@@ -30,7 +30,7 @@ phases:
             - serverless create_domain --stage $STAGE
             - sls deploy --stage $STAGE
             # Migrations and seeds
-            - SLS_DEBUG=* serverless invoke --function migrate --stage $STAGE --region=eu-west-1 # this is using knex migration function invoking, y/n?
+            # - SLS_DEBUG=* serverless invoke --function migrate --stage $STAGE --region=eu-west-1 # this is using knex migration function invoking, y/n?
             # UI - What do we want to do here for next, yikes? - some docker stuff here i guess
             # - cd $CODEBUILD_SRC_DIR/ui
             # - npm install
