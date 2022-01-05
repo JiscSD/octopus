@@ -1,0 +1,15 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Serverless webpack
+.webpack
+
+# Jest coverage reports
+coverage
+
+# OS Files
+.DS_Store
