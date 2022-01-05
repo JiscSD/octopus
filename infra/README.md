@@ -53,7 +53,7 @@ The code build will only trigger when a PR is merged into branch `main`.
 
 To create this infrastructure you will need to:
 
-1. Make sure there is an `S3 bucket` on the AWS account called `fe-elevator-app-tfstate`, this is referenced in [create-ci-cd/provider.tf](./create-cicd/provider.tf). Ths `S3 bucket` is where the remote state for this terraformed infrastructure is stored, this is something that has to be created manually, referenced in the _[Not managed by Terraform](#Not-managed-by-Terraform)_ section.
+1. Make sure there is an `S3 bucket` on the AWS account called `octopus-app-tfstate`, this is referenced in [create-ci-cd/provider.tf](./create-cicd/provider.tf). Ths `S3 bucket` is where the remote state for this terraformed infrastructure is stored, this is something that has to be created manually, referenced in the _[Not managed by Terraform](#Not-managed-by-Terraform)_ section.
 2. Ensure you have the correct version of Terraform installed, you can find the required Terraform version in the [create-ci-cd/provider.tf](./create-cicd/provider.tf) file.
 3. Once the correct version of Terraform is installed, you can simply run:
 
