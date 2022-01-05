@@ -15,7 +15,6 @@ projects. This project has set up it's modules so that they never have to be cha
 -   **Bastion** `~/infra/modules/bastion`
 -   **Codebuild** `~/infra/modules/codebuild`
 -   **Network** `~/infra/modules/network`
--   **Pipeline** `~/infra/modules/pipline`
 -   **Postgress** `~/infra/modules/postgres`
 -   **SES** `~/infra/modules/ses`
 -   Frontend `~/infra/modules/frontend` - TODO
