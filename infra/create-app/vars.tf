@@ -1,6 +1,6 @@
-variable "full_domain_name" {
-  type = string
-}
+# variable "full_domain_name" {
+#   type = string
+# }
 
 variable "allocated_storage" {
   type = number
@@ -18,10 +18,14 @@ variable "publicly_accessible" {
   type = bool
 }
 
-variable "acm_certificate_arn" {
+# variable "acm_certificate_arn" {
+#   type = string
+# }
+
+variable "rds_identifier" {
   type = string
 }
 
-variable "rds_identifier" {
+variable "db_version" {
   type = string
 }
