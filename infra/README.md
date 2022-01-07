@@ -9,7 +9,7 @@ Any work that cannot be achived through Terraform should be kept as minimal as p
 
 ## Terraform Version
 
-It is **highly important** that the **exact** terraform version is used, please seee [tfenv](https://github.com/tfutils/tfenv) for more information on how to set your local Terraform version. For this project, ensure you are using version **0.14.6**.
+It is **highly important** that the **exact** terraform version is used, please see [tfenv](https://github.com/tfutils/tfenv) for more information on how to set your local Terraform version. For this project, ensure you are using version **0.14.6**.
 
 To check your local version, open your command line and run:
 
@@ -103,12 +103,6 @@ To run this Terraform, follow the below:
 ~/infra/create-app $ terraform plan -var-file=int.tfvars        # pre-apply dry run (pass in enviroment vars)
 ~/infra/create-app $ terraform apply -var-file=int.tfvars       # apply the terraform (pass in enviroment vars)
 ```
-
-&nbsp;
-
-## Database migrations & seeds
-
-TODO
 
 &nbsp;
 
