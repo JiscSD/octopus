@@ -3,19 +3,19 @@
 # }
 
 variable "allocated_storage" {
-  type = number
+    type = number
 }
 
 variable "storage_type" {
-  type = string
+    type = string
 }
 
 variable "instance" {
-  type = string
+    type = string
 }
 
 variable "publicly_accessible" {
-  type = bool
+    type = bool
 }
 
 # variable "acm_certificate_arn" {
@@ -23,9 +23,9 @@ variable "publicly_accessible" {
 # }
 
 variable "rds_identifier" {
-  type = string
+    type = string
 }
 
 variable "db_version" {
-  type = string
+    type = string
 }
