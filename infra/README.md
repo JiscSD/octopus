@@ -7,6 +7,27 @@ Any work that cannot be achived through Terraform should be kept as minimal as p
 
 &nbsp;
 
+## Terraform Version
+
+It is **highly important** that the **exact** terraform version is used, please seee [tfenv](https://github.com/tfutils/tfenv) for more information on how to set your local Terraform version. For this project, ensure you are using version **0.14.6**.
+
+To check your local version, open your command line and run:
+
+```bash
+$ terraform -v
+```
+
+You should get the following output:
+
+```bash
+Terraform v0.14.6
+
+Your version of Terraform is out of date! The latest version
+is 1.1.3. You can update by downloading from https://www.terraform.io/downloads.html
+```
+
+&nbsp;
+
 ## Modules
 
 Terraform has a concept of _modules_, which are reuseable chunks of code, similar to _packages_ so that we can easily pull them in & their implementation is consistent across
@@ -31,14 +52,14 @@ The infrastructure is created/updated by simply switching to the correct workspa
 
 ```bash
 $ terraform workspace select int
-$ terraform apply -var-file=int.tfvars
 ```
 
 Workspaces currently in use:
 
-`int`
+-   **`int`**
+-   **`prod`**
 
-`prod`
+&nbsp;
 
 # Create CI/CD
 
@@ -93,6 +114,16 @@ TODO
 
 # Not managed by Terraform
 
-TODO
+There are some parts to this projects infrastructure that is **not** managed/created by Terraform.
+
+The following are not managed by terraform and were created manually and must be managed manually in AWS.
+
+This includes:
+
+-   Manually creating an `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-app-tfstate)**.
+-   Manually creating an `AWS S3 Bucket`, for hosting the SSH pemkey file
+-   AWS permissions for GitHub webhooks for CodeBuild
+-   Increase the limit of allowed VPCs for a single region (default 5) to 50.
+-   More to come...
 
 &nbsp;
