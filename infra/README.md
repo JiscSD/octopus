@@ -61,7 +61,7 @@ Workspaces currently in use:
 
 &nbsp;
 
-# Create CI/CD
+## Create CI/CD
 
 **⚠️ Please speak to the project lead before attempting to run this Terraform app locally. ⚠️**
 
@@ -86,7 +86,7 @@ To create this infrastructure you will need to:
 
 &nbsp;
 
-# Create application
+## Create application
 
 **⚠️ Please speak to the project lead before attempting to run this Terraform app locally. ⚠️**
 
@@ -106,13 +106,13 @@ To run this Terraform, follow the below:
 
 &nbsp;
 
-# Database migrations & seeds
+## Database migrations & seeds
 
 TODO
 
 &nbsp;
 
-# Not managed by Terraform
+## Not managed by Terraform
 
 There are some parts to this projects infrastructure that is **not** managed/created by Terraform.
 
