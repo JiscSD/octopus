@@ -1,0 +1,9 @@
+localhost:443 {
+    reverse_proxy localhost:3000
+    tls internal
+}
+
+api.localhost:443 {
+    reverse_proxy 0.0.0.0:4003
+    tls internal
+}

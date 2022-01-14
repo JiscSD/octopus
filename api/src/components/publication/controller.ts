@@ -1,7 +1,14 @@
-export const getAll = (event): Promise<IArguments.JSONResponse> => {
+import * as response from 'lib/response';
+import * as service from './service';
+import * as I from 'interface';
+
+export const getAll = async (event): Promise<I.JSONResponse> => {
     try {
-        const publications = publicationService.getAll(event.queryStringParameters)
+        // params from query string/event
+        console.log(event);
+        const publications = await service.getAll();
+        return response.json(200, publications);
     } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' })
+        return response.json(500, { message: 'Unknown server error.' });
     }
 };

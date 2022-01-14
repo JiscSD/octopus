@@ -1,21 +1,48 @@
-service: octopus
+service: octopus-api
 
 plugins:
-  - serverless-plugin-warmup
-  - serverless-middleware
-  - serverless-domain-manager
-  - serverless-webpack
-  - serverless-offline
+    - serverless-plugin-warmup
+    - serverless-middleware
+    - serverless-domain-manager
+    - serverless-webpack
+    - serverless-offline
+    - serverless-pseudo-parameters
 
 provider:
-  name: aws
-  runtime: nodejs14.x
-  region: eu-west-1
-  stage: ${opt:stage, 'local'}
-  environment:
-    stage: ${self:provider.stage}
-  deploymentBucket:
-    tags:
-      Project: Jisc SSO
-      Owner: 0 - 3 Years Innovation Team
-      Name: Jisc SSO API
+    name: aws
+    timeout: 30
+    runtime: nodejs14.x
+    region: eu-west-1
+    stage: ${opt:stage, 'local'}
+    environment:
+        stage: ${self:provider.stage}
+    deploymentBucket:
+        tags:
+            Project: Octopus
+            Owner: 0 - 3 Years Innovation Team
+            Name: Octopus API
+custom:
+    webpack:
+        webpackConfig: ./webpack.config.js
+        includeModules: true
+        packager: 'npm'
+    apiV1: v1
+    serverless-offline:
+        useChildProcesses: true
+functions:
+    healthcheck:
+        handler: src/components/application/routes.healthcheck
+        warmup: true
+        events:
+            - http:
+                  path: healthcheck
+                  method: get
+                  cors: true
+    getPublications:
+        handler: src/components/publication/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: /publications
+                  method: get
+                  cors: true
