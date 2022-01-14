@@ -9,4 +9,3 @@ import * as controller from './controller';
 export const getAll = middy(controller.getAll)
     .use(doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(httpJsonBodyParser());
-// .use(middleware.validator(schema.createAccount, 'body'));

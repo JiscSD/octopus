@@ -4,3 +4,10 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+# Misc
+.env
+.webpack
+.vscode
+.DS_Store
+coverage
