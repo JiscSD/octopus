@@ -44,6 +44,9 @@
             ],
             "config": [
                 "src/config"
+            ],
+            "utilities": [
+                "src/utilities"
             ]
         }
     },

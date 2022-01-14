@@ -26,7 +26,8 @@ custom:
         webpackConfig: ./webpack.config.js
         includeModules: true
         packager: 'npm'
-    apiV1: v1
+    versions:
+        v1: v1
     serverless-offline:
         useChildProcesses: true
 functions:
@@ -35,7 +36,7 @@ functions:
         warmup: true
         events:
             - http:
-                  path: healthcheck
+                  path: ${self:custom.versions.v1}/healthcheck
                   method: get
                   cors: true
     getPublications:
@@ -43,6 +44,6 @@ functions:
         warmup: true
         events:
             - http:
-                  path: /publications
+                  path: ${self:custom.versions.v1}/publications
                   method: get
                   cors: true
