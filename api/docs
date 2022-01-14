@@ -1,0 +1,18 @@
+POST /publications/:id (on creation, we will also create state to draft)
+
+PATCH /publications/:id (will return error if not draft) - content
+
+PUT /publications/:id/status (will return error if no permission, or is LIVE to DRAFT, likewise if no permission to hide)
+
+DELETE /links/:id (let's have a think)
+
+POST /links
+{
+    from:
+    to: 
+}
+
+Tests:
+
+Can someone make a link?
+Can someone make live?
