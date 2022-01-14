@@ -1,0 +1,49 @@
+service: octopus-api
+
+plugins:
+    - serverless-plugin-warmup
+    - serverless-middleware
+    - serverless-domain-manager
+    - serverless-webpack
+    - serverless-offline
+    - serverless-pseudo-parameters
+
+provider:
+    name: aws
+    timeout: 30
+    runtime: nodejs14.x
+    region: eu-west-1
+    stage: ${opt:stage, 'local'}
+    environment:
+        stage: ${self:provider.stage}
+    deploymentBucket:
+        tags:
+            Project: Octopus
+            Owner: 0 - 3 Years Innovation Team
+            Name: Octopus API
+custom:
+    webpack:
+        webpackConfig: ./webpack.config.js
+        includeModules: true
+        packager: 'npm'
+    versions:
+        v1: v1
+    serverless-offline:
+        useChildProcesses: true
+functions:
+    healthcheck:
+        handler: src/components/application/routes.healthcheck
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/healthcheck
+                  method: get
+                  cors: true
+    getPublications:
+        handler: src/components/publication/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications
+                  method: get
+                  cors: true

@@ -1,0 +1,92 @@
+{
+    "root": true,
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "jest": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 10,
+        "project": "./tsconfig.json"
+    },
+    "ignorePatterns": [
+        "webpack.config.js",
+        "jest.config.ts"
+    ],
+    "plugins": [
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "airbnb-typescript/base"
+    ],
+    "rules": {
+        "prettier/prettier": [
+            "error",
+            {},
+            {
+                "usePrettierrc": true
+            }
+        ],
+        "indent": "off",
+        "consistent-return": "off",
+        "object-curly-newline": "off",
+        "no-useless-return": "off",
+        "no-await-in-loop": "off",
+        "no-restricted-syntax": "off",
+        "@typescript-eslint/indent": [
+            "error",
+            4
+        ],
+        "semi": "off",
+        "@typescript-eslint/semi": [
+            "error"
+        ],
+        "no-underscore-dangle": "off",
+        "@typescript-eslint/restrict-template-expressions": "warn",
+        "@typescript-eslint/ban-ts-comment": "warn",
+        "no-extra-semi": "off",
+        "@typescript-eslint/no-extra-semi": [
+            "error"
+        ],
+        "no-console": "warn",
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/no-empty-interface": [
+            "error",
+            {
+                "allowSingleExtends": false
+            }
+        ],
+        "comma-dangle": "off",
+        "@typescript-eslint/comma-dangle": [
+            "error",
+            "never"
+        ],
+        "max-len": [
+            "warn",
+            {
+                "code": 200,
+                "comments": 120,
+                "ignoreComments": false,
+                "ignoreTrailingComments": true,
+                "ignoreUrls": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreRegExpLiterals": true
+            }
+        ]
+    },
+    "overrides": [
+        {
+            "rules": {
+                "require-jsdoc": "off",
+                "func-names": "off"
+            }
+        }
+    ]
+}

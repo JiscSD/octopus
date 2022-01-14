@@ -2,12 +2,42 @@
 
 -badges required-
 
-## Overview
+### Overview
 
-## Monorepo file structure
+&nbsp;
 
-## Database schemas
+### Monorepo file structure
 
-## Additional
+```bash
+├── 📁 .github
+│   ├── 📁 ISSUE_TEMPLATE
+│   │   └── 📄 config.yml                          # issue template config
+│   ├── 📁 workflows
+│   │   ├── 📄 api-testing.yml                     # github actions for api testing
+│   │   └── 📄 ui-testing.yml                      # github actions for ui testing
+│   ├── 📄 CODE-OF-CONDUCT.md                      # project code of conduct
+│   ├── 📄 CONTRIBUTING.md                         # project contributing list
+│   └── 📄 PULL_REQUEST_TEMPLATE.md                # pull request template
+│
+├── 📁 infra
+│   ├── 📁 create-app                              # terraform project for env infrastructure
+│   ├── 📁 create-cicd                             # terraform project for aws codebuild (ran once)
+│   ├── 📁 create-pipeline                         # buildspec files
+│   ├── 📁 modules                                 # terraform modules
+│   └── 📄 README.md                               # infra read me
+│
+├── 📄 .gitignore                                  # git ignored files
+└── 📄 README.md                                   # full project read me
+```
 
-## Useful links
+&nbsp;
+
+### Database schemas
+
+&nbsp;
+
+### Additional
+
+&nbsp;
+
+### Useful links

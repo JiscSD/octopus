@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+    SUPER_USER
+    FUNDER
+    USER
+}
+
+model User {
+    id        String  @id @default(cuid())
+    orcid     String
+    firstName String
+    lastName  String?
+    email     String?
+    role      Role    @default(USER)
+    locked    Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Publication Publication[]
+}
+
+enum PublicationStatusEnum {
+    DRAFT
+    LIVE
+    HIDDEN
+}
+
+enum PublicationType {
+    PROBLEM
+    PROTOCOL
+    ANALYSIS
+    REAL_WORLD_APPLICATION
+    HYPOTHESIS
+    DATA
+    INTERPRETATION
+    PEER_REVIEW
+}
+
+model Publication {
+    id       String          @id @default(cuid())
+    url_slug String          @unique @default(cuid())
+    type     PublicationType
+    title    String?
+    content  String?
+    doi      String?
+
+    createdBy String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user               User                @relation(fields: [createdBy], references: [id])
+    publicationFromRef Links[]             @relation("publicationFromRef")
+    publicationToRef   Links[]             @relation("publicationToRef")
+    PublicationStatus  PublicationStatus[]
+}
+
+model PublicationStatus {
+    id            String                @id @default(cuid())
+    publicationId String
+    status        PublicationStatusEnum
+
+    createdAt DateTime @default(now())
+
+    publication Publication @relation(fields: [publicationId], references: [id])
+}
+
+model Links {
+    id              String   @id @default(cuid())
+    publicationFrom String
+    publicationTo   String
+    active          Boolean? @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    publicationFromRef Publication @relation("publicationFromRef", fields: [publicationFrom], references: [id])
+    publicationToRef   Publication @relation("publicationToRef", fields: [publicationTo], references: [id])
+}
