@@ -1,11 +1,17 @@
 import middy from '@middy/core';
-import httpJsonBodyParser from '@middy/http-json-body-parser';
-import doNotWaitForEmptyEventLoop from '@middy/do-not-wait-for-empty-event-loop';
 
-import * as controller from './controller';
-// import * as middleware from 'middleware';
-// import * as schema from './schema';
+import * as middleware from 'middleware';
 
-export const getAll = middy(controller.getAll)
-    .use(doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(httpJsonBodyParser());
+import * as publicationController from 'publication/controller';
+import * as publicationSchema from 'publication/schema';
+
+
+export const getAll = middy(publicationController.getAll)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser());
+
+export const create = middy(publicationController.create)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(publicationSchema.create, 'body'));

@@ -12,6 +12,10 @@ export interface JSONResponse {
     statusCode: number;
 }
 
+export interface User {
+    id: string;
+}
+
 export interface APIRequest<
     BodyOverride = string | undefined,
     QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
@@ -20,4 +24,23 @@ export interface APIRequest<
     body: BodyOverride;
     queryStringParameters: QueryStringParametersOverride;
     pathParameters: PathParamsOverride;
+}
+
+export interface AuthenticatedAPIRequest<
+    BodyOverride = string | undefined,
+    QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
+    PathParamsOverride = APIGatewayProxyEventPathParameters | undefined
+> extends Omit<APIGatewayProxyEventV2, 'body' | 'queryStringParameters' | 'pathParameters'> {
+    body: BodyOverride;
+    queryStringParameters: QueryStringParametersOverride;
+    pathParameters: PathParamsOverride;
+    user: User;
+}
+
+export type PublicationType = 'PROBLEM' | 'PROTOCOL' | 'ANALYSIS' | 'REAL_WORLD_APPLICATION' | 'HYPOTHESIS' | 'DATA' | 'INTERPRETATION' | 'PEER_REVIEW';
+
+export interface CreatePublicationRequestBody {
+    type: PublicationType;
+    title: string;
+    content?: string;
 }
