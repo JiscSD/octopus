@@ -1,36 +1,28 @@
 import middy from '@middy/core';
-import jwt from 'jsonwebtoken';
 
 import * as I from 'interface';
 import * as response from 'lib/response';
+import * as userService from 'user/service';
 
 const authentication = (): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (request): Promise<I.JSONResponse | void> => {
-        const { Authorization } = request.event.headers;
-
-        const authType = Authorization?.split(' ');
-        let user;
-
-        if (authType[0] === 'Bearer') {
-
-        } else if (authType[0] === 'Basic') {
-
-        } else {
-            return response.json(401, { message: 'Send either a bearer token or API key to authenticate' });
-        }
-
-        const token = Authorization?.slice(7, Authorization.length);
-        if (!token) {
-            return response.json(401, { message: 'No token supplied.' });
-        }
-
         try {
-            const decodedJWT = jwt.verify(token, 'secret');
-
-            // Assign the user object onto the lambda event.
-            Object.assign(request.event, { user: decodedJWT });
+            let user;
+    
+            const apiKey = request.event.queryStringParameters?.apiKey;
+            // const bearerToken = request.event.headers?.Authorization;
+    
+            if (apiKey) {
+                user = await userService.getByApiKey(apiKey);
+            }
+    
+            if (!user) {
+                return response.json(401, { message: 'Please enter either a valid apiKey or bearer token.' });
+            }
+    
+            Object.assign(request.event, { user });
         } catch (err) {
-            return response.json(401, { message: 'Invalid token.' });
+            return response.json(401, { message: 'Unknown authentication error, please contact help@jisc.ac.uk.' });
         }
     };
     return {

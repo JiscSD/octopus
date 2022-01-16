@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-import { prisma } from 'lib/client';
+import prisma from 'lib/client';
 
 export const getAll = async () => {
     const publications = await prisma.publication.findMany({});
