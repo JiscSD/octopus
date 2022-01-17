@@ -74,4 +74,17 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(422);
     });
+
+    test('Attempt to create publication with added invalid properties, created by user that does exist (422)', async () => {
+        const createPublicationRequest = await testUtils.agent.post('/publications').query({
+            apiKey: '123456789'
+        }).send({
+            title: 'Example',
+            type: 'PEER_REVIEW',
+            content: 'Content',
+            keyDoesNotExist: 'This should return a 422'
+        });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
 });
