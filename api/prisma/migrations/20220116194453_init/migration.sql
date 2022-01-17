@@ -16,6 +16,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "locked" BOOLEAN NOT NULL DEFAULT false,
+    "apiKey" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

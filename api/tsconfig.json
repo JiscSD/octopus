@@ -30,6 +30,12 @@
             "components/*": [
                 "src/components/*"
             ],
+            "publication/*":[
+                "src/components/publication/*"
+            ],
+            "user/*":[
+                "src/components/user/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],
