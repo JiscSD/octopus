@@ -62,10 +62,10 @@ model Publication {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    user               User                @relation(fields: [createdBy], references: [id])
+    user               User                @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     publicationFromRef Links[]             @relation("publicationFromRef")
     publicationToRef   Links[]             @relation("publicationToRef")
-    PublicationStatus  PublicationStatus[]
+    publicationStatus  PublicationStatus[]
 }
 
 model PublicationStatus {
@@ -75,7 +75,7 @@ model PublicationStatus {
 
     createdAt DateTime @default(now())
 
-    publication Publication @relation(fields: [publicationId], references: [id])
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Links {

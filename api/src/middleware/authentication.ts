@@ -10,10 +10,12 @@ const authentication = (): middy.MiddlewareObj => {
             let user;
     
             const apiKey = request.event.queryStringParameters?.apiKey;
+            console.log(apiKey)
             // const bearerToken = request.event.headers?.Authorization;
     
             if (apiKey) {
                 user = await userService.getByApiKey(apiKey);
+                console.log(user);
             }
     
             if (!user) {
@@ -22,6 +24,7 @@ const authentication = (): middy.MiddlewareObj => {
     
             Object.assign(request.event, { user });
         } catch (err) {
+            console.log(err);
             return response.json(401, { message: 'Unknown authentication error, please contact help@jisc.ac.uk.' });
         }
     };

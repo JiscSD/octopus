@@ -14,7 +14,7 @@ export const getAll = async (event: I.APIRequest): Promise<I.JSONResponse> => {
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.create(event.body, { id: 'ckyg89bfh00111m6i34s2qk0w' });
+        const publication = await publicationService.create(event.body, event.user);
 
         return response.json(200, publication);
     } catch (err) {

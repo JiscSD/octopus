@@ -3,13 +3,29 @@ import * as I from 'interface';
 import prisma from 'lib/client';
 
 export const getAll = async () => {
-    const publications = await prisma.publication.findMany({});
+    // const publication = await prisma.publication.findFirst({
+    //     where: {
+    //     },
+    //     include: {
+    //         publicationStatus: {
+    //             select: {
+    //                 status: true,
+    //                 createdAt: true,
+    //                 id: true
+    //             },
+    //             orderBy: {
+    //                 createdAt: 'desc'
+    //             }
+    //         }
+    //     }
+    // });
 
-    return publications;
+    // console.log(publication);
+
+    // return publication;
 };
 
 export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
-    // create publication
     const publication = await prisma.publication.create({
         data: {
             title: e.title,
@@ -20,13 +36,34 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
                     id: user.id
                 }
             },
-            PublicationStatus: {
+            publicationStatus: {
                 create: {
                     status: 'DRAFT'
                 }
             }
+        },
+        include: {
+            publicationStatus: {
+                select: {
+                    status: true,
+                    createdAt: true,
+                    id: true
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true
+                }
+            }
         }
     });
+
+    console.log(publication);
 
     return publication;
 };
