@@ -44,3 +44,7 @@ export interface CreatePublicationRequestBody {
     title: string;
     content?: string;
 }
+
+export interface GetPublicationPathParams {
+    id: string;
+}

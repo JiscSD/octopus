@@ -2,27 +2,46 @@ import * as I from 'interface';
 
 import prisma from 'lib/client';
 
-export const getAll = async () => {
-    // const publication = await prisma.publication.findFirst({
-    //     where: {
-    //     },
-    //     include: {
-    //         publicationStatus: {
-    //             select: {
-    //                 status: true,
-    //                 createdAt: true,
-    //                 id: true
-    //             },
-    //             orderBy: {
-    //                 createdAt: 'desc'
-    //             }
-    //         }
-    //     }
-    // });
+export const getAll = async () => {};
 
-    // console.log(publication);
+export const get = async (id: string, user: I.User | null) => {
+    const publication = await prisma.publication.findFirst({
+        where: {
+            id
+        },
+        include: {
+            publicationStatus: {
+                select: {
+                    status: true,
+                    createdAt: true,
+                    id: true
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true
+                }
+            }
+        }
+    });
 
-    // return publication;
+    // anyone can see a LIVE publication
+    if (publication?.currentStatus === 'LIVE') {
+        return publication;
+    }
+
+    // only certain users can see a DRAFT publication
+    if(user?.id === publication?.user.id) {
+        return publication;
+    }
+
+    // user does not have permissions
+    return {};
 };
 
 export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
