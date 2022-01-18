@@ -30,4 +30,6 @@ describe('View individual publications', () => {
 
         expect(getPublication.body).toEqual({})
     });
+
+    test.todo('Any user can see a LIVE publication');
 });
