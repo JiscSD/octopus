@@ -7,9 +7,12 @@ type Props = { children: ReactNode };
 const Standard: FC<Props> = (props): JSX.Element => {
     return (
         <>
+            <a href="#content" className="sr-only">
+                jump to content
+            </a>
             <Components.Header />
-            <main>{props.children}</main>
-            <footer>dsdsds</footer>
+            <main id="content">{props.children}</main>
+            <Components.Footer />
         </>
     );
 };
