@@ -82,7 +82,5 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
         }
     });
 
-    console.log(publication);
-
     return publication;
 };
