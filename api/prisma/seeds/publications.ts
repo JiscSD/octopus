@@ -1,5 +1,6 @@
 const publicationSeeds = [
     {
+
         id: 'publication-1',
         title: 'Publication 1',
         type: 'PEER_REVIEW',
@@ -22,7 +23,7 @@ const publicationSeeds = [
         content: 'Publication 2',
         user: {
             connect: {
-                id: 'test-user21'
+                id: 'test-user-2'
             }
         },
         publicationStatus: {
