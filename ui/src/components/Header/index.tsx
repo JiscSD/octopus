@@ -19,9 +19,10 @@ const Header: FC = (): JSX.Element => {
                     />
                     <span className="block font-montserrat text-2xl font-semibold text-white">Octopus</span>
                 </Components.Link>
-                <nav>
+                <div>
+                    <Components.Nav />
                     <Components.EnableDarkMode />
-                </nav>
+                </div>
             </div>
         </header>
     );
