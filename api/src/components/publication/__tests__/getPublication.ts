@@ -11,7 +11,6 @@ describe('View individual publications', () => {
             apiKey: '123456789'
         });
 
-        console.log(getPublication.body);
         expect(getPublication.body.id).toEqual('publication-1');
     });
 
