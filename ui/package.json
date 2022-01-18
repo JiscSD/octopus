@@ -1,11 +1,22 @@
 {
     "name": "ui",
-    "private": true,
+    "version": "1.0.0",
+    "description": "A new way to publish your scientific work that's fast, free and fair.",
+    "author": "0-3 Years Team",
+    "keywords": [],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/JiscSD/octopus/tree/main/ui"
+    },
+    "engines": {
+        "node": "14.x"
+    },
     "scripts": {
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "format": "npx prettier --write src/"
     },
     "dependencies": {
         "next": "12.0.8",

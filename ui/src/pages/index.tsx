@@ -1,9 +1,22 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
+
+import * as Layouts from '@layouts';
 
 const Home: NextPage = () => {
-    return <p>Index</p>;
+    return (
+        <>
+            <Head>
+                <meta name="description" content="" />
+                <meta name="keywords" content="" />
+                <link rel="canonical" href="" />
+                <title>Home</title>
+            </Head>
+            <Layouts.Standard>
+                <p>Home</p>
+            </Layouts.Standard>
+        </>
+    );
 };
 
 export default Home;
