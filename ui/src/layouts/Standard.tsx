@@ -1,13 +1,15 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
-type Props = { children: React.ReactNode };
+import * as Components from '@components';
 
-const Standard: FC<Props> = (props) => {
+type Props = { children: ReactNode };
+
+const Standard: FC<Props> = (props): JSX.Element => {
     return (
         <>
-            <header>Header here</header>
+            <Components.Header />
             <main>{props.children}</main>
-            <footer></footer>
+            <footer>dsdsds</footer>
         </>
     );
 };
