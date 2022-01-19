@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Desktop: FC<Props> = (props): JSX.Element => {
-    return <>hello</>;
+    return <>Desktop nav here</>;
 };
 
 export default Desktop;

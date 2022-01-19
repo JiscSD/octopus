@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Mobile: FC<Props> = (props): JSX.Element => {
-    return <>hello</>;
+    return <>Mobile Nav here</>;
 };
 
 export default Mobile;
