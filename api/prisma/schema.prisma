@@ -24,7 +24,7 @@ model User {
     email     String?
     role      Role    @default(USER)
     locked    Boolean @default(false)
-    apiKey    String?
+    apiKey    String? @unique
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -56,6 +56,8 @@ model Publication {
     title    String?
     content  String?
     doi      String?
+
+    currentStatus PublicationStatusEnum @default(DRAFT)
 
     createdBy String
 
