@@ -12,6 +12,16 @@ export const getAll = async (event: I.APIRequest): Promise<I.JSONResponse> => {
     }
 };
 
+export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetPublicationPathParams>): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id, event.user);
+
+        return response.json(200, publication);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.create(event.body, event.user);
@@ -20,5 +30,4 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreatePublicatio
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
-
-}
+};

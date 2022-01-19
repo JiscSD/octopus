@@ -47,6 +47,14 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: get
                   cors: true
+    getPublication:
+        handler: src/components/publication/routes.get
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}
+                  method: get
+                  cors: true
     createPublication:
         handler: src/components/publication/routes.create
         warmup: true
