@@ -2,35 +2,31 @@ import { FC, useEffect, useState } from 'react';
 import useWindowSize from 'src/lib/hooks/useWIndowSize';
 
 import * as Components from '@components';
+import * as Lib from '@lib';
+import * as Config from '@config';
 
-const items = [
+const items: Lib.I.NavMenuItem[] = [
     {
         label: 'Search',
-        value: 'asasasas'
+        value: Config.urls.search.path
     },
     {
         label: 'Publish',
-        value: 'sdsdsd'
+        value: Config.urls.createPublication.path
+    },
+    {
+        label: 'Jisc',
+        value: 'https://jisc.ac.uk'
     }
 ];
 
 const Nav: FC = (): JSX.Element => {
-    const [mobile, setMobile] = useState(false);
-
-    const { width } = useWindowSize();
-
-    useEffect(() => {
-        if (width && width > 960) {
-            setMobile(false);
-        } else {
-            setMobile(true);
-        }
-    }, [width]);
+    const screens = useWindowSize();
 
     return (
         <>
-            {mobile && <Components.NavMobile items={items} />}
-            {!mobile && <Components.NavDesktop items={items} />}
+            {screens.sm && <Components.NavMobile items={items} />}
+            {!screens.sm && <Components.NavDesktop items={items} />}
         </>
     );
 };

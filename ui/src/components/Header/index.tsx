@@ -10,7 +10,7 @@ const Header: FC = (): JSX.Element => {
             <div className="flex items-center justify-between container mx-auto px-8">
                 <Components.Link
                     href={Config.urls.home.path}
-                    className="flex items-center rounded border-transparent outline-0 focus:ring-4 focus:ring-yellow-400"
+                    className="flex items-center rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <Assets.Logo
                         height={50}
@@ -19,7 +19,7 @@ const Header: FC = (): JSX.Element => {
                     />
                     <span className="block font-montserrat text-2xl font-semibold text-white">Octopus</span>
                 </Components.Link>
-                <div>
+                <div className="flex items-center">
                     <Components.Nav />
                     <Components.EnableDarkMode />
                 </div>

@@ -1,16 +1,29 @@
 import { FC } from 'react';
 
-interface Item {
-    label: string;
-    value: string;
-}
+import * as Lib from '@lib';
+import * as Components from '@components';
 
 type Props = {
-    items: Item[];
+    items: Lib.I.NavMenuItem[];
 };
 
 const Desktop: FC<Props> = (props): JSX.Element => {
-    return <>Desktop nav here</>;
+    return (
+        <nav className="flex mr-12">
+            <ul className="flex">
+                {props.items.map((item, index) => (
+                    <li key={item.value} className="lg:mx-2 md:mx-1 last:mr-0 first:ml-0">
+                        <Components.Link
+                            href={item.value}
+                            className="p-2 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                        >
+                            <span className="font-montserrat font-medium text-white">{item.label}</span>
+                        </Components.Link>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
 };
 
 export default Desktop;

@@ -23,6 +23,20 @@ const urls = {
         description: "A new way to publish your scientific work that's fast, free and fair.",
         keywords: 'publish',
         canonical: `${base.host}`
+    },
+    createPublication: {
+        path: 'new-publication',
+        title: `New Publication - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/new-publication`
+    },
+    search: {
+        path: '/#search',
+        title: `Search - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/search`
     }
 };
 

@@ -1,15 +1,15 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useRef, useState } from 'react';
 
-import { useDarkModeStore } from 'src/lib/stores/preferences';
-import { DarkModeStore } from 'src/lib/types/stores';
+import { PreferencesStoreTypes } from 'src/lib/types';
+import { usePreferencesStore } from 'src/lib/stores/preferences';
 
 import '../styles/globals.css';
 
 const App = ({ Component, pageProps }: AppProps) => {
     const isMounted = useRef(false);
     const [loading, setLoading] = useState(true);
-    const darkMode = useDarkModeStore((state: DarkModeStore) => state.darkMode);
+    const darkMode = usePreferencesStore((state: PreferencesStoreTypes) => state.darkMode);
 
     useEffect(() => {
         isMounted.current = true;
@@ -21,7 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     return (
         !loading && (
-            <div className={darkMode && 'dark'}>
+            <div className={`font-inter ${darkMode ? 'dark' : ''}`}>
                 <Component {...pageProps} />
             </div>
         )

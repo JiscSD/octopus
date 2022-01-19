@@ -36,7 +36,7 @@ const AppDocument = () => {
                     rel="stylesheet"
                 />
             </Head>
-            <body className="font-inter">
+            <body>
                 <Main />
                 <NextScript />
             </body>
