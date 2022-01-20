@@ -6,7 +6,7 @@ import * as Config from '@config';
 
 const Header: FC = (): JSX.Element => {
     return (
-        <header className="bg-purple-300 dark:bg-grey-800 py-4 text-white transition-all duration-500">
+        <header className="bg-purple-300 dark:bg-grey-800 py-4 text-white transition-colors duration-500">
             <div className="flex items-center justify-between container mx-auto px-8">
                 <Components.Link
                     href={Config.urls.home.path}
@@ -15,7 +15,7 @@ const Header: FC = (): JSX.Element => {
                     <Assets.Logo
                         height={50}
                         width={50}
-                        className="mr-4 fill-black dark:fill-purple-300 transition-all duration-500"
+                        className="mr-4 fill-black dark:fill-purple-300 transition-colors duration-500"
                     />
                     <span className="block font-montserrat text-2xl font-bold text-white">Octopus</span>
                 </Components.Link>

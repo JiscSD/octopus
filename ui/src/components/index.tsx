@@ -5,3 +5,4 @@ export { default as EnableDarkMode } from './EnableDarkMode';
 export { default as Nav } from './Nav';
 export { default as NavMobile } from './Nav/Mobile';
 export { default as NavDesktop } from './Nav/Desktop';
+export { default as Section } from './Section';
