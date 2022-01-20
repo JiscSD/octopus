@@ -14,8 +14,8 @@ export const initialSeed = async (): Promise<void> => {
         await prisma.publication.create({
             // @ts-ignore
             data: publication
-        })
-    })
+        });
+    });
 };
 
 export const clearDB = async (): Promise<void> => {
