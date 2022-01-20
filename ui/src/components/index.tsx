@@ -6,3 +6,6 @@ export { default as Nav } from './Nav';
 export { default as NavMobile } from './Nav/Mobile';
 export { default as NavDesktop } from './Nav/Desktop';
 export { default as Section } from './Section';
+export { default as ScrollToTop } from './ScrollToTop';
+export { default as Search } from './Search';
+export { default as SearchResults } from './Search/SearchResults';
