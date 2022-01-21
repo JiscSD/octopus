@@ -21,16 +21,16 @@ const Home: NextPage = (): JSX.Element => {
                 <link rel="canonical" href={Config.urls.home.canonical} />
                 <title>{Config.urls.home.title}</title>
             </Head>
-            <Layouts.Standard fixedHeader={true}>
+            <Layouts.Standard fixedHeader={false}>
                 {/** Search section */}
                 <Components.Section
-                    id="home-search"
-                    className="bg-teal-50 dark:bg-grey-800"
+                    id="search"
+                    className="bg-teal-50 dark:bg-grey-400"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8">
+                    <div className="container mx-auto px-8 pt-16 pb-8">
                         <div className="block mx-auto lg:w-2/3 2xl:w-1/2">
                             <Components.Search />
                         </div>
@@ -39,13 +39,13 @@ const Home: NextPage = (): JSX.Element => {
                 </Components.Section>
                 {/** Intro */}
                 <Components.SectionTwo
-                    id="intro"
+                    id="content"
                     className="bg-teal-300 dark:bg-grey-900"
                     waveFillTop="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillMiddle="fill-teal-100 dark:fill-grey-700 transition-colors duration-500"
                     waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8 py-6 lg:py-16 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="container mx-auto px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <h2 className="block font-montserrat font-bold text-2xl text-grey-800 dark:text-white lg:col-span-2">
                             What is Octopus?
                         </h2>
@@ -91,7 +91,7 @@ const Home: NextPage = (): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8 py-6 lg:py-16 ">
+                    <div className="container mx-auto px-8 py-16">
                         <h2 className="block mb-6 lg:mb-16 w-fit mx-auto font-montserrat font-bold text-2xl text-grey-900 dark:text-white transition-colors duration-500">
                             Get started with Octopus
                         </h2>
@@ -139,15 +139,15 @@ const Home: NextPage = (): JSX.Element => {
                     className="bg-teal-300 dark:bg-grey-900"
                     waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
                     waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-900 transition-colors duration-500"
+                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8 py-6 lg:py-12 text-grey-900 dark:text-white">
+                    <div className="container mx-auto px-8 py-16 lg:py-12 text-grey-900 dark:text-white">
                         <h2 className="block mb-6 xl:mb-8 font-montserrat font-bold text-2xl lg:col-span-2">
                             Help us improve Octopus
                         </h2>
-                        <h4 className="block mb-6 xl:mb-12 xl:w-1/2 font-montserrat font-semibold text-xl">
+                        <h3 className="block mb-6 xl:mb-12 xl:w-1/2 font-montserrat font-semibold text-xl">
                             Help us to make Octopus the best it can be. if you have feedback, please contact us.
-                        </h4>
+                        </h3>
                         <Components.Button href="" title="Send us feedback" />
                     </div>
                 </Components.SectionTwo>

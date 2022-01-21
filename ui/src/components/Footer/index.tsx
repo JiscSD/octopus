@@ -6,7 +6,7 @@ import * as Config from '@config';
 
 const Footer: FC = (): JSX.Element => {
     return (
-        <footer className="bg-teal-700 dark:bg-grey-900 pt-48 pb-12 transition-all duration-500">
+        <footer className="bg-teal-700 dark:bg-grey-800 pt-28 pb-12 transition-all duration-500">
             <div className="container mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
                 {/** Title */}
                 <h3 className="block lg:mb-12 font-montserrat font-bold text-4xl text-white col-span-1 md:col-span-4 lg:col-span-4">
