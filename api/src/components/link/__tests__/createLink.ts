@@ -54,7 +54,7 @@ describe('Create links', () => {
         expect(link.statusCode).toEqual(404);
     });
 
-    test('User cannot create a link from HYPOTHESIS (in DRAFT) to LINK (in DRAFT)', async () => {
+    test('User cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT)', async () => {
         const link = await testUtils.agent.post('/links').query({
             apiKey: '123456789'
         })
@@ -80,8 +80,8 @@ describe('Create links', () => {
             apiKey: '987654321'
         })
         .send({
-            to: 'publication-hypothesis-live',
-            from: 'publication-problem-live'
+            to: 'publication-problem-live',
+            from: 'publication-hypothesis-draft'
         });
 
         expect(link.statusCode).toEqual(404);
