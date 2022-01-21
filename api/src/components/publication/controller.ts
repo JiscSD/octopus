@@ -14,9 +14,19 @@ export const getAll = async (event: I.APIRequest): Promise<I.JSONResponse> => {
 
 export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetPublicationPathParams>): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id, event.user);
+        const publication = await publicationService.get(event.pathParameters.id);
 
-        return response.json(200, publication);
+        // anyone can see a LIVE publication
+        if (publication?.currentStatus === 'LIVE') {
+            return response.json(200, publication);
+        }
+
+        // only certain users can see a DRAFT publication
+        if(event.user?.id === publication?.user.id) {
+            return response.json(200, publication);
+        }
+
+        return response.json(404, { message: 'Publication is either not found, or you do not have permissions to view it in its current state.' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }

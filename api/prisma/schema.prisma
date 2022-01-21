@@ -89,6 +89,8 @@ model Links {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    publicationFromRef Publication @relation("publicationFromRef", fields: [publicationFrom], references: [id])
-    publicationToRef   Publication @relation("publicationToRef", fields: [publicationTo], references: [id])
+    publicationFromRef Publication @relation("publicationFromRef", fields: [publicationFrom], references: [id], onDelete: Cascade)
+    publicationToRef   Publication @relation("publicationToRef", fields: [publicationTo], references: [id], onDelete: Cascade)
+
+    @@unique([publicationFrom, publicationTo])
 }
