@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import useWindowSize from 'src/lib/hooks/useWIndowSize';
 
 import * as Components from '@components';
@@ -7,16 +7,20 @@ import * as Config from '@config';
 
 const items: Lib.I.NavMenuItem[] = [
     {
+        label: 'Learn',
+        value: '#learn'
+    },
+    {
+        label: 'Browse',
+        value: '#browse'
+    },
+    {
         label: 'Search',
         value: Config.urls.search.path
     },
     {
         label: 'Publish',
         value: Config.urls.createPublication.path
-    },
-    {
-        label: 'Jisc',
-        value: 'https://jisc.ac.uk'
     }
 ];
 

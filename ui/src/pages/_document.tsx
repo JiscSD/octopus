@@ -2,10 +2,10 @@ import { Html, Head, Main, NextScript } from 'next/document';
 
 const AppDocument = () => {
     return (
-        <Html lang="en">
+        <Html lang="en" className="scroll-smooth motion-reduce:scroll-auto bg-grey-800">
             <Head>
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
 
                 <link rel="icon" href="/meta/favicon.ico" />
                 {/* <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png" />

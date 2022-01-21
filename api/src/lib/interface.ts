@@ -48,3 +48,8 @@ export interface CreatePublicationRequestBody {
 export interface GetPublicationPathParams {
     id: string;
 }
+
+export interface CreateLinkBody {
+    to: string;
+    from: string;
+}

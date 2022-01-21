@@ -21,7 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     return (
         !loading && (
-            <div className={`antialiased font-inter ${darkMode ? 'dark' : ''}`}>
+            <div className={`antialiased font-inter ${darkMode ? 'dark' : ''} `}>
                 <Component {...pageProps} />
             </div>
         )

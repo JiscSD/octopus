@@ -1,4 +1,5 @@
-import { CSSProperties, FC, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
 import * as Assets from '@assets';
 
