@@ -17,7 +17,7 @@ const Desktop: FC<Props> = (props): JSX.Element => {
                             href={item.value}
                             className="p-2 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <span className="font-montserrat text-white">{item.label}</span>
+                            <span className="font-manrope text-white">{item.label}</span>
                         </Components.Link>
                     </li>
                 ))}

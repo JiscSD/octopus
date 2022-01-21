@@ -17,7 +17,7 @@ const TealHeader: FC = (): JSX.Element => {
                         width={50}
                         className="mr-4 fill-black dark:fill-teal-300 transition-all duration-500"
                     />
-                    <span className="block font-montserrat text-2xl font-semibold text-white">Octopus</span>
+                    <span className="block font-manrope text-2xl font-semibold text-white">Octopus</span>
                 </Components.Link>
                 <div className="flex items-center">
                     <Components.Nav />
