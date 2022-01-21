@@ -48,14 +48,14 @@ const Home: NextPage = () => {
                 >
                     <div className="container mx-auto px-8 py-6 lg:py-16 grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <h2 className="block font-montserrat font-bold text-2xl text-grey-800 dark:text-white lg:col-span-2">
-                            What is Ocotopus
+                            What is Octopus?
                         </h2>
                         <div className="flex justify-center items-center rounded-lg w-full h-80 bg-white p-4">
-                            vidoe here
+                            video here
                         </div>
                         <div>
                             <h3 className="block mb-2 font-montserrat font-bold text-xl text-grey-800 dark:text-white">
-                                Publish feely
+                                Publish freely
                             </h3>
                             <p className="block mb-10 text-base text-grey-800 dark:text-white">
                                 Upload your publications when they are done. No need to wait around until you have a
@@ -88,12 +88,12 @@ const Home: NextPage = () => {
                 <Components.Section
                     id="getStarted"
                     className="bg-teal-50 dark:bg-grey-800"
-                    waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-900 transition-colors duration-500"
+                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                 >
                     <div className="container mx-auto px-8 py-6 lg:py-16 ">
-                        <h2 className="block mb-6 lg:mb-16 w-fit mx-auto font-montserrat font-bold text-2xl text-white transition-colors duration-500">
+                        <h2 className="block mb-6 lg:mb-16 w-fit mx-auto font-montserrat font-bold text-2xl text-grey-900 dark:text-white transition-colors duration-500">
                             Get started with Octopus
                         </h2>
 
@@ -138,16 +138,16 @@ const Home: NextPage = () => {
                 <Components.SectionTwo
                     id="helpImprove"
                     className="bg-teal-300 dark:bg-grey-900"
-                    waveFillTop="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-100 dark:fill-grey-700 transition-colors duration-500"
-                    waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
+                    waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
+                    waveFillBottom="fill-teal-700 dark:fill-grey-900 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8 py-6 lg:py-12">
-                        <h2 className="block mb-6 xl:mb-8 font-montserrat font-bold text-2xl text-white lg:col-span-2">
-                            Help us improve Ocotopus
+                    <div className="container mx-auto px-8 py-6 lg:py-12 text-grey-900 dark:text-white">
+                        <h2 className="block mb-6 xl:mb-8 font-montserrat font-bold text-2xl lg:col-span-2">
+                            Help us improve Octopus
                         </h2>
-                        <h4 className="block mb-6 xl:mb-12 xl:w-1/2 font-montserrat font-semibold text-xl text-white">
-                            Help us make Octopus the best it can be. if you have feedback, please contact us.
+                        <h4 className="block mb-6 xl:mb-12 xl:w-1/2 font-montserrat font-semibold text-xl">
+                            Help us to make Octopus the best it can be. if you have feedback, please contact us.
                         </h4>
                         <Components.Button href="" title="Send us feedback" />
                     </div>
