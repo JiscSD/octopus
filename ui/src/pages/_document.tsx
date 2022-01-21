@@ -12,9 +12,9 @@ const AppDocument = () => {
                 <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png" />
                 <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png" />
                 <link rel="manifest" href="/meta/site.webmanifest" /> */}
-                <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#8E81E3" />
-                <meta name="msapplication-TileColor" content="#8E81E3" />
-                <meta name="theme-color" content="#8E81E3"></meta>
+                <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#34a4b1" />
+                <meta name="msapplication-TileColor" content="#34a4b1" />
+                <meta name="theme-color" content="#34a4b1"></meta>
 
                 {/* <meta property="og:url" content="" />
                 <meta property="og:type" content="website" />
