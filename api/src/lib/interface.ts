@@ -49,7 +49,14 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface UpdateStatusPathParams {
+    id: string;
+    status: 'LIVE'
+}
+
 export interface CreateLinkBody {
     to: string;
     from: string;
 }
+
+export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';

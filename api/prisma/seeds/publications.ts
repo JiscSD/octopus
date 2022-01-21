@@ -217,7 +217,7 @@ const publicationSeeds = [
         }
     },
 
-    // ANALYSIS
+    //ANALYSIS
     {
         id: 'publication-analysis-live',
         title: 'Publication ANALYSIS-LIVE',
@@ -352,6 +352,58 @@ const publicationSeeds = [
                     createdAt: '2022-01-20T15:51:42.523Z'
                 }
             ]
+        }
+    },
+
+    // publications with links
+    {
+        id: 'publication-hypothesis-draft-problem-live',
+        title: 'Publication HYPOTHESIS-DRAFT',
+        type: 'HYPOTHESIS',
+        content: 'Publication HYPOTHESIS-DRAFT',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        }
+    },
+
+    {
+        id: 'publication-problem-draft-no-content',
+        title: 'Publication PROBLEM-DRAFT',
+        type: 'HYPOTHESIS',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
         }
     },
 

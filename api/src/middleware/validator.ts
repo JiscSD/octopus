@@ -7,6 +7,8 @@ import * as response from 'lib/response';
 export default (schema: I.Schema, requestType: I.RequestType): any => ({
     before: async (request: I.HandlerLambda<I.APIGatewayProxyEventV2, I.APIGatewayProxyResultV2>): Promise<undefined | I.JSONResponse> => {
         const ajv = new Ajv({ allErrors: true, useDefaults: true, coerceTypes: true });
+        console.log(request.event[requestType])
+
         addFormats(ajv);
         const validate = ajv.compile(schema);
 
@@ -14,6 +16,7 @@ export default (schema: I.Schema, requestType: I.RequestType): any => ({
             request.event[requestType] = {};
         }
 
+        console.log(request.event[requestType])
         const valid = validate(request.event[requestType] || {});
 
         if (!valid) {

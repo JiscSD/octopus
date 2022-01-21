@@ -9,13 +9,14 @@ export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.stage}/v
 
 export const initialSeed = async (): Promise<void> => {
     await prisma.user.createMany({ data: seeds.users });
+
     // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
-    seeds.publications.map(async (publication) => {
+    for (let publication of seeds.publications) {
         await prisma.publication.create({
             // @ts-ignore
             data: publication
         });
-    });
+    }
 };
 
 export const clearDB = async (): Promise<void> => {

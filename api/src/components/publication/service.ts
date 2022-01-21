@@ -26,6 +26,18 @@ export const get = async (id: string) => {
                     firstName: true,
                     lastName: true
                 }
+            },
+            linkedTo: {
+                select: {
+                    id: true,
+                    publicationTo: true
+                }
+            },
+            linkedFrom: {
+                select: {
+                    id: true,
+                    publicationFrom: true
+                }
             }
         }
     });
@@ -72,4 +84,41 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
     });
 
     return publication;
+};
+
+export const updateStatus = async (id: string, status: I.PublicationStatus) => {
+    const updatedPublication = await prisma.publication.update({
+        where: {
+            id
+        },
+        data: {
+            currentStatus: status,
+            publicationStatus: {
+                create: {
+                    status
+                }
+            }
+        },
+        include: {
+            publicationStatus: {
+                select: {
+                    status: true,
+                    createdAt: true,
+                    id: true
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true
+                }
+            }
+        }
+    });
+
+    return updatedPublication;
 };
