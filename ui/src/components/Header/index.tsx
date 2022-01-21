@@ -6,7 +6,7 @@ import * as Config from '@config';
 
 const Header: FC = (): JSX.Element => {
     return (
-        <header className="bg-teal-500 dark:bg-grey-800 py-4 text-white transition-colors duration-500">
+        <header className="bg-teal-500 dark:bg-grey-900 py-4 text-white transition-colors duration-500">
             <div className="flex items-center justify-between container mx-auto px-8">
                 <Components.Link
                     href={Config.urls.home.path}
