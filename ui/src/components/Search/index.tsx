@@ -2,15 +2,15 @@ import { ChangeEvent, FC, useState } from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 
 import * as Components from '@components';
+import * as Lib from '@lib';
+import * as Mocks from '@mocks';
 
 const Search: FC = (): JSX.Element => {
-    const [results, setResults] = useState<any[]>([]);
+    const [results, setResults] = useState<Lib.I.SearchResult[]>([]);
 
     const lookup = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 1) {
-            console.log(e.target.value);
-
-            setResults(['entry 1', 'entry 2']);
+            setResults(Mocks.testData.testResults);
         } else {
             setResults([]);
         }

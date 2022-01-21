@@ -98,6 +98,9 @@ module.exports = {
             montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
         },
         extend: {
+            fontSize: {
+                xxs: '0.625rem'
+            },
             strokeWidth: {
                 4: 4
             }
