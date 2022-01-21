@@ -4,7 +4,7 @@ import prisma from 'lib/client';
 
 export const getAll = async () => {};
 
-export const get = async (id: string, user: I.User | null) => {
+export const get = async (id: string) => {
     const publication = await prisma.publication.findFirst({
         where: {
             id
@@ -30,18 +30,7 @@ export const get = async (id: string, user: I.User | null) => {
         }
     });
 
-    // anyone can see a LIVE publication
-    if (publication?.currentStatus === 'LIVE') {
-        return publication;
-    }
-
-    // only certain users can see a DRAFT publication
-    if(user?.id === publication?.user.id) {
-        return publication;
-    }
-
-    // user does not have permissions
-    return {};
+    return publication;
 };
 
 export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {

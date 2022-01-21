@@ -1,12 +1,12 @@
 import * as testUtils from 'lib/testUtils';
 // import prisma from 'lib/client';
 
-beforeEach(async () => {
-    await testUtils.clearDB();
-    await testUtils.initialSeed();
-});
-
 describe('Create publication', () => {
+    beforeEach(async () => {
+        await testUtils.clearDB();
+        await testUtils.initialSeed();
+    });
+
     test('Valid publication created by real user, status is correct too (200)', async () => {
         const createPublicationRequest = await testUtils.agent.post('/publications').query({
             apiKey: '123456789'

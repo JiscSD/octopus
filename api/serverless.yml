@@ -63,3 +63,11 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: post
                   cors: true
+    createLink:
+        handler: src/components/link/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/links
+                  method: post
+                  cors: true
