@@ -1,5 +1,4 @@
-import type { NextPage } from 'next';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { DesktopComputerIcon, PencilIcon, SearchIcon } from '@heroicons/react/outline';
 
@@ -13,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-const Home: NextPage = () => {
+const Home: NextPage = (): JSX.Element => {
     return (
         <>
             <Head>

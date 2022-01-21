@@ -24,6 +24,13 @@ const urls = {
         keywords: 'publish',
         canonical: `${base.host}`
     },
+    search: {
+        path: '/#search',
+        title: `Search - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/search`
+    },
     createPublication: {
         path: 'new-publication',
         title: `New Publication - ${base.title}`,
@@ -31,12 +38,10 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/new-publication`
     },
-    search: {
-        path: '/#search',
-        title: `Search - ${base.title}`,
-        description: '',
-        keywords: '',
-        canonical: `${base.host}/search`
+    viewPublication: {
+        path: 'publications',
+        title: ` - ${base.title}`,
+        canonical: `${base.host}/`
     }
 };
 

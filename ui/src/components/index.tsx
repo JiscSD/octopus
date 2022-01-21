@@ -13,3 +13,4 @@ export { default as ExtendedLink } from './ExtendedLink';
 export { default as Paper } from './Paper';
 export { default as Button } from './Button';
 export { default as JumpToContent } from './JumpToContent';
+export { default as Pill } from './Pill';

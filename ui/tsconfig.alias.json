@@ -20,6 +20,9 @@
             "@stores": [
                 "./src/lib/stores"
             ],
+            "@mocks": [
+                "./src/mocks"
+            ]
         }
     }
 }
