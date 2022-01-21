@@ -11,7 +11,7 @@ type Props = {
 const Header: FC<Props> = (props): JSX.Element => {
     return (
         <header
-            className={`bg-teal-600 dark:bg-grey-800 py-4 text-white transition-colors duration-500 ${
+            className={`bg-teal-600 dark:bg-grey-800 py-4 shadow-sm shadow-white dark:shadow-none text-white transition-colors duration-500 ${
                 props.fixed && 'lg:fixed lg:z-20 lg:top-0 lg:left-0 lg:w-full'
             }`}
         >

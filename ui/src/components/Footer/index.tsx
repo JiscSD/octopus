@@ -73,7 +73,7 @@ const Footer: FC = (): JSX.Element => {
                     <Components.Link
                         href="https://jisc.ac.uk"
                         openNew={true}
-                        className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                        className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <Image src="/images/ukrn.png" alt="Jisc Logo" width={60} height={60} />
                     </Components.Link>
@@ -86,7 +86,7 @@ const Footer: FC = (): JSX.Element => {
                         <Components.Link
                             href="https://jisc.ac.uk"
                             openNew={true}
-                            className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                            className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
                             <Image src="/images/mozillaScienceLab.svg" alt="Jisc Logo" width={200} height={60} />
                         </Components.Link>
@@ -100,7 +100,7 @@ const Footer: FC = (): JSX.Element => {
                         <Components.Link
                             href="https://jisc.ac.uk"
                             openNew={true}
-                            className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                            className="flex w-fit  rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
                             <Image src="/images/elife.svg" alt="Jisc Logo" width={200} height={70} />
                         </Components.Link>
@@ -113,7 +113,7 @@ const Footer: FC = (): JSX.Element => {
                     <Components.Link
                         href="https://jisc.ac.uk"
                         openNew={true}
-                        className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                        className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
                     </Components.Link>

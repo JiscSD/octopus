@@ -97,7 +97,11 @@ module.exports = {
             inter: ['Inter', ...defaultTheme.fontFamily.sans],
             montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
         },
-        extend: {}
+        extend: {
+            strokeWidth: {
+                4: 4
+            }
+        }
     },
     plugins: []
 };

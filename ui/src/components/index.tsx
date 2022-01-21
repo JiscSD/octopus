@@ -9,3 +9,7 @@ export { default as Section } from './Section';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Search } from './Search';
 export { default as SearchResults } from './Search/SearchResults';
+export { default as ExtendedLink } from './ExtendedLink';
+export { default as Paper } from './Paper';
+export { default as Button } from './Button';
+export { default as JumpToContent } from './JumpToContent';
