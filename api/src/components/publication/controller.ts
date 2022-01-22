@@ -2,7 +2,7 @@ import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as I from 'interface';
 
-export const getAll = async (event: I.APIRequest): Promise<I.JSONResponse> => {
+export const getAll = async (): Promise<I.JSONResponse> => {
     try {
         const publications = await publicationService.getAll();
 
@@ -16,8 +16,11 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
+
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
+            publication.user.firstName = publication?.user.firstName[0];
+
             return response.json(200, publication);
         }
 
