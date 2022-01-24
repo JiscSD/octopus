@@ -40,8 +40,8 @@ const urls = {
     },
     viewPublication: {
         path: 'publications',
-        title: ` - ${base.title}`,
-        canonical: `${base.host}/`
+        title: `${base.title}`,
+        canonical: `${base.host}/publications`
     }
 };
 

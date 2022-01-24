@@ -15,7 +15,7 @@ interface User {
     lastName: string;
 }
 
-export interface SearchResult {
+export interface Publication {
     id: string;
     url_slug: string;
     type: string;
@@ -30,4 +30,8 @@ export interface SearchResult {
     user: User;
     publicationFromRef: any[]; // to change
     publicationToRef: any[]; // to change
+}
+
+export interface SearchResult extends Publication {
+    // May be different?
 }

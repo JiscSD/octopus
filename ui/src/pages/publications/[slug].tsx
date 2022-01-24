@@ -1,16 +1,26 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { DownloadIcon, PencilIcon, EyeIcon, LinkIcon } from '@heroicons/react/outline';
 
-import * as Layouts from '@layouts';
+import * as Interfaces from '@interfaces';
 import * as Components from '@components';
+import * as Helpers from '@helpers';
+import * as Layouts from '@layouts';
+import * as Config from '@config';
+import * as Mocks from '@mocks';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { data } = context.query; // this is the full url, not just query params, so because the file is named [slug], there is a slug object, i.e the dynamic part
+    // const { data } = context.query; // this is the full url, not just query params, so because the file is named [slug], there is a slug object, i.e the dynamic part
+    // console.log(data); // will log in our nodejs process, not console
 
-    console.log(data); // will log in our nodejs process, not console
+    const publication: Interfaces.Publication = Mocks.testData.testSinglePublication;
 
-    const publication = {}; // query here to our api to get pub
+    // If no publication is found, maybe a more granular check can be done here
+    if (!publication) {
+        return {
+            notFound: true // render the 404 not found page
+        };
+    }
 
     return {
         props: {
@@ -20,27 +30,92 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    publication: any; // change when we know the shape
+    publication: Interfaces.Publication;
 };
 
 const Publication: NextPage<Props> = (props): JSX.Element => {
-    const router = useRouter(); // do not get the route here, this is client side data fetching
-
     return (
         <>
             <Head>
-                <title>Some piub</title>
+                {/** We need a way to get a short description for a publication */}
+                <meta name="description" content="" />
+                {/** We need a way to get a comma seperated string of keywords for a publication */}
+                <meta name="keywords" content="" />
+                <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${props.publication.url_slug}`} />
+                <title>{`${props.publication.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
-                    className='bg-teal-50 dark:bg-grey-400'
-                    waveFillTop='fill-teal-100 dark:fill-grey-500 transition-colors duration-500'
-                    waveFillMiddle='fill-teal-200 dark:fill-grey-600 transition-colors duration-500'
-                    waveFillBottom='fill-teal-700 dark:fill-grey-800 transition-colors duration-500'
+                    className="bg-teal-50 dark:bg-grey-800"
+                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <div className='container mx-auto px-8 py-16'>
-                        <p>Content here for publication with slug/id {router.query.slug}</p>
-                    </div>
+                    <section className="container mx-auto px-8 pt-8 lg:pt-16">
+                        <span className="block mb-4 lg:mb-8 font-montserrat font-semibold text-2xl text-pink-500">
+                            {Helpers.formatPublicationType(props.publication.type)}
+                        </span>
+
+                        <header className="grid mb-8 lg:mb-12 grid-cols-1 lg:grid-cols-3 lg:gap-4">
+                            <section className="col-span-2">
+                                <h1 className="block mb-8 font-montserrat font-bold text-2xl md:text-3xl xl:text-4xl text-grey-800 dark:text-white leading-tight xl:leading-normal transition-colors duration-500">
+                                    {props.publication.title}
+                                </h1>
+                                {/** Publication meta */}
+                                <div>
+                                    {/** Authors */}
+                                    <div>
+                                        <span>Authors:</span>
+                                        <span>Alexandra Freeman, Ashley Redman, Nathan Sainsbury</span>
+                                    </div>
+                                    {/** Dates */}
+                                    <time>Date time here</time>
+                                    {/** Reporting */}
+                                    <div>Reporting here</div>
+                                </div>
+                            </section>
+                            <aside className="mb-8 lg:mb-0">something</aside>
+                        </header>
+                    </section>
+
+                    <section className="container mx-auto px-8 mb-12">
+                        <h2 className="block mb-6 font-montserrat font-semibold text-2xl text-grey-800 dark:text-white transition-colors duration-500">
+                            Actions
+                        </h2>
+                        <div className="flex items-center">
+                            <Components.ActionButton
+                                title="Download"
+                                icon={<DownloadIcon className="w-10 h-6 text-teal-500" />}
+                                callback={() => console.log('download')}
+                                className="mr-6"
+                            />
+                            <Components.ActionButton
+                                title="Review"
+                                icon={<PencilIcon className="w-6 h-6 text-teal-500" />}
+                                callback={() => console.log('write review')}
+                                className="mr-6"
+                            />
+                            <Components.ActionButton
+                                title="Watch"
+                                icon={<EyeIcon className="w-6 h-6 text-teal-500" />}
+                                callback={() => console.log('watch')}
+                                className="mr-6"
+                            />
+                            <Components.ActionButton
+                                title="Write a linked publication"
+                                icon={<LinkIcon className="w-6 h-6 text-teal-500" />}
+                                callback={() => console.log('write new pub')}
+                                className="mr-6"
+                            />
+                        </div>
+                        {/* <p className="block mb-12 text-grey-700 dark:text-grey-300">
+                            Currently, there are no actions available for this publication.
+                        </p> */}
+                    </section>
+
+                    <section className="container mx-auto px-8 pb-16 ">
+                        <Components.ParseHTML content={props.publication.content} />
+                    </section>
                 </Components.SectionTwo>
             </Layouts.Standard>
         </>
