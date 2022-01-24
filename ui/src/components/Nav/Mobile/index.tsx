@@ -23,11 +23,7 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                 onClick={(e) => toggle()}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <MenuIcon
-                    className={`w-8 h-8 text-white ${
-                        open && 'text-grey-100'
-                    } transition-all `}
-                />
+                <MenuIcon className={`w-8 h-8 text-white ${open && 'text-grey-100'} transition-all `} />
             </button>
             <AnimatePresence>
                 {open && (
@@ -46,9 +42,7 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                                             href={item.value}
                                             className="pl-2 pr-6 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
-                                            <span className="text-grey-900 dark:text-white">
-                                                {item.label}
-                                            </span>
+                                            <span className="text-grey-900 dark:text-white">{item.label}</span>
                                         </Components.Link>
                                     </li>
                                 ))}

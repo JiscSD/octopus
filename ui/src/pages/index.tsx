@@ -1,10 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import {
-    DesktopComputerIcon,
-    PencilIcon,
-    SearchIcon
-} from '@heroicons/react/outline';
+import { DesktopComputerIcon, PencilIcon, SearchIcon } from '@heroicons/react/outline';
 
 import * as Layouts from '@layouts';
 import * as Config from '@config';
@@ -20,10 +16,7 @@ const Home: NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
-                <meta
-                    name="description"
-                    content={Config.urls.home.description}
-                />
+                <meta name="description" content={Config.urls.home.description} />
                 <meta name="keywords" content={Config.urls.home.keywords} />
                 <link rel="canonical" href={Config.urls.home.canonical} />
                 <title>{Config.urls.home.title}</title>
@@ -64,36 +57,29 @@ const Home: NextPage = (): JSX.Element => {
                                 Publish freely
                             </h3>
                             <p className="block mb-10 text-base text-grey-800 dark:text-white">
-                                Upload your publications when they are done. No
-                                need to wait around until you have a full
-                                scientific paper ready.
+                                Upload your publications when they are done. No need to wait around until you have a
+                                full scientific paper ready.
                             </p>
                             <h3 className="block mb-2 font-montserrat font-bold text-xl text-grey-800 dark:text-white">
                                 Establish priority
                             </h3>
                             <p className="block mb-10 text-base text-grey-800 dark:text-white">
-                                Stake your claim on an idea early, and establish
-                                your interests.
+                                Stake your claim on an idea early, and establish your interests.
                             </p>
                             <h3 className="block mb-2 font-montserrat font-bold text-xl text-grey-800 dark:text-white">
                                 Get quick peer reviews
                             </h3>
                             <p className="block mb-8 text-base text-grey-800 dark:text-white">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             </p>
                             <h3 className="block mb-2 font-montserrat font-bold text-xl text-grey-800 dark:text-white">
                                 Meritocracy
                             </h3>
                             <p className="block mb-24 text-base text-grey-800 dark:text-white">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit.
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             </p>
 
-                            <Components.ExtendedLink
-                                href="https://google.co.uk"
-                                title="Read more about Octopus"
-                            />
+                            <Components.ExtendedLink href="https://google.co.uk" title="Read more about Octopus" />
                         </div>
                     </div>
                 </Components.SectionTwo>
@@ -117,14 +103,10 @@ const Home: NextPage = (): JSX.Element => {
                                     Browse publications
                                 </h3>
                                 <p className="block mb-8 font-normal text-grey-800 dark:text-grey-50 transition-colors duration-500">
-                                    Designed to replace journals and papers as
-                                    the place to establish priority and record
-                                    your work in full detail.
+                                    Designed to replace journals and papers as the place to establish priority and
+                                    record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink
-                                    href="https://google.co.uk"
-                                    title="Browse publications"
-                                />
+                                <Components.ExtendedLink href="https://google.co.uk" title="Browse publications" />
                             </Components.Paper>
                             <Components.Paper>
                                 <SearchIcon className="w-10 h-10 mb-8 text-teal-500" />
@@ -132,14 +114,10 @@ const Home: NextPage = (): JSX.Element => {
                                     Search publications
                                 </h3>
                                 <p className="block mb-8 font-normal text-grey-800 dark:text-grey-50 transition-colors duration-500">
-                                    Designed to replace journals and papers as
-                                    the place to establish priority and record
-                                    your work in full detail.
+                                    Designed to replace journals and papers as the place to establish priority and
+                                    record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink
-                                    href="https://google.co.uk"
-                                    title="Search publications"
-                                />
+                                <Components.ExtendedLink href="https://google.co.uk" title="Search publications" />
                             </Components.Paper>
                             <Components.Paper>
                                 <PencilIcon className="w-10 h-10 mb-8 text-teal-500" />
@@ -147,14 +125,10 @@ const Home: NextPage = (): JSX.Element => {
                                     Publish your work
                                 </h3>
                                 <p className="block mb-8 font-normal text-grey-800 dark:text-grey-50 transition-colors duration-500">
-                                    Designed to replace journals and papers as
-                                    the place to establish priority and record
-                                    your work in full detail.
+                                    Designed to replace journals and papers as the place to establish priority and
+                                    record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink
-                                    href="https://google.co.uk"
-                                    title="Publish your work"
-                                />
+                                <Components.ExtendedLink href="https://google.co.uk" title="Publish your work" />
                             </Components.Paper>
                         </div>
                     </div>
@@ -172,8 +146,7 @@ const Home: NextPage = (): JSX.Element => {
                             Help us improve Octopus
                         </h2>
                         <h3 className="block mb-6 xl:mb-12 xl:w-1/2 font-montserrat font-semibold text-xl">
-                            Help us to make Octopus the best it can be. if you
-                            have feedback, please contact us.
+                            Help us to make Octopus the best it can be. if you have feedback, please contact us.
                         </h3>
                         <Components.Button href="" title="Send us feedback" />
                     </div>

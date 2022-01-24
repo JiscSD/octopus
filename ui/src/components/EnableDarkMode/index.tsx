@@ -6,12 +6,8 @@ import * as Types from '@types';
 import * as Stores from '@stores';
 
 const EnableDarkMode: React.FC = (): JSX.Element => {
-    const darkMode = Stores.usePreferencesStore(
-        (state: Types.PreferencesStoreTypes) => state.darkMode
-    );
-    const toggle = Stores.usePreferencesStore(
-        (state: Types.PreferencesStoreTypes) => state.toggle
-    );
+    const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
+    const toggle = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.toggle);
 
     return (
         <button

@@ -20,8 +20,7 @@ const urls = {
     home: {
         path: '/',
         title: `${base.title}`,
-        description:
-            "A new way to publish your scientific work that's fast, free and fair.",
+        description: "A new way to publish your scientific work that's fast, free and fair.",
         keywords: 'publish',
         canonical: `${base.host}`
     },

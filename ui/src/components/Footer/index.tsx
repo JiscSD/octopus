@@ -18,34 +18,26 @@ const Footer: React.FC = (): JSX.Element => {
                         href=""
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Learn
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Learn</h3>
                     </Components.Link>
 
                     <Components.Link
                         href=""
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Browse
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Browse</h3>
                     </Components.Link>
                     <Components.Link
                         href={Config.urls.search.path}
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Search
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Search</h3>
                     </Components.Link>
                     <Components.Link
                         href={Config.urls.createPublication.path}
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Publish
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Publish</h3>
                     </Components.Link>
                 </div>
                 {/** Links */}
@@ -62,17 +54,13 @@ const Footer: React.FC = (): JSX.Element => {
                         href=""
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Privacy
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Privacy</h3>
                     </Components.Link>
                     <Components.Link
                         href=""
                         className="block max-w-fit p-1 mb-1 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
-                            Leave feedback
-                        </h3>
+                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Leave feedback</h3>
                     </Components.Link>
                 </div>
                 {/** Socket */}
@@ -85,12 +73,7 @@ const Footer: React.FC = (): JSX.Element => {
                         openNew={true}
                         className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <Image
-                            src="/images/ukrn.png"
-                            alt="Jisc Logo"
-                            width={60}
-                            height={60}
-                        />
+                        <Image src="/images/ukrn.png" alt="Jisc Logo" width={60} height={60} />
                     </Components.Link>
                 </div>
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
@@ -103,12 +86,7 @@ const Footer: React.FC = (): JSX.Element => {
                             openNew={true}
                             className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <Image
-                                src="/images/mozillaScienceLab.svg"
-                                alt="Jisc Logo"
-                                width={200}
-                                height={60}
-                            />
+                            <Image src="/images/mozillaScienceLab.svg" alt="Jisc Logo" width={200} height={60} />
                         </Components.Link>
                     </div>
                 </div>
@@ -122,12 +100,7 @@ const Footer: React.FC = (): JSX.Element => {
                             openNew={true}
                             className="flex w-fit  rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <Image
-                                src="/images/elife.svg"
-                                alt="Jisc Logo"
-                                width={200}
-                                height={70}
-                            />
+                            <Image src="/images/elife.svg" alt="Jisc Logo" width={200} height={70} />
                         </Components.Link>
                     </div>
                 </div>
@@ -140,12 +113,7 @@ const Footer: React.FC = (): JSX.Element => {
                         openNew={true}
                         className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
-                        <Image
-                            src="/images/jisc-logo.svg"
-                            alt="Jisc Logo"
-                            width={60}
-                            height={60}
-                        />
+                        <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
                     </Components.Link>
                 </div>
             </div>

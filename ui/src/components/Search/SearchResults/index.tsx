@@ -21,9 +21,7 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
     return (
         <AnimatePresence>
             {open && (
-                <ClickAwayListener
-                    onClickAway={() => setOpen((prevState) => !prevState)}
-                >
+                <ClickAwayListener onClickAway={() => setOpen((prevState) => !prevState)}>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -33,10 +31,7 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
                     >
                         <ul>
                             {props.results.map((result, index) => (
-                                <li
-                                    key={result.id}
-                                    className="mb-6 pb-4 border-b border-grey-700"
-                                >
+                                <li key={result.id} className="mb-6 pb-4 border-b border-grey-700">
                                     <Components.Link
                                         href={`${Config.urls.viewPublication.path}/${result.url_slug}`}
                                         className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
@@ -44,9 +39,7 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
                                         <div className="">
                                             <div className="flex items-center justify-between mb-4">
                                                 <div className="flex mb-2">
-                                                    <h5 className="mr-4">
-                                                        {result.title}
-                                                    </h5>
+                                                    <h5 className="mr-4">{result.title}</h5>
                                                 </div>
                                             </div>
                                             <div className="flex items-center justify-between">
@@ -54,9 +47,7 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
                                                     {result.doi}
                                                 </span>
                                                 <span className="text-sm text-grey-700 dark:text-grey-200">
-                                                    {Helpers.formatDate(
-                                                        result.createdAt
-                                                    )}
+                                                    {Helpers.formatDate(result.createdAt)}
                                                 </span>
                                             </div>
                                         </div>

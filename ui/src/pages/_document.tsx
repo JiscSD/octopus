@@ -2,15 +2,9 @@ import { Html, Head, Main, NextScript } from 'next/document';
 
 const AppDocument = () => {
     return (
-        <Html
-            lang="en"
-            className="scroll-smooth motion-reduce:scroll-auto bg-teal-50 dark:bg-grey-800"
-        >
+        <Html lang="en" className="scroll-smooth motion-reduce:scroll-auto bg-teal-50 dark:bg-grey-800">
             <Head>
-                <meta
-                    httpEquiv="Content-Type"
-                    content="text/html; charset=utf-8"
-                />
+                <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
 
                 <link rel="icon" href="/meta/favicon.ico" />
@@ -18,11 +12,7 @@ const AppDocument = () => {
                 <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png" />
                 <link rel="icon" type="image/png" sizes="16x16" href="/meta/favicon-16x16.png" />
                 <link rel="manifest" href="/meta/site.webmanifest" /> */}
-                <link
-                    rel="mask-icon"
-                    href="/meta/safari-pinned-tab.svg"
-                    color="#34a4b1"
-                />
+                <link rel="mask-icon" href="/meta/safari-pinned-tab.svg" color="#34a4b1" />
                 <meta name="msapplication-TileColor" content="#34a4b1" />
                 <meta name="theme-color" content="#34a4b1"></meta>
 

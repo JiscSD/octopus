@@ -28,15 +28,9 @@ const useWindowSize = () => {
 
     return {
         sm: windowSize.width <= Config.screens.sm,
-        md:
-            windowSize.width <= Config.screens.md &&
-            windowSize.width > Config.screens.sm,
-        lg:
-            windowSize.width <= Config.screens.lg &&
-            windowSize.width > Config.screens.md,
-        xl:
-            windowSize.width <= Config.screens.xl &&
-            windowSize.width > Config.screens.lg,
+        md: windowSize.width <= Config.screens.md && windowSize.width > Config.screens.sm,
+        lg: windowSize.width <= Config.screens.lg && windowSize.width > Config.screens.md,
+        xl: windowSize.width <= Config.screens.xl && windowSize.width > Config.screens.lg,
         xxl: windowSize.width > Config.screens.xl,
         windowHeight: windowSize.height
     };

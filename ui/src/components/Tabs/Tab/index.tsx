@@ -7,11 +7,7 @@ type Props = {
 
 const Tab: React.FC<Props> = (props): JSX.Element => {
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             {props.children}
         </motion.div>
     );

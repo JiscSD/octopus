@@ -9,9 +9,7 @@ import '../styles/globals.css';
 const App = ({ Component, pageProps }: AppProps) => {
     const isMounted = React.useRef(false);
     const [loading, setLoading] = React.useState(true);
-    const darkMode = Stores.usePreferencesStore(
-        (state: Types.PreferencesStoreTypes) => state.darkMode
-    );
+    const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
 
     React.useEffect(() => {
         isMounted.current = true;
@@ -23,9 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     return (
         !loading && (
-            <div
-                className={`antialiased font-inter ${darkMode ? 'dark' : ''} `}
-            >
+            <div className={`antialiased font-inter ${darkMode ? 'dark' : ''} `}>
                 <Component {...pageProps} />
             </div>
         )

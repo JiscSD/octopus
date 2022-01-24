@@ -7,9 +7,7 @@ type Props = {
 };
 
 const TabHead: React.FC<Props> = (props): JSX.Element => {
-    return (
-        <button onClick={() => props.set(props.tab)}>{props.heading}</button>
-    );
+    return <button onClick={() => props.set(props.tab)}>{props.heading}</button>;
 };
 
 export default TabHead;

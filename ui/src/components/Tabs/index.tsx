@@ -13,32 +13,19 @@ type Props = {
 };
 
 const Tabs: React.FC<Props> = (props): JSX.Element => {
-    const [active, setActive] = React.useState<React.ReactNode>(
-        props.content[0]
-    );
+    const [active, setActive] = React.useState<React.ReactNode>(props.content[0]);
 
     return (
         <div className="tabs">
             <div className="tab-head flex">
                 {props.content.map((entry) => {
-                    return (
-                        <Components.TabHead
-                            key={entry.title}
-                            heading={entry.title}
-                            tab={entry}
-                            set={setActive}
-                        />
-                    );
+                    return <Components.TabHead key={entry.title} heading={entry.title} tab={entry} set={setActive} />;
                 })}
             </div>
 
             <AnimatePresence>
                 {props.content.map((entry) => {
-                    return entry === active ? (
-                        <Components.Tab key={entry.title}>
-                            {entry.content}
-                        </Components.Tab>
-                    ) : null;
+                    return entry === active ? <Components.Tab key={entry.title}>{entry.content}</Components.Tab> : null;
                 })}
             </AnimatePresence>
         </div>
