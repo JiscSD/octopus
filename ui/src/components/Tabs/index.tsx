@@ -1,5 +1,4 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
 
 import * as Components from '@components';
 
@@ -17,17 +16,15 @@ const Tabs: React.FC<Props> = (props): JSX.Element => {
 
     return (
         <div className="tabs">
-            <div className="tab-head flex">
+            <div className="flex mb-12">
                 {props.content.map((entry) => {
-                    return <Components.TabHead key={entry.title} heading={entry.title} tab={entry} set={setActive} />;
+                    return <Components.TabHead key={entry.title} tab={entry} active={active} set={setActive} />;
                 })}
             </div>
 
-            <AnimatePresence>
-                {props.content.map((entry) => {
-                    return entry === active ? <Components.Tab key={entry.title}>{entry.content}</Components.Tab> : null;
-                })}
-            </AnimatePresence>
+            {props.content.map((entry) => {
+                return entry === active && <Components.Tab key={entry.title}>{entry.content}</Components.Tab>;
+            })}
         </div>
     );
 };

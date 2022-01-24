@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { DownloadIcon, PencilIcon, EyeIcon, LinkIcon } from '@heroicons/react/outline';
+import { FlagIcon } from '@heroicons/react/solid';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -64,17 +65,22 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                                 {/** Publication meta */}
                                 <div>
                                     {/** Authors */}
-                                    <div>
+                                    <div className="flex mb-4 dark:text-white">
                                         <span>Authors:</span>
                                         <span>Alexandra Freeman, Ashley Redman, Nathan Sainsbury</span>
                                     </div>
                                     {/** Dates */}
-                                    <time>Date time here</time>
+                                    <time className="block mb-4 dark:text-white">Date time here</time>
                                     {/** Reporting */}
-                                    <div>Reporting here</div>
+                                    <span className="flex items-center font-bold text-xs text-pink-500">
+                                        Report this publication
+                                        <FlagIcon className="ml-2 w-3 h-3" />
+                                    </span>
                                 </div>
                             </section>
-                            <aside className="mb-8 lg:mb-0">something</aside>
+                            <aside className="flex items-center mb-8 lg:mb-0">
+                                <div>Ratings here</div>
+                            </aside>
                         </header>
                     </section>
 
@@ -122,12 +128,24 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                         <Components.Tabs
                             content={[
                                 {
-                                    title: 'hello',
+                                    title: 'Full text',
                                     content: <Components.ParseHTML content={props.publication.content} />
                                 },
                                 {
-                                    title: 'Another',
-                                    content: <Components.ParseHTML content={'<p>Some html here </p>'} />
+                                    title: 'Related',
+                                    content: <Components.ParseHTML content={'<p>Related publications view</p>'} />
+                                },
+                                {
+                                    title: 'Reviews',
+                                    content: <Components.ParseHTML content={'<p>Reviews here</p>'} />
+                                },
+                                {
+                                    title: 'Additional information',
+                                    content: <Components.ParseHTML content={'<p>Additional informaito here</p>'} />
+                                },
+                                {
+                                    title: 'Public chain',
+                                    content: <Components.ParseHTML content={'<p>Public chain here</p>'} />
                                 }
                             ]}
                         />
