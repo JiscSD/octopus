@@ -13,10 +13,10 @@ const EnableDarkMode: FC = (): JSX.Element => {
 
     return (
         <button
-            type="button"
+            type='button'
             aria-pressed={darkMode}
             onClick={(e) => toggle(e)}
-            className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+            className='rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400'
         >
             <AnimatePresence>
                 {darkMode && (

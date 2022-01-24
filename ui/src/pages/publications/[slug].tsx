@@ -33,12 +33,12 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-400"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
+                    className='bg-teal-50 dark:bg-grey-400'
+                    waveFillTop='fill-teal-100 dark:fill-grey-500 transition-colors duration-500'
+                    waveFillMiddle='fill-teal-200 dark:fill-grey-600 transition-colors duration-500'
+                    waveFillBottom='fill-teal-700 dark:fill-grey-800 transition-colors duration-500'
                 >
-                    <div className="container mx-auto px-8 py-16">
+                    <div className='container mx-auto px-8 py-16'>
                         <p>Content here for publication with slug/id {router.query.slug}</p>
                     </div>
                 </Components.SectionTwo>

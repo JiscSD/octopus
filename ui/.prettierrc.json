@@ -7,5 +7,6 @@
     "singleQuote": true,
     "bracketSpacing": true,
     "arrowParens": "always",
-    "quoteProps": "as-needed"
+    "quoteProps": "as-needed",
+    "jsxSingleQuote": true
 }
