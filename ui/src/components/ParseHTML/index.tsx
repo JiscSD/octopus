@@ -47,7 +47,7 @@ const ParseHTML: React.FC<Props> = (props): JSX.Element => {
             prose
             lg:max-w-7xl
             text-grey-800 dark:text-grey-100
-            transition-all
+            transition-colors
             duration-500
 
             prose-headings:text-teal-700 dark:prose-headings:text-teal-400
@@ -57,6 +57,9 @@ const ParseHTML: React.FC<Props> = (props): JSX.Element => {
             prose-a:underline-offset-1
             prose-a:decoration-teal-500
             prose-a:decoration-2
+            prose-a:outline-none
+            focus:prose-a:bg-yellow-300
+            dark:focus:prose-a:text-grey-800
 
             prose-blockquote:text-grey-600 dark:prose-blockquote:text-grey-300
             prose-blockquote:border-teal-500

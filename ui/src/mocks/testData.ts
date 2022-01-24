@@ -190,6 +190,44 @@ export const testSinglePublication = {
          
          <h3>This is a heading h3</h3>
 
+        <p>&nbsp;</p>
+        <table style="border-collapse: collapse; width: 100%; height: 36px;" border="1">
+        <tbody>
+        <tr style="height: 18px;">
+        <td style="width: 25%; height: 18px;">
+        <h4>This is a table head</h4>
+        </td>
+        <td style="width: 25%; height: 18px;">
+        <h4>This is a table head</h4>
+        </td>
+        <td style="width: 25%; height: 18px;">
+        <h4>This is a table head</h4>
+        </td>
+        <td style="width: 25%; height: 18px;">
+        <h4>This is a table head</h4>
+        </td>
+        </tr>
+        <tr>
+        <td style="width: 25%; text-align: center;">This is centered</td>
+        <td style="width: 25%;"><span style="text-decoration: underline;">This is underlined</span></td>
+        <td style="width: 25%; text-align: right;">This is right aligned</td>
+        <td style="width: 25%;">
+        <ul>
+        <li>This is a list item</li>
+        <li>This is a lisrt item</li>
+        <li>This is a list item</li>
+        </ul>
+        </td>
+        </tr>
+        <tr style="height: 18px;">
+        <td style="width: 25%; height: 18px;">Lorem ipsum</td>
+        <td style="width: 25%; height: 18px;">Lorem ipsum</td>
+        <td style="width: 25%; height: 18px;">Lorem ipsum</td>
+        <td style="width: 25%; height: 18px;">Lorem ipsum</td>
+        </tr>
+        </tbody>
+        </table>
+
          `,
     doi: 'some-doi-here',
     currentStatus: 'LIVE',

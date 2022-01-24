@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type Props = {
     title: string;
@@ -9,8 +9,12 @@ type Props = {
 
 const ActionButton: React.FC<Props> = (props): JSX.Element => {
     return (
-        <button type="button" onClick={() => props.callback()} className={`flex items-center ${props.className}`}>
-            <span className="mr-2 p-2 font-montserrat font-semibold text-grey-800 dark:text-white border-b-2 border-teal-500 transition-colors duration-500">
+        <button
+            type="button"
+            onClick={() => props.callback()}
+            className={`flex items-center group rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 ${props.className}`}
+        >
+            <span className="mr-2 p-2 font-montserrat font-semibold text-sm text-grey-800 group-hover:text-grey-400 dark:text-white dark:group-hover:text-grey-300 border-b-2 border-teal-500 group-hover:border-teal-700 transition-colors duration-500">
                 {props.title}
             </span>
             {props.icon}

@@ -17,3 +17,6 @@ export { default as ActionButton } from './Button/ActionButton';
 export { default as JumpToContent } from './JumpToContent';
 export { default as Pill } from './Pill';
 export { default as ParseHTML } from './ParseHTML';
+export { default as Tabs } from './Tabs';
+export { default as Tab } from './Tabs/Tab';
+export { default as TabHead } from './Tabs/TabHead';
