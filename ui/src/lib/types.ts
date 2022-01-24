@@ -1,6 +1,6 @@
-import { FormEvent } from 'react';
+import React from 'react';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
-    toggle: (e: FormEvent<HTMLButtonElement>) => void;
+    toggle: (e: React.FormEvent<HTMLButtonElement>) => void;
 };

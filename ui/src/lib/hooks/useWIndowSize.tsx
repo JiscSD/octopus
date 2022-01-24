@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import React from 'react';
 
 import * as Config from '@config';
 
@@ -8,19 +8,19 @@ type Dimensions = {
 };
 
 const useWindowSize = () => {
-    const [windowSize, setWindowSize] = useState<Dimensions>({
+    const [windowSize, setWindowSize] = React.useState<Dimensions>({
         width: window.innerWidth,
         height: window.innerHeight
     });
 
-    const handleResize = useCallback(() => {
+    const handleResize = React.useCallback(() => {
         setWindowSize({
             width: window.innerWidth,
             height: window.innerHeight
         });
     }, []);
 
-    useEffect(() => {
+    React.useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize();
         return () => window.removeEventListener('resize', handleResize);

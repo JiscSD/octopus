@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import { PreferencesStoreTypes } from 'src/lib/types';
 import { usePreferencesStore } from 'src/lib/stores/preferences';
@@ -7,11 +7,11 @@ import { usePreferencesStore } from 'src/lib/stores/preferences';
 import '../styles/globals.css';
 
 const App = ({ Component, pageProps }: AppProps) => {
-    const isMounted = useRef(false);
-    const [loading, setLoading] = useState(true);
+    const isMounted = React.useRef(false);
+    const [loading, setLoading] = React.useState(true);
     const darkMode = usePreferencesStore((state: PreferencesStoreTypes) => state.darkMode);
 
-    useEffect(() => {
+    React.useEffect(() => {
         isMounted.current = true;
         setLoading(false);
         return () => {

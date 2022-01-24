@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import React from 'react';
 import { ArrowCircleUpIcon } from '@heroicons/react/solid';
 import { motion } from 'framer-motion';
 
-const ScrollToTop: FC = (): JSX.Element => {
+const ScrollToTop: React.FC = (): JSX.Element => {
     return (
         <motion.button
             initial={{ scale: 0.5 }}

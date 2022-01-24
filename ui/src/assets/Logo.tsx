@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 
 type Props = {
     height: number;
@@ -6,7 +6,7 @@ type Props = {
     className?: string;
 };
 
-const Logo: FC<Props> = (props): JSX.Element => {
+const Logo: React.FC<Props> = (props): JSX.Element => {
     return (
         <svg
             version='1.0'

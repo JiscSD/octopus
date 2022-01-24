@@ -1,5 +1,4 @@
-import { FC, ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 
 import * as Assets from '@assets';
 
@@ -9,10 +8,10 @@ type Props = {
     waveFillTop: string;
     waveFillMiddle: string;
     waveFillBottom: string;
-    children: ReactNode;
+    children: React.ReactNode;
 };
 
-const Section: FC<Props> = (props): JSX.Element => {
+const Section: React.FC<Props> = (props): JSX.Element => {
     return (
         <section
             id={props.id && props.id}

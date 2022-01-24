@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import React from 'react';
 import Link from 'next/link';
 
 type Props = {
@@ -6,10 +6,10 @@ type Props = {
     className?: string;
     scroll?: boolean;
     openNew?: boolean;
-    children: ReactElement[] | ReactElement;
+    children: React.ReactElement[] | React.ReactElement;
 };
 
-const CustomLink: FC<Props> = (props): JSX.Element => {
+const CustomLink: React.FC<Props> = (props): JSX.Element => {
     return (
         <Link href={props.href} scroll={props.scroll}>
             <a

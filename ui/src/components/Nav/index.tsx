@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import useWindowSize from 'src/lib/hooks/useWIndowSize';
 
 import * as Components from '@components';
@@ -24,7 +24,7 @@ const items: Lib.I.NavMenuItem[] = [
     }
 ];
 
-const Nav: FC = (): JSX.Element => {
+const Nav: React.FC = (): JSX.Element => {
     const screens = useWindowSize();
 
     return (

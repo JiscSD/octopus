@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 
 import * as Components from '@components';
@@ -9,7 +9,7 @@ type Props = {
     className?: string;
 };
 
-const ExtendedLink: FC<Props> = (props): JSX.Element => {
+const ExtendedLink: React.FC<Props> = (props): JSX.Element => {
     return (
         <Components.Link
             href={props.href}

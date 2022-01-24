@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import React from 'react';
 
-const JumpToContent: FC = (): JSX.Element => {
+const JumpToContent: React.FC = (): JSX.Element => {
     return (
         <a
             id='top'

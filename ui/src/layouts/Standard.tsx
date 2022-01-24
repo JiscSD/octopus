@@ -1,13 +1,13 @@
-import { FC, ReactNode } from 'react';
+import React from 'react';
 
 import * as Components from '@components';
 
 type Props = {
     fixedHeader?: boolean;
-    children: ReactNode;
+    children: React.ReactNode;
 };
 
-const Standard: FC<Props> = (props): JSX.Element => {
+const Standard: React.FC<Props> = (props): JSX.Element => {
     return (
         <>
             <Components.JumpToContent />

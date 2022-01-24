@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 
 type Props = {
     className?: string;
@@ -7,7 +7,7 @@ type Props = {
     waveFillBottom: string;
 };
 
-const WaveOne: FC<Props> = (props): JSX.Element => {
+const WaveOne: React.FC<Props> = (props): JSX.Element => {
     const {
         waveFillTop = 'fill-white dark:fill-black',
         waveFillMiddle = 'fill-white dark:fill-black',

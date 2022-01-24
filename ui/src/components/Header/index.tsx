@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 
 import * as Components from '@components';
 import * as Assets from '@assets';
@@ -8,7 +8,7 @@ type Props = {
     fixed?: boolean;
 };
 
-const Header: FC<Props> = (props): JSX.Element => {
+const Header: React.FC<Props> = (props): JSX.Element => {
     return (
         <header
             className={`bg-teal-600 dark:bg-grey-800 py-4 shadow-sm shadow-white dark:shadow-none text-white transition-colors duration-500 ${

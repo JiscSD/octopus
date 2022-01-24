@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 import * as Components from '@components';
 import * as Config from '@config';
 
-const Footer: FC = (): JSX.Element => {
+const Footer: React.FC = (): JSX.Element => {
     return (
         <footer className='bg-teal-700 dark:bg-grey-800 pt-28 pb-12 transition-all duration-500'>
             <div className='container mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-8'>

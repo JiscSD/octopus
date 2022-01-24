@@ -1,4 +1,4 @@
-import { CSSProperties, FC, ReactNode } from 'react';
+import React from 'react';
 
 import * as Assets from '@assets';
 
@@ -8,10 +8,10 @@ type Props = {
     waveFillTop: string;
     waveFillMiddle: string;
     waveFillBottom: string;
-    children: ReactNode;
+    children: React.ReactNode;
 };
 
-const SectionTwo: FC<Props> = (props): JSX.Element => {
+const SectionTwo: React.FC<Props> = (props): JSX.Element => {
     return (
         <section
             id={props.id && props.id}

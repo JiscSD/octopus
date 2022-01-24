@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ClickAwayListener from 'react-click-away-listener';
 import { MenuIcon } from '@heroicons/react/outline';
@@ -10,8 +10,8 @@ type Props = {
     items: Lib.I.NavMenuItem[];
 };
 
-const Mobile: FC<Props> = (props): JSX.Element => {
-    const [open, setOpen] = useState(false);
+const Mobile: React.FC<Props> = (props): JSX.Element => {
+    const [open, setOpen] = React.useState(false);
 
     const toggle = () => {
         setOpen(!open);

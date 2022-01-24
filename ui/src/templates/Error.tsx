@@ -1,11 +1,11 @@
-import { FC } from 'react';
+import React from 'react';
 
 import * as Layouts from '@layouts';
 import * as Components from '@components';
 
 type Props = { statusCode: number; title: string; content: string };
 
-const ErrorTemplate: FC<Props> = (props) => {
+const ErrorTemplate: React.FC<Props> = (props) => {
     return (
         <Layouts.Standard>
             <Components.Section
