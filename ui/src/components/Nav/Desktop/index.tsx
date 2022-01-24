@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as Lib from '@lib';
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 
 type Props = {
-    items: Lib.I.NavMenuItem[];
+    items: Interfaces.NavMenuItem[];
 };
 
 const Desktop: React.FC<Props> = (props): JSX.Element => {

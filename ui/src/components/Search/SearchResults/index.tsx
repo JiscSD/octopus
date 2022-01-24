@@ -2,12 +2,13 @@ import { FC, useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ClickAwayListener from 'react-click-away-listener';
 
-import * as Lib from '@lib';
+import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Components from '@components';
+import * as Helpers from '@helpers';
 
 type Props = {
-    results: Lib.I.SearchResult[];
+    results: Interfaces.SearchResult[];
 };
 
 const SearchResults: FC<Props> = (props): JSX.Element => {
@@ -46,7 +47,7 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
                                                     {result.doi}
                                                 </span>
                                                 <span className='text-sm text-grey-700 dark:text-grey-200'>
-                                                    {Lib.H.formatDate(result.createdAt)}
+                                                    {Helpers.formatDate(result.createdAt)}
                                                 </span>
                                             </div>
                                         </div>

@@ -2,12 +2,12 @@ import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SunIcon, MoonIcon } from '@heroicons/react/outline';
 
-import { usePreferencesStore } from 'src/lib/stores/preferences';
-import { PreferencesStoreTypes } from 'src/lib/types';
+import * as Types from '@types';
+import * as Stores from '@stores';
 
 const EnableDarkMode: React.FC = (): JSX.Element => {
-    const darkMode = usePreferencesStore((state: PreferencesStoreTypes) => state.darkMode);
-    const toggle = usePreferencesStore((state: PreferencesStoreTypes) => state.toggle);
+    const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
+    const toggle = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.toggle);
 
     return (
         <button

@@ -1,11 +1,11 @@
 import React from 'react';
-import useWindowSize from 'src/lib/hooks/useWIndowSize';
 
 import * as Components from '@components';
-import * as Lib from '@lib';
+import * as Interfaces from '@interfaces';
+import * as Hooks from '@hooks';
 import * as Config from '@config';
 
-const items: Lib.I.NavMenuItem[] = [
+const items: Interfaces.NavMenuItem[] = [
     {
         label: 'Learn',
         value: '#learn'
@@ -25,7 +25,7 @@ const items: Lib.I.NavMenuItem[] = [
 ];
 
 const Nav: React.FC = (): JSX.Element => {
-    const screens = useWindowSize();
+    const screens = Hooks.useWindowSize();
 
     return (
         <>

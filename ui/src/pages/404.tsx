@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 
-import ErrorTemplate from 'src/templates/Error';
+import * as Templates from '@templates';
 
 const Error404: NextPage = () => {
-    return <ErrorTemplate statusCode={404} title='Not found' content='Lorem ipsum' />;
+    return <Templates.ErrorTemplate statusCode={404} title='Not found' content='Lorem ipsum' />;
 };
 
 export default Error404;

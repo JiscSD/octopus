@@ -2,11 +2,11 @@ import React from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 
 import * as Components from '@components';
-import * as Lib from '@lib';
+import * as Interfaces from '@interfaces';
 import * as Mocks from '@mocks';
 
 const Search: React.FC = (): JSX.Element => {
-    const [results, setResults] = React.useState<Lib.I.SearchResult[]>([]);
+    const [results, setResults] = React.useState<Interfaces.SearchResult[]>([]);
 
     const lookup = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length > 1) {

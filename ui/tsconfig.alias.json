@@ -5,9 +5,6 @@
             "@components": [
                 "./src/components"
             ],
-            "@lib": [
-                "./src/lib"
-            ],
             "@config": [
                 "./src/config"
             ],
@@ -17,11 +14,26 @@
             "@assets": [
                 "./src/assets"
             ],
-            "@stores": [
-                "./src/lib/stores"
-            ],
             "@mocks": [
                 "./src/mocks"
+            ],
+            "@hooks": [
+                "./src/hooks"
+            ],
+            "@stores": [
+                "./src/stores"
+            ],
+            "@templates": [
+                "./src/templates"
+            ],
+            "@interfaces": [
+                "./src/lib/interfaces"
+            ],
+            "@types": [
+                "./src/lib/types"
+            ],
+            "@helpers": [
+                "./src/lib/helpers"
             ]
         }
     }

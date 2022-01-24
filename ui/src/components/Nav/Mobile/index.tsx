@@ -4,10 +4,10 @@ import ClickAwayListener from 'react-click-away-listener';
 import { MenuIcon } from '@heroicons/react/outline';
 
 import * as Components from '@components';
-import * as Lib from '@lib';
+import * as Interfaces from '@interfaces';
 
 type Props = {
-    items: Lib.I.NavMenuItem[];
+    items: Interfaces.NavMenuItem[];
 };
 
 const Mobile: React.FC<Props> = (props): JSX.Element => {
