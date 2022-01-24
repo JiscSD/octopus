@@ -13,22 +13,14 @@ type Props = {
 const SearchResults: FC<Props> = (props): JSX.Element => {
     const [open, setOpen] = useState(false);
 
-    const toggle = () => {
-        setOpen(!open);
-    };
-
     useEffect(() => {
-        if (props.results.length) {
-            setOpen(true);
-        } else {
-            setOpen(false);
-        }
+        if (props.results.length) setOpen((prevState) => !prevState);
     }, [props.results]);
 
     return (
         <AnimatePresence>
             {open && (
-                <ClickAwayListener onClickAway={toggle}>
+                <ClickAwayListener onClickAway={() => setOpen((prevState) => !prevState)}>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
