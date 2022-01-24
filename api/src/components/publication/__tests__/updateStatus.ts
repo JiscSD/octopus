@@ -39,6 +39,15 @@ describe('Update publication status', () => {
         expect(updatedPublication.status).toEqual(200);
     });
 
+
+    test('User with permissions cannot update their publication to DRAFT from LIVE', async () => {
+        const updatedPublication = await testUtils.agent.put('/publications/publication-problem-live/status/DRAFT').query({
+            apiKey: '123456789'
+        });
+
+        expect(updatedPublication.status).toEqual(422);
+    });
+
     test('User without permissions cannot update their publication to LIVE from DRAFT', async () => {
         const updatedPublication = await testUtils.agent.put('/publications/publication-hypothesis-draft-problem-live/status/LIVE').query({
             apiKey: '987654321'
