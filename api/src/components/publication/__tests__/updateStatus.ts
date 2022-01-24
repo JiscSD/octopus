@@ -39,7 +39,7 @@ describe('Update publication status', () => {
         expect(updatedPublication.status).toEqual(200);
     });
 
-    test('User without permissions can update their publication to LIVE from DRAFT', async () => {
+    test('User without permissions cannot update their publication to LIVE from DRAFT', async () => {
         const updatedPublication = await testUtils.agent.put('/publications/publication-hypothesis-draft-problem-live/status/LIVE').query({
             apiKey: '987654321'
         });
