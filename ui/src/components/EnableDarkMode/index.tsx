@@ -5,8 +5,6 @@ import { SunIcon, MoonIcon } from '@heroicons/react/outline';
 import { usePreferencesStore } from 'src/lib/stores/preferences';
 import { PreferencesStoreTypes } from 'src/lib/types';
 
-const classes = 'w-8 h-8 text-white transition-all';
-
 const EnableDarkMode: FC = (): JSX.Element => {
     const darkMode = usePreferencesStore((state: PreferencesStoreTypes) => state.darkMode);
     const toggle = usePreferencesStore((state: PreferencesStoreTypes) => state.toggle);
@@ -26,7 +24,7 @@ const EnableDarkMode: FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <SunIcon className={classes} />
+                        <SunIcon className='w-8 h-8 text-white transition-all' />
                     </motion.div>
                 )}
 
@@ -37,7 +35,7 @@ const EnableDarkMode: FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <MoonIcon className={classes} />
+                        <MoonIcon className='w-8 h-8 text-white transition-all' />
                     </motion.div>
                 )}
             </AnimatePresence>
