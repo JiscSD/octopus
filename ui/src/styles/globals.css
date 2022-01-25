@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    ::selection {
+        @apply bg-grey-800 dark:bg-teal-500 text-grey-100;
+    }
+}
