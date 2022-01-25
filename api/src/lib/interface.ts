@@ -60,3 +60,13 @@ export interface CreateLinkBody {
 }
 
 export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
+export type OrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type OrderDirection = 'asc' | 'desc';
+
+export interface PublicationFilters {
+    search?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: OrderBy;
+    orderDirection?: OrderDirection;
+}

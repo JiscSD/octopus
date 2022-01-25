@@ -2,12 +2,13 @@ import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as I from 'interface';
 
-export const getAll = async (): Promise<I.JSONResponse> => {
+export const getAll = async (event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>): Promise<I.JSONResponse> => {
     try {
-        const publications = await publicationService.getAll();
+        const publications = await publicationService.getAll(event.queryStringParameters);
 
         return response.json(200, publications);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

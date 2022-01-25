@@ -2,7 +2,51 @@ import * as I from 'interface';
 
 import prisma from 'lib/client';
 
-export const getAll = async () => {};
+export const getAll = async (filters: I.PublicationFilters) => {
+    console.log(filters);
+    const publications = await prisma.publication.findMany({
+        take: Number(filters.limit) || 10,
+        skip: Number(filters.offset) || 0,
+        orderBy: {
+            [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
+        },
+        where: {
+            currentStatus: 'LIVE',
+            OR: [
+                {
+                    title: {
+                        contains: filters.search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    content: {
+                        contains: filters.search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    user: {
+                        firstName: {
+                            contains: filters.search,
+                            mode: 'insensitive'
+                        }
+                    }
+                },
+                {
+                    user: {
+                        lastName: {
+                            contains: filters.search,
+                            mode: 'insensitive'
+                        }
+                    }
+                }
+            ]
+        }
+    });
+
+    return publications;
+};
 
 export const get = async (id: string) => {
     const publication = await prisma.publication.findFirst({
