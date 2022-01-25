@@ -25,40 +25,88 @@ const urls = {
         canonical: `${base.host}`
     },
     search: {
-        path: '/#search',
-        title: `Search - ${base.title}`,
+        path: '/search',
+        title: `Search publications - ${base.title}`,
         description: '',
         keywords: '',
         canonical: `${base.host}/search`
     },
     // Publications
     createPublication: {
-        path: '/new-publication',
+        path: '/create',
         title: `New Publication - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/new-publication`
+        canonical: `${base.host}/create`
     },
     viewPublication: {
         path: '/publications',
         title: `${base.title}`,
         canonical: `${base.host}/publications`
     },
-    // Reviews
-    createReview: {
-        path: '/review',
-        title: 'Create publication review',
+    browsePublications: {
+        path: '/browse',
+        title: `Browse all publications - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/review`
+        canonical: `${base.host}/browse`
     },
-    // Report
-    createFlag: {
-        path: '/flag',
-        title: 'Flag publication',
+    editPublication: {
+        path: '/edit',
+        title: `Edit draft publication - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/flag`
+        canonical: `${base.host}/edit`
+    },
+    // Reviews
+    // createReview: {
+    //     path: '/review',
+    //     title: 'Create publication review',
+    //     description: '',
+    //     keywords: '',
+    //     canonical: `${base.host}/review`
+    // },
+    // Report
+    // createFlag: {
+    //     path: '/flag',
+    //     title: 'Flag publication',
+    //     description: '',
+    //     keywords: '',
+    //     canonical: `${base.host}/flag`
+    // },
+    legal: {
+        path: '/legal',
+        title: `Legal - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/legal`
+    },
+    privacy: {
+        path: '/privacy',
+        title: `Privacy - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/privacy`
+    },
+    feedback: {
+        path: '/feedback',
+        title: `Leave feedback- ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/feedback`
+    },
+    about: {
+        path: '/about',
+        title: `About Octopus- ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/about`
+    },
+    404: {
+        title: `404 Not Found - ${base.title}`
+    },
+    500: {
+        title: `Something wen wrong - ${base.title}`
     }
 };
 

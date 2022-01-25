@@ -7,12 +7,8 @@ import * as Config from '@config';
 
 const items: Interfaces.NavMenuItem[] = [
     {
-        label: 'Learn',
-        value: '#learn'
-    },
-    {
         label: 'Browse',
-        value: '#browse'
+        value: Config.urls.browsePublications.path
     },
     {
         label: 'Search',
