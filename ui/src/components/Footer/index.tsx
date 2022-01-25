@@ -6,7 +6,7 @@ import * as Config from '@config';
 
 const Footer: React.FC = (): JSX.Element => {
     return (
-        <footer className="bg-teal-700 pt-28 pb-12 transition-all duration-500 dark:bg-grey-800">
+        <footer className="bg-teal-700 pt-28 pb-12 transition-all duration-500 dark:bg-grey-800 print:hidden">
             <div className="container mx-auto grid grid-cols-1 gap-8 px-8 md:grid-cols-4">
                 {/** Title */}
                 <h2 className="col-span-1 block font-montserrat text-4xl font-bold text-white md:col-span-4 lg:col-span-4 lg:mb-12">

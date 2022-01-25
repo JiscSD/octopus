@@ -45,6 +45,7 @@ const ParseHTML: React.FC<Props> = (props): JSX.Element => {
         <article
             className={`
             prose
+            max-w-none
             text-grey-800
             transition-colors duration-500
             prose-headings:text-teal-700
@@ -64,7 +65,7 @@ const ParseHTML: React.FC<Props> = (props): JSX.Element => {
             dark:prose-a:text-white dark:focus:prose-a:text-grey-800
             dark:prose-blockquote:text-grey-300
 
-            dark:prose-strong:text-teal-300 lg:max-w-7xl
+            dark:prose-strong:text-teal-300
 
             `}
         >

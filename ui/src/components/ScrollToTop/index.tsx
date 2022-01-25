@@ -8,7 +8,7 @@ const ScrollToTop: React.FC = (): JSX.Element => {
             initial={{ scale: 0.5 }}
             animate={{ scale: 1, type: 'spring' }}
             type="button"
-            className="fixed bottom-4 right-4 z-20 rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 lg:bottom-12 lg:right-12"
+            className="fixed bottom-4 right-4 z-20 rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 print:hidden lg:bottom-12 lg:right-12"
             onClick={(e) => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });

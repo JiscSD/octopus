@@ -20,3 +20,6 @@ export { default as ParseHTML } from './ParseHTML';
 export { default as Tabs } from './Tabs';
 export { default as Tab } from './Tabs/Tab';
 export { default as TabHead } from './Tabs/TabHead';
+export { default as PublicationSidebar } from './Publication/Sidebar';
+export { default as PublicationContentSection } from './Publication/ContentSection';
+export { default as PublicationRatings } from './Publication/Ratings';
