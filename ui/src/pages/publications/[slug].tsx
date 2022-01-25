@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { PencilIcon } from '@heroicons/react/outline';
-import { FlagIcon } from '@heroicons/react/solid';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -75,13 +74,13 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                                     className="mr-6 mb-4 lg:mb-0"
                                 />
                             </div>
-                            <Components.Link
+                            {/* <Components.Link
                                 href={`${Config.urls.createFlag.path}?for=${props.publication.id}`}
                                 className="flex w-fit items-center rounded border-transparent text-xs font-bold text-pink-500 outline-0 focus:ring-2 focus:ring-yellow-400 print:hidden"
                             >
                                 <span>Report this publication</span>
                                 <FlagIcon className="ml-2 h-3 w-3" />
-                            </Components.Link>
+                            </Components.Link> */}
                         </div>
                         <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:mt-0 lg:mb-0 lg:justify-end">
                             <Components.PublicationRatings publication={props.publication} />
@@ -100,13 +99,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                             <Components.PublicationSidebar
                                 actions={[
                                     { title: 'Authors', href: 'authors' },
-                                    { title: 'Full text', href: 'full-text' },
-                                    { title: 'Related publications', href: 'related-publications' },
-                                    { title: 'Funding statement', href: 'funding-statement' },
-                                    { title: 'Conflicts of interest', href: 'conflicts-of-interest' },
-                                    { title: 'Reviews', href: 'reviews' },
-                                    { title: 'Additional information', href: 'additional-information' },
-                                    { title: 'Publication chain', href: 'publication-chain' }
+                                    { title: 'Full text', href: 'full-text' }
                                 ]}
                             />
                         </aside>
@@ -121,105 +114,6 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">
                                 <Components.ParseHTML content={props.publication.content} />
-                            </Components.PublicationContentSection>
-
-                            {/** Related */}
-                            <Components.PublicationContentSection
-                                id="related-publications"
-                                title="Related publications"
-                            >
-                                <p>Lorem</p>
-                            </Components.PublicationContentSection>
-
-                            {/** Funding statement */}
-                            <Components.PublicationContentSection id="funding-statement" title="Funding statement">
-                                <p className="block leading-relaxed text-grey-800 dark:text-grey-100">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed, eius explicabo ullam
-                                    magnam commodi molestias quis repudiandae, in nesciunt ducimus debitis eum impedit
-                                    maiores voluptate provident sequi molestiae nemo quas. Necessitatibus earum ea iste
-                                    enim cupiditate saepe molestias commodi ipsum itaque asperiores vel deserunt sint,
-                                    exercitationem eaque, autem facilis eligendi rem optio tempore numquam. Vel nulla
-                                    cum eius labore a! Incidunt nesciunt pariatur asperiores hic? Itaque, quidem harum
-                                    provident, consequuntur nobis minus deserunt debitis velit non omnis minima atque
-                                    neque ipsum vel quam tempore temporibus, architecto distinctio delectus officiis!
-                                    Asperiores. Quos corrupti commodi, asperiores, magnam harum fugiat optio praesentium
-                                    architecto, ut rem unde? Quam pariatur reiciendis soluta unde molestiae animi est
-                                    architecto, impedit temporibus, harum quo necessitatibus blanditiis nulla debitis!
-                                    Corrupti nostrum tempora harum similique recusandae, quia reprehenderit quis
-                                    molestias quae ducimus unde quisquam! Ea quis incidunt quas non omnis nihil nisi
-                                    voluptas rerum est voluptate. Doloribus nemo natus vel!
-                                </p>
-                            </Components.PublicationContentSection>
-
-                            {/** Conflicts of interest */}
-                            <Components.PublicationContentSection
-                                id="conflicts-of-interest"
-                                title="Conflicts of interest"
-                            >
-                                <p className="block leading-relaxed text-grey-800 dark:text-grey-100">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed, eius explicabo ullam
-                                    magnam commodi molestias quis repudiandae, in nesciunt ducimus debitis eum impedit
-                                    maiores voluptate provident sequi molestiae nemo quas. Necessitatibus earum ea iste
-                                    enim cupiditate saepe molestias commodi ipsum itaque asperiores vel deserunt sint,
-                                    exercitationem eaque, autem facilis eligendi rem optio tempore numquam. Vel nulla
-                                    cum eius labore a! Incidunt nesciunt pariatur asperiores hic? Itaque, quidem harum
-                                    provident, consequuntur nobis minus deserunt debitis velit non omnis minima atque
-                                    neque ipsum vel quam tempore temporibus, architecto distinctio delectus officiis!
-                                    Asperiores. Quos corrupti commodi, asperiores, magnam harum fugiat optio praesentium
-                                    architecto, ut rem unde? Quam pariatur reiciendis soluta unde molestiae animi est
-                                    architecto, impedit temporibus, harum quo necessitatibus blanditiis nulla debitis!
-                                    Corrupti nostrum tempora harum similique recusandae, quia reprehenderit quis
-                                    molestias quae ducimus unde quisquam! Ea quis incidunt quas non omnis nihil nisi
-                                    voluptas rerum est voluptate. Doloribus nemo natus vel!
-                                </p>
-                            </Components.PublicationContentSection>
-
-                            {/** Reviews */}
-                            <Components.PublicationContentSection id="reviews" title="Reviews">
-                                <p>Lorem</p>
-                            </Components.PublicationContentSection>
-
-                            {/** Additional information */}
-                            <Components.PublicationContentSection
-                                id="additional-information"
-                                title="Additional information"
-                            >
-                                <p className="block leading-relaxed text-grey-800 dark:text-grey-100">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed, eius explicabo ullam
-                                    magnam commodi molestias quis repudiandae, in nesciunt ducimus debitis eum impedit
-                                    maiores voluptate provident sequi molestiae nemo quas. Necessitatibus earum ea iste
-                                    enim cupiditate saepe molestias commodi ipsum itaque asperiores vel deserunt sint,
-                                    exercitationem eaque, autem facilis eligendi rem optio tempore numquam. Vel nulla
-                                    cum eius labore a! Incidunt nesciunt pariatur asperiores hic? Itaque, quidem harum
-                                    provident, consequuntur nobis minus deserunt debitis velit non omnis minima atque
-                                    neque ipsum vel quam tempore temporibus, architecto distinctio delectus officiis!
-                                    Asperiores. Quos corrupti commodi, asperiores, magnam harum fugiat optio praesentium
-                                    architecto, ut rem unde? Quam pariatur reiciendis soluta unde molestiae animi est
-                                    architecto, impedit temporibus, harum quo necessitatibus blanditiis nulla debitis!
-                                    Corrupti nostrum tempora harum similique recusandae, quia reprehenderit quis
-                                    molestias quae ducimus unde quisquam! Ea quis incidunt quas non omnis nihil nisi
-                                    voluptas rerum est voluptate. Doloribus nemo natus vel!
-                                </p>
-                            </Components.PublicationContentSection>
-
-                            {/** Publication chain */}
-                            <Components.PublicationContentSection id="publication-chain" title="Publication chain">
-                                <p className="block leading-relaxed text-grey-800 dark:text-grey-100">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed, eius explicabo ullam
-                                    magnam commodi molestias quis repudiandae, in nesciunt ducimus debitis eum impedit
-                                    maiores voluptate provident sequi molestiae nemo quas. Necessitatibus earum ea iste
-                                    enim cupiditate saepe molestias commodi ipsum itaque asperiores vel deserunt sint,
-                                    exercitationem eaque, autem facilis eligendi rem optio tempore numquam. Vel nulla
-                                    cum eius labore a! Incidunt nesciunt pariatur asperiores hic? Itaque, quidem harum
-                                    provident, consequuntur nobis minus deserunt debitis velit non omnis minima atque
-                                    neque ipsum vel quam tempore temporibus, architecto distinctio delectus officiis!
-                                    Asperiores. Quos corrupti commodi, asperiores, magnam harum fugiat optio praesentium
-                                    architecto, ut rem unde? Quam pariatur reiciendis soluta unde molestiae animi est
-                                    architecto, impedit temporibus, harum quo necessitatibus blanditiis nulla debitis!
-                                    Corrupti nostrum tempora harum similique recusandae, quia reprehenderit quis
-                                    molestias quae ducimus unde quisquam! Ea quis incidunt quas non omnis nihil nisi
-                                    voluptas rerum est voluptate. Doloribus nemo natus vel!
-                                </p>
                             </Components.PublicationContentSection>
                         </div>
                     </section>

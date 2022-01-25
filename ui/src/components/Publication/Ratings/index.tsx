@@ -69,17 +69,17 @@ const Ratings: React.FC<Props> = (props): JSX.Element => {
     return (
         <div className="rounded-xl">
             <div className="rounded-t-lg bg-teal-100 px-8 py-6 transition-colors duration-500">
-                {Object.values(ratings).map((rate: RateProps, index) => (
+                {/* {Object.values(ratings).map((rate: RateProps, index) => (
                     <Rate key={index} title={rate.title} value={rate.value} />
-                ))}
+                ))} */}
 
-                <button
+                {/* <button
                     type="button"
                     onClick={(e) => writeReview(e)}
                     className="f my-6 block rounded border-transparent text-sm font-bold underline outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     Rate this publication
-                </button>
+                </button> */}
 
                 <div className="grid grid-cols-2 gap-8">
                     <span className="text-sm font-semibold text-grey-800">Date added:</span>
