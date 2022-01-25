@@ -27,23 +27,23 @@ const SearchResults: FC<Props> = (props): JSX.Element => {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.15 }}
                         exit={{ opacity: 0 }}
-                        className="absolute max-h-72 overflow-y-auto overflow-x-hidden z-20 top-full p-6 mt-4 left-0 w-full rounded bg-white dark:bg-grey-800 text-grey-800 dark:text-white shadow transition-colors duration-500"
+                        className="absolute top-full left-0 z-20 mt-4 max-h-72 w-full overflow-y-auto overflow-x-hidden rounded bg-white p-6 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-800 dark:text-white"
                     >
                         <ul>
                             {props.results.map((result, index) => (
-                                <li key={result.id} className="mb-6 pb-4 border-b border-grey-700">
+                                <li key={result.id} className="mb-6 border-b border-grey-700 pb-4">
                                     <Components.Link
                                         href={`${Config.urls.viewPublication.path}/${result.url_slug}`}
                                         className="block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                     >
                                         <div className="">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <div className="flex mb-2">
+                                            <div className="mb-4 flex items-center justify-between">
+                                                <div className="mb-2 flex">
                                                     <h5 className="mr-4">{result.title}</h5>
                                                 </div>
                                             </div>
                                             <div className="flex items-center justify-between">
-                                                <span className="font-medium uppercase tracking-wider text-xs text-grey-300">
+                                                <span className="text-xs font-medium uppercase tracking-wider text-grey-300">
                                                     {result.doi}
                                                 </span>
                                                 <span className="text-sm text-grey-700 dark:text-grey-200">

@@ -16,7 +16,7 @@ const Tabs: React.FC<Props> = (props): JSX.Element => {
 
     return (
         <div className="tabs">
-            <div className="flex mb-12">
+            <div className="mb-12 flex">
                 {props.content.map((entry) => {
                     return <Components.TabHead key={entry.title} tab={entry} active={active} set={setActive} />;
                 })}

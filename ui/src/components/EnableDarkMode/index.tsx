@@ -24,7 +24,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <SunIcon className="w-8 h-8 text-white transition-all" />
+                        <SunIcon className="h-8 w-8 text-white transition-all" />
                     </motion.div>
                 )}
 
@@ -35,7 +35,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <MoonIcon className="w-8 h-8 text-white transition-all" />
+                        <MoonIcon className="h-8 w-8 text-white transition-all" />
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -45,26 +45,26 @@ const ParseHTML: React.FC<Props> = (props): JSX.Element => {
         <article
             className={`
             prose
-            lg:max-w-7xl
-            text-grey-800 dark:text-grey-100
-            transition-colors
-            duration-500
+            text-grey-800
+            transition-colors duration-500
+            prose-headings:text-teal-700
+            prose-a:text-grey-800
 
-            prose-headings:text-teal-700 dark:prose-headings:text-teal-400
+            prose-a:underline prose-a:decoration-teal-500
 
-            prose-a:text-grey-800 dark:prose-a:text-white
-            prose-a:underline
-            prose-a:underline-offset-1
-            prose-a:decoration-teal-500
-            prose-a:decoration-2
+            prose-a:decoration-2 prose-a:underline-offset-1
             prose-a:outline-none
             focus:prose-a:bg-yellow-300
-            dark:focus:prose-a:text-grey-800
-
-            prose-blockquote:text-grey-600 dark:prose-blockquote:text-grey-300
             prose-blockquote:border-teal-500
+            prose-blockquote:text-grey-600
+            prose-strong:text-grey-800
+            dark:text-grey-100
+            dark:prose-headings:text-teal-400
 
-            prose-strong:text-grey-800 dark:prose-strong:text-teal-300
+            dark:prose-a:text-white dark:focus:prose-a:text-grey-800
+            dark:prose-blockquote:text-grey-300
+
+            dark:prose-strong:text-teal-300 lg:max-w-7xl
 
             `}
         >

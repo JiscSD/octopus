@@ -5,7 +5,7 @@ const JumpToContent: React.FC = (): JSX.Element => {
         <a
             id="top"
             href="#content"
-            className="flex justify-center fixed bottom-0 left-0 w-0 h-0 focus:z-50 focus:w-full focus:h-auto focus:py-2 outline-none bg-yellow-500 font-medium"
+            className="fixed bottom-0 left-0 flex h-0 w-0 justify-center bg-yellow-500 font-medium outline-none focus:z-50 focus:h-auto focus:w-full focus:py-2"
             title="Skip to content"
         >
             Skip to content

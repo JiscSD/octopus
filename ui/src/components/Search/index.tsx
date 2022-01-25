@@ -17,27 +17,27 @@ const Search: React.FC = (): JSX.Element => {
     };
 
     return (
-        <div className="relative py-6 px-6 bg-white dark:bg-grey-800 rounded-md shadow-md transition-colors duration-500">
-            <h2 className="block mb-4 font-montserrat font-bold text-lg text-grey-800 dark:text-white transition-colors duration-500">
+        <div className="relative rounded-md bg-white py-6 px-6 shadow-md transition-colors duration-500 dark:bg-grey-800">
+            <h2 className="mb-4 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                 A new way to publish your scientific work that&apos;s fast, free and fair.
             </h2>
-            <p className="block text-base leading-6 text-grey-700 dark:text-grey-100 transition-colors duration-500">
+            <p className="block text-base leading-6 text-grey-700 transition-colors duration-500 dark:text-grey-100">
                 Designed to replace jounrals and papers as the place to establish priority and record your work in full
                 detail.
             </p>
             <div className="mt-10 mb-6">
                 <label
                     htmlFor="search-input"
-                    className="mt-1 flex rounded shadow-md border border-grey-50 bg-white dark:bg-grey-700 transition-colors duration-500"
+                    className="mt-1 flex rounded border border-grey-50 bg-white shadow-md transition-colors duration-500 dark:bg-grey-700"
                 >
-                    <span className="inline-flex items-center p-4 rounded-l-md border-r-0">
-                        <SearchIcon className="text-teal-500 w-8 h-8" />
+                    <span className="inline-flex items-center rounded-l-md border-r-0 p-4">
+                        <SearchIcon className="h-8 w-8 text-teal-500" />
                     </span>
                     <input
                         type="text"
                         name="search-input"
                         id="search-input"
-                        className="flex-1 min-w-0 block w-full p-4 bg-transparent rounded-none rounded-r-md outline-0 focus:ring-2 focus:ring-yellow-400  text-grey-800 dark:text-white placeholder:text-grey-400 dark:placeholder:text-white transition-colors duration-500"
+                        className="block w-full min-w-0 flex-1 rounded-none rounded-r-md bg-transparent p-4 text-grey-800 outline-0 transition-colors  duration-500 placeholder:text-grey-400 focus:ring-2 focus:ring-yellow-400 dark:text-white dark:placeholder:text-white"
                         placeholder="Search for a publication on Octopus"
                         onChange={(e) => lookup(e)}
                     />

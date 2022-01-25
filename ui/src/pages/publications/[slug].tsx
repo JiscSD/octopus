@@ -53,46 +53,46 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 pt-8 lg:pt-16">
-                        <span className="block mb-4 lg:mb-8 font-montserrat font-semibold text-2xl text-pink-500">
+                        <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500 lg:mb-8">
                             {Helpers.formatPublicationType(props.publication.type)}
                         </span>
 
-                        <header className="grid mb-8 lg:mb-12 grid-cols-1 lg:grid-cols-3 lg:gap-4">
+                        <header className="mb-8 grid grid-cols-1 lg:mb-12 lg:grid-cols-3 lg:gap-4">
                             <section className="col-span-2">
-                                <h1 className="block mb-8 font-montserrat font-bold text-2xl md:text-3xl xl:text-4xl text-grey-800 dark:text-white leading-tight xl:leading-normal transition-colors duration-500">
+                                <h1 className="mb-8 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-4xl xl:leading-normal">
                                     {props.publication.title}
                                 </h1>
                                 {/** Publication meta */}
                                 <div>
                                     {/** Authors */}
-                                    <div className="flex mb-4 dark:text-white">
+                                    <div className="mb-4 flex dark:text-white">
                                         <span>Authors:</span>
                                         <span>Alexandra Freeman, Ashley Redman, Nathan Sainsbury</span>
                                     </div>
                                     {/** Dates */}
-                                    <time className="block mb-4 dark:text-white">Date time here</time>
+                                    <time className="mb-4 block dark:text-white">Date time here</time>
                                     {/** Reporting */}
-                                    <span className="flex items-center font-bold text-xs text-pink-500">
+                                    <span className="flex items-center text-xs font-bold text-pink-500">
                                         Report this publication
-                                        <FlagIcon className="ml-2 w-3 h-3" />
+                                        <FlagIcon className="ml-2 h-3 w-3" />
                                     </span>
                                 </div>
                             </section>
-                            <aside className="flex items-center mb-8 lg:mb-0">
+                            <aside className="mb-8 flex items-center lg:mb-0">
                                 <div>Ratings here</div>
                             </aside>
                         </header>
                     </section>
 
-                    <section className="container mx-auto px-8 mb-12">
-                        <h2 className="block mb-6 font-montserrat font-semibold text-2xl text-grey-800 dark:text-white transition-colors duration-500">
+                    <section className="container mx-auto mb-12 px-8">
+                        <h2 className="mb-6 block font-montserrat text-2xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
                             Actions
                         </h2>
                         <div className="flex items-center">
                             <Components.ActionButton
                                 title="Download"
                                 icon={
-                                    <DownloadIcon className="w-6 h-6 text-teal-500 group-hover:text-teal-800 transition-colors duration-500" />
+                                    <DownloadIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
                                 callback={() => console.log('download')}
                                 className="mr-6"
@@ -100,7 +100,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                             <Components.ActionButton
                                 title="Review"
                                 icon={
-                                    <PencilIcon className="w-6 h-6 text-teal-500 group-hover:text-teal-800 transition-colors duration-500" />
+                                    <PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
                                 callback={() => console.log('write review')}
                                 className="mr-6"
@@ -108,7 +108,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                             <Components.ActionButton
                                 title="Watch"
                                 icon={
-                                    <EyeIcon className="w-6 h-6 text-teal-500 group-hover:text-teal-800 transition-colors duration-500" />
+                                    <EyeIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
                                 callback={() => console.log('watch')}
                                 className="mr-6"
@@ -116,7 +116,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                             <Components.ActionButton
                                 title="Write a linked publication"
                                 icon={
-                                    <LinkIcon className="w-6 h-6 text-teal-500 group-hover:text-teal-800 transition-colors duration-500" />
+                                    <LinkIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
                                 callback={() => console.log('write new pub')}
                                 className="mr-6"
