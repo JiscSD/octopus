@@ -8,7 +8,8 @@ import * as publicationSchema from 'publication/schema';
 
 export const getAll = middy(publicationController.getAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser());
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.validator(publicationSchema.getAll, 'queryStringParameters'));
 
 export const get = middy(publicationController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))

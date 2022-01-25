@@ -69,4 +69,7 @@ export interface PublicationFilters {
     offset?: string;
     orderBy?: OrderBy;
     orderDirection?: OrderDirection;
-}
+    type: string;
+};
+
+export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
