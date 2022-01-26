@@ -49,7 +49,14 @@ When posting, select the category as `Ideas` and then add a title and some conte
 
 ---
 
-If you would like to submit any changes and contribute some code, please [submit a PR for review](https://github.com/JiscSD/octopus/pulls).
+If you would like to submit any changes and contribute some code, please:
+
+1. fork this repository
+2. create a new branch
+3. make changes
+4. commit/push your new branch
+5. [submit a PR for review](https://github.com/JiscSD/octopus/pulls)
+
 We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
 
 **Prerequisites and local setup**
@@ -60,3 +67,5 @@ We use Pull request labels to specify when changes are made to the `UI`, the `AP
 Follow our documentation on locally setting up [the UI](../ui/README.md#local-setup) and [the API](../api/README.md#local-setup).
 
 **Code styleguide**
+
+Both our `UI` and `API` use individual configurations of [ESLint](https://eslint.org) and [Prettier](https://prettier.io) to enforce coding styles.

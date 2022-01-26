@@ -41,3 +41,18 @@
 &nbsp;
 
 ### Useful links
+
+## Contributing
+
+If you are interested in contributing, please check out [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
+
+## Code of Conduct
+
+Everyone interacting with this codebase should adhere to our [Code of Conduct](.github/CODE-OF-CONDUCT.md).
+
+## License
+
+Octopus is available under the
+[MIT license](https://opensource.org/licenses/MIT). the [APACHE 2.0 license](https://opensource.org/licenses/Apache-2.0). See
+[LICENSE](https://github.com/JiscSD/octopus/LICENSE) for the full
+license text.
