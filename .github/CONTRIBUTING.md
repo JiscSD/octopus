@@ -1,5 +1,3 @@
-[example](https://mozillascience.github.io/working-open-workshop/contributing/)
-
 # Welcome
 
 Welcome! :tada::sparkles: and thank you for taking the time to contribute to this project.
@@ -40,7 +38,7 @@ A helpful bug report should include:
 
 ---
 
-## Suggest an enhancement by posting in the Ideas section
+## Suggest an enhancement by posting in the ideas section
 
 ---
 
@@ -48,16 +46,22 @@ If you have an :bulb: idea :bulb: for an enhancement or feature then feel free t
 
 When posting, select the category as `Ideas` and then add a title and some content.
 
+---
+
 ## Submit changes by creating a PR
 
 ---
 
+If you would like to submit any changes and contribute some code, please [submit a PR for review](https://github.com/JiscSD/octopus/pulls).
+We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
+
 ### Prerequisites and local setup
 
+1. Install Node.js `14`
+    - Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
+
+Follow our documentation on locally setting up [the UI](../ui/README.md) and [the API](../api/README.md).
+
 ### Code styleguide
-
-### PR labels
-
-We use Pull Request labels to specify changes to the `UI`, the `API`, or `Documentation`.
 
 ---
