@@ -15,7 +15,7 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 ---
 
 -   [Report a bug by creating an issue](#report-a-bug-by-creating-an-issue)
--   [Suggest an enhancement by posting in the Ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
+-   [Suggest an enhancement by posting in the ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
 -   [Submit changes by creating a PR](#submit-changes-by-creating-a-pr)
 
 ---
@@ -57,6 +57,7 @@ If you would like to submit any changes and contribute some code, please:
 4. commit/push your new branch
 5. [submit a PR for review](https://github.com/JiscSD/octopus/pulls)
 
+A pull request should be created as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you request a review on GitHub.  
 We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
 
 **Prerequisites and local setup**
