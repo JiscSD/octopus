@@ -157,3 +157,43 @@ export const testResults = [
         publicationToRef: []
     }
 ];
+
+export const testSinglePublication = {
+    id: 'some-id-string',
+    url_slug: 'ckylhxud10003ml2s2jkdespz',
+    type: 'INTERPRETATION',
+    title: 'Could treatment for COPD be protective against COVID-19 symptoms?',
+    content: `
+        <p>
+            The lower reported prevalence of asthma and COPD in patients diagnosed with COVID-19 might be due to one or a number of factors. First, it is possible that, in contrast to the diagnosis of diabetes, there was substantial underdiagnosis or poor recognition of chronic respiratory disease in patients with COVID-19, particularly in China. However, this seems unlikely, as in very recent data (March 23, 2020) from Italy, among 355 patients dying with COVID-19 (mean age 79·5 years), diabetes was reported in 20·3% of patients but COPD was not listed as a comorbidity for any patient.3 Similarly, provisional data from the USA (March 31, 2020) show that chronic respiratory diseases and diabetes were comorbidities in 8·5% and 10·2% of patients with COVID-19, respectively, compared with Global Burden of Disease figures for the population as a whole of 11·3% for chronic respiratory diseases and 10·2% for diabetes; however these data are based on only 7162 of the 74 439 patients reported.
+        </p>
+
+        <p>
+            A second possibility is that having a chronic respiratory disease protects against COVID-19, perhaps through a different immune response elicited by the chronic disease itself. However, this theory is not supported by the finding that among those with COVID-19 who have COPD as a comorbidity, mortality is increased, as would otherwise be expected.
+        </p>
+
+        <p>
+            A third possibility is that therapies used by patients with chronic respiratory diseases can reduce the risk of infection or of developing symptoms leading to diagnosis. It is important to note that, at most, only around half of patients with COPD in China take treatments that are standard in Europe and North America,6 but up to 75% of people in China with asthma use inhaled corticosteroids.7 Furthermore, in in-vitro models, inhaled corticosteroids alone or in combination with bronchodilators have been shown to suppress coronavirus replication and cytokine production.8,9 Low-quality evidence also exists from a case series in Japan, in which improvement was seen in three patients with COVID-19 requiring oxygen, but not ventilatory support, after being given inhaled ciclesonide;10 however, no control group was used and it is not known whether these patients would have improved spontaneously. Yet, the possibility that inhaled corticosteroids might prevent (at least partly) the development of symptomatic infection or severe presentations of COVID-19 cannot be ignored. By contrast, a systematic review on the use of systemic corticosteroids to treat SARS, once established, showed no benefit but possible harm.
+        </p>
+
+         `,
+    doi: '10.1109/5.771073',
+    currentStatus: 'LIVE',
+    createdBy: 'some-user-id',
+    createdAt: '2022-01-19T12:03:23.509Z',
+    updatedAt: '2022-01-19T12:03:23.510Z',
+    publicationStatus: [
+        {
+            status: 'DRAFT',
+            createdAt: '2022-01-19T12:03:23.509Z',
+            id: 'ckylhxud10004ml2sxp3u11td'
+        }
+    ],
+    user: {
+        id: 'test-user-1',
+        firstName: 'J',
+        lastName: 'Doe'
+    },
+    publicationFromRef: [],
+    publicationToRef: []
+};

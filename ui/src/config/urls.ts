@@ -31,17 +31,34 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/search`
     },
+    // Publications
     createPublication: {
-        path: 'new-publication',
+        path: '/new-publication',
         title: `New Publication - ${base.title}`,
         description: '',
         keywords: '',
         canonical: `${base.host}/new-publication`
     },
     viewPublication: {
-        path: 'publications',
-        title: ` - ${base.title}`,
-        canonical: `${base.host}/`
+        path: '/publications',
+        title: `${base.title}`,
+        canonical: `${base.host}/publications`
+    },
+    // Reviews
+    createReview: {
+        path: '/review',
+        title: 'Create publication review',
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/review`
+    },
+    // Report
+    createFlag: {
+        path: '/flag',
+        title: 'Flag publication',
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/flag`
     }
 };
 

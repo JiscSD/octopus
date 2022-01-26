@@ -34,6 +34,9 @@
             ],
             "@helpers": [
                 "./src/lib/helpers"
+            ],
+            "@api": [
+                "./src/lib/api"
             ]
         }
     }

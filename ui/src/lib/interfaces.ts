@@ -1,21 +1,23 @@
+import * as Types from '@types';
+
 export interface NavMenuItem {
     label: string;
     value: string;
 }
 
-interface PublicationStatus {
+export interface PublicationStatus {
     status: string;
     createdAt: string;
     id: string;
 }
 
-interface User {
+export interface User {
     id: string;
     firstName: string;
     lastName: string;
 }
 
-export interface SearchResult {
+export interface Publication {
     id: string;
     url_slug: string;
     type: string;
@@ -30,4 +32,12 @@ export interface SearchResult {
     user: User;
     publicationFromRef: any[]; // to change
     publicationToRef: any[]; // to change
+}
+
+export interface SearchResult extends Publication {
+    // May be different?
+}
+
+export interface JSON {
+    [key: string]: Types.JSONValue;
 }

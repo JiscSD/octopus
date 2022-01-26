@@ -4,6 +4,6 @@
 
 @layer base {
     ::selection {
-        @apply bg-grey-800 dark:bg-teal-500 text-grey-100;
+        @apply bg-grey-800 text-grey-100 dark:bg-teal-500;
     }
 }
