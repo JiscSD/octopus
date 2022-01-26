@@ -11,7 +11,7 @@ type Props = {
 };
 
 const HTML: React.FC<Props> = (props): JSX.Element => (
-    <figure aria-label={props.title} role="video" className=" h-fit w-full rounded-lg bg-white p-2">
+    <figure aria-label={props.title} role="video" className=" h-fit w-full rounded-lg bg-white p-2 dark:bg-teal-500">
         <video controls={props.controls} width={props.width} poster={props.poster} className="rounded-lg">
             <source src={props.srcWebM} type="video/webm" />
             <source src={props.srcMp4} type="video/mp4" />
