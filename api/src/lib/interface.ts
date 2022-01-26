@@ -49,7 +49,27 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface UpdateStatusPathParams {
+    id: string;
+    status: 'LIVE'
+}
+
 export interface CreateLinkBody {
     to: string;
     from: string;
 }
+
+export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
+export type OrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type OrderDirection = 'asc' | 'desc';
+
+export interface PublicationFilters {
+    search?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: OrderBy;
+    orderDirection?: OrderDirection;
+    type: string;
+};
+
+export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];

@@ -71,3 +71,11 @@ functions:
                   path: ${self:custom.versions.v1}/links
                   method: post
                   cors: true
+    updateStatus:
+        handler: src/components/publication/routes.updateStatus
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/status/{status}
+                  method: put
+                  cors: true

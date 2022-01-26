@@ -65,20 +65,13 @@ model Publication {
     updatedAt DateTime @updatedAt
 
     user               User                @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    publicationFromRef Links[]             @relation("publicationFromRef")
-    publicationToRef   Links[]             @relation("publicationToRef")
+    
+    linkedTo     Links[]             @relation("from")
+    linkedFrom   Links[]             @relation("to")
+
     publicationStatus  PublicationStatus[]
 }
 
-model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
-
-    createdAt DateTime @default(now())
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-}
 
 model Links {
     id              String   @id @default(cuid())
@@ -89,8 +82,18 @@ model Links {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    publicationFromRef Publication @relation("publicationFromRef", fields: [publicationFrom], references: [id], onDelete: Cascade)
-    publicationToRef   Publication @relation("publicationToRef", fields: [publicationTo], references: [id], onDelete: Cascade)
+    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
+    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
 
     @@unique([publicationFrom, publicationTo])
+}
+
+model PublicationStatus {
+    id            String                @id @default(cuid())
+    publicationId String
+    status        PublicationStatusEnum
+
+    createdAt DateTime @default(now())
+
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
