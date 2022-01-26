@@ -53,7 +53,7 @@ const Home: NextPage = (): JSX.Element => {
                             srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
                             srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
                             title="A quick introduction to Octopus: the new primary research record for science"
-                            showCaption={true}
+                            showCaption={false}
                             controls={true}
                             poster="/images/jpg/poster.jpg"
                             width={800}
