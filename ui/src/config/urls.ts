@@ -106,7 +106,7 @@ const urls = {
         title: `404 Not Found - ${base.title}`
     },
     500: {
-        title: `Something wen wrong - ${base.title}`
+        title: `Something went wrong - ${base.title}`
     }
 };
 
