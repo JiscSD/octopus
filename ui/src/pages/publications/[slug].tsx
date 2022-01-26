@@ -97,7 +97,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                     <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         <aside className="col-span-2 hidden pt-24 lg:block">
                             <Components.PublicationSidebar
-                                actions={[
+                                jumpToList={[
                                     { title: 'Authors', href: 'authors' },
                                     { title: 'Full text', href: 'full-text' }
                                 ]}
