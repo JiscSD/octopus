@@ -14,10 +14,12 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 
 ## Contents
 
--   Report a bug by creating an issue
--   Suggest an enhancement by posting in the Ideas section
--   Submit changes by creating a PR
-    -   Local setup and installations
+---
+
+-   [Report a bug by creating an issue](#report-a-bug-by-creating-an-issue)
+-   [Suggest an enhancement by posting in the Ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
+-   [Submit changes by creating a PR](#submit-changes-by-creating-a-pr)
+    -   Prerequisites and local setup
     -   Code styleguide
     -   PR labels
 
@@ -27,16 +29,35 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 
 ---
 
+If you spot a :bug: bug :bug: then feel free to [open an issue](https://github.com/JiscSD/octopus/issues).
+
+A helpful bug report should include:
+
+-   the exact steps to reproduce the bug
+-   the actual behaviour
+-   the expected behaviour
+-   screenshot of the unexpected behaviour, if possible
+
+---
+
 ## Suggest an enhancement by posting in the Ideas section
 
 ---
 
+If you have an :bulb: idea :bulb: for an enhancement or feature then feel free to [post an idea](https://github.com/JiscSD/octopus/discussions/categories/ideas).
+
+When posting, select the category as `Ideas` and then add a title and some content.
+
 ## Submit changes by creating a PR
 
-### Local setup and installations
+---
+
+### Prerequisites and local setup
 
 ### Code styleguide
 
 ### PR labels
+
+We use Pull Request labels to specify changes to the `UI`, the `API`, or `Documentation`.
 
 ---
