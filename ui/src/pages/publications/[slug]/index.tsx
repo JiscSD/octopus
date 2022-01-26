@@ -69,7 +69,9 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                                     }
                                     callback={(e) => {
                                         e.preventDefault();
-                                        router.push(`${Config.urls.createReview.path}?for=${props.publication.id}`);
+                                        router.push(
+                                            `${Config.urls.createPublication.path}?for=${props.publication.id}&type=review`
+                                        );
                                     }}
                                     className="mr-6 mb-4 lg:mb-0"
                                 />

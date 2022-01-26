@@ -14,15 +14,15 @@ const Footer: React.FC = (): JSX.Element => {
                 </h2>
                 {/** Links */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    <Components.Link
+                    {/* <Components.Link
                         href=""
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Learn</h3>
-                    </Components.Link>
+                    </Components.Link> */}
 
                     <Components.Link
-                        href=""
+                        href={Config.urls.browsePublications.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Browse</h3>
@@ -43,7 +43,7 @@ const Footer: React.FC = (): JSX.Element => {
                 {/** Links */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-3">
                     <Components.Link
-                        href=""
+                        href={Config.urls.legal.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">
@@ -51,13 +51,13 @@ const Footer: React.FC = (): JSX.Element => {
                         </h3>
                     </Components.Link>
                     <Components.Link
-                        href=""
+                        href={Config.urls.privacy.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Privacy</h3>
                     </Components.Link>
                     <Components.Link
-                        href=""
+                        href={Config.urls.feedback.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Leave feedback</h3>
@@ -69,7 +69,7 @@ const Footer: React.FC = (): JSX.Element => {
                         In partnership with
                     </h4>
                     <Components.Link
-                        href="https://jisc.ac.uk"
+                        href="https://www.ukrn.org/"
                         openNew={true}
                         className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
@@ -82,7 +82,7 @@ const Footer: React.FC = (): JSX.Element => {
                     </h4>
                     <div className="flex">
                         <Components.Link
-                            href="https://jisc.ac.uk"
+                            href="https://wiki.mozilla.org/ScienceLab"
                             openNew={true}
                             className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
@@ -96,7 +96,7 @@ const Footer: React.FC = (): JSX.Element => {
                     </h4>
                     <div className="flex">
                         <Components.Link
-                            href="https://jisc.ac.uk"
+                            href="https://elifesciences.org/"
                             openNew={true}
                             className="flex w-fit  rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >

@@ -79,7 +79,7 @@ const Home: NextPage = (): JSX.Element => {
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             </p>
 
-                            <Components.ExtendedLink href="https://google.co.uk" title="Read more about Octopus" />
+                            <Components.ExtendedLink href={Config.urls.about.path} title="Read more about Octopus" />
                         </div>
                     </div>
                 </Components.SectionTwo>
@@ -106,7 +106,10 @@ const Home: NextPage = (): JSX.Element => {
                                     Designed to replace journals and papers as the place to establish priority and
                                     record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink href="https://google.co.uk" title="Browse publications" />
+                                <Components.ExtendedLink
+                                    href={Config.urls.browsePublications.path}
+                                    title="Browse publications"
+                                />
                             </Components.Paper>
                             <Components.Paper>
                                 <SearchIcon className="mb-8 h-10 w-10 text-teal-500" />
@@ -117,7 +120,7 @@ const Home: NextPage = (): JSX.Element => {
                                     Designed to replace journals and papers as the place to establish priority and
                                     record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink href="https://google.co.uk" title="Search publications" />
+                                <Components.ExtendedLink href={Config.urls.search.path} title="Search publications" />
                             </Components.Paper>
                             <Components.Paper>
                                 <PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
@@ -128,7 +131,10 @@ const Home: NextPage = (): JSX.Element => {
                                     Designed to replace journals and papers as the place to establish priority and
                                     record your work in full detail.
                                 </p>
-                                <Components.ExtendedLink href="https://google.co.uk" title="Publish your work" />
+                                <Components.ExtendedLink
+                                    href={Config.urls.createPublication.path}
+                                    title="Publish your work"
+                                />
                             </Components.Paper>
                         </div>
                     </div>
@@ -148,7 +154,7 @@ const Home: NextPage = (): JSX.Element => {
                         <h3 className="mb-6 block font-montserrat text-xl font-semibold xl:mb-12 xl:w-1/2">
                             Help us to make Octopus the best it can be. if you have feedback, please contact us.
                         </h3>
-                        <Components.Button href="" title="Send us feedback" />
+                        <Components.Button href={Config.urls.feedback.path} title="Send us feedback" />
                     </div>
                 </Components.SectionTwo>
             </Layouts.Standard>
