@@ -23,3 +23,5 @@ export { default as TabHead } from './Tabs/TabHead';
 export { default as PublicationSidebar } from './Publication/Sidebar';
 export { default as PublicationContentSection } from './Publication/ContentSection';
 export { default as PublicationRatings } from './Publication/Ratings';
+export { default as YouTubeVideo } from './Video/YouTube';
+export { default as HTMLVideo } from './Video/HTML';
