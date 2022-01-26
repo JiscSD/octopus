@@ -17,9 +17,6 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 -   [Report a bug by creating an issue](#report-a-bug-by-creating-an-issue)
 -   [Suggest an enhancement by posting in the Ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
 -   [Submit changes by creating a PR](#submit-changes-by-creating-a-pr)
-    -   Prerequisites and local setup
-    -   Code styleguide
-    -   PR labels
 
 ---
 
@@ -55,13 +52,11 @@ When posting, select the category as `Ideas` and then add a title and some conte
 If you would like to submit any changes and contribute some code, please [submit a PR for review](https://github.com/JiscSD/octopus/pulls).
 We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
 
-### Prerequisites and local setup
+**Prerequisites and local setup**
 
-1. Install Node.js `14`
-    - Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
+-   Install [Node.js](https://github.com/nodejs/node) `v14`
+    -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
 
-Follow our documentation on locally setting up [the UI](../ui/README.md) and [the API](../api/README.md).
+Follow our documentation on locally setting up [the UI](../ui/README.md#local-setup) and [the API](../api/README.md#local-setup).
 
-### Code styleguide
-
----
+**Code styleguide**
