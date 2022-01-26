@@ -17,13 +17,7 @@ const base = {
 };
 
 const urls = {
-    home: {
-        path: '/',
-        title: `${base.title}`,
-        description: "A new way to publish your scientific work that's fast, free and fair.",
-        keywords: 'publish',
-        canonical: `${base.host}`
-    },
+    // Search
     search: {
         path: '/search',
         title: `Search publications - ${base.title}`,
@@ -31,6 +25,7 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/search`
     },
+
     // Publications
     createPublication: {
         path: '/create',
@@ -58,6 +53,7 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/edit`
     },
+
     // Reviews
     // createReview: {
     //     path: '/review',
@@ -66,6 +62,7 @@ const urls = {
     //     keywords: '',
     //     canonical: `${base.host}/review`
     // },
+
     // Report
     // createFlag: {
     //     path: '/flag',
@@ -74,6 +71,15 @@ const urls = {
     //     keywords: '',
     //     canonical: `${base.host}/flag`
     // },
+
+    // Static Pages
+    home: {
+        path: '/',
+        title: `${base.title}`,
+        description: "A new way to publish your scientific work that's fast, free and fair.",
+        keywords: 'publish',
+        canonical: `${base.host}`
+    },
     legal: {
         path: '/legal',
         title: `Legal - ${base.title}`,
