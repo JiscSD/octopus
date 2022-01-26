@@ -49,9 +49,15 @@ const Home: NextPage = (): JSX.Element => {
                         <h2 className="block font-montserrat text-2xl font-bold text-grey-800 dark:text-white lg:col-span-2">
                             What is Octopus?
                         </h2>
-                        <div className="flex h-80 w-full items-center justify-center rounded-lg bg-white p-4">
-                            video here
-                        </div>
+                        <Components.HTMLVideo
+                            srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
+                            srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
+                            title="A quick introduction to Octopus: the new primary research record for science"
+                            showCaption={false}
+                            controls={true}
+                            poster="/images/jpg/poster.jpg"
+                            width={800}
+                        />
                         <div>
                             <h3 className="mb-2 block font-montserrat text-xl font-bold text-grey-800 dark:text-white">
                                 Publish freely
