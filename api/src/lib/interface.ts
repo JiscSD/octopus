@@ -60,3 +60,16 @@ export interface CreateLinkBody {
 }
 
 export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
+export type OrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type OrderDirection = 'asc' | 'desc';
+
+export interface PublicationFilters {
+    search?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: OrderBy;
+    orderDirection?: OrderDirection;
+    type: string;
+};
+
+export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];

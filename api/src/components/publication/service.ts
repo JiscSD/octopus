@@ -2,7 +2,85 @@ import * as I from 'interface';
 
 import prisma from 'lib/client';
 
-export const getAll = async () => {};
+export const getAll = async (filters: I.PublicationFilters) => {
+    const query = {
+        orderBy: {
+            [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
+        },
+        where: {
+            type: {
+                in: filters.type.split(',') as I.ProblemTypes || ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW']
+            },
+            currentStatus: 'LIVE',
+            OR: [
+                {
+                    title: {
+                        contains: filters.search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    content: {
+                        contains: filters.search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    user: {
+                        firstName: {
+                            contains: filters.search,
+                            mode: 'insensitive'
+                        }
+                    }
+                },
+                {
+                    user: {
+                        lastName: {
+                            contains: filters.search,
+                            mode: 'insensitive'
+                        }
+                    }
+                }
+            ]
+        }
+    };
+
+    // @ts-ignore
+    const publications = await prisma.publication.findMany({
+        ...query,
+        include: {
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    id: true
+                }
+            }
+        },
+        take: Number(filters.limit) || 10,
+        skip: Number(filters.offset) || 0
+    });
+
+    const removeFirstNameFromPublications = publications.map((publication) => {
+        // @ts-ignore
+        const user = publication.user;
+        user.firstName = user.firstName[0];
+
+        return { ...publication, user };
+    })
+
+    // @ts-ignore
+    const totalPublications = await prisma.publication.count(query);
+
+    return { 
+        data: removeFirstNameFromPublications,
+        metadata: {
+            total: totalPublications,
+            limit: Number(filters.limit) || 10,
+            offset: Number(filters.offset) || 0
+        }
+    };
+};
 
 export const get = async (id: string) => {
     const publication = await prisma.publication.findFirst({
