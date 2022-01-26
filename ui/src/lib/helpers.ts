@@ -21,13 +21,18 @@ export const formatDate = (value: string): string => {
 /**
  * @description Format a publication type returned from the DB
  */
-export const formatPublicationType = (value: string) => {
-    const string: string = value.replace(/_/g, ' ').toLowerCase();
-    const words: string[] = string.split(' ');
+export const formatPublicationType = (value: string): string => {
+    const types = {
+        PROBLEM: 'Problem',
+        PROTOCOL: 'Protocol',
+        ANALYSIS: 'Analysis',
+        REAL_WORLD_APPLICATION: 'Real world application',
+        HYPOTHESIS: 'Hypothesis',
+        DATA: 'Data',
+        INTERPRETATION: 'Interpretation',
+        PEER_REVIEW: 'Peer review'
+    };
 
-    for (let i = 0; i < words.length; i++) {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-    }
-
-    return words.join(' ');
+    // @ts-ignore
+    return types[value];
 };

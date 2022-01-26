@@ -18,8 +18,6 @@ const WaveTwo: React.FC<Props> = (props): JSX.Element => {
         <svg
             id="visual"
             viewBox="0 0 1500 200"
-            width="auto"
-            height="auto"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             version="1.1"

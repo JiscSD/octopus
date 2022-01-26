@@ -1,5 +1,4 @@
 import React from 'react';
-import useSWR from 'swr';
 import { StarIcon as StarIconOutline } from '@heroicons/react/outline';
 import { DownloadIcon, StarIcon as StarIconSolid } from '@heroicons/react/solid';
 
@@ -12,8 +11,8 @@ type RateProps = {
     value: number;
 };
 
-const Rate: React.FC<RateProps> = (props): JSX.Element => {
-    const arrange = (value: number) => {
+const Rating: React.FC<RateProps> = (props): JSX.Element => {
+    const arrangeStars = (value: number) => {
         return (
             <div className="flex items-center justify-end">
                 {new Array(value).fill(0).map((_, i) => (
@@ -31,7 +30,7 @@ const Rate: React.FC<RateProps> = (props): JSX.Element => {
             <span className="font-montserrat text-sm font-medium text-grey-800">
                 {props.title}({props.value})
             </span>
-            {arrange(props.value)}
+            {arrangeStars(props.value)}
         </div>
     );
 };
@@ -40,10 +39,7 @@ type Props = {
     publication: Interfaces.Publication;
 };
 
-const Ratings: React.FC<Props> = (props): JSX.Element => {
-    // Make api call to get publications ratings
-    // const { data, error } = useSWR(`${Config.endpoints.ratings}?id=${props.publicationId}`);
-
+const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
     // Mock
     const data = {
         wellDefined: {
@@ -60,17 +56,11 @@ const Ratings: React.FC<Props> = (props): JSX.Element => {
         }
     };
 
-    const [ratings, setRatings] = React.useState(data);
-
-    const writeReview = (e: React.MouseEvent) => {
-        console.log(e);
-    };
-
     return (
         <div className="rounded-xl">
             <div className="rounded-t-lg bg-teal-100 px-8 py-6 transition-colors duration-500">
                 {/* {Object.values(ratings).map((rate: RateProps, index) => (
-                    <Rate key={index} title={rate.title} value={rate.value} />
+                    <Rating key={index} title={rate.title} value={rate.value} />
                 ))} */}
 
                 {/* <button
@@ -100,4 +90,4 @@ const Ratings: React.FC<Props> = (props): JSX.Element => {
     );
 };
 
-export default Ratings;
+export default RatingsCollection;
