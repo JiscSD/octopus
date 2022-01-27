@@ -13,7 +13,8 @@ let store: any = (set: any): Types.PreferencesStoreTypes => ({
     toggle: () => set((state: State) => ({ darkMode: !state.darkMode }))
 });
 
-store = devtools(store);
+if (process.env.stage === 'local') store = devtools(store);
+
 store = persist(store, { name: Config.keys.localStorage.darkMode });
 
 const usePreferencesStore = create(store);

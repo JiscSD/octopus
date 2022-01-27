@@ -28,3 +28,4 @@ export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as HTMLVideo } from './Video/HTML';
 export { default as FeaturedCollection } from './FeaturedCollection';
+export { default as CommandPalette } from './CommandPalette';
