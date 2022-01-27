@@ -22,11 +22,7 @@ jobs:
             - name: Run build
               working-directory: ./ui
               run: npm run build
-              env:
-                  stage: local
 
             - name: Run lighthouseCI
               working-directory: ./ui
               run: lhci autorun
-              env:
-                  stage: local
