@@ -20,6 +20,7 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
     return (
         <div className="relative mr-4 h-8 w-8">
             <button
+                aria-label="Mobile Navigation Menu"
                 onClick={(e) => toggle()}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
