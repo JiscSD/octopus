@@ -17,7 +17,7 @@
         "start": "next start",
         "lint": "next lint",
         "format": "npx prettier --write src/",
-        "lighthouse": "NODE_STAGE=local npm run start"
+        "lighthouse": "NODE_ENV=stage npm run start"
     },
     "dependencies": {
         "@heroicons/react": "^1.0.5",
