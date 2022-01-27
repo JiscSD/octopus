@@ -1,7 +1,7 @@
 module.exports = {
     ci: {
         collect: {
-            startServerCommand: 'npm run start',
+            startServerCommand: 'npm run lighthouse',
             url: ['http://localhost:3000/']
         },
         upload: {
