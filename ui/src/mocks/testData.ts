@@ -197,6 +197,3 @@ export const testSinglePublication = {
     publicationFromRef: [],
     publicationToRef: []
 };
-
-// export const testPublicationTopics = ['COVID=19', 'Cancer', 'Space travel', 'Cell structure', 'Health'];
-// export const testPublicationSciences = ['Biology', 'Chemistry', 'Mathematics', 'Physics', 'Psychology'];
