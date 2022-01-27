@@ -19,6 +19,10 @@ jobs:
               working-directory: ./ui
               run: npm ci && npm install -g @lhci/cli@0.8.x
 
+            - name: Run build
+              working-directory: ./ui
+              run: npm run build
+
             - name: Run lighthouseCI
               working-directory: ./ui
               run: lhci autorun
