@@ -103,6 +103,9 @@ module.exports = {
             },
             strokeWidth: {
                 4: 4
+            },
+            screens: {
+                '3xl': '1700px'
             }
         }
     },

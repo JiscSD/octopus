@@ -159,7 +159,7 @@ export const testResults = [
 ];
 
 export const testSinglePublication = {
-    id: 'some-id-string',
+    id: 'publication-problem-live',
     url_slug: 'ckylhxud10003ml2s2jkdespz',
     type: 'INTERPRETATION',
     title: 'Could treatment for COPD be protective against COVID-19 symptoms?',
