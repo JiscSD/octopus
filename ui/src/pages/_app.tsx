@@ -13,16 +13,23 @@ const App = ({ Component, pageProps }: AppProps) => {
     const isMounted = React.useRef(false);
     const [loading, setLoading] = React.useState(true);
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
-
-    const test = () => {
-        alert('hello');
-    };
+    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     React.useEffect(() => {
         isMounted.current = true;
 
         if (isMounted.current === true) {
-            document.addEventListener('keypress', test);
+            document.addEventListener('keydown', function (e) {
+                if (window.navigator.appVersion.indexOf('Mac')) {
+                    if (e.metaKey && e.code === 'KeyK') {
+                        toggleCmdPalette();
+                    }
+                } else {
+                    if (e.ctrlKey && e.code === 'KeyK') {
+                        toggleCmdPalette();
+                    }
+                }
+            });
         }
 
         setLoading(false);

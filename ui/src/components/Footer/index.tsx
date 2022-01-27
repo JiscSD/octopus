@@ -28,12 +28,6 @@ const Footer: React.FC = (): JSX.Element => {
                         <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Browse</h3>
                     </Components.Link>
                     <Components.Link
-                        href={Config.urls.search.path}
-                        className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
-                    >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Search</h3>
-                    </Components.Link>
-                    <Components.Link
                         href={Config.urls.createPublication.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                     >
