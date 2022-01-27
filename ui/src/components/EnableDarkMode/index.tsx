@@ -12,6 +12,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
     return (
         <button
             type="button"
+            aria-label="Enable Dark Mode"
             aria-pressed={darkMode}
             onClick={(e) => toggle(e)}
             className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"

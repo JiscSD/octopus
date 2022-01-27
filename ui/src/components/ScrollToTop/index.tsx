@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 const ScrollToTop: React.FC = (): JSX.Element => {
     return (
         <motion.button
+            aria-label="Scroll to Top"
             initial={{ scale: 0.5 }}
             animate={{ scale: 1, type: 'spring' }}
             type="button"
