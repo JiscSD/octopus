@@ -9,13 +9,13 @@ import * as Mocks from '@mocks';
 import * as Helpers from '@helpers';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    // Get featured publications
+    // Get featured publications endpoint
     const featured: Interfaces.Publication[] = [
         Mocks.testData.testSinglePublication,
         Mocks.testData.testSinglePublication
     ];
 
-    // Get latest publications
+    // Get latest publications endpoint
     const latest: Interfaces.Publication[] = [
         Mocks.testData.testSinglePublication,
         Mocks.testData.testSinglePublication,
@@ -25,21 +25,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ];
 
     // Get publication types
-    const types: string[] = Mocks.testData.testPublicationTypes;
-
-    // Get publication topics
-    const topics: string[] = Mocks.testData.testPublicationTopics;
-
-    // Get publication sciences
-    const sciences: string[] = Mocks.testData.testPublicationSciences;
+    const types: string[] = Config.values.publicationTypes;
 
     return {
         props: {
             featured,
             latest,
-            types,
-            topics,
-            sciences
+            types
         }
     };
 };
@@ -48,8 +40,6 @@ type Props = {
     featured: Interfaces.Publication[];
     latest: Interfaces.Publication[];
     types: string[];
-    topics: string[];
-    sciences: string[];
 };
 
 const Browse: NextPage<Props> = (props): JSX.Element => {
@@ -70,7 +60,7 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <h1 className="mb-8 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-4xl xl:leading-normal">
+                        <h1 className="block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl lg:mb-8 xl:text-4xl xl:leading-normal">
                             Browse all publications
                         </h1>
                     </section>
@@ -80,7 +70,14 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                                 <h2 className="mb-2 block font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Publication type
                                 </h2>
-                                {/** All option, no idea where thats supposed to... maybe to search with type empty, todo. */}
+                                <Components.Link
+                                    href={`${Config.urls.search.path}?type=${Config.values.publicationTypes.join()}`}
+                                    className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                                >
+                                    <span className="text-teal-500 transition-colors duration-500 group-hover:text-grey-500 dark:text-teal-300">
+                                        All
+                                    </span>
+                                </Components.Link>
                                 {props.types.map((type) => (
                                     <Components.Link
                                         key={type}

@@ -198,15 +198,5 @@ export const testSinglePublication = {
     publicationToRef: []
 };
 
-export const testPublicationTypes = [
-    'PROBLEM',
-    'PROTOCOL',
-    'ANALYSIS',
-    'REAL_WORLD_APPLICATION',
-    'HYPOTHESIS',
-    'DATA',
-    'INTERPRETATION',
-    'PEER_REVIEW'
-];
-export const testPublicationTopics = ['COVID=19', 'Cancer', 'Space travel', 'Cell structure', 'Health'];
-export const testPublicationSciences = ['Biology', 'Chemistry', 'Mathematics', 'Physics', 'Psychology'];
+// export const testPublicationTopics = ['COVID=19', 'Cancer', 'Space travel', 'Cell structure', 'Health'];
+// export const testPublicationSciences = ['Biology', 'Chemistry', 'Mathematics', 'Physics', 'Psychology'];

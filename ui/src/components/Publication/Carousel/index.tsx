@@ -16,8 +16,8 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             {/** Left arrow */}
             <button
                 type="button"
-                onClick={(e) => (container.current.scrollLeft += 20)}
-                className="absolute -left-12 top-1/2 hidden -translate-y-full rounded outline-0 focus:ring-2 focus:ring-yellow-400 2xl:block"
+                onClick={(e) => (container.current.scrollLeft += -50)}
+                className="absolute -left-16 top-1/2 hidden -translate-y-full rounded outline-0 focus:ring-2 focus:ring-yellow-400 2xl:block"
             >
                 <ChevronLeftIcon className="h-10 w-10 text-teal-500" />
             </button>
@@ -25,10 +25,10 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             <div className="overflow-hidden">
                 <div
                     ref={container}
-                    className="flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none pt-2 pb-6"
+                    className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none pt-2 pb-6 3xl:snap-none"
                 >
                     {props.publications.map((publication: Interfaces.Publication, index: number) => (
-                        <div key={index} className="mr-10 min-w-[300px] snap-center">
+                        <div key={index} className="mr-10 min-w-[300px] 3xl:snap-center">
                             <Components.PublicationCard publication={publication} />
                         </div>
                     ))}
@@ -38,7 +38,7 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             {/** Left arrow */}
             <button
                 type="button"
-                onClick={(e) => (container.current.scrollLeft -= 20)}
+                onClick={(e) => (container.current.scrollLeft += 50)}
                 className="absolute -right-8 top-1/2 z-20 hidden -translate-y-full rounded outline-0 focus:ring-2 focus:ring-yellow-400 2xl:block 3xl:-right-16 "
             >
                 <ChevronRightIcon className="h-10 w-10 text-teal-500" />
