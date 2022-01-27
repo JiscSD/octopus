@@ -5,7 +5,6 @@ import * as Components from '@components';
 
 type Props = {
     publications: Interfaces.Publication[];
-    limit: number;
 };
 
 const FeaturedCollection: React.FC<Props> = (props): JSX.Element => (

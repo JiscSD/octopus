@@ -93,7 +93,7 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                         </aside>
                         <article className="lg:col-span-6">
                             <div className="mb-16">
-                                <Components.FeaturedCollection publications={props.featured} limit={2} />
+                                <Components.FeaturedCollection publications={props.featured} />
                             </div>
 
                             <div className="mb-16">
