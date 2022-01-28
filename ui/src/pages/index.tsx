@@ -35,12 +35,12 @@ const Home: NextPage = (): JSX.Element => {
                     waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                 >
                     <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
-                        <div className="mx-auto block lg:w-10/12">
+                        <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                             <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
                                 A new way to publish your scientific work that&apos;s fast, free and fair.
                             </h1>
                             <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
-                                Designed to replace jounrals and papers as the place to establish priority and record
+                                Designed to replace journals and papers as the place to establish priority and record
                                 your work in full detail.
                             </p>
 
@@ -70,21 +70,6 @@ const Home: NextPage = (): JSX.Element => {
                         </div>
                     </div>
                 </Components.Section>
-                {/** Search section */}
-                {/* <Components.Section
-                    id="search"
-                    className="bg-teal-50 dark:bg-grey-400"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
-                >
-                    <div className="container mx-auto px-8 pt-16 pb-8">
-                        <div className="mx-auto block lg:w-2/3 2xl:w-1/2">
-                            <Components.Search />
-                        </div>
-                    </div>
-                </Components.Section> */}
-                {/** Intro */}
                 <Components.SectionTwo
                     id="content"
                     className="bg-teal-300 dark:bg-grey-900"
