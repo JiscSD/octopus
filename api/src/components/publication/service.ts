@@ -15,29 +15,27 @@ export const getAll = async (filters: I.PublicationFilters) => {
             OR: [
                 {
                     title: {
-                        contains: filters.search,
-                        mode: 'insensitive'
+                        search: filters.search?.replace(/ /ig, '|')
                     }
                 },
                 {
                     content: {
-                        contains: filters.search,
-                        mode: 'insensitive'
+                        search: filters.search?.replace(/ /ig, '|')
+
                     }
                 },
                 {
                     user: {
                         firstName: {
-                            contains: filters.search,
-                            mode: 'insensitive'
+                            search: filters.search?.replace(/ /ig, '|')
+
                         }
                     }
                 },
                 {
                     user: {
                         lastName: {
-                            contains: filters.search,
-                            mode: 'insensitive'
+                            search: filters.search?.replace(/ /ig, '|')
                         }
                     }
                 }
