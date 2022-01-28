@@ -4,9 +4,11 @@ import ClickAwayListener from 'react-click-away-listener';
 import * as SolidIcon from '@heroicons/react/solid';
 
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as Mocks from '@mocks';
 
 type SearchType = 'publications' | 'authors';
 
@@ -14,7 +16,15 @@ const CommandPalette: React.FC = (): JSX.Element => {
     const router = useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
     const [query, setQuery] = React.useState('');
-    const [results, setResults] = React.useState([]);
+    // @ts-ignore
+    const [results, setResults] = React.useState<Interfaces.Publication[]>([
+        Mocks.testData.testSinglePublication,
+        Mocks.testData.testSinglePublication2,
+        Mocks.testData.testSinglePublication3,
+        Mocks.testData.testSinglePublication,
+        Mocks.testData.testSinglePublication2,
+        Mocks.testData.testSinglePublication3
+    ]);
     const [searchFor, setSearchFor] = React.useState<SearchType>('publications');
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
@@ -41,8 +51,8 @@ const CommandPalette: React.FC = (): JSX.Element => {
         showCmdPalette && (
             <Components.Overlay>
                 <ClickAwayListener onClickAway={() => toggleCmdPalette()}>
-                    <div className="relative z-50 overflow-hidden rounded-lg bg-teal-50 py-1 shadow shadow-grey-600 dark:bg-grey-700 dark:shadow-none lg:w-[500px]">
-                        <div className="flex items-center pl-4">
+                    <div className="relative z-50 mx-4 overflow-hidden rounded-lg bg-teal-50 py-1 shadow shadow-grey-600 dark:bg-grey-700 dark:shadow-none lg:w-[600px]">
+                        <div className="mb-2 flex items-center pl-4">
                             <input
                                 ref={searchInput}
                                 type="text"
@@ -57,6 +67,18 @@ const CommandPalette: React.FC = (): JSX.Element => {
                             <div className="rounded-l-lg py-2 px-4">
                                 <SolidIcon.SearchIcon className="h-6 w-6 text-teal-500" />
                             </div>
+                        </div>
+                        <div className="max-h-[400px] overflow-y-auto">
+                            {results.map((result) => (
+                                <Components.PublicationResult
+                                    key={result.id}
+                                    id={result.id}
+                                    title={result.title}
+                                    createdBy={`${result.user.firstName}. ${result.user.lastName}`}
+                                    date={result.createdAt}
+                                    type={result.type}
+                                />
+                            ))}
                         </div>
                         {/* <Components.Link
                             href={`${Config.urls.search.path}?for=${searchFor}&query=${query}`}
