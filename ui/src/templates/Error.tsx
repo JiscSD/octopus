@@ -22,7 +22,7 @@ const ErrorTemplate: React.FC<Props> = (props) => {
                     <h2 className="mx-auto mb-10 block font-montserrat text-4xl font-bold text-grey-900 transition-colors duration-500 dark:text-white md:col-span-4 lg:col-span-4">
                         {props.title}
                     </h2>
-                    <p className="mx-auto mb-12 block font-inter text-2xl text-grey-800 transition-colors duration-500 dark:text-white md:col-span-4 lg:col-span-4">
+                    <p className="mx-auto mb-12 block text-center font-inter text-2xl text-grey-800 transition-colors duration-500 dark:text-white md:col-span-4 lg:col-span-4">
                         {props.content}
                     </p>
                     <div className="mx-auto mb-12 block text-grey-800 transition-colors duration-500 dark:text-white md:col-span-4 lg:col-span-4">
