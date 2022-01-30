@@ -12,6 +12,10 @@ export interface JSONResponse {
     statusCode: number;
 }
 
+export interface User {
+    id: string;
+}
+
 export interface APIRequest<
     BodyOverride = string | undefined,
     QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
@@ -21,3 +25,51 @@ export interface APIRequest<
     queryStringParameters: QueryStringParametersOverride;
     pathParameters: PathParamsOverride;
 }
+
+export interface AuthenticatedAPIRequest<
+    BodyOverride = string | undefined,
+    QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
+    PathParamsOverride = APIGatewayProxyEventPathParameters | undefined
+> extends Omit<APIGatewayProxyEventV2, 'body' | 'queryStringParameters' | 'pathParameters'> {
+    body: BodyOverride;
+    queryStringParameters: QueryStringParametersOverride;
+    pathParameters: PathParamsOverride;
+    user: User;
+}
+
+export type PublicationType = 'PROBLEM' | 'PROTOCOL' | 'ANALYSIS' | 'REAL_WORLD_APPLICATION' | 'HYPOTHESIS' | 'DATA' | 'INTERPRETATION' | 'PEER_REVIEW';
+
+export interface CreatePublicationRequestBody {
+    type: PublicationType;
+    title: string;
+    content?: string;
+}
+
+export interface GetPublicationPathParams {
+    id: string;
+}
+
+export interface UpdateStatusPathParams {
+    id: string;
+    status: 'LIVE'
+}
+
+export interface CreateLinkBody {
+    to: string;
+    from: string;
+}
+
+export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
+export type OrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type OrderDirection = 'asc' | 'desc';
+
+export interface PublicationFilters {
+    search?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: OrderBy;
+    orderDirection?: OrderDirection;
+    type: string;
+};
+
+export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];

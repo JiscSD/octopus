@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@components": [
+                "./src/components"
+            ],
+            "@config": [
+                "./src/config"
+            ],
+            "@layouts": [
+                "./src/layouts"
+            ],
+            "@assets": [
+                "./src/assets"
+            ],
+            "@mocks": [
+                "./src/mocks"
+            ],
+            "@hooks": [
+                "./src/hooks"
+            ],
+            "@stores": [
+                "./src/stores"
+            ],
+            "@templates": [
+                "./src/templates"
+            ],
+            "@interfaces": [
+                "./src/lib/interfaces"
+            ],
+            "@types": [
+                "./src/lib/types"
+            ],
+            "@helpers": [
+                "./src/lib/helpers"
+            ],
+            "@api": [
+                "./src/lib/api"
+            ]
+        }
+    }
+}

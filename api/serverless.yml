@@ -47,3 +47,35 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: get
                   cors: true
+    getPublication:
+        handler: src/components/publication/routes.get
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}
+                  method: get
+                  cors: true
+    createPublication:
+        handler: src/components/publication/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications
+                  method: post
+                  cors: true
+    createLink:
+        handler: src/components/link/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/links
+                  method: post
+                  cors: true
+    updateStatus:
+        handler: src/components/publication/routes.updateStatus
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/status/{status}
+                  method: put
+                  cors: true

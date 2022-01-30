@@ -24,6 +24,7 @@ model User {
     email     String?
     role      Role    @default(USER)
     locked    Boolean @default(false)
+    apiKey    String? @unique
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -56,26 +57,21 @@ model Publication {
     content  String?
     doi      String?
 
+    currentStatus PublicationStatusEnum @default(DRAFT)
+
     createdBy String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    user               User                @relation(fields: [createdBy], references: [id])
-    publicationFromRef Links[]             @relation("publicationFromRef")
-    publicationToRef   Links[]             @relation("publicationToRef")
-    PublicationStatus  PublicationStatus[]
+    user               User                @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    
+    linkedTo     Links[]             @relation("from")
+    linkedFrom   Links[]             @relation("to")
+
+    publicationStatus  PublicationStatus[]
 }
 
-model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
-
-    createdAt DateTime @default(now())
-
-    publication Publication @relation(fields: [publicationId], references: [id])
-}
 
 model Links {
     id              String   @id @default(cuid())
@@ -86,6 +82,18 @@ model Links {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    publicationFromRef Publication @relation("publicationFromRef", fields: [publicationFrom], references: [id])
-    publicationToRef   Publication @relation("publicationToRef", fields: [publicationTo], references: [id])
+    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
+    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+
+    @@unique([publicationFrom, publicationTo])
+}
+
+model PublicationStatus {
+    id            String                @id @default(cuid())
+    publicationId String
+    status        PublicationStatusEnum
+
+    createdAt DateTime @default(now())
+
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
