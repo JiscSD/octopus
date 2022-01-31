@@ -13,8 +13,8 @@ const Error404: NextPage = () => {
             <Templates.ErrorTemplate
                 statusCode={404}
                 error="Error: 404"
-                title="Page not found!"
-                content="Oops, this page does not exist."
+                title="page not found"
+                content="Nothing to see here!"
             />
         </>
     );
