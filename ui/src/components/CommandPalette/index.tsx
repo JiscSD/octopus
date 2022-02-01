@@ -4,7 +4,6 @@ import ClickAwayListener from 'react-click-away-listener';
 import * as SolidIcon from '@heroicons/react/solid';
 import { Switch } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import _ from 'lodash';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -36,31 +35,27 @@ const CommandPalette: React.FC = (): JSX.Element => {
         router.push(`${Config.urls.search.path}?for=${searchFor}&query=${query}`);
     };
 
-    const debouncedSearch = _.debounce(async (value: string) => {
-        const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
-
-        try {
-            const response = await API.get(`${endpoint}?limit=10&search=${value}`);
-            if (!response.data.data.length) throw new Config.CustomErros.SearchThrowError('No results found.');
-            setResults(response.data.data);
-            setResultsMeta(response.data.metadata);
-            setResultsError(null);
-            setLoading(false);
-        } catch (err) {
-            if (err instanceof Config.CustomErros.SearchThrowError) {
-                setResultsError(err.message);
-            } else {
-                setResultsError('There was an problem fetching results.');
-            }
-            setLoading(false);
-        }
-    }, 800);
-
-    const handleSearchRequest = (value: string) => {
+    const handleSearchRequest = async (value: string) => {
         setQuery(value);
         if (value.length) {
             setLoading(true);
-            debouncedSearch(value);
+
+            try {
+                const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+                const response = await API.get(`${endpoint}?limit=10&search=${value}`);
+                if (!response.data.data.length) throw new Config.CustomErros.SearchThrowError('No results found.');
+                setResults(response.data.data);
+                setResultsMeta(response.data.metadata);
+                setResultsError(null);
+                setLoading(false);
+            } catch (err) {
+                if (err instanceof Config.CustomErros.SearchThrowError) {
+                    setResultsError(err.message);
+                } else {
+                    setResultsError('There was an problem fetching results.');
+                }
+                setLoading(false);
+            }
         } else {
             setResults([]);
         }
