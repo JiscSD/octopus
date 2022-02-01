@@ -31,6 +31,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
         searchFor === 'publications' ? setSearchFor('users') : setSearchFor('publications');
 
     const handleGoToSearchResults = () => {
+        resetData();
         toggleCmdPalette();
         router.push(`${Config.urls.search.path}?for=${searchFor}&query=${query}`);
     };
