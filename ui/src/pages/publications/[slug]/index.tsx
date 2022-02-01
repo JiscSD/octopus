@@ -1,3 +1,4 @@
+import React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -7,7 +8,9 @@ import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Types from '@types';
 import * as API from '@api';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -34,6 +37,11 @@ type Props = {
 
 const Publication: NextPage<Props> = (props): JSX.Element => {
     const router = useRouter();
+    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+
+    React.useEffect(() => {
+        toggleCmdPalette(false);
+    }, []);
 
     return (
         <>

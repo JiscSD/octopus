@@ -12,7 +12,7 @@
         "node": "14.x"
     },
     "scripts": {
-        "dev": "next dev",
+        "dev": "NEXT_PUBLIC_ENV=local next dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",

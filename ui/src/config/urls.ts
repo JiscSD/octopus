@@ -1,6 +1,6 @@
 let host: string;
 
-switch (process.env.stage) {
+switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
         host = 'http://localhost:3000';
         break;

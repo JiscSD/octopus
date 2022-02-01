@@ -12,7 +12,7 @@ let store: any = (set: any): Types.GlobalsStoreType => ({
     toggleCmdPalette: () => set((state: State) => ({ showCmdPalette: !state.showCmdPalette }))
 });
 
-if (process.env.stage === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
 
 const useGlobalsStore = create(store);
 

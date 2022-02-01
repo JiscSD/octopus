@@ -194,26 +194,28 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     >
                                         {results.map((result, index) => {
                                             if (searchFor === 'publications') {
-                                                <Components.PublicationSearchResult
-                                                    key={result.id}
-                                                    id={result.id}
-                                                    title={result.title}
-                                                    createdBy={`${result.user.firstName}. ${result.user.lastName}`}
-                                                    date={result.createdAt}
-                                                    type={result.type}
-                                                    accent={
-                                                        searchFor === 'publications'
-                                                            ? 'text-teal-500'
-                                                            : 'text-purple-300'
-                                                    }
-                                                    className={`${index === 0 ? 'mt-2' : ''} ${
-                                                        index === results.length - 1 ? 'mb-2' : ''
-                                                    }`}
-                                                />;
+                                                return (
+                                                    <Components.PublicationSearchResult
+                                                        key={result.id}
+                                                        id={result.id}
+                                                        title={result.title}
+                                                        createdBy={`${result.user.firstName}. ${result.user.lastName}`}
+                                                        date={result.createdAt}
+                                                        type={result.type}
+                                                        accent={
+                                                            searchFor === 'publications'
+                                                                ? 'text-teal-500'
+                                                                : 'text-purple-300'
+                                                        }
+                                                        className={`${index === 0 ? 'mt-2' : ''} ${
+                                                            index === results.length - 1 ? 'mb-2' : ''
+                                                        }`}
+                                                    />
+                                                );
                                             }
 
                                             if (searchFor === 'users') {
-                                                <Components.UserSearchResult key={result.id} id={result.id} />;
+                                                return <Components.UserSearchResult key={result.id} id={result.id} />;
                                             }
                                         })}
                                     </motion.div>
