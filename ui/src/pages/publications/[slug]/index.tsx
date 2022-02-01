@@ -37,10 +37,11 @@ type Props = {
 
 const Publication: NextPage<Props> = (props): JSX.Element => {
     const router = useRouter();
+    const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     React.useEffect(() => {
-        toggleCmdPalette(false);
+        if (showCmdPalette) toggleCmdPalette();
     }, []);
 
     return (
