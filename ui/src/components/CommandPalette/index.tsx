@@ -37,28 +37,33 @@ const CommandPalette: React.FC = (): JSX.Element => {
 
     const handleSearchRequest = async (value: string) => {
         setQuery(value);
-        if (value.length) {
-            setLoading(true);
+        setLoading(true);
+        let data: Interfaces.Publication[] = [];
+        let metadata: null = null;
 
-            try {
-                const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
-                const response = await API.get(`${endpoint}?limit=10&search=${value}`);
-                if (!response.data.data.length) throw new Config.CustomErros.SearchThrowError('No results found.');
-                setResults(response.data.data);
-                setResultsMeta(response.data.metadata);
-                setResultsError(null);
-                setTimeout(() => setLoading(false), 500);
-            } catch (err) {
-                if (err instanceof Config.CustomErros.SearchThrowError) {
-                    setResultsError(err.message);
-                } else {
-                    setResultsError('There was an problem fetching results.');
-                }
-                setLoading(false);
+        try {
+            const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+            const response = await API.get(`${endpoint}?limit=10&search=${value}`);
+            if (!response.data.data.length) throw new Config.CustomErros.SearchThrowError('No results found.');
+            if (value.length) {
+                data = response.data.data;
+                metadata = response.data.metadata;
             }
-        } else {
-            setResults([]);
+            setResultsError(null);
+        } catch (err) {
+            if (err instanceof Config.CustomErros.SearchThrowError) {
+                setResultsError(err.message);
+            } else {
+                setResultsError('There was an problem fetching results.');
+            }
         }
+
+        // Small delay here for any hanging responses to resolve
+        setTimeout(() => {
+            setResults(data);
+            setResultsMeta(metadata);
+            setLoading(false);
+        }, 500);
     };
 
     React.useEffect(() => {
@@ -84,7 +89,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
             <Components.Overlay>
                 <ClickAwayListener onClickAway={() => toggleCmdPalette()}>
                     <div className="mx-auto md:w-[620px]">
-                        <div className="relative z-50 mx-4 flex items-center justify-between rounded-t-lg bg-grey-800 px-6 pt-4 pb-2">
+                        <div className="relative z-50 mx-4 flex flex-col items-center justify-between rounded-t-lg bg-grey-800 px-6 pt-4 pb-2 sm:flex-row">
                             <span className="mr-2 text-sm text-grey-100">
                                 {resultsMeta && 'Results found: ' + resultsMeta.total}
                             </span>
@@ -197,11 +202,6 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                         createdBy={`${result.user.firstName}. ${result.user.lastName}`}
                                                         date={result.createdAt}
                                                         type={result.type}
-                                                        accent={
-                                                            searchFor === 'publications'
-                                                                ? 'text-teal-500'
-                                                                : 'text-purple-300'
-                                                        }
                                                         className={`${index === 0 ? 'mt-2' : ''} ${
                                                             index === results.length - 1 ? 'mb-2' : ''
                                                         }`}

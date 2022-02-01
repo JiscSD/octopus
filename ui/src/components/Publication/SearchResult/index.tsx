@@ -13,7 +13,6 @@ type Props = {
     type: Interfaces.PublicationType;
     date: string;
     content?: string;
-    accent?: string;
     className?: string;
 };
 
@@ -29,11 +28,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
                 href={`${Config.urls.viewPublication.path}/${props.id}`}
                 className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${props.className}`}
             >
-                <span
-                    className={`leading-0 inline-flex font-montserrat text-xs font-semibold tracking-wide ${
-                        props.accent ? props.accent : 'text-purple-300'
-                    }`}
-                >
+                <span className="leading-0 inline-flex font-montserrat text-xs font-semibold tracking-wide text-teal-300">
                     {Helpers.formatPublicationType(props.type)}
                 </span>
                 <span className="mt-1 block text-sm tracking-wide text-white">{props.title}</span>
