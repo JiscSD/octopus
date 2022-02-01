@@ -4,7 +4,7 @@ import * as Layouts from '@layouts';
 import * as Components from '@components';
 import * as Config from '@config';
 
-type Props = { statusCode: number; error: string; title: string; content: string };
+type Props = { statusCode: number; title: string; content: string };
 
 const ErrorTemplate: React.FC<Props> = (props) => {
     return (
@@ -16,10 +16,7 @@ const ErrorTemplate: React.FC<Props> = (props) => {
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
                 <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:gap-4 lg:pt-36">
-                    <Components.Pill className="mx-auto mt-20 mb-5 bg-teal-600 font-inter font-bold text-white transition-colors duration-500  dark:bg-teal-300 dark:text-grey-900 lg:my-5">
-                        {props.error}
-                    </Components.Pill>
-                    <h1 className="mx-auto mb-8 block text-center font-montserrat text-6xl font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white lg:mb-4 lg:leading-none">
+                    <h1 className="mx-auto mt-8 mb-8 block text-center font-montserrat text-6xl font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white lg:mt-2 lg:mb-4 lg:leading-none">
                         {props.title}
                     </h1>
                     <h2 className="mx-auto mb-4 block text-center font-inter text-2xl text-teal-900 transition-colors duration-500 dark:text-white">
