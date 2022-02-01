@@ -53,7 +53,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
 
             <Layouts.Standard fixedHeader={true}>
                 <Components.Section
-                    className="bg-teal-600 dark:bg-grey-800"
+                    className="bg-gradient-to-t from-teal-600 to-teal-400 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
                     waveFillTop="fill-teal-200 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
