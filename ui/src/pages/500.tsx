@@ -12,7 +12,6 @@ const Error500: NextPage = () => {
             </Head>
             <Templates.ErrorTemplate
                 statusCode={500}
-                error="Error: 500"
                 title="Internal server error"
                 content="There is a problem with the server"
             />
