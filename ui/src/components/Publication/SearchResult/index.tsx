@@ -19,7 +19,12 @@ type Props = {
 
 const SearchResult: React.FC<Props> = (props): JSX.Element => {
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             <Components.Link
                 href={`${Config.urls.viewPublication.path}/${props.id}`}
                 className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${props.className}`}

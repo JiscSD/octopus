@@ -47,7 +47,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                 setResults(response.data.data);
                 setResultsMeta(response.data.metadata);
                 setResultsError(null);
-                setLoading(false);
+                setTimeout(() => setLoading(false), 500);
             } catch (err) {
                 if (err instanceof Config.CustomErros.SearchThrowError) {
                     setResultsError(err.message);
