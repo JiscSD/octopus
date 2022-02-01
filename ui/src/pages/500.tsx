@@ -10,7 +10,12 @@ const Error500: NextPage = () => {
             <Head>
                 <title>{Config.urls[500].title}</title>
             </Head>
-            <Templates.ErrorTemplate statusCode={500} title="Internal serevr error" content="Lorem ipsum" />;
+            <Templates.ErrorTemplate
+                statusCode={500}
+                title="Internal server error"
+                content="There is a problem with the server"
+            />
+            ;
         </>
     );
 };
