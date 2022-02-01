@@ -31,8 +31,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                     }
                 }
 
-                console.log(showCmdPalette, e.key);
-
                 if (e.key === 'Escape' && !showCmdPalette) toggleCmdPalette();
             });
         }

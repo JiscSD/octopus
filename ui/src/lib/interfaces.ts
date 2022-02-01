@@ -51,3 +51,9 @@ export interface SearchResult extends Publication {
 export interface JSON {
     [key: string]: Types.JSONValue;
 }
+
+export interface SearchResultMeta {
+    total: number;
+    limit: number;
+    offset: number;
+}

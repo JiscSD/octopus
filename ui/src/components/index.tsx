@@ -25,9 +25,10 @@ export { default as PublicationContentSection } from './Publication/ContentSecti
 export { default as PublicationRatings } from './Publication/Ratings';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
+export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as HTMLVideo } from './Video/HTML';
 export { default as FeaturedCollection } from './FeaturedCollection';
 export { default as CommandPalette } from './CommandPalette';
 export { default as Overlay } from './Overlay';
-export { default as PublicationResult } from './PublicationResult';
+export { default as UserSearchResult } from './Users/SearchResult';

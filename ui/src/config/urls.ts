@@ -54,23 +54,12 @@ const urls = {
         canonical: `${base.host}/edit`
     },
 
-    // Reviews
-    // createReview: {
-    //     path: '/review',
-    //     title: 'Create publication review',
-    //     description: '',
-    //     keywords: '',
-    //     canonical: `${base.host}/review`
-    // },
-
-    // Report
-    // createFlag: {
-    //     path: '/flag',
-    //     title: 'Flag publication',
-    //     description: '',
-    //     keywords: '',
-    //     canonical: `${base.host}/flag`
-    // },
+    // Users
+    viewUser: {
+        path: '/authors',
+        title: `${base.title}`,
+        canonical: `${base.host}/authors`
+    },
 
     // Static Pages
     home: {
