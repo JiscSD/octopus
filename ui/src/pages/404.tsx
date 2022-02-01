@@ -10,7 +10,7 @@ const Error404: NextPage = () => {
             <Head>
                 <title>{Config.urls[404].title}</title>
             </Head>
-            <Templates.ErrorTemplate statusCode={404} title="Not found" content="Lorem ipsum" />
+            <Templates.ErrorTemplate statusCode={404} title="Page not found." content="Nothing to see here!" />
         </>
     );
 };
