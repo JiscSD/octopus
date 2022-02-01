@@ -66,11 +66,15 @@ const CommandPalette: React.FC = (): JSX.Element => {
         }, 500);
     };
 
-    React.useEffect(() => {
+    const resetData = () => {
         setQuery('');
         setResults([]);
         setResultsMeta(null);
         setResultsError(null);
+    };
+
+    React.useEffect(() => {
+        resetData();
         searchInput.current?.focus();
     }, [searchFor]);
 
@@ -80,7 +84,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
             searchInput.current?.focus();
         } else {
             document.body.style.overflowY = 'auto';
-            setQuery('');
+            resetData();
         }
     }, [showCmdPalette]);
 
