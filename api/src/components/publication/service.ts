@@ -4,9 +4,6 @@ import prisma from 'lib/client';
 
 export const getAll = async (filters: I.PublicationFilters) => {
     const query = {
-        orderBy: {
-            [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
-        },
         where: {
             type: {
                 in: filters.type.split(',') as I.ProblemTypes || ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW']
@@ -15,29 +12,27 @@ export const getAll = async (filters: I.PublicationFilters) => {
             OR: [
                 {
                     title: {
-                        contains: filters.search,
-                        mode: 'insensitive'
+                        search: filters.search?.replace(/ /ig, '|')
                     }
                 },
                 {
                     content: {
-                        contains: filters.search,
-                        mode: 'insensitive'
+                        search: filters.search?.replace(/ /ig, '|')
+
                     }
                 },
                 {
                     user: {
                         firstName: {
-                            contains: filters.search,
-                            mode: 'insensitive'
+                            search: filters.search?.replace(/ /ig, '|')
+
                         }
                     }
                 },
                 {
                     user: {
                         lastName: {
-                            contains: filters.search,
-                            mode: 'insensitive'
+                            search: filters.search?.replace(/ /ig, '|')
                         }
                     }
                 }
@@ -48,6 +43,9 @@ export const getAll = async (filters: I.PublicationFilters) => {
     // @ts-ignore
     const publications = await prisma.publication.findMany({
         ...query,
+        orderBy: {
+            [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
+        },
         include: {
             user: {
                 select: {

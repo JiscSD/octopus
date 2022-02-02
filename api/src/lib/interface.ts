@@ -60,16 +60,25 @@ export interface CreateLinkBody {
 }
 
 export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
-export type OrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
 export interface PublicationFilters {
     search?: string;
     limit?: string;
     offset?: string;
-    orderBy?: OrderBy;
+    orderBy?: PublicationOrderBy;
     orderDirection?: OrderDirection;
     type: string;
+};
+
+export interface UserFilters {
+    search?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: UserOrderBy;
+    orderDirection?: OrderDirection;
 };
 
 export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
