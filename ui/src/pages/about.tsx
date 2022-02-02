@@ -8,6 +8,8 @@ import * as Assets from '@assets';
 
 type Props = {
     aboutSections: string[];
+    heroContents: string[];
+    sectionContents: string[];
 };
 
 const About: NextPage<Props> = (props): JSX.Element => {
@@ -42,6 +44,39 @@ const About: NextPage<Props> = (props): JSX.Element => {
         }
     ];
 
+    const sectionContents = [
+        {
+            heading: 'What is Octopus?',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        },
+        {
+            heading: 'Why publish in Octopus?',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        },
+        {
+            heading: 'What makes Octopus different?',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        },
+        {
+            heading: 'How to publish in Octopus?',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        },
+        {
+            heading: 'Peer review and quality control',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        },
+        {
+            heading: 'Frequently asked questions',
+            content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+        }
+    ];
+
     return (
         <>
             <Head>
@@ -53,17 +88,17 @@ const About: NextPage<Props> = (props): JSX.Element => {
 
             <Layouts.Standard fixedHeader={true}>
                 <Components.Section
-                    className="bg-gradient-to-t from-teal-600 to-teal-400 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
-                    waveFillTop="fill-teal-200 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
+                    className="bg-gradient-to-t from-teal-200 to-teal-50 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
+                    waveFillTop="fill-teal-600 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-400 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillBottom="fill-teal-300 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <div className="container mx-auto gap-6 px-8 py-16 text-white">
-                            <h1 className="ml-52 block font-montserrat text-2xl font-bold leading-tight text-white transition-colors duration-500 md:text-3xl lg:mb-4 xl:text-4xl xl:leading-normal">
+                        <div className="container mx-auto gap-6 px-8 py-8 text-grey-800 dark:text-white">
+                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl lg:mb-4 xl:text-4xl xl:leading-normal">
                                 Learn about Octopus
                             </h1>
-                            <div className="container mx-auto max-w-max gap-6 px-8 py-16 text-white">
+                            <div className="container mx-auto min-w-min gap-6 px-8 py-16 md:max-w-max">
                                 <Components.HTMLVideo
                                     srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
                                     srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
@@ -75,10 +110,10 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 />
                             </div>
 
-                            <div className="m-auto grid max-w-6xl grid-cols-4 gap-10">
+                            <div className="m-auto grid max-w-7xl grid-cols-1 gap-10 text-center md:grid-cols-4">
                                 {heroContents.map((heroContent) => (
                                     <div key={heroContent.heading}>
-                                        <h2 className="mb-2 block font-montserrat text-xl font-bold ">
+                                        <h2 className="mb-2 block font-montserrat text-2xl font-bold ">
                                             {heroContent.heading}
                                         </h2>
                                         <p className="mb-10 block text-base ">{heroContent.content}</p>
@@ -89,7 +124,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     </section>
                 </Components.Section>
                 <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-800"
+                    className="bg-gradient-to-t from-teal-400 to-teal-300 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
@@ -119,20 +154,19 @@ const About: NextPage<Props> = (props): JSX.Element => {
                             </div>
                         </aside>
                         <section className="lg:col-span-6">
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    What is Octopus?
-                                </h2>
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.
-                                </h3>
-                            </div>
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
+                            {sectionContents.map((sectionContent) => (
+                                <Components.Paper key={sectionContent.heading}>
+                                    <div className="container mx-auto rounded-xl px-8 py-16 text-grey-900 dark:text-white lg:py-12">
+                                        <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
+                                            {sectionContent.heading}
+                                        </h2>
+                                        <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
+                                            {sectionContent.content}
+                                        </h3>
+                                    </div>
+                                </Components.Paper>
+                            ))}
+                            {/* <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
                                 <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
                                     Why publish in Octopus?
                                 </h2>
@@ -201,7 +235,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
                                     Frequently asked questions
                                 </h2>
-                            </div>
+                            </div> */}
                         </section>
                     </main>
                 </Components.SectionTwo>
