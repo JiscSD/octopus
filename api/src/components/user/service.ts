@@ -66,4 +66,27 @@ export const getByApiKey = async (apiKey: string) => {
     });
     
     return user;
+};
+
+export const get = async (id: string) => {
+    const user = await prisma.user.findFirst({
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            orcid: true,
+            email: true,
+            role: true,
+            createdAt: true
+        },
+        where: {
+            id
+        }
+    });
+
+    if (user) {
+        user.firstName = user?.firstName[0];
+    }
+
+    return user;
 }
