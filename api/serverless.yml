@@ -87,3 +87,11 @@ functions:
                   path: ${self:custom.versions.v1}/users
                   method: get
                   cors: true
+    getUser:
+        handler: src/components/user/routes.get
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/{id}
+                  method: get
+                  cors: true
