@@ -13,16 +13,6 @@ type Props = {
 };
 
 const About: NextPage<Props> = (props): JSX.Element => {
-    const aboutSections = [
-        'What is Octopus?',
-        'Take some quick lessons',
-        'Why publish in Octopus?',
-        'What makes Octopus different?',
-        'How to publish in Octopus',
-        'Peer review and quality control',
-        'Frequently asked questions'
-    ];
-
     const heroContents = [
         {
             heading: 'Publish freely',
@@ -46,31 +36,37 @@ const About: NextPage<Props> = (props): JSX.Element => {
 
     const sectionContents = [
         {
+            id: 'what_is_octopus',
             heading: 'What is Octopus?',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         },
         {
+            id: 'why_publish_in_octopus',
             heading: 'Why publish in Octopus?',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         },
         {
+            id: 'what_makes_octopus_different',
             heading: 'What makes Octopus different?',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         },
         {
+            id: 'how_to_publish_in_octopus',
             heading: 'How to publish in Octopus?',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         },
         {
+            id: 'peer_review_and_quality_control',
             heading: 'Peer review and quality control',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         },
         {
+            id: 'faq',
             heading: 'Frequently asked questions',
             content:
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -89,13 +85,13 @@ const About: NextPage<Props> = (props): JSX.Element => {
             <Layouts.Standard fixedHeader={true}>
                 <Components.Section
                     className="bg-gradient-to-t from-teal-200 to-teal-50 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
-                    waveFillTop="fill-teal-600 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-400 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-300 dark:fill-grey-800 transition-colors duration-500"
+                    waveFillTop="fill-teal-300 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <div className="container mx-auto gap-6 px-8 py-8 text-grey-800 dark:text-white">
-                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl lg:mb-4 xl:text-4xl xl:leading-normal">
+                        <div className="container mx-auto gap-6 px-8 py-4 text-grey-800 dark:text-white">
+                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl xl:text-4xl xl:leading-normal">
                                 Learn about Octopus
                             </h1>
                             <div className="container mx-auto min-w-min gap-6 px-8 py-16 md:max-w-max">
@@ -124,9 +120,9 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     </section>
                 </Components.Section>
                 <Components.SectionTwo
-                    className="bg-gradient-to-t from-teal-400 to-teal-300 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                    className="bg-gradient-to-t from-teal-200 to-teal-50 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
+                    waveFillTop="fill-teal-500 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-600 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <div className="container mx-auto gap-6 px-8 py-16">
@@ -140,103 +136,35 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 <h2 className="mb-2 block font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Jump to:
                                 </h2>
-                                {aboutSections.map((aboutSection) => (
+                                {sectionContents.map((sectionContent) => (
                                     <Components.Link
-                                        key={aboutSection}
-                                        href={`${Config.urls.home.path}`}
+                                        key={sectionContent.id}
+                                        href={`#${sectionContent.id}`}
                                         className="group mb-2 block w-fit rounded border-transparent outline-0 hover:underline focus:ring-2 focus:ring-yellow-400"
                                     >
                                         <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
-                                            {aboutSection}
+                                            {sectionContent.heading}
                                         </span>
                                     </Components.Link>
                                 ))}
                             </div>
                         </aside>
-                        <section className="lg:col-span-6">
+                        <div className="grid grid-cols-1 gap-4 lg:col-span-6">
                             {sectionContents.map((sectionContent) => (
-                                <Components.Paper key={sectionContent.heading}>
-                                    <div className="container mx-auto rounded-xl px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                        <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                            {sectionContent.heading}
-                                        </h2>
-                                        <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                            {sectionContent.content}
-                                        </h3>
-                                    </div>
-                                </Components.Paper>
+                                <div key={sectionContent.id} id={sectionContent.id} className="py-8 ">
+                                    <Components.Paper>
+                                        <section className="container mx-auto rounded-xl px-8 py-16 text-grey-900 dark:text-white lg:py-12">
+                                            <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
+                                                {sectionContent.heading}
+                                            </h2>
+                                            <h3 className="mb-6 block font-inter text-xl xl:mb-12">
+                                                {sectionContent.content}
+                                            </h3>
+                                        </section>
+                                    </Components.Paper>
+                                </div>
                             ))}
-                            {/* <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    Why publish in Octopus?
-                                </h2>
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.{' '}
-                                </h3>
-                            </div>
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    What makes Octopus different?
-                                </h2>
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.
-                                </h3>
-                                <Assets.Logo
-                                    height={100}
-                                    width={100}
-                                    className="mb-10 mr-4 fill-black transition-colors duration-500 dark:fill-teal-600"
-                                />
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.
-                                </h3>
-                            </div>
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    How to publish in Octopus?
-                                </h2>
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.{' '}
-                                </h3>
-                            </div>
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    Peer review and quality control
-                                </h2>
-                                <h3 className="mb-6 block font-inter text-xl xl:mb-12 xl:w-1/2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                    deserunt mollit anim id est laborum.{' '}
-                                </h3>
-                            </div>
-                            <div className="container mx-auto px-8 py-16 text-grey-900 dark:text-white lg:py-12">
-                                <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
-                                    Frequently asked questions
-                                </h2>
-                            </div> */}
-                        </section>
+                        </div>
                     </main>
                 </Components.SectionTwo>
             </Layouts.Standard>
