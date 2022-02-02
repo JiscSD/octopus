@@ -1,10 +1,6 @@
 locals {
     project_name          = "octopus"
-    project_slug          = "octopus"
     project_key_pair_name = "octopus-ssh"
-    project_friendly_name = "Octopus"
-    aws_region            = "eu-west-1"
-    hosted_zone_id        = "Z09850829MG7NK3703KB"
     environment           = terraform.workspace
     allowable_ips = [
         "193.62.83.114/32", // vpn
@@ -45,30 +41,3 @@ module "postgres" {
     db_version                = var.db_version
     backup_retention_period   = var.backup_retention_period
 }
-
-module "s3" {
-    source              = "../modules/s3"
-    environment         = local.environment
-    project_name        = local.project_name
-    acl                 = "public-read" # Need input from PO on this.
-}
-
-/*
-module "ses" {
-    source          = "../modules/ses"
-    domain_name     = var.full_domain_name
-    environment     = local.environment
-    hosted_zone_id  = local.hosted_zone_id
-}
-
-# API JWT secrets
-resource "random_string" "jwt_secret_string" {
-    length = 32
-}
-
-resource "aws_ssm_parameter" "jwt_secret" {
-    name    = "jwt_secret_${local.environment}"
-    type    = "String"
-    value   = random_string.jwt_secret_string.result
-}
-*/
