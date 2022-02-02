@@ -10,7 +10,7 @@ import * as Types from '@types';
 import * as API from '@api';
 
 const getResults = async (
-    searchType: string | Types.SearchType = 'publications',
+    searchType: string | Types.SearchType,
     query: string | null = '',
     limit: number = 0,
     offset: number = 0,
@@ -29,19 +29,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     let query: string | string[] | null = null;
     let results: Interfaces.Publication[] | Interfaces.User[] | [] = [];
     let metadata: Interfaces.SearchResultMeta | {} = {};
+    let error: boolean = false;
+    let errorMessage: string = '';
 
     if (context.query.query) query = context.query.query;
     if (context.query.for) searchType = context.query.for;
 
     if (searchType) {
-        // if (Array.isArray(searchType)) searchType = searchType[searchType.length - 1]; // not working
-        if (Array.isArray(searchType)) searchType = searchType[0]; // working
-        // if (Array.isArray(query)) query = query[query.length - 1]; // not working
-        if (Array.isArray(query)) query = query[0]; // working
+        if (Array.isArray(searchType)) searchType = searchType[0];
+        if (Array.isArray(query)) query = query[0];
 
-        const response = await getResults(searchType, query);
-        results = response.data.data;
-        metadata = response.data.metadata;
+        if (searchType === 'publications' || searchType === 'users') {
+            try {
+                const response = await getResults(searchType, query);
+                results = response.data.data;
+                metadata = response.data.metadata;
+            } catch (err) {
+                error = true;
+                errorMessage = 'There was a problem.';
+            }
+        }
     }
 
     return {
@@ -49,7 +56,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             searchType,
             query,
             results,
-            metadata
+            metadata,
+            error,
+            errorMessage
         }
     };
 };
@@ -59,6 +68,8 @@ type Props = {
     query: string | null;
     results: Interfaces.Publication[] | Interfaces.User[] | [];
     metadata: Interfaces.SearchResultMeta | {};
+    error: boolean;
+    errorMessage: string;
 };
 
 const Search: NextPage<Props> = (props): JSX.Element => {
@@ -66,6 +77,7 @@ const Search: NextPage<Props> = (props): JSX.Element => {
     const [query, setQuery] = React.useState(props.query);
     const [results, setResutls] = React.useState(props.results);
     const [metadta, setMetadata] = React.useState(props.metadata);
+    const [error, setError] = React.useState(props.error);
 
     console.log(props);
 
