@@ -1,11 +1,74 @@
-import { NextPage } from 'next';
+import React from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
+import * as API from '@api';
 
-const Search: NextPage = (): JSX.Element => {
+const getResults = async (
+    searchType: string | Types.SearchType = 'publications',
+    query: string | null = '',
+    limit: number = 0,
+    offset: number = 0,
+    orderBy: Types.OrderBySearchOption = 'createdAt',
+    orderDirection: Types.OrderDirectionSearchOption = 'asc'
+) => {
+    const endpoint = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+    const response = await API.get(
+        `${endpoint}?search=${query}&limit=${limit}&offset=${offset}&orderBy=${orderBy}&orderDirection=${orderDirection}`
+    );
+    return response;
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    let searchType: string | string[] | null = null;
+    let query: string | string[] | null = null;
+    let results: Interfaces.Publication[] | Interfaces.User[] | [] = [];
+    let metadata: Interfaces.SearchResultMeta | {} = {};
+
+    if (context.query.query) query = context.query.query;
+    if (context.query.for) searchType = context.query.for;
+
+    if (searchType) {
+        // if (Array.isArray(searchType)) searchType = searchType[searchType.length - 1]; // not working
+        if (Array.isArray(searchType)) searchType = searchType[0]; // working
+        // if (Array.isArray(query)) query = query[query.length - 1]; // not working
+        if (Array.isArray(query)) query = query[0]; // working
+
+        const response = await getResults(searchType, query);
+        results = response.data.data;
+        metadata = response.data.metadata;
+    }
+
+    return {
+        props: {
+            searchType,
+            query,
+            results,
+            metadata
+        }
+    };
+};
+
+type Props = {
+    searchType: Types.SearchType | null;
+    query: string | null;
+    results: Interfaces.Publication[] | Interfaces.User[] | [];
+    metadata: Interfaces.SearchResultMeta | {};
+};
+
+const Search: NextPage<Props> = (props): JSX.Element => {
+    const [searchType, setSearchType] = React.useState(props.searchType);
+    const [query, setQuery] = React.useState(props.query);
+    const [results, setResutls] = React.useState(props.results);
+    const [metadta, setMetadata] = React.useState(props.metadata);
+
+    console.log(props);
+
     return (
         <>
             <Head>
