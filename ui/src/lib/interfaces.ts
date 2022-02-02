@@ -17,10 +17,20 @@ export interface User {
     lastName: string;
 }
 
+export type PublicationType =
+    | 'PROBLEM'
+    | 'PROTOCOL'
+    | 'ANALYSIS'
+    | 'REAL_WORLD_APPLICATION'
+    | 'HYPOTHESIS'
+    | 'DATA'
+    | 'INTERPRETATION'
+    | 'PEER_REVIEW';
+
 export interface Publication {
     id: string;
     url_slug: string;
-    type: string;
+    type: PublicationType;
     title: string;
     content: string;
     doi: any; // to change
@@ -40,4 +50,10 @@ export interface SearchResult extends Publication {
 
 export interface JSON {
     [key: string]: Types.JSONValue;
+}
+
+export interface SearchResultMeta {
+    total: number;
+    limit: number;
+    offset: number;
 }

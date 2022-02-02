@@ -2,9 +2,12 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { DesktopComputerIcon, PencilIcon, SearchIcon } from '@heroicons/react/outline';
 
-import * as Layouts from '@layouts';
-import * as Config from '@config';
 import * as Components from '@components';
+import * as Layouts from '@layouts';
+import * as Helpers from '@helpers';
+import * as Config from '@config';
+import * as Stores from '@stores';
+import * as Types from '@types';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
@@ -13,6 +16,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Home: NextPage = (): JSX.Element => {
+    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+
     return (
         <>
             <Head>
@@ -22,22 +27,49 @@ const Home: NextPage = (): JSX.Element => {
                 <title>{Config.urls.home.title}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
-                {/** Search section */}
                 <Components.Section
                     id="search"
-                    className="bg-teal-50 dark:bg-grey-400"
+                    className="bg-teal-50 dark:bg-grey-800"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                 >
-                    <div className="container mx-auto px-8 pt-16 pb-8">
-                        <div className="mx-auto block lg:w-2/3 2xl:w-1/2">
-                            <Components.Search />
+                    <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
+                        <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
+                            <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
+                                A new way to publish your scientific work that&apos;s fast, free and fair.
+                            </h1>
+                            <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
+                                Designed to replace journals and papers as the place to establish priority and record
+                                your work in full detail.
+                            </p>
+
+                            <div className="mx-auto flex w-fit">
+                                <Components.Link
+                                    href={Config.urls.about.path}
+                                    className="mr-6 flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white outline-0 transition-colors duration-500 hover:bg-grey-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-500 dark:hover:bg-teal-600"
+                                >
+                                    <span className="text-center font-montserrat text-sm leading-none lg:text-base">
+                                        Get started
+                                    </span>
+                                </Components.Link>
+                                <button
+                                    aria-label="Open search"
+                                    className="flex w-52 items-center justify-between rounded-lg bg-teal-200 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
+                                    onClick={(e) => toggleCmdPalette()}
+                                >
+                                    <SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-teal-500" />
+                                    <span className="font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                                        Quick search...
+                                    </span>
+                                    <span className="font-montserrat text-xs text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                                        {Helpers.setOSKey()}
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {/** Intro */}
                 </Components.Section>
-                {/** Intro */}
                 <Components.SectionTwo
                     id="content"
                     className="bg-teal-300 dark:bg-grey-900"

@@ -10,19 +10,10 @@ import * as Helpers from '@helpers';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     // Get featured publications endpoint
-    const featured: Interfaces.Publication[] = [
-        Mocks.testData.testSinglePublication,
-        Mocks.testData.testSinglePublication
-    ];
+    const featured: Interfaces.Publication[] = [];
 
     // Get latest publications endpoint
-    const latest: Interfaces.Publication[] = [
-        Mocks.testData.testSinglePublication,
-        Mocks.testData.testSinglePublication,
-        Mocks.testData.testSinglePublication,
-        Mocks.testData.testSinglePublication,
-        Mocks.testData.testSinglePublication
-    ];
+    const latest: Interfaces.Publication[] = [];
 
     // Get publication types
     const types: string[] = Config.values.publicationTypes;

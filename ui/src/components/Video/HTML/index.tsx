@@ -13,9 +13,14 @@ type Props = {
 const HTML: React.FC<Props> = (props): JSX.Element => (
     <figure
         aria-label={props.title}
-        className=" h-fit w-full rounded-lg bg-white p-2 transition-colors duration-500 dark:bg-teal-500"
+        className=" h-fit w-full rounded-lg bg-white p-2 transition-colors duration-500 dark:bg-teal-500 "
     >
-        <video controls={props.controls} width={props.width} poster={props.poster} className="rounded-lg">
+        <video
+            controls={props.controls}
+            width={props.width}
+            poster={props.poster}
+            className="rounded-lg outline-0 focus:ring-2 focus:ring-yellow-400"
+        >
             <source src={props.srcWebM} type="video/webm" />
             <source src={props.srcMp4} type="video/mp4" />
         </video>
