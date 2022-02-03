@@ -6,39 +6,50 @@ export const getAll = async (filters: I.PublicationFilters) => {
     const query = {
         where: {
             type: {
-                in: filters.type.split(',') as I.ProblemTypes || ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW']
+                in: (filters.type.split(',') as I.ProblemTypes) || [
+                    'PROBLEM',
+                    'PROTOCOL',
+                    'ANALYSIS',
+                    'REAL_WORLD_APPLICATION',
+                    'HYPOTHESIS',
+                    'DATA',
+                    'INTERPRETATION',
+                    'PEER_REVIEW'
+                ]
             },
-            currentStatus: 'LIVE',
-            OR: [
-                {
-                    title: {
-                        search: filters.search?.replace(/ /ig, '|')
-                    }
-                },
-                {
-                    content: {
-                        search: filters.search?.replace(/ /ig, '|')
-
-                    }
-                },
-                {
-                    user: {
-                        firstName: {
-                            search: filters.search?.replace(/ /ig, '|')
-
-                        }
-                    }
-                },
-                {
-                    user: {
-                        lastName: {
-                            search: filters.search?.replace(/ /ig, '|')
-                        }
-                    }
-                }
-            ]
+            currentStatus: 'LIVE'
         }
     };
+
+    if (filters.search) {
+        // @ts-ignore
+        query.where.OR = [
+            {
+                title: {
+                    search: filters.search?.replace(/ /gi, '|')
+                }
+            },
+            {
+                content: {
+                    search: filters.search?.replace(/ /gi, '|')
+                }
+            },
+            {
+                user: {
+                    firstName: {
+                        search: filters.search?.replace(/ /gi, '|')
+                    }
+                }
+            },
+            {
+                user: {
+                    lastName: {
+                        search: filters.search?.replace(/ /gi, '|')
+                    }
+                }
+            }
+        ];
+    }
 
     // @ts-ignore
     const publications = await prisma.publication.findMany({
@@ -65,12 +76,12 @@ export const getAll = async (filters: I.PublicationFilters) => {
         user.firstName = user.firstName[0];
 
         return { ...publication, user };
-    })
+    });
 
     // @ts-ignore
     const totalPublications = await prisma.publication.count(query);
 
-    return { 
+    return {
         data: removeFirstNameFromPublications,
         metadata: {
             total: totalPublications,
