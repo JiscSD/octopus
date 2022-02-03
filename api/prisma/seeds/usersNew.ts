@@ -1,25 +1,25 @@
 const userSeeds = [
     {
-        id: 'test-user-1',
+        id: 'test-user-1b-victoria-allen',
         orcid: '0001',
-        firstName: 'Test',
-        lastName: 'User 1',
+        firstName: 'Victoria',
+        lastName: 'Allen',
         locked: false,
-        apiKey: '123456789'
+        apiKey: '000000001'
     },
     {
-        id: 'test-user-2',
+        id: 'test-user-2b-rami-salem',
         orcid: '0002',
-        firstName: 'Test',
-        lastName: 'User 2',
+        firstName: 'Rami',
+        lastName: 'Salem',
         locked: false,
-        apiKey: '987654321'
+        apiKey: '000000002'
     },
     {
-        id: 'test-user-3-peer-reviewer',
+        id: 'test-user-3-aoi-han',
         orcid: '0003',
-        firstName: 'Peer',
-        lastName: 'Reviewer 3',
+        firstName: 'Aoi',
+        lastName: 'Han',
         locked: false,
         apiKey: '000000003'
     },
