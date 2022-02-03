@@ -21,7 +21,7 @@ const users = {
     peerReviewer: 'test-user-3-peer-reviewer'
 };
 
-const publicationSeeds = [
+const newPublicationSeeds = [
     // User 1 PROBLEM > HYPOTHESIS > PROTOCOL > DATA > ANALYSIS > INTERPRETATION > REAL_WORLD_APPLICATION
 
     // Problem Live and Draft
@@ -764,59 +764,6 @@ const publicationSeeds = [
                 publicationTo: 'publication-user-2-interpretation-1-live'
             }
         }
-    },
-
-    // publications with links
-    {
-        id: 'publication-hypothesis-draft-problem-live',
-        title: 'Publication HYPOTHESIS-DRAFT',
-        type: 'HYPOTHESIS',
-        content: 'Publication HYPOTHESIS-DRAFT',
-        currentStatus: PublicationStatus.draft,
-        user: {
-            connect: {
-                id: users.user1
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
-            create: {
-                publicationTo: 'publication-problem-live'
-            }
-        }
-    },
-
-    {
-        id: 'publication-problem-draft-no-content',
-        title: 'Publication PROBLEM-DRAFT',
-        type: 'HYPOTHESIS',
-        currentStatus: PublicationStatus.draft,
-        user: {
-            connect: {
-                id: users.user1
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
-            create: {
-                publicationTo: 'publication-problem-live'
-            }
-        }
     }
 ];
-
-export default publicationSeeds;
+export default newPublicationSeeds;
