@@ -79,3 +79,11 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/status/{status}
                   method: put
                   cors: true
+    getUsers:
+        handler: src/components/user/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users
+                  method: get
+                  cors: true

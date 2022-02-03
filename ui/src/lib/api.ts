@@ -4,7 +4,7 @@ import * as Interfaces from '@interfaces';
 
 export let baseURL: string;
 
-switch (process.env.stage) {
+switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
         baseURL = 'http://localhost:4003/local/v1';
         break;

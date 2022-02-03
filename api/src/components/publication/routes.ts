@@ -5,7 +5,6 @@ import * as middleware from 'middleware';
 import * as publicationController from 'publication/controller';
 import * as publicationSchema from 'publication/schema';
 
-
 export const getAll = middy(publicationController.getAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
