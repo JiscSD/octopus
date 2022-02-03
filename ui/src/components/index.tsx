@@ -30,3 +30,5 @@ export { default as FeaturedCollection } from './FeaturedCollection';
 export { default as CommandPalette } from './CommandPalette';
 export { default as Overlay } from './Overlay';
 export { default as UserSearchResult } from './Users/SearchResult';
+export { default as PageTitle } from './PageTitle';
+export { default as Alert } from './Alert';
