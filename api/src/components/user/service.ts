@@ -77,7 +77,17 @@ export const get = async (id: string) => {
             orcid: true,
             email: true,
             role: true,
-            createdAt: true
+            createdAt: true,
+            Publication: {
+                select: {
+                    id: true,
+                    title: true,
+                    type: true
+                },
+                where: {
+                    currentStatus: 'LIVE'
+                }
+            }
         },
         where: {
             id
