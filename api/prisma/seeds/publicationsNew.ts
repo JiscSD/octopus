@@ -120,6 +120,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-1-problem-1-live'
+            }
         }
     },
 
