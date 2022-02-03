@@ -43,7 +43,7 @@ export const search = async (
 ) => {
     const endpoint = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
     const response = await get(
-        `${endpoint}?type=${publicationType}&limit=${limit}&offset=${offset}&orderBy=${orderBy}&orderDirection=${orderDirection}${
+        `${endpoint}XXX?type=${publicationType}&limit=${limit}&offset=${offset}&orderBy=${orderBy}&orderDirection=${orderDirection}${
             query ? `&search=${query}` : ''
         }`
     );

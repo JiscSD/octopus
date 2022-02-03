@@ -112,9 +112,9 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                         <Components.Link
                                             href={props.supportLink.url}
                                             openNew={props.supportLink.external}
-                                            className="flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
+                                            className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
-                                            <span className="mr-2 py-1 px-2 text-sm font-semibold text-grey-800 underline underline-offset-2  transition-colors duration-150 dark:text-white">
+                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white">
                                                 {props.supportLink.text}
                                             </span>
                                         </Components.Link>
@@ -124,7 +124,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                         <button
                                             type="button"
                                             onClick={() => setShow(false)}
-                                            className="rounded py-1 px-2 text-sm font-semibold text-grey-800 underline underline-offset-2 outline-0 transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
                                             Dismiss
                                         </button>
