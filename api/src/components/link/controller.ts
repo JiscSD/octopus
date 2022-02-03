@@ -4,19 +4,20 @@ import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
-
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>) => {
     try {
         // function checks if the user has permission to see it in DRAFT mode
         const fromPublication = await publicationService.get(event.body.from);
-        
+
         // the publication does not exist, is
         // publications that are live cannot have links created.
         if (!fromPublication || fromPublication?.currentStatus === 'LIVE') {
-            return response.json(404, { message: `Publication with id ${event.body.to} is either LIVE or does not eixst.` });
+            return response.json(404, {
+                message: `Publication with id ${event.body.to} is either LIVE or does not eixst.`
+            });
         }
 
-        // the authenticated user is not the owner of the publication 
+        // the authenticated user is not the owner of the publication
         if (fromPublication.user.id !== event.user.id) {
             return response.json(404, { message: `You do not have permission to create publication links` });
         }
@@ -26,13 +27,20 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
 
         // toPublication does not exist in a LIVE state
         if (!toPublication || toPublication.currentStatus !== 'LIVE') {
-            return response.json(404, { message: `Publication with id ${event.body.to} is either not LIVE or does not eixst.` });
+            return response.json(404, {
+                message: `Publication with id ${event.body.to} is either not LIVE or does not eixst.`
+            });
         }
 
-        const isLinkValid = linkService.canLinkBeCreatedBetweenPublicationTypes(fromPublication.type, toPublication.type);
+        const isLinkValid = linkService.canLinkBeCreatedBetweenPublicationTypes(
+            fromPublication.type,
+            toPublication.type
+        );
 
         if (!isLinkValid) {
-            return response.json(404, { message: `Link cannot be created between types from "${fromPublication.type}" to ${toPublication.type}.` });
+            return response.json(404, {
+                message: `Link cannot be created between types from "${fromPublication.type}" to ${toPublication.type}.`
+            });
         }
 
         // does a link already exist?

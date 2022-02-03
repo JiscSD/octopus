@@ -5,10 +5,19 @@ const createPublicationSchema: I.Schema = {
     properties: {
         type: {
             type: 'string',
-            enum: ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW']
+            enum: [
+                'PROBLEM',
+                'PROTOCOL',
+                'ANALYSIS',
+                'REAL_WORLD_APPLICATION',
+                'HYPOTHESIS',
+                'DATA',
+                'INTERPRETATION',
+                'PEER_REVIEW'
+            ]
         },
         title: {
-            type: 'string',
+            type: 'string'
         },
         content: {
             type: 'string'

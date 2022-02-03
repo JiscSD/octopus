@@ -1,4 +1,8 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyEventQueryStringParameters, APIGatewayProxyEventPathParameters } from 'aws-lambda';
+import {
+    APIGatewayProxyEventV2,
+    APIGatewayProxyEventQueryStringParameters,
+    APIGatewayProxyEventPathParameters
+} from 'aws-lambda';
 
 export { APIGatewayProxyEventV2, APIGatewayProxyResultV2, APIGatewayProxyHandlerV2 } from 'aws-lambda';
 export { HandlerLambda } from 'middy';
@@ -37,7 +41,15 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
-export type PublicationType = 'PROBLEM' | 'PROTOCOL' | 'ANALYSIS' | 'REAL_WORLD_APPLICATION' | 'HYPOTHESIS' | 'DATA' | 'INTERPRETATION' | 'PEER_REVIEW';
+export type PublicationType =
+    | 'PROBLEM'
+    | 'PROTOCOL'
+    | 'ANALYSIS'
+    | 'REAL_WORLD_APPLICATION'
+    | 'HYPOTHESIS'
+    | 'DATA'
+    | 'INTERPRETATION'
+    | 'PEER_REVIEW';
 
 export interface CreatePublicationRequestBody {
     type: PublicationType;
@@ -49,9 +61,13 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface UpdatePublicationPathParams {
+    id: string;
+}
+
 export interface UpdateStatusPathParams {
     id: string;
-    status: 'LIVE'
+    status: 'LIVE';
 }
 
 export interface CreateLinkBody {
@@ -71,7 +87,7 @@ export interface PublicationFilters {
     orderBy?: PublicationOrderBy;
     orderDirection?: OrderDirection;
     type: string;
-};
+}
 
 export interface UserFilters {
     search?: string;
@@ -79,10 +95,25 @@ export interface UserFilters {
     offset?: string;
     orderBy?: UserOrderBy;
     orderDirection?: OrderDirection;
-};
+}
 
-export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
+export type ProblemTypes = [
+    'PROBLEM',
+    'PROTOCOL',
+    'ANALYSIS',
+    'REAL_WORLD_APPLICATION',
+    'HYPOTHESIS',
+    'DATA',
+    'INTERPRETATION',
+    'PEER_REVIEW'
+];
 
 export interface GetUserParameters {
     id: string;
+}
+
+export interface UpdatePublicationRequestBody {
+    content?: string;
+    title?: string;
+    id?: string;
 }

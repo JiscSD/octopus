@@ -30,4 +30,3 @@ const getAllSchema: I.Schema = {
 };
 
 export default getAllSchema;
-
