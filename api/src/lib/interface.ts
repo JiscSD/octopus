@@ -82,3 +82,7 @@ export interface UserFilters {
 };
 
 export type ProblemTypes = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
+
+export interface GetUserParameters {
+    id: string;
+}
