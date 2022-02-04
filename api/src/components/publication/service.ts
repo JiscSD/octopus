@@ -91,6 +91,27 @@ export const getAll = async (filters: I.PublicationFilters) => {
     };
 };
 
+export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
+    const updatedPublication = await prisma.publication.update({
+        where: {
+            id
+        },
+        data: updateContent
+    });
+
+    return updatedPublication;
+};
+
+export const isIdInUse = async (id: string) => {
+    const publication = await prisma.publication.count({
+        where: {
+            id
+        }
+    });
+
+    return Boolean(publication);
+};
+
 export const get = async (id: string) => {
     const publication = await prisma.publication.findFirst({
         where: {

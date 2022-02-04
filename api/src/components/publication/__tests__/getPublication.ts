@@ -19,7 +19,7 @@ describe('View individual publications', () => {
             apiKey: '987654321'
         });
 
-        expect(getPublication.status).toEqual(404)
+        expect(getPublication.status).toEqual(404);
     });
 
     test('Cannot view publication in DRAFT without API key', async () => {
@@ -27,7 +27,7 @@ describe('View individual publications', () => {
             apiKey: '987654321'
         });
 
-        expect(getPublication.status).toEqual(404)
+        expect(getPublication.status).toEqual(404);
     });
 
     test.todo('Any user can see a LIVE publication');

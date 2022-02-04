@@ -18,7 +18,7 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetUserPar
         const user = await userService.get(event.pathParameters.id);
 
         if (!user) {
-            return response.json(404, { message: 'User not found '});
+            return response.json(404, { message: 'User not found ' });
         }
 
         return response.json(200, user);
@@ -26,4 +26,4 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetUserPar
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
-}
+};
