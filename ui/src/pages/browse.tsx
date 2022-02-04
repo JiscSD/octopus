@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             'createdAt',
             'asc'
         );
-        // throw new Error('There');
         featured = featuredResponse.data.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
