@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+
 import * as Types from '@types';
 
 export interface NavMenuItem {
@@ -17,20 +19,10 @@ export interface User {
     lastName: string;
 }
 
-export type PublicationType =
-    | 'PROBLEM'
-    | 'PROTOCOL'
-    | 'ANALYSIS'
-    | 'REAL_WORLD_APPLICATION'
-    | 'HYPOTHESIS'
-    | 'DATA'
-    | 'INTERPRETATION'
-    | 'PEER_REVIEW';
-
 export interface Publication {
     id: string;
     url_slug: string;
-    type: PublicationType;
+    type: Types.PublicationType;
     title: string;
     content: string;
     doi: any; // to change
@@ -51,6 +43,8 @@ export interface SearchResult extends Publication {
 export interface JSON {
     [key: string]: Types.JSONValue;
 }
+
+export interface JSONResponseError extends AxiosError {}
 
 export interface SearchResultMeta {
     total: number;

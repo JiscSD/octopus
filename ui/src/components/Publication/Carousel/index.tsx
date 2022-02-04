@@ -16,7 +16,7 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             {/** Left arrow */}
             <button
                 type="button"
-                onClick={(e) => (container.current.scrollLeft += -50)}
+                onClick={(e) => (container.current.scrollLeft += -280)}
                 className="absolute -left-16 top-1/2 hidden -translate-y-full rounded outline-0 focus:ring-2 focus:ring-yellow-400 2xl:block"
             >
                 <ChevronLeftIcon className="h-10 w-10 text-teal-500" />
@@ -38,14 +38,14 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             {/** Left arrow */}
             <button
                 type="button"
-                onClick={(e) => (container.current.scrollLeft += 50)}
+                onClick={(e) => (container.current.scrollLeft += 280)}
                 className="absolute -right-8 top-1/2 z-20 hidden -translate-y-full rounded outline-0 focus:ring-2 focus:ring-yellow-400 2xl:block 3xl:-right-16 "
             >
                 <ChevronRightIcon className="h-10 w-10 text-teal-500" />
             </button>
 
             {/** Fade off */}
-            <div className="absolute top-0 right-0 h-full w-1/6 select-none bg-gradient-to-r from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800" />
+            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 md:block" />
         </div>
     );
 };

@@ -13,8 +13,6 @@ import * as Assets from '@assets';
 import * as Types from '@types';
 import * as API from '@api';
 
-type SearchType = 'publications' | 'users';
-
 const CommandPalette: React.FC = (): JSX.Element => {
     const router = useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
@@ -23,7 +21,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
     const [resultsMeta, setResultsMeta] = React.useState<Interfaces.SearchResultMeta | null>();
     const [resultsError, setResultsError] = React.useState<string | null>();
     const [loading, setLoading] = React.useState(false);
-    const [searchFor, setSearchFor] = React.useState<SearchType>('publications');
+    const [searchFor, setSearchFor] = React.useState<Types.SearchType>('publications');
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
