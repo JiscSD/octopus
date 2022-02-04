@@ -10,31 +10,68 @@ import * as Types from '@types';
 import * as API from '@api';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    // defaults to possible query params
     let searchType: string | string[] | null = null;
     let query: string | string[] | null = null;
     let publicationType: string | string[] | null = null;
+    let limit: number | string | string[] | null = null;
+    let offset: number | string | string[] | null = null;
+    let orderBy: string | string[] | null = null;
+    let orderDirection: string | string[] | null = null;
+
+    // defaults to results
     let results: Interfaces.Publication[] | Interfaces.User[] | [] = [];
     let metadata: Interfaces.SearchResultMeta | {} = {};
-    let error: boolean = false;
-    let errorMessage: string = '';
 
+    // default error
+    let error: string | null = 'No search type provided';
+
+    // setting params
     if (context.query.query) query = context.query.query;
     if (context.query.for) searchType = context.query.for;
     if (context.query.type) publicationType = context.query.type;
+    if (context.query.limit) limit = context.query.limit;
+    if (context.query.offset) offset = context.query.offset;
+    if (context.query.orderBy) orderBy = context.query.orderBy;
+    if (context.query.orderDirection) orderDirection = context.query.orderDirection;
 
+    // only if a search type is provided
     if (searchType) {
+        // If multiple of the same params are provided, pick the first
         if (Array.isArray(searchType)) searchType = searchType[0];
         if (Array.isArray(query)) query = query[0];
         if (Array.isArray(publicationType)) publicationType = publicationType[0];
+        if (Array.isArray(limit)) limit = limit[0];
+        if (Array.isArray(offset)) offset = offset[0];
+        if (Array.isArray(orderBy)) orderBy = orderBy[0];
+        if (Array.isArray(orderDirection)) orderDirection = orderDirection[0];
 
+        // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
+        limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
+        offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
+
+        // ensure the strings provided for ordering are as we expect them to be, else ignore them
+        orderBy && ['createdAt', 'updatedAt'].includes(orderBy) ? null : (orderBy = null);
+        orderDirection && ['asc', 'desc'].includes(orderDirection) ? null : (orderDirection = null);
+
+        // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
-                const response = await API.search(searchType, query, publicationType, 100, 0, 'createdAt', 'asc');
-                results = response.data.data;
-                metadata = response.data.metadata;
+                const response = await API.search(
+                    searchType,
+                    query,
+                    publicationType,
+                    limit,
+                    offset,
+                    orderBy as Types.OrderBySearchOption, // to please ts, we must tom hanks it, even though we can be sure of the value
+                    orderDirection as Types.OrderDirectionSearchOption // to please ts, we must tom hanks it, even though we can be sure of the value
+                );
+                results = response.data;
+                metadata = response.metadata;
+                error = null;
             } catch (err) {
-                error = true;
-                errorMessage = 'There was a problem.';
+                const { message } = err as Interfaces.JSONResponseError;
+                error = message;
             }
         }
     }
@@ -46,8 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             publicationType,
             results,
             metadata,
-            error,
-            errorMessage
+            error
         }
     };
 };
@@ -58,11 +94,11 @@ type Props = {
     publicationType: string | null;
     results: Interfaces.Publication[] | Interfaces.User[] | [];
     metadata: Interfaces.SearchResultMeta | {};
-    error: boolean;
-    errorMessage: string;
+    error: string | null;
 };
 
 const Search: NextPage<Props> = (props): JSX.Element => {
+    const [loading, setLoading] = React.useState(false);
     const [searchType, setSearchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query);
     const [publicationType, setPublicationType] = React.useState(props.publicationType);
@@ -92,7 +128,17 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                         <Components.PageTitle text="Search results" />
                     </section>
                     <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                        Content here
+                        {!loading && !error && <p>Results to show</p>}
+                        {loading && !error && <p>loading state</p>}
+                        {!loading && error && (
+                            <div className="col-span-8">
+                                <Components.Alert
+                                    severity="ERROR"
+                                    title="There was a problem fetching results"
+                                    details={[error]}
+                                />
+                            </div>
+                        )}
                     </section>
                 </Components.SectionTwo>
             </Layouts.Standard>

@@ -2,6 +2,11 @@ import { AxiosError } from 'axios';
 
 import * as Types from '@types';
 
+export interface JSON {
+    [key: string]: Types.JSONValue;
+}
+
+export interface JSONResponseError extends AxiosError {}
 export interface NavMenuItem {
     label: string;
     value: string;
@@ -11,12 +16,6 @@ export interface PublicationStatus {
     status: string;
     createdAt: string;
     id: string;
-}
-
-export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
 }
 
 export interface Publication {
@@ -36,15 +35,16 @@ export interface Publication {
     publicationToRef: any[]; // to change
 }
 
-export interface SearchResult extends Publication {
-    // May be different?
+export interface User {
+    id: string;
+    firstName: string;
+    lastName: string;
 }
 
-export interface JSON {
-    [key: string]: Types.JSONValue;
+export interface SearchResults {
+    data: Publication[] | User[];
+    metadata: SearchResultMeta;
 }
-
-export interface JSONResponseError extends AxiosError {}
 
 export interface SearchResultMeta {
     total: number;

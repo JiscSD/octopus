@@ -6,7 +6,6 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as API from '@api';
 
 interface Errors {
@@ -21,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 
     // Get featured publications endpoint
-    let featured: Interfaces.Publication[] = [];
+    let featured: unknown = [];
     try {
         const featuredResponse = await API.search(
             'publications',
@@ -32,14 +31,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             'createdAt',
             'asc'
         );
-        featured = featuredResponse.data.data;
+        featured = featuredResponse.data as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         errors.featured = message;
     }
 
     // Get latest publications endpoint
-    let latest: Interfaces.Publication[] = [];
+    let latest: unknown = [];
     try {
         const latestResponse = await API.search(
             'publications',
@@ -50,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             'createdAt',
             'asc'
         );
-        latest = latestResponse.data.data;
+        latest = latestResponse.data as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         errors.latest = message;

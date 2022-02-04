@@ -14,13 +14,6 @@ const Footer: React.FC = (): JSX.Element => {
                 </h2>
                 {/** Links */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    {/* <Components.Link
-                        href=""
-                        className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
-                    >
-                        <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Learn</h3>
-                    </Components.Link> */}
-
                     <Components.Link
                         href={Config.urls.browsePublications.path}
                         className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
@@ -76,25 +69,11 @@ const Footer: React.FC = (): JSX.Element => {
                     </h4>
                     <div className="flex">
                         <Components.Link
-                            href="https://wiki.mozilla.org/ScienceLab"
+                            href="https://www.ukri.org/"
                             openNew={true}
                             className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <Image src="/images/mozillaScienceLab.svg" alt="Jisc Logo" width={200} height={60} />
-                        </Components.Link>
-                    </div>
-                </div>
-                <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-teal-400 dark:text-teal-200">
-                        &nbsp;
-                    </h4>
-                    <div className="flex">
-                        <Components.Link
-                            href="https://elifesciences.org/"
-                            openNew={true}
-                            className="flex w-fit  rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                        >
-                            <Image src="/images/elife.svg" alt="Jisc Logo" width={200} height={70} />
+                            <Image src="/images/logo-ukri.png" alt="UKRI" width={200} height={64} />
                         </Components.Link>
                     </div>
                 </div>
@@ -109,6 +88,12 @@ const Footer: React.FC = (): JSX.Element => {
                     >
                         <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
                     </Components.Link>
+                </div>
+                <div className="col-span-1 md:col-span-2 lg:col-span-1">
+                    <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-teal-400 dark:text-teal-200">
+                        &nbsp;
+                    </h4>
+                    <div className="flex"></div>
                 </div>
             </div>
         </footer>
