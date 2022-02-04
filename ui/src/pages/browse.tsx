@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // throw new Error('There');
         featured = featuredResponse.data.data;
     } catch (err) {
-        const { message } = err as AxiosError;
+        const { message } = err as Interfaces.JSONResponseError;
         errors.featured = message;
     }
 
