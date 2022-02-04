@@ -20,10 +20,18 @@ export const doesLinkExist = async (fromPublicationId: string, toPublicationId: 
     });
 
     return link;
-}
+};
 
 export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {
-    const publicationTypes = ['PROBLEM', 'HYPOTHESIS', 'PROTOCOL', 'DATA', 'ANALYSIS', 'INTERPRETATION', 'REAL_WORLD_APPLICATION'];
+    const publicationTypes = [
+        'PROBLEM',
+        'HYPOTHESIS',
+        'PROTOCOL',
+        'DATA',
+        'ANALYSIS',
+        'INTERPRETATION',
+        'REAL_WORLD_APPLICATION'
+    ];
 
     // problems can link to anything
     if (fromType === 'PROBLEM') {

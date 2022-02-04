@@ -6,10 +6,10 @@ export const getAll = async (filters: I.UserFilters) => {
     const query = {
         where: {
             firstName: {
-                search: filters.search?.replace(/ /ig, '|')
+                search: filters.search?.replace(/ /gi, '|')
             },
             lastName: {
-                search: filters.search?.replace(/ /ig, '|')
+                search: filters.search?.replace(/ /gi, '|')
             }
         }
     };
@@ -43,12 +43,12 @@ export const getAll = async (filters: I.UserFilters) => {
     const usersWithoutFirstName = users.map((user) => ({
         ...user,
         firstName: user.firstName[0]
-    }))
+    }));
 
     // @ts-ignore
     const totalUsers = await prisma.user.count(query);
 
-    return { 
+    return {
         data: usersWithoutFirstName,
         metadata: {
             total: 2,
@@ -64,7 +64,7 @@ export const getByApiKey = async (apiKey: string) => {
             apiKey
         }
     });
-    
+
     return user;
 };
 
@@ -99,4 +99,4 @@ export const get = async (id: string) => {
     }
 
     return user;
-}
+};

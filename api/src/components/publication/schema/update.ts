@@ -1,17 +1,19 @@
 import * as I from 'interface';
 
-const createPublicationSchema: I.Schema = {
+const updatePublicationSchema: I.Schema = {
     type: 'object',
     properties: {
-        from: {
+        title: {
             type: 'string'
         },
-        to: {
+        content: {
+            type: 'string'
+        },
+        id: {
             type: 'string'
         }
     },
-    required: ['from', 'to'],
     additionalProperties: false
 };
 
-export default createPublicationSchema;
+export default updatePublicationSchema;

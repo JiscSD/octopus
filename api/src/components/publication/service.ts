@@ -6,33 +6,40 @@ export const getAll = async (filters: I.PublicationFilters) => {
     const query = {
         where: {
             type: {
-                in: filters.type.split(',') as I.ProblemTypes || ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW']
+                in: (filters.type.split(',') as I.ProblemTypes) || [
+                    'PROBLEM',
+                    'PROTOCOL',
+                    'ANALYSIS',
+                    'REAL_WORLD_APPLICATION',
+                    'HYPOTHESIS',
+                    'DATA',
+                    'INTERPRETATION',
+                    'PEER_REVIEW'
+                ]
             },
             currentStatus: 'LIVE',
             OR: [
                 {
                     title: {
-                        search: filters.search?.replace(/ /ig, '|')
+                        search: filters.search?.replace(/ /gi, '|')
                     }
                 },
                 {
                     content: {
-                        search: filters.search?.replace(/ /ig, '|')
-
+                        search: filters.search?.replace(/ /gi, '|')
                     }
                 },
                 {
                     user: {
                         firstName: {
-                            search: filters.search?.replace(/ /ig, '|')
-
+                            search: filters.search?.replace(/ /gi, '|')
                         }
                     }
                 },
                 {
                     user: {
                         lastName: {
-                            search: filters.search?.replace(/ /ig, '|')
+                            search: filters.search?.replace(/ /gi, '|')
                         }
                     }
                 }
@@ -65,12 +72,12 @@ export const getAll = async (filters: I.PublicationFilters) => {
         user.firstName = user.firstName[0];
 
         return { ...publication, user };
-    })
+    });
 
     // @ts-ignore
     const totalPublications = await prisma.publication.count(query);
 
-    return { 
+    return {
         data: removeFirstNameFromPublications,
         metadata: {
             total: totalPublications,
@@ -78,6 +85,27 @@ export const getAll = async (filters: I.PublicationFilters) => {
             offset: Number(filters.offset) || 0
         }
     };
+};
+
+export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
+    const updatedPublication = await prisma.publication.update({
+        where: {
+            id
+        },
+        data: updateContent
+    });
+
+    return updatedPublication;
+};
+
+export const isIdInUse = async (id: string) => {
+    const publication = await prisma.publication.count({
+        where: {
+            id
+        }
+    });
+
+    return Boolean(publication);
 };
 
 export const get = async (id: string) => {

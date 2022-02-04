@@ -21,6 +21,12 @@ export const create = middy(publicationController.create)
     .use(middleware.authentication())
     .use(middleware.validator(publicationSchema.create, 'body'));
 
+export const update = middy(publicationController.update)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(publicationSchema.update, 'body'));
+
 export const updateStatus = middy(publicationController.updateStatus)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
