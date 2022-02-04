@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+
 import * as Types from '@types';
 
 export interface NavMenuItem {
@@ -41,6 +43,8 @@ export interface SearchResult extends Publication {
 export interface JSON {
     [key: string]: Types.JSONValue;
 }
+
+export interface JSONResponseError extends AxiosError {}
 
 export interface SearchResultMeta {
     total: number;

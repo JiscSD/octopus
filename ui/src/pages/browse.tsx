@@ -1,6 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { AxiosError } from 'axios';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -54,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         );
         latest = latestResponse.data.data;
     } catch (err) {
-        const { message } = err as AxiosError;
+        const { message } = err as Interfaces.JSONResponseError;
         errors.latest = message;
     }
 
