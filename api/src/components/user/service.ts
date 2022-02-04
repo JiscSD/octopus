@@ -3,16 +3,19 @@ import prisma from 'lib/client';
 import * as I from 'interface';
 
 export const getAll = async (filters: I.UserFilters) => {
-    const query = {
-        where: {
+    const query = {};
+
+    if (filters.search) {
+        // @ts-ignore
+        query.where = {
             firstName: {
                 search: filters.search?.replace(/ /gi, '|')
             },
             lastName: {
                 search: filters.search?.replace(/ /gi, '|')
             }
-        }
-    };
+        };
+    }
 
     // @ts-ignore
     const users = await prisma.user.findMany({

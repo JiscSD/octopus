@@ -17,35 +17,39 @@ export const getAll = async (filters: I.PublicationFilters) => {
                     'PEER_REVIEW'
                 ]
             },
-            currentStatus: 'LIVE',
-            OR: [
-                {
-                    title: {
-                        search: filters.search?.replace(/ /gi, '|')
-                    }
-                },
-                {
-                    content: {
-                        search: filters.search?.replace(/ /gi, '|')
-                    }
-                },
-                {
-                    user: {
-                        firstName: {
-                            search: filters.search?.replace(/ /gi, '|')
-                        }
-                    }
-                },
-                {
-                    user: {
-                        lastName: {
-                            search: filters.search?.replace(/ /gi, '|')
-                        }
-                    }
-                }
-            ]
+            currentStatus: 'LIVE'
         }
     };
+
+    if (filters.search) {
+        // @ts-ignore
+        query.where.OR = [
+            {
+                title: {
+                    search: filters.search?.replace(/ /gi, '|')
+                }
+            },
+            {
+                content: {
+                    search: filters.search?.replace(/ /gi, '|')
+                }
+            },
+            {
+                user: {
+                    firstName: {
+                        search: filters.search?.replace(/ /gi, '|')
+                    }
+                }
+            },
+            {
+                user: {
+                    lastName: {
+                        search: filters.search?.replace(/ /gi, '|')
+                    }
+                }
+            }
+        ];
+    }
 
     // @ts-ignore
     const publications = await prisma.publication.findMany({

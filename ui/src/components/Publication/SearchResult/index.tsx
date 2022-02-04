@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
+import * as Types from '@types';
 import * as Config from '@config';
 
 type Props = {
     id: string;
     title: string;
     createdBy: string;
-    type: Interfaces.PublicationType;
+    type: Types.PublicationType;
     date: string;
     content?: string;
     className?: string;

@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
     title: string;
-    icon: React.ReactElement;
+    icon?: React.ReactElement;
     callback: (e: React.MouseEvent) => void;
     className?: string;
 };

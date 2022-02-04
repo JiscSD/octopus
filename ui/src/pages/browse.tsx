@@ -4,16 +4,57 @@ import Head from 'next/head';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Mocks from '@mocks';
 import * as Helpers from '@helpers';
+import * as Config from '@config';
+import * as Types from '@types';
+import * as API from '@api';
+
+interface Errors {
+    featured: null | string;
+    latest: null | string;
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const errors: Errors = {
+        featured: null,
+        latest: null
+    };
+
     // Get featured publications endpoint
-    const featured: Interfaces.Publication[] = [];
+    let featured: Interfaces.Publication[] = [];
+    try {
+        const featuredResponse = await API.search(
+            'publications',
+            null,
+            Config.values.publicationTypes.join(),
+            3,
+            0,
+            'createdAt',
+            'asc'
+        );
+        featured = featuredResponse.data.data;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        errors.featured = message;
+    }
 
     // Get latest publications endpoint
-    const latest: Interfaces.Publication[] = [];
+    let latest: Interfaces.Publication[] = [];
+    try {
+        const latestResponse = await API.search(
+            'publications',
+            null,
+            Config.values.publicationTypes.join(),
+            5,
+            0,
+            'createdAt',
+            'asc'
+        );
+        latest = latestResponse.data.data;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        errors.latest = message;
+    }
 
     // Get publication types
     const types: string[] = Config.values.publicationTypes;
@@ -22,7 +63,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             featured,
             latest,
-            types
+            types,
+            errors
         }
     };
 };
@@ -31,6 +73,7 @@ type Props = {
     featured: Interfaces.Publication[];
     latest: Interfaces.Publication[];
     types: string[];
+    errors: Errors;
 };
 
 const Browse: NextPage<Props> = (props): JSX.Element => {
@@ -51,9 +94,7 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <h1 className="block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl lg:mb-8 xl:text-4xl xl:leading-normal">
-                            Browse all publications
-                        </h1>
+                        <Components.PageTitle text="Browse all publications" />
                     </section>
                     <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         <aside className="relative col-span-2 hidden lg:block">
@@ -62,7 +103,9 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                                     Publication type
                                 </h2>
                                 <Components.Link
-                                    href={`${Config.urls.search.path}?type=${Config.values.publicationTypes.join()}`}
+                                    href={`${
+                                        Config.urls.search.path
+                                    }?for=publications&type=${Config.values.publicationTypes.join()}`}
                                     className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                 >
                                     <span className="text-teal-500 transition-colors duration-500 group-hover:text-grey-500 dark:text-teal-300">
@@ -72,7 +115,7 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                                 {props.types.map((type) => (
                                     <Components.Link
                                         key={type}
-                                        href={`${Config.urls.search.path}?type=${type}`}
+                                        href={`${Config.urls.search.path}?for=publications&type=${type}`}
                                         className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                     >
                                         <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
@@ -83,9 +126,12 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                             </div>
                         </aside>
                         <article className="lg:col-span-6">
-                            <div className="mb-16">
-                                <Components.FeaturedCollection publications={props.featured} />
-                            </div>
+                            {/** If there are no featured, or there was an error, simply dont show this section */}
+                            {!props.errors.featured && (
+                                <div className="mb-16">
+                                    <Components.FeaturedCollection publications={props.featured} />
+                                </div>
+                            )}
 
                             <div className="mb-16">
                                 <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
@@ -95,7 +141,17 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                                     See the latest publications that have been uploaded to Octopus
                                 </h3>
 
-                                <Components.PublicationCarousel publications={props.latest} />
+                                {/** If there are no latest or there was an error, we do show an alert */}
+                                {!props.errors.latest ? (
+                                    <Components.PublicationCarousel publications={props.latest} />
+                                ) : (
+                                    <Components.Alert
+                                        title="There was a problem fetching the latest publications"
+                                        details={[props.errors.latest]}
+                                        severity="ERROR"
+                                        allowDismiss={true}
+                                    />
+                                )}
                             </div>
                         </article>
                     </section>
