@@ -60,14 +60,20 @@ export const update = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
+        if (!publication) {
+            return response.json(403, {
+                message: 'This publication does not exist.'
+            });
+        }
+
         if (publication?.user.id !== event.user.id) {
             return response.json(403, {
-                message: 'You do not have permission to modify the status of this publication.'
+                message: 'You do not have permission to modify this publication.'
             });
         }
 
         if (publication?.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
+            return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
         }
 
         if (event.body.content) {
