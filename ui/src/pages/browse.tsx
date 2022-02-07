@@ -55,14 +55,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         errors.latest = message;
     }
 
-    // Get publication types
-    const types: string[] = Config.values.publicationTypes;
-
     return {
         props: {
             featured,
             latest,
-            types,
             errors
         }
     };
@@ -71,7 +67,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 type Props = {
     featured: Interfaces.Publication[];
     latest: Interfaces.Publication[];
-    types: string[];
     errors: Errors;
 };
 
@@ -111,7 +106,7 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                                         All
                                     </span>
                                 </Components.Link>
-                                {props.types.map((type) => (
+                                {Config.values.publicationTypes.map((type) => (
                                     <Components.Link
                                         key={type}
                                         href={`${Config.urls.search.path}?for=publications&type=${type}`}

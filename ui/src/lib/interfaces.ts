@@ -51,3 +51,13 @@ export interface SearchResultMeta {
     limit: number;
     offset: number;
 }
+
+export interface SearchQueryParams {
+    query?: string;
+    for?: string;
+    type?: string;
+    limit?: string;
+    offset?: string;
+    orderBy?: string;
+    orderDirection?: string;
+}

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Assets from '@assets';
@@ -17,7 +18,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
     const router = useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
     const [query, setQuery] = React.useState('');
-    const [results, setResults] = React.useState<Interfaces.Publication[]>([]);
+    const [results, setResults] = React.useState<Interfaces.Publication[] | Interfaces.User[]>([]);
     const [resultsMeta, setResultsMeta] = React.useState<Interfaces.SearchResultMeta | null>();
     const [resultsError, setResultsError] = React.useState<string | null>();
     const [loading, setLoading] = React.useState(false);
@@ -25,8 +26,10 @@ const CommandPalette: React.FC = (): JSX.Element => {
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
-    const toggleSearchType = () =>
+    const toggleSearchType = () => {
+        setResults([]);
         searchFor === 'publications' ? setSearchFor('users') : setSearchFor('publications');
+    };
 
     const handleGoToSearchResults = () => {
         resetData();
@@ -57,12 +60,9 @@ const CommandPalette: React.FC = (): JSX.Element => {
             }
         }
 
-        // Small delay here for any hanging responses to resolve
-        setTimeout(() => {
-            setResults(data);
-            setResultsMeta(metadata);
-            setLoading(false);
-        }, 500);
+        setResults(data);
+        setResultsMeta(metadata);
+        setLoading(false);
     };
 
     const resetData = () => {
@@ -150,85 +150,93 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     />
                                 </button>
                             </div>
-                            <AnimatePresence>
-                                {loading && (
-                                    <div className="flex justify-center px-6 py-4">
-                                        <motion.div
-                                            animate={{
-                                                scale: [1, 1.1, 1, 1.1, 1],
-                                                rotate: [0, 400, 0, 400, 0],
-                                                opacity: 1
-                                            }}
-                                            transition={{
-                                                repeat: Infinity,
-                                                duration: 3.5,
-                                                type: 'spring',
-                                                stiffness: 1
-                                            }}
-                                            initial={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                        >
-                                            <Assets.Logo
-                                                height={50}
-                                                width={50}
-                                                className={
-                                                    searchFor === 'publications' ? 'fill-teal-500' : 'fill-purple-300'
-                                                }
-                                            />
-                                        </motion.div>
-                                    </div>
-                                )}
-                                {!loading && !resultsError && results.length > 0 && (
-                                    <motion.div
-                                        initial="hidden"
-                                        animate="show"
-                                        exit={{ maxHeight: 0, opacity: 0 }}
-                                        variants={{
-                                            hidden: { maxHeight: 0, opacity: 0 },
-                                            show: {
-                                                opacity: 1,
-                                                maxHeight: 400,
-                                                transition: {
-                                                    staggerChildren: 0.5
-                                                }
-                                            }
-                                        }}
-                                        className="scrollbar-vert overflow-y-auto"
-                                    >
-                                        {results.map((result, index) => {
-                                            if (searchFor === 'publications') {
-                                                return (
-                                                    <Components.PublicationSearchResult
-                                                        key={result.id}
-                                                        id={result.id}
-                                                        title={result.title}
-                                                        createdBy={`${result.user.firstName}. ${result.user.lastName}`}
-                                                        date={result.createdAt}
-                                                        type={result.type}
-                                                        className={`${index === 0 ? 'mt-2' : ''} ${
-                                                            index === results.length - 1 ? 'mb-2' : ''
-                                                        }`}
-                                                    />
-                                                );
-                                            }
+                            {/** Loader */}
+                            {loading ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex justify-center px-6 py-4"
+                                >
+                                    <Assets.Logo
+                                        height={50}
+                                        width={50}
+                                        className={`motion-safe:animate-bounce ${
+                                            searchFor === 'publications' ? 'fill-teal-500' : 'fill-purple-300'
+                                        }`}
+                                    />
+                                </motion.div>
+                            ) : (
+                                <></>
+                            )}
 
-                                            if (searchFor === 'users') {
-                                                return <Components.UserSearchResult key={result.id} id={result.id} />;
-                                            }
-                                        })}
-                                    </motion.div>
-                                )}
-                                {!loading && resultsError && (
-                                    <motion.div
-                                        initial={{ opacity: 1 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        className="flex justify-center px-6 pb-4 pt-4"
-                                    >
-                                        <span className="text-sm text-pink-500 dark:text-pink-300">{resultsError}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                            {/** Results */}
+                            {!loading && !resultsError && results.length ? (
+                                <motion.div
+                                    initial="hidden"
+                                    animate="show"
+                                    exit={{ maxHeight: 0, opacity: 0 }}
+                                    variants={{
+                                        hidden: { maxHeight: 0, opacity: 0 },
+                                        show: {
+                                            opacity: 1,
+                                            maxHeight: 400
+                                        }
+                                    }}
+                                    className="scrollbar-vert overflow-y-auto"
+                                >
+                                    {results.map((result: any, index) => {
+                                        if (searchFor === 'publications') {
+                                            return (
+                                                <Components.CommandPaletteResult
+                                                    key={result.id}
+                                                    id={result.id}
+                                                    title={result.title}
+                                                    excerpt={`${result.user.firstName}. ${result.user.lastName}`}
+                                                    link={`${Config.urls.viewPublication.path}/${result.id}`}
+                                                    meta={Helpers.formatPublicationType(result.type)}
+                                                    date={Helpers.formatDate(result.updatedAt)}
+                                                    accentColor={'text-teal-300'}
+                                                    className={`${index === 0 ? 'mt-2' : ''} ${
+                                                        index === results.length - 1 ? 'mb-2' : ''
+                                                    }`}
+                                                />
+                                            );
+                                        }
+
+                                        if (searchFor === 'users') {
+                                            return (
+                                                <Components.CommandPaletteResult
+                                                    key={result.id}
+                                                    id={result.id}
+                                                    title={`${result.firstName}. ${result.lastName}`}
+                                                    link={`${Config.urls.viewUser.path}/${result.id}`}
+                                                    accentColor={'text-purple-300'}
+                                                    className={`${index === 0 ? 'mt-2' : ''} ${
+                                                        index === results.length - 1 ? 'mb-2' : ''
+                                                    }`}
+                                                />
+                                            );
+                                        }
+                                    })}
+                                </motion.div>
+                            ) : (
+                                <></>
+                            )}
+
+                            {/** Error */}
+                            {!loading && resultsError ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex justify-center px-6 pb-4 pt-4"
+                                >
+                                    <span className="text-sm text-pink-500 dark:text-pink-300">{resultsError}</span>
+                                </motion.div>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                 </ClickAwayListener>

@@ -3,9 +3,9 @@ import React from 'react';
 import * as SWR from 'swr';
 
 import * as Components from '@components';
-import * as Types from '@types';
 import * as Stores from '@stores';
-import * as api from '@api';
+import * as Types from '@types';
+import * as API from '@api';
 
 import '../styles/globals.css';
 
@@ -45,7 +45,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         !loading && (
             <SWR.SWRConfig
                 value={{
-                    fetcher: (resource) => api.get(resource),
+                    fetcher: (resource) => API.get(resource),
                     fallback: pageProps.fallback,
                     errorRetryCount: 3,
                     refreshInterval: 60000, // for dev

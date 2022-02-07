@@ -48,12 +48,15 @@ export const search = async (
     let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
     let params: string = '';
 
+    // Global search params
     limit && (params += '&limit=' + limit);
     offset && (params += '&offset=' + offset);
     orderBy && (params += '&orderBy=' + orderBy);
     orderDirection && (params += '&orderDirection=' + orderDirection);
-    publicationType && (params += '&type=' + publicationType);
     query && (params += '&search=' + query);
+
+    // publication specific params
+    searchType === 'publications' && publicationType && (params += '&type=' + publicationType);
 
     params.includes('&') && (params = params.replace('&', '?'));
 

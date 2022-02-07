@@ -1,11 +1,16 @@
 import React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import * as Framer from 'framer-motion';
+import * as Router from 'next/router';
+import * as SolidIcons from '@heroicons/react/solid';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Mocks from '@mocks';
 import * as Types from '@types';
 import * as API from '@api';
 
@@ -89,24 +94,88 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType: Types.SearchType | null;
+    searchType: Types.SearchType | string | undefined;
     query: string | null;
     publicationType: string | null;
-    results: Interfaces.Publication[] | Interfaces.User[] | [];
-    metadata: Interfaces.SearchResultMeta | {};
+    results: Interfaces.Publication[] | Interfaces.User[];
+    metadata: Interfaces.SearchResultMeta;
     error: string | null;
 };
 
 const Search: NextPage<Props> = (props): JSX.Element => {
+    const router = Router.useRouter();
+    const searchInputRef = React.useRef<HTMLInputElement | any>();
     const [loading, setLoading] = React.useState(false);
-    const [searchType, setSearchType] = React.useState(props.searchType);
+    const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');
     const [query, setQuery] = React.useState(props.query);
-    const [publicationType, setPublicationType] = React.useState(props.publicationType);
+    const [publicationTypes, setPublicationTypes] = React.useState(props.publicationType);
     const [results, setResutls] = React.useState(props.results);
-    const [metadta, setMetadata] = React.useState(props.metadata);
+    const [metadata, setMetadata] = React.useState(props.metadata);
     const [error, setError] = React.useState(props.error);
 
-    console.log(props);
+    const updateResults = async () => {
+        setLoading(true);
+
+        router.push({
+            query: {
+                ...router.query,
+                query
+            }
+        });
+
+        try {
+            const response = await API.search(searchType, searchInputRef.current.value, publicationTypes);
+            setError(null);
+            setResutls(response.data);
+        } catch (err) {
+            const { message } = err as Interfaces.JSONResponseError;
+            setError(message);
+            console.log(err);
+        }
+
+        setLoading(false);
+    };
+
+    const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+        const current = publicationTypes ? publicationTypes.split(',') : [];
+        const uniqueSet = new Set(current);
+        e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
+        const uniqueArray = Array.from(uniqueSet).join(',');
+
+        router.push({
+            query: {
+                for: searchType,
+                type: uniqueArray
+            }
+        });
+
+        setPublicationTypes(uniqueArray);
+    };
+
+    React.useEffect(() => {
+        if (searchType === 'users') {
+            const paramsListCopy = { ...router.query };
+            if (paramsListCopy.hasOwnProperty('type')) delete paramsListCopy.type;
+
+            router.push({
+                query: { ...paramsListCopy, for: searchType }
+            });
+        }
+        if (searchType === 'publications') {
+            router.push({
+                query: {
+                    ...router.query,
+                    for: searchType,
+                    type: publicationTypes,
+                    query: searchInputRef.current.value
+                }
+            });
+        }
+    }, [searchType]);
+
+    React.useEffect(() => {
+        if (!loading) searchInputRef.current.focus();
+    }, [loading]);
 
     return (
         <>
@@ -125,20 +194,151 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <Components.PageTitle text="Search results" />
+                        <Components.PageTitle text={`Search results ${props.query ? `for ${props.query}` : ''}`} />
                     </section>
-                    <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                        {!loading && !error && <p>Results to show</p>}
-                        {loading && !error && <p>loading state</p>}
-                        {!loading && error && (
-                            <div className="col-span-8">
+                    <section
+                        id="content"
+                        className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8"
+                    >
+                        <div className="col-span-12 grid w-full grid-cols-12 gap-y-4 lg:gap-x-12">
+                            <fieldset className="col-span-12 flex items-center lg:col-span-3">
+                                <legend className="sr-only">Search for</legend>
+                                <select
+                                    name="search-type"
+                                    id="search-type"
+                                    onChange={(e) => setSearchType(e.target.value)}
+                                    value={searchType}
+                                    className="!mt-0 w-full rounded-md border-transparent outline-none focus:ring-2 focus:ring-yellow-500"
+                                    disabled={loading}
+                                >
+                                    <option value="publications">Publications</option>
+                                    <option value="users">Authors</option>
+                                </select>
+                            </fieldset>
+                            <form
+                                name="query-form"
+                                id="query-form"
+                                className="col-span-12 flex justify-end lg:col-span-9"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    updateResults();
+                                }}
+                            >
+                                <label
+                                    htmlFor="search-query"
+                                    className="2xl:1/3 flex w-full items-center lg:w-2/3 xl:w-1/2"
+                                    tabIndex={1}
+                                >
+                                    <input
+                                        ref={searchInputRef}
+                                        name="query"
+                                        id="query"
+                                        onChange={(e) => setQuery(e.target.value)}
+                                        defaultValue={query ? query : ''}
+                                        type="text"
+                                        placeholder="Quick search..."
+                                        className="w-full rounded-l-md border-none px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-500"
+                                        disabled={loading}
+                                    />
+                                    <button
+                                        type="submit"
+                                        form="query-form"
+                                        className="rounded-r-md border-none bg-white p-3 outline-none focus:ring-2 focus:ring-yellow-500"
+                                    >
+                                        <SolidIcons.SearchIcon className="h-6 w-6 text-teal-500" />
+                                    </button>
+                                </label>
+                            </form>
+                        </div>
+
+                        <aside className="relative col-span-3 hidden lg:block">
+                            <Framer.AnimatePresence>
+                                {searchType === 'publications' && (
+                                    <Framer.motion.fieldset
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="sticky top-28 space-y-5"
+                                    >
+                                        <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
+                                            Publication types
+                                        </legend>
+                                        {Config.values.publicationTypes.map((type) => (
+                                            <div key={type} className="relative flex items-start">
+                                                <div className="flex h-5 items-center">
+                                                    <input
+                                                        id={type}
+                                                        aria-describedby={type}
+                                                        name={type}
+                                                        type="checkbox"
+                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300"
+                                                        checked={
+                                                            publicationTypes
+                                                                ? publicationTypes.split(',').includes(type)
+                                                                : false
+                                                        }
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                                            collatePublicationTypes(e, type)
+                                                        }
+                                                        disabled={loading}
+                                                    />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                    <label
+                                                        htmlFor={type}
+                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white"
+                                                    >
+                                                        {Helpers.formatPublicationType(type)}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Framer.motion.fieldset>
+                                )}
+                            </Framer.AnimatePresence>
+                        </aside>
+
+                        <article className="col-span-9">
+                            {!loading && !error && results.length ? (
+                                <>
+                                    {props.results.map((result: any) => {
+                                        if (searchType === 'publications') {
+                                            return (
+                                                <Components.PublicationSearchResult
+                                                    key={result.id}
+                                                    id={result.id}
+                                                    title={result.title}
+                                                    createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
+                                                    type={result.type}
+                                                    date={result.updatedAt}
+                                                />
+                                            );
+                                        }
+                                        if (searchType === 'users') {
+                                            return <Components.UserSearchResult key={result.id} id={result.id} />;
+                                        }
+                                    })}
+
+                                    <div className="mt-6 empty:hidden">
+                                        {results.length > 5 && <Components.Pagination metadata={metadata} />}
+                                    </div>
+                                </>
+                            ) : null}
+                            {!loading && !error && !results.length && (
+                                <Components.Alert
+                                    severity="INFO"
+                                    title="Sorry, there are no results for your search request"
+                                />
+                            )}
+                            {loading && <p>loading state</p>}
+                            {!loading && error && (
                                 <Components.Alert
                                     severity="ERROR"
                                     title="There was a problem fetching results"
                                     details={[error]}
                                 />
-                            </div>
-                        )}
+                            )}
+                        </article>
                     </section>
                 </Components.SectionTwo>
             </Layouts.Standard>
