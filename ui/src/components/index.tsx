@@ -32,3 +32,4 @@ export { default as Overlay } from './Overlay';
 export { default as UserSearchResult } from './Users/SearchResult';
 export { default as PageTitle } from './PageTitle';
 export { default as Alert } from './Alert';
+export { default as Accordian } from './Accordian';
