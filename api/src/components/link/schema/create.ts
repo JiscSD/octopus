@@ -4,7 +4,7 @@ const createPublicationSchema: I.Schema = {
     type: 'object',
     properties: {
         from: {
-            type: 'string',
+            type: 'string'
         },
         to: {
             type: 'string'

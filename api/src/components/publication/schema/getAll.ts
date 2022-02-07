@@ -5,7 +5,8 @@ const getAllSchema: I.Schema = {
     properties: {
         type: {
             type: 'string',
-            pattern: '^((PROBLEM|PROTOCOL|ANALYSIS|REAL_WORLD_APPLICATION|HYPOTHESIS|DATA|INTERPRETATION|PEER_REVIEW)(,)?)+$',
+            pattern:
+                '^((PROBLEM|PROTOCOL|ANALYSIS|REAL_WORLD_APPLICATION|HYPOTHESIS|DATA|INTERPRETATION|PEER_REVIEW)(,)?)+$',
             default: 'PROBLEM,PROTOCOL,ANALYSIS,REAL_WORLD_APPLICATION,HYPOTHESIS,DATA,INTERPRETATION,PEER_REVIEW'
         },
         limit: {
@@ -35,4 +36,3 @@ const getAllSchema: I.Schema = {
 };
 
 export default getAllSchema;
-

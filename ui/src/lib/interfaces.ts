@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+
 import * as Types from '@types';
 
 export interface NavMenuItem {
@@ -20,7 +22,7 @@ export interface User {
 export interface Publication {
     id: string;
     url_slug: string;
-    type: string;
+    type: Types.PublicationType;
     title: string;
     content: string;
     doi: any; // to change
@@ -40,4 +42,12 @@ export interface SearchResult extends Publication {
 
 export interface JSON {
     [key: string]: Types.JSONValue;
+}
+
+export interface JSONResponseError extends AxiosError {}
+
+export interface SearchResultMeta {
+    total: number;
+    limit: number;
+    offset: number;
 }

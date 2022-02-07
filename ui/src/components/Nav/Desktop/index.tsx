@@ -9,7 +9,7 @@ type Props = {
 
 const Desktop: React.FC<Props> = (props): JSX.Element => {
     return (
-        <nav className="mr-12 flex">
+        <nav className="mr-6 flex">
             <ul className="flex">
                 {props.items.map((item) => (
                     <li key={item.value} className="first:ml-0 last:mr-0 md:mx-1 lg:mx-2">

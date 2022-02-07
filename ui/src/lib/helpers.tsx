@@ -1,3 +1,4 @@
+import React from 'react';
 import * as luxon from 'luxon';
 
 /**
@@ -35,4 +36,12 @@ export const formatPublicationType = (value: string): string => {
 
     // @ts-ignore
     return types[value];
+};
+
+export const setOSKey = (): string | JSX.Element => {
+    if (window.navigator.appVersion.indexOf('Mac')) {
+        return <>&#8984;K</>;
+    } else {
+        return 'Ctrl-K';
+    }
 };

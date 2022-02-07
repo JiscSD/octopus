@@ -79,3 +79,27 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/status/{status}
                   method: put
                   cors: true
+    updatePublication:
+        handler: src/components/publication/routes.update
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}
+                  method: patch
+                  cors: true
+    getUsers:
+        handler: src/components/user/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users
+                  method: get
+                  cors: true
+    getUser:
+        handler: src/components/user/routes.get
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/{id}
+                  method: get
+                  cors: true
