@@ -1,9 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
+import useSWR from 'swr';
 import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/solid';
-import useSWR from 'swr';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -152,7 +152,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
             shallow: true
         });
 
-        setPublicationTypes(uniqueArray);
+        setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
 
     const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
