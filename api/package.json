@@ -1,5 +1,5 @@
 {
-    "name": "ocotpus",
+    "name": "octopus",
     "version": "1.0.0",
     "description": "A new way to publish your scientific work that's fast, free and fair.",
     "author": "0-3 Years Team",
@@ -21,6 +21,7 @@
     },
     "scripts": {
         "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
+        "seed:local": "npx prisma migrate reset",
         "test:local": "stage=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"
     },

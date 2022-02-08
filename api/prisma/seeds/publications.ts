@@ -1,6 +1,5 @@
 const publicationSeeds = [
     {
-
         id: 'publication-1',
         title: 'Publication 1',
         type: 'PEER_REVIEW',
@@ -405,8 +404,7 @@ const publicationSeeds = [
                 publicationTo: 'publication-problem-live'
             }
         }
-    },
-
+    }
 ];
 
 export default publicationSeeds;
