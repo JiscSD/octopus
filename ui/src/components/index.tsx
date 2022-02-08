@@ -33,3 +33,6 @@ export { default as UserSearchResult } from './Users/SearchResult';
 export { default as PageTitle } from './PageTitle';
 export { default as Alert } from './Alert';
 export { default as Accordian } from './Accordian';
+export { default as Search } from './Search';
+export { default as SearchDesktop } from './Search/Desktop';
+export { default as SearchMobile } from './Search/Mobile';
