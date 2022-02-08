@@ -2,6 +2,9 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import * as Framer from 'framer-motion';
+import ClickAwayListener from 'react-click-away-listener';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -19,6 +22,13 @@ type Props = {
 };
 
 const About: NextPage<Props> = (props): JSX.Element => {
+    const [open, setOpen] = React.useState(false);
+
+    const toggle = () => {
+        setOpen(!open);
+    };
+
+    // Content for sections stored here.
     const heroContents = [
         {
             id: 'publish_freely',
@@ -40,7 +50,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
             id: 'meritocracy',
             heading: 'Meritocracy',
             content:
-                'Scientific work should be judged on its merits, and not on how good a "story" it tells: and so should scientific researchers.'
+                "Scientific work should be judged on its merits, and not on how good a 'story' it tells: and so should scientific researchers."
         }
     ];
 
@@ -112,40 +122,33 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     content:
                         'You can write and share one of eight kinds of publication (though we support custom types for different fields and research types):',
                     otherContent: (
-                        <dl className="grid grid-cols-2 items-start gap-6 pb-10 text-lg text-grey-900 dark:text-white md:grid-cols-4">
+                        <dl className="grid grid-cols-3 items-start gap-6 pb-10 text-lg text-grey-900 dark:text-white md:grid-cols-4">
                             <dt className="col-span-1 font-medium">Problem</dt>
                             <dd className="col-span-3">a neatly defined scientific problem.</dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Hypothesis</dt>
                             <dd className="col-span-3">
                                 an original hypothesis relating to an existing published Problem or the rationale for
                                 how you think the Problem could be addressed
                             </dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Method/Protocol</dt>
                             <dd className="col-span-3">
                                 a practical method of testing an existing published Hypothesis
                             </dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Data/Results</dt>
                             <dd className="col-span-3">
                                 raw data or summarised results collected according to an existing published Method (can
                                 be linked to a data repository)
                             </dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Analysis</dt>
                             <dd className="col-span-3">
                                 a statistical or thematic analysis of existing published Data or Results
                             </dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Interpretation</dt>
                             <dd className="col-span-3">a discussion around an existing published Analysis</dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Application</dt>
                             <dd className="col-span-3">
                                 real world applications arising from an existing published Interpretation
                             </dd>
-                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Review</dt>
                             <dd className="col-span-3">
                                 a considered, detailed review of any of the above kinds of publication
@@ -313,12 +316,13 @@ const About: NextPage<Props> = (props): JSX.Element => {
                 'If you suspect plagiarism, copyright issues, ethical or scientific misconduct then you will can click to use the Red Flag system to raise your concerns. This will email the authors and you will enter a "dispute resolution" centre. The publication will immediately be flagged so that it is clear to others that an issue has been raised. If the dispute is not quickly resolved, the issue will be escalated to the authors\' institutional Research Integrity Office, or their national office.'
         }
     ];
+    // End of content.
 
     return (
         <>
             <Head>
-                <meta name="description" content="About Octopus" />
-                <meta name="keywords" content="Octopus" />
+                <meta name="description" content={Config.urls.about.description} />
+                <meta name="keywords" content={Config.urls.about.keywords} />
                 <link rel="canonical" href={`${Config.urls.about.canonical}`} />
                 <title>{Config.urls.about.title}</title>
             </Head>
@@ -366,10 +370,10 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         <Components.PageTitle text="More about Octopus" />
                     </div>
                     <main id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                        {/* Jump to aside bar */}
+                        {/* Jump to aside bar - desktop */}
                         <aside className="relative col-span-2 hidden lg:block">
                             <div className="sticky top-28">
-                                <h2 className="mb-2 block border-b border-grey-200 pb-2 font-montserrat font-semibold text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                                <h2 className="mb-2 block border-b border-white pb-2 font-montserrat font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50">
                                     Jump to:
                                 </h2>
                                 <>
@@ -396,6 +400,57 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 </>
                             </div>
                         </aside>
+                        {/* Jump to menu - mobile */}
+                        <div className="relative col-span-2 block lg:hidden">
+                            <button
+                                aria-label="Jump to: Section"
+                                onClick={(e) => toggle()}
+                                className="mb-8 flex justify-between gap-4 rounded-lg border-2 border-white bg-teal-600 px-4 py-2 text-left text-lg font-semibold text-white hover:bg-teal-500 focus:outline-none focus-visible:ring focus-visible:ring-teal-500 focus-visible:ring-opacity-75 dark:border-teal-300 dark:bg-grey-800 dark:text-white"
+                            >
+                                Jump to section:
+                                <OutlineIcons.ChevronUpIcon
+                                    className={`${open ? 'rotate-180 transform' : ''} h-8 w-8 text-white`}
+                                />
+                            </button>
+                            <Framer.AnimatePresence>
+                                {open && (
+                                    <ClickAwayListener onClickAway={toggle}>
+                                        <Framer.motion.nav
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.25 }}
+                                            exit={{ opacity: 0 }}
+                                            className="absolute top-10 right-0 z-20 rounded bg-white px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
+                                        >
+                                            <ul>
+                                                {sectionContents.map((sectionContent) => (
+                                                    <li key={'Jump to' + sectionContent.id} className="my-4">
+                                                        <Components.Link
+                                                            href={`#${sectionContent.id}`}
+                                                            className="rounded border-transparent pl-2 pr-6 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                        >
+                                                            <span className="text-grey-900 dark:text-white">
+                                                                {sectionContent.heading}
+                                                            </span>
+                                                        </Components.Link>
+                                                    </li>
+                                                ))}
+                                                <li key="faq" className="my-4">
+                                                    <Components.Link
+                                                        href="#faq"
+                                                        className="rounded border-transparent pl-2 pr-6 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                    >
+                                                        <span className="text-grey-900 dark:text-white">
+                                                            Frequently asked questions
+                                                        </span>
+                                                    </Components.Link>
+                                                </li>
+                                            </ul>
+                                        </Framer.motion.nav>
+                                    </ClickAwayListener>
+                                )}
+                            </Framer.AnimatePresence>
+                        </div>
                         {/* Sections of about page */}
                         <div className="grid grid-cols-1 gap-8 lg:col-span-6">
                             {sectionContents.map((sectionContent) => (
