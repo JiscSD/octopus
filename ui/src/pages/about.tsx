@@ -1,3 +1,4 @@
+import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -5,8 +6,6 @@ import Image from 'next/image';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Assets from '@assets';
-import { ReactChild, ReactComponentElement, ReactElement } from 'react';
 
 type Content = {
     id: string;
@@ -16,25 +15,29 @@ type Content = {
 type Props = {
     aboutSections: string[];
     heroContents: string[];
-    sectionContents: [{ id: string; heading: string; contents: Content[]; otherContent?: ReactElement }];
+    sectionContents: [{ id: string; heading: string; contents: Content[]; otherContent?: React.ReactElement }];
 };
 
 const About: NextPage<Props> = (props): JSX.Element => {
     const heroContents = [
         {
+            id: 'publish_freely',
             heading: 'Publish freely',
             content:
                 'Upload your publications when they are done. No need to wait around until you have a full scientific paper ready.'
         },
         {
+            id: 'establish_priority',
             heading: 'Establish priority',
             content: 'Stake your claim on an idea early, and establish your interests.'
         },
         {
+            id: 'quick_peer_reviews',
             heading: 'Quick peer reviews',
             content: 'Scientific ideas and findings should be shared as quickly as possible.'
         },
         {
+            id: 'meritocracy',
             heading: 'Meritocracy',
             content:
                 'Scientific work should be judged on its merits, and not on how good a "story" it tells: and so should scientific researchers.'
@@ -109,40 +112,40 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     content:
                         'You can write and share one of eight kinds of publication (though we support custom types for different fields and research types):',
                     otherContent: (
-                        <dl className="grid grid-cols-4 items-start gap-6 pb-10 text-lg">
+                        <dl className="grid grid-cols-2 items-start gap-6 pb-10 text-lg text-grey-900 dark:text-white md:grid-cols-4">
                             <dt className="col-span-1 font-medium">Problem</dt>
                             <dd className="col-span-3">a neatly defined scientific problem.</dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Hypothesis</dt>
                             <dd className="col-span-3">
                                 an original hypothesis relating to an existing published Problem or the rationale for
                                 how you think the Problem could be addressed
                             </dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Method/Protocol</dt>
                             <dd className="col-span-3">
                                 a practical method of testing an existing published Hypothesis
                             </dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Data/Results</dt>
                             <dd className="col-span-3">
                                 raw data or summarised results collected according to an existing published Method (can
                                 be linked to a data repository)
                             </dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Analysis</dt>
                             <dd className="col-span-3">
                                 a statistical or thematic analysis of existing published Data or Results
                             </dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Interpretation</dt>
                             <dd className="col-span-3">a discussion around an existing published Analysis</dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Application</dt>
                             <dd className="col-span-3">
                                 real world applications arising from an existing published Interpretation
                             </dd>
-                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <hr className="col-span-4 border-b border-teal-300 dark:border-grey-400" />
                             <dt className="col-span-1 font-medium">Review</dt>
                             <dd className="col-span-3">
                                 a considered, detailed review of any of the above kinds of publication
@@ -235,6 +238,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
             ]
         }
     ];
+
     const faqContents = [
         {
             id: 'why_octopus',
@@ -326,33 +330,29 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-50 dark:fill-grey-700 transition-colors duration-500"
                 >
-                    <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-32">
-                        <div className="container mx-auto gap-4 px-8 py-2 text-grey-800 dark:text-white">
-                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl xl:leading-normal">
-                                Learn about Octopus
-                            </h1>
-                            <div className="container mx-auto min-w-min gap-6 px-8 pb-16 pt-10 md:max-w-max">
-                                <Components.HTMLVideo
-                                    srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
-                                    srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
-                                    title="A quick introduction to Octopus: the new primary research record for science"
-                                    showCaption={false}
-                                    controls={true}
-                                    poster="/images/jpg/poster.jpg"
-                                    width={800}
-                                />
-                            </div>
+                    <section className="container mx-auto px-8 py-8 text-grey-800 dark:text-white lg:gap-4 lg:pt-36">
+                        <Components.PageTitle text="Learn about Octopus" />
+                        <div className="container mx-auto max-w-[800px] gap-6 px-8 py-10">
+                            <Components.HTMLVideo
+                                srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
+                                srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
+                                title="A quick introduction to Octopus: the new primary research record for science"
+                                showCaption={false}
+                                controls={true}
+                                poster="/images/jpg/poster.jpg"
+                                width={800}
+                            />
+                        </div>
 
-                            <div className="m-auto grid max-w-7xl grid-cols-1 gap-10 text-center md:grid-cols-4">
-                                {heroContents.map((heroContent) => (
-                                    <div key={heroContent.heading}>
-                                        <h2 className="mb-2 block font-montserrat text-2xl font-bold ">
-                                            {heroContent.heading}
-                                        </h2>
-                                        <p className="mb-10 block text-base ">{heroContent.content}</p>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="m-auto grid max-w-4xl grid-cols-1 pt-6 text-center md:grid-cols-4 md:gap-8">
+                            {heroContents.map((heroContent) => (
+                                <div key={heroContent.id}>
+                                    <h2 className="mb-2 block font-montserrat text-2xl font-bold ">
+                                        {heroContent.heading}
+                                    </h2>
+                                    <p className="mb-10 block text-base ">{heroContent.content}</p>
+                                </div>
+                            ))}
                         </div>
                     </section>
                 </Components.Section>
@@ -362,10 +362,8 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <div className="container mx-auto gap-6 px-8 py-16">
-                        <h1 className="block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl lg:mb-8 xl:text-4xl xl:leading-normal">
-                            More about Octopus
-                        </h1>
+                    <div className="container mx-auto px-8 py-8 text-grey-800 dark:text-white lg:gap-4 lg:pt-16">
+                        <Components.PageTitle text="More about Octopus" />
                     </div>
                     <main id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         {/* Jump to aside bar */}
@@ -377,7 +375,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 <>
                                     {sectionContents.map((sectionContent) => (
                                         <Components.Link
-                                            key={sectionContent.id}
+                                            key={'Jump to' + sectionContent.id}
                                             href={`#${sectionContent.id}`}
                                             className="group mb-2 block w-fit rounded border-transparent outline-0 hover:underline focus:ring-2 focus:ring-yellow-400"
                                         >
@@ -403,15 +401,15 @@ const About: NextPage<Props> = (props): JSX.Element => {
                             {sectionContents.map((sectionContent) => (
                                 <div key={sectionContent.id} id={sectionContent.id}>
                                     <Components.Paper>
-                                        <section className="container mx-auto rounded-xl px-8 pt-4 md:py-12">
-                                            <h2 className="mb-6 block font-montserrat text-2xl font-bold text-grey-900 dark:text-teal-300 lg:col-span-2">
+                                        <section className="container mx-auto rounded-xl px-2 pt-2 md:px-8 md:py-12">
+                                            <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2">
                                                 {sectionContent.heading}
                                             </h2>
                                             {sectionContent.contents?.map(({ id, content, otherContent }) => (
                                                 <>
                                                     <p
-                                                        key={id}
-                                                        className="mb-6 block font-inter text-lg text-grey-900 dark:text-grey-50"
+                                                        key={sectionContent.id + 'content' + id}
+                                                        className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg"
                                                     >
                                                         {content}
                                                     </p>
@@ -422,15 +420,16 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                     </Components.Paper>
                                 </div>
                             ))}
+
                             {/* Frequently asked questions section */}
                             <div id="faq">
                                 <Components.Paper>
-                                    <section className="container mx-auto flex flex-col gap-6 rounded-xl px-8 py-2 md:py-12">
-                                        <h2 className="mb-6 block font-montserrat text-2xl font-bold text-grey-900 dark:text-teal-300 lg:col-span-2 xl:mb-8">
+                                    <section className="container mx-auto flex flex-col gap-6 rounded-xl px-2 pt-2 md:px-8 md:py-12">
+                                        <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
                                             Frequently asked questions
                                         </h2>
-                                        {faqContents.map((faqContent) => (
-                                            <Components.Accordian
+                                        {faqContents?.map((faqContent) => (
+                                            <Components.Accordion
                                                 key={faqContent.id}
                                                 heading={faqContent.heading}
                                                 content={faqContent.content}
