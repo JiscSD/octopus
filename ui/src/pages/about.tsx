@@ -1,10 +1,12 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Assets from '@assets';
+import { ReactChild, ReactComponentElement, ReactElement } from 'react';
 
 type Content = {
     id: string;
@@ -14,11 +16,10 @@ type Content = {
 type Props = {
     aboutSections: string[];
     heroContents: string[];
-    sectionContents: [{ id: string; heading: string; contents: Content[] }];
+    sectionContents: [{ id: string; heading: string; contents: Content[]; otherContent?: ReactElement }];
 };
 
 const About: NextPage<Props> = (props): JSX.Element => {
-    const tab = { title: 'test', content: 'test' };
     const heroContents = [
         {
             heading: 'Publish freely',
@@ -30,7 +31,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
             content: 'Stake your claim on an idea early, and establish your interests.'
         },
         {
-            heading: 'Get quick peer reviews',
+            heading: 'Quick peer reviews',
             content: 'Scientific ideas and findings should be shared as quickly as possible.'
         },
         {
@@ -106,64 +107,74 @@ const About: NextPage<Props> = (props): JSX.Element => {
                 {
                     id: 2,
                     content:
-                        'You can write and share one of eight kinds of publication (though we support custom types for different fields and research types)'
+                        'You can write and share one of eight kinds of publication (though we support custom types for different fields and research types):',
+                    otherContent: (
+                        <dl className="grid grid-cols-4 items-start gap-6 pb-10 text-lg">
+                            <dt className="col-span-1 font-medium">Problem</dt>
+                            <dd className="col-span-3">a neatly defined scientific problem.</dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Hypothesis</dt>
+                            <dd className="col-span-3">
+                                an original hypothesis relating to an existing published Problem or the rationale for
+                                how you think the Problem could be addressed
+                            </dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Method/Protocol</dt>
+                            <dd className="col-span-3">
+                                a practical method of testing an existing published Hypothesis
+                            </dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Data/Results</dt>
+                            <dd className="col-span-3">
+                                raw data or summarised results collected according to an existing published Method (can
+                                be linked to a data repository)
+                            </dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Analysis</dt>
+                            <dd className="col-span-3">
+                                a statistical or thematic analysis of existing published Data or Results
+                            </dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Interpretation</dt>
+                            <dd className="col-span-3">a discussion around an existing published Analysis</dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Application</dt>
+                            <dd className="col-span-3">
+                                real world applications arising from an existing published Interpretation
+                            </dd>
+                            <hr className="col-span-4 border-b-2 border-teal-300" />
+                            <dt className="col-span-1 font-medium">Review</dt>
+                            <dd className="col-span-3">
+                                a considered, detailed review of any of the above kinds of publication
+                            </dd>
+                        </dl>
+                    )
                 },
                 {
                     id: 3,
-                    content: 'Problem -  a neatly defined scientific problem.'
+                    content:
+                        "Every publication in Octopus must be linked to another existing publication in order to form ordered chains. Only Problems and Reviews can be linked to any of the first publication types – others must be linked only to a type directly above them in the 'chain':",
+                    otherContent: (
+                        <Image
+                            src="/images/diagramPublishingFlow.png"
+                            alt="Publishing Flow Diagram"
+                            width="1500"
+                            height="1048"
+                        />
+                    )
                 },
                 {
                     id: 4,
                     content:
-                        'Hypothesis/Theoretical Rationale - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed'
-                },
-                {
-                    id: 5,
-                    content: 'Method/Protocol - a practical method of testing an existing published Hypothesis'
-                },
-                {
-                    id: 6,
-                    content:
-                        'Data/Results - raw data or summarised results collected according to an existing published Method (can be linked to a data repository)'
-                },
-                {
-                    id: 7,
-                    content: 'Analysis - a statistical or thematic analysis of existing published Data or Results'
-                },
-                {
-                    id: 8,
-                    content: 'Interpretation - a discussion around an existing published Analysis'
-                },
-                {
-                    id: 9,
-                    content:
-                        "Translation/Application - 'real world' applications arising from an existing published Interpretation"
-                },
-                {
-                    id: 10,
-                    content: 'Review - a considered, detailed review of any of the above kinds of publication'
-                },
-                {
-                    id: 11,
-                    content:
-                        "Every publication in Octopus must be linked to another existing publication in order to form ordered chains. Only Problems and Reviews can be linked to any of the first publication types – others must be linked only to a type directly above them in the 'chain':"
-                },
-                {
-                    id: 12,
-                    content: 'image'
-                },
-                {
-                    id: 13,
-                    content:
                         'Anyone can read anything in Octopus. Those logged in with an ORCiD can write and rate publications.'
                 },
                 {
-                    id: 14,
+                    id: 5,
                     content:
                         'Every publication you write (including reviews) can be rated by others, and these will add to your individual page which is available for all individuals, institutions and funding bodies to see. Publishing quickly and well, and good collaborative reviewing is therefore rewarded.'
                 },
                 {
-                    id: 15,
+                    id: 6,
                     content:
                         "Any publication can be 'red flagged' if a reader has serious concerns. This will be visible to other readers and will alert the authors to allow them to resolve any issues."
                 }
@@ -315,12 +326,12 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-50 dark:fill-grey-700 transition-colors duration-500"
                 >
-                    <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <div className="container mx-auto gap-6 px-8 py-4 text-grey-800 dark:text-white">
-                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl xl:text-4xl xl:leading-normal">
+                    <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-32">
+                        <div className="container mx-auto gap-4 px-8 py-2 text-grey-800 dark:text-white">
+                            <h1 className="block text-center font-montserrat text-2xl font-bold leading-tight transition-colors duration-500 md:text-3xl xl:leading-normal">
                                 Learn about Octopus
                             </h1>
-                            <div className="container mx-auto min-w-min gap-6 px-8 py-16 md:max-w-max">
+                            <div className="container mx-auto min-w-min gap-6 px-8 pb-16 pt-10 md:max-w-max">
                                 <Components.HTMLVideo
                                     srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
                                     srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
@@ -393,16 +404,19 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 <div key={sectionContent.id} id={sectionContent.id}>
                                     <Components.Paper>
                                         <section className="container mx-auto rounded-xl px-8 pt-4 md:py-12">
-                                            <h2 className="mb-6 block font-montserrat text-2xl font-bold text-grey-900 dark:text-teal-300 lg:col-span-2 xl:mb-8">
+                                            <h2 className="mb-6 block font-montserrat text-2xl font-bold text-grey-900 dark:text-teal-300 lg:col-span-2">
                                                 {sectionContent.heading}
                                             </h2>
-                                            {sectionContent.contents?.map(({ id, content }) => (
-                                                <p
-                                                    key={id}
-                                                    className="mb-8 block font-inter text-lg text-grey-900 dark:text-grey-50"
-                                                >
-                                                    {content}
-                                                </p>
+                                            {sectionContent.contents?.map(({ id, content, otherContent }) => (
+                                                <>
+                                                    <p
+                                                        key={id}
+                                                        className="mb-6 block font-inter text-lg text-grey-900 dark:text-grey-50"
+                                                    >
+                                                        {content}
+                                                    </p>
+                                                    {otherContent}
+                                                </>
                                             ))}
                                         </section>
                                     </Components.Paper>
