@@ -1,8 +1,7 @@
 import React from 'react';
-import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { PencilIcon } from '@heroicons/react/outline';
+import * as Router from 'next/router';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -13,7 +12,7 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as API from '@api';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedSlug = context.query.slug;
     const response = await API.get(`${Config.endpoints.publications}/${requestedSlug}`);
     const publication: Interfaces.Publication = response.data;
@@ -35,8 +34,8 @@ type Props = {
     publication: Interfaces.Publication;
 };
 
-const Publication: NextPage<Props> = (props): JSX.Element => {
-    const router = useRouter();
+const Publication: Types.NextPage<Props> = (props): JSX.Element => {
+    const router = Router.useRouter();
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
@@ -59,8 +58,8 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <header className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        <div className="lg:col-span-2">
+                    <header className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-8 lg:gap-4 lg:pt-36">
+                        <div className="lg:col-span-6">
                             <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
                                 {Helpers.formatPublicationType(props.publication.type)}
                             </span>
@@ -74,7 +73,7 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                                 <Components.ActionButton
                                     title="Write a review"
                                     icon={
-                                        <PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
+                                        <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                     }
                                     callback={(e) => {
                                         e.preventDefault();
@@ -93,18 +92,11 @@ const Publication: NextPage<Props> = (props): JSX.Element => {
                                 <FlagIcon className="ml-2 h-3 w-3" />
                             </Components.Link> */}
                         </div>
-                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:mt-0 lg:mb-0 lg:justify-end">
+                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-2 lg:mt-0 lg:mb-0 lg:justify-end">
                             <Components.PublicationRatings publication={props.publication} />
                         </aside>
                     </header>
-                </Components.SectionTwo>
 
-                <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-800"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
-                >
                     <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         <aside className="col-span-2 hidden pt-24 lg:block">
                             <Components.PublicationSidebar

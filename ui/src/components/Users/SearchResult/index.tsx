@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import * as Framer from 'framer-motion';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -13,14 +13,14 @@ type Props = {
 
 const SearchResult: React.FC<Props> = (props): JSX.Element => {
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <Framer.motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <Components.Link
                 href={`${Config.urls.viewUser.path}/${props.id}`}
                 className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${props.className}`}
             >
                 <span>{props.id}</span>
             </Components.Link>
-        </motion.div>
+        </Framer.motion.div>
     );
 };
 

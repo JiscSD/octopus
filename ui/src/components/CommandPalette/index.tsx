@@ -1,9 +1,9 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import ClickAwayListener from 'react-click-away-listener';
+import * as Router from 'next/router';
 import * as SolidIcon from '@heroicons/react/solid';
-import { Switch } from '@headlessui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import * as HeadlessUI from '@headlessui/react';
+import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -15,8 +15,9 @@ import * as Types from '@types';
 import * as API from '@api';
 
 const CommandPalette: React.FC = (): JSX.Element => {
-    const router = useRouter();
+    const router = Router.useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
+
     const [query, setQuery] = React.useState('');
     const [results, setResults] = React.useState<Interfaces.Publication[] | Interfaces.User[]>([]);
     const [resultsMeta, setResultsMeta] = React.useState<Interfaces.SearchResultMeta | null>();
@@ -39,30 +40,31 @@ const CommandPalette: React.FC = (): JSX.Element => {
 
     const handleSearchRequest = async (value: string) => {
         setQuery(value);
-        setLoading(true);
-        let data: Interfaces.Publication[] = [];
-        let metadata: null = null;
 
-        try {
-            const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
-            const response = await API.get(`${endpoint}?limit=10&search=${value}`);
-            if (!response.data.data.length) throw new Config.CustomErros.SearchThrowError('No results found.');
-            if (value.length) {
+        // Looks like the api search only returns results if the search query is 3+ chars?
+        if (value.length > 3) {
+            setLoading(true);
+            let data: Interfaces.Publication[] | Interfaces.User[] = [];
+            let metadata: null = null;
+
+            try {
+                const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+                const response = await API.get(`${endpoint}?limit=10&search=${value}`);
                 data = response.data.data;
                 metadata = response.data.metadata;
+                setResultsError(null);
+            } catch (err) {
+                const { message } = err as Interfaces.JSONResponseError;
+                setResultsError(message);
             }
-            setResultsError(null);
-        } catch (err) {
-            if (err instanceof Config.CustomErros.SearchThrowError) {
-                setResultsError(err.message);
-            } else {
-                setResultsError('There was an problem fetching results.');
-            }
-        }
 
-        setResults(data);
-        setResultsMeta(metadata);
-        setLoading(false);
+            setLoading(false);
+            setResults(data);
+            setResultsMeta(metadata);
+        } else if (!value.length) {
+            setResults([]);
+            setResultsMeta(null);
+        }
     };
 
     const resetData = () => {
@@ -100,7 +102,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                 <span className="mr-2 text-sm text-grey-100">
                                     Switch to {searchFor === 'publications' ? 'user' : 'publication'} search
                                 </span>
-                                <Switch
+                                <HeadlessUI.Switch
                                     checked={true}
                                     onChange={(e) => toggleSearchType()}
                                     onKeyDown={(e: React.KeyboardEvent) => {
@@ -119,7 +121,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                             searchFor === 'publications' ? 'translate-x-5' : 'translate-x-0'
                                         }`}
                                     />
-                                </Switch>
+                                </HeadlessUI.Switch>
                             </div>
                         </div>
                         <div
@@ -150,93 +152,88 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     />
                                 </button>
                             </div>
-                            {/** Loader */}
-                            {loading ? (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="flex justify-center px-6 py-4"
-                                >
-                                    <Assets.Logo
-                                        height={50}
-                                        width={50}
-                                        className={`motion-safe:animate-bounce ${
-                                            searchFor === 'publications' ? 'fill-teal-500' : 'fill-purple-300'
-                                        }`}
-                                    />
-                                </motion.div>
-                            ) : (
-                                <></>
-                            )}
+                            <Framer.AnimatePresence>
+                                {/** Loader */}
+                                {loading && (
+                                    <Framer.motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="flex justify-center px-6 py-4"
+                                    >
+                                        <Assets.Logo
+                                            height={50}
+                                            width={50}
+                                            className={`motion-safe:animate-bounce ${
+                                                searchFor === 'publications' ? 'fill-teal-500' : 'fill-purple-300'
+                                            }`}
+                                        />
+                                    </Framer.motion.div>
+                                )}
 
-                            {/** Results */}
-                            {!loading && !resultsError && results.length ? (
-                                <motion.div
-                                    initial="hidden"
-                                    animate="show"
-                                    exit={{ maxHeight: 0, opacity: 0 }}
-                                    variants={{
-                                        hidden: { maxHeight: 0, opacity: 0 },
-                                        show: {
-                                            opacity: 1,
-                                            maxHeight: 400
-                                        }
-                                    }}
-                                    className="scrollbar-vert overflow-y-auto"
-                                >
-                                    {results.map((result: any, index) => {
-                                        if (searchFor === 'publications') {
-                                            return (
-                                                <Components.CommandPaletteResult
-                                                    key={result.id}
-                                                    id={result.id}
-                                                    title={result.title}
-                                                    excerpt={`${result.user.firstName}. ${result.user.lastName}`}
-                                                    link={`${Config.urls.viewPublication.path}/${result.id}`}
-                                                    meta={Helpers.formatPublicationType(result.type)}
-                                                    date={Helpers.formatDate(result.updatedAt)}
-                                                    accentColor={'text-teal-300'}
-                                                    className={`${index === 0 ? 'mt-2' : ''} ${
-                                                        index === results.length - 1 ? 'mb-2' : ''
-                                                    }`}
-                                                />
-                                            );
-                                        }
+                                {/** Results */}
+                                {!loading && !resultsError && results.length && (
+                                    <Framer.motion.div
+                                        initial="hidden"
+                                        animate="show"
+                                        exit={{ maxHeight: 0, opacity: 0 }}
+                                        variants={{
+                                            hidden: { maxHeight: 0, opacity: 0 },
+                                            show: {
+                                                opacity: 1,
+                                                maxHeight: 400
+                                            }
+                                        }}
+                                        className="scrollbar-vert overflow-y-auto"
+                                    >
+                                        {results.map((result: any, index) => {
+                                            if (searchFor === 'publications') {
+                                                return (
+                                                    <Components.CommandPaletteResult
+                                                        key={result.id}
+                                                        id={result.id}
+                                                        title={result.title}
+                                                        excerpt={`${result.user.firstName}. ${result.user.lastName}`}
+                                                        link={`${Config.urls.viewPublication.path}/${result.id}`}
+                                                        meta={Helpers.formatPublicationType(result.type)}
+                                                        date={Helpers.formatDate(result.updatedAt)}
+                                                        accentColor={'text-teal-300'}
+                                                        className={`${index === 0 ? 'mt-2' : ''} ${
+                                                            index === results.length - 1 ? 'mb-2' : ''
+                                                        }`}
+                                                    />
+                                                );
+                                            }
 
-                                        if (searchFor === 'users') {
-                                            return (
-                                                <Components.CommandPaletteResult
-                                                    key={result.id}
-                                                    id={result.id}
-                                                    title={`${result.firstName}. ${result.lastName}`}
-                                                    link={`${Config.urls.viewUser.path}/${result.id}`}
-                                                    accentColor={'text-purple-300'}
-                                                    className={`${index === 0 ? 'mt-2' : ''} ${
-                                                        index === results.length - 1 ? 'mb-2' : ''
-                                                    }`}
-                                                />
-                                            );
-                                        }
-                                    })}
-                                </motion.div>
-                            ) : (
-                                <></>
-                            )}
+                                            if (searchFor === 'users') {
+                                                return (
+                                                    <Components.CommandPaletteResult
+                                                        key={result.id}
+                                                        id={result.id}
+                                                        title={`${result.firstName}. ${result.lastName}`}
+                                                        link={`${Config.urls.viewUser.path}/${result.id}`}
+                                                        accentColor={'text-purple-300'}
+                                                        className={`${index === 0 ? 'mt-2' : ''} ${
+                                                            index === results.length - 1 ? 'mb-2' : ''
+                                                        }`}
+                                                    />
+                                                );
+                                            }
+                                        })}
+                                    </Framer.motion.div>
+                                )}
 
-                            {/** Error */}
-                            {!loading && resultsError ? (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="flex justify-center px-6 pb-4 pt-4"
-                                >
-                                    <span className="text-sm text-pink-500 dark:text-pink-300">{resultsError}</span>
-                                </motion.div>
-                            ) : (
-                                <></>
-                            )}
+                                {/** Error */}
+                                {!loading && resultsError && (
+                                    <Framer.motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex justify-center px-6 pb-4 pt-4"
+                                    >
+                                        <span className="text-sm text-pink-500 dark:text-pink-300">{resultsError}</span>
+                                    </Framer.motion.div>
+                                )}
+                            </Framer.AnimatePresence>
                         </div>
                     </div>
                 </ClickAwayListener>

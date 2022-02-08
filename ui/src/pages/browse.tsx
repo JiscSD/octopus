@@ -1,4 +1,3 @@
-import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
@@ -6,36 +5,37 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
+import * as Types from '@types';
 import * as API from '@api';
 
 interface Errors {
-    featured: null | string;
+    // featured: null | string;
     latest: null | string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const errors: Errors = {
-        featured: null,
+        // featured: null,
         latest: null
     };
 
     // Get featured publications endpoint
-    let featured: unknown = [];
-    try {
-        const featuredResponse = await API.search(
-            'publications',
-            null,
-            Config.values.publicationTypes.join(),
-            3,
-            0,
-            'createdAt',
-            'asc'
-        );
-        featured = featuredResponse.data as Interfaces.Publication[];
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        errors.featured = message;
-    }
+    // let featured: unknown = [];
+    // try {
+    //     const featuredResponse = await API.search(
+    //         'publications',
+    //         null,
+    //         Config.values.publicationTypes.join(),
+    //         3,
+    //         0,
+    //         'createdAt',
+    //         'asc'
+    //     );
+    //     featured = featuredResponse.data as Interfaces.Publication[];
+    // } catch (err) {
+    //     const { message } = err as Interfaces.JSONResponseError;
+    //     errors.featured = message;
+    // }
 
     // Get latest publications endpoint
     let latest: unknown = [];
@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            featured,
+            // featured,
             latest,
             errors
         }
@@ -65,12 +65,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    featured: Interfaces.Publication[];
+    // featured: Interfaces.Publication[];
     latest: Interfaces.Publication[];
     errors: Errors;
 };
 
-const Browse: NextPage<Props> = (props): JSX.Element => {
+const Browse: Types.NextPage<Props> = (props): JSX.Element => {
     return (
         <>
             <Head>
@@ -120,12 +120,12 @@ const Browse: NextPage<Props> = (props): JSX.Element => {
                             </div>
                         </aside>
                         <article className="lg:col-span-6">
-                            {/** If there are no featured, or there was an error, simply dont show this section */}
-                            {!props.errors.featured && (
+                            {/** Hidding this section for now until requirements are known */}
+                            {/* {!props.errors.featured && (
                                 <div className="mb-16">
                                     <Components.FeaturedCollection publications={props.featured} />
                                 </div>
-                            )}
+                            )} */}
 
                             <div className="mb-16">
                                 <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">

@@ -1,4 +1,3 @@
-import type { AppProps } from 'next/app';
 import React from 'react';
 import * as SWR from 'swr';
 
@@ -9,7 +8,7 @@ import * as API from '@api';
 
 import '../styles/globals.css';
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }: Types.AppProps) => {
     const isMounted = React.useRef(false);
     const [loading, setLoading] = React.useState(true);
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);

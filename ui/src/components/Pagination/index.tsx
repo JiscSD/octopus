@@ -1,5 +1,5 @@
-import * as SolidIcons from '@heroicons/react/solid';
 import React from 'react';
+import * as SolidIcons from '@heroicons/react/solid';
 
 import * as Interfaces from '@interfaces';
 
@@ -8,8 +8,6 @@ type Props = {
 };
 
 const Pagination: React.FC<Props> = (props): JSX.Element => {
-    console.log(props);
-
     const [active, setActive] = React.useState();
 
     return (

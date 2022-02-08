@@ -1,24 +1,23 @@
 import React from 'react';
-import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/solid';
+import useSWR from 'swr';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Mocks from '@mocks';
 import * as Types from '@types';
 import * as API from '@api';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
     let searchType: string | string[] | null = null;
     let query: string | string[] | null = null;
-    let publicationType: string | string[] | null = null;
+    let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
     let orderBy: string | string[] | null = null;
@@ -34,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // setting params
     if (context.query.query) query = context.query.query;
     if (context.query.for) searchType = context.query.for;
-    if (context.query.type) publicationType = context.query.type;
+    if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
     if (context.query.orderBy) orderBy = context.query.orderBy;
@@ -45,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // If multiple of the same params are provided, pick the first
         if (Array.isArray(searchType)) searchType = searchType[0];
         if (Array.isArray(query)) query = query[0];
-        if (Array.isArray(publicationType)) publicationType = publicationType[0];
+        if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
         if (Array.isArray(orderBy)) orderBy = orderBy[0];
@@ -65,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 const response = await API.search(
                     searchType,
                     query,
-                    publicationType,
+                    publicationTypes,
                     limit,
                     offset,
                     orderBy as Types.OrderBySearchOption, // to please ts, we must tom hanks it, even though we can be sure of the value
@@ -81,14 +80,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
+    const swrKey = `/${searchType}?search=${query || ''}${
+        searchType === 'publications' ? `&type=${publicationTypes}` : ''
+    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
+        orderDirection || 'asc'
+    }`;
+
     return {
         props: {
             searchType,
             query,
-            publicationType,
-            results,
-            metadata,
-            error
+            publicationTypes,
+            limit,
+            offset,
+            orderBy,
+            orderDirection,
+            fallback: {
+                [swrKey]: results
+            }
         }
     };
 };
@@ -96,44 +105,41 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 type Props = {
     searchType: Types.SearchType | string | undefined;
     query: string | null;
-    publicationType: string | null;
-    results: Interfaces.Publication[] | Interfaces.User[];
-    metadata: Interfaces.SearchResultMeta;
-    error: string | null;
+    publicationTypes: string | null;
+    limit: string | null;
+    offset: string | null;
+    orderBy: string | null;
+    orderDirection: string | null;
 };
 
-const Search: NextPage<Props> = (props): JSX.Element => {
+const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
-    const searchInputRef = React.useRef<HTMLInputElement | any>();
-    const [loading, setLoading] = React.useState(false);
+    const searchInputRef = React.useRef<HTMLInputElement>(null);
+    // params
     const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');
-    const [query, setQuery] = React.useState(props.query);
-    const [publicationTypes, setPublicationTypes] = React.useState(props.publicationType);
-    const [results, setResutls] = React.useState(props.results);
-    const [metadata, setMetadata] = React.useState(props.metadata);
-    const [error, setError] = React.useState(props.error);
+    const [query, setQuery] = React.useState(props.query ? props.query : '');
+    const [publicationTypes, setPublicationTypes] = React.useState(
+        props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
+    );
+    // param for pagination
+    const [limit, setLimit] = React.useState(props.limit);
+    const [offset, setOffset] = React.useState(props.offset);
+    const [orderBy, setOrderBy] = React.useState(props.orderBy);
+    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection);
 
-    const updateResults = async () => {
-        setLoading(true);
+    // ugly complex swr key
+    const swrKey = `/${searchType}?search=${query || ''}${
+        searchType === 'publications' ? `&type=${publicationTypes}` : ''
+    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
+        orderDirection || 'asc'
+    }`;
 
-        router.push({
-            query: {
-                ...router.query,
-                query
-            }
-        });
+    const { data: { data: results = [] } = {}, error } = useSWR(swrKey);
 
-        try {
-            const response = await API.search(searchType, searchInputRef.current.value, publicationTypes);
-            setError(null);
-            setResutls(response.data);
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
-            console.log(err);
-        }
-
-        setLoading(false);
+    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault();
+        const searchTerm = searchInputRef.current?.value || '';
+        setQuery(searchTerm);
     };
 
     const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -142,40 +148,34 @@ const Search: NextPage<Props> = (props): JSX.Element => {
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
         const uniqueArray = Array.from(uniqueSet).join(',');
 
-        router.push({
-            query: {
-                for: searchType,
-                type: uniqueArray
-            }
+        router.push({ pathname: '/search', query: { for: searchType, type: uniqueArray } }, undefined, {
+            shallow: true
         });
 
         setPublicationTypes(uniqueArray);
     };
 
-    React.useEffect(() => {
-        if (searchType === 'users') {
+    const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === 'users') {
             const paramsListCopy = { ...router.query };
             if (paramsListCopy.hasOwnProperty('type')) delete paramsListCopy.type;
 
-            router.push({
-                query: { ...paramsListCopy, for: searchType }
-            });
+            router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
-        if (searchType === 'publications') {
-            router.push({
-                query: {
-                    ...router.query,
-                    for: searchType,
-                    type: publicationTypes,
-                    query: searchInputRef.current.value
-                }
-            });
+        if (value === 'publications') {
+            router.push(
+                {
+                    query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
+                },
+                undefined,
+                { shallow: true }
+            );
         }
-    }, [searchType]);
-
-    React.useEffect(() => {
-        if (!loading) searchInputRef.current.focus();
-    }, [loading]);
+        setQuery('');
+        searchInputRef.current && (searchInputRef.current.value = '');
+        setSearchType(e.target.value);
+    };
 
     return (
         <>
@@ -194,7 +194,7 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
-                        <Components.PageTitle text={`Search results ${props.query ? `for ${props.query}` : ''}`} />
+                        <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
                     </section>
                     <section
                         id="content"
@@ -206,10 +206,10 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                                 <select
                                     name="search-type"
                                     id="search-type"
-                                    onChange={(e) => setSearchType(e.target.value)}
+                                    onChange={handleChangeSearchType}
                                     value={searchType}
-                                    className="!mt-0 w-full rounded-md border-transparent outline-none focus:ring-2 focus:ring-yellow-500"
-                                    disabled={loading}
+                                    className="!mt-0 w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
+                                    disabled={!results}
                                 >
                                     <option value="publications">Publications</option>
                                     <option value="users">Authors</option>
@@ -219,31 +219,28 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                                 name="query-form"
                                 id="query-form"
                                 className="col-span-12 flex justify-end lg:col-span-9"
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    updateResults();
-                                }}
+                                onSubmit={handlerSearchFormSubmit}
                             >
                                 <label
                                     htmlFor="search-query"
-                                    className="2xl:1/3 flex w-full items-center lg:w-2/3 xl:w-1/2"
+                                    className="2xl:1/3 relative flex w-full items-center lg:w-2/3 xl:w-1/2"
                                     tabIndex={1}
                                 >
                                     <input
                                         ref={searchInputRef}
+                                        autoFocus
                                         name="query"
                                         id="query"
-                                        onChange={(e) => setQuery(e.target.value)}
-                                        defaultValue={query ? query : ''}
+                                        defaultValue={props.query ? props.query : ''}
                                         type="text"
                                         placeholder="Quick search..."
-                                        className="w-full rounded-l-md border-none px-4 py-3 outline-none focus:ring-2 focus:ring-yellow-500"
-                                        disabled={loading}
+                                        className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500"
+                                        disabled={!results}
                                     />
                                     <button
                                         type="submit"
                                         form="query-form"
-                                        className="rounded-r-md border-none bg-white p-3 outline-none focus:ring-2 focus:ring-yellow-500"
+                                        className="absolute right-px rounded-md bg-white p-2 outline-none focus:ring-2 focus:ring-yellow-500"
                                     >
                                         <SolidIcons.SearchIcon className="h-6 w-6 text-teal-500" />
                                     </button>
@@ -277,10 +274,8 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                                                                 ? publicationTypes.split(',').includes(type)
                                                                 : false
                                                         }
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                            collatePublicationTypes(e, type)
-                                                        }
-                                                        disabled={loading}
+                                                        onChange={(e) => collatePublicationTypes(e, type)}
+                                                        disabled={!results}
                                                     />
                                                 </div>
                                                 <div className="ml-3 text-sm">
@@ -299,9 +294,25 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                         </aside>
 
                         <article className="col-span-9">
-                            {!loading && !error && results.length ? (
-                                <>
-                                    {props.results.map((result: any) => {
+                            {error && !results?.data?.length && (
+                                <Components.Alert
+                                    severity="ERROR"
+                                    title={error}
+                                    details={['Please refer to our support page']}
+                                />
+                            )}
+
+                            {!error && !results && (
+                                <Components.Alert
+                                    severity="WARNING"
+                                    title="No results found"
+                                    details={['Some helpfuls informaiton here', 'Some more helpful information here']}
+                                />
+                            )}
+
+                            {!error && results?.data && (
+                                <div className="mt-8 space-y-5 lg:mt-0">
+                                    {results?.data.map((result: any) => {
                                         if (searchType === 'publications') {
                                             return (
                                                 <Components.PublicationSearchResult
@@ -320,23 +331,11 @@ const Search: NextPage<Props> = (props): JSX.Element => {
                                     })}
 
                                     <div className="mt-6 empty:hidden">
-                                        {results.length > 5 && <Components.Pagination metadata={metadata} />}
+                                        {results?.data.length > 5 && (
+                                            <Components.Pagination metadata={results.metadata} />
+                                        )}
                                     </div>
-                                </>
-                            ) : null}
-                            {!loading && !error && !results.length && (
-                                <Components.Alert
-                                    severity="INFO"
-                                    title="Sorry, there are no results for your search request"
-                                />
-                            )}
-                            {loading && <p>loading state</p>}
-                            {!loading && error && (
-                                <Components.Alert
-                                    severity="ERROR"
-                                    title="There was a problem fetching results"
-                                    details={[error]}
-                                />
+                                </div>
                             )}
                         </article>
                     </section>
