@@ -17,7 +17,12 @@ type Props = {
 };
 
 const SearchResult: React.FC<Props> = (props): JSX.Element => (
-    <Framer.motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <Framer.motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ type: 'tween', duration: 2 }}
+    >
         <Components.Link
             href={`${Config.urls.viewPublication.path}/${props.id}`}
             className={`

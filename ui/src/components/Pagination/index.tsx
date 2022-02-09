@@ -4,12 +4,12 @@ import * as SolidIcons from '@heroicons/react/solid';
 import * as Interfaces from '@interfaces';
 
 type Props = {
-    metadata: Interfaces.SearchResultMeta;
+    current: number;
+    limit: number;
+    total: number;
 };
 
 const Pagination: React.FC<Props> = (props): JSX.Element => {
-    const [active, setActive] = React.useState();
-
     return (
         <div className="flex items-center justify-between px-4 py-3 sm:px-6">
             <div className="flex flex-1 justify-between sm:hidden">
@@ -29,8 +29,9 @@ const Pagination: React.FC<Props> = (props): JSX.Element => {
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
                     <p className="text-sm text-grey-700">
-                        Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{' '}
-                        <span className="font-medium">97</span> results
+                        Showing <span className="font-medium">{props.current}</span> to{' '}
+                        <span className="font-medium">{props.limit}</span> of{' '}
+                        <span className="font-medium">{props.total}</span> results
                     </p>
                 </div>
                 <div>

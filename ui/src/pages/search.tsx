@@ -122,10 +122,10 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
     );
     // param for pagination
-    const [limit, setLimit] = React.useState(props.limit);
-    const [offset, setOffset] = React.useState(props.offset);
-    const [orderBy, setOrderBy] = React.useState(props.orderBy);
-    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection);
+    const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
+    const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
+    const [orderBy, setOrderBy] = React.useState(props.orderBy ? props.orderBy : 'updatedAt');
+    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection ? props.orderDirection : 'asc');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
@@ -134,7 +134,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         orderDirection || 'asc'
     }`;
 
-    const { data: { data: results = [] } = {}, error } = useSWR(swrKey);
+    const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
@@ -250,93 +250,112 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
 
                         <aside className="relative col-span-3 hidden lg:block">
                             <Framer.AnimatePresence>
-                                {searchType === 'publications' && (
-                                    <Framer.motion.fieldset
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        className="sticky top-28 space-y-5"
-                                    >
-                                        <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
-                                            Publication types
-                                        </legend>
-                                        {Config.values.publicationTypes.map((type) => (
-                                            <div key={type} className="relative flex items-start">
-                                                <div className="flex h-5 items-center">
-                                                    <input
-                                                        id={type}
-                                                        aria-describedby={type}
-                                                        name={type}
-                                                        type="checkbox"
-                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300"
-                                                        checked={
-                                                            publicationTypes
-                                                                ? publicationTypes.split(',').includes(type)
-                                                                : false
-                                                        }
-                                                        onChange={(e) => collatePublicationTypes(e, type)}
-                                                        disabled={!results}
-                                                    />
-                                                </div>
-                                                <div className="ml-3 text-sm">
-                                                    <label
-                                                        htmlFor={type}
-                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white"
-                                                    >
-                                                        {Helpers.formatPublicationType(type)}
-                                                    </label>
-                                                </div>
+                                <Framer.motion.fieldset
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="sticky top-28 space-y-5"
+                                >
+                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
+                                        Publication types
+                                    </legend>
+                                    {Config.values.publicationTypes.map((type) => (
+                                        <div
+                                            key={type}
+                                            className={`relative flex items-start ${
+                                                searchType !== 'publications' && 'opacity-50'
+                                            }`}
+                                        >
+                                            <div className="flex h-5 items-center">
+                                                <input
+                                                    id={type}
+                                                    aria-describedby={type}
+                                                    name={type}
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
+                                                    checked={
+                                                        publicationTypes
+                                                            ? publicationTypes.split(',').includes(type)
+                                                            : false
+                                                    }
+                                                    onChange={(e) => collatePublicationTypes(e, type)}
+                                                    disabled={!results || searchType !== 'publications'}
+                                                />
                                             </div>
-                                        ))}
-                                    </Framer.motion.fieldset>
-                                )}
+                                            <div className="ml-3 text-sm">
+                                                <label
+                                                    htmlFor={type}
+                                                    className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white"
+                                                    aria-disabled={!results || searchType !== 'publications'}
+                                                >
+                                                    {Helpers.formatPublicationType(type)}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </Framer.motion.fieldset>
                             </Framer.AnimatePresence>
                         </aside>
 
-                        <article className="col-span-9">
-                            {error && !results?.data?.length && (
-                                <Components.Alert
-                                    severity="ERROR"
-                                    title={error}
-                                    details={['Please refer to our support page']}
-                                />
-                            )}
+                        <article className="col-span-9 min-h-screen">
+                            <Framer.AnimatePresence>
+                                {!!error && (
+                                    <Components.Alert
+                                        severity="ERROR"
+                                        title={error}
+                                        details={['Please refer to our support page']}
+                                    />
+                                )}
 
-                            {!error && !results && (
-                                <Components.Alert
-                                    severity="WARNING"
-                                    title="No results found"
-                                    details={['Some helpfuls informaiton here', 'Some more helpful information here']}
-                                />
-                            )}
+                                {!error && !results?.data?.length && !isValidating && (
+                                    <Components.Alert
+                                        severity="INFO"
+                                        title="No results found"
+                                        details={[
+                                            'Some helpfuls informaiton here',
+                                            'Some more helpful information here'
+                                        ]}
+                                    />
+                                )}
 
-                            {!error && results?.data && (
-                                <div className="mt-8 space-y-5 lg:mt-0">
-                                    {results?.data.map((result: any) => {
-                                        if (searchType === 'publications') {
-                                            return (
-                                                <Components.PublicationSearchResult
-                                                    key={result.id}
-                                                    id={result.id}
-                                                    title={result.title}
-                                                    createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
-                                                    type={result.type}
-                                                    date={result.updatedAt}
+                                {!error && !isValidating && !!results?.data && (
+                                    <div className="mt-8 space-y-5 lg:mt-0">
+                                        {/* <div className="mt-6 empty:hidden">
+                                            {!!results?.metadata && !!results?.data.length && (
+                                                <Components.Pagination
+                                                    current={Math.ceil(offset / limit + 1)}
+                                                    limit={limit}
+                                                    total={parseInt(results.metadata.total, 10)}
                                                 />
-                                            );
-                                        }
-                                        if (searchType === 'users') {
-                                            return <Components.UserSearchResult key={result.id} id={result.id} />;
-                                        }
-                                    })}
+                                            )}
+                                        </div> */}
 
-                                    <div className="mt-6 empty:hidden">
-                                        {results?.data.length > 5 && (
-                                            <Components.Pagination metadata={results.metadata} />
-                                        )}
+                                        {results?.data.map((result: any, index: number) => {
+                                            if (searchType === 'publications') {
+                                                return (
+                                                    <Components.Delay delay={index * 50}>
+                                                        <Components.PublicationSearchResult
+                                                            key={result.id}
+                                                            id={result.id}
+                                                            title={result.title}
+                                                            createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
+                                                            type={result.type}
+                                                            date={result.updatedAt}
+                                                        />
+                                                    </Components.Delay>
+                                                );
+                                            }
+                                            if (searchType === 'users') {
+                                                return (
+                                                    <Components.Delay delay={index * 50}>
+                                                        <Components.UserSearchResult key={result.id} id={result.id} />
+                                                    </Components.Delay>
+                                                );
+                                            }
+                                        })}
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </Framer.AnimatePresence>
                         </article>
                     </section>
                 </Components.SectionTwo>
