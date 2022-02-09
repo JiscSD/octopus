@@ -159,8 +159,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         const value = e.target.value;
         if (value === 'users') {
             const paramsListCopy = { ...router.query };
-            if (paramsListCopy.hasOwnProperty('type')) delete paramsListCopy.type;
-
+            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
             router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
         if (value === 'publications') {
