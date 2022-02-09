@@ -93,7 +93,7 @@ const Browse: Types.NextPage<Props> = (props): JSX.Element => {
                     <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         <aside className="relative col-span-2 hidden lg:block">
                             <div className="sticky top-28">
-                                <h2 className="mb-2 block font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
+                                <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
                                     Publication type
                                 </h2>
                                 <Components.Link
@@ -102,7 +102,7 @@ const Browse: Types.NextPage<Props> = (props): JSX.Element => {
                                     }?for=publications&type=${Config.values.publicationTypes.join()}`}
                                     className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                 >
-                                    <span className="text-teal-500 transition-colors duration-500 group-hover:text-grey-500 dark:text-teal-300">
+                                    <span className="font-medium text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
                                         All
                                     </span>
                                 </Components.Link>
