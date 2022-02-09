@@ -94,7 +94,7 @@ module.exports = {
             black: '#000000'
         },
         fontFamily: {
-            inter: ['Inter', ...defaultTheme.fontFamily.sans],
+            inter: ['Inter var', ...defaultTheme.fontFamily.sans],
             montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
         },
         extend: {

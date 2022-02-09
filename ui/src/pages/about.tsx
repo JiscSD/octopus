@@ -5,6 +5,7 @@ import Image from 'next/image';
 import * as Framer from 'framer-motion';
 import ClickAwayListener from 'react-click-away-listener';
 import * as OutlineIcons from '@heroicons/react/outline';
+import parse from 'html-react-parser';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -32,25 +33,27 @@ const About: NextPage<Props> = (props): JSX.Element => {
     const heroContents = [
         {
             id: 'publish_freely',
-            heading: 'Publish freely',
+            heading: 'Free and quick to publish',
             content:
-                'Upload your publications when they are done. No need to wait around until you have a full scientific paper ready.'
+                'Octopus is designed to help researchers get their work published quickly, easily and freely. Break away from the tyranny of ‘papers’ and publish your work faster! '
         },
         {
             id: 'establish_priority',
-            heading: 'Establish priority',
-            content: 'Stake your claim on an idea early, and establish your interests.'
+            heading: 'Establish your priority',
+            content:
+                'No need to worry about being &apos;scooped&apos; - once you’ve published an idea, or a protocol in Octopus you have established your priority. That work now has your name and date on it for everyone to see. '
         },
         {
-            id: 'quick_peer_reviews',
-            heading: 'Quick peer reviews',
-            content: 'Scientific ideas and findings should be shared as quickly as possible.'
+            id: 'relevant_work',
+            heading: 'Find relevant work',
+            content:
+                'All publications in Octopus are linked, forming branching chains. If you subscribe to a particular research problem you can easily see all work linked to it.'
         },
         {
             id: 'meritocracy',
-            heading: 'Meritocracy',
+            heading: 'Get the credit you deserve',
             content:
-                "Scientific work should be judged on its merits, and not on how good a 'story' it tells: and so should scientific researchers."
+                'All your work in Octopus, including reviews that you write, are displayed on your personal page for others to see, along with ratings that others have given them.'
         }
     ];
 
@@ -327,7 +330,53 @@ const About: NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.about.title}</title>
             </Head>
 
-            <Layouts.Standard fixedHeader={true}>
+            <Layouts.Standard fixedHeader={false}>
+                <Components.Section
+                    id="search"
+                    className="bg-teal-50 dark:bg-grey-800"
+                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
+                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                    waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
+                >
+                    <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
+                        <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
+                            <h1 className="mb-10 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
+                                Learn about Octopus.
+                            </h1>
+                            <h2 className="mx-auto mb-14 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-2xl">
+                                A new way to publish your scientific work that is fast, free and fair.
+                            </h2>
+                        </div>
+                        <div className="m-auto grid grid-cols-1 lg:w-9/12 lg:grid-cols-12 lg:gap-16 xl:w-10/12">
+                            {heroContents.map((heroContent) => (
+                                <div className="col-span-12 lg:col-span-6 2xl:col-span-3" key={heroContent.id}>
+                                    <h3 className="mb-2 block font-montserrat text-lg font-medium text-grey-700 underline decoration-teal-300 decoration-2">
+                                        {heroContent.heading}
+                                    </h3>
+                                    <p className="mb-10 block text-sm leading-6 tracking-wide">
+                                        {parse(heroContent.content)}
+                                    </p>
+                                </div>
+                            ))}
+                            <p className="col-span-12 text-center font-montserrat text-lg leading-relaxed text-grey-700 lg:text-xl">
+                                It&apos;s easy for institutions and funders to see exactly what you&apos;ve done and how
+                                its&apos; been regarded by others.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="container mx-auto gap-6 px-8 pb-10">
+                        <Components.HTMLVideo
+                            srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
+                            srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
+                            title="A quick introduction to Octopus: the new primary research record for science"
+                            showCaption={false}
+                            controls={true}
+                            poster="/images/jpg/poster.jpg"
+                            width={1024}
+                            className="mx-auto !w-fit bg-transparent"
+                        />
+                    </div>
+                </Components.Section>
                 <Components.Section
                     className="bg-gradient-to-t from-teal-200 to-teal-50 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-800"
                     waveFillTop="fill-teal-300 dark:fill-grey-500 transition-colors duration-500"
@@ -346,17 +395,6 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 poster="/images/jpg/poster.jpg"
                                 width={800}
                             />
-                        </div>
-
-                        <div className="m-auto grid max-w-4xl grid-cols-1 pt-6 text-center md:grid-cols-4 md:gap-8">
-                            {heroContents.map((heroContent) => (
-                                <div key={heroContent.id}>
-                                    <h2 className="mb-2 block font-montserrat text-2xl font-bold ">
-                                        {heroContent.heading}
-                                    </h2>
-                                    <p className="mb-10 block text-base ">{heroContent.content}</p>
-                                </div>
-                            ))}
                         </div>
                     </section>
                 </Components.Section>
