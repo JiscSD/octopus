@@ -51,25 +51,29 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${props.publication.url_slug}`} />
                 <title>{`${props.publication.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>
-            <Layouts.Standard fixedHeader={true}>
+            <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
                     className="bg-teal-50 dark:bg-grey-800"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
+                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <header className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-8 lg:gap-4 lg:pt-36">
-                        <div className="lg:col-span-6">
+                    <header className="container mx-auto grid grid-cols-1 px-8 py-8 lg:grid-cols-12 lg:gap-4 lg:pb-24 lg:pt-16">
+                        <div className="lg:col-span-8">
                             <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
                                 {Helpers.formatPublicationType(props.publication.type)}
                             </span>
-                            <h1 className="mb-8 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-4xl xl:leading-normal">
+                            <h1 className="mb-20 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
                                 {props.publication.title}
                             </h1>
-                            <span className="mb-8 block tracking-wider text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                DOI: <span className="font-medium text-teal-500">{props.publication.doi}</span>
-                            </span>
-                            <div className="mb-12 print:hidden lg:flex">
+
+                            <div className="print:hidden lg:flex">
+                                <span className="mr-16 flex self-center font-bold tracking-wider text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    DOI
+                                    <span className="ml-2 block font-medium text-teal-500">
+                                        {props.publication.doi}
+                                    </span>
+                                </span>
                                 <Components.ActionButton
                                     title="Write a review"
                                     icon={
@@ -84,21 +88,14 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                     className="mr-6 mb-4 lg:mb-0"
                                 />
                             </div>
-                            {/* <Components.Link
-                                href={`${Config.urls.createFlag.path}?for=${props.publication.id}`}
-                                className="flex w-fit items-center rounded border-transparent text-xs font-bold text-pink-500 outline-0 focus:ring-2 focus:ring-yellow-400 print:hidden"
-                            >
-                                <span>Report this publication</span>
-                                <FlagIcon className="ml-2 h-3 w-3" />
-                            </Components.Link> */}
                         </div>
-                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-2 lg:mt-0 lg:mb-0 lg:justify-end">
+                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-4 lg:mt-0 lg:mb-0">
                             <Components.PublicationRatings publication={props.publication} />
                         </aside>
                     </header>
 
                     <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                        <aside className="col-span-2 hidden pt-24 lg:block">
+                        <aside className="col-span-2 hidden lg:block">
                             <Components.PublicationSidebar
                                 jumpToList={[
                                     { title: 'Authors', href: 'authors' },
