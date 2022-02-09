@@ -46,6 +46,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             focus:opacity-95
             focus:ring-2
             focus:ring-yellow-500
+            dark:border-grey-600
             dark:bg-grey-700
             lg:grid-cols-12
             ${props.className ? props.className : ''}
@@ -59,7 +60,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
                     {props.title}
                 </h2>
 
-                <p className="mb-4 block text-xs text-grey-700">
+                <p className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, fugiat perspiciatis officia voluptates
                     aliquam delectus odio dolor ipsum modi repellat et corporis, necessitatibus quia vitae officiis quae
                     maxime repudiandae qui. Saepe atque eius tempora ut laboriosam? Consequuntur...

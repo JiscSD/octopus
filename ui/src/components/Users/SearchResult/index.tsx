@@ -41,16 +41,19 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
                 focus:opacity-95
                 focus:ring-2
                 focus:ring-yellow-500
+                dark:border-grey-600
                 dark:bg-grey-700
                 lg:grid-cols-12
                 ${props.className ? props.className : ''}
                 `}
             >
                 <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
-                <span className="col-span-6 flex h-full items-center font-medium">
+                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white">
                     {props.user.firstName}. {props.user.lastName}
                 </span>
-                <span className="col-span-4 flex h-full items-center font-light lg:col-span-3">Some meta here?</span>
+                <span className="col-span-4 flex h-full items-center font-light text-grey-600 transition-colors duration-500 dark:text-grey-100 lg:col-span-3">
+                    Some meta here?
+                </span>
                 <OutlineIcons.ChevronRightIcon className="col-span-1 hidden h-5 w-5 self-center justify-self-end text-teal-400 lg:block" />
             </Components.Link>
         </Framer.motion.div>

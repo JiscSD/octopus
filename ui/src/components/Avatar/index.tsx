@@ -10,11 +10,11 @@ type Props = {
 const Avatar: React.FC<Props> = (props): JSX.Element => {
     return (
         <div
-            className={`flex h-14 w-14 items-center justify-center rounded-full border-2 border-teal-500 ${
+            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 border-teal-500 ${
                 props.className ? props.className : ''
             }`}
         >
-            <span className="font-montserrat font-semibold leading-none tracking-tighter text-grey-800">
+            <span className="font-montserrat font-semibold leading-none tracking-tighter text-grey-800 transition-colors duration-500 dark:text-white">
                 {props.user.firstName[0]} {props.user.lastName[0]}
             </span>
         </div>

@@ -330,12 +330,9 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                         </div> */}
 
                                         {results?.data.map((result: any, index: number) => {
-                                            let classes;
-                                            index === 0
-                                                ? (classes = 'rounded-t-lg')
-                                                : index === results.data.length - 1
-                                                ? (classes = 'rounded-b-lg')
-                                                : (classes = '');
+                                            let classes = '';
+                                            index === 0 ? (classes += 'rounded-t-lg ') : null;
+                                            index === results.data.length - 1 ? (classes += 'rounded-b-lg') : null;
 
                                             if (searchType === 'publications') {
                                                 return (
