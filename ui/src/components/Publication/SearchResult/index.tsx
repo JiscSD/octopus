@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -21,24 +22,21 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ type: 'tween', duration: 2 }}
+        transition={{ type: 'tween', duration: 0.35 }}
     >
         <Components.Link
             href={`${Config.urls.viewPublication.path}/${props.id}`}
             className={`
-            relative
             grid
             min-h-[4rem]
             grid-cols-1
             items-start
             overflow-hidden
-            rounded-md
-            border
-            border-transparent
+            border-b
+            border-grey-50
             bg-white
             py-4
             px-4
-            shadow
             outline-0
             transition-all
             duration-500
@@ -48,32 +46,32 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             focus:opacity-95
             focus:ring-2
             focus:ring-yellow-500
-            dark:border-grey-700
             dark:bg-grey-700
-            dark:shadow-none
             lg:grid-cols-12
-            ${props.className && props.className}
+            ${props.className ? props.className : ''}
             `}
         >
-            <Assets.Logo
-                height={128}
-                width={128}
-                className="absolute -right-3 top-2 z-10 mr-8 rotate-12 fill-grey-400 opacity-10 transition-colors duration-500 dark:fill-grey-900"
-            />
-
-            <div className="z-10 col-span-10 w-full">
-                <h2 className="col-span-7 mb-4 font-montserrat leading-7 text-grey-800 transition-colors duration-500 dark:text-white">
+            <div className="z-10 col-span-11 w-full">
+                <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-500">
+                    {Helpers.formatPublicationType(props.type)}
+                </span>
+                <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white">
                     {props.title}
                 </h2>
-                <span className="flex text-xs tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-100">
-                    Published by {props.createdBy}, {Helpers.formatDate(props.date)}
+
+                <p className="mb-4 block text-xs text-grey-700">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, fugiat perspiciatis officia voluptates
+                    aliquam delectus odio dolor ipsum modi repellat et corporis, necessitatibus quia vitae officiis quae
+                    maxime repudiandae qui. Saepe atque eius tempora ut laboriosam? Consequuntur...
+                </p>
+
+                <span className="flex text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                    Published {Helpers.relativeDate(props.date)}, by {props.createdBy}
                 </span>
             </div>
 
-            <div className="col-span-2 mt-4 lg:mt-0">
-                <span className="leading-0 col-span-1 block font-montserrat text-sm font-semibold tracking-wide text-teal-500 lg:text-right">
-                    {Helpers.formatPublicationType(props.type)}
-                </span>
+            <div className="col-span-1 mt-4 flex h-full w-full items-center justify-end lg:mt-0">
+                <OutlineIcons.ChevronRightIcon className="h-5 w-5 text-teal-400" />
             </div>
         </Components.Link>
     </Framer.motion.div>

@@ -318,7 +318,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                 )}
 
                                 {!error && !isValidating && !!results?.data && (
-                                    <div className="mt-8 space-y-5 lg:mt-0">
+                                    <div className="mt-8 lg:mt-0">
                                         {/* <div className="mt-6 empty:hidden">
                                             {!!results?.metadata && !!results?.data.length && (
                                                 <Components.Pagination
@@ -330,6 +330,13 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                         </div> */}
 
                                         {results?.data.map((result: any, index: number) => {
+                                            let classes;
+                                            index === 0
+                                                ? (classes = 'rounded-t-lg')
+                                                : index === results.data.length - 1
+                                                ? (classes = 'rounded-b-lg')
+                                                : (classes = '');
+
                                             if (searchType === 'publications') {
                                                 return (
                                                     <Components.Delay delay={index * 50}>
@@ -340,6 +347,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                                             createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
                                                             type={result.type}
                                                             date={result.updatedAt}
+                                                            className={classes}
                                                         />
                                                     </Components.Delay>
                                                 );
@@ -347,7 +355,11 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                             if (searchType === 'users') {
                                                 return (
                                                     <Components.Delay delay={index * 50}>
-                                                        <Components.UserSearchResult key={result.id} id={result.id} />
+                                                        <Components.UserSearchResult
+                                                            key={result.id}
+                                                            user={result}
+                                                            className={classes}
+                                                        />
                                                     </Components.Delay>
                                                 );
                                             }
