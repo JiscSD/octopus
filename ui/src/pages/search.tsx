@@ -392,7 +392,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     <Components.Alert
                                         severity="ERROR"
                                         title={error}
-                                        details={['Please refer to our support page']}
+                                        details={['Placeholder support text here']}
                                     />
                                 )}
 
@@ -400,16 +400,13 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     <Components.Alert
                                         severity="INFO"
                                         title="No results found"
-                                        details={[
-                                            'Some helpfuls informaiton here',
-                                            'Some more helpful information here'
-                                        ]}
+                                        details={['Placeholder support text here', 'Placeholder support text here']}
                                     />
                                 )}
 
                                 {!error && !isValidating && !!results?.data && (
                                     <>
-                                        {results?.data.map((result: any, index: number) => {
+                                        {results.data.map((result: any, index: number) => {
                                             let classes = '';
                                             index === 0 ? (classes += 'rounded-t-lg ') : null;
                                             index === results.data.length - 1 ? (classes += 'rounded-b-lg') : null;
@@ -442,7 +439,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                             }
                                         })}
 
-                                        {!isValidating && !!results?.data.length && (
+                                        {!isValidating && !!results.data.length && (
                                             <Components.Delay delay={results.data.length * 50}>
                                                 <Framer.motion.div
                                                     initial={{ opacity: 0 }}
