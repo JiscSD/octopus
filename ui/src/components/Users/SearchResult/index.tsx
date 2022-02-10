@@ -52,7 +52,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
                     {props.user.firstName}. {props.user.lastName}
                 </span>
                 <span className="col-span-4 flex h-full items-center font-light text-grey-600 transition-colors duration-500 dark:text-grey-100 lg:col-span-3">
-                    Some meta here?
+                    {props.user.orcid}
                 </span>
                 <OutlineIcons.ChevronRightIcon className="col-span-1 hidden h-5 w-5 self-center justify-self-end text-teal-400 lg:block" />
             </Components.Link>
