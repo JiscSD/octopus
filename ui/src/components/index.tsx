@@ -32,6 +32,7 @@ export { default as CommandPalette } from './CommandPalette';
 export { default as CommandPaletteResult } from './CommandPalette/Result';
 export { default as Overlay } from './Overlay';
 export { default as UserSearchResult } from './Users/SearchResult';
+export { default as UserBreakdown } from './Users/Breakdown';
 export { default as PageTitle } from './PageTitle';
 export { default as Alert } from './Alert';
 export { default as Pagination } from './Pagination';
