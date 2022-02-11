@@ -20,6 +20,13 @@ export const formatDate = (value: string): string => {
 };
 
 /**
+ * @description Formats a ISO string date to a relative to now string
+ */
+export const relativeDate = (value: string): string | null => {
+    return luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
+};
+
+/**
  * @description Format a publication type returned from the DB
  */
 export const formatPublicationType = (value: string): string => {

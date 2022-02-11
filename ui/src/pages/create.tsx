@@ -1,17 +1,18 @@
-import { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+import * as Router from 'next/router';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
-const Create: NextPage = (): JSX.Element => {
+const Create: Types.NextPage = (): JSX.Element => {
     /**
      * TODO
      * - Check for query param PUBLICATION_TYPE
      */
-    const router = useRouter();
+    const router = Router.useRouter();
+
     return (
         <>
             <Head>

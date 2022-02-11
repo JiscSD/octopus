@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Sidebar: React.FC<Props> = (props): JSX.Element => (
-    <div className="sticky top-28">
+    <div className="sticky top-16">
         <span className="mb-6 block border-b border-grey-200 pb-6 font-montserrat font-semibold text-grey-700 transition-colors duration-500 dark:text-grey-50">
             Jump to:
         </span>

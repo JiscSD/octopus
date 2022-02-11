@@ -1,11 +1,11 @@
-import { NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
-const About: NextPage = (): JSX.Element => {
+const About: Types.NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
