@@ -48,8 +48,6 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
-    console.log(props.publication);
-
     React.useEffect(() => showCmdPalette && toggleCmdPalette(), []);
 
     return (

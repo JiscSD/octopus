@@ -36,10 +36,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
     const toggleSearchType = () =>
         searchType === 'publications' ? setSearchType('users') : setSearchType('publications');
 
-    const handleGoToSearchResults = () => {
-        toggleCmdPalette();
-        router.push(`${Config.urls.search.path}?for=${searchType}&query=${query}`);
-    };
+    const handleGoToSearchResults = () => router.push(`${Config.urls.search.path}?for=${searchType}&query=${query}`);
 
     React.useEffect(() => {
         if (showCmdPalette) {

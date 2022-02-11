@@ -52,3 +52,7 @@ export const setOSKey = (): string | JSX.Element => {
         return 'Ctrl-K';
     }
 };
+
+export const percentage = (partialValue: number, totalValue: number) => {
+    return (100 * partialValue) / totalValue;
+};
