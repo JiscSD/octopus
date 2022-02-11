@@ -21,14 +21,18 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
         <div className="relative mr-4 h-8 w-8">
             <button
                 aria-label="Mobile Navigation Menu"
-                onClick={(e) => toggle()}
+                onClick={(e) => setOpen((prevState) => !prevState)}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 <MenuIcon className={`h-8 w-8 text-white ${open && 'text-grey-100'} transition-all `} />
             </button>
             <AnimatePresence>
                 {open && (
-                    <ClickAwayListener onClickAway={toggle}>
+                    <ClickAwayListener
+                        onClickAway={() => {
+                            setOpen(false);
+                        }}
+                    >
                         <motion.nav
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
