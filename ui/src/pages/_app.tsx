@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SWR from 'swr';
+import NextNprogress from 'nextjs-progressbar';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -41,30 +42,43 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     }, []);
 
     return (
-        !loading && (
-            <SWR.SWRConfig
-                value={{
-                    fetcher: (resource) => API.get(resource),
-                    fallback: pageProps.fallback,
-                    errorRetryCount: 3,
-                    refreshInterval: 60000, // for dev
-                    onError: (error, key) => {
-                        if (error.status === 403) {
-                            console.log('403 error');
-                        }
-
-                        if (error.status === 401) {
-                            console.log('401 error');
-                        }
-                    }
+        <>
+            <NextNprogress
+                color={darkMode ? '#34a4b1' : '#c4e9ee'}
+                startPosition={0.3}
+                stopDelayMs={200}
+                height={3}
+                showOnShallow={false}
+                options={{
+                    showSpinner: false
                 }}
-            >
-                <div className={`font-inter antialiased ${darkMode ? 'dark' : ''} `}>
-                    <Components.CommandPalette />
-                    <Component {...pageProps} />
-                </div>
-            </SWR.SWRConfig>
-        )
+            />
+            {!loading && (
+                <SWR.SWRConfig
+                    value={{
+                        fetcher: (resource) => API.get(resource),
+                        fallback: pageProps.fallback,
+                        errorRetryCount: 3,
+                        refreshInterval: 60000, // for dev
+                        onError: (error, key) => {
+                            if (error.status === 403) {
+                                console.log('403 error');
+                            }
+
+                            if (error.status === 401) {
+                                console.log('401 error');
+                            }
+                        }
+                    }}
+                >
+                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''} `}>
+                        <Components.CommandPalette />
+
+                        <Component {...pageProps} />
+                    </div>
+                </SWR.SWRConfig>
+            )}
+        </>
     );
 };
 

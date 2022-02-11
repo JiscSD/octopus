@@ -25,7 +25,7 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             <div className="overflow-hidden">
                 <div
                     ref={container}
-                    className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none pt-2 pb-6 sm:snap-none"
+                    className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none pt-2 pb-6 pl-[2px] sm:snap-none"
                 >
                     {props.publications.map((publication: Interfaces.Publication, index: number) => (
                         <div key={index} className="mr-10 min-w-[300px] snap-center sm:snap-align-none">

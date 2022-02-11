@@ -39,6 +39,8 @@ export interface User {
     id: string;
     firstName: string;
     lastName: string;
+    orcid: string;
+    Publication: Publication[];
 }
 
 export interface SearchResults {
