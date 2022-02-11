@@ -26,7 +26,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
         isValidating
     } = useSWR(`/${searchType}?search=${query}&limit=10`, null, {
         fallback: {
-            '/publications': ''
+            '/publications': []
         },
         revalidateIfStale: false,
         revalidateOnFocus: false,
