@@ -335,40 +335,44 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         waveFillMiddle="fill-teal-100 dark:fill-grey-700 transition-colors duration-500"
                         waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
                     >
-                        <div className="container mx-auto w-10/12 px-8 py-16 text-grey-900 dark:text-white lg:py-24">
+                        <div className="container mx-auto w-10/12 px-8 pt-32 pb-10 text-grey-900 dark:text-white">
                             <h2 className="mx-auto mb-12 block font-montserrat text-3xl font-bold lg:col-span-2">
-                                Principles of Octopus:
+                                Principles of Octopus
                             </h2>
                             <div className="mx-auto block text-2xl xl:mb-12">
                                 <ul>
-                                    <li className="mb-6 flex">
-                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                        <span>Knowledge should not be locked behind paywalls.</span>
+                                    <li className="mb-12 flex gap-4">
+                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                        <span className="pt-1 font-montserrat font-medium">
+                                            Knowledge should not be locked behind paywalls.
+                                        </span>
                                     </li>
-                                    <li className="mb-6 flex">
-                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                        <span>New ideas and findings should be shared as quickly as possible.</span>
+                                    <li className="mb-12 flex gap-4">
+                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                        <span className="pt-1 font-montserrat font-medium">
+                                            New ideas and findings should be shared as quickly as possible.
+                                        </span>
                                     </li>
-                                    <li className="mb-6 flex">
-                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                        <span>
+                                    <li className="mb-12 flex gap-4">
+                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                        <span className="pt-1 font-montserrat font-medium">
                                             Work should be accessible for people to share and read, regardless of the
                                             languages they speak.
                                         </span>
                                     </li>
-                                    <li className="mb-24 flex">
-                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                        <span>
+                                    <li className="mb-24 flex gap-4">
+                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                        <span className="pt-1 font-montserrat font-medium">
                                             Work should be judged on its merits, not on how good a &apos;story&apos;
                                             researchers can write about it.
                                         </span>
                                     </li>
                                 </ul>
                             </div>
-                            <p className="mb-2 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                            <p className="mb-2 font-montserrat text-xl font-medium leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
                                 Do you feel like these principles align with your own?
                             </p>
-                            <p className="mb-8 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                            <p className="mb-12 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
                                 You can help to support Octopus by joining our user community.
                             </p>
                             <Components.Button href="#" title="Join our user community" />
@@ -382,30 +386,40 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         waveFillMiddle="fill-teal-500 dark:fill-grey-700 transition-colors duration-500"
                         waveFillBottom="fill-teal-400 dark:fill-grey-800 transition-colors duration-500"
                     >
-                        <div className="container mx-auto w-10/12 px-8 pt-16 text-grey-900 dark:text-white">
-                            <h2 className="mx-auto mb-12 block pt-10 text-center font-montserrat text-3xl font-bold lg:col-span-2">
+                        <div className="container mx-auto px-8 pt-20">
+                            <h2 className="mx-auto mb-6 block w-fit font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-white lg:mb-16">
                                 How do I use Octopus?
                             </h2>
-                            <div className="col-span-1 mb-20 grid grid-cols-2 gap-8 text-center lg:col-span-2">
-                                <div className="col-span-1">
-                                    <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                            <div className="mx-auto mb-20 grid w-7/12 grid-cols-1 gap-8 lg:grid-cols-2">
+                                <Components.Paper>
+                                    <OutlineIcons.DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
+                                    <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                         To read publications
                                     </h3>
-                                    <p className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg">
-                                        Anyone can read any Octopus publication.
+                                    <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                                        Anyone can read any Octopus publication, you don&apos;t need to log in.
                                     </p>
-                                </div>
-                                <div className="col-span-1">
-                                    <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                                    <Components.ExtendedLink
+                                        href={Config.urls.browsePublications.path}
+                                        title="Browse publications"
+                                    />
+                                </Components.Paper>
+                                <Components.Paper>
+                                    <OutlineIcons.PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
+                                    <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                         To write publications
                                     </h3>
-                                    <p className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg">
-                                        To write and review publications, log in via your ORCiD account.
+                                    <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                                        Log in via your ORCiD account in order to write and review publications.
                                     </p>
-                                </div>
+                                    <Components.ExtendedLink
+                                        href={Config.urls.createPublication.path}
+                                        title="Publish your work"
+                                    />
+                                </Components.Paper>
                             </div>
                             <div className="container mx-auto px-8">
-                                <ul className="mx-auto w-10/12">
+                                <ul className="mx-auto w-9/12 pr-10">
                                     <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
                                         <OutlineIcons.StarIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:text-white" />
                                         <span className="col-span-11">
@@ -419,7 +433,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                     <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
                                         <OutlineIcons.FlagIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-peach-400 transition-colors duration-500 dark:text-white" />
                                         <span className="col-span-11">
-                                            To ensure academic integrity concerns about any publication can be &apos;red
+                                            To ensure academic integrity concerns, any publication can be &apos;red
                                             flagged&apos; by a logged-in user. This red flag will be visible on the
                                             publication page and will alert the authors to allow them to resolve any
                                             issues. Once the issue is resolved, the red flag can be removed by the
@@ -437,19 +451,17 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                     >
                         {/* Frequently asked questions section */}
-                        <div id="faq">
-                            <section className="container flex w-10/12 flex-col gap-6 rounded-xl px-2 pt-2 md:px-8 md:py-12 lg:mx-32">
-                                <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
-                                    Frequently asked questions
-                                </h2>
-                                {faqContents?.map((faqContent) => (
-                                    <Components.Accordion
-                                        key={faqContent.id}
-                                        heading={faqContent.heading}
-                                        content={faqContent.content}
-                                    />
-                                ))}
-                            </section>
+                        <div className="container mx-auto flex w-8/12 flex-col gap-6 px-8 py-16">
+                            <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
+                                Frequently asked questions
+                            </h2>
+                            {faqContents?.map((faqContent) => (
+                                <Components.Accordion
+                                    key={faqContent.id}
+                                    heading={faqContent.heading}
+                                    content={faqContent.content}
+                                />
+                            ))}
                         </div>
                     </Components.SectionTwo>
                 </main>
