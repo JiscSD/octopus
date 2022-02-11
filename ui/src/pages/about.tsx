@@ -15,9 +15,8 @@ type Content = {
 };
 
 type Props = {
-    heroContents: [{ id: string; heading: string; contents: string }];
-    sectionOneContents: [{ id: string; heading: string; contents: string }];
-    sectionTwoContents: [{ id: string; heading: string; contents: string }];
+    heroContents: [{ id: string; heading: string; content: string }];
+    publicationTypes: [{ id: string; icon: React.ReactElement; heading: string; content: string }];
 };
 
 // Content for sections stored here.
@@ -51,70 +50,77 @@ const heroContents = [
 const publicationTypes = [
     {
         id: 'problem',
-        heading: 'Research Problem',
-        content: 'a neatly defined scientific problem.',
         icon: (
-            <OutlineIcons.SparklesIcon className="mb-2 block h-8 w-8 text-yellow-700 transition-colors duration-500 dark:text-white" />
-        )
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 1,
+        heading: 'Research Problem',
+        content: 'a neatly defined scientific problem.'
     },
     {
         id: 'hypothesis',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 2,
         heading: 'Hypothesis/Rationale',
         content:
             'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
     },
     {
         id: 'method',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 3,
         heading: 'Methods/Protocols',
         content: 'a practical method of testing an existing published Hypothesis.'
     },
     {
         id: 'data',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 4,
         heading: 'Data/Results',
         content:
             'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
     },
     {
         id: 'analysis',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 5,
         heading: 'Analysis',
         content: 'a statistical or thematic analysis of existing published Data or Results.'
     },
     {
         id: 'interpretation',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 6,
         heading: 'Interpretation',
         content: 'a discussion around an existing published Analysis.'
     },
     {
         id: 'implementation',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 7,
         heading: 'Real-world Implementation',
         content: 'real world applications arising from an existing published Interpretation.'
     },
     {
         id: 'peer_review',
+        icon: (
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+        ),
+        linkNumber: 8,
         heading: 'Peer Review',
         content: 'a considered, detailed review of any of the above kinds of publication.'
-    }
-];
-
-const howDoIUseOctopusContents = [
-    {
-        id: 1,
-        content: 'Establish priority on your ideas and your work instantly. You can publish a paper later.'
-    },
-    {
-        id: 2,
-        content:
-            'Publish work that you cannot publish elsewhere: hypotheses, small data sets, methods, peer reviews. Get credit for it, and let the scientific community benefit.'
-    },
-    {
-        id: 3,
-        content:
-            "No need to write a whole 'paper'. You only need to write up what is new: Octopus is fast and efficient"
-    },
-    {
-        id: 4,
-        content:
-            'Everything you do within Octopus - and how it is received by your peers - will appear on your public profile page, for funders, institutions and other researchers to see.'
     }
 ];
 
@@ -207,138 +213,220 @@ const About: NextPage<Props> = (props): JSX.Element => {
             </Head>
 
             <Layouts.Standard fixedHeader={false}>
-                <Components.SectionTwo
-                    id="search"
-                    className="bg-teal-50 dark:bg-grey-800"
-                    waveFillTop="fill-teal-200 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-100 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-50 dark:fill-grey-900 transition-colors duration-500"
-                >
-                    <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
-                        <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                            <h1 className="mb-10 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
-                                Learn about Octopus.
-                            </h1>
-                            <h2 className="mx-auto mb-28 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-2xl">
-                                A new way to publish your scientific work that is fast, free and fair.
+                <main>
+                    <Components.Section
+                        id="learn_about_octopus"
+                        className="bg-teal-50 dark:bg-grey-800"
+                        waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
+                        waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                        waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
+                    >
+                        <section>
+                            <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
+                                <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
+                                    <h1 className="mb-10 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
+                                        Learn about Octopus.
+                                    </h1>
+                                    <h2 className="mx-auto mb-28 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-2xl">
+                                        A new way to publish your scientific work that is fast, free and fair.
+                                    </h2>
+                                </div>
+                                <div className="m-auto mb-28 grid grid-cols-1 lg:w-9/12 lg:grid-cols-12 lg:gap-10 xl:w-10/12">
+                                    {heroContents.map((heroContent) => (
+                                        <div className="col-span-12 lg:col-span-6 2xl:col-span-3" key={heroContent.id}>
+                                            <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 underline decoration-teal-300 decoration-2">
+                                                {heroContent.heading}
+                                            </h3>
+                                            <p className=" block leading-6 tracking-wide text-grey-700">
+                                                {parse(heroContent.content)}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="container mx-auto mb-4 gap-6 px-8 lg:mb-16">
+                                <Components.HTMLVideo
+                                    srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
+                                    srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
+                                    title="A quick introduction to Octopus: the new primary research record for science"
+                                    showCaption={false}
+                                    controls={true}
+                                    poster="/images/jpg/poster.jpg"
+                                    width={1024}
+                                    className="mx-auto !w-fit bg-transparent"
+                                />
+                            </div>
+                            <div className="container mx-auto px-8">
+                                <ul className="mx-auto w-8/12">
+                                    <li className="mb-8 flex min-h-[3rem] items-start pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.EyeIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>
+                                            Easy for institutions and funders to see exactly what you&apos;ve done and
+                                            how it has been regarded by others.
+                                        </span>
+                                    </li>
+                                    <li className="mb-8 flex min-h-[3rem] pb-2 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.SparklesIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white " />
+                                        <span>
+                                            Designed to recognise and reward good practice and serves the needs of both
+                                            researchers and the global research endeavour itself.
+                                        </span>
+                                    </li>
+                                    <li className="mb-8 flex min-h-[3rem] basis-7 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.UserCircleIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>
+                                            Free for researchers to publish their work, free for anyone to read and
+                                            embeds the principles of openness and transparency throughout.
+                                        </span>
+                                    </li>
+                                    <li className="mb-20 flex min-h-[3rem] basis-7 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.ShareIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>
+                                            Work can be shared in full detail with no &apos;spin&apos;, encouraging a
+                                            new culture of collaboration and constructive critique.
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <Assets.Logo className="my-24 mx-auto" height={70} width={70} />
+                        <section>
+                            <h2 className="mx-auto mb-24 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-3xl">
+                                What makes Octopus different?
                             </h2>
-                        </div>
-                        <div className="m-auto mb-28 grid grid-cols-1 lg:w-9/12 lg:grid-cols-12 lg:gap-10 xl:w-10/12">
-                            {heroContents.map((heroContent) => (
-                                <div className="col-span-12 lg:col-span-6 2xl:col-span-3" key={heroContent.id}>
-                                    <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-600 underline decoration-teal-300 decoration-2">
-                                        {heroContent.heading}
-                                    </h3>
-                                    <p className=" block leading-6 tracking-wide  text-grey-600">
-                                        {parse(heroContent.content)}
+                            <div className="container m-auto mb-20 grid grid-cols-1 px-8 lg:w-9/12 lg:grid-cols-12 lg:gap-16 xl:w-10/12">
+                                {publicationTypes.map((publicationType) => (
+                                    <div
+                                        className="col-span-12 rounded-lg border-2 border-white p-4 shadow lg:col-span-6 2xl:col-span-3"
+                                        key={publicationType.id}
+                                    >
+                                        <div className="mb-2 flex gap-1">
+                                            {publicationType.icon}
+                                            <span className="text-lg font-semibold text-yellow-700">
+                                                {publicationType.linkNumber}
+                                            </span>
+                                        </div>
+                                        <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                                            {publicationType.heading}
+                                        </h3>
+                                        <p className="mb-10 block leading-6 tracking-wide">
+                                            {parse(publicationType.content)}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="container mx-auto px-8">
+                                <div className="mx-auto w-10/12">
+                                    <h4 className="text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white">
+                                        Smaller units of publication encourage faster sharing, easier publication
+                                        writing, and smaller author groups.
+                                    </h4>
+                                    <p className="mb-12 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white">
+                                        Allowing researchers to get more meaningful credit for what they&apos;ve done.
                                     </p>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="container mx-auto mb-4 gap-6 px-8 lg:mb-16">
-                        <Components.HTMLVideo
-                            srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
-                            srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
-                            title="A quick introduction to Octopus: the new primary research record for science"
-                            showCaption={false}
-                            controls={true}
-                            poster="/images/jpg/poster.jpg"
-                            width={1024}
-                            className="mx-auto !w-fit bg-transparent"
-                        />
-                    </div>
-                    <div className="container mx-auto px-8">
-                        <ul className="mx-auto w-8/12">
-                            <li className="mb-4 flex min-h-[3rem] items-start pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                <OutlineIcons.EyeIcon className="mr-4 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                <span>
-                                    It&apos;s easy for institutions and funders to see exactly what you&apos;ve done and
-                                    how it has been regarded by others.
-                                </span>
-                            </li>
-                            <li className="mb-4 flex min-h-[3rem] pb-2 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                <OutlineIcons.SparklesIcon className="mr-4 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white " />
-                                <span>
-                                    It is designed to recognise and reward good practice and serves the needs of both
-                                    researchers and the global research endeavour itself.
-                                </span>
-                            </li>
-                            <li className="mb-20 flex min-h-[3rem] basis-7 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                <OutlineIcons.UserCircleIcon className="mr-4 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
-                                <span>
-                                    It is free for researchers to publish their work, free for anyone to read and embeds
-                                    the principles of openness and transparency throughout.
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <Assets.Logo className="my-20 mx-auto" height={70} width={70} />
-                    <h2 className="mx-auto mb-14 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-2xl">
-                        What makes Octopus different?
-                    </h2>
-                    <div className="container m-auto grid grid-cols-1 px-8 lg:w-9/12 lg:grid-cols-12 lg:gap-16 xl:w-10/12">
-                        {publicationTypes.map((publicationType) => (
-                            <div className="col-span-12 lg:col-span-6 2xl:col-span-3" key={publicationType.id}>
-                                {publicationType.icon}
-                                <h3 className="mb-2 block font-montserrat text-lg font-medium text-grey-700 underline decoration-teal-300 decoration-2">
-                                    {publicationType.heading}
-                                </h3>
-                                <p className="mb-10 block text-sm leading-6 tracking-wide">
-                                    {parse(publicationType.content)}
-                                </p>
                             </div>
-                        ))}
-                    </div>
-                    <div className="">
-                        <p className="">
-                            These smaller units of publication encourage faster sharing, easier publication writing, and
-                            smaller author groups - allowing researchers to get more meaningful credit for what
-                            they&apos;ve done. It also means that work can be shared in full detail with no
-                            &apos;spin&apos;.
-                        </p>
-                        <p>
-                            This is designed encourage a new culture of collaboration and constructive critique,
-                            resetting the incentive structure in research to reward best practice in every aspect of the
-                            scientific process.
-                        </p>
-                        <p className="text-2xl">These principles underlie our vision for Octopus:</p>
-                        <ul>
-                            <li>Knowledge should not be locked behind paywalls.</li>
-                            <li>New ideas and findings should be shared as quickly as possible.</li>
-                            <li>
-                                Work should be accessible for people to share and read regardless of the languages they
-                                speak.
-                            </li>
-                            <li>
-                                Work should be judged on its merits, not on how good a &apos;story&apos; researchers can
-                                write about it.
-                            </li>
-                        </ul>
-                    </div>
-                </Components.SectionTwo>
-                <main id="content">
+                        </section>
+                    </Components.Section>
+                    <Components.SectionTwo
+                        id="principles_of_octopus"
+                        className="bg-teal-300 dark:bg-grey-900"
+                        waveFillTop="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
+                        waveFillMiddle="fill-teal-100 dark:fill-grey-700 transition-colors duration-500"
+                        waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
+                    >
+                        <div className="container mx-auto w-10/12 px-8 py-16 text-grey-900 dark:text-white lg:py-24">
+                            <h2 className="mx-auto mb-12 block font-montserrat text-3xl font-bold lg:col-span-2">
+                                Principles of Octopus:
+                            </h2>
+                            <div className="mx-auto block text-2xl xl:mb-12">
+                                <ul>
+                                    <li className="mb-6 flex">
+                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>Knowledge should not be locked behind paywalls.</span>
+                                    </li>
+                                    <li className="mb-6 flex">
+                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>New ideas and findings should be shared as quickly as possible.</span>
+                                    </li>
+                                    <li className="mb-6 flex">
+                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>
+                                            Work should be accessible for people to share and read, regardless of the
+                                            languages they speak.
+                                        </span>
+                                    </li>
+                                    <li className="mb-24 flex">
+                                        <OutlineIcons.MinusIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <span>
+                                            Work should be judged on its merits, not on how good a &apos;story&apos;
+                                            researchers can write about it.
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p className="mb-2 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                                Do you feel like these principles align with your own?
+                            </p>
+                            <p className="mb-8 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                                You can help to support Octopus by joining our user community.
+                            </p>
+                            <Components.Button href="#" title="Join our user community" />
+                        </div>
+                    </Components.SectionTwo>
+
                     <Components.Section
-                        className="bg-gradient-to-t from-teal-200 to-teal-50 transition-colors duration-500 dark:bg-gradient-to-t dark:from-grey-800 dark:to-grey-700"
+                        id="using_octopus"
+                        className="bg-teal-50 transition-colors duration-500 dark:bg-grey-700"
                         waveFillTop="fill-teal-600 dark:fill-grey-600 transition-colors duration-500"
                         waveFillMiddle="fill-teal-500 dark:fill-grey-700 transition-colors duration-500"
                         waveFillBottom="fill-teal-400 dark:fill-grey-800 transition-colors duration-500"
                     >
-                        <div className="container mx-auto px-8 py-8 text-grey-800 dark:text-white lg:gap-4 lg:pt-16">
-                            <Components.PageTitle text="How do I use Octopus?" />
-                        </div>
-                        <div className="grid grid-cols-1 gap-8 lg:col-span-6">
-                            <div>
-                                <section className="container mx-auto rounded-xl px-2 pt-2 md:px-8 md:py-12">
-                                    {howDoIUseOctopusContents.map((howDoIUseOctopusContent) => (
-                                        <p
-                                            key={howDoIUseOctopusContent.id}
-                                            className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg"
-                                        >
-                                            {howDoIUseOctopusContent.content}
-                                        </p>
-                                    ))}
-                                </section>
+                        <div className="container mx-auto w-10/12 px-8 pt-16 text-grey-900 dark:text-white">
+                            <h2 className="mx-auto mb-12 block pt-10 text-center font-montserrat text-3xl font-bold lg:col-span-2">
+                                How do I use Octopus?
+                            </h2>
+                            <div className="col-span-1 mb-20 grid grid-cols-2 gap-8 text-center lg:col-span-2">
+                                <div className="col-span-1">
+                                    <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                                        To read publications
+                                    </h3>
+                                    <p className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg">
+                                        Anyone can read any Octopus publication.
+                                    </p>
+                                </div>
+                                <div className="col-span-1">
+                                    <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                                        To write publications
+                                    </h3>
+                                    <p className="mb-6 block font-inter text-grey-900 dark:text-grey-50 md:text-lg">
+                                        To write and review publications, log in via your ORCiD account.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="container mx-auto px-8">
+                                <ul className="mx-auto w-10/12">
+                                    <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.StarIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:text-white" />
+                                        <span className="col-span-11">
+                                            Every publication you write (including reviews) can be rated by others. Your
+                                            activity, including publications, reviews and ratings, will appear on your
+                                            individual author page for everyone to see. Publishing promptly and well,
+                                            and contributing to the community through constructive reviewing, is
+                                            therefore rewarded.
+                                        </span>
+                                    </li>
+                                    <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
+                                        <OutlineIcons.FlagIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-peach-400 transition-colors duration-500 dark:text-white" />
+                                        <span className="col-span-11">
+                                            To ensure academic integrity concerns about any publication can be &apos;red
+                                            flagged&apos; by a logged-in user. This red flag will be visible on the
+                                            publication page and will alert the authors to allow them to resolve any
+                                            issues. Once the issue is resolved, the red flag can be removed by the
+                                            initiating user.
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </Components.Section>
@@ -350,7 +438,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                     >
                         {/* Frequently asked questions section */}
                         <div id="faq">
-                            <section className="container flex w-screen flex-col gap-6 rounded-xl px-2 pt-2 md:px-8 md:py-12 lg:mx-32">
+                            <section className="container flex w-10/12 flex-col gap-6 rounded-xl px-2 pt-2 md:px-8 md:py-12 lg:mx-32">
                                 <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
                                     Frequently asked questions
                                 </h2>
