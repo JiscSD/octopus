@@ -37,6 +37,9 @@
             ],
             "@api": [
                 "./src/lib/api"
+            ],
+            "@documentation": [
+                "./src/lib/documentation"
             ]
         }
     }
