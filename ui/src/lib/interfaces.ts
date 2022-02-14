@@ -63,3 +63,20 @@ export interface SearchQueryParams {
     orderBy?: string;
     orderDirection?: string;
 }
+
+export interface DocumentationEntry {
+    method: string;
+    endpoint: string;
+    id: string;
+    description: string;
+    exampleResponse: unknown;
+    exampleUse: string;
+    queryParameters: DocumentationEntryQueryParams[];
+}
+
+export interface DocumentationEntryQueryParams {
+    name: string;
+    optional: boolean;
+    enums?: Array<string>;
+    description: string;
+}

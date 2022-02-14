@@ -40,3 +40,4 @@ export { default as Delay } from './Delay';
 export { default as Avatar } from './Avatar';
 export { default as ProgressBar } from './Progress/Bar';
 export { default as ProgressCircle } from './Progress/Circle';
+export { default as DocumentationSection } from './Documentation/Section';
