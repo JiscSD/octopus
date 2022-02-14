@@ -1,7 +1,7 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import ClickAwayListener from 'react-click-away-listener';
-import { MenuIcon } from '@heroicons/react/outline';
+import * as Framer from 'framer-motion';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -24,12 +24,12 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                 onClick={(e) => toggle()}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <MenuIcon className={`h-8 w-8 text-white ${open && 'text-grey-100'} transition-all `} />
+                <OutlineIcons.MenuIcon className={`h-8 w-8 text-white ${open && 'text-grey-100'} transition-all `} />
             </button>
-            <AnimatePresence>
+            <Framer.AnimatePresence>
                 {open && (
                     <ClickAwayListener onClickAway={toggle}>
-                        <motion.nav
+                        <Framer.motion.nav
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.25 }}
@@ -48,10 +48,10 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                                     </li>
                                 ))}
                             </ul>
-                        </motion.nav>
+                        </Framer.motion.nav>
                     </ClickAwayListener>
                 )}
-            </AnimatePresence>
+            </Framer.AnimatePresence>
         </div>
     );
 };

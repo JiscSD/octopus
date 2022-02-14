@@ -1,6 +1,5 @@
-import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { DesktopComputerIcon, PencilIcon, SearchIcon } from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -9,13 +8,13 @@ import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {}
     };
 };
 
-const Home: NextPage = (): JSX.Element => {
+const Home: Types.NextPage = (): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
@@ -58,7 +57,7 @@ const Home: NextPage = (): JSX.Element => {
                                     className="flex w-52 items-center justify-between rounded-lg bg-teal-200 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
                                     onClick={(e) => toggleCmdPalette()}
                                 >
-                                    <SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-teal-500" />
+                                    <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-teal-500" />
                                     <span className="font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-grey-50">
                                         Quick search...
                                     </span>
@@ -136,7 +135,7 @@ const Home: NextPage = (): JSX.Element => {
 
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                             <Components.Paper>
-                                <DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
+                                <OutlineIcons.DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
                                 <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Browse publications
                                 </h3>
@@ -150,7 +149,7 @@ const Home: NextPage = (): JSX.Element => {
                                 />
                             </Components.Paper>
                             <Components.Paper>
-                                <SearchIcon className="mb-8 h-10 w-10 text-teal-500" />
+                                <OutlineIcons.SearchIcon className="mb-8 h-10 w-10 text-teal-500" />
                                 <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Search publications
                                 </h3>
@@ -161,7 +160,7 @@ const Home: NextPage = (): JSX.Element => {
                                 <Components.ExtendedLink href={Config.urls.search.path} title="Search publications" />
                             </Components.Paper>
                             <Components.Paper>
-                                <PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
+                                <OutlineIcons.PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
                                 <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Publish your work
                                 </h3>

@@ -1,10 +1,10 @@
 import React from 'react';
-import { ArrowCircleUpIcon } from '@heroicons/react/solid';
-import { motion } from 'framer-motion';
+import * as SolidIcons from '@heroicons/react/solid';
+import * as Framer from 'framer-motion';
 
 const ScrollToTop: React.FC = (): JSX.Element => {
     return (
-        <motion.button
+        <Framer.motion.button
             aria-label="Scroll to Top"
             initial={{ scale: 0.5 }}
             animate={{ scale: 1, type: 'spring' }}
@@ -15,8 +15,8 @@ const ScrollToTop: React.FC = (): JSX.Element => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
         >
-            <ArrowCircleUpIcon className="h-16 w-16 text-grey-800 transition-colors  duration-500 dark:text-teal-500" />
-        </motion.button>
+            <SolidIcons.ArrowCircleUpIcon className="h-16 w-16 text-grey-800 transition-colors  duration-500 dark:text-teal-500" />
+        </Framer.motion.button>
     );
 };
 

@@ -1,26 +1,62 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import * as Framer from 'framer-motion';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Config from '@config';
 
 type Props = {
-    id: string;
+    user: Interfaces.User;
     className?: string;
 };
 
 const SearchResult: React.FC<Props> = (props): JSX.Element => {
     return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <Framer.motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: 'tween', duration: 0.35 }}
+        >
             <Components.Link
-                href={`${Config.urls.viewUser.path}/${props.id}`}
-                className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${props.className}`}
+                href={`${Config.urls.viewUser.path}/${props.user.id}`}
+                className={`
+                grid
+                grid-cols-1
+                items-start
+                gap-4
+                overflow-hidden
+                border-b
+                border-grey-50
+                bg-white
+                py-4
+                px-4
+                outline-0
+                transition-all
+                duration-500
+                hover:opacity-95
+                focus:rounded
+                focus:border-transparent
+                focus:opacity-95
+                focus:ring-2
+                focus:ring-yellow-500
+                dark:border-grey-600
+                dark:bg-grey-700
+                lg:grid-cols-12
+                ${props.className ? props.className : ''}
+                `}
             >
-                <span>{props.id}</span>
+                <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
+                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                    {props.user.firstName}. {props.user.lastName}
+                </span>
+                <span className="col-span-4 flex h-full items-center font-light text-grey-600 transition-colors duration-500 dark:text-grey-100 lg:col-span-3">
+                    {props.user.orcid}
+                </span>
+                <OutlineIcons.ChevronRightIcon className="col-span-1 hidden h-5 w-5 self-center justify-self-end text-teal-400 lg:block" />
             </Components.Link>
-        </motion.div>
+        </Framer.motion.div>
     );
 };
 
