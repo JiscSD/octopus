@@ -7,6 +7,7 @@ interface JumpTo {
 
 type Props = {
     jumpToList: JumpTo[];
+    linkClassNames?: string;
 };
 
 const Sidebar: React.FC<Props> = (props): JSX.Element => (
@@ -18,7 +19,7 @@ const Sidebar: React.FC<Props> = (props): JSX.Element => (
             <a
                 key={jumpTo.href}
                 href={`#${jumpTo.href}`}
-                className="mb-1 block w-fit rounded border-transparent py-1 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
+                className={`mb-1 block w-fit rounded border-transparent py-1 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100 ${props.linkClassNames}`}
             >
                 {jumpTo.title}
             </a>

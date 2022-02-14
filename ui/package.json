@@ -19,6 +19,7 @@
         "format": "npx prettier --write src/"
     },
     "dependencies": {
+        "@atlaskit/code": "^14.3.2",
         "@headlessui/react": "^1.4.3",
         "@heroicons/react": "^1.0.5",
         "@types/lodash": "^4.14.178",
