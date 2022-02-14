@@ -1,12 +1,12 @@
-import { NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
 import * as Docs from '@documentation';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
-const Documentation: NextPage = (): JSX.Element => (
+const Documentation: Types.NextPage = (): JSX.Element => (
     <>
         <Head>
             <meta name="description" content="" />
