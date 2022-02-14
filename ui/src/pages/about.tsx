@@ -51,7 +51,7 @@ const publicationTypes = [
     {
         id: 'problem',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 1,
         heading: 'Research Problem',
@@ -60,7 +60,7 @@ const publicationTypes = [
     {
         id: 'hypothesis',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 2,
         heading: 'Hypothesis/Rationale',
@@ -70,7 +70,7 @@ const publicationTypes = [
     {
         id: 'method',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 3,
         heading: 'Methods/Protocols',
@@ -79,7 +79,7 @@ const publicationTypes = [
     {
         id: 'data',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 4,
         heading: 'Data/Results',
@@ -89,7 +89,7 @@ const publicationTypes = [
     {
         id: 'analysis',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 5,
         heading: 'Analysis',
@@ -98,7 +98,7 @@ const publicationTypes = [
     {
         id: 'interpretation',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 6,
         heading: 'Interpretation',
@@ -107,7 +107,7 @@ const publicationTypes = [
     {
         id: 'implementation',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 7,
         heading: 'Real-world Implementation',
@@ -116,7 +116,7 @@ const publicationTypes = [
     {
         id: 'peer_review',
         icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-white" />
+            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
         ),
         linkNumber: 8,
         heading: 'Peer Review',
@@ -222,7 +222,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
                     >
                         <section>
-                            <div className="container mx-auto px-8 pt-8 pb-8 lg:pt-24">
+                            <div className="container mx-2 px-2 pt-8 pb-8 lg:mx-auto lg:px-8 lg:pt-24">
                                 <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                                     <h1 className="mb-10 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
                                         Learn about Octopus.
@@ -231,20 +231,20 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                         A new way to publish your scientific work that is fast, free and fair.
                                     </h2>
                                 </div>
-                                <div className="m-auto mb-28 grid grid-cols-1 lg:w-9/12 lg:grid-cols-12 lg:gap-10 xl:w-10/12">
+                                <div className="mb-10 grid grid-cols-1 gap-10 md:mb-16 lg:mx-auto lg:mb-28 lg:w-9/12 lg:grid-cols-12 xl:w-10/12">
                                     {heroContents.map((heroContent) => (
                                         <div className="col-span-12 lg:col-span-6 2xl:col-span-3" key={heroContent.id}>
-                                            <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 underline decoration-teal-300 decoration-2">
+                                            <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 underline decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white">
                                                 {heroContent.heading}
                                             </h3>
-                                            <p className=" block leading-6 tracking-wide text-grey-700">
+                                            <p className=" block leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200">
                                                 {parse(heroContent.content)}
                                             </p>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                            <div className="container mx-auto mb-4 gap-6 px-8 lg:mb-16">
+                            <div className="container mx-auto mb-10 gap-6 px-8 lg:mb-16">
                                 <Components.HTMLVideo
                                     srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
                                     srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
@@ -256,31 +256,31 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                     className="mx-auto !w-fit bg-transparent"
                                 />
                             </div>
-                            <div className="container mx-auto px-8">
-                                <ul className="mx-auto w-8/12">
+                            <div className="container mx-auto px-2 lg:px-8">
+                                <ul className="mx-auto lg:w-8/12">
                                     <li className="mb-8 flex min-h-[3rem] items-start pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.EyeIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <OutlineIcons.EyeIcon className="mt-1 mr-4 block h-16 w-16 text-grey-500 transition-colors duration-500 dark:text-white lg:h-6 lg:w-6 lg:basis-7" />
                                         <span>
                                             Easy for institutions and funders to see exactly what you&apos;ve done and
                                             how it has been regarded by others.
                                         </span>
                                     </li>
                                     <li className="mb-8 flex min-h-[3rem] pb-2 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.SparklesIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white " />
+                                        <OutlineIcons.SparklesIcon className="mr-4 mt-1 block h-16 w-16 text-grey-500 transition-colors duration-500 dark:text-white lg:h-6 lg:w-6 lg:basis-7 " />
                                         <span>
                                             Designed to recognise and reward good practice and serves the needs of both
                                             researchers and the global research endeavour itself.
                                         </span>
                                     </li>
                                     <li className="mb-8 flex min-h-[3rem] basis-7 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.UserCircleIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <OutlineIcons.UserCircleIcon className="mr-4 mt-1 block h-16 w-16 text-grey-500 transition-colors duration-500 dark:text-white lg:h-6 lg:w-6 lg:basis-7" />
                                         <span>
                                             Free for researchers to publish their work, free for anyone to read and
                                             embeds the principles of openness and transparency throughout.
                                         </span>
                                     </li>
                                     <li className="mb-20 flex min-h-[3rem] basis-7 pl-6 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.ShareIcon className="mr-4 mt-1 block h-6 w-6 basis-7 text-grey-500 transition-colors duration-500 dark:text-white" />
+                                        <OutlineIcons.ShareIcon className="mr-4 mt-1 block h-16 w-16 text-grey-500 transition-colors duration-500 dark:text-white lg:h-6 lg:w-6 lg:basis-7" />
                                         <span>
                                             Work can be shared in full detail with no &apos;spin&apos;, encouraging a
                                             new culture of collaboration and constructive critique.
@@ -289,27 +289,27 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 </ul>
                             </div>
                         </section>
-                        <Assets.Logo className="my-24 mx-auto" height={70} width={70} />
+                        <Assets.Logo className="my-24 mx-auto dark:fill-teal-500" height={70} width={70} />
                         <section>
-                            <h2 className="mx-auto mb-24 block text-center font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-3xl">
+                            <h2 className="mx-auto mb-12 block text-center font-montserrat text-2xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:mb-24 lg:text-3xl">
                                 What makes Octopus different?
                             </h2>
-                            <div className="container m-auto mb-20 grid grid-cols-1 px-8 lg:w-9/12 lg:grid-cols-12 lg:gap-16 xl:w-10/12">
+                            <div className="container mx-auto mb-20 grid grid-cols-1 gap-10 px-8 lg:w-9/12 lg:grid-cols-12 lg:gap-16 xl:w-10/12">
                                 {publicationTypes.map((publicationType) => (
                                     <div
-                                        className="col-span-12 rounded-lg border-2 border-white p-4 shadow lg:col-span-6 2xl:col-span-3"
+                                        className="col-span-12 h-48 rounded-lg border-2 border-white p-4 shadow dark:border-grey-500 lg:col-span-6 lg:h-60 2xl:col-span-3"
                                         key={publicationType.id}
                                     >
                                         <div className="mb-2 flex gap-1">
                                             {publicationType.icon}
-                                            <span className="text-lg font-semibold text-yellow-700">
+                                            <span className="text-lg font-semibold text-yellow-700 transition-colors duration-500 dark:text-yellow-300">
                                                 {publicationType.linkNumber}
                                             </span>
                                         </div>
-                                        <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900">
+                                        <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900  transition-colors duration-500 dark:text-white">
                                             {publicationType.heading}
                                         </h3>
-                                        <p className="mb-10 block leading-6 tracking-wide">
+                                        <p className="mb-10 block leading-6 tracking-wide  transition-colors duration-500 dark:text-grey-200">
                                             {parse(publicationType.content)}
                                         </p>
                                     </div>
@@ -317,11 +317,11 @@ const About: NextPage<Props> = (props): JSX.Element => {
                             </div>
                             <div className="container mx-auto px-8">
                                 <div className="mx-auto w-10/12">
-                                    <h4 className="text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white">
+                                    <h4 className="mb-10 text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4">
                                         Smaller units of publication encourage faster sharing, easier publication
                                         writing, and smaller author groups.
                                     </h4>
-                                    <p className="mb-12 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white">
+                                    <p className="mb-20 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12">
                                         Allowing researchers to get more meaningful credit for what they&apos;ve done.
                                     </p>
                                 </div>
@@ -335,33 +335,33 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         waveFillMiddle="fill-teal-100 dark:fill-grey-700 transition-colors duration-500"
                         waveFillBottom="fill-teal-50 dark:fill-grey-800 transition-colors duration-500"
                     >
-                        <div className="container mx-auto w-10/12 px-8 pt-32 pb-10 text-grey-900 dark:text-white">
+                        <div className="container mx-auto px-8 pt-32 pb-10 text-grey-900 dark:text-white lg:w-10/12">
                             <h2 className="mx-auto mb-12 block font-montserrat text-3xl font-bold lg:col-span-2">
                                 Principles of Octopus
                             </h2>
-                            <div className="mx-auto block text-2xl xl:mb-12">
+                            <div className="mx-auto block text-2xl xl:mb-20">
                                 <ul>
-                                    <li className="mb-12 flex gap-4">
-                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                    <li className="h-30 mb-14 flex gap-4 lg:mb-12">
+                                        <OutlineIcons.LightBulbIcon className="mt-1 h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
                                         <span className="pt-1 font-montserrat font-medium">
                                             Knowledge should not be locked behind paywalls.
                                         </span>
                                     </li>
-                                    <li className="mb-12 flex gap-4">
-                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                    <li className="h-30 mb-14 flex gap-4 lg:mb-12">
+                                        <OutlineIcons.LightBulbIcon className="mt-1 h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
                                         <span className="pt-1 font-montserrat font-medium">
                                             New ideas and findings should be shared as quickly as possible.
                                         </span>
                                     </li>
-                                    <li className="mb-12 flex gap-4">
-                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                    <li className="h-30 mb-14 flex gap-4 lg:mb-12">
+                                        <OutlineIcons.LightBulbIcon className="mt-1 h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
                                         <span className="pt-1 font-montserrat font-medium">
                                             Work should be accessible for people to share and read, regardless of the
                                             languages they speak.
                                         </span>
                                     </li>
-                                    <li className="mb-24 flex gap-4">
-                                        <OutlineIcons.LightBulbIcon className="h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
+                                    <li className="h-30 mb-14 flex gap-4 lg:mb-12">
+                                        <OutlineIcons.LightBulbIcon className="mt-1 h-8 min-h-[2rem] w-8 min-w-[2rem] text-white transition-colors duration-500" />
                                         <span className="pt-1 font-montserrat font-medium">
                                             Work should be judged on its merits, not on how good a &apos;story&apos;
                                             researchers can write about it.
@@ -369,10 +369,10 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                     </li>
                                 </ul>
                             </div>
-                            <p className="mb-2 font-montserrat text-xl font-medium leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                            <p className="mb-2 font-montserrat text-lg font-medium leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white">
                                 Do you feel like these principles align with your own?
                             </p>
-                            <p className="mb-12 font-montserrat text-xl leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white lg:text-lg">
+                            <p className="mb-12 font-montserrat leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white">
                                 You can help to support Octopus by joining our user community.
                             </p>
                             <Components.Button href="#" title="Join our user community" />
@@ -381,16 +381,16 @@ const About: NextPage<Props> = (props): JSX.Element => {
 
                     <Components.Section
                         id="using_octopus"
-                        className="bg-teal-50 transition-colors duration-500 dark:bg-grey-700"
+                        className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800"
                         waveFillTop="fill-teal-600 dark:fill-grey-600 transition-colors duration-500"
                         waveFillMiddle="fill-teal-500 dark:fill-grey-700 transition-colors duration-500"
-                        waveFillBottom="fill-teal-400 dark:fill-grey-800 transition-colors duration-500"
+                        waveFillBottom="fill-teal-400 dark:fill-grey-900 transition-colors duration-500"
                     >
                         <div className="container mx-auto px-8 pt-20">
-                            <h2 className="mx-auto mb-6 block w-fit font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-white lg:mb-16">
+                            <h2 className="mx-auto mb-16 block w-fit font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-white">
                                 How do I use Octopus?
                             </h2>
-                            <div className="mx-auto mb-20 grid w-7/12 grid-cols-1 gap-8 lg:grid-cols-2">
+                            <div className="mx-auto mb-24 grid grid-cols-1 gap-8 lg:mb-20 lg:w-7/12 lg:grid-cols-2">
                                 <Components.Paper>
                                     <OutlineIcons.DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
                                     <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
@@ -419,10 +419,10 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 </Components.Paper>
                             </div>
                             <div className="container mx-auto px-8">
-                                <ul className="mx-auto w-9/12 pr-10">
-                                    <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.StarIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:text-white" />
-                                        <span className="col-span-11">
+                                <ul className="mx-auto mb-20 pr-10 lg:mb-0 lg:w-9/12">
+                                    <li className="mb-20 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-0 lg:grid-cols-12 lg:pl-10 lg:text-lg">
+                                        <OutlineIcons.StarIcon className="col-span-1 mx-auto mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
+                                        <span className="col-span-1 text-center lg:col-span-11 lg:text-left">
                                             Every publication you write (including reviews) can be rated by others. Your
                                             activity, including publications, reviews and ratings, will appear on your
                                             individual author page for everyone to see. Publishing promptly and well,
@@ -430,9 +430,9 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                             therefore rewarded.
                                         </span>
                                     </li>
-                                    <li className="mb-8 grid min-h-[8rem] grid-cols-12 items-center gap-4 pl-10 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:text-lg">
-                                        <OutlineIcons.FlagIcon className="col-span-1 mx-auto mr-4 mt-1 block h-12 w-12 fill-peach-400 transition-colors duration-500 dark:text-white" />
-                                        <span className="col-span-11">
+                                    <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-xl leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10 lg:text-lg">
+                                        <OutlineIcons.FlagIcon className="col-span-1 mx-auto mt-1 block h-12 w-12 fill-peach-400 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
+                                        <span className="col-span-1 text-center lg:col-span-11 lg:text-left">
                                             To ensure academic integrity concerns, any publication can be &apos;red
                                             flagged&apos; by a logged-in user. This red flag will be visible on the
                                             publication page and will alert the authors to allow them to resolve any
@@ -445,13 +445,13 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         </div>
                     </Components.Section>
                     <Components.SectionTwo
-                        className="bg-teal-400 transition-colors duration-500  dark:bg-grey-700"
+                        className="bg-teal-400 transition-colors duration-500  dark:bg-grey-900"
                         waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
                         waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
                         waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                     >
                         {/* Frequently asked questions section */}
-                        <div className="container mx-auto flex w-8/12 flex-col gap-6 px-8 py-16">
+                        <div className="container mx-auto flex flex-col gap-6 px-8 py-16 lg:w-8/12">
                             <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
                                 Frequently asked questions
                             </h2>

@@ -20,7 +20,7 @@ const Accordion: React.FC<Props> = (props): JSX.Element => (
                         />
                     </div>
                 </HeadlessUI.Disclosure.Button>
-                <HeadlessUI.Disclosure.Panel className="text-gray-70 w-10/12 px-4 pt-2 pb-6 text-sm dark:text-grey-200">
+                <HeadlessUI.Disclosure.Panel className="text-md w-10/12 px-4 pt-2 pb-6 font-medium text-grey-700 dark:text-grey-200">
                     <p>{props.content}</p>
                 </HeadlessUI.Disclosure.Panel>
             </>
