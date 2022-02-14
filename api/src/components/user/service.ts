@@ -43,16 +43,11 @@ export const getAll = async (filters: I.UserFilters) => {
         }
     });
 
-    const usersWithoutFirstName = users.map((user) => ({
-        ...user,
-        firstName: user.firstName[0]
-    }));
-
     // @ts-ignore
     const totalUsers = await prisma.user.count(query);
 
     return {
-        data: usersWithoutFirstName,
+        data: users,
         metadata: {
             total: 2,
             limit: Number(filters.limit) || 10,
@@ -96,10 +91,6 @@ export const get = async (id: string) => {
             id
         }
     });
-
-    if (user) {
-        user.firstName = user?.firstName[0];
-    }
 
     return user;
 };

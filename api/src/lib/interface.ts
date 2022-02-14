@@ -117,3 +117,20 @@ export interface UpdatePublicationRequestBody {
     title?: string;
     id?: string;
 }
+
+export type FlagCategory =
+    | 'PLAGARISM'
+    | 'ETHICAL_ISSUES'
+    | 'MISREPRESENTATION'
+    | 'UNDECLARED_IMAGE_MANIPULATION'
+    | 'COPYRIGHT'
+    | 'INAPPROPRIATE';
+
+export interface CreateFlagPathParams {
+    id: string;
+}
+
+export interface CreateFlagRequestBody {
+    category: FlagCategory;
+    comments: string;
+}
