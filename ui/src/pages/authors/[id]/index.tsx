@@ -6,7 +6,6 @@ import * as Framer from 'framer-motion';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Config from '@config';
@@ -50,9 +49,7 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     const [publicationLimit, setPublicationLimit] = React.useState(1);
 
-    React.useEffect(() => {
-        showCmdPalette && toggleCmdPalette();
-    }, []);
+    React.useEffect(() => showCmdPalette && toggleCmdPalette(), []);
 
     return (
         <>
