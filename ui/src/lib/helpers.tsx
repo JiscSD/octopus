@@ -45,6 +45,9 @@ export const formatPublicationType = (value: string): string => {
     return types[value];
 };
 
+/**
+ * @description Returns the string of the key for the current os
+ */
 export const setOSKey = (): string | JSX.Element => {
     if (window.navigator.appVersion.indexOf('Mac')) {
         return <>&#8984;K</>;
@@ -53,6 +56,17 @@ export const setOSKey = (): string | JSX.Element => {
     }
 };
 
+/**
+ * @description Returns the % of a value to the % max
+ */
 export const percentage = (partialValue: number, totalValue: number) => {
     return (100 * partialValue) / totalValue;
+};
+
+/**
+ * @description Returns a random hex color value
+ */
+export const randomColor = () => {
+    const value = Math.floor(Math.random() * 16777215).toString(16);
+    return `#${value}`;
 };
