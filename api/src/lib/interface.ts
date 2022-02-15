@@ -118,5 +118,6 @@ export interface GetUserParameters {
 export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
+    licence?: LicenceType;
     id?: string;
 }
