@@ -61,6 +61,7 @@ const publicationSeeds = [
         id: 'publication-problem-draft',
         title: 'Publication PROBLEM-DRAFT',
         type: 'PROBLEM',
+        licence: 'CC_BY',
         content: 'Publication PROBLEM-DRAFT',
         currentStatus: 'DRAFT',
         user: {
@@ -359,6 +360,7 @@ const publicationSeeds = [
         id: 'publication-hypothesis-draft-problem-live',
         title: 'Publication HYPOTHESIS-DRAFT',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-DRAFT',
         currentStatus: 'DRAFT',
         user: {
@@ -385,6 +387,7 @@ const publicationSeeds = [
         id: 'publication-problem-draft-no-content',
         title: 'Publication PROBLEM-DRAFT',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         currentStatus: 'DRAFT',
         user: {
             connect: {
