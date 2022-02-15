@@ -51,9 +51,12 @@ export type PublicationType =
     | 'INTERPRETATION'
     | 'PEER_REVIEW';
 
+export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+
 export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
+    licence?: LicenceType;
     content?: string;
 }
 
