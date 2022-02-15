@@ -289,7 +289,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         </ul>
                     </div>
 
-                    <Assets.Logo className="my-24 mx-auto dark:fill-teal-500" height={70} width={70} />
+                    <Assets.Logo className="mx-auto mt-24 mb-10 dark:fill-teal-500 lg:my-24" height={70} width={70} />
 
                     {/* What makes Octopus different? section */}
                     <div className="container mx-auto px-8">
@@ -347,26 +347,26 @@ const About: NextPage<Props> = (props): JSX.Element => {
                         <div className="mx-auto block px-2 text-xl lg:px-0 lg:text-2xl xl:mb-20">
                             <ul>
                                 <li className="mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-white transition-colors duration-500" />
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
                                     <span className="pt-1 font-montserrat font-medium">
                                         Knowledge should not be locked behind paywalls.
                                     </span>
                                 </li>
                                 <li className="h-30 mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-white transition-colors duration-500" />
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
                                     <span className="pt-1 font-montserrat font-medium">
                                         New ideas and findings should be shared as quickly as possible.
                                     </span>
                                 </li>
                                 <li className="h-30 mb-8 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-white transition-colors duration-500" />
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
                                     <span className="pt-1 font-montserrat font-medium">
                                         Work should be accessible for people to share and read, regardless of the
                                         languages they speak.
                                     </span>
                                 </li>
                                 <li className="h-30 mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-white transition-colors duration-500" />
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
                                     <span className="pt-1 font-montserrat font-medium">
                                         Work should be judged on its merits, not on how good a &apos;story&apos;
                                         researchers can write about it.
@@ -428,9 +428,9 @@ const About: NextPage<Props> = (props): JSX.Element => {
                             </Components.Paper>
                         </div>
 
-                        <ul className="mx-auto mb-20 lg:mb-0 lg:w-9/12">
-                            <li className="mb-20 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:pl-10 lg:text-base">
-                                <OutlineIcons.StarIcon className="col-span-1 mx-auto mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
+                        <ul className="mb-20 lg:mx-auto lg:mb-0 lg:w-9/12">
+                            <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10 lg:text-base">
+                                <OutlineIcons.StarIcon className="col-span-1 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
                                 <span className="col-span-1 lg:col-span-11">
                                     Every publication you write (including reviews) can be rated by others. Your
                                     activity, including publications, reviews and ratings, will appear on your
@@ -439,7 +439,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                 </span>
                             </li>
                             <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10 lg:text-base">
-                                <OutlineIcons.FlagIcon className="col-span-1 mx-auto mt-1 block h-12 w-12 fill-peach-400 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
+                                <OutlineIcons.FlagIcon className="col-span-1 mt-1 block h-12 w-12 fill-peach-400 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
                                 <span className="col-span-1 lg:col-span-11">
                                     To ensure academic integrity concerns, any publication can be &apos;red
                                     flagged&apos; by a logged-in user. This red flag will be visible on the publication
