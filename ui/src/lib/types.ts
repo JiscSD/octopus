@@ -1,5 +1,8 @@
 import React from 'react';
 
+export type { AppProps } from 'next/app';
+export type { GetServerSideProps, NextPage } from 'next';
+
 export type PreferencesStoreTypes = {
     darkMode: boolean;
     toggle: (e: React.FormEvent<HTMLButtonElement>) => void;

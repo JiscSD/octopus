@@ -1,9 +1,9 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import * as NextDocument from 'next/document';
 
 const AppDocument = () => {
     return (
-        <Html lang="en" className="scroll-smooth bg-teal-50 motion-reduce:scroll-auto dark:bg-grey-800">
-            <Head>
+        <NextDocument.Html lang="en" className="scroll-smooth bg-teal-50 motion-reduce:scroll-auto dark:bg-grey-800">
+            <NextDocument.Head>
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
 
@@ -36,12 +36,12 @@ const AppDocument = () => {
                     rel="stylesheet"
                 />
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
-            </Head>
+            </NextDocument.Head>
             <body className="overflow-x-hidden">
-                <Main />
-                <NextScript />
+                <NextDocument.Main />
+                <NextDocument.NextScript />
             </body>
-        </Html>
+        </NextDocument.Html>
     );
 };
 

@@ -4,11 +4,11 @@ switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
         host = 'http://localhost:3000';
         break;
-    case 'int':
-        host = 'https://int.octopus.ac';
+    case 'prod':
+        host = 'https://octopus.ac';
         break;
     default:
-        host = 'https://octopus.ac';
+        host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
 }
 
 const base = {
@@ -96,6 +96,13 @@ const urls = {
         description: 'More information about the Octopus platform.',
         keywords: 'about, octopus',
         canonical: `${base.host}/about`
+    },
+    documentation: {
+        path: '/documentation',
+        title: `API documentation - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/documentation`
     },
     404: {
         title: `404 Not Found - ${base.title}`

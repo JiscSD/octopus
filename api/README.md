@@ -5,3 +5,21 @@ Introduction to api content here.
 &nbsp;
 
 ## Local setup
+
+To begin the API locally:
+
+```bash
+npm run start:local
+```
+
+To reset the database and regenerate the seed data locally:
+
+```bash
+npm run seed:local
+```
+
+To run all tests locally:
+
+```bash
+npm run test:local
+```

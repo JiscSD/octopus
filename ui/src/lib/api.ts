@@ -32,20 +32,34 @@ export const post = async (url: string, body: Interfaces.JSON): Promise<AxiosRes
     return response;
 };
 
+/**
+ * @description Request an array of publications OR users based on params
+ * @throws AxiosError
+ */
 export const search = async (
     searchType: string | Types.SearchType,
-    query: string | null = '',
-    publicationType: string | null = Config.values.publicationTypes.join(),
-    limit: number = 0,
-    offset: number = 0,
-    orderBy: Types.OrderBySearchOption = 'createdAt',
-    orderDirection: Types.OrderDirectionSearchOption = 'asc'
-) => {
-    const endpoint = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
-    const response = await get(
-        `${endpoint}?type=${publicationType}&limit=${limit}&offset=${offset}&orderBy=${orderBy}&orderDirection=${orderDirection}${
-            query ? `&search=${query}` : ''
-        }`
-    );
-    return response;
+    query: string | null = null,
+    publicationType: string | null = null,
+    limit: number | null = null,
+    offset: number | null = null,
+    orderBy: Types.OrderBySearchOption | null = null,
+    orderDirection: Types.OrderDirectionSearchOption | null = null
+): Promise<Interfaces.SearchResults> => {
+    let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+    let params: string = '';
+
+    // Global search params
+    limit && (params += '&limit=' + limit);
+    offset && (params += '&offset=' + offset);
+    orderBy && (params += '&orderBy=' + orderBy);
+    orderDirection && (params += '&orderDirection=' + orderDirection);
+    query && (params += '&search=' + query);
+
+    // publication specific params
+    searchType === 'publications' && publicationType && (params += '&type=' + publicationType);
+
+    params.includes('&') && (params = params.replace('&', '?'));
+
+    const response = await get(endpoint + params);
+    return response.data;
 };
