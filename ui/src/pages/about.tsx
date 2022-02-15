@@ -398,38 +398,38 @@ const About: NextPage<Props> = (props): JSX.Element => {
                             How do I use Octopus?
                         </h2>
 
-                        <div className="mx-auto mb-24 grid grid-cols-1 gap-8 lg:mb-20 lg:w-7/12 lg:grid-cols-2">
-                            <Components.Paper>
-                                <OutlineIcons.DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
-                                <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
+                        <div className="mx-auto mb-24 grid grid-cols-1 gap-24 lg:mb-24 lg:w-7/12">
+                            <div className="col-span-1 mx-auto text-center">
+                                <OutlineIcons.DesktopComputerIcon className="mx-auto mb-4 h-10 w-10 text-teal-500" />
+                                <h3 className="mb-4 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                     To read publications
                                 </h3>
                                 <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
                                     Anyone can read any Octopus publication, you don&apos;t need to log in.
                                 </p>
-                                <Components.ExtendedLink
+                                <Components.Button
                                     href={Config.urls.browsePublications.path}
                                     title="Browse publications"
                                 />
-                            </Components.Paper>
+                            </div>
 
-                            <Components.Paper>
-                                <OutlineIcons.PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
-                                <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
+                            <div className="col-span-1 mx-auto text-center">
+                                <OutlineIcons.PencilIcon className="mx-auto mb-4 h-10 w-10 text-teal-500" />
+                                <h3 className="mb-4 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
                                     To write publications
                                 </h3>
                                 <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
                                     Log in via your ORCiD account in order to write and review publications.
                                 </p>
-                                <Components.ExtendedLink
+                                <Components.Button
                                     href={Config.urls.createPublication.path}
                                     title="Publish your work"
                                 />
-                            </Components.Paper>
+                            </div>
                         </div>
 
                         <ul className="mb-20 lg:mx-auto lg:mb-0 lg:w-9/12">
-                            <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10 lg:text-base">
+                            <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10 lg:text-base">
                                 <OutlineIcons.StarIcon className="col-span-1 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
                                 <span className="col-span-1 lg:col-span-11">
                                     Every publication you write (including reviews) can be rated by others. Your
@@ -438,7 +438,7 @@ const About: NextPage<Props> = (props): JSX.Element => {
                                     contributing to the community through constructive reviewing, is therefore rewarded.
                                 </span>
                             </li>
-                            <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10 lg:text-base">
+                            <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10 lg:text-base">
                                 <OutlineIcons.FlagIcon className="col-span-1 mt-1 block h-12 w-12 fill-peach-400 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
                                 <span className="col-span-1 lg:col-span-11">
                                     To ensure academic integrity concerns, any publication can be &apos;red
