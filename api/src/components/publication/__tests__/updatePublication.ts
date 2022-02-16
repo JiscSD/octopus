@@ -75,6 +75,15 @@ describe('Update publication', () => {
         expect(updatePublication.body.licence).toEqual('CC_BY_ND');
     });
 
+    test('Cannot update publication with invalid licence enum', async () => {
+        const updatePublication = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({ apiKey: 123456789 })
+            .send({ licence: 'INVALID' });
+
+        expect(updatePublication.status).toEqual(422);
+    });
+
     test('Cannot update publication with invalid update parameter', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
