@@ -91,10 +91,7 @@ model Publication {
     linkedFrom Links[] @relation("to")
 
     publicationStatus PublicationStatus[]
-    <<<<<<< HEAD
     publicationFlags  PublicationFlags[]
-    =======
-    >>>>>>> main
 }
 
 model Links {
