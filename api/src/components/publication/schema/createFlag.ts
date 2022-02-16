@@ -6,7 +6,7 @@ const updatedPublicationSchema: I.Schema = {
         category: {
             type: 'string',
             enum: [
-                'PLAGARISM',
+                'PLAGIARISM',
                 'ETHICAL_ISSUES',
                 'MISREPRESENTATION',
                 'UNDECLARED_IMAGE_MANIPULATION',

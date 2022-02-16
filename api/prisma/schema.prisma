@@ -52,7 +52,7 @@ enum PublicationType {
 }
 
 enum PublicationFlagCategoryEnum {
-    PLAGARISM
+    PLAGIARISM
     ETHICAL_ISSUES
     MISREPRESENTATION
     UNDECLARED_IMAGE_MANIPULATION

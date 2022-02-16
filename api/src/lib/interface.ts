@@ -119,7 +119,7 @@ export interface UpdatePublicationRequestBody {
 }
 
 export type FlagCategory =
-    | 'PLAGARISM'
+    | 'PLAGIARISM'
     | 'ETHICAL_ISSUES'
     | 'MISREPRESENTATION'
     | 'UNDECLARED_IMAGE_MANIPULATION'
