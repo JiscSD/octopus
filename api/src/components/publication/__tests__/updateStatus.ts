@@ -66,12 +66,21 @@ describe('Update publication status', () => {
     });
 
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no content.', async () => {
-        const updatePublicationAttemptOne = await testUtils.agent
+        const updatedPublication = await testUtils.agent
             .put('/publications/publication-problem-draft-no-content/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationAttemptOne.status).toEqual(404);
+        expect(updatedPublication.status).toEqual(404);
+    });
+    test('User with permissions cannot update their publication to LIVE from DRAFT if there is no licence.', async () => {
+        const updatedPublication = await testUtils.agent
+            .put('/publications/publication-hypothesis-draft/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(updatedPublication.status).toEqual(404);
     });
 });
