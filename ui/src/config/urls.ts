@@ -97,6 +97,13 @@ const urls = {
         keywords: 'about, octopus',
         canonical: `${base.host}/about`
     },
+    faq: {
+        path: '/faq',
+        title: `Frequently Asked Questions - ${base.title}`,
+        description: 'Frequently asked questions about the Octopus platform.',
+        keywords: 'faq, octopus',
+        canonical: `${base.host}/faq`
+    },
     documentation: {
         path: '/documentation',
         title: `API documentation - ${base.title}`,
