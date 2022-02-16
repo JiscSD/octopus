@@ -159,6 +159,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
         data: {
             title: e.title,
             type: e.type,
+            licence: e.licence,
             content: e.content,
             user: {
                 connect: {

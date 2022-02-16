@@ -119,7 +119,7 @@ export const updateStatus = async (
         }
 
         // check content, is it in a state where it can go live.
-        const publicationHasAllKeys = ['title', 'content'].every((field) => publication[field]);
+        const publicationHasAllKeys = ['title', 'content', 'licence'].every((field) => publication[field]);
 
         const isPublicationReadyForPublish = publicationHasAllKeys && publication.linkedTo.length !== 0;
 

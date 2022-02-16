@@ -15,7 +15,8 @@ describe('Create publication', () => {
             })
             .send({
                 type: 'PEER_REVIEW',
-                title: 'Publication test 1'
+                title: 'Publication test 1',
+                licence: 'CC_BY_SA'
             });
 
         expect(createPublicationRequest.status).toEqual(200);
@@ -23,6 +24,7 @@ describe('Create publication', () => {
         expect(createPublicationRequest.body.user.id).toEqual('test-user-1');
         expect(createPublicationRequest.body.publicationStatus.length).toEqual(1);
         expect(createPublicationRequest.body.publicationStatus[0].status).toEqual('DRAFT');
+        expect(createPublicationRequest.body.licence).toEqual('CC_BY_SA');
     });
 
     test('Valid publication created by real user with content (200)', async () => {

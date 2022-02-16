@@ -60,11 +60,21 @@ enum PublicationFlagCategoryEnum {
     INAPPROPRIATE
 }
 
+enum LicenceType {
+    CC_BY
+    CC_BY_SA
+    CC_BY_ND
+    CC_BY_NC
+    CC_BY_NC_SA
+    CC_BY_NC_ND
+}
+
 model Publication {
     id       String          @id @default(cuid())
     url_slug String          @unique @default(cuid())
     type     PublicationType
     title    String?
+    licence  LicenceType?
     content  String?
     doi      String?
 
@@ -81,7 +91,10 @@ model Publication {
     linkedFrom Links[] @relation("to")
 
     publicationStatus PublicationStatus[]
+    <<<<<<< HEAD
     publicationFlags  PublicationFlags[]
+    =======
+    >>>>>>> main
 }
 
 model Links {
