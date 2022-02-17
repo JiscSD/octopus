@@ -24,8 +24,6 @@ export const get = async (
 
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            publication.user.firstName = publication?.user.firstName[0];
-
             return response.json(200, publication);
         }
 
@@ -137,6 +135,38 @@ export const updateStatus = async (
         );
 
         return response.json(200, updatedPublication);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const createFlag = async (
+    event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
+) => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        if (!publication || publication.currentStatus !== 'LIVE') {
+            return response.json(404, {
+                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
+            });
+        }
+
+        if (publication.user.id === event.user.id) {
+            return response.json(403, {
+                message: 'Cannot flag your own publication'
+            });
+        }
+
+        const flag = await publicationService.createFlag(
+            event.pathParameters.id,
+            event.user.id,
+            event.body.category,
+            event.body.comments
+        );
+
+        return response.json(200, flag);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

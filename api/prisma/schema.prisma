@@ -30,7 +30,8 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    Publication Publication[]
+    Publication      Publication[]
+    PublicationFlags PublicationFlags[]
 }
 
 enum PublicationStatusEnum {
@@ -48,6 +49,15 @@ enum PublicationType {
     DATA
     INTERPRETATION
     PEER_REVIEW
+}
+
+enum PublicationFlagCategoryEnum {
+    PLAGIARISM
+    ETHICAL_ISSUES
+    MISREPRESENTATION
+    UNDECLARED_IMAGE_MANIPULATION
+    COPYRIGHT
+    INAPPROPRIATE
 }
 
 enum LicenceType {
@@ -81,6 +91,7 @@ model Publication {
     linkedFrom Links[] @relation("to")
 
     publicationStatus PublicationStatus[]
+    publicationFlags  PublicationFlags[]
 }
 
 model Links {
@@ -106,4 +117,19 @@ model PublicationStatus {
     createdAt DateTime @default(now())
 
     publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+}
+
+model PublicationFlags {
+    id            String                      @id @default(cuid())
+    publicationId String
+    category      PublicationFlagCategoryEnum
+    comments      String
+    createdBy     String
+
+    createdAt DateTime @default(now())
+
+    user        User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, category, createdBy])
 }
