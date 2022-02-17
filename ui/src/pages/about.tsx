@@ -16,7 +16,7 @@ type Content = {
 
 type Props = {
     heroContents: [{ id: string; heading: string; content: string }];
-    publicationTypes: [{ id: string; icon: React.ReactElement; heading: string; content: string }];
+    publicationTypes: [{ id: string; heading: string; content: string; margin?: string }];
 };
 
 // Content for sections stored here.
@@ -50,77 +50,53 @@ const heroContents = [
 const publicationTypes = [
     {
         id: 'problem',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 1,
         heading: 'Research Problem',
-        content: 'a neatly defined scientific problem.'
+        content: 'a neatly defined scientific problem.',
+        margin: 'pl-9 lg:pl-6'
     },
     {
         id: 'hypothesis',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 2,
         heading: 'Hypothesis/Rationale',
         content:
-            'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
+            'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
+        margin: 'pl-4 lg:pl-1'
     },
     {
         id: 'method',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 3,
         heading: 'Methods/Protocols',
-        content: 'a practical method of testing an existing published Hypothesis.'
+        content: 'a practical method of testing an existing published Hypothesis.',
+        margin: 'pl-5 lg:pl-6'
     },
     {
         id: 'data',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 4,
         heading: 'Data/Results',
         content:
-            'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+            'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
+        margin: 'lg:ml-0 ml-1 pl-12 lg:pl-14'
     },
     {
         id: 'analysis',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700  transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 5,
         heading: 'Analysis',
-        content: 'a statistical or thematic analysis of existing published Data or Results.'
+        content: 'a statistical or thematic analysis of existing published Data or Results.',
+        margin: 'ml-1 lg:ml-0 pl-16'
     },
     {
         id: 'interpretation',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 6,
         heading: 'Interpretation',
-        content: 'a discussion around an existing published Analysis.'
+        content: 'a discussion around an existing published Analysis.',
+        margin: 'pl-10 lg:pl-8'
     },
     {
         id: 'implementation',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 7,
         heading: 'Real-world Implementation',
-        content: 'real world applications arising from an existing published Interpretation.'
+        content: 'real world applications arising from an existing published Interpretation.',
+        margin: 'pl-4 lg:pl-2'
     },
     {
         id: 'peer_review',
-        icon: (
-            <OutlineIcons.LinkIcon className="mb-2 block h-6 w-6 text-yellow-700 transition-colors duration-500 dark:text-yellow-300" />
-        ),
-        linkNumber: 8,
         heading: 'Peer Review',
-        content: 'a considered, detailed review of any of the above kinds of publication.'
+        content: 'a considered, detailed review of any of the above kinds of publication.',
+        margin: 'pl-4'
     }
 ];
 
@@ -212,45 +188,40 @@ const About: NextPage<Props> = (props): JSX.Element => (
                     </ul>
                 </div>
 
-                <Assets.Logo className="mx-auto mt-24 mb-10 dark:fill-teal-500 lg:my-24" height={70} width={70} />
+                <Assets.Logo className="mx-auto mt-24 mb-14 dark:fill-teal-500 lg:my-24" height={70} width={70} />
 
                 {/* What makes Octopus different? section */}
-                <div className="container mx-auto px-8">
-                    <h2 className="mx-auto mb-12 block text-center font-montserrat text-2xl font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:mb-24 lg:text-3xl">
+                <div className="container lg:mx-auto lg:px-8">
+                    <h2 className="mx-auto mb-16 block px-8 text-center font-montserrat text-3xl font-bold lg:px-0">
                         What makes Octopus different?
                     </h2>
-
-                    <div className="container mx-auto mb-20 grid grid-cols-1 gap-10 lg:w-9/12 lg:grid-cols-12 lg:gap-8 xl:w-10/12">
-                        {publicationTypes.map((publicationType) => (
-                            <div
-                                className="col-span-1 h-48 rounded-lg border-2 border-white p-4 shadow dark:border-grey-500 lg:col-span-6 lg:h-60 2xl:col-span-3"
-                                key={publicationType.id}
-                            >
-                                <div className="mb-2 flex gap-1">
-                                    {publicationType.icon}
-                                    <span className="text-lg font-semibold text-yellow-700 transition-colors duration-500 dark:text-yellow-300">
-                                        {publicationType.linkNumber}
-                                    </span>
+                    <div className="mx-auto mb-16 flex ">
+                        <div className="-ml-16 lg:ml-0">
+                            <Assets.LinkingVerticalWave />
+                        </div>
+                        <div className="container -ml-24 grid grid-cols-1">
+                            {publicationTypes.map((publicationType) => (
+                                <div className={`mt-2 lg:mt-10 ${publicationType.margin}`} key={publicationType.id}>
+                                    <div className="flex gap-4 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
+                                        <OutlineIcons.LinkIcon className="mb-2 h-5 w-5 rounded-full bg-grey-800 p-1 text-yellow-300 transition-colors duration-500 dark:text-yellow-300 lg:h-8 lg:w-8" />
+                                        {parse(publicationType.heading)}
+                                    </div>
+                                    <div className="block w-10/12 pl-12 text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:text-base">
+                                        {parse(publicationType.content)}
+                                    </div>
                                 </div>
-                                <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900  transition-colors duration-500 dark:text-white">
-                                    {publicationType.heading}
-                                </h3>
-                                <p className="mb-10 block leading-6 tracking-wide  transition-colors duration-500 dark:text-grey-200">
-                                    {parse(publicationType.content)}
-                                </p>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-
-                <div className="container mx-auto px-8 lg:w-10/12">
-                    <h4 className="mb-10 text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4">
-                        Smaller units of publication encourage faster sharing, easier publication writing, and smaller
-                        author groups.
-                    </h4>
-                    <p className="mb-20 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12">
-                        Allowing researchers to get more meaningful credit for what they&apos;ve done.
-                    </p>
+                    <div className="container mx-auto px-8 lg:w-10/12">
+                        <h4 className="mb-10 text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4">
+                            Smaller units of publication encourage faster sharing, easier publication writing, and
+                            smaller author groups.
+                        </h4>
+                        <p className="mb-20 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12">
+                            Allowing researchers to get more meaningful credit for what they&apos;ve done.
+                        </p>
+                    </div>
                 </div>
             </Components.Section>
 
