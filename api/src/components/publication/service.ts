@@ -1,12 +1,12 @@
-import * as I from 'interface';
-
 import prisma from 'lib/client';
+
+import * as I from 'interface';
 
 export const getAll = async (filters: I.PublicationFilters) => {
     const query = {
         where: {
             type: {
-                in: (filters.type.split(',') as I.ProblemTypes) || [
+                in: (filters.type.split(',') as I.PublicationType[]) || [
                     'PROBLEM',
                     'PROTOCOL',
                     'ANALYSIS',
@@ -21,8 +21,10 @@ export const getAll = async (filters: I.PublicationFilters) => {
         }
     };
 
+    console.log(query);
+
     if (filters.search) {
-        // @ts-ignore
+        //@ts-ignore
         query.where.OR = [
             {
                 title: {
@@ -51,6 +53,8 @@ export const getAll = async (filters: I.PublicationFilters) => {
         ];
     }
 
+    console.log(query);
+
     // @ts-ignore
     const publications = await prisma.publication.findMany({
         ...query,
@@ -69,6 +73,8 @@ export const getAll = async (filters: I.PublicationFilters) => {
         take: Number(filters.limit) || 10,
         skip: Number(filters.offset) || 0
     });
+
+    console.log(publications);
 
     // @ts-ignore
     const totalPublications = await prisma.publication.count(query);
@@ -196,7 +202,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatus) => {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
     const updatedPublication = await prisma.publication.update({
         where: {
             id
@@ -233,7 +239,12 @@ export const updateStatus = async (id: string, status: I.PublicationStatus) => {
     return updatedPublication;
 };
 
-export const createFlag = async (publication: string, user: string, category: I.FlagCategory, comments: string) => {
+export const createFlag = async (
+    publication: string,
+    user: string,
+    category: I.PublicationFlagCategoryEnum,
+    comments: string
+) => {
     const flag = await prisma.publicationFlags.create({
         data: {
             comments,
@@ -252,4 +263,18 @@ export const createFlag = async (publication: string, user: string, category: I.
     });
 
     return flag;
+};
+
+export const isPublicationReadyToPublish = async (publication: I.Publication) => {
+    // check content, is it in a state where it can go live.
+    const publicationHasAllKeys = ['title', 'content', 'licence'].every((field) => publication[field]);
+
+    console.log(publication);
+
+    // add more logic about is conflcit of interest here...
+    // if conflict of interest = true, need free text field, otherwise can be null
+
+    const passed = publicationHasAllKeys && publication.linkedTo.length !== 0;
+
+    return passed;
 };

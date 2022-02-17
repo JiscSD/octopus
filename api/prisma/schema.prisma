@@ -70,13 +70,16 @@ enum LicenceType {
 }
 
 model Publication {
-    id       String          @id @default(cuid())
-    url_slug String          @unique @default(cuid())
-    type     PublicationType
-    title    String?
-    licence  LicenceType?
-    content  String?
-    doi      String?
+    id                                String          @id @default(cuid())
+    url_slug                          String          @unique @default(cuid())
+    type                              PublicationType
+    title                             String?
+    licence                           LicenceType?
+    conflictOfInterestStatus          Boolean?        @default(false)
+    conflictOfInterestSupportText     String?
+    conflictOfInterestExplanatoryText String?
+    content                           String?
+    doi                               String?
 
     currentStatus PublicationStatusEnum @default(DRAFT)
 

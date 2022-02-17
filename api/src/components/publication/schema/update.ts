@@ -15,6 +15,15 @@ const updatePublicationSchema: I.Schema = {
         },
         id: {
             type: 'string'
+        },
+        conflictOfInterestStatus: {
+            type: 'boolean'
+        },
+        conflictOfInterestSupportText: {
+            type: 'string'
+        },
+        conflictOfInterestExplanatoryText: {
+            type: 'string'
         }
     },
     additionalProperties: false

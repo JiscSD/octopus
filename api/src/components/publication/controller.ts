@@ -118,12 +118,7 @@ export const updateStatus = async (
             return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
         }
 
-        // check content, is it in a state where it can go live.
-        const publicationHasAllKeys = ['title', 'content', 'licence'].every((field) => publication[field]);
-
-        const isPublicationReadyForPublish = publicationHasAllKeys && publication.linkedTo.length !== 0;
-
-        if (!isPublicationReadyForPublish && event.pathParameters.status === 'LIVE') {
+        if (!publicationService.isPublicationReadyToPublish(publication) && event.pathParameters.status === 'LIVE') {
             return response.json(404, {
                 message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
             });

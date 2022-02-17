@@ -1,4 +1,13 @@
 import {
+    Prisma,
+    PublicationType,
+    LicenceType,
+    PublicationStatusEnum,
+    PublicationFlagCategoryEnum
+} from '@prisma/client';
+export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum } from '@prisma/client';
+
+import {
     APIGatewayProxyEventV2,
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventPathParameters
@@ -41,17 +50,18 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
-export type PublicationType =
-    | 'PROBLEM'
-    | 'PROTOCOL'
-    | 'ANALYSIS'
-    | 'REAL_WORLD_APPLICATION'
-    | 'HYPOTHESIS'
-    | 'DATA'
-    | 'INTERPRETATION'
-    | 'PEER_REVIEW';
-
-export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+const pismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({
+    include: {
+        linkedTo: true,
+        linkedFrom: true
+    },
+    select: {
+        publicationStatus: true,
+        publicationFlags: true,
+        user: true
+    }
+});
+export type Publication = Prisma.PublicationGetPayload<typeof pismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
     type: PublicationType;
@@ -78,7 +88,6 @@ export interface CreateLinkBody {
     from: string;
 }
 
-export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
 export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
@@ -99,17 +108,6 @@ export interface UserFilters {
     orderBy?: UserOrderBy;
     orderDirection?: OrderDirection;
 }
-
-export type ProblemTypes = [
-    'PROBLEM',
-    'PROTOCOL',
-    'ANALYSIS',
-    'REAL_WORLD_APPLICATION',
-    'HYPOTHESIS',
-    'DATA',
-    'INTERPRETATION',
-    'PEER_REVIEW'
-];
 
 export interface GetUserParameters {
     id: string;
@@ -135,6 +133,6 @@ export interface CreateFlagPathParams {
 }
 
 export interface CreateFlagRequestBody {
-    category: FlagCategory;
+    category: PublicationFlagCategoryEnum;
     comments: string;
 }
