@@ -13,6 +13,7 @@ const Footer: React.FC = (): JSX.Element => (
                 <Components.Link
                     href="https://github.com/JiscSD/octopus"
                     openNew={true}
+                    ariaLabel="Github Repository"
                     className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <svg height="25" width="25" aria-hidden="true" viewBox="0 0 16 16" className="fill-white">
@@ -22,6 +23,7 @@ const Footer: React.FC = (): JSX.Element => (
                 <Components.Link
                     href="https://twitter.com/science_octopus"
                     openNew={true}
+                    ariaLabel="Twitter"
                     className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <svg height="25" width="25" viewBox="0 0 24 24" aria-hidden="true" className="fill-white">

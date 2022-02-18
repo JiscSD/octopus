@@ -11,6 +11,7 @@ const Mobile: React.FC = (): JSX.Element => {
         <div className="relative mt-2 mr-2 p-1">
             <button
                 onClick={(e) => toggleCmdPalette()}
+                aria-label="Search"
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 <SolidIcon.SearchIcon aria-label="Search Palette" className="h-8 w-8 text-white" />
