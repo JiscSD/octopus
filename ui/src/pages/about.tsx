@@ -126,7 +126,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
 
         <Layouts.Standard fixedHeader={false}>
             <Components.Section
-                id="learn_about_octopus"
+                id="content"
                 className=" bg-teal-50 dark:bg-grey-800"
                 waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                 waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"

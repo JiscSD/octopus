@@ -111,6 +111,13 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/documentation`
     },
+    accessibility: {
+        path: '/accessibility',
+        title: `Accessibility - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/accessibility`
+    },
     404: {
         title: `404 Not Found - ${base.title}`
     },
