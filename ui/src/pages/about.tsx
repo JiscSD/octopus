@@ -52,27 +52,27 @@ const publicationTypes = [
         id: 'problem',
         heading: 'Research Problem',
         content: 'a neatly defined scientific problem.',
-        margin: 'pl-9 lg:pl-6'
+        margin: 'pl-7 lg:pl-5'
     },
     {
         id: 'hypothesis',
         heading: 'Hypothesis/Rationale',
         content:
             'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
-        margin: 'pl-4 lg:pl-1'
+        margin: 'pl-2 lg:pl-1'
     },
     {
         id: 'method',
         heading: 'Methods/Protocols',
         content: 'a practical method of testing an existing published Hypothesis.',
-        margin: 'pl-5 lg:pl-6'
+        margin: 'pl-4 lg:pl-5'
     },
     {
         id: 'data',
         heading: 'Data/Results',
         content:
             'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
-        margin: 'lg:ml-0 ml-1 pl-12 lg:pl-14'
+        margin: 'pl-12 lg:pl-14'
     },
     {
         id: 'analysis',
@@ -84,22 +84,35 @@ const publicationTypes = [
         id: 'interpretation',
         heading: 'Interpretation',
         content: 'a discussion around an existing published Analysis.',
-        margin: 'pl-10 lg:pl-8'
+        margin: 'pl-14 lg:pl-12'
     },
     {
         id: 'implementation',
-        heading: 'Real-world Implementation',
+        heading: 'Real-world Application',
         content: 'real world applications arising from an existing published Interpretation.',
-        margin: 'pl-4 lg:pl-2'
-    },
-    {
-        id: 'peer_review',
-        heading: 'Peer Review',
-        content: 'a considered, detailed review of any of the above kinds of publication.',
-        margin: 'pl-4'
+        margin: 'pl-6 lg:pl-4'
     }
 ];
 
+const principles = [
+    {
+        id: 'principle-1',
+        content: 'Knowledge should not be locked behind paywalls.'
+    },
+    {
+        id: 'principle-2',
+        content: 'New ideas and findings should be shared as quickly as possible.'
+    },
+    {
+        id: 'principle-3',
+        content: 'Work should be accessible for people to share and read, regardless of the languages they speak.'
+    },
+    {
+        id: 'principle-4',
+        content:
+            'Work should be judged on its merits, not on how good a &apos;story&apos; researchers can write about it.'
+    }
+];
 // End of content.
 
 const About: NextPage<Props> = (props): JSX.Element => (
@@ -192,35 +205,47 @@ const About: NextPage<Props> = (props): JSX.Element => (
 
                 {/* What makes Octopus different? section */}
                 <div className="container lg:mx-auto lg:px-8">
-                    <h2 className="mx-auto mb-16 block px-8 text-center font-montserrat text-3xl font-bold lg:px-0">
+                    <h2 className="mx-auto mb-16 block px-8 text-center font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100 lg:px-0">
                         What makes Octopus different?
                     </h2>
-                    <div className="mx-auto mb-16 flex ">
-                        <div className="-ml-16 lg:ml-0">
+                    <div className="mx-auto mb-24 flex lg:w-6/12 2xl:w-5/12">
+                        <div className="-ml-24 lg:ml-0">
                             <Assets.LinkingVerticalWave />
                         </div>
-                        <div className="container -ml-24 grid grid-cols-1">
+                        <div className="container -ml-24 grid grid-cols-1 gap-1">
                             {publicationTypes.map((publicationType) => (
-                                <div className={`mt-2 lg:mt-10 ${publicationType.margin}`} key={publicationType.id}>
-                                    <div className="flex gap-4 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
-                                        <OutlineIcons.LinkIcon className="mb-2 h-5 w-5 rounded-full bg-grey-800 p-1 text-yellow-300 transition-colors duration-500 dark:text-yellow-300 lg:h-8 lg:w-8" />
+                                <div
+                                    className={`mt-8 h-[90px] lg:mt-14 ${publicationType.margin}`}
+                                    key={publicationType.id}
+                                >
+                                    <div className="flex items-start gap-6 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
+                                        <OutlineIcons.LinkIcon className="h-7 w-7 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 lg:mb-1" />
                                         {parse(publicationType.heading)}
                                     </div>
-                                    <div className="block w-10/12 pl-12 text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:text-base">
+                                    <div className="block pl-12 text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-[400px]  lg:pl-14 lg:text-sm">
                                         {parse(publicationType.content)}
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
-                    <div className="container mx-auto px-8 lg:w-10/12">
-                        <h4 className="mb-10 text-center font-montserrat text-xl font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4">
+                    <div className="container mx-auto mb-28 px-8 lg:w-10/12">
+                        <h4 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
                             Smaller units of publication encourage faster sharing, easier publication writing, and
                             smaller author groups.
                         </h4>
-                        <p className="mb-20 text-center text-lg text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12">
+                        <p className="mb-20 text-center text-base text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12 lg:text-lg">
                             Allowing researchers to get more meaningful credit for what they&apos;ve done.
                         </p>
+                    </div>
+                    <div className="container mx-auto mb-20 lg:mb-6">
+                        <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
+                            <OutlineIcons.LinkIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
+                            Peer Review
+                        </div>
+                        <div className="mx-auto block w-10/12 text-center text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-3/12 lg:text-base">
+                            A considered, detailed review of any of the above kinds of publication.
+                        </div>
                     </div>
                 </div>
             </Components.Section>
@@ -238,35 +263,17 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         Principles of Octopus
                     </h2>
 
-                    <div className="mx-auto mb-24 block px-2 text-xl lg:mb-12 lg:px-0 lg:text-2xl xl:mb-20">
-                        <ul>
-                            <li className="mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
-                                <span className="pt-1 font-montserrat font-medium">
-                                    Knowledge should not be locked behind paywalls.
-                                </span>
-                            </li>
-                            <li className="h-30 mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
-                                <span className="pt-1 font-montserrat font-medium">
-                                    New ideas and findings should be shared as quickly as possible.
-                                </span>
-                            </li>
-                            <li className="h-30 mb-8 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
-                                <span className="pt-1 font-montserrat font-medium">
-                                    Work should be accessible for people to share and read, regardless of the languages
-                                    they speak.
-                                </span>
-                            </li>
-                            <li className="h-30 flex min-h-[3rem] items-start gap-4">
-                                <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 text-black transition-colors duration-500 dark:text-white" />
-                                <span className="pt-1 font-montserrat font-medium">
-                                    Work should be judged on its merits, not on how good a &apos;story&apos; researchers
-                                    can write about it.
-                                </span>
-                            </li>
-                        </ul>
+                    <div className="mx-auto mb-24 block px-2 lg:mb-12 lg:px-0 xl:mb-20">
+                        {principles.map((principle) => (
+                            <ul key={principle.id}>
+                                <li className="mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 rounded-full bg-teal-100 text-black transition-colors duration-500 dark:text-white" />
+                                    <span className="pt-1 font-montserrat text-lg font-medium lg:text-2xl">
+                                        {parse(principle.content)}
+                                    </span>
+                                </li>
+                            </ul>
+                        ))}
                     </div>
 
                     <p className="mb-2 font-montserrat text-lg font-medium leading-relaxed text-grey-900 transition-colors duration-500 dark:text-white">
@@ -318,7 +325,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
 
                     <ul className="mb-20 lg:mx-auto lg:mb-0 lg:w-9/12">
                         <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10">
-                            <OutlineIcons.StarIcon className="col-span-1 mt-1 block h-12 w-12 fill-yellow-300 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
+                            <OutlineIcons.StarIcon className="col-span-1 mt-1 block h-12 w-12 fill-yellow-200 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
                             <span className="col-span-1 lg:col-span-11">
                                 Every publication you write (including reviews) can be rated by others. Your activity,
                                 including publications, reviews and ratings, will appear on your individual author page
@@ -327,7 +334,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                             </span>
                         </li>
                         <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10">
-                            <OutlineIcons.FlagIcon className="col-span-1 mt-1 block h-12 w-12 fill-peach-400 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
+                            <OutlineIcons.FlagIcon className="col-span-1 mt-1 block h-12 w-12 fill-peach-300 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
                             <span className="col-span-1 lg:col-span-11">
                                 To ensure academic integrity concerns, any publication can be &apos;red flagged&apos; by
                                 a logged-in user. This red flag will be visible on the publication page and will alert
