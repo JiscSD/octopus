@@ -414,6 +414,147 @@ const publicationSeeds = [
                 publicationTo: 'publication-problem-live'
             }
         }
+    },
+
+    // publications with and without conflicts of interest
+    {
+        id: 'publication-problem-draft-with-coi-but-no-support-or-explanatory',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true
+    },
+    {
+        id: 'publication-problem-draft-with-coi-with-support-but-no-explanatory',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true,
+        conflictOfInterestSupportText: 'This is support text'
+    },
+    {
+        id: 'publication-problem-draft-with-coi-with-explanatory-but-no-support',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true,
+        conflictOfInterestExplanatoryText: 'This is explanatory text'
+    },
+    {
+        id: 'publication-problem-draft-with-coi-with-explanatory-with-support',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true,
+        conflictOfInterestExplanatoryText: 'This is explanatory text',
+        conflictOfInterestSupportText: 'This is support text'
+    },
+    {
+        id: 'publication-problem-draft-with-no-coi',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: false
     }
 ];
 

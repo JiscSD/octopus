@@ -1,10 +1,4 @@
-import {
-    Prisma,
-    PublicationType,
-    LicenceType,
-    PublicationStatusEnum,
-    PublicationFlagCategoryEnum
-} from '@prisma/client';
+import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum } from '@prisma/client';
 export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum } from '@prisma/client';
 
 import {
@@ -18,16 +12,6 @@ export { HandlerLambda } from 'middy';
 export { Schema, JSONSchemaType } from 'ajv';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
-
-export interface JSONResponse {
-    body: string;
-    headers: any;
-    statusCode: number;
-}
-
-export interface User {
-    id: string;
-}
 
 export interface APIRequest<
     BodyOverride = string | undefined,
@@ -50,17 +34,17 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
-const pismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({
-    include: {
-        linkedTo: true,
-        linkedFrom: true
-    },
-    select: {
-        publicationStatus: true,
-        publicationFlags: true,
-        user: true
-    }
-});
+export interface JSONResponse {
+    body: string;
+    headers: any;
+    statusCode: number;
+}
+
+/**
+ * @description Publications
+ */
+
+const pismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
 export type Publication = Prisma.PublicationGetPayload<typeof pismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
@@ -83,9 +67,11 @@ export interface UpdateStatusPathParams {
     status: 'LIVE';
 }
 
-export interface CreateLinkBody {
-    to: string;
-    from: string;
+export interface UpdatePublicationRequestBody {
+    content?: string;
+    title?: string;
+    licence?: LicenceType;
+    id?: string;
 }
 
 export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
@@ -101,6 +87,21 @@ export interface PublicationFilters {
     type: string;
 }
 
+/**
+ * @description Links
+ */
+export interface CreateLinkBody {
+    to: string;
+    from: string;
+}
+
+/**
+ * @description Users
+ */
+export interface User {
+    id: string;
+}
+
 export interface UserFilters {
     search?: string;
     limit?: string;
@@ -113,12 +114,9 @@ export interface GetUserParameters {
     id: string;
 }
 
-export interface UpdatePublicationRequestBody {
-    content?: string;
-    title?: string;
-    licence?: LicenceType;
-    id?: string;
-}
+/**
+ * @description Flags
+ */
 
 export type FlagCategory =
     | 'PLAGIARISM'

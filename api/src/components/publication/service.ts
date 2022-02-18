@@ -21,8 +21,6 @@ export const getAll = async (filters: I.PublicationFilters) => {
         }
     };
 
-    console.log(query);
-
     if (filters.search) {
         //@ts-ignore
         query.where.OR = [
@@ -53,8 +51,6 @@ export const getAll = async (filters: I.PublicationFilters) => {
         ];
     }
 
-    console.log(query);
-
     // @ts-ignore
     const publications = await prisma.publication.findMany({
         ...query,
@@ -73,8 +69,6 @@ export const getAll = async (filters: I.PublicationFilters) => {
         take: Number(filters.limit) || 10,
         skip: Number(filters.offset) || 0
     });
-
-    console.log(publications);
 
     // @ts-ignore
     const totalPublications = await prisma.publication.count(query);
@@ -265,16 +259,29 @@ export const createFlag = async (
     return flag;
 };
 
-export const isPublicationReadyToPublish = async (publication: I.Publication) => {
-    // check content, is it in a state where it can go live.
-    const publicationHasAllKeys = ['title', 'content', 'licence'].every((field) => publication[field]);
+export const validateConflictOfInterest = (publication: I.Publication) => {
+    if (publication.conflictOfInterestStatus) {
+        if (
+            !publication.conflictOfInterestSupportText?.length ||
+            !publication.conflictOfInterestExplanatoryText?.length
+        )
+            return false;
+    }
 
-    console.log(publication);
+    return true;
+};
 
-    // add more logic about is conflcit of interest here...
-    // if conflict of interest = true, need free text field, otherwise can be null
+export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
+    let isReady = false;
 
-    const passed = publicationHasAllKeys && publication.linkedTo.length !== 0;
+    // @ts-ignore This needs looking at, type mismatch between infered type from get method to what Prisma has
+    const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
+    const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
+    const conflictOfInterest = validateConflictOfInterest(publication);
+    const isAttemptToLive = status === 'LIVE';
 
-    return passed;
+    // More external checks can be chained here for the future
+    if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && isAttemptToLive) isReady = true;
+
+    return isReady;
 };
