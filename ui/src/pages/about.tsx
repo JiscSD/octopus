@@ -219,7 +219,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                                     key={publicationType.id}
                                 >
                                     <div className="flex items-start gap-6 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
-                                        <OutlineIcons.LinkIcon className="h-7 w-7 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 lg:mb-1" />
+                                        <OutlineIcons.LinkIcon className="h-7 w-7 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 dark:bg-teal-50 dark:text-black lg:mb-1" />
                                         {parse(publicationType.heading)}
                                     </div>
                                     <div className="block pl-12 text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-[400px]  lg:pl-14 lg:text-sm">
@@ -253,9 +253,9 @@ const About: NextPage<Props> = (props): JSX.Element => (
             <Components.SectionTwo
                 id="principles_of_octopus"
                 className="bg-teal-300 dark:bg-grey-900"
-                waveFillTop="fill-teal-400 dark:fill-grey-600 transition-colors duration-500"
-                waveFillMiddle="fill-teal-200 dark:fill-grey-700 transition-colors duration-500"
-                waveFillBottom="fill-teal-100 dark:fill-grey-800 transition-colors duration-500"
+                waveFillTop="fill-teal-400 dark:fill-grey-700 transition-colors duration-500"
+                waveFillMiddle="fill-teal-200 dark:fill-grey-800 transition-colors duration-500"
+                waveFillBottom="fill-teal-100 dark:fill-grey-900 transition-colors duration-500"
             >
                 {/* Principles of Octopus section */}
                 <div className="container mx-auto mb-10 px-8 pt-32 pb-10 text-grey-900 dark:text-white lg:mb-2 lg:w-10/12">
@@ -267,7 +267,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         {principles.map((principle) => (
                             <ul key={principle.id}>
                                 <li className="mb-14 flex min-h-[3rem] items-start gap-4 lg:mb-12">
-                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 rounded-full bg-teal-100 text-black transition-colors duration-500 dark:text-white" />
+                                    <OutlineIcons.LightBulbIcon className="mt-1 w-10 min-w-[2rem] basis-7 rounded-full bg-teal-100 text-black transition-colors duration-500 " />
                                     <span className="pt-1 font-montserrat text-lg font-medium lg:text-2xl">
                                         {parse(principle.content)}
                                     </span>
@@ -288,9 +288,9 @@ const About: NextPage<Props> = (props): JSX.Element => (
 
             <Components.Section
                 id="using_octopus"
-                className="bg-teal-100 transition-colors duration-500 dark:bg-grey-800"
-                waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
-                waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
+                className="bg-teal-100 transition-colors duration-500 dark:bg-grey-900"
+                waveFillTop="fill-teal-500 dark:fill-grey-500 transition-colors duration-500"
+                waveFillMiddle="fill-teal-600 dark:fill-grey-600 transition-colors duration-500"
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
                 {/* How do I use Octopus? section */}
@@ -324,7 +324,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                     </div>
 
                     <ul className="mb-20 lg:mx-auto lg:mb-0 lg:w-9/12">
-                        <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10">
+                        <li className="mb-20 grid min-h-[8rem] grid-cols-1 gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:mb-10 lg:grid-cols-12 lg:items-center lg:pl-10">
                             <OutlineIcons.StarIcon className="col-span-1 mt-1 block h-12 w-12 fill-yellow-200 text-grey-900 transition-colors duration-500 dark:fill-yellow-500 dark:text-white lg:mr-4" />
                             <span className="col-span-1 lg:col-span-11">
                                 Every publication you write (including reviews) can be rated by others. Your activity,
@@ -333,7 +333,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                                 through constructive reviewing, is therefore rewarded.
                             </span>
                         </li>
-                        <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:grid-cols-12 lg:pl-10">
+                        <li className="mb-8 grid min-h-[8rem] grid-cols-1 items-center gap-4 font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:grid-cols-12 lg:pl-10">
                             <OutlineIcons.FlagIcon className="col-span-1 mt-1 block h-12 w-12 fill-peach-300 text-grey-900 transition-colors duration-500 dark:text-white lg:mr-4" />
                             <span className="col-span-1 lg:col-span-11">
                                 To ensure academic integrity concerns, any publication can be &apos;red flagged&apos; by
