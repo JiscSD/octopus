@@ -13,6 +13,11 @@ module.exports = {
                 'http://localhost:3000/search'
             ]
         },
+        assert: {
+            assertions: {
+                'categories:accessibility': ['error', { minScore: 0.9 }]
+            }
+        },
         upload: {
             target: 'temporary-public-storage'
         }
