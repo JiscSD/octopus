@@ -51,9 +51,12 @@ export type PublicationType =
     | 'INTERPRETATION'
     | 'PEER_REVIEW';
 
+export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+
 export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
+    licence?: LicenceType;
     content?: string;
 }
 
@@ -115,5 +118,23 @@ export interface GetUserParameters {
 export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
+    licence?: LicenceType;
     id?: string;
+}
+
+export type FlagCategory =
+    | 'PLAGIARISM'
+    | 'ETHICAL_ISSUES'
+    | 'MISREPRESENTATION'
+    | 'UNDECLARED_IMAGE_MANIPULATION'
+    | 'COPYRIGHT'
+    | 'INAPPROPRIATE';
+
+export interface CreateFlagPathParams {
+    id: string;
+}
+
+export interface CreateFlagRequestBody {
+    category: FlagCategory;
+    comments: string;
 }

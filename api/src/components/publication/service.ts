@@ -70,19 +70,11 @@ export const getAll = async (filters: I.PublicationFilters) => {
         skip: Number(filters.offset) || 0
     });
 
-    const removeFirstNameFromPublications = publications.map((publication) => {
-        // @ts-ignore
-        const user = publication.user;
-        user.firstName = user.firstName[0];
-
-        return { ...publication, user };
-    });
-
     // @ts-ignore
     const totalPublications = await prisma.publication.count(query);
 
     return {
-        data: removeFirstNameFromPublications,
+        data: publications,
         metadata: {
             total: totalPublications,
             limit: Number(filters.limit) || 10,
@@ -128,6 +120,15 @@ export const get = async (id: string) => {
                     createdAt: 'desc'
                 }
             },
+            publicationFlags: {
+                select: {
+                    category: true,
+                    comments: true,
+                    createdBy: true,
+                    id: true,
+                    createdAt: true
+                }
+            },
             user: {
                 select: {
                     id: true,
@@ -158,6 +159,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
         data: {
             title: e.title,
             type: e.type,
+            licence: e.licence,
             content: e.content,
             user: {
                 connect: {
@@ -229,4 +231,25 @@ export const updateStatus = async (id: string, status: I.PublicationStatus) => {
     });
 
     return updatedPublication;
+};
+
+export const createFlag = async (publication: string, user: string, category: I.FlagCategory, comments: string) => {
+    const flag = await prisma.publicationFlags.create({
+        data: {
+            comments,
+            category,
+            user: {
+                connect: {
+                    id: user
+                }
+            },
+            publication: {
+                connect: {
+                    id: publication
+                }
+            }
+        }
+    });
+
+    return flag;
 };

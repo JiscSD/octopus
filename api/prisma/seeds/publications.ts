@@ -37,6 +37,7 @@ const publicationSeeds = [
         id: 'publication-problem-live',
         title: 'Publication PROBLEM-LIVE',
         type: 'PROBLEM',
+        licence: 'CC_BY',
         content: 'Publication PROBLEM-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -61,6 +62,7 @@ const publicationSeeds = [
         id: 'publication-problem-draft',
         title: 'Publication PROBLEM-DRAFT',
         type: 'PROBLEM',
+        licence: 'CC_BY',
         content: 'Publication PROBLEM-DRAFT',
         currentStatus: 'DRAFT',
         user: {
@@ -83,6 +85,7 @@ const publicationSeeds = [
         id: 'publication-hypothesis-live',
         title: 'Publication HYPOTHESIS-LIVE',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -129,6 +132,7 @@ const publicationSeeds = [
         id: 'publication-protocol-live',
         title: 'Publication PROTOCOL-LIVE',
         type: 'PROTOCOL',
+        licence: 'CC_BY',
         content: 'Publication PROTOCOL-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -175,6 +179,7 @@ const publicationSeeds = [
         id: 'publication-data-live',
         title: 'Publication DATA-LIVE',
         type: 'DATA',
+        licence: 'CC_BY',
         content: 'Publication DATA-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -221,6 +226,7 @@ const publicationSeeds = [
         id: 'publication-analysis-live',
         title: 'Publication ANALYSIS-LIVE',
         type: 'ANALYSIS',
+        licence: 'CC_BY',
         content: 'Publication ANALYSIS-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -267,6 +273,7 @@ const publicationSeeds = [
         id: 'publication-interpretation-live',
         title: 'Publication INTERPRETATION-LIVE',
         type: 'INTERPRETATION',
+        licence: 'CC_BY',
         content: 'Publication INTERPRETATION-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -313,6 +320,7 @@ const publicationSeeds = [
         id: 'publication-real-world-application-live',
         title: 'Publication REAL_WORLD_APPLICATION-LIVE',
         type: 'REAL_WORLD_APPLICATION',
+        licence: 'CC_BY',
         content: 'Publication REAL_WORLD_APPLICATION-LIVE',
         currentStatus: 'LIVE',
         user: {
@@ -359,6 +367,7 @@ const publicationSeeds = [
         id: 'publication-hypothesis-draft-problem-live',
         title: 'Publication HYPOTHESIS-DRAFT',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-DRAFT',
         currentStatus: 'DRAFT',
         user: {
@@ -385,6 +394,7 @@ const publicationSeeds = [
         id: 'publication-problem-draft-no-content',
         title: 'Publication PROBLEM-DRAFT',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         currentStatus: 'DRAFT',
         user: {
             connect: {
