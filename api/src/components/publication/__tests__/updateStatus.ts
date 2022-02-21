@@ -74,6 +74,7 @@ describe('Update publication status', () => {
 
         expect(updatedPublication.status).toEqual(404);
     });
+
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no licence.', async () => {
         const updatedPublication = await testUtils.agent
             .put('/publications/publication-hypothesis-draft/status/LIVE')
@@ -82,5 +83,16 @@ describe('Update publication status', () => {
             });
 
         expect(updatedPublication.status).toEqual(404);
+    });
+
+    test('User with permissions can update their publication to LIVE from DRAFT and a publishedDate is created', async () => {
+        const updatedPublication = await testUtils.agent
+            .put('/publications/publication-hypothesis-draft-problem-live/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(updatedPublication.status).toEqual(200);
+        expect(updatedPublication.body.publishedDate).toBeTruthy();
     });
 });
