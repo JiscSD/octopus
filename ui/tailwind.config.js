@@ -19,16 +19,16 @@ module.exports = {
                 900: 'hsl(216, 20%, 5%)' // #0a0c0f
             },
             teal: {
-                50: 'hsl(184, 54%, 95%)', // #ebf8f9
-                100: 'hsl(187, 55%, 85%)', // #c4e9ee
-                200: 'hsl(186, 55%, 75%)', // #9cdbe2
-                300: 'hsl(186, 54%, 65%)', // #75ccd6
-                400: 'hsl(186, 55%, 55%)', // #4ebecb
-                500: 'hsl(186, 55%, 45%)', // #34a4b1
-                600: 'hsl(186, 54%, 35%)', // #29808a
-                700: 'hsl(187, 55%, 25%)', // #1d5b63
-                800: 'hsl(186, 55%, 15%)', // #11373b
-                900: 'hsl(189, 54%, 5%)' // #061214
+                50: 'hsl(197, 54%, 95%)', // #ebf5f9
+                100: 'hsl(199, 55%, 85%)', // #c4e1ee
+                200: 'hsl(198, 55%, 75%)', // #9ccde2
+                300: 'hsl(198, 54%, 65%)', // #75b9d6
+                400: 'hsl(198, 55%, 55%)', // #4ea5cb
+                500: 'hsl(198, 55%, 45%)', // #348cb1
+                600: 'hsl(198, 54%, 35%)', // #296d8a
+                700: 'hsl(198, 55%, 25%)', // #1d4e63
+                800: 'hsl(197, 55%, 15%)', // #112f3b
+                900: 'hsl(197, 54%, 5%)' // #061014
             },
             purple: {
                 50: 'hsl(248, 62%, 95%)', // #eceafa
@@ -94,7 +94,7 @@ module.exports = {
             black: '#000000'
         },
         fontFamily: {
-            inter: ['Inter', ...defaultTheme.fontFamily.sans],
+            inter: ['Inter var', ...defaultTheme.fontFamily.sans],
             montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
         },
         extend: {
