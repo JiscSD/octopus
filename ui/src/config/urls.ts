@@ -1,14 +1,18 @@
 let host: string;
+let orcidAppiID: string;
 
 switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
-        host = 'http://localhost:3000';
+        host = 'https://localhost:3000';
+        orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
         break;
     case 'prod':
         host = 'https://octopus.ac';
+        orcidAppiID = '';
         break;
     default:
         host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
+        orcidAppiID = '';
 }
 
 const base = {
@@ -123,6 +127,9 @@ const urls = {
     },
     500: {
         title: `Something went wrong - ${base.title}`
+    },
+    orcidLogin: {
+        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/callback`
     }
 };
 
