@@ -125,9 +125,12 @@ export const updateStatus = async (
             });
         }
 
+        const shouldPublishedDateBeUpdated = !!!publication.publishedDate && event.pathParameters.status === 'LIVE';
+
         const updatedPublication = await publicationService.updateStatus(
             event.pathParameters.id,
-            event.pathParameters.status
+            event.pathParameters.status,
+            shouldPublishedDateBeUpdated
         );
 
         return response.json(200, updatedPublication);

@@ -79,6 +79,7 @@ model Publication {
     conflictOfInterestText   String?
     content                  String?
     doi                      String?
+    publishedDate            DateTime?
 
     currentStatus PublicationStatusEnum @default(DRAFT)
 

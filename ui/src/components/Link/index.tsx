@@ -6,6 +6,7 @@ type Props = {
     className?: string;
     scroll?: boolean;
     openNew?: boolean;
+    ariaLabel?: string;
     children: React.ReactElement[] | React.ReactElement;
 };
 
@@ -16,6 +17,7 @@ const CustomLink: React.FC<Props> = (props): JSX.Element => {
                 className={props.className}
                 target={props.openNew ? '_blank' : ''}
                 rel={props.openNew ? 'noreferrer noopener' : ''}
+                aria-label={props.ariaLabel}
             >
                 {props.children}
             </a>

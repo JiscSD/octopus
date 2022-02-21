@@ -197,7 +197,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
 };
 
 export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
-    const updatedPublication = await prisma.publication.update({
+    const updatePublishedDate = await prisma.publication.update({
         where: {
             id
         },
@@ -229,6 +229,14 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
             }
         }
     });
+
+    if (updatePublishedDate) {
+        // @ts-ignore
+        query.data.publishedDate = new Date().toISOString();
+    }
+
+    // @ts-ignore
+    const updatedPublication = await prisma.publication.update(query);
 
     return updatedPublication;
 };

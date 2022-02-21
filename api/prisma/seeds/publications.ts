@@ -40,6 +40,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROBLEM-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -88,6 +89,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -135,6 +137,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROTOCOL-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -182,6 +185,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication DATA-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -229,6 +233,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication ANALYSIS-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -276,6 +281,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication INTERPRETATION-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -323,6 +329,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication REAL_WORLD_APPLICATION-LIVE',
         currentStatus: 'LIVE',
+        publishedDate: '2022-01-22T15:51:42.523Z',
         user: {
             connect: {
                 id: 'test-user-1'
