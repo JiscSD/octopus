@@ -261,11 +261,7 @@ export const createFlag = async (
 
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
-        if (
-            !publication.conflictOfInterestSupportText?.length ||
-            !publication.conflictOfInterestExplanatoryText?.length
-        )
-            return false;
+        if (!publication.conflictOfInterestText?.length) return false;
     }
 
     return true;
@@ -278,6 +274,9 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
+
+    console.log('COI test', conflictOfInterest);
+
     const isAttemptToLive = status === 'LIVE';
 
     // More external checks can be chained here for the future

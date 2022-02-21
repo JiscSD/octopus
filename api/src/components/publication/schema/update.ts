@@ -19,10 +19,7 @@ const updatePublicationSchema: I.Schema = {
         conflictOfInterestStatus: {
             type: 'boolean'
         },
-        conflictOfInterestSupportText: {
-            type: 'string'
-        },
-        conflictOfInterestExplanatoryText: {
+        conflictOfInterestText: {
             type: 'string'
         }
     },
