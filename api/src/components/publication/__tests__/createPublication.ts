@@ -110,4 +110,20 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(422);
     });
+
+    test('Valid publication created by real user with content does not have a publishedDate (200)', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PEER_REVIEW',
+                title: 'Publication test 2',
+                content: 'Content'
+            });
+
+        expect(createPublicationRequest.status).toEqual(200);
+        expect(createPublicationRequest.body.publishedDate).toBeNull();
+    });
 });
