@@ -118,19 +118,21 @@ export const updateStatus = async (
             return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
         }
 
-        // Ensure this publication is ready & is going from DRAFT -> LIVE
-        if (!publicationService.isPublicationReadyToPublish(publication, event.pathParameters.status)) {
+        const isReadyToPublish = publicationService.isPublicationReadyToPublish(
+            publication,
+            event.pathParameters.status
+        );
+
+        if (!isReadyToPublish) {
             return response.json(404, {
                 message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
             });
         }
 
-        const shouldPublishedDateBeUpdated = !!!publication.publishedDate && event.pathParameters.status === 'LIVE';
-
         const updatedPublication = await publicationService.updateStatus(
             event.pathParameters.id,
             event.pathParameters.status,
-            shouldPublishedDateBeUpdated
+            isReadyToPublish
         );
 
         return response.json(200, updatedPublication);

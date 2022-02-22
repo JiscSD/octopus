@@ -196,8 +196,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
-    const updatePublishedDate = await prisma.publication.update({
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum, isReadyToPublish: boolean) => {
+    const query = {
         where: {
             id
         },
@@ -228,9 +228,9 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
                 }
             }
         }
-    });
+    };
 
-    if (updatePublishedDate) {
+    if (isReadyToPublish) {
         // @ts-ignore
         query.data.publishedDate = new Date().toISOString();
     }
@@ -282,13 +282,12 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
-
-    console.log('COI test', conflictOfInterest);
+    const hasPublishDate = Boolean(publication.publishedDate);
 
     const isAttemptToLive = status === 'LIVE';
 
     // More external checks can be chained here for the future
-    if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && isAttemptToLive) isReady = true;
+    if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && !hasPublishDate && isAttemptToLive) isReady = true;
 
     return isReady;
 };

@@ -128,9 +128,11 @@ describe('Update publication status', () => {
     });
 
     test('User with permissions can update their publication to LIVE if they have no conflict of interest & have provided text', async () => {
-        const updatedPublication = await testUtils.agent.put(
-            '/publications/publication-problem-draft-with-no-coi-with-text/status/LIVE'
-        );
+        const updatedPublication = await testUtils.agent
+            .put('/publications/publication-problem-draft-with-no-coi-with-text/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
 
         expect(updatedPublication.status).toEqual(200);
     });
