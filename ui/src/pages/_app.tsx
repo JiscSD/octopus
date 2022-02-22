@@ -71,7 +71,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         }
                     }}
                 >
-                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''} `}>
+                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''}`}>
                         <Components.CommandPalette />
 
                         <Component {...pageProps} />

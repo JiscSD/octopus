@@ -194,8 +194,6 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         setOffset(0);
     }, [searchType, query, publicationTypes, limit, orderBy, orderDirection]);
 
-    React.useEffect(() => showCmdPalette && toggleCmdPalette(), []);
-
     return (
         <>
             <Head>
@@ -419,9 +417,8 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
 
                                             if (searchType === 'publications') {
                                                 return (
-                                                    <Components.Delay delay={index * 50}>
+                                                    <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.PublicationSearchResult
-                                                            key={result.id}
                                                             id={result.id}
                                                             title={result.title}
                                                             createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
@@ -434,9 +431,8 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                             }
                                             if (searchType === 'users') {
                                                 return (
-                                                    <Components.Delay delay={index * 50}>
+                                                    <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.UserSearchResult
-                                                            key={result.id}
                                                             user={result}
                                                             className={classes}
                                                         />

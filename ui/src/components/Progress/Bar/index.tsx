@@ -4,10 +4,15 @@ import * as Framer from 'framer-motion';
 type Props = {
     value: number;
     color?: string;
+    width?: number;
+    className?: string;
 };
 
 const Bar: React.FC<Props> = (props): JSX.Element => (
-    <div className="relative w-52">
+    <div
+        style={{ width: props.width ? props.width : 0 }}
+        className={`relative ${props.className ? props.className : ''}`}
+    >
         <Framer.motion.span
             initial={{ width: 0 }}
             animate={{ width: `${props.value}%` }}

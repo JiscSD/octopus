@@ -1,13 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
-import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
 import * as Framer from 'framer-motion';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
-import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as API from '@api';
@@ -23,7 +20,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
-        console.log(message);
     }
 
     if (!user || error) {
@@ -44,12 +40,7 @@ type Props = {
 };
 
 const Author: Types.NextPage<Props> = (props): JSX.Element => {
-    const router = Router.useRouter();
-    const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     const [publicationLimit, setPublicationLimit] = React.useState(1);
-
-    React.useEffect(() => showCmdPalette && toggleCmdPalette(), []);
 
     return (
         <>
@@ -70,7 +61,7 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
                         <div className="mb-8 flex items-center">
                             <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
                             <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
-                                {props.user.firstName}. {props.user.lastName}
+                                {props.user.firstName} {props.user.lastName}
                             </h1>
                         </div>
                         <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white">
@@ -79,14 +70,14 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
                     </header>
 
                     <section id="content" className="container mx-auto px-8 pb-12 lg:pb-24">
-                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 dark:text-white lg:mb-8">
+                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
                             Research breakdown
                         </h2>
                         <Components.PublicationBreakdown publications={props.user.Publication} />
                     </section>
 
                     <section className="container mx-auto mb-16 px-8">
-                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 dark:text-white lg:mb-8">
+                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
                             Octopus publications
                         </h2>
                         {props.user.Publication.length ? (

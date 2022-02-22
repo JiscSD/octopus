@@ -17,36 +17,70 @@ const Breakdown: React.FC<Props> = (props): JSX.Element => {
 
             return {
                 title: Helpers.formatPublicationType(type),
-                color: Helpers.randomColor(),
-                value: count ? count : 0
+                color: Helpers.publicationColor(type),
+                value: count ? count : 0 // value: Helpers.randomWholeNumberInRange(0, 100000) // test data
             };
         })
     ]);
 
+    const totalCount = React.useMemo(() => values.reduce((sum, curr) => sum + curr.value, 0), [values]);
+    const highestValue = React.useMemo(
+        () => values.reduce((sum, curr) => (sum > curr.value ? sum : curr.value), 0),
+        [values]
+    );
+
     return (
-        <div className="w-fit rounded-3xl border border-grey-100 bg-white px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600">
-            <div className="inline-flex">
-                <Components.ProgressCircle
-                    title="100"
-                    subTitle="text here"
-                    values={values}
-                    width={100}
-                    height={100}
-                    thickness={15}
-                />
+        <div className="grid w-full gap-8 rounded-3xl border border-grey-100 bg-white px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600 lg:w-fit lg:grid-cols-[max-content_auto]">
+            {/** circle */}
+            <div className="relative mx-auto">
+                <Components.ProgressCircle values={values} width={100} height={100} thickness={20} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <span className="mb-4 block text-center font-montserrat text-5xl font-medium text-teal-500 transition-colors duration-500 dark:text-white">
+                        {totalCount}
+                    </span>
+                    <span className="block text-center font-montserrat text-2xl transition-colors duration-500 dark:text-grey-50">
+                        Publications
+                    </span>
+                </div>
             </div>
 
-            <div className="inline-block">
-                {values.map((value) => (
-                    <div key={value.value} className="flex">
-                        <span className="min-w-[12rem] text-right">{value.title}</span>
-                        <span className="mx-4 min-w-[1.5rem]">({value.value})</span>
-                        <Components.ProgressBar
-                            value={Math.round(Helpers.percentage(value.value, props.publications.length))}
-                            color={value.color}
-                        />
-                    </div>
-                ))}
+            {/** bars */}
+            <div className="grid items-center gap-y-3 lg:gap-y-0">
+                {values.map((value) => {
+                    const valuePercentage = Math.round(Helpers.percentage(value.value, props.publications.length));
+                    const highestPercentage = Math.round(Helpers.percentage(highestValue, props.publications.length));
+
+                    let max = highestPercentage;
+                    if (highestPercentage > 350) max = 350;
+                    if (highestPercentage < 200) max = 200;
+
+                    return (
+                        <div
+                            key={value.title}
+                            className="grid grid-cols-[auto_auto] lg:grid-cols-[minmax(12.5rem_,_max-content)_minmax(6rem_,_max-content)_auto]"
+                        >
+                            <span
+                                key={value.title}
+                                className="font-montserrat transition-colors duration-500 dark:text-grey-100 lg:text-right"
+                            >
+                                {value.title}
+                            </span>
+                            <span
+                                key={value.value}
+                                className="mx-4 text-right font-montserrat transition-colors duration-500 dark:text-grey-100 lg:text-center"
+                            >
+                                ({value.value})
+                            </span>
+                            <Components.ProgressBar
+                                key={value.color}
+                                value={Helpers.percentage(valuePercentage, highestPercentage)}
+                                color={value.color}
+                                width={max}
+                                className="col-span-2 mt-3 h-4 lg:col-span-1 lg:mt-0 lg:h-full"
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -13,8 +13,6 @@ type Props = {
     width: number;
     height: number;
     thickness: number;
-    title: string;
-    subTitle: string;
     values: Data[];
 };
 
