@@ -19,12 +19,7 @@ const items: Interfaces.NavMenuItem[] = [
 const Nav: React.FC = (): JSX.Element => {
     const screens = Hooks.useWindowSize();
 
-    return (
-        <>
-            {screens.sm && <Components.NavMobile items={items} />}
-            {!screens.sm && <Components.NavDesktop items={items} />}
-        </>
-    );
+    return <>{screens.sm ? <Components.NavMobile items={items} /> : <Components.NavDesktop items={items} />}</>;
 };
 
 export default Nav;

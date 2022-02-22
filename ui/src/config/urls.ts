@@ -93,9 +93,16 @@ const urls = {
     about: {
         path: '/about',
         title: `About Octopus - ${base.title}`,
-        description: '',
-        keywords: '',
+        description: 'More information about the Octopus platform.',
+        keywords: 'about, octopus',
         canonical: `${base.host}/about`
+    },
+    faq: {
+        path: '/faq',
+        title: `Frequently Asked Questions - ${base.title}`,
+        description: 'Frequently asked questions about the Octopus platform.',
+        keywords: 'faq, octopus',
+        canonical: `${base.host}/faq`
     },
     documentation: {
         path: '/documentation',
@@ -103,6 +110,13 @@ const urls = {
         description: '',
         keywords: '',
         canonical: `${base.host}/documentation`
+    },
+    accessibility: {
+        path: '/accessibility',
+        title: `Accessibility - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/accessibility`
     },
     404: {
         title: `404 Not Found - ${base.title}`

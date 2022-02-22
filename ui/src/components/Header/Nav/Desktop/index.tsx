@@ -17,7 +17,7 @@ const Desktop: React.FC<Props> = (props): JSX.Element => {
                             href={item.value}
                             className="rounded border-transparent p-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <span className="font-manrope text-white">{item.label}</span>
+                            <span className=" text-white">{item.label}</span>
                         </Components.Link>
                     </li>
                 ))}

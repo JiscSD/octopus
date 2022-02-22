@@ -10,7 +10,7 @@ describe('Get individual user', () => {
         const user = await testUtils.agent.get('/users/test-user-1');
 
         expect(user.status).toEqual(200);
-        expect(user.body.firstName).toEqual('T');
+        expect(user.body.firstName).toEqual('Test');
     });
 
     test('User not found', async () => {

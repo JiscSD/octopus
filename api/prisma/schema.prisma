@@ -30,7 +30,8 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    Publication Publication[]
+    Publication      Publication[]
+    PublicationFlags PublicationFlags[]
 }
 
 enum PublicationStatusEnum {
@@ -50,6 +51,15 @@ enum PublicationType {
     PEER_REVIEW
 }
 
+enum PublicationFlagCategoryEnum {
+    PLAGIARISM
+    ETHICAL_ISSUES
+    MISREPRESENTATION
+    UNDECLARED_IMAGE_MANIPULATION
+    COPYRIGHT
+    INAPPROPRIATE
+}
+
 enum LicenceType {
     CC_BY
     CC_BY_SA
@@ -60,13 +70,14 @@ enum LicenceType {
 }
 
 model Publication {
-    id       String          @id @default(cuid())
-    url_slug String          @unique @default(cuid())
-    type     PublicationType
-    title    String?
-    licence  LicenceType?
-    content  String?
-    doi      String?
+    id            String          @id @default(cuid())
+    url_slug      String          @unique @default(cuid())
+    type          PublicationType
+    title         String?
+    licence       LicenceType?
+    content       String?
+    doi           String?
+    publishedDate DateTime?
 
     currentStatus PublicationStatusEnum @default(DRAFT)
 
@@ -81,6 +92,7 @@ model Publication {
     linkedFrom Links[] @relation("to")
 
     publicationStatus PublicationStatus[]
+    publicationFlags  PublicationFlags[]
 }
 
 model Links {
@@ -106,4 +118,19 @@ model PublicationStatus {
     createdAt DateTime @default(now())
 
     publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+}
+
+model PublicationFlags {
+    id            String                      @id @default(cuid())
+    publicationId String
+    category      PublicationFlagCategoryEnum
+    comments      String
+    createdBy     String
+
+    createdAt DateTime @default(now())
+
+    user        User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, category, createdBy])
 }

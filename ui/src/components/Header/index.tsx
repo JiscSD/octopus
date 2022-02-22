@@ -33,15 +33,7 @@ const Header: React.FC<Props> = (props): JSX.Element => {
                     <span className="block font-montserrat text-2xl font-bold text-white">Octopus</span>
                 </Components.Link>
                 <div className="flex items-center">
-                    <button
-                        className="mr-6 rounded border-transparent p-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                        onClick={(e) => toggleCmdPalette()}
-                    >
-                        Search
-                        <span className="ml-2 text-sm text-teal-300 transition-colors duration-500 dark:text-grey-500">
-                            {Helpers.setOSKey()}
-                        </span>
-                    </button>
+                    <Components.Search />
                     <Components.Nav />
                     <Components.EnableDarkMode />
                 </div>
