@@ -396,7 +396,6 @@ const publicationSeeds = [
             }
         }
     },
-
     {
         id: 'publication-problem-draft-no-content',
         title: 'Publication PROBLEM-DRAFT',
@@ -421,6 +420,119 @@ const publicationSeeds = [
                 publicationTo: 'publication-problem-live'
             }
         }
+    },
+
+    // publications with and without conflicts of interest
+    {
+        id: 'publication-problem-draft-with-coi-but-no-text',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true
+    },
+    {
+        id: 'publication-problem-draft-with-coi-with-text',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: true,
+        conflictOfInterestText: 'This is text text'
+    },
+    {
+        id: 'publication-problem-draft-with-no-coi-with-no-text',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: false
+        // conflictOfInterestText: 'This is text text'
+    },
+    {
+        id: 'publication-problem-draft-with-no-coi-with-text',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: false,
+        conflictOfInterestText: 'This is text text'
     }
 ];
 

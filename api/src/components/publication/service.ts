@@ -1,12 +1,12 @@
-import * as I from 'interface';
-
 import prisma from 'lib/client';
+
+import * as I from 'interface';
 
 export const getAll = async (filters: I.PublicationFilters) => {
     const query = {
         where: {
             type: {
-                in: (filters.type.split(',') as I.ProblemTypes) || [
+                in: (filters.type.split(',') as I.PublicationType[]) || [
                     'PROBLEM',
                     'PROTOCOL',
                     'ANALYSIS',
@@ -22,7 +22,7 @@ export const getAll = async (filters: I.PublicationFilters) => {
     };
 
     if (filters.search) {
-        // @ts-ignore
+        //@ts-ignore
         query.where.OR = [
             {
                 title: {
@@ -196,7 +196,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatus, updatePublishedDate: boolean) => {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum, isReadyToPublish: boolean) => {
     const query = {
         where: {
             id
@@ -230,7 +230,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatus, upda
         }
     };
 
-    if (updatePublishedDate) {
+    if (isReadyToPublish) {
         // @ts-ignore
         query.data.publishedDate = new Date().toISOString();
     }
@@ -241,7 +241,12 @@ export const updateStatus = async (id: string, status: I.PublicationStatus, upda
     return updatedPublication;
 };
 
-export const createFlag = async (publication: string, user: string, category: I.FlagCategory, comments: string) => {
+export const createFlag = async (
+    publication: string,
+    user: string,
+    category: I.PublicationFlagCategoryEnum,
+    comments: string
+) => {
     const flag = await prisma.publicationFlags.create({
         data: {
             comments,
@@ -260,4 +265,29 @@ export const createFlag = async (publication: string, user: string, category: I.
     });
 
     return flag;
+};
+
+export const validateConflictOfInterest = (publication: I.Publication) => {
+    if (publication.conflictOfInterestStatus) {
+        if (!publication.conflictOfInterestText?.length) return false;
+    }
+
+    return true;
+};
+
+export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
+    let isReady = false;
+
+    // @ts-ignore This needs looking at, type mismatch between infered type from get method to what Prisma has
+    const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
+    const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
+    const conflictOfInterest = validateConflictOfInterest(publication);
+    const hasPublishDate = Boolean(publication.publishedDate);
+
+    const isAttemptToLive = status === 'LIVE';
+
+    // More external checks can be chained here for the future
+    if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && !hasPublishDate && isAttemptToLive) isReady = true;
+
+    return isReady;
 };

@@ -5,7 +5,7 @@ const updatedPublicationSchema: I.Schema = {
     properties: {
         status: {
             type: 'string',
-            enum: ['LIVE']
+            enum: <I.PublicationStatusEnum[]>['LIVE']
         },
         id: {
             type: 'string'
