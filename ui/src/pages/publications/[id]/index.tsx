@@ -47,13 +47,14 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const sectionList = React.useMemo(() => {
         let list = [
             { title: 'Authors', href: 'authors' },
+            { title: 'Conflict of interest', href: 'coi' },
             { title: 'Full text', href: 'full-text' }
         ];
         switch (props.publication.type) {
-            case 'PEER_REVIEW':
+            case 'PROBLEM':
                 list = [...list, { title: 'Linked from', href: 'linked-from' }];
                 break;
-            case 'PROBLEM':
+            case 'PEER_REVIEW':
                 list = [...list, { title: 'Linked to', href: 'linked-to' }];
                 break;
             default:
@@ -77,7 +78,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-800"
+                    className="bg-white-50 dark:bg-grey-800"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
@@ -102,23 +103,24 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                         {props.publication.doi}
                                     </span>
                                 </span>
-                                <Components.ActionButton
-                                    title="Write a review"
-                                    icon={
-                                        <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
-                                    }
-                                    callback={(e) => {
-                                        e.preventDefault();
-                                        router.push({
-                                            pathname: `${Config.urls.createPublication.path}`,
-                                            query: {
-                                                for: props.publication.id,
-                                                type: 'review'
-                                            }
-                                        });
-                                    }}
-                                    className="mr-6 mb-4 lg:mb-0"
-                                />
+                                {props.publication.type !== 'PEER_REVIEW' && (
+                                    <Components.ActionButton
+                                        title="Write a review"
+                                        icon={
+                                            <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
+                                        }
+                                        callback={() => {
+                                            router.push({
+                                                pathname: `${Config.urls.createPublication.path}`,
+                                                query: {
+                                                    for: props.publication.id,
+                                                    type: 'review'
+                                                }
+                                            });
+                                        }}
+                                        className="mr-6 mb-4 lg:mb-0"
+                                    />
+                                )}
                             </div>
                         </div>
                         <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-4 lg:mt-0 lg:mb-0 xl:col-span-3">
@@ -133,24 +135,78 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                         <div className="lg:col-span-6">
                             {/** Authors */}
                             <Components.PublicationContentSection id="authors" title="Authors">
+                                <Components.Link
+                                    href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}
+                                    className="block w-fit rounded outline-0 focus:ring-2 focus:ring-yellow-400"
+                                >
+                                    <p className="block leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 transition-colors duration-500 hover:decoration-teal-700 dark:text-grey-100">
+                                        {props.publication.user.firstName} {props.publication.user.lastName}
+                                    </p>
+                                </Components.Link>
+                            </Components.PublicationContentSection>
+
+                            {/** Conflict of interest */}
+                            <Components.PublicationContentSection id="coi" title="Conflict of interest">
                                 <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {props.publication.user.firstName} {props.publication.user.lastName}
+                                    {props.publication.conflictOfInterestStatus
+                                        ? props.publication.conflictOfInterestText
+                                        : `This ${Helpers.formatPublicationType(
+                                              props.publication.type
+                                          )} does not have any specified conflicts of interest.`}
                                 </p>
                             </Components.PublicationContentSection>
 
-                            {props.publication.type !== 'PROBLEM' && (
+                            {/** Linked from publications */}
+                            {props.publication.type !== 'PEER_REVIEW' && (
                                 <Components.PublicationContentSection id="linked-from" title="Linked from">
-                                    <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                        hello
-                                    </p>
+                                    <>
+                                        {props.publication.linkedFrom.length ? (
+                                            props.publication.linkedFrom.map((publication) => (
+                                                <Components.Link
+                                                    key={publication.id}
+                                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                                >
+                                                    {/** The content of a linkedFrom from the api seem off? Only have the link ID and publicationID */}
+                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                        {publication.id}
+                                                    </span>
+                                                </Components.Link>
+                                            ))
+                                        ) : (
+                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                {`This ${Helpers.formatPublicationType(
+                                                    props.publication.type
+                                                )} does not have any linked from publications.`}
+                                            </p>
+                                        )}
+                                    </>
                                 </Components.PublicationContentSection>
                             )}
 
-                            {props.publication.type !== 'PEER_REVIEW' && (
+                            {/** Linked to publications */}
+                            {props.publication.type !== 'PROBLEM' && (
                                 <Components.PublicationContentSection id="linked-to" title="Linked to">
-                                    <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                        hello
-                                    </p>
+                                    <>
+                                        {props.publication.linkedTo.length ? (
+                                            props.publication.linkedTo.map((publication) => (
+                                                <Components.Link
+                                                    key={publication.id}
+                                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                                >
+                                                    {/** The content of a linkedTo from the api seem off? Only have the link ID and publicationID */}
+                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                        {publication.id}
+                                                    </span>
+                                                </Components.Link>
+                                            ))
+                                        ) : (
+                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                {`This ${Helpers.formatPublicationType(
+                                                    props.publication.type
+                                                )} does not have any linked to publications.`}
+                                            </p>
+                                        )}
+                                    </>
                                 </Components.PublicationContentSection>
                             )}
 

@@ -24,15 +24,17 @@ export interface Publication {
     type: Types.PublicationType;
     title: string;
     content: string;
-    doi: any; // to change
+    doi: string | null;
     currentStatus: string;
     createdBy: string;
     createdAt: string;
     updatedAt: string;
     publicationStatus: PublicationStatus[];
     user: User;
-    publicationFromRef: any[]; // to change
-    publicationToRef: any[]; // to change
+    linkedFrom: Publication[];
+    linkedTo: Publication[];
+    conflictOfInterestStatus: boolean;
+    conflictOfInterestText: string | null;
 }
 
 export interface User {
