@@ -1,13 +1,12 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus</h1>
 
 ![api-tasks](https://github.com/JiscSD/octopus/actions/workflows/api-tasks.yml/badge.svg)
+
 ![ui-tasks](https://github.com/JiscSD/octopus/actions/workflows/ui-tasks.yml/badge.svg)
 
 ---
 
 ## Octopus Project Overview
-
----
 
 **Octopus. The primary research record.**  
 A new way to publish your scientific work that's fast, free and fair.
@@ -20,8 +19,6 @@ A new way to publish your scientific work that's fast, free and fair.
 ---
 
 ## Monorepo file structure
-
----
 
 ```bash
 ├── 📁 .github
@@ -79,9 +76,7 @@ A new way to publish your scientific work that's fast, free and fair.
 
 ## Branching Model
 
----
-
-A pull request should be created in draft as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you change the PR to ready for review on GitHub.
+A pull request should be created in draft as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you change the PR to 'ready for review' on GitHub.
 
 If the PR is reviewed and passes tests/reviews, then it can be merged into `main`.
 
@@ -90,8 +85,6 @@ Anything in the `main` branch is considered to be ready for deployment.
 ---
 
 ## Pull Requests and Reviews
-
----
 
 :warning: **All PRs must be approved by at least one developer who is not the developer who created the PR. If the reviewer is a new starter, then a more experienced team member also needs to review the branch.** :warning:
 
@@ -110,8 +103,6 @@ All checks will need to pass in order for a PR to be reviewed and merged.
 ---
 
 ## Project Breakdown
-
----
 
 ### Publications
 
@@ -138,15 +129,11 @@ A **Peer Review** is a review of any type of publication, and so can also link t
 
 ## Entity Relationship Diagram (ERD)
 
----
-
 ![erd](./api/prisma/ERD.png 'ERD')
 
 ---
 
 ## Contributing
-
----
 
 If you are interested in contributing, please check out [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
 
@@ -154,15 +141,11 @@ If you are interested in contributing, please check out [CONTRIBUTING.md](.githu
 
 ## Code of Conduct
 
----
-
 Everyone interacting with this codebase should adhere to our [Code of Conduct](.github/CODE-OF-CONDUCT.md).
 
 ---
 
 ## License
 
----
-
 Octopus is available under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  
-See [COPYING](https://github.com/JiscSD/octopus/LICENSE) for the full license text.
+See [COPYING](https://github.com/JiscSD/octopus/COPYING) for the full license text.
