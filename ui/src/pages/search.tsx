@@ -9,7 +9,6 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
-import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as API from '@api';
@@ -115,8 +114,6 @@ type Props = {
 
 const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
-    const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
     const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');

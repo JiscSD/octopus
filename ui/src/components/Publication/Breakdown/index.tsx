@@ -10,18 +10,21 @@ type Props = {
 };
 
 const Breakdown: React.FC<Props> = (props): JSX.Element => {
-    const [values, _] = React.useState([
-        ...Config.values.publicationTypes.map((type) => {
-            const publicationsOfType = props.publications.filter((publication) => publication.type === type);
-            const count = publicationsOfType.length;
+    const values = React.useMemo(
+        () => [
+            ...Config.values.publicationTypes.map((type) => {
+                const publicationsOfType = props.publications.filter((publication) => publication.type === type);
+                const count = publicationsOfType.length;
 
-            return {
-                title: Helpers.formatPublicationType(type),
-                color: Helpers.publicationColor(type),
-                value: count ? count : 0 // value: Helpers.randomWholeNumberInRange(0, 100000) // test data
-            };
-        })
-    ]);
+                return {
+                    title: Helpers.formatPublicationType(type),
+                    color: Helpers.publicationColor(type),
+                    value: count ? count : 0
+                };
+            })
+        ],
+        [props.publications]
+    );
 
     const totalCount = React.useMemo(() => values.reduce((sum, curr) => sum + curr.value, 0), [values]);
     const highestValue = React.useMemo(
