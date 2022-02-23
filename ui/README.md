@@ -1,34 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [create-next-app](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+---
 
 ## Local setup
 
-First, run the development server:
+For local development, in the **UI directory** run:
 
 ```bash
-npm run dev
-# or
-yarn dev
+~/ui$ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Technologies
 
-## Learn More
+### Languages
 
-To learn more about Next.js, take a look at the following resources:
+-   [TypeScript]('https://www.typescriptlang.org/') - [See config]('./tsconfig.json')
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Frameworks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-   [Next.js]('https://nextjs.org/') - [See config]('./next.config.js')
+-   [Tailwind CSS]('https://tailwindcss.com/') - [See config]('./tailwind.config.js')
 
-## Deploy on Vercel
+### Libraries
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-   [Framer Motion]('https://www.framer.com/motion/')
+-   [Luxon]('https://moment.github.io/luxon/')
+-   [PostCSS]('https://postcss.org/')
+-   [SWR]('https://swr.vercel.app/')
+-   [Zustand]('https://github.com/pmndrs/zustand/')
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Linting
+
+-   [ESLint]('https://eslint.org/') - [See config]('./.eslintrc.json')
+-   [Prettier]('https://prettier.io/') - [See config]('./.prettierrc.json')
+
+---
+
+### Team Code Conventions
+
+We have chosen to either use npm packages if they provide a default export, or:
+
+```
+import * as SomePackageName from 'some-package'
+```
+
+The idea is that it gives all developers on the project an understanding of where methods/functions are coming from when used within large files.
+
+---
+
+## Testing
+
+UI tests will be written using Jest. Currently there will be no UI tests for Alpha release.
+
+---
+
+## Workflows on push
+
+We have a job which utilitses [Lighthouse CI]('https://github.com/GoogleChrome/lighthouse-ci') to run an accessibility audit on all pages - [See config]('./lighthouserc.js'). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
+
+---
