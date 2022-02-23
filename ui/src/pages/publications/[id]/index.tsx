@@ -78,7 +78,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
-                    className="bg-white-50 dark:bg-grey-800"
+                    className="bg-teal-50 dark:bg-grey-800"
                     waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
