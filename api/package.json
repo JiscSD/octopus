@@ -4,6 +4,7 @@
     "description": "A new way to publish your scientific work that's fast, free and fair.",
     "author": "0-3 Years Team",
     "keywords": [],
+    "license": "GPL-3.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/JiscSD/octopus/tree/main/api"
@@ -21,7 +22,7 @@
     },
     "scripts": {
         "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
-        "seed:local": "npx prisma migrate reset",
+        "seed:local": "npx prisma migrate reset --force",
         "test:local": "stage=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"
     },

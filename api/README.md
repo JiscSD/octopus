@@ -1,25 +1,106 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">API</h1>
+<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
 
-Introduction to api content here.
+The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
 
-&nbsp;
+## Prerequisites
+
+-   Node version 14 and npm. Install via [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm#install--update-script).
+-   Serverless.
+-   [Docker Compose](https://docs.docker.com/get-docker/).
+-   .env file
+
+### Environment File
+
+Create a `.env` file inside `api/prisma` with the following credentials to connect to the postgres db which is hosted in the provided docker container.
 
 ## Local setup
 
-To begin the API locally:
+To run the API locally:
+
+First, start up Docker Desktop and within the **root directory** run:
 
 ```bash
-npm run start:local
+docker compose up
 ```
 
-To reset the database and regenerate the seed data locally:
+All of the following commands should be ran at the root of this directory (`~/api`).
+
+Then, open another terminal and within the **API directory** run:
 
 ```bash
-npm run seed:local
+~/api$ npm i
+```
+
+To start the API:
+
+```bash
+~/api$ npm run start:local
 ```
 
 To run all tests locally:
 
 ```bash
-npm run test:local
+~/api$ npm run test:local
 ```
+
+---
+
+# Prisma
+
+## Commands
+
+Whenever a change is made to the Prisma Schema you must run `npx prisma generate` in order for the Prisma Client to update.  
+If you do not run this, the application
+code will break as the client will not reflect the latest schema.
+
+```bash
+~/api$ npx prisma generate
+```
+
+Migrate and reseed the database:
+
+```bash
+~/api$ npm run seed:local
+```
+
+Create a new migration:
+
+```bash
+~/api$ npx prisma migrate dev --name new_migration_name
+```
+
+You can then apply the changes made by the new migration using the two commands above (generate and migrate reset).
+
+More information on migrations in Prisma can be found [here]('https://www.prisma.io/docs/concepts/components/prisma-migrate').
+
+---
+
+## Technologies
+
+### Languages
+
+-   [TypeScript]('https://www.typescriptlang.org/') - [See config]('./tsconfig.json')
+-   [PostgreSQL](https://www.postgresql.org/)
+
+### ORM
+
+-   [Prisma]('https://www.prisma.io/')
+
+### Libraries
+
+-   [Luxon]('https://moment.github.io/luxon/')
+-   [Middy]('https://middy.js.org/')
+-   [AJV]('https://ajv.js.org/')
+
+### Linting
+
+-   [ESLint]('https://eslint.org/') - [See config]('./.eslintrc.json')
+-   [Prettier]('https://prettier.io/') - [See config]('./.prettierrc.json')
+
+---
+
+## Entity Relationship Diagram (ERD)
+
+![erd](./prisma/ERD.png 'ERD')
+
+---
