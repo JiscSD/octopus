@@ -8,6 +8,7 @@ type Props = {
     openNew?: boolean;
     ariaLabel?: string;
     children: React.ReactElement[] | React.ReactElement;
+    onClick?: () => void;
 };
 
 const CustomLink: React.FC<Props> = (props): JSX.Element => {
@@ -18,6 +19,7 @@ const CustomLink: React.FC<Props> = (props): JSX.Element => {
                 target={props.openNew ? '_blank' : ''}
                 rel={props.openNew ? 'noreferrer noopener' : ''}
                 aria-label={props.ariaLabel}
+                onClick={props.onClick}
             >
                 {props.children}
             </a>

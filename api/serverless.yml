@@ -103,3 +103,11 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: get
                   cors: true
+    createFlag:
+        handler: src/components/publication/routes.createFlag
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/flag
+                  method: post
+                  cors: true

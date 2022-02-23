@@ -13,11 +13,19 @@ import * as Types from '@types';
 import * as API from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const requestedSlug = context.query.slug;
-    const response = await API.get(`${Config.endpoints.publications}/${requestedSlug}`);
-    const publication: Interfaces.Publication = response.data;
+    const requestedId = context.query.id;
+    let publication: Interfaces.Publication | null = null;
+    let error: string | null = null;
 
-    if (!publication || response.status !== 200) {
+    try {
+        const response = await API.get(`${Config.endpoints.publications}/${requestedId}`);
+        publication = response.data;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
+    }
+
+    if (!publication || error) {
         return {
             notFound: true
         };
@@ -38,10 +46,6 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-
-    React.useEffect(() => {
-        if (showCmdPalette) toggleCmdPalette();
-    }, []);
 
     return (
         <>

@@ -16,9 +16,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
-    React.useEffect(() => {
-        isMounted.current = true;
-
+    const setUpCmdPalListeners = React.useCallback(() => {
         if (isMounted.current === true) {
             document.addEventListener('keydown', (e) => {
                 if (window.navigator.appVersion.indexOf('Mac')) {
@@ -34,17 +32,21 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                 if (e.key === 'Escape' && !showCmdPalette) toggleCmdPalette();
             });
         }
+    }, [showCmdPalette, toggleCmdPalette]);
 
+    React.useEffect(() => {
+        isMounted.current = true;
+        setUpCmdPalListeners();
         setLoading(false);
         return () => {
             isMounted.current = false;
         };
-    }, []);
+    }, [setUpCmdPalListeners]);
 
     return (
         <>
             <NextNprogress
-                color={darkMode ? '#34a4b1' : '#c4e9ee'}
+                color={darkMode ? '#348cb1' : '#c4e1ee'}
                 startPosition={0.3}
                 stopDelayMs={200}
                 height={3}
@@ -71,7 +73,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         }
                     }}
                 >
-                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''} `}>
+                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''}`}>
                         <Components.CommandPalette />
 
                         <Component {...pageProps} />

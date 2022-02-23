@@ -19,7 +19,7 @@ const getAllSchema: I.Schema = {
         },
         orderBy: {
             type: 'string',
-            enum: ['id', 'createdAt', 'updatedAt', 'title'],
+            enum: ['id', 'createdAt', 'updatedAt', 'publishedDate', 'title'],
             default: 'updatedAt'
         },
         orderDirection: {

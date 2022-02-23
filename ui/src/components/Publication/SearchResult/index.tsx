@@ -71,7 +71,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
                 </span>
             </div>
 
-            <div className="col-span-1 mt-4 flex h-full w-full items-center justify-end lg:mt-0">
+            <div className="lg: col-span-1 mt-4 hidden h-full w-full items-center justify-end lg:mt-0 lg:flex">
                 <OutlineIcons.ChevronRightIcon className="h-5 w-5 text-teal-400" />
             </div>
         </Components.Link>

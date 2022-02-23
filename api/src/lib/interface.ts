@@ -1,3 +1,6 @@
+import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum } from '@prisma/client';
+export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum } from '@prisma/client';
+
 import {
     APIGatewayProxyEventV2,
     APIGatewayProxyEventQueryStringParameters,
@@ -9,16 +12,6 @@ export { HandlerLambda } from 'middy';
 export { Schema, JSONSchemaType } from 'ajv';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
-
-export interface JSONResponse {
-    body: string;
-    headers: any;
-    statusCode: number;
-}
-
-export interface User {
-    id: string;
-}
 
 export interface APIRequest<
     BodyOverride = string | undefined,
@@ -41,19 +34,23 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
-export type PublicationType =
-    | 'PROBLEM'
-    | 'PROTOCOL'
-    | 'ANALYSIS'
-    | 'REAL_WORLD_APPLICATION'
-    | 'HYPOTHESIS'
-    | 'DATA'
-    | 'INTERPRETATION'
-    | 'PEER_REVIEW';
+export interface JSONResponse {
+    body: string;
+    headers: any;
+    statusCode: number;
+}
+
+/**
+ * @description Publications
+ */
+
+const pismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
+export type Publication = Prisma.PublicationGetPayload<typeof pismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
+    licence?: LicenceType;
     content?: string;
 }
 
@@ -70,12 +67,13 @@ export interface UpdateStatusPathParams {
     status: 'LIVE';
 }
 
-export interface CreateLinkBody {
-    to: string;
-    from: string;
+export interface UpdatePublicationRequestBody {
+    content?: string;
+    title?: string;
+    licence?: LicenceType;
+    id?: string;
 }
 
-export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN';
 export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
@@ -89,6 +87,21 @@ export interface PublicationFilters {
     type: string;
 }
 
+/**
+ * @description Links
+ */
+export interface CreateLinkBody {
+    to: string;
+    from: string;
+}
+
+/**
+ * @description Users
+ */
+export interface User {
+    id: string;
+}
+
 export interface UserFilters {
     search?: string;
     limit?: string;
@@ -97,23 +110,27 @@ export interface UserFilters {
     orderDirection?: OrderDirection;
 }
 
-export type ProblemTypes = [
-    'PROBLEM',
-    'PROTOCOL',
-    'ANALYSIS',
-    'REAL_WORLD_APPLICATION',
-    'HYPOTHESIS',
-    'DATA',
-    'INTERPRETATION',
-    'PEER_REVIEW'
-];
-
 export interface GetUserParameters {
     id: string;
 }
 
-export interface UpdatePublicationRequestBody {
-    content?: string;
-    title?: string;
-    id?: string;
+/**
+ * @description Flags
+ */
+
+export type FlagCategory =
+    | 'PLAGIARISM'
+    | 'ETHICAL_ISSUES'
+    | 'MISREPRESENTATION'
+    | 'UNDECLARED_IMAGE_MANIPULATION'
+    | 'COPYRIGHT'
+    | 'INAPPROPRIATE';
+
+export interface CreateFlagPathParams {
+    id: string;
+}
+
+export interface CreateFlagRequestBody {
+    category: PublicationFlagCategoryEnum;
+    comments: string;
 }
