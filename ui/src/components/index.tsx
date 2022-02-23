@@ -26,6 +26,7 @@ export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationBreakdown } from './Publication/Breakdown';
+export { default as PublicationVisualChain } from './Publication/VisualChain';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as HTMLVideo } from './Video/HTML';
 export { default as FeaturedCollection } from './FeaturedCollection';

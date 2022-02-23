@@ -7,7 +7,6 @@ import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
-import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as API from '@api';
@@ -44,8 +43,29 @@ type Props = {
 
 const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
-    const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+
+    const sectionList = React.useMemo(() => {
+        let list = [
+            { title: 'Authors', href: 'authors' },
+            { title: 'Full text', href: 'full-text' }
+        ];
+        switch (props.publication.type) {
+            case 'PEER_REVIEW':
+                list = [...list, { title: 'Linked from', href: 'linked-from' }];
+                break;
+            case 'PROBLEM':
+                list = [...list, { title: 'Linked to', href: 'linked-to' }];
+                break;
+            default:
+                list = [
+                    ...list,
+                    { title: 'Linked from', href: 'linked-from' },
+                    { title: 'Linked to', href: 'linked-to' }
+                ];
+        }
+
+        return list;
+    }, [props.publication.type]);
 
     return (
         <>
@@ -63,15 +83,19 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <header className="container mx-auto grid grid-cols-1 px-8 py-8 lg:grid-cols-12 lg:gap-4 lg:pb-24 lg:pt-16">
-                        <div className="lg:col-span-8">
+                        <div className="lg:col-span-8 xl:col-span-9">
                             <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
                                 {Helpers.formatPublicationType(props.publication.type)}
                             </span>
-                            <h1 className="mb-20 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
+                            <h1 className="mb-12 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
                                 {props.publication.title}
                             </h1>
 
-                            <div className="print:hidden lg:flex">
+                            {props.publication.type !== 'PEER_REVIEW' && (
+                                <Components.PublicationVisualChain highlighted={props.publication.type} />
+                            )}
+
+                            <div className="mt-12 print:hidden lg:flex">
                                 <span className="mr-16 flex self-center font-bold tracking-wider text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     DOI
                                     <span className="ml-2 block font-medium text-teal-500">
@@ -85,27 +109,26 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                     }
                                     callback={(e) => {
                                         e.preventDefault();
-                                        router.push(
-                                            `${Config.urls.createPublication.path}?for=${props.publication.id}&type=review`
-                                        );
+                                        router.push({
+                                            pathname: `${Config.urls.createPublication.path}`,
+                                            query: {
+                                                for: props.publication.id,
+                                                type: 'review'
+                                            }
+                                        });
                                     }}
                                     className="mr-6 mb-4 lg:mb-0"
                                 />
                             </div>
                         </div>
-                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-4 lg:mt-0 lg:mb-0">
+                        <aside className="relative mb-8 mt-8 flex items-center justify-center print:hidden lg:col-span-4 lg:mt-0 lg:mb-0 xl:col-span-3">
                             <Components.PublicationRatings publication={props.publication} />
                         </aside>
                     </header>
 
                     <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                         <aside className="col-span-2 hidden lg:block">
-                            <Components.PublicationSidebar
-                                jumpToList={[
-                                    { title: 'Authors', href: 'authors' },
-                                    { title: 'Full text', href: 'full-text' }
-                                ]}
-                            />
+                            <Components.PublicationSidebar jumpToList={sectionList} />
                         </aside>
                         <div className="lg:col-span-6">
                             {/** Authors */}
@@ -114,6 +137,22 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                     {props.publication.user.firstName} {props.publication.user.lastName}
                                 </p>
                             </Components.PublicationContentSection>
+
+                            {props.publication.type !== 'PROBLEM' && (
+                                <Components.PublicationContentSection id="linked-from" title="Linked from">
+                                    <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                        hello
+                                    </p>
+                                </Components.PublicationContentSection>
+                            )}
+
+                            {props.publication.type !== 'PEER_REVIEW' && (
+                                <Components.PublicationContentSection id="linked-to" title="Linked to">
+                                    <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                        hello
+                                    </p>
+                                </Components.PublicationContentSection>
+                            )}
 
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">
