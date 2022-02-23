@@ -16,9 +16,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
-    React.useEffect(() => {
-        isMounted.current = true;
-
+    const setUpCmdPalListeners = React.useCallback(() => {
         if (isMounted.current === true) {
             document.addEventListener('keydown', (e) => {
                 if (window.navigator.appVersion.indexOf('Mac')) {
@@ -34,12 +32,16 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                 if (e.key === 'Escape' && !showCmdPalette) toggleCmdPalette();
             });
         }
+    }, [showCmdPalette, toggleCmdPalette]);
 
+    React.useEffect(() => {
+        isMounted.current = true;
+        setUpCmdPalListeners();
         setLoading(false);
         return () => {
             isMounted.current = false;
         };
-    }, []);
+    }, [setUpCmdPalListeners]);
 
     return (
         <>
