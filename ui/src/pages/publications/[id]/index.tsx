@@ -162,7 +162,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                 </Components.Link>
                             </Components.PublicationContentSection>
 
-                            {/** Linked from publications */}
+                            {/** Linked from publications  - should not include problems or peer reviews, as they have their own section*/}
                             {props.publication.type !== 'PEER_REVIEW' && (
                                 <Components.PublicationContentSection id="linked-from" title={from.title}>
                                     <>
@@ -175,7 +175,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                             className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                                         >
                                                             <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                                {link.publicationFromRef.title}
+                                                                {link.publicationFromRef.title}{' '}
                                                             </span>
                                                         </Components.Link>
                                                     </Components.ListItem>
@@ -192,7 +192,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                 </Components.PublicationContentSection>
                             )}
 
-                            {/** Linked to publications */}
+                            {/** Linked to publications TODO: improve logic */}
                             {props.publication.type !== 'PROBLEM' && (
                                 <Components.PublicationContentSection id="linked-to" title={to.title}>
                                     <>
@@ -221,6 +221,10 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                     </>
                                 </Components.PublicationContentSection>
                             )}
+
+                            {/* TODO: PEER REVIEWS - loop through linksFrom */}
+
+                            {/* TODO: PROBLEMS - loop through linksFrom */}
 
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">

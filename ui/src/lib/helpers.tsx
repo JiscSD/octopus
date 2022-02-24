@@ -15,18 +15,22 @@ export const truncateString = (value: string, length: number): string => {
  * @description Formats a string ISO from the DB
  */
 export const formatDate = (value: string): string => {
-    return luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
+
+    return date === 'Invalid DateTime' ? 'N/A' : date;
 };
 
 /**
  * @description Formats a ISO string date to a relative to now string
  */
 export const relativeDate = (value: string): string | null => {
-    return luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
+
+    return date === 'Invalid DateTime' ? 'N/A' : date;
 };
 
 /**
