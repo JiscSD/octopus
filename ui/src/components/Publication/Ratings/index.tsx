@@ -56,7 +56,7 @@ const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
     };
 
     return (
-        <div className="rounded-xl">
+        <div className="w-full rounded-xl lg:w-fit">
             <div className="rounded-t-lg bg-teal-100 px-8 py-6 transition-colors duration-500">
                 {/* {Object.values(ratings).map((rate: RateProps, index) => (
                     <Rating key={index} title={rate.title} value={rate.value} />

@@ -18,6 +18,40 @@ export interface PublicationStatus {
     id: string;
 }
 
+export interface LinkTo {
+    id: string;
+    publicationToRef: {
+        id: string;
+        title: string;
+        publishedDate: string;
+        currentStatus: PublicationStatus;
+        type: Types.PublicationType;
+        user: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            orcid: string;
+        };
+    };
+}
+
+export interface LinkFrom {
+    id: string;
+    publicationFromRef: {
+        id: string;
+        title: string;
+        publishedDate: string;
+        currentStatus: PublicationStatus;
+        type: Types.PublicationType;
+        user: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            orcid: string;
+        };
+    };
+}
+
 export interface Publication {
     id: string;
     url_slug: string;
@@ -29,10 +63,11 @@ export interface Publication {
     createdBy: string;
     createdAt: string;
     updatedAt: string;
+    publishedDate: string;
     publicationStatus: PublicationStatus[];
     user: User;
-    linkedFrom: Publication[];
-    linkedTo: Publication[];
+    linkedFrom: LinkFrom[];
+    linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
 }

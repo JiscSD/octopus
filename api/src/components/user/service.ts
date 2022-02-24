@@ -76,17 +76,21 @@ export const get = async (id: string) => {
             email: true,
             role: true,
             createdAt: true,
+            updatedAt: true,
             Publication: {
                 select: {
                     id: true,
                     title: true,
                     type: true,
                     doi: true,
+                    createdAt: true,
+                    updatedAt: true,
                     publishedDate: true,
                     currentStatus: true,
                     url_slug: true,
                     licence: true,
-                    content: true
+                    content: true,
+                    user: true
                 },
                 where: {
                     currentStatus: 'LIVE'

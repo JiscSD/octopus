@@ -44,29 +44,46 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
 
+    const to = React.useMemo(() => {
+        return {
+            title: `Linked ${Helpers.formatPublicationType(
+                Helpers.findPreviousPublicationType(props.publication.type)
+            )}(s)`,
+            href: 'linked-to'
+        };
+    }, [props.publication.type]);
+
+    const from = React.useMemo(() => {
+        return {
+            title: `Linked ${Helpers.formatPublicationType(
+                Helpers.findNextPublicationType(props.publication.type)
+            )}(s)`,
+            href: 'linked-from'
+        };
+    }, [props.publication.type]);
+
     const sectionList = React.useMemo(() => {
-        let list = [
-            { title: 'Authors', href: 'authors' },
-            { title: 'Conflict of interest', href: 'coi' },
-            { title: 'Full text', href: 'full-text' }
-        ];
+        let list = [{ title: 'Authors', href: 'authors' }];
+
         switch (props.publication.type) {
             case 'PROBLEM':
-                list = [...list, { title: 'Linked from', href: 'linked-from' }];
+                list = [...list, from];
                 break;
             case 'PEER_REVIEW':
-                list = [...list, { title: 'Linked to', href: 'linked-to' }];
+                list = [...list, to];
                 break;
             default:
-                list = [
-                    ...list,
-                    { title: 'Linked from', href: 'linked-from' },
-                    { title: 'Linked to', href: 'linked-to' }
-                ];
+                list = [...list, from, to];
         }
 
-        return list;
-    }, [props.publication.type]);
+        return [
+            ...list,
+            ...[
+                { title: 'Full text', href: 'full-text' },
+                { title: 'Conflict of interest', href: 'coi' }
+            ]
+        ];
+    }, [props.publication.type, to, from]);
 
     return (
         <>
@@ -83,12 +100,12 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <header className="container mx-auto grid grid-cols-1 px-8 py-8 lg:grid-cols-12 lg:gap-4 lg:pb-24 lg:pt-16">
+                    <header className="container mx-auto grid grid-cols-1 px-8 py-8 lg:grid-cols-12 lg:gap-4 lg:pt-16 lg:pb-8">
                         <div className="lg:col-span-8 xl:col-span-9">
                             <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
                                 {Helpers.formatPublicationType(props.publication.type)}
                             </span>
-                            <h1 className="mb-12 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
+                            <h1 className="mb-12 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:w-4/5 xl:text-4xl xl:leading-normal">
                                 {props.publication.title}
                             </h1>
 
@@ -129,7 +146,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                     </header>
 
                     <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                        <aside className="col-span-2 hidden lg:block">
+                        <aside className="col-span-2 hidden pt-12 lg:block">
                             <Components.PublicationSidebar jumpToList={sectionList} />
                         </aside>
                         <div className="lg:col-span-6">
@@ -137,41 +154,33 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                             <Components.PublicationContentSection id="authors" title="Authors">
                                 <Components.Link
                                     href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}
-                                    className="block w-fit rounded outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400 "
                                 >
-                                    <p className="block leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 transition-colors duration-500 hover:decoration-teal-700 dark:text-grey-100">
+                                    <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                         {props.publication.user.firstName} {props.publication.user.lastName}
                                     </p>
                                 </Components.Link>
                             </Components.PublicationContentSection>
 
-                            {/** Conflict of interest */}
-                            <Components.PublicationContentSection id="coi" title="Conflict of interest">
-                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {props.publication.conflictOfInterestStatus
-                                        ? props.publication.conflictOfInterestText
-                                        : `This ${Helpers.formatPublicationType(
-                                              props.publication.type
-                                          )} does not have any specified conflicts of interest.`}
-                                </p>
-                            </Components.PublicationContentSection>
-
                             {/** Linked from publications */}
                             {props.publication.type !== 'PEER_REVIEW' && (
-                                <Components.PublicationContentSection id="linked-from" title="Linked from">
+                                <Components.PublicationContentSection id="linked-from" title={from.title}>
                                     <>
                                         {props.publication.linkedFrom.length ? (
-                                            props.publication.linkedFrom.map((publication) => (
-                                                <Components.Link
-                                                    key={publication.id}
-                                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
-                                                >
-                                                    {/** The content of a linkedFrom from the api seem off? Only have the link ID and publicationID */}
-                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                        {publication.id}
-                                                    </span>
-                                                </Components.Link>
-                                            ))
+                                            <Components.List ordered={false}>
+                                                {props.publication.linkedFrom.map((link) => (
+                                                    <Components.ListItem key={link.id}>
+                                                        <Components.Link
+                                                            href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
+                                                            className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                        >
+                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                                {link.publicationFromRef.title}
+                                                            </span>
+                                                        </Components.Link>
+                                                    </Components.ListItem>
+                                                ))}
+                                            </Components.List>
                                         ) : (
                                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                                 {`This ${Helpers.formatPublicationType(
@@ -185,20 +194,23 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
 
                             {/** Linked to publications */}
                             {props.publication.type !== 'PROBLEM' && (
-                                <Components.PublicationContentSection id="linked-to" title="Linked to">
+                                <Components.PublicationContentSection id="linked-to" title={to.title}>
                                     <>
                                         {props.publication.linkedTo.length ? (
-                                            props.publication.linkedTo.map((publication) => (
-                                                <Components.Link
-                                                    key={publication.id}
-                                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
-                                                >
-                                                    {/** The content of a linkedTo from the api seem off? Only have the link ID and publicationID */}
-                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                        {publication.id}
-                                                    </span>
-                                                </Components.Link>
-                                            ))
+                                            <Components.List ordered={false}>
+                                                {props.publication.linkedTo.map((link) => (
+                                                    <Components.ListItem key={link.id}>
+                                                        <Components.Link
+                                                            href={`${Config.urls.viewPublication.path}/${link.publicationToRef.id}`}
+                                                            className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                        >
+                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                                {link.publicationToRef.title}
+                                                            </span>
+                                                        </Components.Link>
+                                                    </Components.ListItem>
+                                                ))}
+                                            </Components.List>
                                         ) : (
                                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                                 {`This ${Helpers.formatPublicationType(
@@ -213,6 +225,17 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">
                                 <Components.ParseHTML content={props.publication.content} />
+                            </Components.PublicationContentSection>
+
+                            {/** Conflict of interest */}
+                            <Components.PublicationContentSection id="coi" title="Conflict of interest">
+                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {props.publication.conflictOfInterestStatus
+                                        ? props.publication.conflictOfInterestText
+                                        : `This ${Helpers.formatPublicationType(
+                                              props.publication.type
+                                          )} does not have any specified conflicts of interest.`}
+                                </p>
                             </Components.PublicationContentSection>
                         </div>
                     </section>

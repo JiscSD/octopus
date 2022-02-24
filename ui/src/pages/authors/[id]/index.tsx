@@ -89,14 +89,11 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
                                         publicationLimit !== 1 && index === publicationLimit - 1
                                             ? (classes += 'rounded-b-lg')
                                             : null;
+
                                         return (
                                             <Components.Delay key={publication.id} delay={index * 50}>
                                                 <Components.PublicationSearchResult
-                                                    id={publication.id}
-                                                    title={publication.title}
-                                                    createdBy={`${publication?.user?.firstName}. ${publication?.user?.lastName}`}
-                                                    type={publication.type}
-                                                    date={publication.updatedAt}
+                                                    publication={publication}
                                                     className={classes}
                                                 />
                                             </Components.Delay>
