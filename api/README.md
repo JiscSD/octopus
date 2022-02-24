@@ -72,7 +72,7 @@ Create a new migration:
 
 You can then apply the changes made by the new migration using the two commands above (generate and migrate reset).
 
-More information on migrations in Prisma can be found [here]('https://www.prisma.io/docs/concepts/components/prisma-migrate').
+More information on migrations in Prisma can be found [here]('https://www.prisma.io/docs/concepts/components/prisma-migrate/').
 
 ---
 
