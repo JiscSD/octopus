@@ -73,7 +73,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                 list = [...list, to];
                 break;
             default:
-                list = [...list, from, to];
+                list = [...list, to, from];
         }
 
         return [
@@ -162,36 +162,6 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                 </Components.Link>
                             </Components.PublicationContentSection>
 
-                            {/** Linked from publications  - should not include problems or peer reviews, as they have their own section*/}
-                            {props.publication.type !== 'PEER_REVIEW' && (
-                                <Components.PublicationContentSection id="linked-from" title={from.title}>
-                                    <>
-                                        {props.publication.linkedFrom.length ? (
-                                            <Components.List ordered={false}>
-                                                {props.publication.linkedFrom.map((link) => (
-                                                    <Components.ListItem key={link.id}>
-                                                        <Components.Link
-                                                            href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
-                                                            className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                        >
-                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                                {link.publicationFromRef.title}{' '}
-                                                            </span>
-                                                        </Components.Link>
-                                                    </Components.ListItem>
-                                                ))}
-                                            </Components.List>
-                                        ) : (
-                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                {`This ${Helpers.formatPublicationType(
-                                                    props.publication.type
-                                                )} does not have any linked from publications.`}
-                                            </p>
-                                        )}
-                                    </>
-                                </Components.PublicationContentSection>
-                            )}
-
                             {/** Linked to publications TODO: improve logic */}
                             {props.publication.type !== 'PROBLEM' && (
                                 <Components.PublicationContentSection id="linked-to" title={to.title}>
@@ -216,6 +186,36 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                 {`This ${Helpers.formatPublicationType(
                                                     props.publication.type
                                                 )} does not have any linked to publications.`}
+                                            </p>
+                                        )}
+                                    </>
+                                </Components.PublicationContentSection>
+                            )}
+
+                            {/** Linked from publications  - should not include problems or peer reviews, as they have their own section*/}
+                            {props.publication.type !== 'PEER_REVIEW' && (
+                                <Components.PublicationContentSection id="linked-from" title={from.title}>
+                                    <>
+                                        {props.publication.linkedFrom.length ? (
+                                            <Components.List ordered={false}>
+                                                {props.publication.linkedFrom.map((link) => (
+                                                    <Components.ListItem key={link.id}>
+                                                        <Components.Link
+                                                            href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
+                                                            className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                        >
+                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                                {link.publicationFromRef.title}{' '}
+                                                            </span>
+                                                        </Components.Link>
+                                                    </Components.ListItem>
+                                                ))}
+                                            </Components.List>
+                                        ) : (
+                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                {`This ${Helpers.formatPublicationType(
+                                                    props.publication.type
+                                                )} does not have any linked from publications.`}
                                             </p>
                                         )}
                                     </>
