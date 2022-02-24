@@ -28,7 +28,9 @@ const Result: React.FC<Props> = (props): JSX.Element => {
         >
             <Components.Link
                 href={props.link}
-                className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 hover:opacity-80 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${props.className}`}
+                className={`mx-4 block border-t border-grey-600 px-2 py-2 outline-0 hover:opacity-80 focus:rounded focus:border-transparent focus:ring-2 focus:ring-yellow-500 ${
+                    props.className ? props.className : ''
+                }`}
                 onClick={() => toggleCmdPalette()}
             >
                 <>

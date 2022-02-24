@@ -56,7 +56,7 @@ const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
     };
 
     return (
-        <div className="rounded-xl">
+        <div className="w-full rounded-xl lg:w-fit">
             <div className="rounded-t-lg bg-teal-100 px-8 py-6 transition-colors duration-500">
                 {/* {Object.values(ratings).map((rate: RateProps, index) => (
                     <Rating key={index} title={rate.title} value={rate.value} />
@@ -73,7 +73,7 @@ const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800">Published:</span>
                     <time className="text-right text-sm font-medium text-grey-800">
-                        {Helpers.formatDate(props.publication.createdAt)}
+                        {Helpers.formatDate(props.publication.publishedDate)}
                     </time>
                 </div>
             </div>

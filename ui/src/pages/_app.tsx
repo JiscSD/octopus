@@ -41,7 +41,8 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
         return () => {
             isMounted.current = false;
         };
-    }, [setUpCmdPalListeners]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
