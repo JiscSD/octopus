@@ -167,7 +167,7 @@ Everyone interacting with this codebase should adhere to our [Code of Conduct](.
 
 ---
 
-## License
+## Licence
 
 Octopus is available under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  
-See [COPYING](https://github.com/JiscSD/octopus/COPYING) for the full license text.
+See [COPYING](https://github.com/JiscSD/octopus/COPYING) for the full licence text.
