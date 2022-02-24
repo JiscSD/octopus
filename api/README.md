@@ -4,14 +4,15 @@ The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL]
 
 ## Prerequisites
 
--   Node version 14 and npm. Install via [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm#install--update-script).
--   Serverless.
+-   Install [Node.js](https://github.com/nodejs/node) `v14`.
+    -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
+-   [Serverless](https://www.serverless.com/).
 -   [Docker Compose](https://docs.docker.com/get-docker/).
--   .env file
+-   .env file.
 
 ### Environment File
 
-Create a `.env` file inside `api/prisma` with the following credentials to connect to the postgres db which is hosted in the provided docker container.
+Create a `.env` file inside `api/prisma` with credentials to connect to the postgres db which is hosted in the provided docker container.
 
 ## Local setup
 

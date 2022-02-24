@@ -131,6 +131,34 @@ A **Peer Review** is a review of any type of publication, and so can also link t
 
 If you are interested in contributing, please check out [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
 
+Any pull requests from contributors will require a member of the team to review before this can be merged - see [CODEOWNERS](.github/CODEOWNERS).
+
+---
+
+### Team Code Conventions
+
+1. We have chosen to either use npm packages if they provide a default export, or:
+
+```
+import * as OutlineIcons from '@heroicons/react/outline';
+```
+
+```
+import * as Components from '@components';
+```
+
+Then this will be referred to in the code as:
+
+```
+<OutlineIcons.SparklesIcon>
+```
+
+```
+<Components.Button>
+```
+
+The idea is that it gives all developers on the project an understanding of where methods/functions are coming from when used within large files.
+
 ---
 
 ## Code of Conduct

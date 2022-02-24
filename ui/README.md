@@ -44,20 +44,6 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ---
 
-### Team Code Conventions
-
-We have chosen to either use npm packages if they provide a default export, or:
-
-```
-import * as SomePackageName from 'some-package'
-```
-
-The idea is that it gives all developers on the project an understanding of where methods/functions are coming from when used within large files.
-
-todo/ add more to this.
-
----
-
 ## Testing
 
 UI tests will be written using Jest. Currently there will be no UI tests for Alpha release.
