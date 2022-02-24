@@ -144,7 +144,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                         excerpt={`${result.user.firstName}. ${result.user.lastName}`}
                                                         link={`${Config.urls.viewPublication.path}/${result.id}`}
                                                         meta={Helpers.formatPublicationType(result.type)}
-                                                        date={Helpers.formatDate(result.updatedAt)}
+                                                        date={Helpers.formatDate(result.publishedDate)}
                                                         accentColor={'text-teal-300'}
                                                         className={`${index === 0 ? 'mt-2' : ''} ${
                                                             index === results.length - 1 ? 'mb-2' : ''

@@ -15,7 +15,7 @@ const CustomLink: React.FC<Props> = (props): JSX.Element => {
     return (
         <Link href={props.href} scroll={props.scroll}>
             <a
-                className={props.className}
+                className={props.className ? props.className : ''}
                 target={props.openNew ? '_blank' : ''}
                 rel={props.openNew ? 'noreferrer noopener' : ''}
                 aria-label={props.ariaLabel}

@@ -62,7 +62,8 @@ export const getAll = async (filters: I.PublicationFilters) => {
                 select: {
                     firstName: true,
                     lastName: true,
-                    id: true
+                    id: true,
+                    orcid: true
                 }
             }
         },
@@ -139,13 +140,45 @@ export const get = async (id: string) => {
             linkedTo: {
                 select: {
                     id: true,
-                    publicationTo: true
+                    publicationToRef: {
+                        select: {
+                            id: true,
+                            title: true,
+                            publishedDate: true,
+                            currentStatus: true,
+                            type: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
                 }
             },
             linkedFrom: {
                 select: {
                     id: true,
-                    publicationFrom: true
+                    publicationFromRef: {
+                        select: {
+                            id: true,
+                            title: true,
+                            publishedDate: true,
+                            currentStatus: true,
+                            type: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

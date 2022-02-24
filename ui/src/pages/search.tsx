@@ -416,11 +416,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                                 return (
                                                     <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.PublicationSearchResult
-                                                            id={result.id}
-                                                            title={result.title}
-                                                            createdBy={`${result?.user?.firstName}. ${result?.user?.lastName}`}
-                                                            type={result.type}
-                                                            date={result.updatedAt}
+                                                            publication={result}
                                                             className={classes}
                                                         />
                                                     </Components.Delay>
