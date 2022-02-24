@@ -13,11 +13,11 @@ jobs:
             - name: Setup Node 14.x Environment
               uses: actions/setup-node@v2
               with:
-                  node-version: '14.x'
+                  node-version: "14.x"
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm ci && npm install -g @lhci/cli@0.8.x
+              run: npm install --legacy-peer-deps -g @lhci/cli@0.8.x
 
             - name: Run build
               working-directory: ./ui
