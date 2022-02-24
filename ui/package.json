@@ -17,7 +17,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "format": "npx prettier --write src/"
+        "format:check": "npx prettier --check src/",
+        "format:write": "npx prettier --write src/"
     },
     "dependencies": {
         "@atlaskit/code": "^14.3.2",
