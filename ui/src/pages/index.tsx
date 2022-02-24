@@ -89,33 +89,37 @@ const Home: Types.NextPage = (): JSX.Element => {
                             poster="/images/jpg/poster.jpg"
                             width={800}
                         />
-                        <div>
-                            <h3 className="mb-2 block font-montserrat text-xl font-bold text-grey-800 dark:text-white">
-                                Publish freely
-                            </h3>
-                            <p className="mb-10 block text-base text-grey-800 dark:text-white">
-                                Upload your publications when they are done. No need to wait around until you have a
-                                full scientific paper ready.
-                            </p>
-                            <h3 className="mb-2 block font-montserrat text-xl font-bold text-grey-800 dark:text-white">
-                                Establish priority
-                            </h3>
-                            <p className="mb-10 block text-base text-grey-800 dark:text-white">
-                                Stake your claim on an idea early, and establish your interests.
-                            </p>
-                            <h3 className="mb-2 block font-montserrat text-xl font-bold text-grey-800 dark:text-white">
-                                Get quick peer reviews
-                            </h3>
-                            <p className="mb-8 block text-base text-grey-800 dark:text-white">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            </p>
-                            <h3 className="mb-2 block font-montserrat text-xl font-bold text-grey-800 dark:text-white">
-                                Meritocracy
-                            </h3>
-                            <p className="mb-24 block text-base text-grey-800 dark:text-white">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            </p>
 
+                        <div>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Free and quick to publish
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                Octopus is designed to help researchers get their work published quickly, easily and
+                                freely. Break away from the tyranny of &apos;papers&apos; and publish your work faster!
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Establish your priority
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                No need to worry about being &apos;scooped&apos; - once you&apos;ve published an idea,
+                                or a protocol in Octopus you have established your priority. That work now has your name
+                                and date on it for everyone to see.
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Find relevant work
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                All publications in Octopus are linked, forming branching chains. If you subscribe to a
+                                particular research problem you can easily see all work linked to it.
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Get the credit you deserve
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                All your work in Octopus, including reviews that you write, are displayed on your
+                                personal page for others to see, along with ratings that others have given them.
+                            </p>
                             <Components.ExtendedLink href={Config.urls.about.path} title="Read more about Octopus" />
                         </div>
                     </div>
@@ -140,8 +144,8 @@ const Home: Types.NextPage = (): JSX.Element => {
                                     Browse publications
                                 </h3>
                                 <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                    Designed to replace journals and papers as the place to establish priority and
-                                    record your work in full detail.
+                                    Browse our most recent publications, and different types of publication. You
+                                    don&apos;t need to log in.
                                 </p>
                                 <Components.ExtendedLink
                                     href={Config.urls.browsePublications.path}
@@ -154,8 +158,8 @@ const Home: Types.NextPage = (): JSX.Element => {
                                     Search publications
                                 </h3>
                                 <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                    Designed to replace journals and papers as the place to establish priority and
-                                    record your work in full detail.
+                                    Anyone can read any publication on Octopus. Search by keyword, title or author to
+                                    discover more.
                                 </p>
                                 <Components.ExtendedLink href={Config.urls.search.path} title="Search publications" />
                             </Components.Paper>
@@ -165,8 +169,8 @@ const Home: Types.NextPage = (): JSX.Element => {
                                     Publish your work
                                 </h3>
                                 <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                    Designed to replace journals and papers as the place to establish priority and
-                                    record your work in full detail.
+                                    Publishing in Octopus is free and simple, with eight publications types aligned with
+                                    the scientific process.
                                 </p>
                                 <Components.ExtendedLink
                                     href={Config.urls.createPublication.path}
