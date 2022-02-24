@@ -11,7 +11,7 @@
 **Octopus. The primary research record.**  
 A new way to publish your scientific work that's fast, free and fair.
 
--   Designed to replace journals and papers as the place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
+-   The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
 -   Publication is instant. Peer review happens openly. All work can be reviewed and rated.
 -   Your personal page records everything you do and how it is rated by your peers.
 -   Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
@@ -121,9 +121,9 @@ There are eight publication types:
 
 A **Research Problem** can link to any type of publication.
 
-Each publication type can only link to the publication type before itself in the chain, for example an **Interpretation** can be linked to an **Analysis**.
-
 A **Peer Review** is a review of any type of publication, and so can also link to any type of publication.
+
+All other publication types can only link to the publication type before itself in the chain, for example an **Interpretation** can be linked to an **Analysis**.
 
 ---
 
