@@ -17,7 +17,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm install --legacy-peer-deps -g @lhci/cli@0.8.x
+              run: npm install --legacy-peer-deps && npm install -g @lhci/cli@0.8.x
 
             - name: Run build
               working-directory: ./ui
