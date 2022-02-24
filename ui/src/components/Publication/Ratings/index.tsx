@@ -73,7 +73,7 @@ const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800">Published:</span>
                     <time className="text-right text-sm font-medium text-grey-800">
-                        {Helpers.formatDate(props.publication.createdAt)}
+                        {Helpers.formatDate(props.publication.publishedDate)}
                     </time>
                 </div>
             </div>
