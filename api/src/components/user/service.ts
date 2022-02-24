@@ -80,7 +80,13 @@ export const get = async (id: string) => {
                 select: {
                     id: true,
                     title: true,
-                    type: true
+                    type: true,
+                    doi: true,
+                    publishedDate: true,
+                    currentStatus: true,
+                    url_slug: true,
+                    licence: true,
+                    content: true
                 },
                 where: {
                     currentStatus: 'LIVE'
