@@ -72,7 +72,7 @@ Create a new migration:
 
 You can then apply the changes made by the new migration using the two commands above (generate and migrate reset).
 
-More information on migrations in Prisma can be found here: [https://www.prisma.io/docs/concepts/components/prisma-migrate/]('https://www.prisma.io/docs/concepts/components/prisma-migrate/').
+More information on migrations in Prisma can be found here: [Prisma Migrate Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate/).
 
 ---
 
@@ -80,29 +80,29 @@ More information on migrations in Prisma can be found here: [https://www.prisma.
 
 ### Languages
 
--   [TypeScript]('https://www.typescriptlang.org/') - [See config]('./tsconfig.json')
+-   [TypeScript](https://www.typescriptlang.org/) - [See config]('./tsconfig.json')
 -   [PostgreSQL](https://www.postgresql.org/)
 
 ### ORM
 
--   [Prisma]('https://www.prisma.io/')
+-   [Prisma](https://www.prisma.io/)
 
 ### Libraries
 
--   [Luxon]('https://moment.github.io/luxon/')
--   [Middy]('https://middy.js.org/')
--   [AJV]('https://ajv.js.org/')
+-   [Luxon](https://moment.github.io/luxon/)
+-   [Middy](https://middy.js.org/)
+-   [AJV](https://ajv.js.org/)
 
 ### Linting
 
--   [ESLint]('https://eslint.org/') - [See config]('./.eslintrc.json')
--   [Prettier]('https://prettier.io/') - [See config]('./.prettierrc.json')
+-   [ESLint](https://eslint.org/) - [See config]('./.eslintrc.json')
+-   [Prettier](https://prettier.io/) - [See config]('./.prettierrc.json')
 
 ---
 
 ## Testing
 
-API tests are written in [Jest]('https://jestjs.io/') and each endpoint has tests written to ensure the code is correct and working.
+API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working.
 
 ---
 
