@@ -1,6 +1,7 @@
 import React from 'react';
 import * as luxon from 'luxon';
 
+import * as Config from '@config';
 import * as Types from '@types';
 
 /**
@@ -14,18 +15,22 @@ export const truncateString = (value: string, length: number): string => {
  * @description Formats a string ISO from the DB
  */
 export const formatDate = (value: string): string => {
-    return luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
+
+    return date === 'Invalid DateTime' ? 'N/A' : date;
 };
 
 /**
  * @description Formats a ISO string date to a relative to now string
  */
 export const relativeDate = (value: string): string | null => {
-    return luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
+
+    return date === 'Invalid DateTime' ? 'N/A' : date;
 };
 
 /**
@@ -62,6 +67,22 @@ export const publicationColor = (publicationType: Types.PublicationType) => {
     };
 
     return color[publicationType];
+};
+
+/**
+ * @description Return the publication type next in the chain
+ */
+export const findNextPublicationType = (type: Types.PublicationType) => {
+    const index = Config.values.publicationTypes.findIndex((t) => t === type) + 1;
+    return Config.values.publicationTypes[index];
+};
+
+/**
+ * @description Return the publiction type previous in the chain
+ */
+export const findPreviousPublicationType = (type: Types.PublicationType) => {
+    const index = Config.values.publicationTypes.findIndex((t) => t === type) - 1;
+    return Config.values.publicationTypes[index];
 };
 
 /**

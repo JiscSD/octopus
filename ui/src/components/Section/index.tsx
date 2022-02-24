@@ -15,7 +15,7 @@ const Section: React.FC<Props> = (props): JSX.Element => {
     return (
         <section
             id={props.id && props.id}
-            className={`relative transition-colors duration-500 ${props.className && props.className}`}
+            className={`relative transition-colors duration-500 ${props.className ? props.className : ''}`}
         >
             <>
                 {props.children}

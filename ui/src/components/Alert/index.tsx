@@ -90,7 +90,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                     transition={{ duration: 0.35 }}
                     exit={{ opacity: 0 }}
                     className={`rounded-md p-4 pr-8 transition-colors duration-150 ${classes.background} ${
-                        !!props.className && props.className
+                        props.className ? props.className : ''
                     }`}
                 >
                     <div className="flex">
