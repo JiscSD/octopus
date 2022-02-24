@@ -5,7 +5,7 @@ const updatedPublicationSchema: I.Schema = {
     properties: {
         category: {
             type: 'string',
-            enum: [
+            enum: <I.FlagCategory[]>[
                 'PLAGIARISM',
                 'ETHICAL_ISSUES',
                 'MISREPRESENTATION',

@@ -1,19 +1,15 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
-import * as Types from '@types';
-import * as Assets from '@assets';
 
 type Props = {
-    id: string;
-    title: string;
-    createdBy: string;
-    type: Types.PublicationType;
-    date: string;
+    publication: Interfaces.Publication;
     className?: string;
 };
 
@@ -25,7 +21,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
         transition={{ type: 'tween', duration: 0.35 }}
     >
         <Components.Link
-            href={`${Config.urls.viewPublication.path}/${props.id}`}
+            href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
             className={`
             grid
             min-h-[4rem]
@@ -54,24 +50,23 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
         >
             <div className="z-10 col-span-11 w-full">
                 <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-500">
-                    {Helpers.formatPublicationType(props.type)}
+                    {Helpers.formatPublicationType(props.publication.type)}
                 </span>
                 <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white">
-                    {props.title}
+                    {props.publication.title}
                 </h2>
 
                 <p className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id, fugiat perspiciatis officia voluptates
-                    aliquam delectus odio dolor ipsum modi repellat et corporis, necessitatibus quia vitae officiis quae
-                    maxime repudiandae qui. Saepe atque eius tempora ut laboriosam? Consequuntur...
+                    {parse(Helpers.truncateString(props.publication.content, 370))}
                 </p>
 
                 <span className="flex text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Published {Helpers.relativeDate(props.date)}, by {props.createdBy}
+                    Published {Helpers.relativeDate(props.publication.publishedDate)}, by{' '}
+                    {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                 </span>
             </div>
 
-            <div className="col-span-1 mt-4 flex h-full w-full items-center justify-end lg:mt-0">
+            <div className="lg: col-span-1 mt-4 hidden h-full w-full items-center justify-end lg:mt-0 lg:flex">
                 <OutlineIcons.ChevronRightIcon className="h-5 w-5 text-teal-400" />
             </div>
         </Components.Link>

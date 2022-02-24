@@ -8,16 +8,18 @@ type Props = {
     openNew?: boolean;
     ariaLabel?: string;
     children: React.ReactElement[] | React.ReactElement;
+    onClick?: () => void;
 };
 
 const CustomLink: React.FC<Props> = (props): JSX.Element => {
     return (
         <Link href={props.href} scroll={props.scroll}>
             <a
-                className={props.className}
+                className={props.className ? props.className : ''}
                 target={props.openNew ? '_blank' : ''}
                 rel={props.openNew ? 'noreferrer noopener' : ''}
                 aria-label={props.ariaLabel}
+                onClick={props.onClick}
             >
                 {props.children}
             </a>

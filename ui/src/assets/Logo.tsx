@@ -16,7 +16,7 @@ const Logo: React.FC<Props> = (props): JSX.Element => {
             viewBox="0 0 3600 3400"
             aria-label="Octopus"
             fill="fill-current"
-            className={props.className}
+            className={props.className ? props.className : ''}
         >
             <path
                 fill="fill-current"

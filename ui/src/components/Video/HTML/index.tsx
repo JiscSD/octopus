@@ -22,6 +22,7 @@ const HTML: React.FC<Props> = (props): JSX.Element => (
             controls={props.controls}
             width={props.width}
             poster={props.poster}
+            preload="none"
             className="rounded-lg outline-0 focus:ring-2 focus:ring-yellow-400"
         >
             <source src={props.srcWebM} type="video/webm" />

@@ -192,10 +192,9 @@ const Home: Types.NextPage = (): JSX.Element => {
                         <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
                             Help us improve Octopus
                         </h2>
-                        <h3 className="mb-6 block font-montserrat text-xl font-semibold xl:mb-12 xl:w-1/2">
+                        <h3 className="block font-montserrat text-xl font-semibold xl:w-1/2">
                             Help us to make Octopus the best it can be. if you have feedback, please contact us.
                         </h3>
-                        <Components.Button href={Config.urls.feedback.path} title="Send us feedback" />
                     </div>
                 </Components.SectionTwo>
             </Layouts.Standard>

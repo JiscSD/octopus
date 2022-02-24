@@ -83,13 +83,6 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/privacy`
     },
-    feedback: {
-        path: '/feedback',
-        title: `Leave feedback - ${base.title}`,
-        description: '',
-        keywords: '',
-        canonical: `${base.host}/feedback`
-    },
     about: {
         path: '/about',
         title: `About Octopus - ${base.title}`,
