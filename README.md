@@ -127,12 +127,6 @@ A **Peer Review** is a review of any type of publication, and so can also link t
 
 ---
 
-## Entity Relationship Diagram (ERD)
-
-![erd](./api/prisma/ERD.png 'ERD')
-
----
-
 ## Contributing
 
 If you are interested in contributing, please check out [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.

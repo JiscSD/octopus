@@ -99,8 +99,14 @@ More information on migrations in Prisma can be found [here]('https://www.prisma
 
 ---
 
-## Entity Relationship Diagram (ERD)
+## Testing
 
-![erd](./prisma/ERD.png 'ERD')
+API tests are written in [Jest]('https://jestjs.io/') and each endpoint has tests written to ensure the code is correct and working.
+
+---
+
+## Workflows on push
+
+We have a job which runs the API test suite through github-actions. If any of the API tests fail, then the action will fail.
 
 ---

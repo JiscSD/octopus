@@ -54,6 +54,8 @@ import * as SomePackageName from 'some-package'
 
 The idea is that it gives all developers on the project an understanding of where methods/functions are coming from when used within large files.
 
+todo/ add more to this.
+
 ---
 
 ## Testing
@@ -64,6 +66,6 @@ UI tests will be written using Jest. Currently there will be no UI tests for Alp
 
 ## Workflows on push
 
-We have a job which utilitses [Lighthouse CI]('https://github.com/GoogleChrome/lighthouse-ci') to run an accessibility audit on all pages - [See config]('./lighthouserc.js'). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
+We have a job which utilises [Lighthouse CI]('https://github.com/GoogleChrome/lighthouse-ci') to run an accessibility audit on all pages - [See config]('./lighthouserc.js'). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
 
 ---
