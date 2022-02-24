@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import parse from 'html-react-parser';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
@@ -15,38 +14,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 };
 
-type Props = {
-    heroContents: [{ id: string; heading: string; content: string }];
-};
-
-const heroContents = [
-    {
-        id: 'publish_freely',
-        heading: 'Free and quick to publish',
-        content:
-            'Octopus is designed to help researchers get their work published quickly, easily and freely. Break away from the tyranny of ‘papers’ and publish your work faster! '
-    },
-    {
-        id: 'establish_priority',
-        heading: 'Establish your priority',
-        content:
-            'No need to worry about being &apos;scooped&apos; - once you&apos;ve published an idea, or a protocol in Octopus you have established your priority. That work now has your name and date on it for everyone to see. '
-    },
-    {
-        id: 'relevant_work',
-        heading: 'Find relevant work',
-        content:
-            'All publications in Octopus are linked, forming branching chains. If you subscribe to a particular research problem you can easily see all work linked to it.'
-    },
-    {
-        id: 'meritocracy',
-        heading: 'Get the credit you deserve',
-        content:
-            'All your work in Octopus, including reviews that you write, are displayed on your personal page for others to see, along with ratings that others have given them.'
-    }
-];
-
-const Home: Types.NextPage<Props> = (props): JSX.Element => {
+const Home: Types.NextPage = (): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
@@ -123,16 +91,35 @@ const Home: Types.NextPage<Props> = (props): JSX.Element => {
                         />
 
                         <div>
-                            {heroContents.map((heroContent) => (
-                                <>
-                                    <h3 className="key={heroContent.id} mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
-                                        {heroContent.heading}
-                                    </h3>
-                                    <p className="mb-5 block text-sm text-grey-800 dark:text-white">
-                                        {parse(heroContent.content)}
-                                    </p>
-                                </>
-                            ))}
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Free and quick to publish
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                Octopus is designed to help researchers get their work published quickly, easily and
+                                freely. Break away from the tyranny of &apos;papers&apos; and publish your work faster!
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Establish your priority
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                No need to worry about being &apos;scooped&apos; - once you&apos;ve published an idea,
+                                or a protocol in Octopus you have established your priority. That work now has your name
+                                and date on it for everyone to see.
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Find relevant work
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                All publications in Octopus are linked, forming branching chains. If you subscribe to a
+                                particular research problem you can easily see all work linked to it.
+                            </p>
+                            <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
+                                Get the credit you deserve
+                            </h3>
+                            <p className="mb-5 block text-sm text-grey-800 dark:text-white">
+                                All your work in Octopus, including reviews that you write, are displayed on your
+                                personal page for others to see, along with ratings that others have given them.
+                            </p>
                             <Components.ExtendedLink href={Config.urls.about.path} title="Read more about Octopus" />
                         </div>
                     </div>
