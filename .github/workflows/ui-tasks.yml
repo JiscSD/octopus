@@ -18,7 +18,7 @@ jobs:
               working-directory: ./ui
               run: npm ci
 
-            - name: Run lint
+            - name: Run prettier check
               working-directory: ./ui
               run: npm run format:check
 
