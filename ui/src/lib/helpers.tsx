@@ -1,4 +1,6 @@
 import React from 'react';
+import jwt_decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
 
 import * as Config from '@config';
@@ -113,4 +115,13 @@ export const randomColor = () => {
 
 export const randomWholeNumberInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + min;
+};
+
+export const thing = () => {
+    // Cookies.set(config.keys.cookieToken, token, { expires: 1 });
+    // User has a cookie so can now be redirected to the dashboard
+
+    //const decodedToken = jwt_decode(token) as I.User;
+
+    return 'hello';
 };

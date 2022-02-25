@@ -121,6 +121,13 @@ const urls = {
     500: {
         title: `Something went wrong - ${base.title}`
     },
+    orcidLoginCallback: {
+        path: '/callback',
+        title: `Logging in with ORCID - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/callback`
+    },
     orcidLogin: {
         path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/callback`
     }

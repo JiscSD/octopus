@@ -3,6 +3,8 @@ import axios from 'axios';
 import * as I from 'interface';
 import * as response from 'lib/response';
 
+import * as userService from 'user/service';
+
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
         const orcidRequest = await axios.post(
@@ -12,11 +14,16 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
 
         const userInformation = await axios.get(`https://orcid.org/${orcidRequest.data.orcid}/public-record.json`);
 
+        const user = await userService.upsertUser(orcidRequest.data.orcid, {
+            firstName: userInformation.data?.names?.givenNames?.value || '',
+            lastName: userInformation.data?.names?.familyName?.value || ''
+        });
+
         // store and update information in db, get latest back
 
         // generate jwt
 
-        return response.json(200, userInformation.data);
+        return response.json(200, user);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

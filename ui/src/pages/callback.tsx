@@ -36,6 +36,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             code
         });
         token = response.data;
+        console.log(token);
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
@@ -58,7 +59,7 @@ type Props = {
     token: string; // TODO: Need a really good interface for the shape of user
 };
 
-const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
+const Callback: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 
@@ -74,8 +75,8 @@ const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
             <Head>
                 <meta name="description" content="" />
                 <meta name="keywords" content="" />
-                <link rel="canonical" href={`${Config.urls.about.canonical}`} />
-                <title>{Config.urls.about.title}</title>
+                <link rel="canonical" href={`${Config.urls.orcidLoginCallback.canonical}`} />
+                <title>{Config.urls.orcidLoginCallback.title}</title>
             </Head>
 
             <Layouts.Standard fixedHeader={true}>
@@ -94,4 +95,4 @@ const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
     );
 };
 
-export default Orcid;
+export default Callback;

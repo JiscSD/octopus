@@ -138,3 +138,8 @@ export interface CreateFlagRequestBody {
 export interface AuthorizeRequestBody {
     code: string;
 }
+
+export interface UpdateUserInformation {
+    firstName: string;
+    lastName: string;
+}
