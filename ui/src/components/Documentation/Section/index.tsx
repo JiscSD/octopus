@@ -14,7 +14,7 @@ const DocumentationSection: React.FC<SectionProps> = (props): JSX.Element => {
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
 
     return (
-        <div className="grid grid-cols-1 xl:grid-cols-2  gap-x-8 2xl:gap-x-16">
+        <div className="grid grid-cols-1 gap-x-8  xl:grid-cols-2 2xl:gap-x-16">
             <article className="col-span-1">
                 <p className="mb-4 text-grey-800 dark:text-white">{props.entry.description}</p>
                 {!!props.entry.queryParameters && (

@@ -1,83 +1,51 @@
 import React from 'react';
 import ClickAwayListener from 'react-click-away-listener';
+import useSWR from 'swr';
 import * as Router from 'next/router';
 import * as SolidIcon from '@heroicons/react/solid';
 import * as HeadlessUI from '@headlessui/react';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Assets from '@assets';
 import * as Types from '@types';
-import * as API from '@api';
 
 const CommandPalette: React.FC = (): JSX.Element => {
     const router = Router.useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
-
-    const [query, setQuery] = React.useState('');
-    const [results, setResults] = React.useState<Interfaces.Publication[] | Interfaces.User[]>([]);
-    const [resultsMeta, setResultsMeta] = React.useState<Interfaces.SearchResultMeta | null>();
-    const [resultsError, setResultsError] = React.useState<string | null>();
-    const [loading, setLoading] = React.useState(false);
-    const [searchFor, setSearchFor] = React.useState<Types.SearchType>('publications');
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+    const [query, setQuery] = React.useState('');
+    const [searchType, setSearchType] = React.useState<Types.SearchType>('publications');
 
-    const toggleSearchType = () => {
-        setResults([]);
-        searchFor === 'publications' ? setSearchFor('users') : setSearchFor('publications');
-    };
+    const {
+        data: { data: results = [] } = {},
+        error,
+        isValidating
+    } = useSWR(`/${searchType}?search=${query}&limit=10`, null, {
+        fallback: {
+            '/publications': []
+        },
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false
+    });
+
+    const toggleSearchType = () =>
+        searchType === 'publications' ? setSearchType('users') : setSearchType('publications');
 
     const handleGoToSearchResults = () => {
-        resetData();
         toggleCmdPalette();
-        router.push(`${Config.urls.search.path}?for=${searchFor}&query=${query}`);
-    };
-
-    const handleSearchRequest = async (value: string) => {
-        setQuery(value);
-
-        // Looks like the api search only returns results if the search query is 3+ chars?
-        if (value.length > 3) {
-            setLoading(true);
-            let data: Interfaces.Publication[] | Interfaces.User[] = [];
-            let metadata: null = null;
-
-            try {
-                const endpoint = searchFor === 'users' ? Config.endpoints.users : Config.endpoints.publications;
-                const response = await API.get(`${endpoint}?limit=10&search=${value}`);
-                data = response.data.data;
-                metadata = response.data.metadata;
-                setResultsError(null);
-            } catch (err) {
-                const { message } = err as Interfaces.JSONResponseError;
-                setResultsError(message);
+        router.push({
+            pathname: `${Config.urls.search.path}`,
+            query: {
+                for: searchType,
+                query: query
             }
-
-            setLoading(false);
-            setResults(data);
-            setResultsMeta(metadata);
-        } else if (!value.length) {
-            setResults([]);
-            setResultsMeta(null);
-        }
+        });
     };
-
-    const resetData = () => {
-        setQuery('');
-        setResults([]);
-        setResultsMeta(null);
-        setResultsError(null);
-    };
-
-    React.useEffect(() => {
-        resetData();
-        searchInput.current?.focus();
-    }, [searchFor]);
 
     React.useEffect(() => {
         if (showCmdPalette) {
@@ -85,7 +53,6 @@ const CommandPalette: React.FC = (): JSX.Element => {
             searchInput.current?.focus();
         } else {
             document.body.style.overflowY = 'auto';
-            resetData();
         }
     }, [showCmdPalette]);
 
@@ -96,11 +63,11 @@ const CommandPalette: React.FC = (): JSX.Element => {
                     <div className="mx-auto md:w-[620px]">
                         <div className="relative z-50 mx-4 flex flex-col items-center justify-between rounded-t-lg bg-grey-800 px-6 pt-4 pb-2 sm:flex-row">
                             <span className="mr-2 text-sm text-grey-100">
-                                {resultsMeta && 'Results found: ' + resultsMeta.total}
+                                {!isValidating && !error && results?.data && 'Results found: ' + results?.data?.length}
                             </span>
                             <div className="flex items-center">
                                 <span className="mr-2 text-sm text-grey-100">
-                                    Switch to {searchFor === 'publications' ? 'user' : 'publication'} search
+                                    Switch to {searchType === 'publications' ? 'user' : 'publication'} search
                                 </span>
                                 <HeadlessUI.Switch
                                     checked={true}
@@ -109,7 +76,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                         if (e.key === 'Enter') toggleSearchType();
                                     }}
                                     className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2  focus:ring-offset-2 ${
-                                        searchFor === 'publications'
+                                        searchType === 'publications'
                                             ? 'bg-teal-500 focus:ring-teal-500'
                                             : 'bg-purple-400 focus:ring-purple-300'
                                     }`}
@@ -118,7 +85,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     <span
                                         aria-hidden="true"
                                         className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                                            searchFor === 'publications' ? 'translate-x-5' : 'translate-x-0'
+                                            searchType === 'publications' ? 'translate-x-5' : 'translate-x-0'
                                         }`}
                                     />
                                 </HeadlessUI.Switch>
@@ -132,10 +99,10 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                 <input
                                     ref={searchInput}
                                     type="text"
-                                    placeholder={`Search ${searchFor}`}
+                                    placeholder={`Search ${searchType}`}
                                     className="w-full rounded bg-transparent px-2 py-1 text-base leading-loose tracking-wide text-white outline-0 focus:ring-2 focus:ring-yellow-500"
                                     value={query}
-                                    onChange={(e) => handleSearchRequest(e.target.value)}
+                                    onChange={(e) => setQuery(e.target.value)}
                                     onKeyDown={(e: React.KeyboardEvent) => {
                                         if (e.key === 'Enter') handleGoToSearchResults();
                                     }}
@@ -147,37 +114,19 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                 >
                                     <SolidIcon.SearchIcon
                                         className={`h-6 w-6 ${
-                                            searchFor === 'publications' ? 'text-teal-500' : 'text-purple-300'
+                                            searchType === 'publications' ? 'text-teal-500' : 'text-purple-300'
                                         }`}
                                     />
                                 </button>
                             </div>
                             <Framer.AnimatePresence>
-                                {/** Loader */}
-                                {loading && (
-                                    <Framer.motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="flex justify-center px-6 py-4"
-                                    >
-                                        <Assets.Logo
-                                            height={50}
-                                            width={50}
-                                            className={`motion-safe:animate-bounce ${
-                                                searchFor === 'publications' ? 'fill-teal-500' : 'fill-purple-300'
-                                            }`}
-                                        />
-                                    </Framer.motion.div>
-                                )}
-
-                                {/** Results */}
-                                {!loading && !resultsError && results.length && (
+                                {!isValidating && !error && results?.data?.length && (
                                     <Framer.motion.div
                                         initial="hidden"
                                         animate="show"
-                                        exit={{ maxHeight: 0, opacity: 0 }}
+                                        exit={{ maxHeight: 50, opacity: 0 }}
                                         variants={{
-                                            hidden: { maxHeight: 0, opacity: 0 },
+                                            hidden: { maxHeight: 50, opacity: 0 },
                                             show: {
                                                 opacity: 1,
                                                 maxHeight: 400
@@ -185,8 +134,8 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                         }}
                                         className="scrollbar-vert overflow-y-auto"
                                     >
-                                        {results.map((result: any, index) => {
-                                            if (searchFor === 'publications') {
+                                        {results?.data.map((result: any, index: number) => {
+                                            if (searchType === 'publications') {
                                                 return (
                                                     <Components.CommandPaletteResult
                                                         key={result.id}
@@ -195,7 +144,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                         excerpt={`${result.user.firstName}. ${result.user.lastName}`}
                                                         link={`${Config.urls.viewPublication.path}/${result.id}`}
                                                         meta={Helpers.formatPublicationType(result.type)}
-                                                        date={Helpers.formatDate(result.updatedAt)}
+                                                        date={Helpers.formatDate(result.publishedDate)}
                                                         accentColor={'text-teal-300'}
                                                         className={`${index === 0 ? 'mt-2' : ''} ${
                                                             index === results.length - 1 ? 'mb-2' : ''
@@ -204,7 +153,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                 );
                                             }
 
-                                            if (searchFor === 'users') {
+                                            if (searchType === 'users') {
                                                 return (
                                                     <Components.CommandPaletteResult
                                                         key={result.id}
@@ -222,15 +171,25 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     </Framer.motion.div>
                                 )}
 
-                                {/** Error */}
-                                {!loading && resultsError && (
+                                {!isValidating && !error && results?.data?.length === 0 && (
                                     <Framer.motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         className="flex justify-center px-6 pb-4 pt-4"
                                     >
-                                        <span className="text-sm text-pink-500 dark:text-pink-300">{resultsError}</span>
+                                        <span className="text-sm text-teal-500">No results found for `{query}`</span>
+                                    </Framer.motion.div>
+                                )}
+
+                                {!isValidating && error && (
+                                    <Framer.motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="flex justify-center px-6 pb-4 pt-4"
+                                    >
+                                        <span className="text-sm text-pink-500 dark:text-pink-300">{error}</span>
                                     </Framer.motion.div>
                                 )}
                             </Framer.AnimatePresence>

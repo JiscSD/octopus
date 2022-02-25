@@ -57,8 +57,10 @@ If you would like to submit any changes and contribute some code, please:
 4. commit/push your new branch
 5. [submit a PR for review](https://github.com/JiscSD/octopus/pulls)
 
-A pull request should be created as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you request a review on GitHub.  
+A draft pull request should be created as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you request a review on GitHub.  
 We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
+
+Any pull requests from contributors will require a member of the team to review before this can be merged - see [CODEOWNERS](../.github/CODEOWNERS).
 
 **Prerequisites and local setup**
 
@@ -70,3 +72,27 @@ Follow our documentation on locally setting up [the UI](../ui/README.md#local-se
 **Code styleguide**
 
 Both our `UI` and `API` use individual configurations of [ESLint](https://eslint.org) and [Prettier](https://prettier.io) to enforce coding styles.
+
+### Team Code Conventions
+
+1. We have chosen to either use npm packages if they provide a default export, or:
+
+```
+import * as OutlineIcons from '@heroicons/react/outline';
+```
+
+```
+import * as Components from '@components';
+```
+
+Then this will be referred to in the code as:
+
+```
+<OutlineIcons.SparklesIcon>
+```
+
+```
+<Components.Button>
+```
+
+The idea is that it gives all developers on the project an understanding of where methods/functions are coming from when used within large files.

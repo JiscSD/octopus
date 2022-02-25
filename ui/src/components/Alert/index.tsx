@@ -15,6 +15,7 @@ type Props = {
         url: string;
         external: boolean;
     };
+    className?: string;
 };
 
 const Alert: React.FC<Props> = (props): JSX.Element => {
@@ -88,7 +89,9 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.35 }}
                     exit={{ opacity: 0 }}
-                    className={`rounded-md p-4 transition-colors duration-150 ${classes.background}`}
+                    className={`rounded-md p-4 pr-8 transition-colors duration-150 ${classes.background} ${
+                        props.className ? props.className : ''
+                    }`}
                 >
                     <div className="flex">
                         <div className="flex-shrink-0">{classes.icon}</div>

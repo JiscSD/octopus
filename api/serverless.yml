@@ -14,6 +14,13 @@ provider:
     runtime: nodejs14.x
     region: eu-west-1
     stage: ${opt:stage, 'local'}
+    vpc:
+        securityGroupIds:
+            - ${ssm:/${self:provider.stage}_octopus_sls_sg}
+        subnetIds:
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az1}
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az2}
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
     environment:
         stage: ${self:provider.stage}
     deploymentBucket:
@@ -22,6 +29,13 @@ provider:
             Owner: 0 - 3 Years Innovation Team
             Name: Octopus API
 custom:
+    customDomain:
+        domainName: '${self:provider.stage}.api.octopus.ac'
+        basePath: ''
+        hostedZoneId: Z0024644REA9FF3O23MK
+        certificateName: '*.api.octopus.ac'
+        stage: ${self:provider.stage}
+        createRoute53Record: true
     webpack:
         webpackConfig: ./webpack.config.js
         includeModules: true
