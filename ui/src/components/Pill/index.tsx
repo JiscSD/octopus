@@ -8,7 +8,9 @@ type Props = {
 const Pill: React.FC<Props> = (props): JSX.Element => {
     return (
         <span
-            className={`flex rounded-full border-2 border-teal-500 px-2 py-1 text-xxs font-semibold uppercase leading-tight tracking-widest ${props.className}`}
+            className={`flex rounded-full border-2 border-teal-500 px-2 py-1 text-xxs font-semibold uppercase leading-tight tracking-widest ${
+                props.className ? props.className : ''
+            }`}
         >
             {props.children}
         </span>

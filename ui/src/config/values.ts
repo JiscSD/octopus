@@ -1,10 +1,12 @@
-export const publicationTypes = [
+import * as Types from '@types';
+
+export const publicationTypes: Types.PublicationType[] = [
     'PROBLEM',
-    'PROTOCOL',
-    'ANALYSIS',
-    'REAL_WORLD_APPLICATION',
     'HYPOTHESIS',
+    'PROTOCOL',
     'DATA',
+    'ANALYSIS',
     'INTERPRETATION',
+    'REAL_WORLD_APPLICATION',
     'PEER_REVIEW'
 ];

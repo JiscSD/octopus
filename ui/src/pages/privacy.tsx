@@ -1,11 +1,11 @@
-import { NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
-const Privacy: NextPage = (): JSX.Element => {
+const Privacy: Types.NextPage = (): JSX.Element => {
     return (
         <>
             <Head>

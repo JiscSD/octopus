@@ -1,14 +1,14 @@
 let host: string;
 
-switch (process.env.stage) {
+switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
         host = 'http://localhost:3000';
         break;
-    case 'int':
-        host = 'https://int.octopus.ac';
+    case 'prod':
+        host = 'https://octopus.ac';
         break;
     default:
-        host = 'https://octopus.ac';
+        host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
 }
 
 const base = {
@@ -54,23 +54,12 @@ const urls = {
         canonical: `${base.host}/edit`
     },
 
-    // Reviews
-    // createReview: {
-    //     path: '/review',
-    //     title: 'Create publication review',
-    //     description: '',
-    //     keywords: '',
-    //     canonical: `${base.host}/review`
-    // },
-
-    // Report
-    // createFlag: {
-    //     path: '/flag',
-    //     title: 'Flag publication',
-    //     description: '',
-    //     keywords: '',
-    //     canonical: `${base.host}/flag`
-    // },
+    // Users
+    viewUser: {
+        path: '/authors',
+        title: `${base.title}`,
+        canonical: `${base.host}/authors`
+    },
 
     // Static Pages
     home: {
@@ -94,19 +83,33 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/privacy`
     },
-    feedback: {
-        path: '/feedback',
-        title: `Leave feedback- ${base.title}`,
-        description: '',
-        keywords: '',
-        canonical: `${base.host}/feedback`
-    },
     about: {
         path: '/about',
-        title: `About Octopus- ${base.title}`,
+        title: `About Octopus - ${base.title}`,
+        description: 'More information about the Octopus platform.',
+        keywords: 'about, octopus',
+        canonical: `${base.host}/about`
+    },
+    faq: {
+        path: '/faq',
+        title: `Frequently Asked Questions - ${base.title}`,
+        description: 'Frequently asked questions about the Octopus platform.',
+        keywords: 'faq, octopus',
+        canonical: `${base.host}/faq`
+    },
+    documentation: {
+        path: '/documentation',
+        title: `API documentation - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/about`
+        canonical: `${base.host}/documentation`
+    },
+    accessibility: {
+        path: '/accessibility',
+        title: `Accessibility - ${base.title}`,
+        description: '',
+        keywords: '',
+        canonical: `${base.host}/accessibility`
     },
     404: {
         title: `404 Not Found - ${base.title}`
