@@ -29,6 +29,13 @@ provider:
             Owner: 0 - 3 Years Innovation Team
             Name: Octopus API
 custom:
+    customDomain:
+        domainName: '${self:provider.stage}.api.octopus.ac'
+        basePath: ''
+        hostedZoneId: Z0024644REA9FF3O23MK
+        certificateName: '*.api.octopus.ac'
+        stage: ${self:provider.stage}
+        createRoute53Record: true
     webpack:
         webpackConfig: ./webpack.config.js
         includeModules: true
