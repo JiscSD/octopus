@@ -1,6 +1,0 @@
-octopus-next-app:
-  component: "@sls-next/serverless-component"
-  inputs:
-    domain:
-      - ${env.SUB}
-      - ${env.DOMAIN}
