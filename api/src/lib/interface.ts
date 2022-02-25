@@ -134,3 +134,7 @@ export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
     comments: string;
 }
+
+export interface AuthorizeRequestBody {
+    code: string;
+}

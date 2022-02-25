@@ -91,7 +91,8 @@ module.exports = {
                 900: 'hsl(46, 100%, 5%)' // #1a1400
             },
             white: '#ffffff',
-            black: '#000000'
+            black: '#000000',
+            orcid: '#437405'
         },
         fontFamily: {
             inter: ['Inter var', ...defaultTheme.fontFamily.sans],

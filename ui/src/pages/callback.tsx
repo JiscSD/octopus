@@ -1,11 +1,59 @@
 import Head from 'next/head';
 
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as API from '@api';
 
-const Orcid: Types.NextPage = (): JSX.Element => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    let code: string | string[] | null = null;
+    let user: any = null;
+    let error: string | null = null;
+
+    // Ensure we have a set code
+    if (context.query.code) code = context.query.code;
+
+    // No code query param, no processable
+    if (!code) {
+        return {
+            notFound: true
+        };
+    }
+
+    // Ensure we only use one query param of code, the first
+    if (Array.isArray(code)) code = code[0];
+
+    try {
+        const response = await API.post(`${Config.endpoints.authorization}`, {
+            code
+        });
+        user = response.data;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
+        console.log(error);
+    }
+
+    if (!user || error) {
+        return {
+            notFound: true
+        };
+    }
+
+    // At this point we have the user object, but we will expect a jwt token.
+
+    return {
+        props: { user }
+    };
+};
+
+type Props = {
+    user: any; // TODO: Need a really good interface for the shape of user
+};
+
+const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
     return (
         <>
             <Head>
@@ -23,7 +71,7 @@ const Orcid: Types.NextPage = (): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        Callinbg back...
+                        {props.user.displayName}
                     </section>
                 </Components.SectionTwo>
             </Layouts.Standard>

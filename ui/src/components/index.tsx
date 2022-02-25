@@ -48,3 +48,4 @@ export { default as ProgressCircle } from './Progress/Circle';
 export { default as DocumentationSection } from './Documentation/Section';
 export { default as List } from './List';
 export { default as ListItem } from './List/Item';
+export { default as ORCIDLogInButton } from './ORCID/LogInButton';

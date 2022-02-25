@@ -3,8 +3,8 @@ let orcidAppiID: string;
 
 switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
-        host = 'https://localhost:3000';
-        orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
+        host = 'https://localhost:3001';
+        orcidAppiID = 'APP-57ZHSJRO55526ROC';
         break;
     case 'prod':
         host = 'https://octopus.ac';
