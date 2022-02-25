@@ -18,3 +18,7 @@ variable "db_version" {
 variable "backup_retention_period" {
   type = number
 }
+
+variable "domain_name" {
+  type = string
+}
