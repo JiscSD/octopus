@@ -13,6 +13,11 @@ export type GlobalsStoreType = {
     toggleCmdPalette: () => void;
 };
 
+export type AuthStoreType = {
+    user: null | {};
+    setUser: (user: any) => void;
+};
+
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
 
 export type SearchType = 'publications' | 'users';

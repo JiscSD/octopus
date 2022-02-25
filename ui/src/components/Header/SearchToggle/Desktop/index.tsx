@@ -1,7 +1,5 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 import * as Types from '@types';

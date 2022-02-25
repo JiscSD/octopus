@@ -1,15 +1,21 @@
+import React from 'react';
 import Head from 'next/head';
+import * as Router from 'next/router';
+// import jwt_decode from 'jwt-decode';
+// import Cookies from 'js-cookie';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
+
 import * as API from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let code: string | string[] | null = null;
-    let user: any = null;
+    let token: any = null;
     let error: string | null = null;
 
     // Ensure we have a set code
@@ -29,31 +35,40 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         const response = await API.post(`${Config.endpoints.authorization}`, {
             code
         });
-        user = response.data;
+        token = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
         console.log(error);
     }
 
-    if (!user || error) {
+    if (!token || error) {
         return {
             notFound: true
         };
     }
 
     // At this point we have the user object, but we will expect a jwt token.
-
     return {
-        props: { user }
+        props: { token }
     };
 };
 
 type Props = {
-    user: any; // TODO: Need a really good interface for the shape of user
+    token: string; // TODO: Need a really good interface for the shape of user
 };
 
 const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
+    const router = Router.useRouter();
+    const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
+
+    React.useEffect(() => {
+        setUser(props.token);
+        router.push({
+            pathname: `${Config.urls.home.path}`
+        });
+    }, []);
+
     return (
         <>
             <Head>
@@ -71,7 +86,7 @@ const Orcid: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        {props.user.displayName}
+                        Loading...
                     </section>
                 </Components.SectionTwo>
             </Layouts.Standard>
