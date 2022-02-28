@@ -391,7 +391,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
 
                         <article className="col-span-9 min-h-screen">
                             {props.error ? (
-                                <Components.Alert 
+                                <Components.Alert
                                     severity="ERROR"
                                     title={props.error}
                                     details={['Placeholder support text here']}
