@@ -8,7 +8,7 @@ const Desktop: React.FC = (): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     return (
         <button
-            className="mr-6 rounded border-transparent p-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+            className="mr-4 rounded border-transparent p-2 outline-0 focus:ring-2 focus:ring-yellow-400"
             onClick={(e) => toggleCmdPalette()}
         >
             Search

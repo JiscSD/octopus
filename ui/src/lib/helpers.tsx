@@ -113,15 +113,21 @@ export const randomColor = () => {
     return `#${value}`;
 };
 
+/**
+ * @description Return a random floored number in a given range
+ */
 export const randomWholeNumberInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + min;
 };
 
-export const thing = () => {
-    // Cookies.set(config.keys.cookieToken, token, { expires: 1 });
-    // User has a cookie so can now be redirected to the dashboard
+/**
+ * @description Set the JWT token in a cookie & return the decaded version
+ */
+export const setAndReturnJWT = (token: string) => {
+    Cookies.set(Config.keys.cookieStorage.token, token, { expires: 1 });
+    return jwt_decode(token);
+};
 
-    //const decodedToken = jwt_decode(token) as I.User;
-
-    return 'hello';
+export const clearJWT = () => {
+    Cookies.remove(Config.keys.cookieStorage.token);
 };

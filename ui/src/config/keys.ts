@@ -5,6 +5,9 @@ const keys = {
         darkMode: `${prefix}-dark-mode`,
         token: `${prefix}-token`,
         user: `${prefix}-user`
+    },
+    cookieStorage: {
+        token: `${prefix}-token`
     }
 };
 
