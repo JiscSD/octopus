@@ -1174,7 +1174,7 @@ const newPublicationSeeds = [
     // Peer Review (live)
     {
         id: 'publication-user-7-peer-review-3-live',
-        title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
+        title: 'Peer Review of Analysis for Expert elicitation on the relative importance of possible SARS-CoV-2 transmission routes and the effectiveness of mitigations',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
         content:
@@ -1202,7 +1202,7 @@ const newPublicationSeeds = [
         },
         linkedTo: {
             create: {
-                publicationTo: 'publication-user-2-analysis-1-live'
+                publicationTo: 'publication-user-5-analysis-1-live'
             }
         }
     },
