@@ -3,11 +3,11 @@ import Head from 'next/head';
 import * as Router from 'next/router';
 
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 import * as Assets from '@assets';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
-
 import * as API from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
@@ -15,17 +15,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let token: any = null;
     let error: string | null = null;
 
-    // Ensure we have a set code
     if (context.query.code) code = context.query.code;
 
-    // No code query param, no processable
     if (!code) {
         return {
             notFound: true
         };
     }
 
-    // Ensure we only use one query param of code, the first
     if (Array.isArray(code)) code = code[0];
 
     try {
@@ -33,7 +30,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             code
         });
         token = response.data;
-        console.log(token);
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
@@ -46,14 +42,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
-    // At this point we have the user object, but we will expect a jwt token.
     return {
         props: { token }
     };
 };
 
 type Props = {
-    token: string; // TODO: Need a really good interface for the shape of user
+    token: string;
 };
 
 const Callback: Types.NextPage<Props> = (props): JSX.Element => {
@@ -61,15 +56,16 @@ const Callback: Types.NextPage<Props> = (props): JSX.Element => {
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 
     React.useEffect(() => {
-        setUser(props.token);
+        const decodedJWT = Helpers.setAndReturnJWT(props.token);
+        setUser(decodedJWT);
         setTimeout(
             () =>
                 router.push({
                     pathname: `${Config.urls.home.path}`
                 }),
-            800
+            300
         );
-    }, []);
+    }, [props.token]);
 
     return (
         <>

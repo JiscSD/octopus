@@ -4,6 +4,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 
 import * as userService from 'user/service';
+import * as authorizationService from 'authorization/service';
 
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
@@ -19,11 +20,9 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
             lastName: userInformation.data?.names?.familyName?.value || ''
         });
 
-        // store and update information in db, get latest back
+        const token = authorizationService.createJWT(user);
 
-        // generate jwt
-
-        return response.json(200, user);
+        return response.json(200, token);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

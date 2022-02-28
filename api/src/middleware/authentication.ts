@@ -3,6 +3,7 @@ import middy from '@middy/core';
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as userService from 'user/service';
+import * as authorizationService from 'authorization/service';
 
 const authentication = (optional = false): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (request): Promise<I.JSONResponse | void> => {
@@ -10,9 +11,13 @@ const authentication = (optional = false): middy.MiddlewareObj => {
             let user: null | I.User = null;
 
             const apiKey = request.event.queryStringParameters?.apiKey;
+            const bearerToken = request.event.headers.authorization;
 
             if (apiKey) {
+                // @ts-ignore
                 user = await userService.getByApiKey(apiKey);
+            } else if (bearerToken) {
+                user = authorizationService.validateJWT(bearerToken.split(' ')[1]);
             }
 
             // if there's no user account, and authentication is *not* optional, then the request is blocked.

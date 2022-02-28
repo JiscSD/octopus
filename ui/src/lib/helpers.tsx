@@ -128,6 +128,9 @@ export const setAndReturnJWT = (token: string) => {
     return jwt_decode(token);
 };
 
+/**
+ * @description Clear the JWT from browser cookie storage
+ */
 export const clearJWT = () => {
     Cookies.remove(Config.keys.cookieStorage.token);
 };
