@@ -189,7 +189,9 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                         exit={{ opacity: 0 }}
                                         className="flex justify-center px-6 pb-4 pt-4"
                                     >
-                                        <span className="text-sm text-pink-500 dark:text-pink-300">{error}</span>
+                                        <span className="text-sm text-pink-500 dark:text-pink-300">
+                                            There was a problem fetching publications.
+                                        </span>
                                     </Framer.motion.div>
                                 )}
                             </Framer.AnimatePresence>
