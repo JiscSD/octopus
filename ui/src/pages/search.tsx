@@ -28,7 +28,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error
-    let error: string | null = 'No search type provided';
+    let error: string | null = null;
 
     // setting params
     if (context.query.query) query = context.query.query;
@@ -97,7 +97,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             orderDirection,
             fallback: {
                 [swrKey]: results
-            }
+            },
+            error
         }
     };
 };
@@ -110,6 +111,7 @@ type Props = {
     offset: string | null;
     orderBy: string | null;
     orderDirection: string | null;
+    error: string | null;
 };
 
 const Search: Types.NextPage<Props> = (props): JSX.Element => {
@@ -388,96 +390,104 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                         </aside>
 
                         <article className="col-span-9 min-h-screen">
-                            <Framer.AnimatePresence>
-                                {!!error && (
-                                    <Components.Alert
-                                        severity="ERROR"
-                                        title={error}
-                                        details={['Placeholder support text here']}
-                                    />
-                                )}
+                            {props.error ? (
+                                <Components.Alert 
+                                    severity="ERROR"
+                                    title={props.error}
+                                    details={['Placeholder support text here']}
+                                />
+                            ) : (
+                                <Framer.AnimatePresence>
+                                    {!!error && (
+                                        <Components.Alert
+                                            severity="ERROR"
+                                            title={error}
+                                            details={['Placeholder support text here']}
+                                        />
+                                    )}
 
-                                {!error && !results?.data?.length && !isValidating && (
-                                    <Components.Alert
-                                        severity="INFO"
-                                        title="No results found"
-                                        details={['Placeholder support text here', 'Placeholder support text here']}
-                                    />
-                                )}
+                                    {!error && !results?.data?.length && !isValidating && (
+                                        <Components.Alert
+                                            severity="INFO"
+                                            title="No results found"
+                                            details={['Placeholder support text here', 'Placeholder support text here']}
+                                        />
+                                    )}
 
-                                {!error && !isValidating && !!results?.data && (
-                                    <>
-                                        {results.data.map((result: any, index: number) => {
-                                            let classes = '';
-                                            index === 0 ? (classes += 'rounded-t-lg ') : null;
-                                            index === results.data.length - 1 ? (classes += 'rounded-b-lg') : null;
+                                    {!error && !isValidating && !!results?.data && (
+                                        <>
+                                            {results.data.map((result: any, index: number) => {
+                                                let classes = '';
+                                                index === 0 ? (classes += 'rounded-t-lg ') : null;
+                                                index === results.data.length - 1 ? (classes += 'rounded-b-lg') : null;
 
-                                            if (searchType === 'publications') {
-                                                return (
-                                                    <Components.Delay key={result.id} delay={index * 50}>
-                                                        <Components.PublicationSearchResult
-                                                            publication={result}
-                                                            className={classes}
-                                                        />
-                                                    </Components.Delay>
-                                                );
-                                            }
-                                            if (searchType === 'users') {
-                                                return (
-                                                    <Components.Delay key={result.id} delay={index * 50}>
-                                                        <Components.UserSearchResult
-                                                            user={result}
-                                                            className={classes}
-                                                        />
-                                                    </Components.Delay>
-                                                );
-                                            }
-                                        })}
+                                                if (searchType === 'publications') {
+                                                    return (
+                                                        <Components.Delay key={result.id} delay={index * 50}>
+                                                            <Components.PublicationSearchResult
+                                                                publication={result}
+                                                                className={classes}
+                                                            />
+                                                        </Components.Delay>
+                                                    );
+                                                }
+                                                if (searchType === 'users') {
+                                                    return (
+                                                        <Components.Delay key={result.id} delay={index * 50}>
+                                                            <Components.UserSearchResult
+                                                                user={result}
+                                                                className={classes}
+                                                            />
+                                                        </Components.Delay>
+                                                    );
+                                                }
+                                            })}
 
-                                        {!isValidating && !!results.data.length && (
-                                            <Components.Delay delay={results.data.length * 50}>
-                                                <Framer.motion.div
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    transition={{ type: 'tween', duration: 0.75 }}
-                                                    className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse"
-                                                >
-                                                    <div className="flex justify-between">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                                setOffset((prev) => prev - limit);
-                                                            }}
-                                                            disabled={offset === 0}
-                                                            className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
-                                                        >
-                                                            Previous
-                                                        </button>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                                setOffset((prev) => prev + limit);
-                                                            }}
-                                                            className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
-                                                            disabled={limit + offset > results.metadata.total}
-                                                        >
-                                                            Next
-                                                        </button>
-                                                    </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white">
-                                                        Showing {offset + 1} -{' '}
-                                                        {limit + offset > results.metadata.total
-                                                            ? results.metadata.total
-                                                            : limit + offset}{' '}
-                                                        of {results.metadata.total}
-                                                    </span>
-                                                </Framer.motion.div>
-                                            </Components.Delay>
-                                        )}
-                                    </>
-                                )}
-                            </Framer.AnimatePresence>
+                                            {!isValidating && !!results.data.length && (
+                                                <Components.Delay delay={results.data.length * 50}>
+                                                    <Framer.motion.div
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        exit={{ opacity: 0 }}
+                                                        transition={{ type: 'tween', duration: 0.75 }}
+                                                        className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse"
+                                                    >
+                                                        <div className="flex justify-between">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                    setOffset((prev) => prev - limit);
+                                                                }}
+                                                                disabled={offset === 0}
+                                                                className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
+                                                            >
+                                                                Previous
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                    setOffset((prev) => prev + limit);
+                                                                }}
+                                                                className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
+                                                                disabled={limit + offset > results.metadata.total}
+                                                            >
+                                                                Next
+                                                            </button>
+                                                        </div>
+                                                        <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                                                            Showing {offset + 1} -{' '}
+                                                            {limit + offset > results.metadata.total
+                                                                ? results.metadata.total
+                                                                : limit + offset}{' '}
+                                                            of {results.metadata.total}
+                                                        </span>
+                                                    </Framer.motion.div>
+                                                </Components.Delay>
+                                            )}
+                                        </>
+                                    )}
+                                </Framer.AnimatePresence>
+                            )}
                         </article>
                     </section>
                 </Components.SectionTwo>
