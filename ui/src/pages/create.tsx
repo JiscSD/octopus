@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import * as Router from 'next/router';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -11,7 +10,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const cookies = context.req.cookies;
     let publicationFor: string | string[] | null = null;
     let publicationType: string | string[] | null = null;
-    let userIsLoggedIn = true;
 
     if (context.query.for) publicationFor = context.query.for;
     if (context.query.type) publicationType = context.query.type;
@@ -22,12 +20,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = cookies[Config.keys.cookieStorage.token];
 
     if (!token) {
-        userIsLoggedIn = false;
+        context.res.writeHead(302, {
+            Location: Config.urls.orcidLogin.path
+        });
+        context.res.end();
     }
 
     return {
         props: {
-            userIsLoggedIn,
             publicationFor,
             publicationType
         }
@@ -35,22 +35,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    userIsLoggedIn: boolean;
     publicationFor: string | null;
     publicationType: Types.PublicationType | null;
 };
 
 const Create: Types.NextPage<Props> = (props): JSX.Element => {
-    const router = Router.useRouter();
-
-    React.useEffect(() => {
-        if (!props.userIsLoggedIn) {
-            router.push({
-                pathname: Config.urls.orcidLogin.path
-            });
-        }
-    }, [props.userIsLoggedIn]);
-
     return (
         <>
             <Head>
