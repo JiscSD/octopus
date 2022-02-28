@@ -42,6 +42,8 @@ const newPublicationSeeds = [
         title: 'What is the connection between human needs and sustainable development?',
         type: PublicationTypes.problem,
         licence: 'CC_BY',
+        conflictOfInterestStatus: true,
+        conflictOfInterestText: 'This publication has a conflict of interest with The University of...',
         content:
             '<p>what is the connection between human needs and sustainable development? There are four dimensions to sustainable development derived from Bruntland Report: society – satisfying basic human needs, environment – long term ecological sustainability, culture and economy – which are linked collectively. Besides, sustainable development is robustly linked to the quality of life of the society – it is about whether the social, environmental systems and economic activities that build up the community are providing a healthy and significant life for all the current living society and future.</p><cite>This material is adapted from the following article under the Creative Commons Attribution 3.0 License: M M Yusoff 2020 IOP Conf. Ser.: Earth Environ. Sci. 561 012020. <a href="https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020">https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020</cite>',
         currentStatus: PublicationStatus.live,
@@ -127,6 +129,8 @@ const newPublicationSeeds = [
         id: 'publication-user-1-hypothesis-2-draft',
         title: 'Draft Hypothesis of Improving the quality of life for sustainable development',
         type: PublicationTypes.hypothesis,
+        conflictOfInterestStatus: true,
+        conflictOfInterestText: 'This publication has a conflict of interest with The University of...',
         content: '<p>Draft Hypothesis of Improving the quality of life for sustainable development</p>',
         currentStatus: PublicationStatus.draft,
         user: {
@@ -209,7 +213,7 @@ const newPublicationSeeds = [
         id: 'publication-user-1-data-1-live',
         title: 'Data attached to Improving the quality of life for sustainable development',
         type: PublicationTypes.data,
-        licence: 'CC_BY',
+        licence: 'CC_BY_SA',
         content:
             '<table><tbody><tr><td>Sc</td><td>7.0</td><td>12</td><td>15</td><td>&nbsp;</td><td>&nbsp;</td><td>16</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>12</td><td>10.3</td><td>11</td></tr><tr><td>Ti</td><td>3120</td><td>3180</td><td>3900</td><td>2400</td><td>2700</td><td>4200</td><td>3000</td><td>3000</td><td>4800</td><td>3400</td><td>3200</td><td>3000</td></tr><tr><td>V</td><td>53</td><td>59</td><td>98</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>70</td><td>62</td><td>60</td></tr><tr><td>Cr</td><td>35</td><td>76</td><td>80</td><td>&lt;50</td><td>19</td><td>82</td><td>60</td><td>43</td><td>72</td><td>58</td><td>59</td><td>35</td></tr><tr><td>Co</td><td>12</td><td>&nbsp;</td><td>17</td><td>35</td><td>8</td><td>17</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>18</td><td>13</td><td>10</td></tr><tr><td>Ni</td><td>19</td><td>19</td><td>38</td><td>25</td><td>13</td><td>43</td><td>25</td><td>27</td><td>33</td><td>27</td><td>23</td><td>20</td></tr><tr><td>Rb</td><td>110</td><td>&nbsp;</td><td>82</td><td>85</td><td>187</td><td>72</td><td>77</td><td>125</td><td>63</td><td>100</td><td>99</td><td>112</td></tr><tr><td>Zr</td><td>237</td><td>190</td><td>188</td><td>135</td><td>180</td><td>148</td><td>117</td><td>154</td><td>197</td><td>172</td><td>186</td><td>190</td></tr><tr><td>Nb</td><td>26</td><td>&nbsp;</td><td>12</td><td>4</td><td>&nbsp;</td><td>9.1</td><td>&nbsp;</td><td>11</td><td>10</td><td>12</td><td>(23)</td><td>25</td></tr><tr><td>Cs</td><td>&nbsp;</td><td>&nbsp;</td><td>3.55</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>3.6</td><td>3.6</td><td>3.7</td></tr><tr><td>Ba</td><td>1070</td><td>730</td><td>678</td><td>795</td><td>590</td><td>749</td><td>420</td><td>701</td><td>775</td><td>723</td><td>754</td><td>550</td></tr><tr><td>La</td><td>32.3</td><td>71</td><td>34.8</td><td>55</td><td>43</td><td>27</td><td>23</td><td>45</td><td>32</td><td>40</td><td>(43)</td><td>30</td></tr><tr><td>Hf</td><td>5.8</td><td>&nbsp;</td><td>5.12</td><td>&nbsp;</td><td>&nbsp;</td><td>4.4</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>5.1</td><td>5.7</td><td>5.8</td></tr><tr><td>Ta</td><td>5.7</td><td>&nbsp;</td><td>0.74</td><td>&nbsp;</td><td>&nbsp;</td><td>0.67</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&hellip;</td><td>&hellip;</td><td>2.2</td></tr><tr><td>Pb</td><td>17</td><td>18</td><td>18</td><td>&nbsp;</td><td>&nbsp;</td><td>14</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>17</td><td>18</td><td>20</td></tr><tr><td>Th</td><td>10.3</td><td>10.8</td><td>8.95</td><td>&nbsp;</td><td>13</td><td>6.2</td><td>7.9</td><td>14</td><td>&nbsp;</td><td>10.2</td><td>9.8</td><td>10.7</td></tr><tr><td colspan="13">&nbsp;</td></tr><tr><td>Area, 10<sup>6</sup>km<sup>2</sup></td><td>5.56</td><td>&nbsp;</td><td>&nbsp;</td><td>0.95</td><td>0.01</td><td>0.05</td><td>0.02</td><td>2.16</td><td>0.20</td><td>0.06</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>',
         currentStatus: PublicationStatus.live,
@@ -234,6 +238,11 @@ const newPublicationSeeds = [
         linkedTo: {
             create: {
                 publicationTo: 'publication-user-1-protocol-1-live'
+            }
+        },
+        linkedFrom: {
+            create: {
+                publicationFrom: 'publication-user-1-problem-1-live'
             }
         }
     },
@@ -262,7 +271,7 @@ const newPublicationSeeds = [
         id: 'publication-user-1-analysis-1-live',
         title: 'Analysis of Improving the quality of life for sustainable development',
         type: PublicationTypes.analysis,
-        licence: 'CC_BY',
+        licence: 'CC_BY_ND',
         content:
             '<h2><i>2.6 Improving quality of life on fragile environment</i></h2><p>Improve land use utilization under development planning is one of the action that should be taken bythe respective authority. Land use planning need to understand the social needs and the priority given toeach requirement. Land use utilization provides compact development and help to prevent urban sprawl.By concentrating the development and human activities at one centre the services and infrastructure willbe provided efficiently. Land use planning measures the land utilization by different land-use types ineach zone. Residential, commercial area, schools and basic infrastructure such as hospitals are closelyrelated to needs of living and working. Therefore, land-use utilization refers to the continuation ofdifferent types of land use development to improve the society quality of life. Propensity of people towalk and thus to be physically active absolutely demand a greater combination of land use types whichis related to the human needs.</p><p>Pelling [5] shows that ‘planned and unplanned developments were seen to have contributed to increasedcity-wide environmental risk’ by manipulations and adjustment that had been made to natural resourcessuch as land. Smith [25] points out that, “risk is sometimes taken as synonymous with hazards but riskhas the additional implication of the chance of a particular hazard actually occurring”. Risk is the actualexposure of something of human value to a hazard, and is often regarded as the connection of probabilityand loss. It is also viewed as “the probability of a specific hazard’s occurrence” [25]; for example, therisk when people build a house on a steep slope is the probability that the house will be exposed to alandslide. Therefore, fragile environment demand stringent regulations if the areas propose fordevelopment. However, by understanding the environmental system processes together with planninginstruments it can help the sensitive environment to be developed more efficient and innovative uses.For example, the constructions of recreational park in the flood plain will allow the space to be usedeffectively which could lead to improve quality of life of the society in gaining healthy lifestyles.Besides, during the flooding the flood plain will still able to cope with the process and the continuousevent exist will giving no harm to the society. </p><cite>This material is adapted from the following article under the Creative Commons Attribution 3.0 License: M M Yusoff 2020 IOP Conf. Ser.: Earth Environ. Sci. 561 012020. <a href="https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020">https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020</cite>',
         currentStatus: PublicationStatus.live,
@@ -342,6 +351,11 @@ const newPublicationSeeds = [
         linkedTo: {
             create: {
                 publicationTo: 'publication-user-1-analysis-1-live'
+            }
+        },
+        linkedFrom: {
+            create: {
+                publicationFrom: 'publication-user-1-problem-1-live'
             }
         }
     },
@@ -451,7 +465,7 @@ const newPublicationSeeds = [
         },
         linkedTo: {
             create: {
-                publicationTo: 'publication-user-1-real-world-application-1-live'
+                publicationTo: 'publication-user-1-problem-1-live'
             }
         }
     },
@@ -501,6 +515,16 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-27T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-problem-1-live'
+            }
+        },
+        linkedFrom: {
+            create: {
+                publicationFrom: 'publication-user-1-problem-1-live'
+            }
         }
     },
     {
@@ -520,6 +544,16 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-problem-1-live'
+            }
+        },
+        linkedFrom: {
+            create: {
+                publicationFrom: 'publication-user-1-problem-1-live'
+            }
         }
     },
 
@@ -528,7 +562,9 @@ const newPublicationSeeds = [
         id: 'publication-user-2-protocol-1-live',
         title: 'Method for meta-analysis of studies of R0 for COVID-19',
         type: PublicationTypes.protocol,
-        licence: 'CC_BY',
+        licence: 'CC_BY_NC_SA',
+        conflictOfInterestStatus: true,
+        conflictOfInterestText: 'This publication has a conflict of interest because of funding with XYZ.',
         content:
             'PubMed, bioRxiv and Google Scholar were accessed to search for eligible studies. The term "coronavirus & basic reproduction number" was used. The time period covered was from 1 January 2020 to 7 February 2020. - content from Science Octopus Prototype',
         currentStatus: PublicationStatus.live,
@@ -549,6 +585,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-27T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-hypothesis-1-live'
+            }
         }
     },
     {
@@ -568,6 +609,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-hypothesis-1-live'
+            }
         }
     },
 
@@ -597,6 +643,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-24T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-protocol-1-live'
+            }
         }
     },
     {
@@ -617,6 +668,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-protocol-1-live'
+            }
         }
     },
 
@@ -627,7 +683,7 @@ const newPublicationSeeds = [
         type: PublicationTypes.analysis,
         licence: 'CC_BY',
         conflictOfInterestStatus: true,
-        conflictOfInterestText: 'This publication does have a conflict of interest...',
+        conflictOfInterestText: 'This publication does have a conflict of interest with the Institution of Wuhan.',
         content:
             "We included 171 patients with complete data for all variables (53 non-survivors and 118 survivors) in the multivariable logistic regression model. We found that older age, higher SOFA score, and d-dimer greater than 1 μg/mL at admission were associated with increased odds of death (table 3). When adjusting for study centre, our generalised linear model showed similar results (appendix p 5). For survivors, the median duration of viral shedding was 20·0 days (IQR 17·0–24·0) from illness onset, but the virus was continuously detectable until death in non-survivors (table 2; figure 1). The shortest observed duration of viral shedding among survivors was 8 days, whereas the longest was 37 days. Among 29 patients who received lopinavir/ritonavir and were discharged, the median time from illness onset to initiation of antiviral treatment was 14·0 days (IQR 10·0–17·0) and the median duration of viral shedding was 22·0 days (18·0–24·0). The median duration of viral shedding was 19·0 days (17·0–22·0) in patients with severe disease status and 24·0 days (22·0–30·0) in patients with critical disease status. Download : Download high-res image (889KB) Download : Download full-size image Figure 1. Clinical courses of major symptoms and outcomes and duration of viral shedding from illness onset in patients hospitalised with COVID-19 Figure shows median duration of symptoms and onset of complications and outcomes. ICU=intensive care unit. SARS-CoV-2=severe acute respiratory syndrome coronavirus 2. ARDS=acute respiratory distress syndrome. COVID-19=coronavirus disease 2019. Major laboratory markers were tracked from illness onset (figure 2). Baseline lymphocyte count was significantly higher in survivors than non-survivors; in survivors, lymphocyte count was lowest on day 7 after illness onset and improved during hospitalisation, whereas severe lymphopenia was observed until death in non-survivors. Levels of d-dimer, high-sensitivity cardiac troponin I, serum ferritin, lactate dehydrogenase, and IL-6 were clearly elevated in non-survivors compared with survivors throughout the clinical course, and increased with illness deterioration (figure 2). In non-survivors, high-sensitivity cardiac troponin I increased rapidly from day 16 after disease onset, whereas lactate dehydrogenase increased for both survivors and non-survivors in the early stage of illness, but decreased from day 13 for survivors. Download : Download high-res image (972KB) Download : Download full-size image Figure 2. Temporal changes in laboratory markers from illness onset in patients hospitalised with COVID-19 Figure shows temporal changes in d-dimer (A), lymphocytes (B), IL-6 (C), serum ferritin (D), high-sensitivity cardiac troponin I (E), and lactate dehydrogenase (F). Differences between survivors and non-survivors were significant for all timepoints shown, except for day 4 after illness onset for d-dimer, IL-6, and high-sensitivity cardiac troponin I. For serum ferritin (D), the median values after day 16 exceeded the upper limit of detection, as indicated by the dashed line. COVID-19=coronavirus disease 2019. IL-6=interleukin-6. Median time from illness onset to dyspnoea was similar in survivors and non-survivors, with a median duration of dyspnoea of 13·0 days (9·0–16·5) for survivors (table 2; figure 1). In survivors, the median duration of fever was 12·0 days (8·0–13·0) and cough persisted for 19·0 days (IQR 12·0–23·0; figure 1). 62 (45%) survivors still had cough on discharge and 39 (72%) non-survivors still had cough at the time of death. The dynamic profiles of fever, cough, and dyspnoea are shown in the appendix (p 6). Sepsis developed at a median of 9·0 days (7·0–13·0) after illness onset among all patients, followed by ARDS (12·0 days [8·0–15·0]), acute cardiac injury (15·0 days [10·0–17·0]), acute kidney injury (15·0 days [13·0–19·5]), and secondary infection (17·0 days [13·0–19·0]). The initiation time and duration of systematic corticosteroid use was also similar between the two groups. Among non-survivors, the median time from illness onset was 10·0 days (7·0–14·0) to sepsis, 12·0 days (8·0–15·0) to ARDS, 14·5 days (9·5–17·0) to acute cardiac injury, and 17·0 days (13·0–19·0) to secondary infection (figure 1; table 2). Among survivors, secondary infection, acute kidney injury, and acute cardiac injury were observed in one patient each, occurring 9 days (acute kidney injury), 14 days (secondary infection), and 21 days (acute cardiac injury) after illness onset. The median time from dyspnoea to intubation was 10·0 days (IQR 5·0–12·5) for patients who received invasive mechanical ventilation and the time from invasive mechanical ventilation to occurrence of ventilator-associated pneumonia was 8·0 days (2·0–9·0; figure 1). Continuous and categorical variables were presented as median (IQR) and n (%), respectively. We used the Mann-Whitney U test, χ2 test, or Fisher's exact test to compare differences between survivors and non-survivors where appropriate. To explore the risk factors associated with in-hospital death, univariable and multivariable logistic regression models were used. Considering the total number of deaths (n=54) in our study and to avoid overfitting in the model, five variables were chosen for multivariable analysis on the basis of previous findings and clinical constraints. Previous studies have shown blood levels of d-dimer and Sequential Organ Failure Assessment (SOFA) scores to be higher in critically ill or fatal cases, whereas lymphopenia and cardiovascular disease have been less commonly observed in non-critical or surviving patients with SARS-COV-2 infection.5, 6, 12Similar risk factors, including older age, have been reported associated with adverse clinical outcomes in adults with SARS and Middle East respiratory syndrome (MERS).3, 13 Some laboratory findings, including alanine aminotransferase (ALT), lactate dehydrogenase, high-sensitivity cardiac troponin I, creatine kinase, d-dimer, serum ferritin, and IL-6, might be unavailable in emergency circumstances. Therefore, we chose lymphocyte count, d-dimer, SOFA score, coronary heart disease, and age as the five variables for our multivariable logistic regression model. We excluded variables from the univariable analysis if their between-group differences were not significant, if their accuracy was unconfirmed (eg, exposure, which was self-reported), if the number of events was too small to calculate odds ratios, and if they had colinearity with the SOFA score. We compared patient characteristics between the two hospitals and used a generalised linear model to adjust for possible differences in patients’ characteristics and treatment between the two study centres. A two-sided α of less than 0·05 was considered statistically significant. Statistical analyses were done using the SAS software (version 9.4), unless otherwise indicated. - content from Science Octopus Prototype",
         currentStatus: PublicationStatus.live,
@@ -648,6 +704,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-24T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-data-1-live'
+            }
         }
     },
     {
@@ -667,6 +728,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-data-1-live'
+            }
         }
     },
 
@@ -696,6 +762,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-24T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-analysis-1-live'
+            }
         }
     },
     {
@@ -715,6 +786,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-analysis-1-live'
+            }
         }
     },
 
@@ -744,6 +820,11 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-24T18:51:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-interpretation-1-live'
+            }
         }
     },
     {
@@ -763,10 +844,15 @@ const newPublicationSeeds = [
                     createdAt: '2022-01-21T10:00:42.523Z'
                 }
             ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-2-interpretation-1-live'
+            }
         }
     },
 
-    // User 4 PROTOCOL and REAL WORLD APPLICATION
+    // User 4 PROTOCOL and DATA and REAL WORLD APPLICATION
 
     // Protocol Live
     {
@@ -775,7 +861,8 @@ const newPublicationSeeds = [
         type: PublicationTypes.protocol,
         licence: 'CC_BY',
         conflictOfInterestStatus: true,
-        conflictOfInterestText: 'This publication does have a conflict of interest...',
+        conflictOfInterestText:
+            'This publication does have a conflict of interest due to the author holding a position at XYZ.',
         content:
             '<p>To explain these trends in the morphing behavior, we regard the system as a network of interconnected slender beams that change their dimensions (diameter and length) and their Young modulus throughout the swelling process. For such a filament, the elastic energy is a sum of the stretching and bending energies</p><p>𝐸elastic(𝑟,𝐿0,𝐸)=&int;𝐿0012𝑘(𝑟,𝐿0,𝐸)(&part;𝑙&part;𝑙0&minus;1)2d𝑙0+&int;𝐿0012𝐵(𝑟,𝐸)(&part;𝜙&part;𝑙0)2d𝑙0Eelastic(r,L0,E)=&int;0L012k(r,L0,E)&part;l&part;l0&minus;12dl0+&int;0L012B(r,E)&part;ϕ&part;l02dl0</p><p>(2)where&nbsp;<em>E</em>&nbsp;is the Young modulus of the swollen polymer,&nbsp;<em>r</em>&nbsp;is the radius of the filament,&nbsp;<em>L</em><sub>0</sub>&nbsp;is the reference contour length of the filament before the deformation,&nbsp;<em>l</em><sub>0</sub>&nbsp;and&nbsp;<em>l</em>&nbsp;are the reference (rest length) and the deformed filament paths, ϕ is the local tangent angle, and&nbsp;&part;𝜙&part;𝑙0=&part;2𝑙&part;𝑙20&part;ϕ&part;l0=&part;2l&part;l02&nbsp;is the curvature of the filament.&nbsp;<em>k</em>&nbsp;and&nbsp;<em>B</em>&nbsp;are the stiffness and bending moduli, respectively, and are given by<sup>[</sup><sup><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0042" id="adfm202111471-bib-0042R">42</a></sup><sup>]</sup></p><p>𝑘=𝐸𝜋𝑟2𝐿0,&emsp;𝐵=𝐸𝜋𝑟44k=E&pi;r2L0,&emsp;B=E&pi;r44</p><p>(3)Thus, the network structure imposes two intrinsic length scales: the filament radius&nbsp;<em>r</em>&nbsp;and the filament length,&nbsp;<em>L</em><sub>0</sub>, which is effectively determined by the fiber density in the network. These two length scales play a crucial role in determining the morphing behavior of the single filament and through the hierarchy, also determine the morphing behavior of the&nbsp;network.</p><p>Another energy term is related to the spatial overlap between the fibers. While fibers can buckle out of the network plane, fiber overlap along the plane was rarely exhibited experimentally, indicating overlap is highly unfavorable. Thus, the fiber overlap energy term was regarded as a Heaviside step function. For&nbsp;<em>d</em>&nbsp;⩽ 2<em>r</em>, where&nbsp;<em>d</em>&nbsp;is the distance between two fibers, the energy is high, and for&nbsp;<em>d</em>&nbsp;&gt; 2<em>r</em>&nbsp;the energy goes to&nbsp;zero.</p><p>Throughout the swelling process stresses are exerted on the edges constructing the network. If the stress exerted on an edge is larger than the critical Euler buckling stress given by</p><p>𝜎critical=𝜋2𝐸𝑟2𝐿20</p> <cite>This material is adapted from the following article under the Attribution-NonCommercial 4.0 International: Sharabani S. Z., Edelstein-Pardo N., Molco M.,Bachar Schwartz N. B., Morami M., Sivan A., Gendelman Rom Y., Evental R., Flaxer E., Sitt A., 2022. Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers. Advanced Functional Materials. <a href="https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471">https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471</cite>',
         currentStatus: PublicationStatus.live,
@@ -845,9 +932,9 @@ const newPublicationSeeds = [
     // Real World Application Live
     {
         id: 'publication-user-4-real-world-application-1-live',
-        title: 'Conclusion to Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers (html)',
+        title: 'Conclusion to Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.realWorldApplication,
-        licence: 'CC_BY',
+        licence: 'CC_BY_NC',
         content:
             '<h2>3 Conclusion</h2><p>The ability to tune the shape-morphing behavior of a hierarchical structure of mesoscale building blocks without changing the polymer itself, but only by changing the diameter of the filaments and the network architecture, provides a novel, versatile, and scalable strategy for the design and development of novel functional responsive materials with high spatial morphing resolutions and with unique morphing abilities. Such systems pave the way for soft synthetic micro-muscles and micro-actuators with high spatial resolutions. Owing to the small dimensions of the filaments, they also hold significant potential for morphing optic devices and tunable separators. Last, such systems demonstrate that hierarchical structures of mesoscale elements may induce unexpected mechanical behaviors and that the dimensions of these elements must be accounted for, whether when dealing with synthetic hydrogel fibers or when examining biological systems such as microtubules and actin&ndash;myosin&nbsp;networks.</p><h2>4 Experimental Section</h2><h4>Materials</h4><p><em>N</em>-isopropylacrylamide (NIPAAM) 99%, glycidyl methacrylate (GMA), and 2,2&prime;-Azobis (2-methylpropionitrile) (AIBN) were purchased from Alfa Aesar. Toluene (anhydrous, 99.8%), dimethylformamide (DMF), chloroform, dichloromethane (DCM), hexane, and tetraethylenepentamine (TEPA), poly[(m-pheneylenevinylene)-alt-(2,5-dihexyloxy-p-phenyleneviylene)] were purchased from Sigma-Aldrich. Diethyl ether and was purchased from BioLab. All the materials were used as bought, without further&nbsp;purification.</p><h4>Copolymer Synthesis</h4><p>The copolymer poly (<em>N</em>-isopropylacrylamide-co-glycidyl methacrylate) (PNcG) was synthesized using a radical polymerization through a modification of the procedure described by Xiaowei et&nbsp;al.<sup>[</sup><sup><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0046" id="adfm202111471-bib-0046R">46</a></sup><sup>]</sup>&nbsp;In a typical synthesis, NIPAAm (6.0 g, 0.053 mol), GMA (0.145 mL, 1.060 mmol), and AIBN (50 mg, 0.304 mmol) were dissolved in 40 mL of toluene, under a purge of argon, and the monomers were allowed to polymerized at 70 &deg;C for 2 h in 100 mL three-neck flask. The solution was cooled down to room temperature and the solvent was evaporated using a rotary evaporator. The copolymer was then redissolved in DCM and was precipitated by slowly pouring 1 L of diethyl ether into the solution. The copolymer was filtered from the solution, dissolved in DCM and hexane (1:1 v/v). Then the solvent was evaporated using a rotary evaporator to yield a white powder. The product was dried under vacuum&nbsp;overnight.</p><h4>Networks Fabrication</h4><p>Fabrication of nano- to microscale fibers of PNIPPAm and its copolymers was demonstrated before using electrospinning.<sup>[</sup><sup><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0031" id="adfm202111471-bib-0031R">31</a>,&nbsp;<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0047" id="adfm202111471-bib-0047R">47</a>-<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0049" id="adfm202111471-bib-0049R">49</a></sup><sup>]</sup>&nbsp;However, obtaining high enough jet stability for accurate jet-writing using electrospinning was not trivial and hence dry-spinning was chosen as a jetting method instead to improve the stability.<sup>[</sup><sup><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0033" id="adfm202111471-bib-0033R">33</a>,&nbsp;<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0037" id="adfm202111471-bib-0037R">37</a>,&nbsp;<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0050" id="adfm202111471-bib-0050R">50</a>-<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/adfm.202111471#adfm202111471-bib-0052" id="adfm202111471-bib-0052R">52</a></sup><sup>]</sup>&nbsp;In this approach, the copolymer and the multi-arm amine crosslinker TEPA were first mixed and dissolved in the appropriate solvent mixture to form a viscous solution. In a typical jetting solution PNIPAAm copolymer of 0.5&ndash;0.8 g mL<sup>&minus;1</sup>&nbsp;was prepared by dissolving the PNcG in a mixture of chloroform and DMF (1:1 v/v). 1&ndash;10% of TEPA was added just before the jetting process. At this range, the crosslinking was sufficient for preventing the dissolving of the copolymer in water, and yet there was a significant swelling of the hydrogel. Usually, trace amounts of the fluorescent polymeric dye were added to the solution to allow examination of the fibers in fluorescence microscopy. Next, the solution was dispensed via a metallic 23-gauge needle at a constant flow rate of 0.020 mL h<sup>&minus;1</sup>. Once a droplet was formed at the end of the capillary, it was mechanically pulled toward the rotating collector. The increase in surface area and the pulling process resulted in the evaporation of the solvents and in solidification into a thin fiber of mesoscale diameter. Once attached to the collector, the motion of the collector derived further pulling of the fiber. For the thin fibers (in average, fiber diameter &lt; 5 &mu;m), the tip-to-ground distance was 3 cm, and the rotating speed of the drum was 16&ndash;32 mm s<sup>&minus;1</sup>. The linear motion stage velocity was 1.15 mm s<sup>&minus;1</sup>. For the thick fibers (fiber diameter &gt;5 &mu;m), the tip-to-ground distance was 1 cm, and rotating speed of the drum was 1&ndash;5 mm s<sup>&minus;1</sup>. The linear motion stage velocity was 0.2 mm s<sup>&minus;1</sup>. For a drum with a radius&nbsp;<em>R</em><sub>d</sub>&nbsp;and an angular velocity of &omega;<sub>d</sub>, positioned on a stage moving at a velocity&nbsp;<em>V</em><sub>s</sub>&nbsp;in perpendicular to the drum rotation, the distance between the parallel fibers is given by&nbsp;<em>V</em><sub>s</sub>/(<em>R</em><sub>d</sub>&nbsp;&middot; &omega;<sub>d</sub>), and hence, for a given rotation speed, the distance between the fibers was controlled by the velocity of the moving&nbsp;stage.</p><p>To construct the networks, the fibers were collected on a plastic frame that was attached to a rotating drum positioned on top of a moving stage. At the first stage, fibers were pulled by the rotating drum along the direction of the rotation and perpendicular to the motion of the moving stage. The diameter of the fibers was determined by the drum velocity and by the polymer concentration of the jetting solution. The distance between the fibers was dictated by the rotation speed of the drum and the velocity of the moving&nbsp;stage.</p><p>Once the fibers were jetted along the entire plastic frame, the frame was detached from the rotating drum and reattached after rotating it by a specific angle. For constructing Cartesian networks the frame was rotated by an angle of 90&deg;, and the jet writing of parallel fibers was repeated to obtain the final network structure. The crossing points of the fibers were defined as the nodes of the network and segment of the fiber connecting two nodes as an edge. The crosslinking of the copolymer was performed post-fabrication of the network by baking it at 70&nbsp;&deg;C overnight. The experimental setup contained a syringe pump (New Era), a linear motion stage (ILS-200LM, Newport), a eight-axis universal controller (XPS-D8, Newport), and a rotating drum&nbsp;collector.</p><h4>Instrumentation</h4><p><sup>1</sup>H-nuclear magnetic resonance spectra was recorded on Bruker Avance III 400 MHz spectrometers. The copolymer was dissolved in deuterated chloroform as a solvent. The chemical shifts were reported in ppm and referenced to the solvent. Gel permeation chromatography measurements were performed on Viscotek GPCmax by Malvern. Scanning electron microscopy (SEM) was performed using a Quanta 200FEG environmental SEM in a high vacuum, WD 10 mm, 12.5&ndash;20 kV. All images and videos were taken by Olympus, IX73 microscope equipped with a heating glass slide (LCI, CU-301).</p><h4>Modeling</h4><p>All models presented in the article were written in Matlab according to the equations&nbsp;described within the&nbsp;text.</p><h2>Acknowledgements</h2><p>The authors would like to thank Prof. Michael Urbakh and Prof. Oded Hod for the insightful discussions A.S. acknowledges the generous support from the Azrieli Foundation. S.Z.S. and N.E.-P. acknowledge the generous support of The Shulamit Aloni Scholarship for Advancing Women in Exact Science and Engineering, provided by The Ministry of Science Technology, Israel. The authors acknowledge the Chaoul Center for Nanoscale Systems of Tel Aviv University for the use of instruments and staff assistance, and the Mechanical Workshop for Research and Development, School of Chemistry, Tel Aviv University, for their help in constructing the fabrication&nbsp;devices.</p><cite>This material is adapted from the following article under the Attribution-NonCommercial 4.0 International: Sharabani S. Z., Edelstein-Pardo N., Molco M.,Bachar Schwartz N. B., Morami M., Sivan A., Gendelman Rom Y., Evental R., Flaxer E., Sitt A., 2022. Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers. Advanced Functional Materials. <a href="https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471">https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471</cite>',
         currentStatus: PublicationStatus.live,
@@ -1028,7 +1115,7 @@ const newPublicationSeeds = [
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
         content: '<h2>Title</h2><p>TBC</p>',
-        currentStatus: PublicationStatus.draft,
+        currentStatus: PublicationStatus.live,
         createdAt: '2021-09-25T16:51:42.523Z',
         updatedAt: '2021-09-25T16:51:42.523Z',
         user: {
@@ -1041,6 +1128,10 @@ const newPublicationSeeds = [
                 {
                     status: PublicationStatus.draft,
                     createdAt: '2022-01-20T16:51:42.523Z'
+                },
+                {
+                    status: PublicationStatus.live,
+                    createdAt: '2022-01-24T18:51:42.523Z'
                 }
             ]
         },
@@ -1051,7 +1142,7 @@ const newPublicationSeeds = [
         }
     },
 
-    // Peer Review (ready to go live)
+    // Peer Review (draft but ready to go live)
     {
         id: 'publication-user-7-peer-review-2-draft',
         title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
@@ -1080,12 +1171,14 @@ const newPublicationSeeds = [
             }
         }
     },
+    // Peer Review (live)
     {
-        id: 'publication-user-7-peer-review-1-draft',
+        id: 'publication-user-7-peer-review-3-live',
         title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
-        content: '<h2>Title</h2><p>TBC</p>',
+        content:
+            '<h2>Peer Review</h2><p>This is a detailed analysis, very useful to the research literature within this area. Good use of the data to feed into this analysis.</p>',
         currentStatus: PublicationStatus.live,
         publishedDate: '2022-01-22T15:51:42.523Z',
         createdAt: '2021-09-25T16:51:42.523Z',
