@@ -1114,7 +1114,8 @@ const newPublicationSeeds = [
         title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
-        content: '<h2>Title</h2><p>TBC</p>',
+        content:
+            '<h2>Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19</h2><p>This is the first comprehensive review in this field.</p>',
         currentStatus: PublicationStatus.live,
         createdAt: '2021-09-25T16:51:42.523Z',
         updatedAt: '2021-09-25T16:51:42.523Z',
