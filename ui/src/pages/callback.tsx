@@ -26,9 +26,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (Array.isArray(code)) code = code[0];
 
     try {
-        const response = await API.post(`${Config.endpoints.authorization}`, {
-            code
-        });
+        const response = await API.post(
+            `${Config.endpoints.authorization}`,
+            {
+                code
+            },
+            undefined
+        );
         token = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;

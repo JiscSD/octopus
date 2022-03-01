@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
 
+import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Types from '@types';
 
@@ -138,7 +139,7 @@ export const clearJWT = () => {
 /**
  * @description For use in NextJS SSR, check cookies for token & set the response location
  */
-export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
+export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
     const cookies = context.req.cookies;
     const token = cookies[Config.keys.cookieStorage.token];
 
@@ -148,4 +149,44 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
         });
         context.res.end();
     }
+
+    return token;
+};
+
+/**
+ * @description todo
+ */
+export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
+    let available: Types.PublicationType[] | [] = [];
+
+    switch (publicationType) {
+        case 'PEER_REVIEW':
+            available = ['PROBLEM'];
+            break;
+        case 'PROBLEM':
+            available = ['HYPOTHESIS', 'PEER_REVIEW'];
+            break;
+        case 'HYPOTHESIS':
+            available = ['PROTOCOL', 'PROBLEM', 'PEER_REVIEW'];
+            break;
+        case 'PROTOCOL':
+            available = ['DATA', 'PROBLEM', 'PEER_REVIEW'];
+            break;
+        case 'DATA':
+            available = ['ANALYSIS', 'PROBLEM', 'PEER_REVIEW'];
+            break;
+        case 'ANALYSIS':
+            available = ['INTERPRETATION', 'PROBLEM', 'PEER_REVIEW'];
+            break;
+        case 'INTERPRETATION':
+            available = ['REAL_WORLD_APPLICATION', 'PROBLEM', 'PEER_REVIEW'];
+            break;
+        case 'REAL_WORLD_APPLICATION':
+            available = ['PROBLEM', 'PEER_REVIEW'];
+            break;
+        default:
+            null;
+    }
+
+    return available;
 };

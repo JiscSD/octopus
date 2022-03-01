@@ -17,7 +17,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
 
     try {
-        const response = await API.get(`${Config.endpoints.publications}/${requestedId}`);
+        const response = await API.get(`${Config.endpoints.publications}/${requestedId}`, undefined);
         publication = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -131,7 +131,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                 pathname: `${Config.urls.createPublication.path}`,
                                                 query: {
                                                     for: props.publication.id,
-                                                    type: 'review'
+                                                    type: 'PEER_REVIEW'
                                                 }
                                             });
                                         }}

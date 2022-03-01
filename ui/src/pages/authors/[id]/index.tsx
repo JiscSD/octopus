@@ -15,7 +15,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
 
     try {
-        const response = await API.get(`${Config.endpoints.users}/${requestId}`);
+        const response = await API.get(`${Config.endpoints.users}/${requestId}`, undefined);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
