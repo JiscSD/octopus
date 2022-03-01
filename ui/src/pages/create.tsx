@@ -1,7 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
 
-import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
@@ -33,6 +32,9 @@ type Props = {
 };
 
 const Create: Types.NextPage<Props> = (props): JSX.Element => {
+    const [step, setStep] = React.useState(0);
+    const [publication, setPublication] = React.useState({});
+
     return (
         <>
             <Head>
@@ -42,18 +44,9 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.createPublication.title}</title>
             </Head>
 
-            <Layouts.Standard fixedHeader={false}>
-                <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-800"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
-                >
-                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        <h1>Create a new publication</h1>
-                    </section>
-                </Components.SectionTwo>
-            </Layouts.Standard>
+            <Layouts.BuildPublication currentStep={step} setStep={setStep} publication={publication}>
+                <h1>Create a new publication</h1>
+            </Layouts.BuildPublication>
         </>
     );
 };
