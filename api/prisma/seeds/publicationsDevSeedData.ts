@@ -648,6 +648,18 @@ const newPublicationSeeds = [
             create: {
                 publicationTo: 'publication-user-2-protocol-1-live'
             }
+        },
+        linkedFrom: {
+            createMany: {
+                data: [
+                    {
+                        publicationFrom: 'publication-user-1-problem-1-live'
+                    },
+                    {
+                        publicationFrom: 'publication-user-2-problem-1-live'
+                    }
+                ]
+            }
         }
     },
     {
@@ -996,8 +1008,15 @@ const newPublicationSeeds = [
             ]
         },
         linkedTo: {
-            create: {
-                publicationTo: 'publication-user-1-protocol-1-live'
+            createMany: {
+                data: [
+                    {
+                        publicationTo: 'publication-user-1-protocol-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-2-protocol-1-live'
+                    }
+                ]
             }
         }
     },
@@ -1202,8 +1221,18 @@ const newPublicationSeeds = [
             ]
         },
         linkedTo: {
-            create: {
-                publicationTo: 'publication-user-5-analysis-1-live'
+            createMany: {
+                data: [
+                    {
+                        publicationTo: 'publication-user-5-analysis-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-analysis-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-2-analysis-1-live'
+                    }
+                ]
             }
         }
     },
