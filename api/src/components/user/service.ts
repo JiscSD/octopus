@@ -78,7 +78,7 @@ export const getAll = async (filters: I.UserFilters) => {
     return {
         data: users,
         metadata: {
-            total: 2,
+            total: totalUsers,
             limit: Number(filters.limit) || 10,
             offset: Number(filters.offset) || 0
         }
