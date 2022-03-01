@@ -8,10 +8,11 @@ export interface JSON {
 }
 
 export interface JSONResponseError extends Axios.AxiosError {}
+
 export interface NavMenuItem {
     label: string;
     value: string;
-    subItems?: NavMenuItem[] | React.ReactNode[];
+    subItems?: NavMenuItem[] | React.ReactNode[] | any[];
 }
 
 export interface PublicationStatus {

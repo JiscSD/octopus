@@ -44,8 +44,7 @@ const Desktop: React.FC<Props> = (props): JSX.Element => (
                                         <li key={index} className="py-2 px-3 text-teal-600">
                                             <HeadlessUI.Menu.Item>
                                                 <div>
-                                                    {/** @ts-ignore - Types correctly but still has issues? */}
-                                                    {subItem?.label && subItem?.value ? (
+                                                    {subItem?.label && subItem.value ? (
                                                         <Components.Link
                                                             href={subItem.value}
                                                             className="block w-full rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
