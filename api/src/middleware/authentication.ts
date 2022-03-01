@@ -11,10 +11,9 @@ const authentication = (optional = false): middy.MiddlewareObj => {
             let user: null | I.User = null;
 
             const apiKey = request.event.queryStringParameters?.apiKey;
-            const bearerToken = request.event.headers.authorization;
+            const bearerToken = request.event.headers.Authorization;
 
             if (apiKey) {
-                // @ts-ignore
                 user = await userService.getByApiKey(apiKey);
             } else if (bearerToken) {
                 user = authorizationService.validateJWT(bearerToken.split(' ')[1]);

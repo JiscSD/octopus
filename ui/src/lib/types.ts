@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage } from 'next';
+export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;

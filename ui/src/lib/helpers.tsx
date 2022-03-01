@@ -134,3 +134,18 @@ export const setAndReturnJWT = (token: string) => {
 export const clearJWT = () => {
     Cookies.remove(Config.keys.cookieStorage.token);
 };
+
+/**
+ * @description For use in NextJS SSR, check cookies for token & set the response location
+ */
+export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
+    const cookies = context.req.cookies;
+    const token = cookies[Config.keys.cookieStorage.token];
+
+    if (!token) {
+        context.res.writeHead(302, {
+            Location: Config.urls.orcidLogin.path
+        });
+        context.res.end();
+    }
+};
