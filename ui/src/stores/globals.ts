@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
+import * as zustandMiddleware from 'zustand/middleware';
 
 import * as Types from '@types';
 
@@ -12,7 +12,7 @@ let store: any = (set: any): Types.GlobalsStoreType => ({
     toggleCmdPalette: () => set((state: State) => ({ showCmdPalette: !state.showCmdPalette }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
 
 const useGlobalsStore = create(store);
 

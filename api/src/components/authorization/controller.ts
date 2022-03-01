@@ -8,16 +8,31 @@ import * as authorizationService from 'authorization/service';
 
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
+        let callbackURL = '';
+        switch (process.env.stage) {
+            case 'local':
+                callbackURL = 'https://localhost:3001/callback';
+                break;
+            case 'prod':
+                callbackURL = 'https://api.octopus.ac/callback';
+                break;
+            default:
+                callbackURL = `https://${process.env.stage}.api.octopus.ac/callback`;
+        }
+
         const orcidRequest = await axios.post(
             'https://orcid.org/oauth/token',
-            `client_id=${process.env.ORCID_ID}&client_secret=${process.env.ORCID_SECRET}&grant_type=authorization_code&redirect_uri=${process.env.UI_CALLBACK_URL}&code=${event.body.code}`
+            `client_id=${process.env.ORCID_ID}&client_secret=${process.env.ORCID_SECRET}&grant_type=authorization_code&redirect_uri=${callbackURL}&code=${event.body.code}`
         );
 
-        const userInformation = await axios.get(`https://orcid.org/${orcidRequest.data.orcid}/public-record.json`);
+        const ORCIDRequestPublicUserResponse = await axios.get(
+            `https://orcid.org/${orcidRequest.data.orcid}/public-record.json`
+        );
+        const userInformation: I.ORCIDUser = ORCIDRequestPublicUserResponse.data;
 
         const user = await userService.upsertUser(orcidRequest.data.orcid, {
-            firstName: userInformation.data?.names?.givenNames?.value || '',
-            lastName: userInformation.data?.names?.familyName?.value || ''
+            firstName: userInformation.names?.givenNames?.value || '',
+            lastName: userInformation.names?.familyName?.value || ''
         });
 
         const token = authorizationService.createJWT(user);

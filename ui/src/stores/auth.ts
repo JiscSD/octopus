@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
+import * as zustandMiddleware from 'zustand/middleware';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
@@ -14,9 +14,9 @@ let store: any = (set: any): Types.AuthStoreType => ({
     setUser: (user: any) => set((state: State) => ({ user }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
 
-store = persist(store, { name: Config.keys.localStorage.user });
+store = zustandMiddleware.persist(store, { name: Config.keys.localStorage.user });
 
 const useAuthStore = create(store);
 

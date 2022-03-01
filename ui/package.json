@@ -30,7 +30,7 @@
         "framer-motion": "^6.0.0",
         "html-react-parser": "^1.4.5",
         "js-cookie": "^3.0.1",
-        "jwt-decode": "^3.1.2",
+        "jsonwebtoken": "^8.5.1",
         "luxon": "^2.3.0",
         "next": "^12.0.10",
         "nextjs-progressbar": "0.0.13",
@@ -44,6 +44,7 @@
     "devDependencies": {
         "@tailwindcss/typography": "^0.5.0",
         "@types/js-cookie": "^3.0.1",
+        "@types/jsonwebtoken": "^8.5.8",
         "@types/luxon": "^2.0.9",
         "@types/node": "17.0.9",
         "@types/react": "17.0.38",
