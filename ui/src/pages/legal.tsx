@@ -9,8 +9,8 @@ const Legal: Types.NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
+                <meta name="description" content={`${Config.urls.legal.description}`} />
+                <meta name="keywords" content={`${Config.urls.legal.keywords}`} />
                 <link rel="canonical" href={`${Config.urls.legal.canonical}`} />
                 <title>{Config.urls.legal.title}</title>
             </Head>
@@ -22,8 +22,12 @@ const Legal: Types.NextPage = (): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        <h1>Legal</h1>
+                    <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-36">
+                        <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 dark:text-white lg:w-8/12">
+                            <Components.PageTitle text="Legal" />
+                            <h2 className="mt-10 text-xl font-medium">Legal placeholder</h2>
+                            <p>Placeholder</p>
+                        </div>
                     </section>
                 </Components.SectionTwo>
             </Layouts.Standard>

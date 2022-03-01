@@ -23,12 +23,15 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-36">
-                        <div className="grid grid-cols-1 gap-4 text-grey-900 dark:text-white">
+                        <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 dark:text-white lg:w-8/12">
                             <Components.PageTitle text="Accessibility" />
-                            <p>
-                                This statement applies to content published on{' '}
-                                <a href="https://www.int.octopus.ac">https://www.int.octopus.ac</a>.
-                            </p>
+                            <p>This statement applies to content published on </p>
+                            <Components.Link
+                                className="mb-6 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                href="https://www.int.octopus.ac"
+                            >
+                                <span>https://www.int.octopus.ac</span>
+                            </Components.Link>
                             <p>
                                 This website has been developed by Jisc. It is designed to be used by as many people as
                                 possible. The text should be clear and simple to understand. You should be able to:
@@ -43,9 +46,15 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                                     JAWS, NVDA and VoiceOver)
                                 </li>
                             </ul>
-                            <p>
-                                <a href="https://mcmw.abilitynet.org.uk/">AbilityNet</a> has advice on making your
-                                device easier to use if you have a disability.
+                            <p className="flex">
+                                <Components.Link
+                                    className="rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    openNew
+                                    href="https://mcmw.abilitynet.org.uk/"
+                                >
+                                    <span>AbilityNet</span>
+                                </Components.Link>
+                                - has advice on making your device easier to use if you have a disability.
                             </p>
                             <h2 className="mt-10 text-xl font-medium">How accessible is this website</h2>
                             <p>
@@ -58,8 +67,7 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                             </h2>
                             <p>
                                 If you find any problems that aren’t listed on this page or think we’re not meeting the
-                                requirements of the accessibility regulations, please contact{' '}
-                                <a href="mailto:web@jisc.ac.uk">help@jisc.ac.uk</a>.
+                                requirements of the accessibility regulations, please contact help@jisc.ac.uk.
                             </p>
                             <h2 className="mt-10 text-xl font-medium">How we tested this website</h2>
                             <p>
@@ -73,17 +81,24 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                                 and must meet WCAG 2.1 AA. We’re also committed to working on the issues above.
                             </p>
                             <p>This statement was prepared on 1 March 2022.</p>
-                            <p>
-                                Content modified from the{' '}
-                                <a href="https://www.gov.uk/help/accessibility-statement">
-                                    GOV.UK accessibility statement
-                                </a>{' '}
-                                - used through the{' '}
-                                <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">
-                                    Open Government Licence v3.0
-                                </a>
-                                .
-                            </p>
+                            <div className="mt-10 flex flex-col gap-1">
+                                <p>Content modified from:</p>
+                                <Components.Link
+                                    className="mb-4 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    openNew
+                                    href="https://www.gov.uk/help/accessibility-statement"
+                                >
+                                    <span>GOV.UK accessibility statement</span>
+                                </Components.Link>
+                                <p>Used through the:</p>
+                                <Components.Link
+                                    className="mb-4 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    openNew
+                                    href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+                                >
+                                    <span> Open Government Licence v3.0</span>
+                                </Components.Link>
+                            </div>
                         </div>
                     </section>
                 </Components.SectionTwo>
