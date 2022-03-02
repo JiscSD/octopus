@@ -169,7 +169,9 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
 
                             <Components.ActionButton
                                 title="Create this publication"
-                                icon={<OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />}
+                                icon={
+                                    <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
+                                }
                                 disabled={!publicationType || !title.length || !confirmed}
                                 callback={createPublication}
                             />

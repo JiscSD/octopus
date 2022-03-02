@@ -40,8 +40,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
     const content = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.content);
     const licence = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.licence);
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus);
-    const conflictOfInterestText = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.conflictOfInterestText);
+    const conflictOfInterestStatus = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
+    );
+    const conflictOfInterestText = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
+    );
 
     const [confirmSaveExit, setConfirmSaveExit] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
@@ -93,7 +97,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to leave?"
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-6 w-6" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm">Changes to your publication will be saved and it&apos;s status kept as draft.</p>
+                <p className="text-gray-500 text-sm">
+                    Changes to your publication will be saved and it&apos;s status kept as draft.
+                </p>
             </Components.Modal>
             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                 <Components.Header fixed={true} />
@@ -107,13 +113,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 <NavigationButton text="Save and exit" onClick={() => setConfirmSaveExit(true)} />
                                 <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prev} />
                                 {props.currentStep < props.steps.length - 1 && (
-                                    <NavigationButton text="Next" disabled={props.currentStep >= props.steps.length - 1} onClick={next} />
+                                    <NavigationButton
+                                        text="Next"
+                                        disabled={props.currentStep >= props.steps.length - 1}
+                                        onClick={next}
+                                    />
                                 )}
-                                {props.currentStep === props.steps.length - 1 && <NavigationButton text="Publish" onClick={publish} />}
+                                {props.currentStep === props.steps.length - 1 && (
+                                    <NavigationButton text="Publish" onClick={publish} />
+                                )}
                             </div>
                         </div>
                         <div className="mb-12">{props.children}</div>
-                        {!!error && <Components.Alert severity="ERROR" title={error} allowDismiss={true} className="w-fit" />}
+                        {!!error && (
+                            <Components.Alert severity="ERROR" title={error} allowDismiss={true} className="w-fit" />
+                        )}
                     </section>
                     <aside className="hidden pt-8 pl-12 lg:col-span-3 lg:block">
                         <ul className="space-y-4">

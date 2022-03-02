@@ -163,10 +163,27 @@ export const publicationsAvailabletoPublication = (publicationType: Types.Public
     // can link to ->
     switch (publicationType) {
         case 'PEER_REVIEW':
-            available = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION'];
+            available = [
+                'PROBLEM',
+                'PROTOCOL',
+                'ANALYSIS',
+                'REAL_WORLD_APPLICATION',
+                'HYPOTHESIS',
+                'DATA',
+                'INTERPRETATION'
+            ];
             break;
         case 'PROBLEM':
-            available = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
+            available = [
+                'PROBLEM',
+                'PROTOCOL',
+                'ANALYSIS',
+                'REAL_WORLD_APPLICATION',
+                'HYPOTHESIS',
+                'DATA',
+                'INTERPRETATION',
+                'PEER_REVIEW'
+            ];
             break;
         case 'HYPOTHESIS':
             available = ['PROBLEM'];

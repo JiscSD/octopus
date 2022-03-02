@@ -17,7 +17,12 @@ const Modal: React.FC<Props> = (props) => {
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
-            <HeadlessUI.Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" initialFocus={cancelButtonRef} onClose={props.setOpen}>
+            <HeadlessUI.Dialog
+                as="div"
+                className="fixed inset-0 z-50 overflow-y-auto"
+                initialFocus={cancelButtonRef}
+                onClose={props.setOpen}
+            >
                 <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                     <HeadlessUI.Transition.Child
                         as={React.Fragment}
@@ -45,9 +50,14 @@ const Modal: React.FC<Props> = (props) => {
                     >
                         <div className="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 sm:align-middle">
                             <div>
-                                <div className="bg-green-100 mx-auto flex h-8 w-8 items-center justify-center rounded-full">{props.icon}</div>
+                                <div className="bg-green-100 mx-auto flex h-8 w-8 items-center justify-center rounded-full">
+                                    {props.icon}
+                                </div>
                                 <div className="mt-3 text-center sm:mt-5">
-                                    <HeadlessUI.Dialog.Title as="h3" className="text-lg font-medium leading-6 text-grey-900">
+                                    <HeadlessUI.Dialog.Title
+                                        as="h3"
+                                        className="text-lg font-medium leading-6 text-grey-900"
+                                    >
                                         {props.title}
                                     </HeadlessUI.Dialog.Title>
                                     <div className="mt-2">{props.children}</div>

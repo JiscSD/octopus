@@ -17,7 +17,9 @@ import * as api from '@api';
  */
 const StepOne: React.FC = () => {
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
-    const updateTitle = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateTitle);
+    const updateTitle = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateTitle
+    );
     const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
 
     return (
@@ -35,13 +37,19 @@ const StepOne: React.FC = () => {
                 />
             </div>
             <div className="mb-6">
-                <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">{Helpers.formatPublicationType(type)}</span>
+                <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
+                    {Helpers.formatPublicationType(type)}
+                </span>
                 <p className="text-grey-800 dark:text-white">
-                    You have chosen this publication to of type `{Helpers.formatPublicationType(type)}`. This can now <strong>not</strong> be changed.
+                    You have chosen this publication to of type `{Helpers.formatPublicationType(type)}`. This can now{' '}
+                    <strong>not</strong> be changed.
                 </p>
                 <p className="text-grey-800 dark:text-white">
                     If you wish to change the publication type, you must delete this publication and create a{' '}
-                    <Components.Link href={Config.urls.createPublication.path} className="rounded outline-none focus:ring-2 focus:ring-yellow-400">
+                    <Components.Link
+                        href={Config.urls.createPublication.path}
+                        className="rounded outline-none focus:ring-2 focus:ring-yellow-400"
+                    >
                         <span className="underline decoration-teal-500 decoration-2 underline-offset-2">new</span>
                     </Components.Link>
                     .
@@ -57,7 +65,9 @@ const StepOne: React.FC = () => {
 const StepTwo = () => {
     // from the store
     const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
-    const forPublicationsID = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.forPublicationsID);
+    const forPublicationsID = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.forPublicationsID
+    );
 
     const [limit, setLimit] = React.useState(10);
     const [publicationLinkToList, setPublicationLinkToList] = React.useState<Interfaces.Publication[] | []>([]);
@@ -146,7 +156,9 @@ const StepTwo = () => {
             </p>
 
             {error && !isValidating && <Components.Alert severity="ERROR" title={error} className="mb-6 w-fit" />}
-            {fetchForError && <Components.Alert severity="ERROR" title={fetchForError} allowDismiss={true} className="mb-6 w-fit" />}
+            {fetchForError && (
+                <Components.Alert severity="ERROR" title={fetchForError} allowDismiss={true} className="mb-6 w-fit" />
+            )}
 
             <div className="my-10 lg:mb-10">
                 <div className="grid grid-cols-2 gap-4">
@@ -156,7 +168,10 @@ const StepTwo = () => {
                             !isValidating &&
                             results.data?.length &&
                             results.data.map((availablePublication: Interfaces.Publication) => (
-                                <button onClick={() => manageAvailableToAdd(availablePublication)} key={availablePublication.id}>
+                                <button
+                                    onClick={() => manageAvailableToAdd(availablePublication)}
+                                    key={availablePublication.id}
+                                >
                                     {availablePublication.title}
                                 </button>
                             ))}
@@ -269,23 +284,37 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
     const [currentStep, setCurrentStep] = React.useState(0);
     const [publication] = React.useState(props.draftedPublication);
 
-    const updateTitle = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateTitle);
-    const updateType = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateType);
-    const updateContent = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateContent);
-    const updateLicence = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateLicence);
+    const updateTitle = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateTitle
+    );
+    const updateType = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateType
+    );
+    const updateContent = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateContent
+    );
+    const updateLicence = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateLicence
+    );
     const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestStatus
     );
-    const updateConflictOfInterestText = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText);
-    const updateForPublicationsID = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.updateForPublicationsID);
+    const updateConflictOfInterestText = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
+    );
+    const updateForPublicationsID = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateForPublicationsID
+    );
 
     React.useEffect(() => {
         if (props.draftedPublication?.title) updateTitle(props.draftedPublication.title);
         if (props.draftedPublication?.type) updateType(props.draftedPublication.type);
         if (props.draftedPublication?.content) updateContent(props.draftedPublication.content);
         if (props.draftedPublication?.licence) updateLicence(props.draftedPublication.licence);
-        if (props.draftedPublication?.conflictOfInterestStatus) updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        if (props.draftedPublication?.conflictOfInterestText) updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
+        if (props.draftedPublication?.conflictOfInterestStatus)
+            updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
+        if (props.draftedPublication?.conflictOfInterestText)
+            updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
         if (props.forPublicationID) updateForPublicationsID(props.forPublicationID);
     }, []);
 
@@ -298,11 +327,22 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.createPublication.title}</title>
             </Head>
 
-            <Layouts.BuildPublication steps={steps} currentStep={currentStep} setStep={setCurrentStep} publication={publication} token={props.token}>
+            <Layouts.BuildPublication
+                steps={steps}
+                currentStep={currentStep}
+                setStep={setCurrentStep}
+                publication={publication}
+                token={props.token}
+            >
                 {steps.map(
                     (step, index) =>
                         index === currentStep && (
-                            <Framer.motion.section key={index} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+                            <Framer.motion.section
+                                key={index}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.35 }}
+                            >
                                 {step.component}
                             </Framer.motion.section>
                         )
