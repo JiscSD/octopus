@@ -4,6 +4,7 @@ type Props = {
     title: string;
     icon?: React.ReactElement;
     callback: (e: React.MouseEvent) => void;
+    disabled?: boolean;
     className?: string;
 };
 
@@ -12,7 +13,8 @@ const ActionButton: React.FC<Props> = (props): JSX.Element => {
         <button
             type="button"
             onClick={(e) => props.callback(e)}
-            className={`group flex items-center rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 ${
+            disabled={props.disabled}
+            className={`group flex items-center rounded border-transparent outline-0 hover:cursor-pointer focus:ring-2 focus:ring-yellow-400 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed ${
                 props.className ? props.className : ''
             }`}
         >

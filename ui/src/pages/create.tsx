@@ -1,45 +1,32 @@
 import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import useSWR from 'swr';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
+import { redirect } from 'next/dist/server/api-utils';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
 
     let publicationForID: string | string[] | null = null;
-    let publicationFor: Interfaces.Publication | null = null;
     let publicationType: string | string[] | null = null;
-    let error: string | null = null;
 
     if (context.query.for) publicationForID = context.query.for;
     if (context.query.type) publicationType = context.query.type;
 
-    if (Array.isArray(publicationFor)) publicationFor = publicationFor[0];
+    if (Array.isArray(publicationForID)) publicationForID = publicationForID[0];
     if (Array.isArray(publicationType)) publicationType = publicationType[0];
-
-    if (publicationForID) {
-        try {
-            const response = await api.get(`${Config.endpoints.publications}/${publicationForID}`, token);
-            publicationFor = response.data;
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            error = message;
-            console.log(err);
-        }
-    }
 
     return {
         props: {
-            publicationFor,
+            publicationForID,
             publicationType,
             token
         }
@@ -47,7 +34,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    publicationFor: Interfaces.Publication | null;
+    publicationForID: string | null;
     publicationType: Types.PublicationType | null;
     token: string;
 };
@@ -55,47 +42,12 @@ type Props = {
 const Create: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const [title, setTitle] = React.useState<string>('');
-    const [publicationFor, setPublicationFor] = React.useState(props.publicationFor);
-    const [publicationType, setPublicationType] = React.useState(props.publicationType);
+    const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');
     const [confirmed, setConfirmed] = React.useState(false);
-    const [query, setQuery] = React.useState('');
-    const [limit, setLimit] = React.useState(5);
-    const [createdPublication, setCreatedPublication] = React.useState<Interfaces.Publication | undefined>(undefined);
-    const [createdLink, setCreatedLink] = React.useState<Interfaces.Publication | undefined>(undefined);
-    const [creationError, setCreationError] = React.useState<string | null>(null);
-    const [creationLinkError, setCreationLinkError] = React.useState<string | null>(null);
-
-    const {
-        data: { data: results = [] } = {},
-        error,
-        isValidating
-    } = useSWR(`/publications?search=${query}&limit=${limit}`, null, {
-        fallback: {
-            '/publications': []
-        },
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false
-    });
-
-    const handleSearch = (searchTerm: string) => {
-        if (searchTerm.length >= 3) setQuery(searchTerm);
-        if (searchTerm.length === 0) setQuery('');
-    };
-
-    const handleConfirmed = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) {
-            setConfirmed(true);
-        } else {
-            setConfirmed(false);
-            setPublicationFor(null);
-            setPublicationType(null);
-        }
-    };
+    const [error, setError] = React.useState<string | null>(null);
 
     const createPublication = async () => {
-        console.log(title, publicationFor?.id, publicationType, confirmed);
-
+        setError(null);
         try {
             const response = await api.post(
                 Config.endpoints.publications,
@@ -106,49 +58,23 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                 props.token
             );
 
-            setCreatedPublication(response.data);
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            setCreationError(message);
-            console.log(err);
-        }
+            const redirect = {
+                pathname: `${Config.urls.viewPublication.path}/${response.data.id}/edit`,
+                query: {}
+            };
 
-        // by this point, all values will be available, lers post them to the api to create a publication, then create the link, then redirect the user to the edit screen of this publication
-    };
-
-    const createPublicationLink = async () => {
-        try {
-            const response = await api.post(
-                Config.endpoints.links,
-                {
-                    to: publicationFor?.id,
-                    from: createdPublication?.id
-                },
-                props.token
-            );
-
-            // This should be a 201 for creation no?
-            if (response.status === 200) {
-                router.push({
-                    pathname: `${Config.urls.viewPublication.path}/${createdPublication?.id}/edit`
-                });
-            } else {
-                setCreationLinkError('Something went wrong...');
-                setPublicationType(null);
+            if (props.publicationForID) {
+                redirect.query = {
+                    for: props.publicationForID
+                };
             }
+
+            router.push(redirect);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setCreationLinkError(message);
-            setPublicationType(null);
-            console.log(err);
+            setError(message);
         }
     };
-
-    React.useEffect(() => {
-        if (createdPublication) {
-            createPublicationLink();
-        }
-    }, [createdPublication]);
 
     return (
         <>
@@ -166,138 +92,88 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
-                        <div className="col-span-3 grid grid-cols-1 gap-8">
-                            <div>
-                                <label className="block">What is the title of this publication?</label>
+                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-8 lg:pt-36">
+                        {error ? <Components.Alert severity="ERROR" title={error} className="mt-2" /> : null}
+
+                        <aside className="mb-8 lg:col-start-3 lg:col-end-4 lg:row-start-1 lg:row-end-1 lg:mb-0">
+                            <h2 className="mb-6 font-montserrat text-2xl text-grey-800 transition-colors duration-500 dark:text-white">
+                                Creating a publication
+                            </h2>
+                            <ul>
+                                <li className="mb-4 text-grey-600 transition-colors duration-500 dark:text-grey-50">
+                                    <span className="font-medium">Publication title</span>
+                                    <ul className="ml-4 list-disc">
+                                        <li className="ml-2 py-2">Something about what makes a good title</li>
+                                    </ul>
+                                </li>
+
+                                <li className="mb-4 text-grey-600 transition-colors duration-500 dark:text-grey-50">
+                                    <span className="font-medium">Publication type</span>
+                                    <ul className="ml-4 list-disc">
+                                        <li className="ml-2 py-2">This is the type of publication</li>
+                                        <li className="ml-2 pb-2">Some other info about publication types</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </aside>
+                        <div className="lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-1">
+                            <div className="mb-12">
+                                <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                                    What is the title of this publication?
+                                </label>
                                 <input
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="block"
+                                    className="block w-10/12 rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
                                 />
                             </div>
 
-                            {!publicationFor && (
-                                <div className="grid grid-cols-12 gap-8">
-                                    <div className="col-span-4">
-                                        <label htmlFor="publicationFor" className="block">
-                                            Choose the publication to link from
-                                        </label>
-                                        <input
-                                            id="publicationFor"
-                                            type="text"
-                                            placeholder="search publication"
-                                            onChange={(e) => handleSearch(e.target.value)}
-                                            className="block w-full"
-                                        />
-                                    </div>
-                                    <div className="col-span-8">
-                                        {!error && !isValidating && results && results.data?.length ? (
-                                            <div className="flex items-center">
-                                                <label htmlFor="limit" className="mr-4 block">
-                                                    Showing {limit} top results
-                                                </label>
-                                                <select
-                                                    id="limit"
-                                                    name="limit"
-                                                    value={limit}
-                                                    onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                                                >
-                                                    <option value={5}>5</option>
-                                                    <option value={10}>10</option>
-                                                    <option value={15}>15</option>
-                                                    <option value={20}>20</option>
-                                                </select>
-                                            </div>
-                                        ) : null}
-                                        {!error && !isValidating && !results.data?.length && (
-                                            <span>No results found</span>
-                                        )}
-                                        {!error && !isValidating && results && results.data?.length ? (
-                                            <div className="block ">
-                                                {results.data.map((publication: Interfaces.Publication) => (
-                                                    <button
-                                                        key={publication.id}
-                                                        onClick={() => setPublicationFor(publication)}
-                                                        className="my-2 block bg-white p-2"
-                                                    >
-                                                        <>
-                                                            <span>
-                                                                {Helpers.formatPublicationType(publication.type)} ---{' '}
-                                                            </span>
-                                                            <span>{Helpers.truncateString(publication.title, 80)}</span>
-                                                            <span>
-                                                                by:{' '}
-                                                                {`${publication.user.firstName} ${publication.user?.lastName}`}
-                                                            </span>
-                                                        </>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        ) : null}
-                                        {!error && isValidating && <span>loading...</span>}
-                                        {!isValidating && error && <span>{error}</span>}
-                                    </div>
-                                </div>
-                            )}
+                            <div className="mb-12">
+                                <label
+                                    htmlFor="publicationType"
+                                    className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white"
+                                >
+                                    Type of publication
+                                </label>
+                                <select
+                                    id="publicationType"
+                                    name="publicationType"
+                                    value={publicationType ?? ''}
+                                    onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
+                                    className="block w-fit rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                                >
+                                    {Config.values.publicationTypes.map((type) => (
+                                        <option key={type} value={type}>
+                                            {Helpers.formatPublicationType(type)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                            {publicationFor && (
-                                <div>
-                                    <span className="block">
-                                        Chosen publication to link to:{' '}
-                                        <span className="block font-semibold">{publicationFor.title}</span>
-                                    </span>
-                                    <button onClick={(e) => setPublicationFor(null)}>Want to change?</button>
-                                </div>
-                            )}
+                            <label htmlFor="confirm" className="mb-6 flex items-center">
+                                <input
+                                    id="confirm"
+                                    name="confirm"
+                                    type="checkbox"
+                                    checked={confirmed}
+                                    disabled={!publicationType || !title.length}
+                                    onChange={() => setConfirmed((prev) => !prev)}
+                                    className="rounded-sm border-teal-500 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
+                                />
+                                <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white">
+                                    I confirm this is the correct publication type.
+                                </span>
+                            </label>
 
-                            {publicationFor && !publicationType && (
-                                <div>
-                                    <label htmlFor="publicationType">Choose this publications type</label>
-                                    <select
-                                        id="publicationType"
-                                        name="publicationType"
-                                        value={publicationType ? publicationType : ''}
-                                        onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
-                                    >
-                                        <option selected>Choose publication type...</option>
-                                        {Helpers.publicationsAvailabletoPublication(publicationFor.type).map((type) => (
-                                            <option key={type} value={type}>
-                                                {Helpers.formatPublicationType(type)}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {creationLinkError ? <span>{creationLinkError}</span> : null}
-                                </div>
-                            )}
-
-                            {publicationType && (
-                                <div>
-                                    <span className="block">
-                                        Chosen publication type:{' '}
-                                        <span className="block font-semibold">
-                                            {Helpers.formatPublicationType(publicationType)}
-                                        </span>
-                                    </span>
-                                    <button onClick={() => setPublicationType(null)}>Want to change?</button>
-                                </div>
-                            )}
-
-                            {publicationFor && publicationType && (
-                                <div>
-                                    <span>Is this correct?</span>
-                                    <input type="checkbox" checked={confirmed} onChange={(e) => handleConfirmed(e)} />
-                                </div>
-                            )}
-
-                            <button
-                                disabled={!publicationFor || !publicationType || !title.length || !confirmed}
-                                className="bg-yellow-500 disabled:opacity-30"
-                                onClick={createPublication}
-                            >
-                                Create this publication
-                            </button>
+                            <Components.ActionButton
+                                title="Create this publication"
+                                icon={
+                                    <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
+                                }
+                                disabled={!publicationType || !title.length || !confirmed}
+                                callback={createPublication}
+                            />
                         </div>
                     </section>
                 </Components.SectionTwo>
