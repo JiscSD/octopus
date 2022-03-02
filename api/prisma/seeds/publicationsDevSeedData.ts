@@ -239,11 +239,6 @@ const newPublicationSeeds = [
             create: {
                 publicationTo: 'publication-user-1-protocol-1-live'
             }
-        },
-        linkedFrom: {
-            create: {
-                publicationFrom: 'publication-user-1-problem-1-live'
-            }
         }
     },
     {
@@ -351,11 +346,6 @@ const newPublicationSeeds = [
         linkedTo: {
             create: {
                 publicationTo: 'publication-user-1-analysis-1-live'
-            }
-        },
-        linkedFrom: {
-            create: {
-                publicationFrom: 'publication-user-1-problem-1-live'
             }
         }
     },
@@ -519,11 +509,6 @@ const newPublicationSeeds = [
         linkedTo: {
             create: {
                 publicationTo: 'publication-user-2-problem-1-live'
-            }
-        },
-        linkedFrom: {
-            create: {
-                publicationFrom: 'publication-user-1-problem-1-live'
             }
         }
     },
@@ -1106,7 +1091,63 @@ const newPublicationSeeds = [
             }
         }
     },
-    // User 7 PEER REVIEWS
+    // User 7 PROBLEMS and PEER REVIEWS
+
+    // Problem (New Problem to link onto other Publication types)
+    {
+        id: 'publication-user-7-problem-1-live',
+        title: '',
+        type: PublicationTypes.problem,
+        licence: 'CC_BY',
+        conflictOfInterestStatus: true,
+        conflictOfInterestText: 'This publication has a conflict of interest because the author has paid consultancy.',
+        content: '',
+        currentStatus: PublicationStatus.live,
+        publishedDate: '2021-10-25T15:51:42.523Z',
+        createdAt: '2022-01-23T15:51:42.523Z',
+        updatedAt: '2022-01-25T15:51:42.523Z',
+        user: {
+            connect: {
+                id: users.user7
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: PublicationStatus.draft,
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                },
+                {
+                    status: PublicationStatus.live,
+                    createdAt: '2022-01-25T16:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            createMany: {
+                data: [
+                    {
+                        publicationTo: 'publication-user-1-problem-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-hypothesis-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-protocol-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-data-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-analysis-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-interpretation-1-live'
+                    }
+                ]
+            }
+        }
+    },
 
     // Peer Review (live)
     {
@@ -1517,6 +1558,33 @@ const newPublicationSeeds = [
         linkedTo: {
             create: {
                 publicationTo: 'publication-user-2-interpretation-1-live'
+            }
+        }
+    },
+    {
+        id: 'publication-user-3-peer-review-11-live',
+        title: 'Review of Problem: What is the connection between human needs and sustainable development?',
+        type: PublicationTypes.peerReview,
+        licence: 'CC_BY_NC',
+        content: '<p>This problem has been explored before.</p>',
+        currentStatus: PublicationStatus.live,
+        publishedDate: '2022-01-22T15:51:42.523Z',
+        user: {
+            connect: {
+                id: users.user3
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: PublicationStatus.live,
+                    createdAt: '2022-01-21T10:00:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-1-problem-1-live'
             }
         }
     }
