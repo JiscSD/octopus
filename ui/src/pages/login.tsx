@@ -55,7 +55,7 @@ type Props = {
     token: string;
 };
 
-const Callback: Types.NextPage<Props> = (props): JSX.Element => {
+const Login: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 
@@ -81,11 +81,11 @@ const Callback: Types.NextPage<Props> = (props): JSX.Element => {
             <main className="flex h-screen w-full flex-col items-center justify-center bg-teal-50 dark:bg-grey-800">
                 <Assets.Logo width={100} height={100} className="block animate-bounce fill-teal-500" />
                 <h1 className="mb-4 block font-montserrat text-lg font-semibold text-grey-800 dark:text-white">
-                    Logging in verification text here...
+                    Logging you into Octopus
                 </h1>
             </main>
         </>
     );
 };
 
-export default Callback;
+export default Login;

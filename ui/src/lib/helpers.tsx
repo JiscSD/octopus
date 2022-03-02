@@ -1,5 +1,5 @@
 import React from 'react';
-import jwt_decode from 'jwt-decode';
+import JWT from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
 
@@ -125,8 +125,9 @@ export const randomWholeNumberInRange = (min: number, max: number): number => {
  * @description Set the JWT token in a cookie & return the decaded version
  */
 export const setAndReturnJWT = (token: string) => {
-    Cookies.set(Config.keys.cookieStorage.token, token, { expires: 1 });
-    return jwt_decode(token);
+    const expireTime = 8 / 24;
+    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime });
+    return JWT.decode(token);
 };
 
 /**

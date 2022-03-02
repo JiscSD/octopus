@@ -122,14 +122,14 @@ const urls = {
         title: `Something went wrong - ${base.title}`
     },
     orcidLoginCallback: {
-        path: '/callback',
+        path: '/login',
         title: `Logging in with ORCID - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/callback`
+        canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/callback`
+        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
     }
 };
 

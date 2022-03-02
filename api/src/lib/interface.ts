@@ -150,3 +150,35 @@ export interface UpdateUserInformation {
     firstName: string;
     lastName: string;
 }
+
+/**
+ * ORCID
+ */
+
+type ORCIDName = {
+    errors: string[];
+    value: string;
+    required: boolean;
+    getRequiredMessage: null;
+};
+
+/**
+ * @todo This needs investigation into possible shapes,
+ * this is shape is what we know is stable & is low risk, other information here is unknown
+ * @see https://orcid.org/PUT_ORCID_ID_HERE/public-record.json
+ */
+export interface ORCIDUser {
+    title: string;
+    displayName?: string;
+    names: {
+        visibility: {
+            errors: string[];
+            required: boolean;
+            getRequiredMessage: null;
+            visibility: string;
+        };
+        givenNames: ORCIDName;
+        familyName: ORCIDName;
+        creditName: ORCIDName;
+    };
+}
