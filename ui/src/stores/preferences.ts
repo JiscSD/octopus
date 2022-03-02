@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
+import * as zustandMiddleware from 'zustand/middleware';
 
 import * as Config from '@config';
 import * as Types from '@types';
@@ -13,9 +13,9 @@ let store: any = (set: any): Types.PreferencesStoreTypes => ({
     toggle: () => set((state: State) => ({ darkMode: !state.darkMode }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
 
-store = persist(store, { name: Config.keys.localStorage.darkMode });
+store = zustandMiddleware.persist(store, { name: Config.keys.localStorage.darkMode });
 
 const usePreferencesStore = create(store);
 

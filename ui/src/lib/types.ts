@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage } from 'next';
+export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -11,6 +11,11 @@ export type PreferencesStoreTypes = {
 export type GlobalsStoreType = {
     showCmdPalette: boolean;
     toggleCmdPalette: () => void;
+};
+
+export type AuthStoreType = {
+    user: null | {};
+    setUser: (user: any) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

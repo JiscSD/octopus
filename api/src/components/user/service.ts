@@ -2,6 +2,35 @@ import prisma from 'lib/client';
 
 import * as I from 'interface';
 
+export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
+    const user = await prisma.user.upsert({
+        select: {
+            email: true,
+            id: true,
+            createdAt: true,
+            firstName: true,
+            lastName: true,
+            locked: true,
+            orcid: true,
+            role: true
+        },
+        where: {
+            orcid
+        },
+        update: {
+            firstName: updateUserInformation.firstName,
+            lastName: updateUserInformation.lastName
+        },
+        create: {
+            firstName: updateUserInformation.firstName,
+            lastName: updateUserInformation.lastName,
+            orcid
+        }
+    });
+
+    return user;
+};
+
 export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 

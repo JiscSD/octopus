@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
@@ -22,20 +23,23 @@ const api = axios.create({
     timeout: 5000
 });
 
+const headers = { headers: { Authorization: `Bearer ${Cookies.get(Config.keys.cookieStorage.token)}` } };
+
 export const get = async (url: string): Promise<AxiosResponse> => {
-    const response = await api.get(url);
+    const response = await api.get(url, headers);
     return response;
 };
 
 export const post = async (url: string, body: Interfaces.JSON): Promise<AxiosResponse> => {
-    const response = await api.post(url, body);
+    const response = await api.post(url, body, headers);
     return response;
 };
 
-/**
- * @description Request an array of publications OR users based on params
- * @throws AxiosError
- */
+export const patch = async (url: string, body: Interfaces.JSON): Promise<AxiosResponse> => {
+    const response = await api.patch(url, body, headers);
+    return response;
+};
+
 export const search = async (
     searchType: string | Types.SearchType,
     query: string | null = null,

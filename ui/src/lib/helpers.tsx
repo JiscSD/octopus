@@ -1,4 +1,6 @@
 import React from 'react';
+import JWT from 'jsonwebtoken';
+import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
 
 import * as Config from '@config';
@@ -111,6 +113,40 @@ export const randomColor = () => {
     return `#${value}`;
 };
 
+/**
+ * @description Return a random floored number in a given range
+ */
 export const randomWholeNumberInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + min;
+};
+
+/**
+ * @description Set the JWT token in a cookie & return the decaded version
+ */
+export const setAndReturnJWT = (token: string) => {
+    const expireTime = 8 / 24;
+    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime });
+    return JWT.decode(token);
+};
+
+/**
+ * @description Clear the JWT from browser cookie storage
+ */
+export const clearJWT = () => {
+    Cookies.remove(Config.keys.cookieStorage.token);
+};
+
+/**
+ * @description For use in NextJS SSR, check cookies for token & set the response location
+ */
+export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
+    const cookies = context.req.cookies;
+    const token = cookies[Config.keys.cookieStorage.token];
+
+    if (!token) {
+        context.res.writeHead(302, {
+            Location: Config.urls.orcidLogin.path
+        });
+        context.res.end();
+    }
 };
