@@ -24,9 +24,18 @@ const Legal: Types.NextPage = (): JSX.Element => {
                 >
                     <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-36">
                         <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 dark:text-white lg:w-8/12">
-                            <Components.PageTitle text="Legal" />
-                            <h2 className="mt-10 text-xl font-medium">Legal placeholder</h2>
-                            <p>Placeholder</p>
+                            <Components.PageTitle text="Legal information" />
+                            <h2 className="text-xl font-semibold">Terms</h2>
+                            <h3 className="text-lg font-medium">Licence</h3>
+                            <p>This project code is licensed under the GNU General Public License v3.0.</p>
+                            <p>The full text of the licence can be found here:</p>
+                            <Components.Link
+                                className="mb-4 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                openNew
+                                href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+                            >
+                                <span>https://www.gnu.org/licenses/gpl-3.0.en.html</span>
+                            </Components.Link>
                         </div>
                     </section>
                 </Components.SectionTwo>
