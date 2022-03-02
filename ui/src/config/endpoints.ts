@@ -1,10 +1,10 @@
-import * as API from '@api';
+import * as api from '@api';
 
 const endpoints = {
-    publications: `${API.baseURL}/publications`,
-    users: `${API.baseURL}/users`,
-    ratings: `${API.baseURL}/ratings`,
-    links: `${API.baseURL}/links`,
-    authorization: `${API.baseURL}/authorization`
+    publications: `${api.baseURL}/publications`,
+    users: `${api.baseURL}/users`,
+    ratings: `${api.baseURL}/ratings`,
+    links: `${api.baseURL}/links`,
+    authorization: `${api.baseURL}/authorization`
 };
 export default endpoints;

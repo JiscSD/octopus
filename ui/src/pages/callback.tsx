@@ -8,7 +8,7 @@ import * as Assets from '@assets';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let code: string | string[] | null = null;
@@ -26,7 +26,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (Array.isArray(code)) code = code[0];
 
     try {
-        const response = await API.post(
+        const response = await api.post(
             `${Config.endpoints.authorization}`,
             {
                 code

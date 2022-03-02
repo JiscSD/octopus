@@ -10,7 +10,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
@@ -28,7 +28,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     if (publicationForID) {
         try {
-            const response = await API.get(`${Config.endpoints.publications}/${publicationForID}`, token);
+            const response = await api.get(`${Config.endpoints.publications}/${publicationForID}`, token);
             publicationFor = response.data;
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
@@ -97,7 +97,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
         console.log(title, publicationFor?.id, publicationType, confirmed);
 
         try {
-            const response = await API.post(
+            const response = await api.post(
                 Config.endpoints.publications,
                 {
                     title,
@@ -118,7 +118,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
 
     const createPublicationLink = async () => {
         try {
-            const response = await API.post(
+            const response = await api.post(
                 Config.endpoints.links,
                 {
                     to: publicationFor?.id,

@@ -7,7 +7,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 const StepOne: React.FC = () => {
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
@@ -88,7 +88,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // handle pre loading a drafted publication & passing it as a page prop
     if (draftedPublicationID) {
         try {
-            const response = await API.get(`${Config.endpoints.publications}/${draftedPublicationID}`, token);
+            const response = await api.get(`${Config.endpoints.publications}/${draftedPublicationID}`, token);
             draftedPublication = response.data;
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;

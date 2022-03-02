@@ -9,7 +9,7 @@ import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
@@ -17,7 +17,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
 
     try {
-        const response = await API.get(`${Config.endpoints.publications}/${requestedId}`, undefined);
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, undefined);
         publication = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
