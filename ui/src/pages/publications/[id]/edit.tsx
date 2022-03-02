@@ -1,7 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
+import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -63,7 +65,9 @@ const StepOne: React.FC = () => {
  * @description Edit links
  */
 const StepTwo = () => {
-    // from the store
+    const draftedPublication = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.draftedPublication
+    );
     const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
     const forPublicationsID = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.forPublicationsID
@@ -72,6 +76,7 @@ const StepTwo = () => {
     const [limit, setLimit] = React.useState(10);
     const [publicationLinkToList, setPublicationLinkToList] = React.useState<Interfaces.Publication[] | []>([]);
     const [fetchForError, setFetchForError] = React.useState<string | null>(null);
+    const [confirmSaveLinks, setConfirmSaveLinks] = React.useState(false);
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
     const formattedAsString = availableLinkTypes.join(',');
 
@@ -97,11 +102,8 @@ const StepTwo = () => {
     };
 
     const manageAvailableToAdd = (availablePublication: Interfaces.Publication) => {
-        // get already linked TODO
-
-        // Known bug, publicatiosn from single endpoint are of different shape to from getall, so set will see them as the same and double up.
-        const current = [...publicationLinkToList, availablePublication]; // current in state
-        const unquie = new Set(current);
+        // TODO We need to make sure to exclude publications already linked.
+        const unquie = new Set([...publicationLinkToList, availablePublication]);
         setPublicationLinkToList(Array.from(unquie));
     };
 
@@ -120,12 +122,34 @@ const StepTwo = () => {
         }
     };
 
+    const saveAndCommitLinks = () => {
+        // save the links
+
+        // Either save all & refresh otherwise other publication state is lost, or was save behind the scence and use toast to show update was successful or failed
+        // the later would be better, but it's alot to do right now
+        // hard refresh to current step to ensure current step represents live data
+        window.location.href = `${Config.urls.viewPublication.path}/${draftedPublication.id}/edit?step=1`;
+    };
+
     React.useEffect(() => {
         if (forPublicationsID) getAskedForPublication(forPublicationsID);
     }, [forPublicationsID]);
 
     return (
         <>
+            <Components.Modal
+                open={confirmSaveLinks}
+                setOpen={setConfirmSaveLinks}
+                positiveActionCallback={saveAndCommitLinks}
+                positiveButtonText="Commit"
+                negativeButtonText="Cancel"
+                title="Are you sure you want to commit these links?"
+                icon={<OutlineIcons.SaveIcon className="text-green-600 h-6 w-6" aria-hidden="true" />}
+            >
+                <p className="text-gray-500 text-sm">
+                    Whilst this publication is in draft mode, you can later edit these links.
+                </p>
+            </Components.Modal>
             <h1 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
                 What publications do you want to linked to?
             </h1>
@@ -160,32 +184,62 @@ const StepTwo = () => {
                 <Components.Alert severity="ERROR" title={fetchForError} allowDismiss={true} className="mb-6 w-fit" />
             )}
 
-            <div className="my-10 lg:mb-10">
-                <div className="grid grid-cols-2 gap-4">
+            <div className="my-4 border-t border-grey-100 py-4 transition-colors duration-500 dark:border-grey-700 lg:my-10 lg:pt-6">
+                <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                    Publications already linked to this one
+                </h2>
+                here
+            </div>
+
+            <div className="my-4 border-t border-grey-100 py-4 transition-colors duration-500 dark:border-grey-700 lg:my-10 lg:pt-6">
+                <div className="flex items-center justify-between">
+                    <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                        Add new links to this publication?
+                    </h2>
+                    <button
+                        className="rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed"
+                        onClick={() => setConfirmSaveLinks(true)}
+                    >
+                        Save &amp; create links
+                    </button>
+                </div>
+                <div className="my-6 grid grid-cols-2 gap-4 ">
                     <div>
                         <h3>Choose from the below</h3>
-                        {!error &&
-                            !isValidating &&
-                            results.data?.length &&
-                            results.data.map((availablePublication: Interfaces.Publication) => (
-                                <button
-                                    onClick={() => manageAvailableToAdd(availablePublication)}
-                                    key={availablePublication.id}
-                                >
-                                    {availablePublication.title}
-                                </button>
-                            ))}
+                        <div className="scrollbar scrollbar-vert h-96 overflow-x-auto rounded border border-teal-500 p-4">
+                            {!error &&
+                                !isValidating &&
+                                results.data?.length &&
+                                results.data.map((availablePublication: Interfaces.Publication) => {
+                                    if (availablePublication.id !== forPublicationsID) {
+                                        return (
+                                            <button
+                                                className="mb-2 whitespace-nowrap bg-white text-left text-sm"
+                                                onClick={() => manageAvailableToAdd(availablePublication)}
+                                                key={availablePublication.id}
+                                            >
+                                                {availablePublication.title}
+                                            </button>
+                                        );
+                                    }
+                                })}
+                        </div>
                     </div>
                     <div>
                         <h3>Selected for linking</h3>
-                        {publicationLinkToList.map((addedPublication) => (
-                            <div key={addedPublication.id} className="grid grid-cols-12">
-                                <span className="col-span-11">{addedPublication.title}</span>
-                                <button className="col-span-1" onClick={() => removeFromLinkToList(addedPublication)}>
-                                    Remove
-                                </button>
-                            </div>
-                        ))}
+                        <div className="scrollbar scrollbar-vert h-96 overflow-x-auto rounded border border-teal-500 p-4">
+                            {publicationLinkToList.map((addedPublication) => (
+                                <div key={addedPublication.id} className="grid grid-cols-12">
+                                    <span className="col-span-11">{addedPublication.title}</span>
+                                    <button
+                                        className="col-span-1"
+                                        onClick={() => removeFromLinkToList(addedPublication)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,17 +261,17 @@ const StepFive = () => {
 
 const steps: Interfaces.PublicationBuildingStep[] = [
     {
-        title: 'Side bar title needed',
+        title: 'Publication title',
         subTitle: 'Page sub title needed',
         component: <StepOne />
     },
     {
-        title: 'Create links',
+        title: 'Manage links',
         subTitle: 'Some sub title here',
         component: <StepTwo />
     },
     {
-        title: 'Licence & COI',
+        title: 'Licence & conflict of interest',
         subTitle: 'Some sub title here',
         component: <StepThree />
     },
@@ -239,14 +293,17 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let draftedPublicationID: string | string[] | null = null;
     let draftedPublication: Interfaces.Publication | null = null;
     let forPublicationID: string | string[] | null = null;
+    let step: string | string[] | null = null;
     let error: string | null = null;
 
     if (context.query.id) draftedPublicationID = context.query.id;
     if (context.query.for) forPublicationID = context.query.for;
+    if (context.query.step) step = context.query.step;
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
     // we're only dealing with one provided publication to link to from params for now.
     // future feature to support multiple
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
+    if (Array.isArray(step)) step = step[0];
 
     // handle pre loading a drafted publication & passing it as a page prop
     if (draftedPublicationID) {
@@ -267,6 +324,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             draftedPublication,
             forPublicationID,
+            step,
             token,
             error
         }
@@ -276,12 +334,17 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 type Props = {
     draftedPublication: Interfaces.Publication;
     forPublicationID: string | null;
+    step: string;
     token: string;
     error: string | null;
 };
 
 const Edit: Types.NextPage<Props> = (props): JSX.Element => {
-    const [currentStep, setCurrentStep] = React.useState(0);
+    const router = Router.useRouter();
+    let defaultStep = props.step ? parseInt(props.step) : 0;
+    defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;
+
+    const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
 
     const updateTitle = Stores.usePublicationCreationStore(
@@ -305,8 +368,12 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
     const updateForPublicationsID = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateForPublicationsID
     );
+    const updateDraftedPublication = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateDraftedPublication
+    );
 
     React.useEffect(() => {
+        updateDraftedPublication(props.draftedPublication);
         if (props.draftedPublication?.title) updateTitle(props.draftedPublication.title);
         if (props.draftedPublication?.type) updateType(props.draftedPublication.type);
         if (props.draftedPublication?.content) updateContent(props.draftedPublication.content);
@@ -317,6 +384,16 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
             updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
         if (props.forPublicationID) updateForPublicationsID(props.forPublicationID);
     }, []);
+
+    React.useEffect(() => {
+        router.push(
+            {
+                query: { ...router.query, step: currentStep }
+            },
+            undefined,
+            { shallow: true }
+        );
+    }, [currentStep]);
 
     return (
         <>
@@ -334,19 +411,21 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
                 publication={publication}
                 token={props.token}
             >
-                {steps.map(
-                    (step, index) =>
-                        index === currentStep && (
-                            <Framer.motion.section
-                                key={index}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.35 }}
-                            >
-                                {step.component}
-                            </Framer.motion.section>
-                        )
-                )}
+                {publication
+                    ? steps.map(
+                          (step, index) =>
+                              index === currentStep && (
+                                  <Framer.motion.section
+                                      key={index}
+                                      initial={{ opacity: 0 }}
+                                      animate={{ opacity: 1 }}
+                                      transition={{ duration: 0.35 }}
+                                  >
+                                      {step.component}
+                                  </Framer.motion.section>
+                              )
+                      )
+                    : null}
             </Layouts.BuildPublication>
         </>
     );

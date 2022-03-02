@@ -14,13 +14,16 @@ type NavigationButtonProps = {
     text: string;
     disabled?: boolean;
     onClick: () => void;
+    className?: string;
 };
 
 const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className="rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed"
+        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
+            props.className ? props.className : ''
+        }`}
     >
         {props.text}
     </button>
@@ -103,14 +106,23 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                 <Components.Header fixed={true} />
-                <main className="container mx-auto grid min-h-screen grid-cols-12 lg:pt-24">
+                <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-24">
                     <section className="col-span-12 p-8 lg:col-span-9">
                         <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
                             <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                 {Object.values(props.steps)[props.currentStep].subTitle}
                             </span>
-                            <div className="grid grid-cols-3 gap-4">
-                                <NavigationButton text="Save and exit" onClick={() => setConfirmSaveExit(true)} />
+                            <div className="grid grid-cols-4 gap-4">
+                                <NavigationButton
+                                    text="Delete draft"
+                                    onClick={() => console.log('attempt to delete')}
+                                    className="bg-pink-500"
+                                />
+                                <NavigationButton
+                                    text="Save and exit"
+                                    onClick={() => setConfirmSaveExit(true)}
+                                    className="bg-purple-400"
+                                />
                                 <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prev} />
                                 {props.currentStep < props.steps.length - 1 && (
                                     <NavigationButton
@@ -120,8 +132,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     />
                                 )}
                                 {props.currentStep === props.steps.length - 1 && (
-                                    <NavigationButton text="Publish" onClick={publish} />
+                                    <NavigationButton text="Publish" onClick={publish} className="bg-purple-400" />
                                 )}
+                                <button
+                                    onClick={() => {
+                                        router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+                                    }}
+                                    className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
+                                >
+                                    Peview publication
+                                </button>
                             </div>
                         </div>
                         <div className="mb-12">{props.children}</div>
@@ -129,8 +149,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <Components.Alert severity="ERROR" title={error} allowDismiss={true} className="w-fit" />
                         )}
                     </section>
-                    <aside className="hidden pt-8 pl-12 lg:col-span-3 lg:block">
-                        <ul className="space-y-4">
+                    <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
+                        <ul className="sticky top-24 space-y-4 lg:mb-8">
+                            <li>
+                                <button
+                                    onClick={() => {
+                                        router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+                                    }}
+                                    className="hidden rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:block"
+                                >
+                                    Peview publication
+                                </button>
+                            </li>
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button

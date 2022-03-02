@@ -22,10 +22,12 @@ let store: any = (set: (params: any) => void) => ({
     linkedFromPublication: null,
     updateLinkedFromPublication: (linkedFromPublication: Interfaces.Publication | null) =>
         set((state: Types.PublicationCreationStoreType) => ({ linkedFromPublication })),
-
     forPublicationsID: null,
     updateForPublicationsID: (forPublicationsID: string | string[] | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ forPublicationsID }))
+        set((state: Types.PublicationCreationStoreType) => ({ forPublicationsID })),
+    draftedPublication: null,
+    updateDraftedPublication: (draftedPublication: Interfaces.Publication | null) =>
+        set((state: Types.PublicationCreationStoreType) => ({ draftedPublication }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

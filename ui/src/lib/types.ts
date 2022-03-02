@@ -37,6 +37,8 @@ export type PublicationCreationStoreType = {
     updateLinkedFromPublication: () => void;
     forPublicationsID: string | null;
     updateForPublicationsID: () => void;
+    draftedPublication: Interfaces.Publication | null;
+    updateDraftedPublication: () => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
