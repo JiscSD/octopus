@@ -14,10 +14,10 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 callbackURL = 'https://localhost:3001/login';
                 break;
             case 'prod':
-                callbackURL = 'https://api.octopus.ac/login';
+                callbackURL = 'https://octopus.ac/login';
                 break;
             default:
-                callbackURL = `https://${process.env.stage}.api.octopus.ac/login`;
+                callbackURL = `https://${process.env.stage}.octopus.ac/login`;
         }
 
         const orcidRequest = await axios.post(
