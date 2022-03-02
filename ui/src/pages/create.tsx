@@ -10,7 +10,6 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import { redirect } from 'next/dist/server/api-utils';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
@@ -122,6 +121,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                     What is the title of this publication?
                                 </label>
                                 <input
+                                    required
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
@@ -153,6 +153,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
 
                             <label htmlFor="confirm" className="mb-6 flex items-center">
                                 <input
+                                    required
                                     id="confirm"
                                     name="confirm"
                                     type="checkbox"
@@ -168,9 +169,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
 
                             <Components.ActionButton
                                 title="Create this publication"
-                                icon={
-                                    <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
-                                }
+                                icon={<OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />}
                                 disabled={!publicationType || !title.length || !confirmed}
                                 callback={createPublication}
                             />

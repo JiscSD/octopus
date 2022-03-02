@@ -4,7 +4,7 @@ import { devtools } from 'zustand/middleware';
 import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
-let store: any = (set: any) => ({
+let store: any = (set: (params: any) => void) => ({
     title: '',
     updateTitle: (title: string) => set((state: Types.PublicationCreationStoreType) => ({ title })),
     type: 'PROBLEM',
@@ -14,14 +14,15 @@ let store: any = (set: any) => ({
     licence: 'CC_BY',
     updateLicence: (licence: Types.LicenceType) => set((state: Types.PublicationCreationStoreType) => ({ licence })),
     conflictOfInterestStatus: true,
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) =>
-        set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestStatus })),
+    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
-    updateConflictOfInterestText: (conflictOfInterestText: string) =>
-        set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestText })),
+    updateConflictOfInterestText: (conflictOfInterestText: string) => set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestText })),
     linkedFromPublication: null,
     updateLinkedFromPublication: (linkedFromPublication: Interfaces.Publication | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ linkedFromPublication }))
+        set((state: Types.PublicationCreationStoreType) => ({ linkedFromPublication })),
+
+    forPublicationsID: null,
+    updateForPublicationsID: (forPublicationsID: string | string[] | null) => set((state: Types.PublicationCreationStoreType) => ({ forPublicationsID }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

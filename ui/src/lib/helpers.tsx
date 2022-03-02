@@ -160,30 +160,31 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
 export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
     let available: Types.PublicationType[] | [] = [];
 
+    // can link to ->
     switch (publicationType) {
         case 'PEER_REVIEW':
-            available = ['PROBLEM'];
+            available = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION'];
             break;
         case 'PROBLEM':
-            available = ['HYPOTHESIS', 'PEER_REVIEW'];
+            available = ['PROBLEM', 'PROTOCOL', 'ANALYSIS', 'REAL_WORLD_APPLICATION', 'HYPOTHESIS', 'DATA', 'INTERPRETATION', 'PEER_REVIEW'];
             break;
         case 'HYPOTHESIS':
-            available = ['PROTOCOL', 'PROBLEM', 'PEER_REVIEW'];
+            available = ['PROBLEM'];
             break;
         case 'PROTOCOL':
-            available = ['DATA', 'PROBLEM', 'PEER_REVIEW'];
+            available = ['HYPOTHESIS'];
             break;
         case 'DATA':
-            available = ['ANALYSIS', 'PROBLEM', 'PEER_REVIEW'];
+            available = ['PROTOCOL'];
             break;
         case 'ANALYSIS':
-            available = ['INTERPRETATION', 'PROBLEM', 'PEER_REVIEW'];
+            available = ['DATA'];
             break;
         case 'INTERPRETATION':
-            available = ['REAL_WORLD_APPLICATION', 'PROBLEM', 'PEER_REVIEW'];
+            available = ['ANALYSIS'];
             break;
         case 'REAL_WORLD_APPLICATION':
-            available = ['PROBLEM', 'PEER_REVIEW'];
+            available = ['INTERPRETATION'];
             break;
         default:
             null;
