@@ -534,11 +534,6 @@ const newPublicationSeeds = [
             create: {
                 publicationTo: 'publication-user-2-problem-1-live'
             }
-        },
-        linkedFrom: {
-            create: {
-                publicationFrom: 'publication-user-1-problem-1-live'
-            }
         }
     },
 
@@ -1017,8 +1012,18 @@ const newPublicationSeeds = [
             ]
         },
         linkedTo: {
-            create: {
-                publicationTo: 'publication-user-5-data-1-live'
+            createMany: {
+                data: [
+                    {
+                        publicationTo: 'publication-user-5-data-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-1-data-1-live'
+                    },
+                    {
+                        publicationTo: 'publication-user-2-data-1-live'
+                    }
+                ]
             }
         }
     },
@@ -1096,12 +1101,12 @@ const newPublicationSeeds = [
     // Problem (New Problem to link onto other Publication types)
     {
         id: 'publication-user-7-problem-1-live',
-        title: '',
+        title: 'New problem branched off of other published publications',
         type: PublicationTypes.problem,
         licence: 'CC_BY',
         conflictOfInterestStatus: true,
         conflictOfInterestText: 'This publication has a conflict of interest because the author has paid consultancy.',
-        content: '',
+        content: 'This problem is a new problem that is linked to 6 other publication types.',
         currentStatus: PublicationStatus.live,
         publishedDate: '2021-10-25T15:51:42.523Z',
         createdAt: '2022-01-23T15:51:42.523Z',
