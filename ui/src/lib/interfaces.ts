@@ -127,3 +127,10 @@ export interface PublicationBuildingStep {
     subTitle: string;
     component: React.ReactNode;
 }
+
+export interface LicenceTypeShape {
+    value: Types.LicenceType;
+    nicename: string;
+    description: string;
+    link: string;
+}
