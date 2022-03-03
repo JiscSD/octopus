@@ -45,7 +45,6 @@ export interface OptionalAuthenticatedAPIRequest<
     user?: User;
 }
 
-
 export interface JSONResponse {
     body: string;
     headers: any;
@@ -165,6 +164,10 @@ export interface AuthorizeRequestBody {
 export interface UpdateUserInformation {
     firstName: string;
     lastName: string;
+}
+
+export interface DeletePublicationPathParams {
+    id: string;
 }
 
 export type ValidStatuses = 'DRAFT' | 'LIVE';

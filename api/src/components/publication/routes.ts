@@ -27,6 +27,11 @@ export const update = middy(publicationController.update)
     .use(middleware.authentication())
     .use(middleware.validator(publicationSchema.update, 'body'));
 
+export const deletePublication = middy(publicationController.deletePublication)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
+
 export const updateStatus = middy(publicationController.updateStatus)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
