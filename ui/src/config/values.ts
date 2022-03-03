@@ -1,3 +1,4 @@
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 export const publicationTypes: Types.PublicationType[] = [
@@ -11,14 +12,7 @@ export const publicationTypes: Types.PublicationType[] = [
     'PEER_REVIEW'
 ];
 
-interface ILicenceTypes {
-    value: Types.LicenceType;
-    nicename: string;
-    description: string;
-    link: string;
-}
-
-export const licenceTypes: ILicenceTypes[] = [
+export const licenceTypes: Interfaces.LicenceTypeShape[] = [
     {
         value: 'CC_BY',
         nicename: 'CC BY',
