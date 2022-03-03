@@ -58,8 +58,8 @@ export const deletePublication = async (
             });
         }
 
-        // the logic here is a bit odd, but currentStatus and publicationStatus array are not intrisinsicly linked
-        // so to be safe, we are check that the current status is DRAFT and that the entire history of the publication
+        // the logic here is a bit odd, but the currentStatus and publicationStatus array are not intrisinsicly linked
+        // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
         // has only ever been draft
         if (
             publication.currentStatus !== 'DRAFT' ||
