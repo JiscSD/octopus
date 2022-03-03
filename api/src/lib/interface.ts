@@ -51,6 +51,8 @@ export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
     licence?: LicenceType;
+    description?: string;
+    keywords?: string[];
     content?: string;
 }
 
@@ -71,6 +73,8 @@ export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
     licence?: LicenceType;
+    description?: string;
+    keywords?: string[];
     id?: string;
 }
 

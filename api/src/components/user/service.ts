@@ -34,7 +34,9 @@ export const getAll = async (filters: I.UserFilters) => {
                 select: {
                     id: true,
                     title: true,
-                    type: true
+                    type: true,
+                    description: true,
+                    keywords: true
                 },
                 where: {
                     currentStatus: 'LIVE'
@@ -87,6 +89,8 @@ export const get = async (id: string) => {
                     updatedAt: true,
                     publishedDate: true,
                     currentStatus: true,
+                    description: true,
+                    keywords: true,
                     url_slug: true,
                     licence: true,
                     content: true,

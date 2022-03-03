@@ -77,6 +77,8 @@ model Publication {
     licence                  LicenceType?
     conflictOfInterestStatus Boolean?        @default(false)
     conflictOfInterestText   String?
+    description              String?
+    keywords                 String[]
     content                  String?
     doi                      String?
     publishedDate            DateTime?
