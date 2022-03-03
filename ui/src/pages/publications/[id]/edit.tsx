@@ -24,7 +24,7 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         component: <Components.PublicationCreationStepTwo />
     },
     {
-        title: 'Licence & conflict of interest',
+        title: 'Additional information',
         subTitle: 'Some sub title here',
         component: <Components.PublicationCreationStepThree />
     },

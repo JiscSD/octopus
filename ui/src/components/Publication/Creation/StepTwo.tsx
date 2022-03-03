@@ -13,7 +13,7 @@ import * as api from '@api';
 /**
  * @description Edit links
  */
-const StepTwo = () => {
+const StepTwo: React.FC = (): JSX.Element => {
     const draftedPublication = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.draftedPublication
     );
