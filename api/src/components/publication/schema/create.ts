@@ -26,6 +26,14 @@ const createPublicationSchema: I.Schema = {
         content: {
             type: 'string'
         },
+        description: {
+            type: 'string'
+        },
+        keywords: {
+            type: 'array',
+            items: { type: 'string' },
+            maxItems: 10
+        },
         conflictOfInterestStatus: {
             type: 'boolean'
         },
