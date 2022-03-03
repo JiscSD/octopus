@@ -50,11 +50,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
     );
 
-    const [confirmSaveExit, setConfirmSaveExit] = React.useState(false);
+    const [saveExitModalVisibility, setSaveExitModalVisibility] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    const prev = () => props.setStep((prevState: number) => prevState - 1);
-    const next = () => props.setStep((prevState: number) => prevState + 1);
+    const prevStep = () => props.setStep((prevState: number) => prevState - 1);
+    const nextStep = () => props.setStep((prevState: number) => prevState + 1);
 
     const publish = () => {
         // update all fields with store data & change status to live
@@ -86,17 +86,17 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             console.log(err);
         }
 
-        setConfirmSaveExit(false);
+        setSaveExitModalVisibility(false);
     };
 
     return (
         <>
             <Components.Modal
-                open={confirmSaveExit}
-                setOpen={setConfirmSaveExit}
+                open={saveExitModalVisibility}
+                setOpen={setSaveExitModalVisibility}
                 positiveActionCallback={saveExit}
                 positiveButtonText="Save and exit"
-                negativeButtonText="Cancel"
+                cancelButtonText="Cancel"
                 title="Are you sure you want to leave?"
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-6 w-6" aria-hidden="true" />}
             >
@@ -120,15 +120,19 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 />
                                 <NavigationButton
                                     text="Save and exit"
-                                    onClick={() => setConfirmSaveExit(true)}
+                                    onClick={() => setSaveExitModalVisibility(true)}
                                     className="bg-purple-400"
                                 />
-                                <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prev} />
+                                <NavigationButton
+                                    text="Previous"
+                                    disabled={props.currentStep <= 0}
+                                    onClick={prevStep}
+                                />
                                 {props.currentStep < props.steps.length - 1 && (
                                     <NavigationButton
                                         text="Next"
                                         disabled={props.currentStep >= props.steps.length - 1}
-                                        onClick={next}
+                                        onClick={nextStep}
                                     />
                                 )}
                                 {props.currentStep === props.steps.length - 1 && (

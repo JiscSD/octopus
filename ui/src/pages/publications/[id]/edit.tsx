@@ -142,7 +142,7 @@ const StepTwo = () => {
                 setOpen={setConfirmSaveLinks}
                 positiveActionCallback={saveAndCommitLinks}
                 positiveButtonText="Commit"
-                negativeButtonText="Cancel"
+                cancelButtonText="Cancel"
                 title="Are you sure you want to commit these links?"
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-6 w-6" aria-hidden="true" />}
             >

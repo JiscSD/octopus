@@ -6,7 +6,7 @@ type Props = {
     setOpen: any; // state setter
     positiveActionCallback: any; // state setter
     positiveButtonText: string;
-    negativeButtonText: string;
+    cancelButtonText: string;
     title: string;
     icon: React.ReactNode;
     children?: React.ReactChildren | React.ReactChild[] | React.ReactChild;
@@ -21,7 +21,7 @@ const Modal: React.FC<Props> = (props) => {
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto"
                 initialFocus={cancelButtonRef}
-                onClose={props.setOpen}
+                onClose={props.setOpen} // Ah, this expects a boolean toggle state, so passing the state setter here for the 'onClose' auto sets it to false
             >
                 <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                     <HeadlessUI.Transition.Child
@@ -77,7 +77,7 @@ const Modal: React.FC<Props> = (props) => {
                                     onClick={() => props.setOpen(false)}
                                     ref={cancelButtonRef}
                                 >
-                                    {props.negativeButtonText}
+                                    {props.cancelButtonText}
                                 </button>
                             </div>
                         </div>
