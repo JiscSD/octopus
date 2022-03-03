@@ -69,12 +69,12 @@ const urls = {
         keywords: 'publish',
         canonical: `${base.host}`
     },
-    legal: {
-        path: '/legal',
-        title: `Legal - ${base.title}`,
+    terms: {
+        path: '/terms',
+        title: `Terms - ${base.title}`,
         description: '',
         keywords: '',
-        canonical: `${base.host}/legal`
+        canonical: `${base.host}/terms`
     },
     privacy: {
         path: '/privacy',

@@ -27,10 +27,10 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                             <Components.PageTitle text="Accessibility" />
                             <p>This statement applies to content published on </p>
                             <Components.Link
-                                className="mb-6 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                href="https://www.int.octopus.ac"
+                                className="mb-6 w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                href="https://int.octopus.ac/"
                             >
-                                <span>https://www.int.octopus.ac</span>
+                                <span>https://int.octopus.ac</span>
                             </Components.Link>
                             <p>
                                 This website has been developed by Jisc. It is designed to be used by as many people as
@@ -66,8 +66,15 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                                 this website
                             </h2>
                             <p>
-                                If you find any problems that aren’t listed on this page or think we’re not meeting the
-                                requirements of the accessibility regulations, please contact help@jisc.ac.uk.
+                                If you find any problems that aren&apos;t listed on this page or think we&apos;re not
+                                meeting the requirements of the accessibility regulations, please contact{' '}
+                                <Components.Link
+                                    className="mb-4 w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    openNew
+                                    href="mailto:help@jisc.ac.uk"
+                                >
+                                    <span>help@jisc.ac.uk.</span>
+                                </Components.Link>
                             </p>
                             <h2 className="mt-10 text-xl font-medium">How we tested this website</h2>
                             <p>
@@ -75,16 +82,18 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                                 Improve and Chrome Lighthouse. As part of pilot testing, we will be completing full
                                 accessibility testing.
                             </p>
-                            <h2 className="mt-10 text-xl font-medium">What we’re doing to improve accessibility</h2>
+                            <h2 className="mt-10 text-xl font-medium">
+                                What we&apos;re doing to improve accessibility
+                            </h2>
                             <p>
                                 Whenever new features are released they go through our internal quality assurance checks
-                                and must meet WCAG 2.1 AA. We’re also committed to working on the issues above.
+                                and must meet WCAG 2.1 AA. We&apos;re also committed to working on the issues above.
                             </p>
                             <p>This statement was prepared on 1 March 2022.</p>
                             <div className="mt-10 flex flex-col gap-1">
                                 <p>Content modified from:</p>
                                 <Components.Link
-                                    className="mb-4 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    className="mb-4 w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                     openNew
                                     href="https://www.gov.uk/help/accessibility-statement"
                                 >
@@ -92,7 +101,7 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                                 </Components.Link>
                                 <p>Used through the:</p>
                                 <Components.Link
-                                    className="mb-4 rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    className="mb-4 w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                     openNew
                                     href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
                                 >

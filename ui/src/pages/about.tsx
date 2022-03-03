@@ -133,7 +133,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                 waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
             >
                 {/* Learn about Octopus section */}
-                <div className="container mx-2 px-8 pt-8 pb-8 lg:mx-auto lg:pt-24">
+                <div className="container px-8 pt-8 pb-8 lg:mx-auto lg:pt-24">
                     <h1 className="mb-10 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
                         Learn about Octopus.
                     </h1>

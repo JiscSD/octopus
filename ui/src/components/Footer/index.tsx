@@ -61,7 +61,7 @@ const Footer: React.FC = (): JSX.Element => (
             {/** Links */}
             <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
                 <Components.Link
-                    href={Config.urls.legal.path}
+                    href={Config.urls.terms.path}
                     className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Terms</h3>
