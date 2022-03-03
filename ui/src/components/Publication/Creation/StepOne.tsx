@@ -27,7 +27,7 @@ const StepOne: React.FC = (): JSX.Element => {
                     type="text"
                     value={title}
                     onChange={(e) => updateTitle(e.target.value)}
-                    className="block w-10/12 rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                    className="block w-10/12 rounded-md  border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
                 />
             </div>
             <div className="mb-6">

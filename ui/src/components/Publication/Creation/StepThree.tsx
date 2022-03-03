@@ -2,7 +2,6 @@ import React from 'react';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
@@ -18,7 +17,7 @@ const StepThree: React.FC = (): JSX.Element => {
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestStatus
     );
     const conflictOfInterestText = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
+        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
     );
     const updateConflictOfInterestText = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
@@ -31,8 +30,8 @@ const StepThree: React.FC = (): JSX.Element => {
     const [showLicenceDetails, setShowLicenceDetails] = React.useState(false);
 
     return (
-        <div className="mb-6 lg:mb-10">
-            <div className="border-b border-grey-100 pb-8 transition-colors duration-500 dark:border-grey-700">
+        <div className="mb-6 space-y-12 lg:mb-10">
+            <div className="mt-20 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
                 <label
                     htmlFor="licence"
                     className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white"
@@ -47,13 +46,14 @@ const StepThree: React.FC = (): JSX.Element => {
                     </Components.Link>{' '}
                     license do you want to select for this publication?
                 </label>
-                <div className="flex items-center">
+                <div className="items-center lg:flex">
                     <select
                         id="licence"
                         name="publicationType"
                         value={licence}
                         onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
-                        className="block w-fit rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                        className="mb-4 block w-fit rounded-md border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white lg:mb-0"
+                        required
                     >
                         {Config.values.licenceTypes.map((type) => (
                             <option key={type.value} value={type.value}>
@@ -63,7 +63,7 @@ const StepThree: React.FC = (): JSX.Element => {
                     </select>
                     <button
                         onClick={() => setShowLicenceDetails((prevState) => !prevState)}
-                        className="ml-8 rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed"
+                        className="rounded bg-teal-500 px-3 py-1 text-xs font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:ml-8"
                     >
                         {showLicenceDetails ? 'Hide licence information' : 'Not sure which licence to choose?'}
                     </button>
@@ -87,6 +87,47 @@ const StepThree: React.FC = (): JSX.Element => {
                             </div>
                         ))}
                     </Framer.motion.div>
+                )}
+            </div>
+            <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
+                <div className="mb-6 flex items-end">
+                    <h2 className="font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                        Do this publication have a conflict of interest?
+                    </h2>
+                    {conflictOfInterestStatus && (
+                        <label
+                            htmlFor="conflictOfInterestStatus"
+                            className="ml-4 block text-xs text-grey-800 transition-colors duration-500 dark:text-white"
+                        >
+                            You must specify a reason for the conflict of interest
+                        </label>
+                    )}
+                </div>
+
+                <label htmlFor="conflictOfInterestStatus" className="mb-6 flex items-center">
+                    <input
+                        required
+                        id="conflictOfInterestStatus"
+                        name="conflictOfInterestStatus"
+                        type="checkbox"
+                        checked={conflictOfInterestStatus}
+                        onChange={(e) => updateConflictOfInterestStatus(e.target.checked)}
+                        className="rounded-sm border border-teal-500 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
+                    />
+                    <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white">
+                        This publication does have a conflict of interest.
+                    </span>
+                </label>
+                {conflictOfInterestStatus && (
+                    <textarea
+                        id="conflictOfInterestStatus"
+                        name="conflictOfInterestStatus"
+                        value={conflictOfInterestText}
+                        rows={6}
+                        onChange={(e) => updateConflictOfInterestText(e.target.value)}
+                        className="w-full rounded border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 dark:text-white"
+                        required
+                    />
                 )}
             </div>
         </div>

@@ -15,27 +15,27 @@ import * as api from '@api';
 const steps: Interfaces.PublicationBuildingStep[] = [
     {
         title: 'Publication title',
-        subTitle: 'Page sub title needed',
+        subTitle: 'Publication title & type information',
         component: <Components.PublicationCreationStepOne />
     },
     {
         title: 'Manage links',
-        subTitle: 'Some sub title here',
+        subTitle: 'Manage links',
         component: <Components.PublicationCreationStepTwo />
     },
     {
         title: 'Additional information',
-        subTitle: 'Some sub title here',
+        subTitle: 'Additional information',
         component: <Components.PublicationCreationStepThree />
     },
     {
         title: 'Full text',
-        subTitle: 'Some sub title here',
+        subTitle: 'Full text',
         component: <Components.PublicationCreationStepFour />
     },
     {
         title: 'Review & Publish <span role="img" aria-label="rocket" className="pl-2">🚀</span>',
-        subTitle: 'Once a publication is published, it is NOT editable.',
+        subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />
     }
 ];

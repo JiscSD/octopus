@@ -64,6 +64,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const saveExit = async () => {
         setError(null);
         try {
+            if (conflictOfInterestStatus && !conflictOfInterestText.length) {
+                props.setStep(2);
+                throw new Error('You must provide a conflict of interest reason.');
+            }
+
             await api.patch(
                 `${Config.endpoints.publications}/${props.publication.id}`,
                 {
@@ -148,10 +153,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 </button>
                             </div>
                         </div>
-                        <div className="mb-12">{props.children}</div>
                         {!!error && (
-                            <Components.Alert severity="ERROR" title={error} allowDismiss={true} className="w-fit" />
+                            <Components.Alert
+                                severity="ERROR"
+                                title={error}
+                                allowDismiss={false}
+                                className="mb-12 w-fit"
+                            />
                         )}
+                        <div className="mb-12">{props.children}</div>
                     </section>
                     <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
                         <ul className="sticky top-24 space-y-4 lg:mb-8">
