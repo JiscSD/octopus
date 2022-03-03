@@ -2,6 +2,35 @@ import prisma from 'lib/client';
 
 import * as I from 'interface';
 
+export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
+    const user = await prisma.user.upsert({
+        select: {
+            email: true,
+            id: true,
+            createdAt: true,
+            firstName: true,
+            lastName: true,
+            locked: true,
+            orcid: true,
+            role: true
+        },
+        where: {
+            orcid
+        },
+        update: {
+            firstName: updateUserInformation.firstName,
+            lastName: updateUserInformation.lastName
+        },
+        create: {
+            firstName: updateUserInformation.firstName,
+            lastName: updateUserInformation.lastName,
+            orcid
+        }
+    });
+
+    return user;
+};
+
 export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 
@@ -70,6 +99,9 @@ export const getByApiKey = async (apiKey: string) => {
 
 export const get = async (id: string) => {
     const user = await prisma.user.findFirst({
+        where: {
+            id
+        },
         select: {
             id: true,
             firstName: true,
@@ -101,10 +133,46 @@ export const get = async (id: string) => {
                 }
             }
         },
-        where: {
-            id
-        }
     });
 
     return user;
+};
+
+
+export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>) => {
+    const userPublications = await prisma.user.findFirst({
+        where: {
+            id
+        },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            orcid: true,
+            createdAt: true,
+            updatedAt: true,
+            Publication: {
+                where: {
+                    currentStatus: {
+                        in: statuses
+                    }
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    type: true,
+                    doi: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    publishedDate: true,
+                    currentStatus: true,
+                    url_slug: true,
+                    licence: true,
+                    content: true
+                }
+            }
+        },
+    });
+
+    return userPublications;
 };

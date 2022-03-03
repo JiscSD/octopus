@@ -138,6 +138,11 @@ export const get = async (id: string) => {
                 }
             },
             linkedTo: {
+                where: {
+                    publicationToRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
                 select: {
                     id: true,
                     publicationToRef: {
@@ -162,6 +167,11 @@ export const get = async (id: string) => {
                 }
             },
             linkedFrom: {
+                where: {
+                    publicationFromRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
                 select: {
                     id: true,
                     publicationFromRef: {

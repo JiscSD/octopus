@@ -1,5 +1,5 @@
-import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum } from '@prisma/client';
-export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum } from '@prisma/client';
+import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role } from '@prisma/client';
+export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum, Role } from '@prisma/client';
 
 import {
     APIGatewayProxyEventV2,
@@ -34,6 +34,18 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
+export interface OptionalAuthenticatedAPIRequest<
+    BodyOverride = string | undefined,
+    QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
+    PathParamsOverride = APIGatewayProxyEventPathParameters | undefined
+> extends Omit<APIGatewayProxyEventV2, 'body' | 'queryStringParameters' | 'pathParameters'> {
+    body: BodyOverride;
+    queryStringParameters: QueryStringParametersOverride;
+    pathParameters: PathParamsOverride;
+    user?: User;
+}
+
+
 export interface JSONResponse {
     body: string;
     headers: any;
@@ -44,8 +56,8 @@ export interface JSONResponse {
  * @description Publications
  */
 
-const pismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
-export type Publication = Prisma.PublicationGetPayload<typeof pismaGeneratedPublicationType>;
+const prismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
+export type Publication = Prisma.PublicationGetPayload<typeof prismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
     type: PublicationType;
@@ -104,6 +116,13 @@ export interface CreateLinkBody {
  */
 export interface User {
     id: string;
+    email: string | null;
+    createdAt: Date;
+    firstName: string;
+    lastName: string | null;
+    locked: boolean;
+    orcid: string;
+    role: Role;
 }
 
 export interface UserFilters {
@@ -137,4 +156,46 @@ export interface CreateFlagPathParams {
 export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
     comments: string;
+}
+
+export interface AuthorizeRequestBody {
+    code: string;
+}
+
+export interface UpdateUserInformation {
+    firstName: string;
+    lastName: string;
+}
+
+export type ValidStatuses = 'DRAFT' | 'LIVE';
+/**
+ * ORCID
+ */
+
+type ORCIDName = {
+    errors: string[];
+    value: string;
+    required: boolean;
+    getRequiredMessage: null;
+};
+
+/**
+ * @todo This needs investigation into possible shapes,
+ * this is shape is what we know is stable & is low risk, other information here is unknown
+ * @see https://orcid.org/PUT_ORCID_ID_HERE/public-record.json
+ */
+export interface ORCIDUser {
+    title: string;
+    displayName?: string;
+    names: {
+        visibility: {
+            errors: string[];
+            required: boolean;
+            getRequiredMessage: null;
+            visibility: string;
+        };
+        givenNames: ORCIDName;
+        familyName: ORCIDName;
+        creditName: ORCIDName;
+    };
 }

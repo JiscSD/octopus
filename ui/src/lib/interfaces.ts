@@ -1,4 +1,5 @@
-import { AxiosError } from 'axios';
+import React from 'react';
+import * as Axios from 'axios';
 
 import * as Types from '@types';
 
@@ -6,10 +7,12 @@ export interface JSON {
     [key: string]: Types.JSONValue;
 }
 
-export interface JSONResponseError extends AxiosError {}
+export interface JSONResponseError extends Axios.AxiosError {}
+
 export interface NavMenuItem {
     label: string;
     value: string;
+    subItems?: NavMenuItem[] | React.ReactNode[] | any[];
 }
 
 export interface PublicationStatus {
