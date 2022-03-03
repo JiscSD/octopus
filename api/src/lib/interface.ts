@@ -34,6 +34,18 @@ export interface AuthenticatedAPIRequest<
     user: User;
 }
 
+export interface OptionalAuthenticatedAPIRequest<
+    BodyOverride = string | undefined,
+    QueryStringParametersOverride = APIGatewayProxyEventQueryStringParameters | undefined,
+    PathParamsOverride = APIGatewayProxyEventPathParameters | undefined
+> extends Omit<APIGatewayProxyEventV2, 'body' | 'queryStringParameters' | 'pathParameters'> {
+    body: BodyOverride;
+    queryStringParameters: QueryStringParametersOverride;
+    pathParameters: PathParamsOverride;
+    user?: User;
+}
+
+
 export interface JSONResponse {
     body: string;
     headers: any;
@@ -151,6 +163,7 @@ export interface UpdateUserInformation {
     lastName: string;
 }
 
+export type ValidStatuses = 'DRAFT' | 'LIVE';
 /**
  * ORCID
  */

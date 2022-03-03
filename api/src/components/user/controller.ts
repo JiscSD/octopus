@@ -27,3 +27,20 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetUserPar
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getPublications = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>) => {
+    try {
+        const statuses: Array<I.ValidStatuses> = event.pathParameters.id === event.user?.id ? ['DRAFT', 'LIVE'] : ['LIVE'];
+        
+        const userPublications = await userService.getPublications(event.pathParameters.id, statuses);
+
+        if (!userPublications) {
+            return response.json(404, { message: 'User not found' });
+        }
+
+        return response.json(200, userPublications);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
