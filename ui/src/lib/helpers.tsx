@@ -3,6 +3,7 @@ import JWT from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
 
+import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Types from '@types';
 
@@ -139,7 +140,7 @@ export const clearJWT = () => {
 /**
  * @description For use in NextJS SSR, check cookies for token & set the response location
  */
-export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
+export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
     const cookies = context.req.cookies;
     const token = cookies[Config.keys.cookieStorage.token];
 
@@ -149,4 +150,62 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext) => {
         });
         context.res.end();
     }
+
+    return token;
+};
+
+/**
+ * @description todo
+ */
+export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
+    let available: Types.PublicationType[] | [] = [];
+
+    // can link to ->
+    switch (publicationType) {
+        case 'PEER_REVIEW':
+            available = [
+                'PROBLEM',
+                'PROTOCOL',
+                'ANALYSIS',
+                'REAL_WORLD_APPLICATION',
+                'HYPOTHESIS',
+                'DATA',
+                'INTERPRETATION'
+            ];
+            break;
+        case 'PROBLEM':
+            available = [
+                'PROBLEM',
+                'PROTOCOL',
+                'ANALYSIS',
+                'REAL_WORLD_APPLICATION',
+                'HYPOTHESIS',
+                'DATA',
+                'INTERPRETATION',
+                'PEER_REVIEW'
+            ];
+            break;
+        case 'HYPOTHESIS':
+            available = ['PROBLEM'];
+            break;
+        case 'PROTOCOL':
+            available = ['HYPOTHESIS'];
+            break;
+        case 'DATA':
+            available = ['PROTOCOL'];
+            break;
+        case 'ANALYSIS':
+            available = ['DATA'];
+            break;
+        case 'INTERPRETATION':
+            available = ['ANALYSIS'];
+            break;
+        case 'REAL_WORLD_APPLICATION':
+            available = ['INTERPRETATION'];
+            break;
+        default:
+            null;
+    }
+
+    return available;
 };

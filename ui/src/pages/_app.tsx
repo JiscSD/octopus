@@ -5,7 +5,7 @@ import NextNprogress from 'nextjs-progressbar';
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 import '../styles/globals.css';
 
@@ -59,7 +59,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
             {!loading && (
                 <SWR.SWRConfig
                     value={{
-                        fetcher: (resource) => API.get(resource),
+                        fetcher: (resource) => api.get(resource, undefined),
                         fallback: pageProps.fallback,
                         errorRetryCount: 3,
                         refreshInterval: 60000, // for dev

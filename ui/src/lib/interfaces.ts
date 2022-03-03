@@ -61,6 +61,7 @@ export interface Publication {
     type: Types.PublicationType;
     title: string;
     content: string;
+    licence: Types.LicenceType;
     doi: string | null;
     currentStatus: string;
     createdBy: string;
@@ -119,4 +120,10 @@ export interface DocumentationEntryQueryParams {
     optional: boolean;
     enums?: Array<string>;
     description: string;
+}
+
+export interface PublicationBuildingStep {
+    title: string;
+    subTitle: string;
+    component: React.ReactNode;
 }
