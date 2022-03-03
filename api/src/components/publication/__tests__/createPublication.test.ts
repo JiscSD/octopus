@@ -16,7 +16,9 @@ describe('Create publication', () => {
             .send({
                 type: 'PEER_REVIEW',
                 title: 'Publication test 1',
-                licence: 'CC_BY_SA'
+                licence: 'CC_BY_SA',
+                description: 'description of Publication test 1',
+                keywords: ['science', 'technology']
             });
 
         expect(createPublicationRequest.status).toEqual(200);
@@ -24,6 +26,8 @@ describe('Create publication', () => {
         expect(createPublicationRequest.body.user.id).toEqual('test-user-1');
         expect(createPublicationRequest.body.publicationStatus.length).toEqual(1);
         expect(createPublicationRequest.body.publicationStatus[0].status).toEqual('DRAFT');
+        expect(createPublicationRequest.body.keywords.length).toEqual(2);
+        expect(createPublicationRequest.body.description).toEqual('description of Publication test 1');
         expect(createPublicationRequest.body.licence).toEqual('CC_BY_SA');
     });
 
