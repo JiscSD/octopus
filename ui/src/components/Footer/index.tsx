@@ -32,7 +32,7 @@ const Footer: React.FC = (): JSX.Element => (
                 </Components.Link>
             </div>
             {/** Links */}
-            <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-1">
+            <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
                 <Components.Link
                     href={Config.urls.browsePublications.path}
                     className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
@@ -46,10 +46,16 @@ const Footer: React.FC = (): JSX.Element => (
                     <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Publish</h3>
                 </Components.Link>
                 <Components.Link
-                    href={Config.urls.accessibility.path}
+                    href={Config.urls.about.path}
                     className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
-                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Accessibility</h3>
+                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">About</h3>
+                </Components.Link>
+                <Components.Link
+                    href={Config.urls.faq.path}
+                    className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
+                >
+                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">FAQs</h3>
                 </Components.Link>
             </div>
             {/** Links */}
@@ -58,13 +64,19 @@ const Footer: React.FC = (): JSX.Element => (
                     href={Config.urls.legal.path}
                     className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
-                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Legal information</h3>
+                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Terms</h3>
                 </Components.Link>
                 <Components.Link
                     href={Config.urls.privacy.path}
                     className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Privacy</h3>
+                </Components.Link>
+                <Components.Link
+                    href={Config.urls.accessibility.path}
+                    className="mb-1 block max-w-fit rounded border-transparent p-1 outline-0 focus:ring-2 focus:ring-yellow-400"
+                >
+                    <h3 className="font-montserrat font-semibold text-white dark:text-teal-200">Accessibility</h3>
                 </Components.Link>
             </div>
             {/** Socket */}
