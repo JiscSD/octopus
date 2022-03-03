@@ -124,3 +124,19 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/flag
                   method: post
                   cors: true
+    authorization:
+        handler: src/components/authorization/routes.authorize
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/authorization
+                  method: post
+                  cors: true
+    getUserPublications:
+        handler: src/components/user/routes.getPublications 
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/{id}/publications
+                  method: get
+                  cors: true

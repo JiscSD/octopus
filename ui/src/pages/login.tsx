@@ -1,0 +1,91 @@
+import React from 'react';
+import Head from 'next/head';
+import * as Router from 'next/router';
+
+import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
+import * as Assets from '@assets';
+import * as Stores from '@stores';
+import * as Config from '@config';
+import * as Types from '@types';
+import * as api from '@api';
+
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    let code: string | string[] | null = null;
+    let token: any = null;
+    let error: string | null = null;
+
+    if (context.query.code) code = context.query.code;
+
+    if (!code) {
+        return {
+            notFound: true
+        };
+    }
+
+    if (Array.isArray(code)) code = code[0];
+
+    try {
+        const response = await api.post(
+            `${Config.endpoints.authorization}`,
+            {
+                code
+            },
+            undefined
+        );
+        token = response.data;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
+        console.log(error);
+    }
+
+    if (!token || error) {
+        return {
+            notFound: true
+        };
+    }
+
+    return {
+        props: { token }
+    };
+};
+
+type Props = {
+    token: string;
+};
+
+const Login: Types.NextPage<Props> = (props): JSX.Element => {
+    const router = Router.useRouter();
+    const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
+
+    React.useEffect(() => {
+        const decodedJWT = Helpers.setAndReturnJWT(props.token);
+        setUser(decodedJWT);
+        setTimeout(
+            () =>
+                router.push({
+                    pathname: `${Config.urls.home.path}`
+                }),
+            300
+        );
+    }, [props.token]);
+
+    return (
+        <>
+            <Head>
+                <meta name="robots" content="noindex" />
+                <title>{Config.urls.orcidLoginCallback.title}</title>
+            </Head>
+
+            <main className="flex h-screen w-full flex-col items-center justify-center bg-teal-50 dark:bg-grey-800">
+                <Assets.Logo width={100} height={100} className="block animate-bounce fill-teal-500" />
+                <h1 className="mb-4 block font-montserrat text-lg font-semibold text-grey-800 dark:text-white">
+                    Logging you into Octopus
+                </h1>
+            </main>
+        </>
+    );
+};
+
+export default Login;

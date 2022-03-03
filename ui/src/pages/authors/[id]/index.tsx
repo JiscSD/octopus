@@ -7,7 +7,7 @@ import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestId = context.query.id;
@@ -15,7 +15,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
 
     try {
-        const response = await API.get(`${Config.endpoints.users}/${requestId}`);
+        const response = await api.get(`${Config.endpoints.users}/${requestId}`, undefined);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;

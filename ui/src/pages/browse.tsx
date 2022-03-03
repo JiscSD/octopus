@@ -6,7 +6,7 @@ import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 interface Errors {
     // featured: null | string;
@@ -40,7 +40,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // Get latest publications endpoint
     let latest: unknown = [];
     try {
-        const latestResponse = await API.search(
+        const latestResponse = await api.search(
             'publications',
             null,
             Config.values.publicationTypes.join(),

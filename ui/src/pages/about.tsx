@@ -49,45 +49,45 @@ const heroContents = [
 
 const publicationTypes = [
     {
-        id: 'problem',
+        id: 'PROBLEM',
         heading: 'Research Problem',
         content: 'a neatly defined scientific problem.',
         margin: 'pl-7 lg:pl-5'
     },
     {
-        id: 'hypothesis',
+        id: 'HYPOTHESIS',
         heading: 'Hypothesis/Rationale',
         content:
             'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
         margin: 'pl-2 lg:pl-1'
     },
     {
-        id: 'method',
+        id: 'PROTOCOL',
         heading: 'Methods/Protocols',
         content: 'a practical method of testing an existing published Hypothesis.',
         margin: 'pl-4 lg:pl-5'
     },
     {
-        id: 'data',
+        id: 'DATA',
         heading: 'Data/Results',
         content:
             'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
         margin: 'pl-12 lg:pl-14'
     },
     {
-        id: 'analysis',
+        id: 'ANALYSIS',
         heading: 'Analysis',
         content: 'a statistical or thematic analysis of existing published Data or Results.',
         margin: 'ml-1 lg:ml-0 pl-16'
     },
     {
-        id: 'interpretation',
+        id: 'INTERPRETATION',
         heading: 'Interpretation',
         content: 'a discussion around an existing published Analysis.',
         margin: 'pl-14 lg:pl-12'
     },
     {
-        id: 'implementation',
+        id: 'REAL_WORLD_APPLICATION',
         heading: 'Real-world Application',
         content: 'real world applications arising from an existing published Interpretation.',
         margin: 'pl-6 lg:pl-4'
@@ -215,6 +215,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         <div className="container -ml-24 grid grid-cols-1 gap-1">
                             {publicationTypes.map((publicationType) => (
                                 <div
+                                    id={publicationType.id}
                                     className={`mt-8 h-[90px] lg:mt-14 ${publicationType.margin}`}
                                     key={publicationType.id}
                                 >
@@ -238,7 +239,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                             Allowing researchers to get more meaningful credit for what they&apos;ve done.
                         </p>
                     </div>
-                    <div className="container mx-auto mb-20 lg:mb-6">
+                    <div id="PEER_REVIEW" className="container mx-auto mb-20 lg:mb-6">
                         <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
                             <OutlineIcons.LinkIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
                             Peer Review

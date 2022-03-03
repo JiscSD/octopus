@@ -1,4 +1,5 @@
-import { AxiosError } from 'axios';
+import React from 'react';
+import * as Axios from 'axios';
 
 import * as Types from '@types';
 
@@ -6,10 +7,12 @@ export interface JSON {
     [key: string]: Types.JSONValue;
 }
 
-export interface JSONResponseError extends AxiosError {}
+export interface JSONResponseError extends Axios.AxiosError {}
+
 export interface NavMenuItem {
     label: string;
     value: string;
+    subItems?: NavMenuItem[] | React.ReactNode[] | any[];
 }
 
 export interface PublicationStatus {
@@ -58,6 +61,7 @@ export interface Publication {
     type: Types.PublicationType;
     title: string;
     content: string;
+    licence: Types.LicenceType;
     doi: string | null;
     currentStatus: string;
     createdBy: string;
@@ -116,4 +120,17 @@ export interface DocumentationEntryQueryParams {
     optional: boolean;
     enums?: Array<string>;
     description: string;
+}
+
+export interface PublicationBuildingStep {
+    title: string;
+    subTitle: string;
+    component: React.ReactNode;
+}
+
+export interface LicenceTypeShape {
+    value: Types.LicenceType;
+    nicename: string;
+    description: string;
+    link: string;
 }

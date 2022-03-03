@@ -138,6 +138,11 @@ export const get = async (id: string) => {
                 }
             },
             linkedTo: {
+                where: {
+                    publicationToRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
                 select: {
                     id: true,
                     publicationToRef: {
@@ -146,6 +151,8 @@ export const get = async (id: string) => {
                             title: true,
                             publishedDate: true,
                             currentStatus: true,
+                            description: true,
+                            keywords: true,
                             type: true,
                             user: {
                                 select: {
@@ -160,6 +167,11 @@ export const get = async (id: string) => {
                 }
             },
             linkedFrom: {
+                where: {
+                    publicationFromRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
                 select: {
                     id: true,
                     publicationFromRef: {
@@ -168,6 +180,8 @@ export const get = async (id: string) => {
                             title: true,
                             publishedDate: true,
                             currentStatus: true,
+                            description: true,
+                            keywords: true,
                             type: true,
                             user: {
                                 select: {
@@ -193,6 +207,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             title: e.title,
             type: e.type,
             licence: e.licence,
+            description: e.description,
+            keywords: e.keywords,
             content: e.content,
             user: {
                 connect: {

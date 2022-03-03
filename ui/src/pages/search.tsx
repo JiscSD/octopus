@@ -11,7 +11,7 @@ import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as API from '@api';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
@@ -61,7 +61,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
-                const response = await API.search(
+                const response = await api.search(
                     searchType,
                     query,
                     publicationTypes,
@@ -197,8 +197,8 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         <>
             <Head>
                 <meta name="robots" content="noindex" />
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
+                <meta name="description" content={Config.urls.search.description} />
+                <meta name="keywords" content={Config.urls.search.keywords} />
                 <link rel="canonical" href={`${Config.urls.search.canonical}`} />
                 <title>{Config.urls.search.title}</title>
             </Head>

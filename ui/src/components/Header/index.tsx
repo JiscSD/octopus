@@ -1,10 +1,9 @@
 import React from 'react';
 
 import * as Components from '@components';
+import * as Stores from '@stores';
 import * as Assets from '@assets';
 import * as Config from '@config';
-import * as Stores from '@stores';
-import * as Helpers from '@helpers';
 import * as Types from '@types';
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 };
 
 const Header: React.FC<Props> = (props): JSX.Element => {
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
 
     return (
         <header
@@ -35,6 +34,7 @@ const Header: React.FC<Props> = (props): JSX.Element => {
                 <div className="flex items-center">
                     <Components.Search />
                     <Components.Nav />
+                    {!user && <Components.ORCIDLogInButton />}
                     <Components.EnableDarkMode />
                 </div>
             </div>

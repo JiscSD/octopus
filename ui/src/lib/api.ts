@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
@@ -22,20 +23,39 @@ const api = axios.create({
     timeout: 5000
 });
 
-export const get = async (url: string): Promise<AxiosResponse> => {
-    const response = await api.get(url);
+export const get = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.get(url, token ? headers : undefined);
     return response;
 };
 
-export const post = async (url: string, body: Interfaces.JSON): Promise<AxiosResponse> => {
-    const response = await api.post(url, body);
+export const post = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.post(url, body, token ? headers : undefined);
     return response;
 };
 
-/**
- * @description Request an array of publications OR users based on params
- * @throws AxiosError
- */
+export const patch = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.patch(url, body, token ? headers : undefined);
+    return response;
+};
+
 export const search = async (
     searchType: string | Types.SearchType,
     query: string | null = null,
@@ -60,6 +80,6 @@ export const search = async (
 
     params.includes('&') && (params = params.replace('&', '?'));
 
-    const response = await get(endpoint + params);
+    const response = await get(endpoint + params, undefined);
     return response.data;
 };

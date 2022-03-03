@@ -13,3 +13,8 @@ export const getAll = middy(userController.getAll)
 export const get = middy(userController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser());
+
+export const getPublications = middy(userController.getPublications)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication(true));

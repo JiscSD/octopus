@@ -36,7 +36,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.details = 'text-grey-700';
                 classesCopy.icon = (
                     <OutlineIcons.ExclamationIcon
-                        className={`text h-5 w-5 text-grey-800 transition-colors duration-150 ${classes.icon}`}
+                        className={`text h-5 w-5 text-grey-800 transition-colors duration-500 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -47,7 +47,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.details = 'text-grey-800 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.XCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-150 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -58,7 +58,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.details = 'text-grey-700 dark:text-white';
                 classesCopy.icon = (
                     <OutlineIcons.CheckCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-150 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -70,7 +70,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.details = 'text-grey-700 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.InformationCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-150 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -89,18 +89,18 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.35 }}
                     exit={{ opacity: 0 }}
-                    className={`rounded-md p-4 pr-8 transition-colors duration-150 ${classes.background} ${
+                    className={`rounded-md p-4 pr-8 transition-colors duration-500 ${classes.background} ${
                         props.className ? props.className : ''
                     }`}
                 >
                     <div className="flex">
                         <div className="flex-shrink-0">{classes.icon}</div>
                         <div className="ml-3">
-                            <h3 className={`text-sm font-medium transition-colors duration-150 ${classes.title}`}>
+                            <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                 {props.title}
                             </h3>
                             {props.details && (
-                                <div className={`mt-2 text-sm transition-colors duration-150 ${classes.details}`}>
+                                <div className={`mt-2 text-sm transition-colors duration-500 ${classes.details}`}>
                                     <ul role="list" className="list-disc space-y-1 pl-5">
                                         {props.details.map((detail) => (
                                             <li key={detail}>{detail}</li>
@@ -117,7 +117,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                             openNew={props.supportLink.external}
                                             className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
-                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white">
+                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white transition-colors duration-500">
                                                 {props.supportLink.text}
                                             </span>
                                         </Components.Link>
@@ -127,7 +127,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                         <button
                                             type="button"
                                             onClick={() => setShow(false)}
-                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white outline-0 focus:ring-2 focus:ring-yellow-400"
+                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                                         >
                                             Dismiss
                                         </button>
