@@ -75,6 +75,24 @@ describe('Update publication', () => {
         expect(updatePublication.body.licence).toEqual('CC_BY_ND');
     });
 
+    test('Can update keywords', async () => {
+        const updatePublication = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({ apiKey: 123456789 })
+            .send({ keywords: ['science', 'technology'] });
+
+        expect(updatePublication.body.keywords.length).toEqual(2);
+    });
+
+    test('Can update description', async () => {
+        const updatePublication = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({ apiKey: 123456789 })
+            .send({ description: 'Test description' });
+
+        expect(updatePublication.body.description).toEqual('Test description');
+    });
+
     test('Cannot update publication with invalid licence enum', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
@@ -100,5 +118,14 @@ describe('Update publication', () => {
             .send({ title: 'Brand new title' });
 
         expect(updatePublication.status).toEqual(404);
+    });
+
+    test('Cannot add more than 10 keywords', async () => {
+        const updatePublication = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({ apiKey: 123456789 })
+            .send({ keywords: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'] });
+
+        expect(updatePublication.status).toEqual(422);
     });
 });
