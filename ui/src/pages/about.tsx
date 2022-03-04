@@ -231,10 +231,10 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         </div>
                     </div>
                     <div className="container mx-auto mb-28 px-8 lg:w-10/12">
-                        <h4 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
+                        <h3 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
                             Smaller units of publication encourage faster sharing, easier publication writing, and
                             smaller author groups.
-                        </h4>
+                        </h3>
                         <p className="mb-20 text-center text-base text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12 lg:text-lg">
                             Allowing researchers to get more meaningful credit for what they&apos;ve done.
                         </p>
