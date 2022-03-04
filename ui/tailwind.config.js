@@ -116,7 +116,8 @@ module.exports = {
                 17: 'repeat(17, minmax(0, 1fr))',
                 18: 'repeat(18, minmax(0, 1fr))',
                 19: 'repeat(19, minmax(0, 1fr))',
-                20: 'repeat(20, minmax(0, 1fr))'
+                20: 'repeat(20, minmax(0, 1fr))',
+                21: 'repeat(21, minmax(0, 1fr))'
             }
         }
     },

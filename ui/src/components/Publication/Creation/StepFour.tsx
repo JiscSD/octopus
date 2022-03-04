@@ -19,7 +19,10 @@ const StepFour: React.FC = (): JSX.Element | null => {
     }, [content]);
 
     return content ? (
-        <div>
+        <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
+            <h2 className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                This publications full text
+            </h2>
             <Components.Editor content={content} changeCallback={updateContent} />
         </div>
     ) : null;

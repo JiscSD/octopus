@@ -28,26 +28,16 @@
     }
 
     .table table {
-        border: 1px solid red;
         @apply table-fixed;
     }
-    .table thead {
-    }
-    .table tbody {
-    }
-    .table tr {
+    .table tr:nth-child(event) {
+        @apply bg-white dark:bg-grey-800;
     }
     .table tr:nth-child(odd) {
-        /* @apply bg-yellow-400; */
-    }
-    .table th {
-        border: 1px solid green;
-    }
-    .table td {
-        border: 1px solid green;
+        @apply bg-grey-50 dark:bg-grey-900;
     }
     .table th,
     .table td {
-        @apply px-1 py-0 lg:px-2;
+        @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
 }

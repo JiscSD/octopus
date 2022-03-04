@@ -57,3 +57,4 @@ export { default as ORCIDLogInButton } from './ORCID/LogInButton';
 export { default as ORCIDLogOutButton } from './ORCID/LogOutButton';
 export { default as Modal } from './Modal';
 export { default as Editor } from './Editor';
+export { default as EditorMenuBar } from './Editor/MenuBar';
