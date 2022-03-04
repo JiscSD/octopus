@@ -132,7 +132,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
+    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'publishedDate'}&orderDirection=${
         orderDirection || 'asc'
     }`;
 
@@ -252,6 +252,9 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     <option value="updatedAt">Date updated</option>
                                     <option value="createdAt">Date created</option>
                                     {searchType === 'publications' && <option value="title">Publication title</option>}
+                                    {searchType === 'publications' && (
+                                        <option value="publishedDate">Published date</option>
+                                    )}
                                     {searchType === 'users' && <option value="firstName">First name</option>}
                                     {searchType === 'users' && <option value="lastName">Last name</option>}
                                 </select>

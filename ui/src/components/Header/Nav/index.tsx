@@ -31,7 +31,14 @@ const Nav: React.FC = (): JSX.Element => {
                     label: `${user?.firstName} ${user?.lastName}`,
                     value: '#',
                     subItems: [
-                        { label: 'Profile', value: `${Config.urls.viewUser.path}/${user.id}` },
+                        {
+                            label: 'Profile',
+                            value: `${Config.urls.viewUser.path}/${user.id}`
+                        },
+                        {
+                            label: 'Account',
+                            value: Config.urls.account.path
+                        },
                         <Components.ORCIDLogOutButton key={user.id} />
                     ]
                 }

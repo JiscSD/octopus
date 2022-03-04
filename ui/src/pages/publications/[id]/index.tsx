@@ -80,6 +80,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
             ...list,
             ...[
                 { title: 'Full text', href: 'full-text' },
+                { title: 'Licence', href: 'licence' },
                 { title: 'Conflict of interest', href: 'coi' }
             ]
         ];
@@ -228,7 +229,18 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
 
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">
-                                <Components.ParseHTML content={props.publication.content} />
+                                <Components.ParseHTML content={props.publication.content ?? ''} />
+                            </Components.PublicationContentSection>
+
+                            {/** Licence */}
+                            <Components.PublicationContentSection id="licence" title="Licence">
+                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {
+                                        Config.values.licenceTypes.find(
+                                            (licence) => licence.value === props.publication.licence
+                                        )?.nicename
+                                    }
+                                </p>
                             </Components.PublicationContentSection>
 
                             {/** Conflict of interest */}

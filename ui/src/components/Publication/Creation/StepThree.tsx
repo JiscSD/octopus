@@ -44,7 +44,7 @@ const StepThree: React.FC = (): JSX.Element => {
                     >
                         <>creative commons</>
                     </Components.Link>{' '}
-                    license do you want to select for this publication?
+                    licence do you want to select for this publication?
                 </label>
                 <div className="items-center lg:flex">
                     <select

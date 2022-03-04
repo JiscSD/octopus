@@ -55,6 +55,19 @@ export const formatPublicationType = (publicationType: Types.PublicationType): s
 };
 
 /**
+ * @description Format a publication status
+ */
+export const formatStatus = (status: Types.PublicationStatuses): string => {
+    const statuses = {
+        DRAFT: 'Draft',
+        LIVE: 'Live',
+        HIDDEN: 'Hidden'
+    };
+
+    return statuses[status];
+};
+
+/**
  * @description Returns the color for a given publication type
  */
 export const publicationColor = (publicationType: Types.PublicationType) => {

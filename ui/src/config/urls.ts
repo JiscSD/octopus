@@ -91,7 +91,16 @@ const urls = {
     viewUser: {
         path: '/authors',
         title: `${base.title}`,
+        description: '',
+        keywords: [],
         canonical: `${base.host}/authors`
+    },
+    account: {
+        path: '/account',
+        title: `${base.title}`,
+        description: '',
+        keywords: [],
+        canonical: `${base.host}/account`
     },
 
     // Static Pages

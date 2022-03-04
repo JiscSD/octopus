@@ -38,7 +38,7 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.25 }}
                             exit={{ opacity: 0 }}
-                            className="absolute top-10 right-0 z-20 rounded bg-white px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
+                            className="absolute top-10 right-0 z-20 w-max rounded bg-white px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
                         >
                             <ul>
                                 {props.items.map((item) => (

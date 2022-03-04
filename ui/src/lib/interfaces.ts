@@ -16,7 +16,7 @@ export interface NavMenuItem {
 }
 
 export interface PublicationStatus {
-    status: string;
+    status: Types.PublicationStatuses;
     createdAt: string;
     id: string;
 }
@@ -55,21 +55,24 @@ export interface LinkFrom {
     };
 }
 
-export interface Publication {
+export interface CorePublication {
     id: string;
-    url_slug: string;
-    type: Types.PublicationType;
     title: string;
-    content: string;
-    licence: Types.LicenceType;
+    type: Types.PublicationType;
     doi: string | null;
-    currentStatus: string;
     description: string;
     keywords: string[];
     createdBy: string;
     createdAt: string;
     updatedAt: string;
     publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    url_slug: string;
+    licence: Types.LicenceType;
+    content: string;
+}
+
+export interface Publication extends CorePublication {
     publicationStatus: PublicationStatus[];
     user: User;
     linkedFrom: LinkFrom[];

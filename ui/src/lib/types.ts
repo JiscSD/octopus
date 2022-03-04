@@ -45,7 +45,7 @@ export type JSONValue = string | number | boolean | { [x: string]: JSONValue } |
 
 export type SearchType = 'publications' | 'users';
 
-export type OrderBySearchOption = 'createdAt' | 'updatedAt';
+export type OrderBySearchOption = 'createdAt' | 'updatedAt' | 'publishedDate';
 
 export type OrderDirectionSearchOption = 'asc' | 'desc';
 
@@ -62,3 +62,5 @@ export type PublicationType =
 export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
 
 export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+
+export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN';
