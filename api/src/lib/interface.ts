@@ -170,6 +170,10 @@ export interface DeletePublicationPathParams {
     id: string;
 }
 
+export interface DeleteLinkPathParams {
+    id: string;
+}
+
 export type ValidStatuses = 'DRAFT' | 'LIVE';
 /**
  * ORCID

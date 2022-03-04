@@ -58,3 +58,31 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>) => {
+    try {
+        const link = await linkService.get(event.pathParameters.id);
+
+        if (!link) {
+            return response.json(404, { message: 'Link not found' });
+        }
+
+        if (
+            link.publicationFromRef.currentStatus !== 'DRAFT' ||
+            !link.publicationFromRef.publicationStatus.every((status) => status.status === 'DRAFT')
+        ) {
+            return response.json(404, { message: 'Cannot delete a link where the publicationFrom is DRAFT ' });
+        }
+
+        if (link.publicationFromRef.user.id !== event.user.id) {
+            return response.json(403, { message: 'You do not have permissions to delete this link' });
+        }
+
+        await linkService.deleteLink(event.pathParameters.id);
+
+        return response.json(200, { message: 'Link deleted' });
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
