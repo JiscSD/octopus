@@ -22,6 +22,11 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: `You do not have permission to create publication links` });
         }
 
+        // peer reviews can only linkTo one thing
+        if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
+            return response.json(404, { message: `Peer reviews can only have 1 link.` });
+        }
+
         // since we are not passing in a user, this should only return a publication if it is LIVE
         const toPublication = await publicationService.get(event.body.to);
 
