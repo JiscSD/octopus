@@ -2,7 +2,7 @@ import JWT from 'jsonwebtoken';
 
 import * as I from 'interface';
 
-const SECRET = 'TODO_CHANGE_THIS_SECRET';
+const SECRET = process.env.JWT_SECRET as string;
 
 export const createJWT = (user: I.User): string => {
     const jwt = JWT.sign(user, SECRET, { expiresIn: '8h' });

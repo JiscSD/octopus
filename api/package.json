@@ -21,7 +21,7 @@
         ]
     },
     "scripts": {
-        "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
+        "start:local": "JWT_SECRET=test nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
         "seed:local": "npx prisma migrate reset --force",
         "test:local": "stage=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"
@@ -46,10 +46,9 @@
         "luxon": "^2.3.0",
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
-        "prisma": "^3.8.0"
+        "prisma": "^3.10.0"
     },
     "devDependencies": {
-        "nodemon": "^2.0.15",
         "@types/aws-lambda": "^8.10.89",
         "@types/serverless": "^1.78.41",
         "@types/supertest": "^2.0.11",
@@ -62,21 +61,23 @@
         "eslint-plugin-prettier": "^4.0.0",
         "jest": "^27.4.7",
         "msw": "^0.36.4",
+        "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
-        "supertest": "^6.2.1",
-        "ts-jest": "^27.1.2",
-        "tsconfig-paths-webpack-plugin": "^3.5.2",
-        "webpack-node-externals": "^3.0.0",
         "serverless-domain-manager": "^5.2.0",
+        "serverless-dotenv-plugin": "^3.12.2",
         "serverless-middleware": "0.0.15",
         "serverless-offline": "^8.3.1",
         "serverless-plugin-warmup": "^6.2.0",
         "serverless-pseudo-parameters": "^2.6.1",
         "serverless-webpack": "^5.6.0",
         "source-map-support": "^0.5.21",
+        "supertest": "^6.2.1",
+        "ts-jest": "^27.1.2",
         "ts-loader": "^9.2.6",
         "ts-node": "^10.4.0",
+        "tsconfig-paths-webpack-plugin": "^3.5.2",
         "typescript": "^4.5.4",
-        "webpack": "^5.66.0"
+        "webpack": "^5.66.0",
+        "webpack-node-externals": "^3.0.0"
     }
 }

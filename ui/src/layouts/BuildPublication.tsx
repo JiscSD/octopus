@@ -149,7 +149,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     }}
                                     className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
                                 >
-                                    Peview publication
+                                    Preview publication
                                 </button>
                             </div>
                         </div>
@@ -172,7 +172,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     }}
                                     className="hidden rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:block"
                                 >
-                                    Peview publication
+                                    Preview publication
                                 </button>
                             </li>
                             {props.steps.map((step, index) => (

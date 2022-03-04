@@ -44,47 +44,32 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
 
-    const to = React.useMemo(() => {
-        return {
-            title: `Linked ${Helpers.formatPublicationType(
-                Helpers.findPreviousPublicationType(props.publication.type)
-            )}(s)`,
-            href: 'linked-to'
-        };
-    }, [props.publication.type]);
+    const linkedPublicationsTo = props.publication.linkedTo;
 
-    const from = React.useMemo(() => {
-        return {
-            title: `Linked ${Helpers.formatPublicationType(
-                Helpers.findNextPublicationType(props.publication.type)
-            )}(s)`,
-            href: 'linked-from'
-        };
-    }, [props.publication.type]);
+    const linkedPublicationsFrom = props.publication.linkedFrom.filter(
+        (link) => link.publicationFromRef.type !== 'PROBLEM' && link.publicationFromRef.type !== 'PEER_REVIEW'
+    );
 
-    const sectionList = React.useMemo(() => {
-        let list = [{ title: 'Authors', href: 'authors' }];
+    const peerReviews = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
+    const problems = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PROBLEM');
 
-        switch (props.publication.type) {
-            case 'PROBLEM':
-                list = [...list, from];
-                break;
-            case 'PEER_REVIEW':
-                list = [...list, to];
-                break;
-            default:
-                list = [...list, to, from];
-        }
+    const list = [];
 
-        return [
-            ...list,
-            ...[
-                { title: 'Full text', href: 'full-text' },
-                { title: 'Licence', href: 'licence' },
-                { title: 'Conflict of interest', href: 'coi' }
-            ]
-        ];
-    }, [props.publication.type, to, from]);
+    const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
+    const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
+
+    if (showProblems) list.push({ title: 'Problems', href: 'problems' });
+
+    if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
+
+    const sectionList = [
+        { title: 'Authors', href: 'authors' },
+        { title: 'Linked publications', href: 'linked-publications' },
+        ...list,
+        { title: 'Full text', href: 'full-text' },
+        { title: 'Licence', href: 'licence' },
+        { title: 'Conflict of interest', href: 'coi' }
+    ];
 
     return (
         <>
@@ -163,69 +148,100 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                 </Components.Link>
                             </Components.PublicationContentSection>
 
-                            {/** Linked to publications TODO: improve logic */}
-                            {props.publication.type !== 'PROBLEM' && (
-                                <Components.PublicationContentSection id="linked-to" title={to.title}>
-                                    <>
-                                        {props.publication.linkedTo.length ? (
-                                            <Components.List ordered={false}>
-                                                {props.publication.linkedTo.map((link) => (
-                                                    <Components.ListItem key={link.id}>
+                            {/* Linked publications */}
+                            <Components.PublicationContentSection id="linked-publications" title="Linked publications">
+                                <>
+                                    {linkedPublicationsTo.length ? (
+                                        <Components.List ordered={false}>
+                                            <>
+                                                {linkedPublicationsTo.map((link) => (
+                                                    <Components.ListItem
+                                                        key={link.id}
+                                                        className="flex items-center font-semibold leading-3 text-pink-500"
+                                                    >
+                                                        <span className="mr-2 text-sm">
+                                                            {Helpers.formatPublicationType(link.publicationToRef.type)}
+                                                        </span>
                                                         <Components.Link
                                                             href={`${Config.urls.viewPublication.path}/${link.publicationToRef.id}`}
-                                                            className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                            className="flex w-fit items-end rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                                         >
-                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                            <span className="block leading-3 text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                                                 {link.publicationToRef.title}
                                                             </span>
                                                         </Components.Link>
                                                     </Components.ListItem>
                                                 ))}
-                                            </Components.List>
-                                        ) : (
-                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                {`This ${Helpers.formatPublicationType(
-                                                    props.publication.type
-                                                )} does not have any linked to publications.`}
-                                            </p>
-                                        )}
-                                    </>
-                                </Components.PublicationContentSection>
-                            )}
-
-                            {/** Linked from publications  - should not include problems or peer reviews, as they have their own section*/}
-                            {props.publication.type !== 'PEER_REVIEW' && (
-                                <Components.PublicationContentSection id="linked-from" title={from.title}>
-                                    <>
-                                        {props.publication.linkedFrom.length ? (
-                                            <Components.List ordered={false}>
-                                                {props.publication.linkedFrom.map((link) => (
-                                                    <Components.ListItem key={link.id}>
+                                                {linkedPublicationsFrom.map((link) => (
+                                                    <Components.ListItem
+                                                        key={link.id}
+                                                        className="flex items-center font-semibold leading-3 text-pink-500"
+                                                    >
+                                                        <span className="mr-2 text-sm">
+                                                            {Helpers.formatPublicationType(
+                                                                link.publicationFromRef.type
+                                                            )}
+                                                        </span>
                                                         <Components.Link
                                                             href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
                                                             className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                                         >
                                                             <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                                {link.publicationFromRef.title}{' '}
+                                                                {link.publicationFromRef.title}
                                                             </span>
                                                         </Components.Link>
                                                     </Components.ListItem>
                                                 ))}
-                                            </Components.List>
-                                        ) : (
-                                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                {`This ${Helpers.formatPublicationType(
-                                                    props.publication.type
-                                                )} does not have any linked from publications.`}
-                                            </p>
-                                        )}
-                                    </>
+                                            </>
+                                        </Components.List>
+                                    ) : (
+                                        <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                            {`This ${Helpers.formatPublicationType(
+                                                props.publication.type
+                                            )} does not have any linked to publications.`}
+                                        </p>
+                                    )}
+                                </>
+                            </Components.PublicationContentSection>
+
+                            {/* Linked from problems */}
+                            {!!showProblems && (
+                                <Components.PublicationContentSection id="problems" title="Linked problems">
+                                    <Components.List ordered={false}>
+                                        {problems.map((link) => (
+                                            <Components.ListItem key={link.id}>
+                                                <Components.Link
+                                                    href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
+                                                    className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                >
+                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                        {link.publicationFromRef.title}{' '}
+                                                    </span>
+                                                </Components.Link>
+                                            </Components.ListItem>
+                                        ))}
+                                    </Components.List>
                                 </Components.PublicationContentSection>
                             )}
 
-                            {/* TODO: PEER REVIEWS - loop through linksFrom */}
-
-                            {/* TODO: PROBLEMS - loop through linksFrom */}
+                            {!!showPeerReviews && (
+                                <Components.PublicationContentSection id="peer-reviews" title="Peer reviews">
+                                    <Components.List ordered={false}>
+                                        {peerReviews.map((link) => (
+                                            <Components.ListItem key={link.id}>
+                                                <Components.Link
+                                                    href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
+                                                    className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                                                >
+                                                    <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                        {link.publicationFromRef.title}{' '}
+                                                    </span>
+                                                </Components.Link>
+                                            </Components.ListItem>
+                                        ))}
+                                    </Components.List>
+                                </Components.PublicationContentSection>
+                            )}
 
                             {/** Full text */}
                             <Components.PublicationContentSection id="full-text" title="Full text">

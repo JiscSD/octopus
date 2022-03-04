@@ -141,7 +141,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                         key={result.id}
                                                         id={result.id}
                                                         title={result.title}
-                                                        excerpt={`${result.user.firstName}. ${result.user.lastName}`}
+                                                        excerpt={`${result.user.firstName[0]}. ${result.user.lastName}`}
                                                         link={`${Config.urls.viewPublication.path}/${result.id}`}
                                                         meta={Helpers.formatPublicationType(result.type)}
                                                         date={Helpers.formatDate(result.publishedDate)}
@@ -158,7 +158,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                     <Components.CommandPaletteResult
                                                         key={result.id}
                                                         id={result.id}
-                                                        title={`${result.firstName[0]}. ${result?.lastName}`}
+                                                        title={`${result.firstName} ${result?.lastName}`}
                                                         link={`${Config.urls.viewUser.path}/${result.id}`}
                                                         accentColor={'text-purple-300'}
                                                         className={`${index === 0 ? 'mt-2' : ''} ${

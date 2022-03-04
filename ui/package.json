@@ -17,6 +17,7 @@
         "dev:ssl": "local-ssl-proxy --source 3001 --target 3000",
         "build": "next build",
         "start": "next start -p 3000",
+        "start:int": "NEXT_PUBLIC_ENV=int next start -p 3000",
         "lint": "next lint",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/"

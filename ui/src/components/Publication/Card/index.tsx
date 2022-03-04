@@ -25,7 +25,7 @@ const Card: React.FC<Props> = (props): JSX.Element => {
                         : props.publication.title}
                 </p>
                 <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white">
-                    {props.publication.user.firstName}. {props.publication.user.lastName}
+                    {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                 </span>
                 <div className="flex items-center justify-between">
                     <span className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
