@@ -158,7 +158,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                                     <Components.CommandPaletteResult
                                                         key={result.id}
                                                         id={result.id}
-                                                        title={`${result.firstName}. ${result.lastName}`}
+                                                        title={`${result.firstName[0]}. ${result.lastName}`}
                                                         link={`${Config.urls.viewUser.path}/${result.id}`}
                                                         accentColor={'text-purple-300'}
                                                         className={`${index === 0 ? 'mt-2' : ''} ${
