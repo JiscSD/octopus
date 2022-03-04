@@ -10,7 +10,7 @@ const Terms: Types.NextPage = (): JSX.Element => {
         <>
             <Head>
                 <meta name="description" content={`${Config.urls.terms.description}`} />
-                <meta name="keywords" content={`${Config.urls.terms.keywords}`} />
+                <meta name="keywords" content={`${Config.urls.terms.keywords.join(',')}`} />
                 <link rel="canonical" href={`${Config.urls.terms.canonical}`} />
                 <title>{Config.urls.terms.title}</title>
             </Head>
@@ -23,7 +23,7 @@ const Terms: Types.NextPage = (): JSX.Element => {
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
                     <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-36">
-                        <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 dark:text-white lg:w-8/12">
+                        <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white lg:w-8/12">
                             <Components.PageTitle text="Terms" />
                             <h2 className="text-xl font-medium">Licence</h2>
                             <p className="mb-4">
