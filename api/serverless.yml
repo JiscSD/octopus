@@ -148,3 +148,11 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}/publications
                   method: get
                   cors: true
+    deleteLink:
+        handler: src/components/link/routes.deleteLink
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/links/{id}
+                  method: delete
+                  cors: true

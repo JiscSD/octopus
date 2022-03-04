@@ -22,6 +22,11 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: `You do not have permission to create publication links` });
         }
 
+        // peer reviews can only linkTo one thing
+        if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
+            return response.json(404, { message: `Peer reviews can only have 1 link.` });
+        }
+
         // since we are not passing in a user, this should only return a publication if it is LIVE
         const toPublication = await publicationService.get(event.body.to);
 
@@ -53,6 +58,34 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         const link = await linkService.create(event.body.from, event.body.to);
 
         return response.json(200, link);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>) => {
+    try {
+        const link = await linkService.get(event.pathParameters.id);
+
+        if (!link) {
+            return response.json(404, { message: 'Link not found' });
+        }
+
+        if (
+            link.publicationFromRef.currentStatus !== 'DRAFT' ||
+            !link.publicationFromRef.publicationStatus.every((status) => status.status === 'DRAFT')
+        ) {
+            return response.json(404, { message: 'Cannot delete a link where the publicationFrom is LIVE ' });
+        }
+
+        if (link.publicationFromRef.user.id !== event.user.id) {
+            return response.json(403, { message: 'You do not have permissions to delete this link' });
+        }
+
+        await linkService.deleteLink(event.pathParameters.id);
+
+        return response.json(200, { message: 'Link deleted' });
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
