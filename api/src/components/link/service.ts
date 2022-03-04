@@ -22,6 +22,44 @@ export const doesLinkExist = async (fromPublicationId: string, toPublicationId: 
     return link;
 };
 
+export const deleteLink = async (id: string) => {
+    const deletedLink = await prisma.links.delete({
+        where: {
+            id
+        }
+    });
+
+    return deletedLink;
+};
+
+export const get = async (id: string) => {
+    const link = await prisma.links.findFirst({
+        include: {
+            publicationFromRef: {
+                select: {
+                    id: true,
+                    user: true,
+                    currentStatus: true,
+                    publicationStatus: true
+                }
+            },
+            publicationToRef: {
+                select: {
+                    id: true,
+                    user: true,
+                    currentStatus: true,
+                    publicationStatus: true
+                }
+            }
+        },
+        where: {
+            id
+        }
+    });
+
+    return link;
+};
+
 export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {
     const publicationTypes = [
         'PROBLEM',
