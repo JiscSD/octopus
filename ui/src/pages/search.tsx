@@ -198,8 +198,8 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
             <Head>
                 <meta name="robots" content="noindex" />
                 <meta name="description" content={Config.urls.search.description} />
-                <meta name="keywords" content={`${Config.urls.search.keywords.join(', ')}`} />
-                <link rel="canonical" href={`${Config.urls.search.canonical}`} />
+                <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.search.canonical} />
                 <title>{Config.urls.search.title}</title>
             </Head>
 

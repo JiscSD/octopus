@@ -91,8 +91,8 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
     <>
         <Head>
             <meta name="description" content={Config.urls.faq.description} />
-            <meta name="keywords" content={`${Config.urls.faq.keywords.join(', ')}`} />
-            <link rel="canonical" href={`${Config.urls.faq.canonical}`} />
+            <meta name="keywords" content={Config.urls.faq.keywords.join(', ')} />
+            <link rel="canonical" href={Config.urls.faq.canonical} />
             <title>{Config.urls.faq.title}</title>
         </Head>
 

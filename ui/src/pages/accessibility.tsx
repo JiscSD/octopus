@@ -9,9 +9,9 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
-                <meta name="description" content={`${Config.urls.accessibility.description}`} />
-                <meta name="keywords" content={`${Config.urls.accessibility.keywords.join(', ')}`} />
-                <link rel="canonical" href={`${Config.urls.accessibility.canonical}`} />
+                <meta name="description" content={Config.urls.accessibility.description} />
+                <meta name="keywords" content={Config.urls.accessibility.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.accessibility.canonical} />
                 <title>{Config.urls.accessibility.title}</title>
             </Head>
 
