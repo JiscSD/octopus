@@ -201,6 +201,16 @@ export const get = async (id: string) => {
     return publication;
 };
 
+export const deletePublication = async (id: string) => {
+    const deletedPublication = await prisma.publication.delete({
+        where: {
+            id
+        }
+    });
+
+    return deletedPublication;
+};
+
 export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
     const publication = await prisma.publication.create({
         data: {

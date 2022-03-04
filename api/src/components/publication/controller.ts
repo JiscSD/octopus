@@ -40,6 +40,44 @@ export const get = async (
     }
 };
 
+export const deletePublication = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeletePublicationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        if (!publication) {
+            return response.json(403, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        if (publication.user.id !== event.user.id) {
+            return response.json(403, {
+                message: 'You do not have permission to delete this publication.'
+            });
+        }
+
+        // the logic here is a bit odd, but the currentStatus and publicationStatus array are not intrisinsicly linked
+        // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
+        // has only ever been draft
+        if (
+            publication.currentStatus !== 'DRAFT' ||
+            !publication.publicationStatus.every((status) => status.status === 'DRAFT')
+        ) {
+            return response.json(403, {
+                message: 'A publication can only be deleted if has only ever been DRAFT.'
+            });
+        }
+
+        await publicationService.deletePublication(event.pathParameters.id);
+
+        return response.json(201, { message: `Publication ${event.pathParameters.id} deleted` });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>
 ): Promise<I.JSONResponse> => {
