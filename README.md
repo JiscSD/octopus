@@ -1,7 +1,5 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus</h1>
 
-![api-tasks](https://github.com/JiscSD/octopus/actions/workflows/api-tasks.yml/badge.svg)
-
 ![ui-tasks](https://github.com/JiscSD/octopus/actions/workflows/ui-tasks.yml/badge.svg)
 
 ---
