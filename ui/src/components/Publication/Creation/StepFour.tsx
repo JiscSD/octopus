@@ -1,9 +1,8 @@
 import React from 'react';
 
 import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
 import * as Stores from '@stores';
+import * as Assets from '@assets';
 import * as Types from '@types';
 
 const StepFour: React.FC = (): JSX.Element | null => {
@@ -14,18 +13,28 @@ const StepFour: React.FC = (): JSX.Element | null => {
         (state: Types.PublicationCreationStoreType) => state.updateContent
     );
 
+    const [loading, setLoading] = React.useState(true);
+
+    // We need to watch the content from the store as it goes from null to the default state of '' if this is a new publication.
+    // Because of that, lets make use of it by adding a loading state with a loading icon
     React.useEffect(() => {
-        console.log(content);
+        setTimeout(() => setLoading(false), 800);
     }, [content]);
 
-    return content ? (
+    return (
         <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
             <h2 className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
                 This publications full text
             </h2>
-            <Components.Editor content={content} changeCallback={updateContent} />
+            {!loading ? (
+                <Components.Editor content={content} changeCallback={updateContent} />
+            ) : (
+                <div className="mt-16 flex animate-bounce justify-center">
+                    <Assets.Logo width={60} height={60} className="fill-teal-500" />
+                </div>
+            )}
         </div>
-    ) : null;
+    );
 };
 
 export default StepFour;
