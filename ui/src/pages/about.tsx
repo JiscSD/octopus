@@ -119,7 +119,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
     <>
         <Head>
             <meta name="description" content={Config.urls.about.description} />
-            <meta name="keywords" content={`${Config.urls.about.keywords.join(',')}`} />
+            <meta name="keywords" content={`${Config.urls.about.keywords.join(', ')}`} />
             <link rel="canonical" href={`${Config.urls.about.canonical}`} />
             <title>{Config.urls.about.title}</title>
         </Head>

@@ -10,7 +10,7 @@ const Privacy: Types.NextPage = (): JSX.Element => {
         <>
             <Head>
                 <meta name="description" content={`${Config.urls.privacy.description}`} />
-                <meta name="keywords" content={`${Config.urls.privacy.keywords.join(',')}`} />
+                <meta name="keywords" content={`${Config.urls.privacy.keywords.join(', ')}`} />
                 <link rel="canonical" href={`${Config.urls.privacy.canonical}`} />
                 <title>{Config.urls.privacy.title}</title>
             </Head>
