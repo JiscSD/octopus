@@ -80,8 +80,8 @@ const Account: Types.NextPage<Props> = (props): JSX.Element => {
                                 {props.user.firstName} {props.user.lastName}
                             </h1>
                         </div>
-                        <div className="flex items-end">
-                            <h2 className="mr-4 block border-r border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white">
+                        <div className="items-end lg:flex">
+                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white lg:mb-0 lg:border-r">
                                 ORCID: <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                             </h2>
                             <Components.Link
