@@ -3,6 +3,7 @@ import Head from 'next/head';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/outline';
 
+import * as Assets from '@assets';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -37,6 +38,46 @@ type Props = {
     publicationType: Types.PublicationType | null;
     token: string;
 };
+
+const publicationTypes = [
+    {
+        id: 'PROBLEM',
+        heading: 'Research Problem',
+        content: 'a neatly defined scientific problem.'
+    },
+    {
+        id: 'HYPOTHESIS',
+        heading: 'Hypothesis',
+        content:
+            'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
+    },
+    {
+        id: 'PROTOCOL',
+        heading: 'Protocol',
+        content: 'a practical method of testing an existing published Hypothesis.'
+    },
+    {
+        id: 'DATA',
+        heading: 'Data',
+        content:
+            'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+    },
+    {
+        id: 'ANALYSIS',
+        heading: 'Analysis',
+        content: 'a statistical or thematic analysis of existing published Data or Results.'
+    },
+    {
+        id: 'INTERPRETATION',
+        heading: 'Interpretation',
+        content: 'a discussion around an existing published Analysis.'
+    },
+    {
+        id: 'REAL_WORLD_APPLICATION',
+        heading: 'Real-world Application',
+        content: 'real world applications arising from an existing published Interpretation.'
+    }
+];
 
 const Create: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
@@ -107,11 +148,32 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                 </li>
 
                                 <li className="mb-4 text-grey-600 transition-colors duration-500 dark:text-grey-50">
-                                    <span className="font-medium">Publication type</span>
-                                    <ul className="ml-4 list-disc">
-                                        <li className="ml-2 py-2">This is the type of publication</li>
-                                        <li className="ml-2 pb-2">Some other info about publication types</li>
-                                    </ul>
+                                    <span className="font-medium">Publication types</span>
+                                    <div className="mx-auto">
+                                        <div className="container grid grid-cols-1 gap-1">
+                                            {publicationTypes.map((publicationType) => (
+                                                <div className="mt-6" key={publicationType.id}>
+                                                    <div className="flex items-start gap-2 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white">
+                                                        <OutlineIcons.LinkIcon className="h-5 w-5 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 dark:bg-teal-50 dark:text-black" />
+                                                        {publicationType.heading}
+                                                    </div>
+                                                    <div className="mt-1 block pl-8 text-xs leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200">
+                                                        {publicationType.content}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <div className="mt-6">
+                                                <div className="flex items-start gap-2 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white">
+                                                    <OutlineIcons.LinkIcon className="h-5 w-5 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
+                                                    Peer Review
+                                                </div>
+                                                <div className="mt-1 block pl-8 text-xs leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200">
+                                                    A considered, detailed review of any of the above kinds of
+                                                    publication.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </aside>
