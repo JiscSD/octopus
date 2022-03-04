@@ -64,6 +64,8 @@ export interface Publication {
     licence: Types.LicenceType;
     doi: string | null;
     currentStatus: string;
+    description: string;
+    keywords: string[];
     createdBy: string;
     createdAt: string;
     updatedAt: string;

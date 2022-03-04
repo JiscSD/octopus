@@ -57,7 +57,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
                 </h2>
 
                 <p className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
-                    {parse(Helpers.truncateString(props.publication.content, 370))}
+                    {props.publication.description || parse(Helpers.truncateString(props.publication.content, 370))}
                 </p>
 
                 <span className="flex text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
