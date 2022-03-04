@@ -252,6 +252,9 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     <option value="updatedAt">Date updated</option>
                                     <option value="createdAt">Date created</option>
                                     {searchType === 'publications' && <option value="title">Publication title</option>}
+                                    {searchType === 'publications' && (
+                                        <option value="publishedDate">Published date</option>
+                                    )}
                                     {searchType === 'users' && <option value="firstName">First name</option>}
                                     {searchType === 'users' && <option value="lastName">Last name</option>}
                                 </select>
