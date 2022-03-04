@@ -24,6 +24,7 @@ export { default as PublicationRatings } from './Publication/Ratings';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
+export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationBreakdown } from './Publication/Breakdown';
 export { default as PublicationVisualChain } from './Publication/VisualChain';
