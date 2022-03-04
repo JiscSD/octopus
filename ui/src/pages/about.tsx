@@ -119,7 +119,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
     <>
         <Head>
             <meta name="description" content={Config.urls.about.description} />
-            <meta name="keywords" content={Config.urls.about.keywords} />
+            <meta name="keywords" content={`${Config.urls.about.keywords.join(',')}`} />
             <link rel="canonical" href={`${Config.urls.about.canonical}`} />
             <title>{Config.urls.about.title}</title>
         </Head>
@@ -133,7 +133,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                 waveFillBottom="fill-teal-300 dark:fill-grey-900 transition-colors duration-500"
             >
                 {/* Learn about Octopus section */}
-                <div className="container mx-2 px-8 pt-8 pb-8 lg:mx-auto lg:pt-24">
+                <div className="container px-8 pt-8 pb-8 lg:mx-auto lg:pt-24">
                     <h1 className="mb-10 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white lg:text-5xl ">
                         Learn about Octopus.
                     </h1>
@@ -231,10 +231,10 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         </div>
                     </div>
                     <div className="container mx-auto mb-28 px-8 lg:w-10/12">
-                        <h4 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
+                        <h3 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
                             Smaller units of publication encourage faster sharing, easier publication writing, and
                             smaller author groups.
-                        </h4>
+                        </h3>
                         <p className="mb-20 text-center text-base text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12 lg:text-lg">
                             Allowing researchers to get more meaningful credit for what they&apos;ve done.
                         </p>
