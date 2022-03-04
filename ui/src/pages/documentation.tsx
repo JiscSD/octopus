@@ -9,9 +9,9 @@ import * as Types from '@types';
 const Documentation: Types.NextPage = (): JSX.Element => (
     <>
         <Head>
-            <meta name="description" content="" />
-            <meta name="keywords" content="" />
-            <link rel="canonical" href={`${Config.urls.documentation.canonical}`} />
+            <meta name="description" content={Config.urls.documentation.description} />
+            <meta name="keywords" content={Config.urls.documentation.keywords.join(', ')} />
+            <link rel="canonical" href={Config.urls.documentation.canonical} />
             <title>{Config.urls.documentation.title}</title>
         </Head>
 

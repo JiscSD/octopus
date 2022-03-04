@@ -14,7 +14,8 @@ const updatePublicationSchema: I.Schema = {
             type: 'string'
         },
         description: {
-            type: 'string'
+            type: 'string',
+            maxLength: 160
         },
         keywords: {
             type: 'array',

@@ -152,8 +152,8 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
         <>
             <Head>
                 <meta name="description" content={Config.urls.createPublication.description} />
-                <meta name="keywords" content={`${Config.urls.createPublication.keywords.join(',')}`} />
-                <link rel="canonical" href={`${Config.urls.createPublication.canonical}`} />
+                <meta name="keywords" content={Config.urls.createPublication.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.createPublication.canonical} />
                 <title>{Config.urls.createPublication.title}</title>
             </Head>
 

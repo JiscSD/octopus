@@ -9,9 +9,9 @@ const Terms: Types.NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
-                <meta name="description" content={`${Config.urls.terms.description}`} />
-                <meta name="keywords" content={`${Config.urls.terms.keywords.join(',')}`} />
-                <link rel="canonical" href={`${Config.urls.terms.canonical}`} />
+                <meta name="description" content={Config.urls.terms.description} />
+                <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.terms.canonical} />
                 <title>{Config.urls.terms.title}</title>
             </Head>
 

@@ -89,8 +89,8 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
     return (
         <>
             <Head>
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
+                <meta name="description" content={props.publication.description || ''} />
+                <meta name="keywords" content={props.publication.keywords.join(', ') || ''} />
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${props.publication.url_slug}`} />
                 <title>{`${props.publication.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>

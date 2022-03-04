@@ -74,9 +74,9 @@ const Browse: Types.NextPage<Props> = (props): JSX.Element => {
     return (
         <>
             <Head>
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
-                <link rel="canonical" href={`${Config.urls.browsePublications.canonical}`} />
+                <meta name="description" content={Config.urls.browsePublications.description} />
+                <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.browsePublications.canonical} />
                 <title>{Config.urls.browsePublications.title}</title>
             </Head>
 

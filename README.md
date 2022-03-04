@@ -1,7 +1,5 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus</h1>
 
-![api-tasks](https://github.com/JiscSD/octopus/actions/workflows/api-tasks.yml/badge.svg)
-
 ![ui-tasks](https://github.com/JiscSD/octopus/actions/workflows/ui-tasks.yml/badge.svg)
 
 ---
@@ -170,4 +168,4 @@ Everyone interacting with this codebase should adhere to our [Code of Conduct](.
 ## Licence
 
 Octopus is available under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  
-See [COPYING](https://github.com/JiscSD/octopus/COPYING) for the full licence text.
+See [COPYING](/COPYING) for the full licence text.

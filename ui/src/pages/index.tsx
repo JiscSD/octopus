@@ -21,7 +21,7 @@ const Home: Types.NextPage = (): JSX.Element => {
         <>
             <Head>
                 <meta name="description" content={Config.urls.home.description} />
-                <meta name="keywords" content={`${Config.urls.home.keywords.join(',')}`} />
+                <meta name="keywords" content={Config.urls.home.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.home.canonical} />
                 <title>{Config.urls.home.title}</title>
             </Head>

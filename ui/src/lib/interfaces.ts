@@ -60,6 +60,9 @@ export interface CorePublication {
     title: string;
     type: Types.PublicationType;
     doi: string | null;
+    description: string;
+    keywords: string[];
+    createdBy: string;
     createdAt: string;
     updatedAt: string;
     publishedDate: string;

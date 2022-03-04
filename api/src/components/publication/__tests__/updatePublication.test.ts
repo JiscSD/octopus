@@ -128,4 +128,16 @@ describe('Update publication', () => {
 
         expect(updatePublication.status).toEqual(422);
     });
+
+    test('Cannot add more than 160 characters into a description', async () => {
+        const updatePublication = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({ apiKey: 123456789 })
+            .send({
+                description:
+                    'testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123x'
+            });
+
+        expect(updatePublication.status).toEqual(422);
+    });
 });
