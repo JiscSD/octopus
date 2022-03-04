@@ -95,12 +95,12 @@ const urls = {
         keywords: [],
         canonical: `${base.host}/authors`
     },
-    viewUserManage: {
-        path: 'manage',
+    account: {
+        path: '/account',
         title: `${base.title}`,
         description: '',
         keywords: [],
-        canonical: `${base.host}/manage`
+        canonical: `${base.host}/account`
     },
 
     // Static Pages

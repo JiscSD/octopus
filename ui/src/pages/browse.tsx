@@ -46,7 +46,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             Config.values.publicationTypes.join(),
             5,
             0,
-            'createdAt',
+            'publishedDate',
             'asc'
         );
         latest = latestResponse.data as Interfaces.Publication[];

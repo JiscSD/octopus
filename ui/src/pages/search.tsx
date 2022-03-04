@@ -132,7 +132,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
+    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'publishedDate'}&orderDirection=${
         orderDirection || 'asc'
     }`;
 

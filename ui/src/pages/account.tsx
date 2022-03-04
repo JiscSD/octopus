@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import JWT from 'jsonwebtoken';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -10,26 +11,18 @@ import * as Types from '@types';
 import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
     const token = Helpers.guardPrivateRoute(context);
+    // If logged in, grab the token from cookies
+    const decodedJWT = JWT.decode(token);
 
-    const requestId = context.query.id;
     let user: Interfaces.User | null = null;
     let error: string | null = null;
 
-    // // id put this off into a new guard like the above, but:
-    // try {
-    //     const response = await api.get('/users/SOME_ID/check', {token});
-    //     // either true or error response
-    // } catch (err) {
-    //     return {
-    //         notFound: true
-    //     }
-    // }
-
+    // If there is a cookie with the correct key, send that token with the request, it will either pass or throw
     try {
-        // Furture features may include multiple requests, flags etc... Maybe we wrap in a promise.all
-        // or get the page load what it can and show errors in places it cant
-        const response = await api.get(`${Config.endpoints.users}/${requestId}/publications`, token);
+        // @ts-ignore JWT.decode specifies a string return, but we know it will be an object with an id
+        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}/publications`, token);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -53,7 +46,7 @@ type Props = {
     user: Interfaces.User;
 };
 
-const Manage: Types.NextPage<Props> = (props): JSX.Element => {
+const Account: Types.NextPage<Props> = (props): JSX.Element => {
     const livePublications = React.useMemo(
         () => props.user.Publication.filter((publication) => publication.currentStatus === 'LIVE'),
         [props.user.Publication]
@@ -68,10 +61,10 @@ const Manage: Types.NextPage<Props> = (props): JSX.Element => {
         <>
             <Head>
                 <meta name="robots" content="noindex, nofollow" />
-                <meta name="description" content={Config.urls.viewUserManage.description} />
-                <meta name="keywords" content={Config.urls.viewUserManage.keywords.join(',')} />
-                <link rel="canonical" href={`${Config.urls.viewUserManage.canonical}/${props.user.id}`} />
-                <title>{`Author: ${props.user.orcid} - ${Config.urls.viewUserManage.title}`}</title>
+                <meta name="description" content={Config.urls.account.description} />
+                <meta name="keywords" content={Config.urls.account.keywords.join(',')} />
+                <link rel="canonical" href={Config.urls.account.canonical} />
+                <title>{`Author: ${props.user.orcid} - ${Config.urls.account.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <Components.SectionTwo
@@ -155,4 +148,4 @@ const Manage: Types.NextPage<Props> = (props): JSX.Element => {
     );
 };
 
-export default Manage;
+export default Account;
