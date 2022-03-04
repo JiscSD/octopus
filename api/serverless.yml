@@ -6,6 +6,7 @@ plugins:
     - serverless-webpack
     - serverless-offline
     - serverless-pseudo-parameters
+    - serverless-dotenv-plugin
 
 provider:
     name: aws
