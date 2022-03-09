@@ -192,18 +192,20 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                     ))}
                                 </select>
                             </div>
-                            {publicationTypes.map((publicationType) => (
-                                <div className="mt-8" key={publicationType.id}>
-                                    <Components.Link
-                                        href="#"
-                                        openNew={true}
-                                        className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
-                                    >
-                                        <strong>{publicationType.heading}</strong>
-                                    </Components.Link>
-                                    <span className="block text-sm lg:w-10/12">{publicationType.content}</span>
-                                </div>
-                            ))}
+                            <div className="text-grey-800 transition-colors duration-500 dark:text-white">
+                                {publicationTypes.map((publicationType) => (
+                                    <div className="mt-8" key={publicationType.id}>
+                                        <Components.Link
+                                            href="#"
+                                            openNew={true}
+                                            className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
+                                        >
+                                            <strong>{publicationType.heading}</strong>
+                                        </Components.Link>
+                                        <span className="block text-sm lg:w-10/12">{publicationType.content}</span>
+                                    </div>
+                                ))}
+                            </div>
                             <label htmlFor="confirm" className="my-6 flex items-center">
                                 <input
                                     required
