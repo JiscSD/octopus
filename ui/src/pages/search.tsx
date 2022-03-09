@@ -210,7 +210,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36 lg:pb-0">
+                    <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-48 lg:pb-0">
                         <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
                     </section>
                     <section

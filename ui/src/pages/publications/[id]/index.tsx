@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/outline';
@@ -101,10 +101,10 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
 
                             <div className="mt-12 print:hidden lg:flex">
                                 <span className="mr-16 flex self-center font-bold tracking-wider text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    DOI
-                                    <span className="ml-2 block font-medium text-teal-500">
-                                        {props.publication.doi}
-                                    </span>
+                                    DOI:
+                                    <Components.Link href="#" openNew={true}>
+                                        <span className="ml-2 block font-medium text-teal-500">coming soon...</span>
+                                    </Components.Link>
                                 </span>
                                 {props.publication.type !== 'PEER_REVIEW' && (
                                     <Components.ActionButton
@@ -159,14 +159,14 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                         key={link.id}
                                                         className="flex items-center font-semibold leading-3 text-pink-500"
                                                     >
-                                                        <span className="mr-2 text-sm">
+                                                        <span className="mr-4 text-sm">
                                                             {Helpers.formatPublicationType(link.publicationToRef.type)}
                                                         </span>
                                                         <Components.Link
                                                             href={`${Config.urls.viewPublication.path}/${link.publicationToRef.id}`}
                                                             className="flex w-fit items-end rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                                                         >
-                                                            <span className="block leading-3 text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                                            <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                                                 {link.publicationToRef.title}
                                                             </span>
                                                         </Components.Link>
@@ -177,7 +177,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                         key={link.id}
                                                         className="flex items-center font-semibold leading-3 text-pink-500"
                                                     >
-                                                        <span className="mr-2 text-sm">
+                                                        <span className="mr-4 text-sm">
                                                             {Helpers.formatPublicationType(
                                                                 link.publicationFromRef.type
                                                             )}

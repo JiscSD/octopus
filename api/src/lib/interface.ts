@@ -161,9 +161,29 @@ export interface AuthorizeRequestBody {
     code: string;
 }
 
+export type UserDates = {
+    month?: string | null;
+    day?: string | null;
+    year?: string | null;
+};
+
 export interface UpdateUserInformation {
     firstName: string;
     lastName: string;
+    employment: Array<{
+        organisation?: string | null;
+        role?: string | null;
+        department?: string | null;
+        startDate?: UserDates | null;
+        endDate?: UserDates | null;
+    }>;
+    education: Array<{
+        organisation?: string | null;
+        role?: string | null;
+        department?: string | null;
+        startDate?: UserDates | null;
+        endDate?: UserDates | null;
+    }>;
 }
 
 export interface DeletePublicationPathParams {
@@ -179,11 +199,8 @@ export type ValidStatuses = 'DRAFT' | 'LIVE';
  * ORCID
  */
 
-type ORCIDName = {
-    errors: string[];
+type OrcidValue = {
     value: string;
-    required: boolean;
-    getRequiredMessage: null;
 };
 
 /**
@@ -192,17 +209,58 @@ type ORCIDName = {
  * @see https://orcid.org/PUT_ORCID_ID_HERE/public-record.json
  */
 export interface ORCIDUser {
-    title: string;
-    displayName?: string;
-    names: {
-        visibility: {
-            errors: string[];
-            required: boolean;
-            getRequiredMessage: null;
-            visibility: string;
+    person: {
+        name: {
+            'given-names'?: OrcidValue;
+            'family-name'?: OrcidValue;
         };
-        givenNames: ORCIDName;
-        familyName: ORCIDName;
-        creditName: ORCIDName;
+    };
+    'activities-summary': {
+        employments: {
+            'affiliation-group': Array<{
+                summaries: Array<{
+                    'employment-summary': {
+                        'department-name'?: string;
+                        'role-title'?: string;
+                        'start-date'?: {
+                            year: OrcidValue;
+                            month: OrcidValue;
+                            day: OrcidValue;
+                        };
+                        'end-date'?: {
+                            year: OrcidValue;
+                            month: OrcidValue;
+                            day: OrcidValue;
+                        };
+                        organization: {
+                            name?: string;
+                        };
+                    };
+                }>;
+            }>;
+        };
+        educations: {
+            'affiliation-group': Array<{
+                summaries: Array<{
+                    'education-summary': {
+                        'department-name'?: string;
+                        'role-title'?: string;
+                        'start-date'?: {
+                            year: OrcidValue;
+                            month: OrcidValue;
+                            day: OrcidValue;
+                        };
+                        'end-date'?: {
+                            year: OrcidValue;
+                            month: OrcidValue;
+                            day: OrcidValue;
+                        };
+                        organization: {
+                            name?: string;
+                        };
+                    };
+                }>;
+            }>;
+        };
     };
 }

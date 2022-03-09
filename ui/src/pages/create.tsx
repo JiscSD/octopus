@@ -85,6 +85,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
     const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');
     const [confirmed, setConfirmed] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
+    const [showPublicationTypes, setShowPublicationTypes] = React.useState<boolean>(false);
 
     const createPublication = async () => {
         setError(null);
@@ -132,9 +133,8 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-8 lg:pt-36">
+                    <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-8 lg:pt-48">
                         {error ? <Components.Alert severity="ERROR" title={error} className="mt-2" /> : null}
-
                         <aside className="mb-8 lg:col-start-3 lg:col-end-4 lg:row-start-1 lg:row-end-1 lg:mb-0">
                             <h2 className="mb-6 font-montserrat text-2xl text-grey-800 transition-colors duration-500 dark:text-white">
                                 Creating a publication
@@ -143,44 +143,24 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                 <li className="mb-4 text-grey-600 transition-colors duration-500 dark:text-grey-50">
                                     <span className="font-medium">Publication title</span>
                                     <ul className="ml-4 list-disc">
-                                        <li className="ml-2 py-2">Something about what makes a good title</li>
+                                        <li className="ml-2 py-2">
+                                            Titles should be concise, specific, and informative – this will help
+                                            relevant readers find your material.
+                                        </li>
                                     </ul>
-                                </li>
-
-                                <li className="mb-4 text-grey-600 transition-colors duration-500 dark:text-grey-50">
                                     <span className="font-medium">Publication types</span>
-                                    <div className="mx-auto">
-                                        <div className="container grid grid-cols-1 gap-1">
-                                            {publicationTypes.map((publicationType) => (
-                                                <div className="mt-6" key={publicationType.id}>
-                                                    <div className="flex items-start gap-2 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white">
-                                                        <OutlineIcons.LinkIcon className="h-5 w-5 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 dark:bg-teal-50 dark:text-black" />
-                                                        {publicationType.heading}
-                                                    </div>
-                                                    <div className="mt-1 block pl-8 text-xs leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200">
-                                                        {publicationType.content}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <div className="mt-6">
-                                                <div className="flex items-start gap-2 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white">
-                                                    <OutlineIcons.LinkIcon className="h-5 w-5 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
-                                                    Peer Review
-                                                </div>
-                                                <div className="mt-1 block pl-8 text-xs leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200">
-                                                    A considered, detailed review of any of the above kinds of
-                                                    publication.
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <ul className="ml-4 list-disc">
+                                        <li className="ml-2 py-2">
+                                            Octopus has 8 publication types which align with the scientific process.
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </aside>
                         <div className="lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-1">
                             <div className="mb-12">
                                 <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
-                                    What is the title of this publication?
+                                    Publication title
                                 </label>
                                 <input
                                     required
@@ -212,8 +192,19 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                     ))}
                                 </select>
                             </div>
-
-                            <label htmlFor="confirm" className="mb-6 flex items-center">
+                            {publicationTypes.map((publicationType) => (
+                                <div className="mt-8" key={publicationType.id}>
+                                    <Components.Link
+                                        href="#"
+                                        openNew={true}
+                                        className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
+                                    >
+                                        <strong>{publicationType.heading}</strong>
+                                    </Components.Link>
+                                    <span className="block text-sm lg:w-10/12">{publicationType.content}</span>
+                                </div>
+                            ))}
+                            <label htmlFor="confirm" className="my-6 flex items-center">
                                 <input
                                     required
                                     id="confirm"

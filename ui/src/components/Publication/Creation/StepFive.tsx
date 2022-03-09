@@ -1,5 +1,9 @@
 const StepFive = () => {
-    return <div>step 5 yay</div>;
+    return (
+        <div>
+            <p>Coming soon...</p>
+        </div>
+    );
 };
 
 export default StepFive;

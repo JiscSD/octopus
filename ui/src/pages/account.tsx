@@ -82,7 +82,10 @@ const Account: Types.NextPage<Props> = (props): JSX.Element => {
                         </div>
                         <div className="items-end lg:flex">
                             <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white lg:mb-0 lg:border-r">
-                                ORCID: <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                                ORCID:{' '}
+                                <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
+                                    <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                                </Components.Link>
                             </h2>
                             <Components.Link
                                 href={`${Config.urls.viewUser.path}/${props.user.id}`}

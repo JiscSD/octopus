@@ -19,11 +19,15 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
         },
         update: {
             firstName: updateUserInformation.firstName,
-            lastName: updateUserInformation.lastName
+            lastName: updateUserInformation.lastName,
+            employment: updateUserInformation.employment,
+            education: updateUserInformation.education
         },
         create: {
             firstName: updateUserInformation.firstName,
             lastName: updateUserInformation.lastName,
+            employment: updateUserInformation.employment,
+            education: updateUserInformation.education,
             orcid
         }
     });
@@ -132,12 +136,11 @@ export const get = async (id: string) => {
                     currentStatus: 'LIVE'
                 }
             }
-        },
+        }
     });
 
     return user;
 };
-
 
 export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>) => {
     const userPublications = await prisma.user.findFirst({
@@ -171,7 +174,7 @@ export const getPublications = async (id: string, statuses: Array<I.ValidStatuse
                     content: true
                 }
             }
-        },
+        }
     });
 
     return userPublications;
