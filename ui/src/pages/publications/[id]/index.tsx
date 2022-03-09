@@ -143,7 +143,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                     className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400 "
                                 >
                                     <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                        {props.publication.user.firstName} {props.publication.user.lastName}
+                                        {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                                     </p>
                                 </Components.Link>
                             </Components.PublicationContentSection>
