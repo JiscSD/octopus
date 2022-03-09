@@ -49,7 +49,7 @@ const Home: Types.NextPage = (): JSX.Element => {
                                     className="mr-6 flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white outline-0 transition-colors duration-500 hover:bg-grey-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-500 dark:hover:bg-teal-600"
                                 >
                                     <span className="text-center font-montserrat text-sm leading-none lg:text-base">
-                                        Get started
+                                        Learn more
                                     </span>
                                 </Components.Link>
                                 <button
@@ -110,8 +110,12 @@ const Home: Types.NextPage = (): JSX.Element => {
                                 Find relevant work
                             </h3>
                             <p className="mb-5 block text-sm text-grey-800 dark:text-white">
-                                All publications in Octopus are linked, forming branching chains. If you subscribe to a
-                                particular research problem you can easily see all work linked to it.
+                                All publications in Octopus are linked, forming branching chains. You can explore these
+                                links from each publication page, or{' '}
+                                <Components.Link href={Config.urls.browsePublications.path}>
+                                    <span>browse</span>
+                                </Components.Link>{' '}
+                                content by type.
                             </p>
                             <h3 className="mb-1 block font-montserrat text-base font-bold text-grey-800 dark:text-white">
                                 Get the credit you deserve
@@ -192,9 +196,34 @@ const Home: Types.NextPage = (): JSX.Element => {
                         <h2 className="mb-6 block font-montserrat text-2xl font-bold lg:col-span-2 xl:mb-8">
                             Help us improve Octopus
                         </h2>
-                        <h3 className="block font-montserrat text-xl font-semibold xl:w-1/2">
-                            Help us to make Octopus the best it can be. if you have feedback, please contact us.
-                        </h3>
+
+                        <p className="block font-montserrat text-xl font-normal xl:w-1/2">
+                            We&apos;re still developing the platform, and your comments will help us identify any issues
+                            and opportunities for improvement.
+                        </p>
+                        <p className="mt-4 block font-montserrat text-xl font-normal xl:w-1/2">
+                            Please complete our{' '}
+                            <Components.Link
+                                openNew={true}
+                                href="https://forms.office.com/r/DhYd8AdHkx"
+                                className="underline"
+                            >
+                                <span>feedback form</span>
+                            </Components.Link>
+                            .
+                        </p>
+                        <p className="mt-4 block font-montserrat text-xl font-normal xl:w-1/2">
+                            If you&apos;d like to get more involved with platform development, do consider joining the
+                            Octopus{' '}
+                            <Components.Link
+                                openNew={true}
+                                href="https://www.jisc.ac.uk/get-involved/octopus-user-community"
+                                className="underline"
+                            >
+                                <span>user community</span>
+                            </Components.Link>
+                            .
+                        </p>
                     </div>
                 </Components.SectionTwo>
             </Layouts.Standard>

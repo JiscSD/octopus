@@ -26,13 +26,57 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
         );
 
         const ORCIDRequestPublicUserResponse = await axios.get(
-            `https://orcid.org/${orcidRequest.data.orcid}/public-record.json`
+            `https://pub.orcid.org/v3.0/${orcidRequest.data.orcid}/record`,
+            {
+                headers: {
+                    Accept: 'application/json'
+                }
+            }
         );
+
         const userInformation: I.ORCIDUser = ORCIDRequestPublicUserResponse.data;
 
+        const employment = userInformation['activities-summary'].employments['affiliation-group'].map(
+            (employmentItem) => ({
+                organisation: employmentItem.summaries[0]['employment-summary'].organization.name || null,
+                role: employmentItem.summaries[0]['employment-summary']['role-title'] || null,
+                department: employmentItem.summaries[0]['department-name'] || null,
+                startDate: {
+                    day: employmentItem.summaries[0]['employment-summary']['start-date']?.day.value || null,
+                    month: employmentItem.summaries[0]['employment-summary']['start-date']?.month.value || null,
+                    year: employmentItem.summaries[0]['employment-summary']['start-date']?.year.value || null
+                },
+                endDate: {
+                    day: employmentItem.summaries[0]['employment-summary']['end-date']?.day.value || null,
+                    month: employmentItem.summaries[0]['employment-summary']['end-date']?.month.value || null,
+                    year: employmentItem.summaries[0]['employment-summary']['end-date']?.year.value || null
+                }
+            })
+        );
+
+        const education = userInformation['activities-summary'].educations['affiliation-group'].map(
+            (educationItem) => ({
+                organisation: educationItem.summaries[0]['education-summary'].organization.name || null,
+                role: educationItem.summaries[0]['education-summary']['role-title'] || null,
+                department: educationItem.summaries[0]['department-name'] || null,
+                startDate: {
+                    day: educationItem.summaries[0]['education-summary']['start-date']?.day.value || null,
+                    month: educationItem.summaries[0]['education-summary']['start-date']?.month.value || null,
+                    year: educationItem.summaries[0]['education-summary']['start-date']?.year.value || null
+                },
+                endDate: {
+                    day: educationItem.summaries[0]['education-summary']['end-date']?.day.value || null,
+                    month: educationItem.summaries[0]['education-summary']['end-date']?.month.value || null,
+                    year: educationItem.summaries[0]['education-summary']['end-date']?.year.value || null
+                }
+            })
+        );
+
         const user = await userService.upsertUser(orcidRequest.data.orcid, {
-            firstName: userInformation.names?.givenNames?.value || '',
-            lastName: userInformation.names?.familyName?.value || ''
+            firstName: userInformation.person.name['given-names']?.value || '',
+            lastName: userInformation.person.name['family-name']?.value || '',
+            employment,
+            education
         });
 
         const token = authorizationService.createJWT(user);

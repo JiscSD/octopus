@@ -19,14 +19,17 @@ enum Role {
 }
 
 model User {
-    id        String  @id @default(cuid())
-    orcid     String  @unique
-    firstName String
-    lastName  String?
-    email     String?
-    role      Role    @default(USER)
-    locked    Boolean @default(false)
-    apiKey    String  @unique @default(uuid())
+    id         String  @id @default(cuid())
+    orcid      String  @unique
+    firstName  String
+    lastName   String?
+    email      String?
+    works      Json[]
+    employment Json[]
+    education  Json[]
+    role       Role    @default(USER)
+    locked     Boolean @default(false)
+    apiKey     String  @unique @default(uuid())
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

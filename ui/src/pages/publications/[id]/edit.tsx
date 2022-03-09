@@ -34,7 +34,7 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         component: <Components.PublicationCreationStepFour />
     },
     {
-        title: 'Review & Publish <span role="img" aria-label="rocket" className="pl-2">🚀</span>',
+        title: 'Review & Publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />
     }

@@ -20,7 +20,7 @@ const StepOne: React.FC = (): JSX.Element => {
         <>
             <div className="mb-6 lg:mb-10">
                 <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
-                    What is the title of this publication?
+                    Publication title
                 </label>
                 <input
                     required
@@ -35,18 +35,11 @@ const StepOne: React.FC = (): JSX.Element => {
                     {Helpers.formatPublicationType(type)}
                 </span>
                 <p className="text-grey-800 dark:text-white">
-                    You have chosen this publication to of type `{Helpers.formatPublicationType(type)}`. This can now{' '}
-                    <strong>not</strong> be changed.
+                    You have selected the publicationtype &quot;{Helpers.formatPublicationType(type)}&quot;.
                 </p>
-                <p className="text-grey-800 dark:text-white">
-                    If you wish to change the publication type, you must delete this publication and create a{' '}
-                    <Components.Link
-                        href={Config.urls.createPublication.path}
-                        className="rounded outline-none focus:ring-2 focus:ring-yellow-400"
-                    >
-                        <span className="underline decoration-teal-500 decoration-2 underline-offset-2">new</span>
-                    </Components.Link>
-                    .
+                <p className="mt-2 text-grey-800 dark:text-white">
+                    Please note that this cannot be changed. If you wish to change publication type, you must delete
+                    this publication and create a new one.
                 </p>
             </div>
         </>

@@ -22,7 +22,7 @@ const Accessibility: Types.NextPage = (): JSX.Element => {
                     waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                     waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
                 >
-                    <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-36">
+                    <section className="container mx-auto px-8 pt-8 lg:gap-4 lg:pt-48">
                         <div className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white lg:w-8/12">
                             <Components.PageTitle text="Accessibility" />
                             <p>This statement applies to content published on </p>

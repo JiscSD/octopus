@@ -111,7 +111,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                 <Components.Header fixed={true} />
-                <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-24">
+                <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-36">
                     <section className="col-span-12 p-8 lg:col-span-9">
                         <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
                             <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">

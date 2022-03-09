@@ -15,7 +15,7 @@ const ErrorTemplate: React.FC<Props> = (props) => {
                 waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
-                <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:gap-4 lg:pt-36">
+                <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:gap-4 lg:pt-48">
                     <h1 className="mx-auto mt-8 mb-8 block text-center font-montserrat text-6xl font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white lg:mt-2 lg:mb-4 lg:leading-none">
                         {props.title}
                     </h1>

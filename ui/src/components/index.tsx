@@ -3,6 +3,7 @@ export { default as Link } from './Link';
 export { default as Footer } from './Footer';
 export { default as EnableDarkMode } from './Header/EnableDarkMode';
 export { default as Nav } from './Header/Nav';
+export { default as SurveyAlert } from './Header/SurveyAlert';
 export { default as NavMobile } from './Header/Nav/Mobile';
 export { default as NavDesktop } from './Header/Nav/Desktop';
 export { default as Section } from './Section';

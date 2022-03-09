@@ -99,9 +99,9 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
         <Layouts.Standard fixedHeader={false}>
             {' '}
             <Components.SectionTwo
-                className="bg-teal-400 transition-colors duration-500  dark:bg-grey-900"
-                waveFillTop="fill-teal-500 dark:fill-grey-600 transition-colors duration-500"
-                waveFillMiddle="fill-teal-600 dark:fill-grey-700 transition-colors duration-500"
+                className="bg-teal-50 dark:bg-grey-800"
+                waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
+                waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
                 {/* Frequently asked questions section */}

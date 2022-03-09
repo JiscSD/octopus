@@ -65,7 +65,10 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
                             </h1>
                         </div>
                         <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white">
-                            ORCID: <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                            ORCID:{' '}
+                            <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
+                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                            </Components.Link>
                         </h3>
                     </header>
 

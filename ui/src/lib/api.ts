@@ -13,6 +13,7 @@ switch (process.env.NEXT_PUBLIC_ENV) {
         break;
     case 'int':
         baseURL = 'https://int.api.octopus.ac/v1';
+        break;
     default:
         baseURL = 'https://api.octopus.ac/v1';
         break;

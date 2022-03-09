@@ -27,7 +27,7 @@ const StepThree: React.FC = (): JSX.Element => {
         (state: Types.PublicationCreationStoreType) => state.updateLicence
     );
 
-    const [showLicenceDetails, setShowLicenceDetails] = React.useState(false);
+    const [showLicenceDetails, setShowLicenceDetails] = React.useState(true);
 
     return (
         <div className="mb-6 space-y-12 lg:mb-10">
@@ -38,7 +38,7 @@ const StepThree: React.FC = (): JSX.Element => {
                 >
                     Which{' '}
                     <Components.Link
-                        href="https://creativecommons.org/"
+                        href="https://creativecommons.org/licenses/"
                         openNew={true}
                         className="rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
                     >
@@ -57,7 +57,7 @@ const StepThree: React.FC = (): JSX.Element => {
                     >
                         {Config.values.licenceTypes.map((type) => (
                             <option key={type.value} value={type.value}>
-                                {type.nicename}
+                                {type.nicename} 4.0
                             </option>
                         ))}
                     </select>
@@ -81,7 +81,7 @@ const StepThree: React.FC = (): JSX.Element => {
                                     openNew={true}
                                     className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
                                 >
-                                    <strong>{type.nicename}</strong>
+                                    <strong>{type.nicename} 4.0</strong>
                                 </Components.Link>
                                 <span className="block text-sm lg:w-10/12">{type.description}</span>
                             </div>

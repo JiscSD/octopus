@@ -22,7 +22,7 @@ const Documentation: Types.NextPage = (): JSX.Element => (
                 waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
-                <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-36">
+                <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-4 lg:pt-48">
                     <Components.PageTitle text="Documentation" />
                 </section>
                 <section className="container mx-auto mb-8 px-8">
