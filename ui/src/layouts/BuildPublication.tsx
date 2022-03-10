@@ -165,7 +165,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     </section>
                     <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
                         <ul className="sticky top-24 space-y-4 lg:mb-8">
-                            <li>
+                            {/* <li>
                                 <button
                                     onClick={() => {
                                         router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
@@ -174,7 +174,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 >
                                     Preview publication
                                 </button>
-                            </li>
+                            </li> */}
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button

@@ -108,14 +108,21 @@ const Footer: React.FC = (): JSX.Element => (
             </div>
             <div className="col-span-1 md:col-span-2 lg:col-span-1">
                 <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white dark:text-teal-200">
-                    A collaboration between
+                    A collaboration with
                 </h4>
                 <Components.Link
                     href="https://jisc.ac.uk"
                     openNew={true}
-                    className="flex w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                    className="mr-4 rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                 >
                     <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
+                </Components.Link>
+                <Components.Link
+                    href="https://science-octopus.org/"
+                    openNew={true}
+                    className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                >
+                    <Image src="/meta/octopus.svg" alt="Octopus logo" width={60} height={60} />
                 </Components.Link>
             </div>
             <div className="col-span-1 md:col-span-2 lg:col-span-1">
