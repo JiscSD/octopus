@@ -144,7 +144,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                     <div className="mb-10 grid grid-cols-1 gap-10 md:mb-16 lg:mx-auto lg:mb-28 lg:grid-cols-12 ">
                         {heroContents.map((heroContent) => (
                             <div className="col-span-1 lg:col-span-6 xl:col-span-3" key={heroContent.id}>
-                                <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 underline decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white">
+                                <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white">
                                     {heroContent.heading}
                                 </h3>
                                 <p className="block text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:text-base">

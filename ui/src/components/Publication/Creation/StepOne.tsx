@@ -35,7 +35,7 @@ const StepOne: React.FC = (): JSX.Element => {
                     {Helpers.formatPublicationType(type)}
                 </span>
                 <p className="text-grey-800 dark:text-white">
-                    You have selected the publicationtype &quot;{Helpers.formatPublicationType(type)}&quot;.
+                    You have selected the publication type &quot;{Helpers.formatPublicationType(type)}&quot;.
                 </p>
                 <p className="mt-2 text-grey-800 dark:text-white">
                     Please note that this cannot be changed. If you wish to change publication type, you must delete
