@@ -151,7 +151,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                             {/* Linked publications */}
                             <Components.PublicationContentSection id="linked-publications" title="Linked publications">
                                 <>
-                                    {linkedPublicationsTo.length ? (
+                                    {linkedPublicationsTo.length || linkedPublicationsFrom.length ? (
                                         <Components.List ordered={false}>
                                             <>
                                                 {linkedPublicationsTo.map((link) => (
