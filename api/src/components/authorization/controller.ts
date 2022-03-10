@@ -42,14 +42,14 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 role: employmentItem.summaries[0]['employment-summary']['role-title'] || null,
                 department: employmentItem.summaries[0]['department-name'] || null,
                 startDate: {
-                    day: employmentItem.summaries[0]['employment-summary']['start-date']?.day.value || null,
-                    month: employmentItem.summaries[0]['employment-summary']['start-date']?.month.value || null,
-                    year: employmentItem.summaries[0]['employment-summary']['start-date']?.year.value || null
+                    day: employmentItem.summaries[0]['employment-summary']['start-date']?.day?.value || null,
+                    month: employmentItem.summaries[0]['employment-summary']['start-date']?.month?.value || null,
+                    year: employmentItem.summaries[0]['employment-summary']['start-date']?.year?.value || null
                 },
                 endDate: {
-                    day: employmentItem.summaries[0]['employment-summary']['end-date']?.day.value || null,
-                    month: employmentItem.summaries[0]['employment-summary']['end-date']?.month.value || null,
-                    year: employmentItem.summaries[0]['employment-summary']['end-date']?.year.value || null
+                    day: employmentItem.summaries[0]['employment-summary']['end-date']?.day?.value || null,
+                    month: employmentItem.summaries[0]['employment-summary']['end-date']?.month?.value || null,
+                    year: employmentItem.summaries[0]['employment-summary']['end-date']?.year?.value || null
                 }
             })
         );
@@ -60,14 +60,14 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 role: educationItem.summaries[0]['education-summary']['role-title'] || null,
                 department: educationItem.summaries[0]['department-name'] || null,
                 startDate: {
-                    day: educationItem.summaries[0]['education-summary']['start-date']?.day.value || null,
-                    month: educationItem.summaries[0]['education-summary']['start-date']?.month.value || null,
-                    year: educationItem.summaries[0]['education-summary']['start-date']?.year.value || null
+                    day: educationItem.summaries[0]['education-summary']['start-date']?.day?.value || null,
+                    month: educationItem.summaries[0]['education-summary']['start-date']?.month?.value || null,
+                    year: educationItem.summaries[0]['education-summary']['start-date']?.year?.value || null
                 },
                 endDate: {
-                    day: educationItem.summaries[0]['education-summary']['end-date']?.day.value || null,
-                    month: educationItem.summaries[0]['education-summary']['end-date']?.month.value || null,
-                    year: educationItem.summaries[0]['education-summary']['end-date']?.year.value || null
+                    day: educationItem.summaries[0]['education-summary']['end-date']?.day?.value || null,
+                    month: educationItem.summaries[0]['education-summary']['end-date']?.month?.value || null,
+                    year: educationItem.summaries[0]['education-summary']['end-date']?.year?.value || null
                 }
             })
         );
