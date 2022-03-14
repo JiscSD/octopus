@@ -1,21 +1,74 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Assets from '@assets';
 
 type Props = {
-    faqContents: [{ id: string; heading: string; content: string }];
+    faqContents: [{ href: string; title: string; content: string }];
 };
+
+const questionsAside = [
+    {
+        title: 'Why would I want to publish in Octopus?',
+        href: 'why_octopus'
+    },
+    {
+        title: 'How do I publish?',
+        href: 'how_do_i_publish'
+    },
+    {
+        title: 'What about copyright?',
+        href: 'copyright'
+    },
+    {
+        title: 'What is the rating system?',
+        href: 'rating_system'
+    },
+    {
+        title: 'Can I publish in both Octopus and a journal?',
+        href: 'publish_in_other_journals_too'
+    },
+    {
+        title: "Won't people steal my ideas/data if I publish it?",
+        href: 'steal_ideas'
+    },
+    {
+        title: 'Does each publication get a DOI?',
+        href: 'doi'
+    },
+    {
+        title: 'If this is only a beta version, when will Octopus launch?',
+        href: 'when_will_octopus_launch'
+    },
+    {
+        title: 'Why would I write a public review?',
+        href: 'why_write_a_public_review'
+    },
+    {
+        title: 'How do I format my publications?',
+        href: 'formatting_publications'
+    },
+    {
+        title: 'Someone has pointed out a really important issue in a review - can I retract?',
+        href: 'how_can_i_retract'
+    },
+    {
+        title: 'I think a publication should be retracted!',
+        href: 'publication_should_be_retracted'
+    }
+];
 
 const faqContents = [
     {
         id: 'why_octopus',
         heading: 'Why would I want to publish in Octopus?',
         content:
-            'Octopus is designed to replace journals and papers as the primary research record. The traditional system is not only slow and expensive, but the concept of "papers" is not a good way of disseminating scientific work in the 21st century. By forcing people to share their work only when they get to the end of what can be a very long research process, it slows down the spread of scientific knowledge, and encourages "questionable research practices" in order for researchers to produce seemingly easy, clear narratives that will get their work widely read. Good science isn\'t necessarily a good story. Good science can be the careful collection of a small amount of data, or careful analysis of data collected by someone else, or a good hypothesis (regardless of whether data later supports it or not). Publishing in Octopus is free, fast, and meritocratic. Why hold on to a hypothesis? Publish it now and establish priority – once it"s out in Octopus it"s yours. Why hold onto your data? Publish that now and regardless of what analyses are done by you or others later, the credit for that data is yours. Just like work put on preprint servers, publishing in Octopus doesn\'t stop you publishing an old-fashioned paper later.'
+            "<p className='mb-2'>Octopus is designed to replace journals and papers as the primary research record. The traditional system is not only slow and expensive, but the concept of &apos;papers&apos; is not a good way of disseminating scientific work in the 21st century. By forcing people to share their work only when they get to the end of what can be a very long research process, it slows down the spread of scientific knowledge, and encourages &apos;questionable research practices&apos; in order for researchers to produce seemingly easy, clear narratives that will get their work widely read.</p> <p className='mb-2'>Good science isn&apos;t necessarily a good story. Good science can be the careful collection of a small amount of data, or careful analysis of data collected by someone else, or a good hypothesis (regardless of whether data later supports it or not).</p> <p className='mb-2'>Publishing in Octopus is free, fast, and meritocratic. Why hold on to a hypothesis? Publish it now and establish priority – once it&apos;s out in Octopus it&apos;s yours. Why hold onto your data? Publish that now and regardless of what analyses are done by you or others later, the credit for that data is yours.</p> <p className='mb-2'>Just like work put on preprint servers, publishing in Octopus doesn't stop you publishing an old-fashioned paper later.</p>"
     },
     {
         id: 'how_do_i_publish',
@@ -96,8 +149,7 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
             <title>{Config.urls.faq.title}</title>
         </Head>
 
-        <Layouts.Standard fixedHeader={false}>
-            {' '}
+        <Layouts.Standard fixedHeader={true}>
             <Components.SectionTwo
                 className="bg-teal-50 dark:bg-grey-800"
                 waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
@@ -105,19 +157,28 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
                 waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
             >
                 {/* Frequently asked questions section */}
-                <div className="container mx-auto flex flex-col gap-6 px-8 py-16 lg:w-8/12">
-                    <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
-                        Frequently asked questions
-                    </h2>
+                <section className="container mx-auto px-8 pt-8 pb-2 lg:gap-4 lg:pt-48">
+                    <Components.PageTitle text="Frequently asked questions" />
+                </section>
 
-                    {faqContents.map((faqContent) => (
-                        <Components.Accordion
-                            key={faqContent.id}
-                            heading={faqContent.heading}
-                            content={faqContent.content}
-                        />
-                    ))}
-                </div>
+                <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                    <aside className="col-span-3 lg:block">
+                        <Components.FaqSidebar jumpToList={questionsAside} />
+                    </aside>
+                    <div className="lg:col-span-5">
+                        {faqContents.map((faqContent) => (
+                            <div key={faqContent.id} id={faqContent.id} className="pt-6">
+                                <div className="pt-12 pb-4">
+                                    <Assets.OctopusLogo />
+                                </div>
+                                <dt className="text-lg font-medium leading-6 text-grey-900">{faqContent.heading}</dt>
+                                <dd className="mt-2 w-10/12 text-base leading-6 text-grey-600">
+                                    {parse(faqContent.content)}
+                                </dd>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             </Components.SectionTwo>
         </Layouts.Standard>
     </>
