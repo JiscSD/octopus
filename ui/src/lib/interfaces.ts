@@ -81,11 +81,34 @@ export interface Publication extends CorePublication {
     conflictOfInterestText: string | null;
 }
 
-export interface User {
+export interface CoreUser {
     id: string;
     firstName: string;
     lastName: string;
     orcid: string;
+}
+
+export interface OrcidDateRecord {
+    day: string | null;
+    month: string | null;
+    year: string | null;
+}
+
+export interface OrcidHistoryRecord {
+    department: string | null;
+    organisation: string | null;
+    role: string | null;
+    startDate: OrcidDateRecord;
+    endDate: OrcidDateRecord;
+}
+
+export interface EmploymentRecord extends OrcidHistoryRecord {}
+
+export interface EducationRecord extends OrcidHistoryRecord {}
+
+export interface User extends CoreUser {
+    education: EducationRecord[];
+    employment: EmploymentRecord[];
     Publication: Publication[];
 }
 

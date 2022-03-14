@@ -3,7 +3,7 @@ import React from 'react';
 import * as Interfaces from '@interfaces';
 
 type Props = {
-    user: Interfaces.User;
+    user: Interfaces.CoreUser;
     className?: string;
 };
 

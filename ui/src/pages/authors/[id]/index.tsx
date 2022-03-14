@@ -79,6 +79,42 @@ const Author: Types.NextPage<Props> = (props): JSX.Element => {
                         <Components.PublicationBreakdown publications={props.user.Publication} />
                     </section>
 
+                    <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                            Employment
+                        </h2>
+                        <div className="2xl:w-2/3">
+                            {props.user.employment.length ? (
+                                <Components.UserHistoryTable
+                                    heads={['Organisation', 'Role', 'Department', 'Start date', 'End date']}
+                                    records={props.user.employment}
+                                />
+                            ) : (
+                                <p className="text-grey-800 transition-colors duration-500 dark:text-white">
+                                    No history available.
+                                </p>
+                            )}
+                        </div>
+                    </section>
+
+                    <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                            Education
+                        </h2>
+                        <div className="2xl:w-2/3">
+                            {props.user.education.length ? (
+                                <Components.UserHistoryTable
+                                    heads={['Organisation', 'Degree/title', 'Department', 'Start date', 'End date']}
+                                    records={props.user.education}
+                                />
+                            ) : (
+                                <p className="text-grey-800 transition-colors duration-500 dark:text-white">
+                                    No history available.
+                                </p>
+                            )}
+                        </div>
+                    </section>
+
                     <section className="container mx-auto mb-16 px-8">
                         <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
                             Octopus publications
