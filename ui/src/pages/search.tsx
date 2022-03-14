@@ -24,7 +24,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let orderDirection: string | string[] | null = null;
 
     // defaults to results
-    let results: Interfaces.Publication[] | Interfaces.User[] | [] = [];
+    let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
     let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error

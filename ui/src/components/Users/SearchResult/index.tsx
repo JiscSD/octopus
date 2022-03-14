@@ -7,7 +7,7 @@ import * as Components from '@components';
 import * as Config from '@config';
 
 type Props = {
-    user: Interfaces.User;
+    user: Interfaces.CoreUser;
     className?: string;
 };
 

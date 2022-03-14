@@ -41,6 +41,7 @@ export { default as CommandPalette } from './CommandPalette';
 export { default as CommandPaletteResult } from './CommandPalette/Result';
 export { default as Overlay } from './Overlay';
 export { default as UserSearchResult } from './Users/SearchResult';
+export { default as UserHistoryTable } from './Users/HistoryTable';
 export { default as PageTitle } from './PageTitle';
 export { default as Alert } from './Alert';
 export { default as Accordion } from './Accordion';

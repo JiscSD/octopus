@@ -115,6 +115,8 @@ export const get = async (id: string) => {
             role: true,
             createdAt: true,
             updatedAt: true,
+            employment: true,
+            education: true,
             Publication: {
                 select: {
                     id: true,
