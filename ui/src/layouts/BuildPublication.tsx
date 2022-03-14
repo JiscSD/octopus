@@ -51,37 +51,53 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     );
 
     const [saveExitModalVisibility, setSaveExitModalVisibility] = React.useState(false);
+    const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
     const prevStep = () => props.setStep((prevState: number) => prevState - 1);
     const nextStep = () => props.setStep((prevState: number) => prevState + 1);
 
-    const publish = () => {
-        // update all fields with store data & change status to live
-        alert('Please confirm etc...');
+    const saveCurrent = async () => {
+        if (conflictOfInterestStatus && !conflictOfInterestText.length) {
+            props.setStep(2);
+            throw new Error('You must provide a conflict of interest reason.');
+        }
+
+        await api.patch(
+            `${Config.endpoints.publications}/${props.publication.id}`,
+            {
+                title,
+                content,
+                licence,
+                conflictOfInterestStatus,
+                conflictOfInterestText
+            },
+            props.token
+        );
+    };
+
+    const publish = async () => {
+        setError(null);
+        try {
+            saveCurrent();
+            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
+            router.push({
+                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+            });
+        } catch (err) {
+            // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
+            // const { message } = err as Interfaces.JSONResponseError;
+            setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
+            console.log(err);
+        }
+
+        setPublishModalVisibility(false);
     };
 
     const saveExit = async () => {
         setError(null);
         try {
-            if (conflictOfInterestStatus && !conflictOfInterestText.length) {
-                props.setStep(2);
-                throw new Error('You must provide a conflict of interest reason.');
-            }
-
-            await api.patch(
-                `${Config.endpoints.publications}/${props.publication.id}`,
-                {
-                    title,
-                    content,
-                    licence,
-                    conflictOfInterestStatus,
-                    conflictOfInterestText
-                },
-                props.token
-            );
-
-            // no status check on response, assume all went well. Error is handled seperately.
+            saveCurrent();
             router.push({
                 pathname: Config.urls.browsePublications.path
             });
@@ -103,11 +119,22 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Save and exit"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to leave?"
-                icon={<OutlineIcons.SaveIcon className="text-green-600 h-6 w-6" aria-hidden="true" />}
+                icon={<OutlineIcons.SaveIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
                     Changes to your publication will be saved and it&apos;s status kept as draft.
                 </p>
+            </Components.Modal>
+            <Components.Modal
+                open={publishModalVisibility}
+                setOpen={setPublishModalVisibility}
+                positiveActionCallback={publish}
+                positiveButtonText="Yes, save &amp; publish"
+                cancelButtonText="Cancel"
+                title="Are you sure you want to publish?"
+                icon={<OutlineIcons.AcademicCapIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+            >
+                <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                 <Components.Header fixed={true} />
@@ -141,7 +168,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     />
                                 )}
                                 {props.currentStep === props.steps.length - 1 && (
-                                    <NavigationButton text="Publish" onClick={publish} className="bg-purple-400" />
+                                    <NavigationButton
+                                        text="Publish"
+                                        onClick={() => setPublishModalVisibility(true)}
+                                        className="bg-purple-400"
+                                    />
                                 )}
                                 <button
                                     onClick={() => {
@@ -165,16 +196,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     </section>
                     <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
                         <ul className="sticky top-24 space-y-4 lg:mb-8">
-                            {/* <li>
-                                <button
-                                    onClick={() => {
-                                        router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
-                                    }}
-                                    className="hidden rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:block"
-                                >
-                                    Preview publication
-                                </button>
-                            </li> */}
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button
