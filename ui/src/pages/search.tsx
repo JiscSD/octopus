@@ -55,10 +55,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
 
         // ensure the strings provided for ordering are as we expect them to be, else ignore them
-        orderBy && ['createdAt', 'updatedAt'].includes(orderBy) ? null : (orderBy = null);
+        if (searchType === 'publications') {
+            orderBy && ['title', 'publishedDate'].includes(orderBy) ? null : (orderBy = null);
+        } else {
+            orderBy && ['createdAt', 'updatedAt'].includes(orderBy) ? null : (orderBy = null);
+        }
+
         orderDirection && ['asc', 'desc'].includes(orderDirection) ? null : (orderDirection = null);
 
-        // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
                 const response = await api.search(
@@ -67,8 +71,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                     publicationTypes,
                     limit,
                     offset,
-                    orderBy as Types.OrderBySearchOption, // to please ts, we must tom hanks it, even though we can be sure of the value
-                    orderDirection as Types.OrderDirectionSearchOption // to please ts, we must tom hanks it, even though we can be sure of the value
+                    orderBy as Types.PublicationOrderBySearchOption | Types.UserOrderBySearchOption,
+                    orderDirection as Types.OrderDirectionSearchOption
                 );
                 results = response.data;
                 metadata = response.metadata;
@@ -126,8 +130,10 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
-    const [orderBy, setOrderBy] = React.useState(props.orderBy ? props.orderBy : 'updatedAt');
-    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection ? props.orderDirection : 'asc');
+    const [orderBy, setOrderBy] = React.useState(
+        props.orderBy ? props.orderBy : searchType === 'publications' ? 'publishedDate' : 'updatedAt'
+    );
+    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection ? props.orderDirection : 'desc');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
@@ -161,10 +167,12 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
         const value = e.target.value;
         if (value === 'users') {
             const paramsListCopy = { ...router.query };
+            setOrderBy('updatedAt');
             if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
             router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
         if (value === 'publications') {
+            setOrderBy('publishedDate');
             router.push(
                 {
                     query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
@@ -173,7 +181,6 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                 { shallow: true }
             );
         }
-        setOrderBy('updatedAt');
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
         setSearchType(e.target.value);
@@ -182,11 +189,15 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
-        setOrderBy('updatedAt');
         setOrderDirection('asc');
         setOffset(0);
         setLimit(10);
-        if (searchType === 'publications') setPublicationTypes(Config.values.publicationTypes.join(','));
+        if (searchType === 'publications') {
+            setPublicationTypes(Config.values.publicationTypes.join(','));
+            setOrderBy('publishedDate');
+        } else if (searchType === 'users') {
+            setOrderBy('updatedAt');
+        }
     };
 
     React.useEffect(() => {
@@ -249,14 +260,20 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     className="col-span-2 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                     disabled={isValidating}
                                 >
-                                    <option value="updatedAt">Date updated</option>
-                                    <option value="createdAt">Date created</option>
-                                    {searchType === 'publications' && <option value="title">Publication title</option>}
                                     {searchType === 'publications' && (
-                                        <option value="publishedDate">Published date</option>
+                                        <>
+                                            <option value="publishedDate">Published date</option>
+                                            <option value="title">Publication title</option>
+                                        </>
                                     )}
-                                    {searchType === 'users' && <option value="firstName">First name</option>}
-                                    {searchType === 'users' && <option value="lastName">Last name</option>}
+                                    {searchType === 'users' && (
+                                        <>
+                                            <option value="firstName">First name</option>
+                                            <option value="lastName">Last name</option>
+                                            <option value="updatedAt">Date updated</option>
+                                            <option value="createdAt">Date created</option>
+                                        </>
+                                    )}
                                 </select>
                             </label>
 

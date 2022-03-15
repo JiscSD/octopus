@@ -45,7 +45,9 @@ export type JSONValue = string | number | boolean | { [x: string]: JSONValue } |
 
 export type SearchType = 'publications' | 'users';
 
-export type OrderBySearchOption = 'createdAt' | 'updatedAt' | 'publishedDate';
+export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
+
+export type UserOrderBySearchOption = 'updatedAt' | 'createdAt';
 
 export type OrderDirectionSearchOption = 'asc' | 'desc';
 
