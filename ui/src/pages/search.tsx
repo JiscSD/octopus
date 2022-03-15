@@ -87,7 +87,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
-        orderDirection || 'asc'
+        orderDirection || 'desc'
     }`;
 
     return {
@@ -139,7 +139,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'publishedDate'}&orderDirection=${
-        orderDirection || 'asc'
+        orderDirection || 'desc'
     }`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
@@ -189,7 +189,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
-        setOrderDirection('asc');
+        setOrderDirection('desc');
         setOffset(0);
         setLimit(10);
         if (searchType === 'publications') {
