@@ -7,10 +7,10 @@ import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
 
-const Completed = () => (
+const CompletedIcon = () => (
     <OutlineIcons.BadgeCheckIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-teal-500 transition-colors duration-500 dark:bg-grey-800" />
 );
-const Incomplete = () => (
+const IncompleteIcon = () => (
     <OutlineIcons.ExclamationCircleIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-yellow-600 transition-colors duration-500 dark:bg-grey-800 dark:text-yellow-500" />
 );
 
@@ -40,7 +40,7 @@ const StepFive = () => {
                 <h1 className="mb-4 block font-montserrat text-3xl text-grey-800 transition-colors duration-500 dark:text-white">
                     {title}
                 </h1>
-                {title.length ? <Completed /> : <Incomplete />}
+                {title.length ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
             <div className="relative mt-10 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
                 <span className="mb-8 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
@@ -61,7 +61,7 @@ const StepFive = () => {
                         {Config.values.licenceTypes.find((type) => type.value === licence)?.nicename} 4.0
                     </strong>
                 </Components.Link>
-                {licence ? <Completed /> : <Incomplete />}
+                {licence ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
 
             <div className="relative mt-10 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
@@ -77,8 +77,8 @@ const StepFive = () => {
                         Specified that there is <strong>no</strong> conflict of interest
                     </p>
                 )}
-                {conflictOfInterestStatus && conflictOfInterestText.length ? <Completed /> : <Incomplete />}
-                {!conflictOfInterestStatus && <Completed />}
+                {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
+                {!conflictOfInterestStatus && <CompletedIcon />}
             </div>
 
             <div className="relative mt-10 pb-16">
@@ -86,7 +86,7 @@ const StepFive = () => {
                     Full text
                 </span>
                 <Components.ParseHTML content={content} />
-                {content.length > 7 ? <Completed /> : <Incomplete />}
+                {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
         </div>
     );
