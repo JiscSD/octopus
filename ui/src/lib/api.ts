@@ -74,7 +74,7 @@ export const search = async (
     publicationType: string | null = null,
     limit: number | null = null,
     offset: number | null = null,
-    orderBy: Types.OrderBySearchOption | null = null,
+    orderBy: Types.PublicationOrderBySearchOption | Types.UserOrderBySearchOption | null = null,
     orderDirection: Types.OrderDirectionSearchOption | null = null
 ): Promise<Interfaces.SearchResults> => {
     let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
