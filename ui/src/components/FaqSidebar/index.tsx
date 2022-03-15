@@ -11,14 +11,16 @@ type Props = {
 };
 
 const FaqSidebar: React.FC<Props> = (props): JSX.Element => (
-    <div className="sticky top-16 pt-24">
+    <div className="sticky top-16">
         {props.jumpToList.map((jumpTo: JumpTo) => (
             <a
                 key={jumpTo.href}
                 href={`#${jumpTo.href}`}
-                className="text-gray-900 mb-1 block w-fit rounded border-transparent py-1 text-base font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100 md:col-span-5"
+                className="mb-1 block w-fit rounded border-transparent py-1 text-grey-800 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-grey-100 "
             >
-                {jumpTo.title}
+                <ul>
+                    <li>{jumpTo.title}</li>
+                </ul>
             </a>
         ))}
     </div>
