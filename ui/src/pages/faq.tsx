@@ -163,9 +163,9 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
                     <aside className="col-span-2 pt-4 lg:block">
                         <Components.FaqSidebar jumpToList={questionsAside} />
                     </aside>
-                    <div className="lg:col-span-6 ">
+                    <div className="pt-14 lg:col-span-6 lg:pt-0">
                         {faqContents.map((faqContent) => (
-                            <div key={faqContent.id} id={faqContent.id} className="mx-auto w-10/12 pt-4">
+                            <div key={faqContent.id} id={faqContent.id} className="mx-auto pt-4 lg:w-10/12">
                                 <dl className="divide-y">
                                     <dt className="mb-1 text-lg font-medium leading-6 text-grey-900 transition-colors duration-500 dark:text-white">
                                         {faqContent.heading}
