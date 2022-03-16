@@ -59,4 +59,5 @@ export { default as ORCIDLogOutButton } from './ORCID/LogOutButton';
 export { default as Modal } from './Modal';
 export { default as Editor } from './Editor';
 export { default as EditorMenuBar } from './Editor/MenuBar';
-export { default as FaqSidebar } from './FaqSidebar';
+export { default as FaqSidebar } from './Faq/Sidebar';
+export { default as FaqPubTypes } from './Faq/PubTypes';

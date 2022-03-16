@@ -14,7 +14,7 @@ type Props = {
 
 const questionsAside = [
     {
-        title: 'Why would I want to publish in Octopus?',
+        title: 'Why publish in Octopus?',
         href: 'why_octopus'
     },
     {
@@ -22,36 +22,32 @@ const questionsAside = [
         href: 'how_do_i_publish'
     },
     {
-        title: 'What about copyright?',
-        href: 'copyright'
-    },
-    {
-        title: 'What is the rating system?',
-        href: 'rating_system'
-    },
-    {
-        title: 'Can I publish in both Octopus and a journal?',
-        href: 'publish_in_other_journals_too'
-    },
-    {
-        title: "Won't people steal my ideas/data if I publish it?",
-        href: 'steal_ideas'
+        title: 'How do I format my publications?',
+        href: 'formatting_publications'
     },
     {
         title: 'Does each publication get a DOI?',
         href: 'doi'
     },
     {
-        title: 'If this is only a beta version, when will Octopus launch?',
-        href: 'when_will_octopus_launch'
+        title: 'What about copyright?',
+        href: 'copyright'
+    },
+    {
+        title: "Won't people steal my ideas/data if I publish it?",
+        href: 'steal_ideas'
+    },
+    {
+        title: 'Can I publish in both Octopus and a journal?',
+        href: 'publish_in_other_journals_too'
+    },
+    {
+        title: 'What is the rating system?',
+        href: 'rating_system'
     },
     {
         title: 'Why would I write a public review?',
         href: 'why_write_a_public_review'
-    },
-    {
-        title: 'How do I format my publications?',
-        href: 'formatting_publications'
     },
     {
         title: 'Someone has pointed out a really important issue in a review - can I retract?',
@@ -60,81 +56,85 @@ const questionsAside = [
     {
         title: 'I think a publication should be retracted!',
         href: 'publication_should_be_retracted'
+    },
+    {
+        title: 'If this is only an alpha version, when will Octopus launch?',
+        href: 'when_will_octopus_launch'
     }
 ];
 
 const faqContents = [
     {
         id: 'why_octopus',
-        heading: 'Why would I want to publish in Octopus?',
+        heading: 'Why publish in Octopus?',
         content:
-            "<p className='mb-2'>Octopus is designed to replace journals and papers as the primary research record. The traditional system is not only slow and expensive, but the concept of &apos;papers&apos; is not a good way of disseminating scientific work in the 21st century. By forcing people to share their work only when they get to the end of what can be a very long research process, it slows down the spread of scientific knowledge, and encourages &apos;questionable research practices&apos; in order for researchers to produce seemingly easy, clear narratives that will get their work widely read.</p> <p className='mb-2'>Good science isn&apos;t necessarily a good story. Good science can be the careful collection of a small amount of data, or careful analysis of data collected by someone else, or a good hypothesis (regardless of whether data later supports it or not).</p> <p className='mb-2'>Publishing in Octopus is free, fast, and meritocratic. Why hold on to a hypothesis? Publish it now and establish priority – once it&apos;s out in Octopus it&apos;s yours. Why hold onto your data? Publish that now and regardless of what analyses are done by you or others later, the credit for that data is yours.</p> <p className='mb-2'>Just like work put on preprint servers, publishing in Octopus doesn't stop you publishing an old-fashioned paper later.</p>"
+            "<p className='mb-2'>Publishing in Octopus is free, fast, and fair.</p><p className='mb-2'>So, you can immediately establish priority on your work, get recognition from peers, and benefit from feedback at all stages of your research.</p><p className='mb-2'>Octopus is designed to address many of the failings of the current system, which is not only slow and expensive, but also limits the spread of knowledge.</p><p className='mb-2'>It recognises that good research is more than a headline-grabbing journal article, it could be a well-thought-out hypothesis or a piece of lateral-thinking that leads to a new rationale that could solve a problem; it could be an intricately-designed protocol, described in scuch a way that it can be followed precisely by others, ensuring reproducibility; it could be carefully collected data, meticulously recorded with all the details others would need to interrogate it or analyse it in different ways &mdash; regardless of what that data reveals; it could be a thorough analysis of some data, or meta-analysis, a re-analysis of existing data using new techniques; it could be an insight into a new interpretation of the findings, or a way in which those findings could be used in the real world to provide benefit. Or, it could be a constructive and insightful critique of the work of others.</p><p className='mb-2'>All of these are research work. All of them should be shared and valued by the research community.</p><p className='mb-2'>Octopus also aims to incentivise good research practice (and minimise pressures for questionable research practicecs) through the way it is structured and its review and ratings systems, as well as minimising causes of bias (such as gender or institutional biases)</p><p className='mb-2'>Octopus sets out aims to be the new primary research record: a place where researchers from all disciplines can freely document all of their efforts and findings without external requirements unduly shaping their outputs. This complements the traditional paper, which continues to be a good place to disseminate research summaries (and particularly &apos;findings&apos;) to a wider audience: publishing in Octopus doesn't stop you publishing in a journal down the line should you want &mdash; but it is the place where you establish your priority for all to see, and document your work in full detail in order to do so, rather like a patent office. Our aim is that the different structure of Octopus will help researchers approach their work differently and allow people to concentrate on excellence rather than chasing &apos;impact&apos;.</p>"
     },
     {
         id: 'how_do_i_publish',
         heading: 'How do I publish?',
         content:
-            "<p className='mb-2'>Octopus accepts 8 types of publication — all must be linked to another publication somewhere in Octopus.</p><p className='mb-2'>The top of any &apos;chain&apos; is a publication that is defining a scientific Problem. Below that you can publish a Hypothesis (theoretical rationale), below that a Method/Protocol, below that Data/Results, below that Analysis, below that an Interpretation (Discussion) and below that Applications or translations in the real world.</p><p className='mb-2'>Reviews can be published attached to any of those 7 other types of publication. </p><p className='mb-2'>To find out more about the publication types, visit our About page.</p><p className='mb-2'>To publish, click on &apos;Publish&apos; and follow the steps."
-    },
-    {
-        id: 'copyright',
-        heading: 'What about copyright?',
-        content:
-            'When Octopus allows you to select a Creative Commons copyright label. This will ensure that you can retain your intellectual property rights as the author, but that others can use your work in the way that you want.'
-    },
-    {
-        id: 'rating_system',
-        heading: 'What is the rating system?',
-        content:
-            'When the rating system is implemented in Octopus, every publication in Octopus can be rated by logged-in readers (i.e. people with an ORCiD). Each type of publication has 3 pre-defined criteria on which you are asked to rate it. These allow us to define what we as a scientific community consider &apos;good science&apos;, and allow authors to get truly meritocratic feedback and reward for their work. Everything you rate will be associated with your username, so it will be obvious if you rate people in a partisan manner.'
-    },
-    {
-        id: 'publish_in_other_journals_too',
-        heading: 'Can I publish in both Octopus and a journal?',
-        content:
-            "<p className='mb-2'>Octopus is designed to replace journals as the primary research record, allowing journals to concentrate on editorialising primary research and disseminating it in a suitable form to their specific readerships. However, in the medium term, many people will want to continue writing papers and recording work first in Octopus should be no barrier to that. Journal policies differ in how they treat material that has been previously published, such as on a preprint server. We recommend that you check whether your intended journal objects before publishing in Octopus."
-    },
-    {
-        id: 'steal_ideas',
-        heading: "Won't people steal my ideas/data if I publish it?",
-        content:
-            "<p className='mb-2'>Once you&apos;ve published something, it can&apos;t be stolen - it&apos;s yours. Publishing to Octopus quickly can establish your priority.</p><p className='mb-2'>If your hypothesis is later supported by data, it doesn&apos;t matter whether that data is collected by you or someone else or by many people: it&apos;s you that published the hypothesis and you that gets the credit for that. Similarly, if you have published the data, that&apos;s a publication already under your belt. You can also publish an analysis of that data - and so can other people."
-    },
-    {
-        id: 'doi',
-        heading: 'Does each publication get a DOI?',
-        content:
-            'We are working to implement DOIs for each publication in Octopus, just like for any other kind of publication. At the moment, for beta testing, we are using our own unique IDs.'
-    },
-    {
-        id: 'when_will_octopus_launch',
-        heading: 'If this is only a beta version, when will Octopus launch?',
-        content:
-            'This is our first major iteration of Octopus, and we are collating feedback whilst we add in the rest of the features we want for launch. We hope to launch fully in 2022. If you want to help, please email alex.freeman@maths.cam.ac.uk!'
-    },
-    {
-        id: 'why_write_a_public_review',
-        heading: 'Why would I write a public review?',
-        content:
-            "<p className='mb-2'>Reviewing and rating is critical to good science. Open peer review, where readers can read the reviews and opinions of others is important as it allows people to learn from the views of those with different experience and knowledge.</p><p className='mb-2'>In Octopus, a review is treated as an equal type of publication to any other, so every review you write will itself appear attached to your individual publication list and will be rated by others. Treat it as carefully as any other piece of work you publish - and enjoy the credit you will get as a result.</p><p className='mb-2'>Some people are concerned about writing open critiques of others&apos; work. We believe that no one writing a genuine, well-argued critique of another&apos;s work is likely to face any backlash, but are considering implementing a system whereby ALL publications in Octopus remain anonymous for their first few months, allowing double-blind reviewing.</p>"
+            "<p className='mb-2'>There are eight types of publication in Octopus align with the stages of scientific research. You should select the one which matches where you are in your research. Note that the publication type cannot be changed once you&apos;ve started drafting a publication.</p><p className='mb-2'>To publish, click on &apos;Publish&apos; and follow the steps.</p><p className='mb-2'>The eight publication types are:</p><p>A Problem:<p className='mb-2'>A Problem publication defines a research problem or question. You will need to explain what is known so far about the problem &mdash; rather like the &apos;Introduction&apos; to a traditional paper.</p><p>A Hypothesis/Rationale:</p><p className='mb-2'>A Hypothesis/Rationale publication sets out the theoretical basis for a potential solution, or partial solution, to the Problem it is linked to. In some fields a formal hypothesis is appropriate, and in some fields it will be more a description of an approach that might be taken.</p><p>A Protocol/Method:</p><p className='mb-2'>A Protocol/Method publication describes in detail a way of testing a hypothesis, or carrying out a theoretical rationale. You can include links to sites such as protocols.io to give more detail of the method if that would be helpful to readers.</p><p>Results/Data:</p><p className='mb-2'>A Results/Data publication comprises raw data or summarised results collected according to an existing published Protocol/Method. It should only describe the data or results themselves, without any analysis, along with details of the exact conditions under which the method was carried out &mdash; anything that might be needed for an analysis or interpretation of the results. You can include links to the raw data files.</p><p>An Analysis:</p><p className='mb-2'>An Analysis publication describes manipulations of results to help conclusions be drawn from them. For example, thematic or statistical analysis.</p><p>An Interpretation:</p><p className='mb-2'>An Interpretation publication describes conclusions drawn from an Analysis of results.</p><p>A Real-world Application:</p><p className='mb-2'>An Application publication describes how findings might have (or have had) an impact in the real world. This might be through a practical or policy application, and would be the appropriate publication type for Case Studies.</p><p>A (Peer) Review:</p><p className='mb-2'>A Review publication should be a carefully considered and constructive critique of an existing publication by someone else. Your review should help other readers assess the publication, and should be written in the same style as any other kind of publication (with relevant references). Authors may reversion publications in the light of reviews.</p>"
     },
     {
         id: 'formatting_publications',
         heading: 'How do I format my publications?',
         content:
-            "<p className='mb-2'>Because each publication in Octopus is smaller than an old-fashioned paper, you will no longer need to spend time writing an Introduction etc for each publication. What you will now publish as a Problem will be roughly the equivalent to a traditional paper&apos;s introduction. A Hypothesis directly following that will therefore no longer need to include all the information in that Problem, though may refer to other publications that support the scientific basis for the hypothesis. Similarly, publishing Results/Data will no longer require you to write out the Method, merely link to the published Method you followed, and add only relevant specific details (such as the dates of data collection, batch numbers of reagents, model numbers of equipment etc).</p><p className='mb-2'>References should no longer all be listed at the end of a publication. Since all publication is now online, direct embedded permanent URLs (eg. DOIs) should be used.</p><p className='mb-2'>Acknowledgements should still be given at the end of a publication.</p><p className='mb-2'>For researchers in biomedical sciences, the EQUATOR guidelines on reporting should still be followed.</p><p className='mb-2'>You can format your own publications in the online editor within Octopus to be sure that you get it to look exactly as you want. No more enforced styles, limited words or figures/tables. And no more time/money wasted proof-reading and sending comments back to Editors.</p>"
+            "<p className='mb-2'>Because each publication in Octopus is smaller than an old-fashioned paper, you will no longer need to spend time writing an Introduction etc for each publication. What you will now publish as a Problem will be roughly the equivalent to a traditional papers Introduction. A Hypothesis directly following that will therefore no longer need to include all the information in that Problem, though may refer to other publications that support the scientific basis for the hypothesis. Similarly, publishing Results/Data will no longer require you to write out the Method, merely link to the published Method you followed, and add only relevant specific details (such as the dates of data collection, batch numbers of reagents, model numbers of equipment etc).</p><p className='mb-2'>References should no longer all be listed at the end of a publication. Since all publication is now online, direct embedded permanent URLs (eg. DOIs) should be used. Acknowledgements should still be given at the end of a publication.</p><p className='mb-2'>For researchers whose fields already have reporting guidelines (such as the EQUATOR guidelines for the biomedical sciences), these should still be followed.</p><p className='mb-2'>You can format your own publications in the online editor within Octopus to be sure that you get it to look exactly as you want. No more enforced styles, limited words or figures/tables. And no more time/money wasted proof-reading and sending comments back to Editors.</p>"
+    },
+    {
+        id: 'doi',
+        heading: 'Does each publication get a DOI?',
+        content:
+            "<p className='mb-2'>The beta version of Octopus will mint a DOI for each new publication via Datacite.</p><p className='mb-2'>At the moment, for alpha testing, we are using our own unique IDs.</p>"
+    },
+    {
+        id: 'copyright',
+        heading: 'What about copyright?',
+        content:
+            "<p className='mb-2'>When Octopus allows you to select a Creative Commons copyright label. This will ensure that you can retain your intellectual property rights as the author, but that others can use your work in the way that you want.</p>The Octopus codebase is Open Source, and is available under the GNU General Public License version 3."
+    },
+    {
+        id: 'steal_ideas',
+        heading: "Won't people steal my ideas/data if I publish it?",
+        content:
+            'Publishing to Octopus establishes your priority quickly. Once you&apos;ve published something, it can&apos;t be stolen - it&apos;s yours. If your hypothesis is later supported by data, it doesn&apos;t matter whether that data is collected by you or someone else or by many people: it&apos;s you that published the hypothesis and you that gets the credit for that. Similarly, if you have published the data, that&apos;s a publication already under your belt. You can also publish an analysis of that data - and so can other people.'
+    },
+    {
+        id: 'publish_in_other_journals_too',
+        heading: 'Can I publish in both Octopus and a journal?',
+        content:
+            'Octopus is designed to replace journals as the primary research record, allowing journals to concentrate on editorialising primary research findings and disseminating them in a suitable form to their specific readerships. However, in the medium term, many people will want to continue writing papers, and recording work first in Octopus should be no barrier to that. Journal policies differ in how they treat material that has been previously published, such as on a preprint server. We recommend that you check whether your intended journal objects before publishing in Octopus.'
+    },
+    {
+        id: 'rating_system',
+        heading: 'What is the rating system?',
+        content:
+            "<p className='mb-2'>Every publication in Octopus can be rated by logged-in users</p><p className='mb-2'>Each type of publication has 3 pre-defined criteria on which you can rate it. These allow us to define what we as a scientific community consider &apos;good work&apos;, and allow authors to get truly meritocratic feedback and reward for their work.</p>Please note that every rating you give will be visible on your user account."
+    },
+    {
+        id: 'why_write_a_public_review',
+        heading: 'Why would I write a public review?',
+        content:
+            "<p className='mb-2'>Reviewing and rating is critical to good research, and encouraging good research is at the heart of Octopus..</p><p className='mb-2'>All reviews are publicly available on Octopus. This enriches the scientific record, allowing readers to see the views and opinions raised by other experts and learn from varied perspectives on a topic. It is also a resource for those just beginning to participate in research, providing ways of thinking about a subject, and guiding good research practice. For the authors of the publication being reviewed, they always have the option to reversion their work taking into account major points raised by early reviewers, and might even choose to invite those reviewers as co-authors on the new version. This new version of a publication may affect all the work done subsequently in the chain.</p>Open peer review, where reviewers&apos; names are published alongside their comments, contributes to the principles of openness, accountability, and collaboration which underpin the platform. In Octopus, a review is treated as an equal type of publication to any other, so every review you write will itself appear attached to your individual publication list. Treat it as carefully as any other piece of work you publish &mdash; and enjoy the credit you will get as a result."
     },
     {
         id: 'how_can_i_retract',
         heading: 'Someone has pointed out a really important issue in a review - can I retract?',
         content:
-            'No need for retraction for an innocent oversight. You can reversion your publication once the reversion functionality has been implemented in Octopus. The old version will still exist on file, but the new one will replace it. If a reviewer made such an important point, do consider offering them co-authorship, but at the minimum, add an acknowledgement.'
+            "<p className='mb-2'>Once a publication goes live it cannot be deleted unless it breaks our contribution guidelines.</p>However, you can create a new version of your publication. The old version will still exist on the platform, but the new one will replace it."
     },
     {
         id: 'publication_should_be_retracted',
         heading: 'I think a publication should be retracted!',
         content:
-            "If you suspect plagiarism, copyright issues, ethical or scientific misconduct then you will can click to use the Red Flag system to raise your concerns. This will email the authors and you will enter a &apos;dispute resolution&apos; centre. The publication will immediately be flagged so that it is clear to others that an issue has been raised. If the dispute is not quickly resolved, the issue will be escalated to the authors' institutional Research Integrity Office, or their national office."
+            "<p className='mb-2'>If you suspect plagiarism, copyright issues, ethical or scientific misconduct then you can use the Red Flag system to raise your concerns. Select which issue to highlight from a list of predefined criteria and add explanatory comments to explain your concerns to the authors and other readers. You can submit red flags for multiple criteria if you need to.</p><p className='mb-2'>The red flag will immediately appear on the publication page to highlight your concern to other readers. Each red flag will also generate an automated email to all the publication&apos;s authors, who will be able to respond to the issues raised through the platform. All comments will be available to be read alongside red flag.<p className='mb-2'>The user who raised the red flag can also remove it, once they feel the issue has been resolved. In the early life of the platform the Octopus team will monitor the use of this feature. Longer-term our aim is to escalate long-standing issues to the authors' institutional Research Integrity Office, or their national office."
+    },
+    {
+        id: 'when_will_octopus_launch',
+        heading: 'If this is only an alpha version, when will Octopus launch?',
+        content:
+            "<p className='mb-2'>The platform will launch in June 2022.</p><p className='mb-2'>The alpha release has reduced features and functionality for now, but additional features will be added for testing prior to launch.</p><p className='mb-2'>We are currently gathering user feedback to ensure that the platform meets your needs, and that we prioritise the features of most value to you."
     }
 ];
 
@@ -160,12 +160,12 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
                 </section>
 
                 <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                    <aside className="col-span-2 lg:block">
+                    <aside className="col-span-2 pt-4 lg:block">
                         <Components.FaqSidebar jumpToList={questionsAside} />
                     </aside>
-                    <div className="lg:col-span-6">
+                    <div className="lg:col-span-6 ">
                         {faqContents.map((faqContent) => (
-                            <div key={faqContent.id} id={faqContent.id} className="mx-auto w-10/12 pt-2">
+                            <div key={faqContent.id} id={faqContent.id} className="mx-auto w-10/12 pt-4">
                                 <dl className="divide-y">
                                     <dt className="mb-1 text-lg font-medium leading-6 text-grey-900 transition-colors duration-500 dark:text-white">
                                         {faqContent.heading}
