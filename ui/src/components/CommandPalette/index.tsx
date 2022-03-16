@@ -60,7 +60,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
         showCmdPalette && (
             <Components.Overlay>
                 <ClickAwayListener onClickAway={() => toggleCmdPalette()}>
-                    <div className="mx-auto md:w-[620px]">
+                    <div className="mx-auto md:w-[720px]">
                         <div className="relative z-50 mx-4 flex flex-col items-center justify-between rounded-t-lg bg-grey-800 px-6 pt-4 pb-2 sm:flex-row">
                             <span className="mr-2 text-sm text-grey-100">
                                 {!isValidating && !error && results?.data && 'Results found: ' + results?.data?.length}

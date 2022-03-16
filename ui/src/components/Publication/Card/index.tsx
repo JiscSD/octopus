@@ -14,7 +14,7 @@ type Props = {
 
 const Card: React.FC<Props> = (props): JSX.Element => {
     return (
-        <div className="rounded-lg ">
+        <div className="rounded-lg shadow">
             <div
                 className={`rounded-t-lg border-b border-teal-500 bg-white p-4 transition-colors duration-500 dark:bg-grey-700 ${props.bodyClassName}`}
             >

@@ -2,7 +2,7 @@ import * as NextDocument from 'next/document';
 
 const AppDocument = () => {
     return (
-        <NextDocument.Html lang="en" className="motion-reduce:scroll-auto">
+        <NextDocument.Html lang="en" className="scroll-smooth motion-reduce:scroll-auto">
             <NextDocument.Head>
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}

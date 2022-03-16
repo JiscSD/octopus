@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import parse from 'html-react-parser';
 import * as OutlineIcons from '@heroicons/react/outline';
+import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -103,89 +104,90 @@ const About: NextPage<Props> = (props): JSX.Element => (
 
             <Components.LearnAboutOctopus />
 
-            <section className="container mx-auto px-8">
-                <ul className="mx-auto lg:w-8/12">
-                    <li className="mb-8 flex min-h-[3rem] items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6">
-                        <OutlineIcons.EyeIcon className="mr-4 block w-20 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:h-8 lg:w-8 lg:basis-7" />
+            <section className="container mx-auto my-16 px-8 2xl:my-36">
+                <ul className="mx-auto 2xl:w-8/12">
+                    <Framer.motion.li
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.4 }}
+                        className="mb-8 flex items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6"
+                    >
+                        <OutlineIcons.EyeIcon className="mr-4 hidden w-8 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:block" />
                         <span>
                             Easy for institutions and funders to see exactly what you&apos;ve done and how it has been
                             regarded by others.
                         </span>
-                    </li>
-                    <li className="mb-8 flex min-h-[3rem] items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6">
-                        <OutlineIcons.SparklesIcon className="mr-4 block w-20 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:h-8 lg:w-8" />
+                    </Framer.motion.li>
+                    <Framer.motion.li
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.45 }}
+                        className="mb-8 flex items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6"
+                    >
+                        <OutlineIcons.SparklesIcon className="mr-4 hidden w-8 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:block" />
                         <span>
                             Designed to recognise and reward good practice and serves the needs of both researchers and
                             the global research endeavour itself.
                         </span>
-                    </li>
-                    <li className="mb-8 flex min-h-[3rem] items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6">
-                        <OutlineIcons.UserCircleIcon className="mr-4 block w-20 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:h-8 lg:w-8" />
+                    </Framer.motion.li>
+                    <Framer.motion.li
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5 }}
+                        className="mb-8 flex items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6"
+                    >
+                        <OutlineIcons.UserCircleIcon className="mr-4 hidden w-8 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:block" />
                         <span>
                             Free for researchers to publish their work, free for anyone to read and embeds the
                             principles of openness and transparency throughout.
                         </span>
-                    </li>
-                    <li className="mb-20 flex min-h-[3rem] items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6">
-                        <OutlineIcons.ShareIcon className="mr-4 block w-20 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:h-8 lg:w-8" />
+                    </Framer.motion.li>
+                    <Framer.motion.li
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.55 }}
+                        className="mb-20 flex items-start gap-4 font-montserrat text-lg leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:pl-6"
+                    >
+                        <OutlineIcons.ShareIcon className="mr-4 hidden w-8 pt-2 text-grey-500 transition-colors duration-500 dark:text-white lg:block" />
                         <span>
                             Work can be shared in full detail with no &apos;spin&apos;, encouraging a new culture of
                             collaboration and constructive critique.
                         </span>
-                    </li>
+                    </Framer.motion.li>
                 </ul>
             </section>
 
-            <Assets.Logo className="mx-auto mt-24 mb-14 dark:fill-teal-500 lg:my-24" height={70} width={70} />
-
-            {/* What makes Octopus different? section */}
-            <section className="container lg:mx-auto lg:px-8">
-                <h2 className="mx-auto mb-16 block px-8 text-center font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100 lg:px-0">
-                    What makes Octopus different?
-                </h2>
-                <div className="mx-auto mb-24 flex lg:w-6/12 2xl:w-5/12">
-                    <div className="-ml-24 lg:ml-0">
-                        <Assets.LinkingVerticalWave />
-                    </div>
-                    <div className="container -ml-24 grid grid-cols-1 gap-1">
-                        {publicationTypes.map((publicationType) => (
-                            <div
-                                id={publicationType.id}
-                                className={`mt-8 h-[90px] lg:mt-14 ${publicationType.margin}`}
-                                key={publicationType.id}
-                            >
-                                <div className="flex items-start gap-6 font-montserrat text-sm font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
-                                    <OutlineIcons.LinkIcon className="h-7 w-7 rounded-full bg-grey-900 p-1 text-white shadow transition-colors duration-500 dark:bg-teal-50 dark:text-black lg:mb-1" />
-                                    {parse(publicationType.heading)}
-                                </div>
-                                <div className="block pl-12 text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-[400px]  lg:pl-14 lg:text-sm">
-                                    {parse(publicationType.content)}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                <div className="container mx-auto mb-28 px-8 lg:w-10/12">
+            <section className="container mx-auto mb-36 px-8 2xl:px-36">
+                <div className="mb-28">
+                    <h2 className="mx-auto mb-8 block px-8 text-center font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100 lg:px-0">
+                        What makes Octopus different?
+                    </h2>
                     <h3 className="mb-6 text-center font-montserrat text-lg font-semibold leading-relaxed text-grey-700 transition-colors duration-500 dark:text-white lg:mb-4 lg:text-xl">
                         Smaller units of publication encourage faster sharing, easier publication writing, and smaller
                         author groups.
                     </h3>
-                    <p className="mb-20 text-center text-base text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12 lg:text-lg">
+                    <p className="text-center text-base text-grey-700 transition-colors duration-500 dark:text-white lg:mb-12 lg:text-lg">
                         Allowing researchers to get more meaningful credit for what they&apos;ve done.
                     </p>
                 </div>
-                <div id="PEER_REVIEW" className="container mx-auto mb-20 lg:mb-6">
-                    <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
-                        <OutlineIcons.LinkIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
-                        Peer Review
-                    </div>
-                    <div className="mx-auto block w-10/12 text-center text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-3/12 lg:text-base">
-                        A considered, detailed review of any of the above kinds of publication.
-                    </div>
+                <Components.VisualPublicationFlow />
+            </section>
+
+            <section id="PEER_REVIEW" className="container mx-auto mb-20 px-8 lg:mb-6">
+                <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
+                    <OutlineIcons.LinkIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
+                    Peer Review
+                </div>
+                <div className="mx-auto block w-10/12 text-center text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-5/12 lg:text-base">
+                    BETTER TEXT IS REQUIRED HERE ON WHY PEER REVIEWS ARE DIFFERENT, NOT THE SAME TEXT AS ABOVE.
                 </div>
             </section>
 
-            {/* Principles of Octopus section */}
+            {/*
             <section className="container mx-auto mb-10 px-8 pt-32 pb-10 text-grey-900 dark:text-white lg:mb-2 lg:w-10/12">
                 <h2 className="mx-auto mb-12 block font-montserrat text-3xl font-bold lg:col-span-2">
                     Principles of Octopus
@@ -213,7 +215,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                 <Components.Button href="#" title="Join our user community" />
             </section>
 
-            {/* How do I use Octopus? section */}
+         
             <section className="container mx-auto px-8 pt-20">
                 <h2 className="mx-auto mb-16 block w-fit text-center font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-white">
                     How do I use Octopus?
@@ -263,7 +265,7 @@ const About: NextPage<Props> = (props): JSX.Element => (
                         </span>
                     </li>
                 </ul>
-            </section>
+            </section> */}
         </Layouts.Standard>
     </>
 );

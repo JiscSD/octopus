@@ -62,3 +62,4 @@ export { default as Modal } from './Modal';
 export { default as Editor } from './Editor';
 export { default as EditorMenuBar } from './Editor/MenuBar';
 export { default as LearnAboutOctopus } from './LearnAboutOctopus';
+export { default as VisualPublicationFlow } from './VisualPublicationFlow';

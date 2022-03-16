@@ -16,7 +16,7 @@ const SurveyAlert: React.FC = (): JSX.Element | null => {
                 initial={{ opacity: 0, transform: 'translateX(-100%)' }}
                 animate={{ opacity: 1, transform: 'translateX(0)' }}
                 transition={{ delay: 0.5 }}
-                className="fixed left-0 bottom-0 z-30 w-full rounded-tr-lg bg-teal-200 py-4 pl-6 pr-8 text-grey-800 transition-all duration-500 dark:bg-teal-700 dark:text-grey-100 md:w-72"
+                className="fixed left-0 bottom-0 z-30 w-full rounded-tr-lg bg-teal-700 py-4 pl-6 pr-8 text-grey-100 transition-all duration-500 md:w-72"
             >
                 <span className="mb-3 block ">Help us improve Octopus</span>
                 <span className="mb-2 block text-sm">
