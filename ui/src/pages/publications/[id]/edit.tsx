@@ -53,12 +53,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.for) forPublicationID = context.query.for;
     if (context.query.step) step = context.query.step;
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
-    // we're only dealing with one provided publication to link to from params for now.
-    // future feature to support multiple
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
     if (Array.isArray(step)) step = step[0];
 
-    // handle pre loading a drafted publication & passing it as a page prop
     if (draftedPublicationID) {
         try {
             const response = await api.get(`${Config.endpoints.publications}/${draftedPublicationID}`, token);
