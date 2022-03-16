@@ -75,9 +75,13 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     }}
                 >
                     <div className={darkMode ? 'dark' : ''}>
-                        <div className="bg-white transition-colors duration-500 dark:bg-grey-800 ">
-                            <Components.CommandPalette />
-                            <Component {...pageProps} />
+                        <div className="relative">
+                            <div className="absolute inset-0 z-0 bg-gradient-to-b from-white to-teal-50 opacity-100 transition-opacity duration-500 dark:opacity-0" />
+                            <div className="absolute inset-0 z-0 bg-grey-800 opacity-0 transition-opacity duration-500 dark:opacity-100" />
+                            <div className="relative z-10">
+                                <Components.CommandPalette />
+                                <Component {...pageProps} />
+                            </div>
                         </div>
                     </div>
                 </SWR.SWRConfig>

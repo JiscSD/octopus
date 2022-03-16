@@ -28,8 +28,10 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             grid-cols-1
             items-start
             overflow-hidden
-            border-b
-            border-grey-50
+            rounded-none
+            border
+            border-teal-100
+            !border-b-transparent
             bg-white
             py-4
             px-4
@@ -37,7 +39,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             transition-all
             duration-500
             hover:opacity-95
-            focus:rounded
+            focus:overflow-hidden
             focus:border-transparent
             focus:opacity-95
             focus:ring-2

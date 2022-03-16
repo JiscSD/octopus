@@ -12,9 +12,9 @@ const Overlay: React.FC<Props> = (props): JSX.Element => (
             animate={{ opacity: 1 }}
             transition={{ duration: 0.15 }}
             exit={{ opacity: 0 }}
-            className="fixed top-0 left-0 z-30 flex h-full w-full justify-center"
+            className="fixed top-0 left-0 z-40 flex h-full w-full justify-center"
         >
-            <div className="w-full pt-20 lg:pt-60">{props.children}</div>
+            <div className="w-full pt-20 lg:pt-40">{props.children}</div>
             <div className="absolute top-0 left-0 z-40 h-full w-full bg-grey-700 opacity-95" />
         </Framer.motion.div>
     </Framer.AnimatePresence>
