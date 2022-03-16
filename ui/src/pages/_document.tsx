@@ -2,7 +2,7 @@ import * as NextDocument from 'next/document';
 
 const AppDocument = () => {
     return (
-        <NextDocument.Html lang="en" className="scroll-smooth bg-teal-50 motion-reduce:scroll-auto dark:bg-grey-800">
+        <NextDocument.Html lang="en" className="motion-reduce:scroll-auto">
             <NextDocument.Head>
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 {/* <meta name="viewport" content="width=device-width, initial-scale=1" /> */}
@@ -37,7 +37,7 @@ const AppDocument = () => {
                 />
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
             </NextDocument.Head>
-            <body className="overflow-x-hidden">
+            <body className="overflow-x-hidden font-inter antialiased">
                 <NextDocument.Main />
                 <NextDocument.NextScript />
             </body>

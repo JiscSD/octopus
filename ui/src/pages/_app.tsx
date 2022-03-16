@@ -74,10 +74,11 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         }
                     }}
                 >
-                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''}`}>
-                        <Components.CommandPalette />
-
-                        <Component {...pageProps} />
+                    <div className={darkMode ? 'dark' : ''}>
+                        <div className="bg-white transition-colors duration-500 dark:bg-grey-800 ">
+                            <Components.CommandPalette />
+                            <Component {...pageProps} />
+                        </div>
                     </div>
                 </SWR.SWRConfig>
             )}

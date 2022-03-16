@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Desktop: React.FC<Props> = (props): JSX.Element => (
-    <nav className="mr-4">
+    <nav className="">
         <ul className="flex items-center">
             {props.items.map((item) => (
                 <li key={item.value} className="first:ml-0 last:mr-0 md:mx-1 lg:mx-2">
@@ -18,7 +18,7 @@ const Desktop: React.FC<Props> = (props): JSX.Element => (
                             href={item.value}
                             className="rounded border-transparent p-2 outline-0 focus:ring-2 focus:ring-yellow-400"
                         >
-                            <span className="text-white">{item.label}</span>
+                            <span className="font-medium text-white">{item.label}</span>
                         </Components.Link>
                     )}
 

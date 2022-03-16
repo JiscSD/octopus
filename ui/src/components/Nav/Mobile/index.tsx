@@ -18,7 +18,7 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
     };
 
     return (
-        <div className="relative mr-2 h-8 w-8">
+        <div className="relative h-8 w-8">
             <button
                 aria-label="Mobile Navigation Menu"
                 onClick={(e) => setOpen((prevState) => !prevState)}

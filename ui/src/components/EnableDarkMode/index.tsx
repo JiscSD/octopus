@@ -7,14 +7,14 @@ import * as Types from '@types';
 
 const EnableDarkMode: React.FC = (): JSX.Element => {
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
-    const toggle = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.toggle);
+    const toggleDarkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.toggleDarkMode);
 
     return (
         <button
             type="button"
             aria-label="Enable Dark Mode"
             aria-pressed={darkMode}
-            onClick={(e) => toggle(e)}
+            onClick={(e) => toggleDarkMode(e)}
             className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
         >
             <Framer.AnimatePresence>
@@ -25,7 +25,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <OutlineIcons.SunIcon className="h-8 w-8 text-white transition-all" />
+                        <OutlineIcons.SunIcon className="h-7 w-7 text-white transition-all" />
                     </Framer.motion.div>
                 )}
 
@@ -36,7 +36,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <OutlineIcons.MoonIcon className="h-8 w-8 text-white transition-all" />
+                        <OutlineIcons.MoonIcon className="h-7 w-7 text-white transition-all" />
                     </Framer.motion.div>
                 )}
             </Framer.AnimatePresence>

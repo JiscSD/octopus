@@ -8,13 +8,13 @@ const Mobile: React.FC = (): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
-        <div className="ml-4 mr-2 flex items-center justify-center p-1">
+        <div className="flex items-center justify-center p-1">
             <button
                 onClick={(e) => toggleCmdPalette()}
                 aria-label="Search"
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <SolidIcon.SearchIcon aria-label="Search Palette" className="h-8 w-8 text-white" />
+                <SolidIcon.SearchIcon aria-label="Search Palette" className="h-7 w-7 text-white" />
             </button>
         </div>
     );

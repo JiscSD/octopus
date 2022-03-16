@@ -7,7 +7,9 @@ export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'ne
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
-    toggle: (e: React.FormEvent<HTMLButtonElement>) => void;
+    toggleDarkMode: () => void;
+    feedback: boolean;
+    toggleFeedback: () => void;
 };
 
 export type GlobalsStoreType = {
