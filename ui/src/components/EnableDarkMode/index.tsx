@@ -36,7 +36,7 @@ const EnableDarkMode: React.FC = (): JSX.Element => {
                         transition={{ duration: 0.5 }}
                         exit={{ opacity: 0 }}
                     >
-                        <OutlineIcons.MoonIcon className="h-7 w-7 text-white transition-all" />
+                        <OutlineIcons.MoonIcon className="h-7 w-7 text-teal-500 transition-all" />
                     </Framer.motion.div>
                 )}
             </Framer.AnimatePresence>

@@ -16,39 +16,39 @@ export const publicationTypesInformation = [
     {
         id: 'PROBLEM',
         heading: 'Research Problem',
-        content: 'a neatly defined scientific problem.'
+        content: 'A neatly defined scientific problem.'
     },
     {
         id: 'HYPOTHESIS',
         heading: 'Hypothesis',
         content:
-            'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
+            'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
     },
     {
         id: 'PROTOCOL',
         heading: 'Protocol',
-        content: 'a practical method of testing an existing published Hypothesis.'
+        content: 'A practical method of testing an existing published Hypothesis.'
     },
     {
         id: 'DATA',
         heading: 'Data',
         content:
-            'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+            'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
     },
     {
         id: 'ANALYSIS',
         heading: 'Analysis',
-        content: 'a statistical or thematic analysis of existing published Data or Results.'
+        content: 'A statistical or thematic analysis of existing published Data or Results.'
     },
     {
         id: 'INTERPRETATION',
         heading: 'Interpretation',
-        content: 'a discussion around an existing published Analysis.'
+        content: 'A discussion around an existing published Analysis.'
     },
     {
         id: 'REAL_WORLD_APPLICATION',
         heading: 'Real-world Application',
-        content: 'real world applications arising from an existing published Interpretation.'
+        content: 'Real world applications arising from an existing published Interpretation.'
     }
 ];
 

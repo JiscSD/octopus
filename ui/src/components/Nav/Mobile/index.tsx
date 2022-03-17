@@ -24,7 +24,11 @@ const Mobile: React.FC<Props> = (props): JSX.Element => {
                 onClick={(e) => setOpen((prevState) => !prevState)}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <OutlineIcons.MenuIcon className={`h-8 w-8 text-white ${open && 'text-grey-100'} transition-all `} />
+                <OutlineIcons.MenuIcon
+                    className={`h-8 w-8 text-teal-500 dark:text-white ${
+                        open && 'text-grey-100'
+                    } transition-colors duration-500 `}
+                />
             </button>
             <Framer.AnimatePresence>
                 {open && (

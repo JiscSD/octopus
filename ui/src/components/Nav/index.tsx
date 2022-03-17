@@ -29,7 +29,7 @@ const Nav: React.FC = (): JSX.Element => {
                 ...prevState,
                 {
                     label: `${user?.firstName} ${user?.lastName}`,
-                    value: '#',
+                    value: `${Config.urls.viewUser.path}/${user.id}`,
                     subItems: [
                         {
                             label: 'Public profile',

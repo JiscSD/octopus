@@ -94,21 +94,21 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                         )}
 
                         <div className="mt-12 print:hidden lg:flex">
-                            <Components.ActionButton
+                            <Components.Button
                                 title="Download as PDF"
                                 icon={
                                     <OutlineIcons.DocumentDownloadIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
-                                callback={() => window.print()}
+                                onClick={() => window.print()}
                                 className="mr-6 mb-4 lg:mb-0"
                             />
                             {props.publication.type !== 'PEER_REVIEW' && (
-                                <Components.ActionButton
+                                <Components.Button
                                     title="Write a review"
                                     icon={
                                         <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                     }
-                                    callback={() => {
+                                    onClick={() => {
                                         router.push({
                                             pathname: `${Config.urls.createPublication.path}`,
                                             query: {

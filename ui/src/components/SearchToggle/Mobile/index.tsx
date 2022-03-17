@@ -12,9 +12,12 @@ const Mobile: React.FC = (): JSX.Element => {
             <button
                 onClick={(e) => toggleCmdPalette()}
                 aria-label="Search"
-                className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                className="rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <SolidIcon.SearchIcon aria-label="Search Palette" className="h-7 w-7 text-white" />
+                <SolidIcon.SearchIcon
+                    aria-label="Search Palette"
+                    className="h-7 w-7 text-teal-500 transition-colors duration-500"
+                />
             </button>
         </div>
     );

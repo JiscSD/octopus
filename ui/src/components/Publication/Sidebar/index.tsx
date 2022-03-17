@@ -16,15 +16,15 @@ const Sidebar: React.FC<Props> = (props): JSX.Element => (
             Jump to:
         </span>
         {props.jumpToList.map((jumpTo: JumpTo) => (
-            <a
+            <button
                 key={jumpTo.href}
-                href={`#${jumpTo.href}`}
+                onClick={() => document.querySelector(`#${jumpTo.href}`)?.scrollIntoView({ behavior: 'smooth' })}
                 className={`mb-1 block w-fit rounded border-transparent py-1 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100 ${
                     !!props.linkClassNames && props.linkClassNames
                 }`}
             >
                 {jumpTo.title}
-            </a>
+            </button>
         ))}
     </div>
 );

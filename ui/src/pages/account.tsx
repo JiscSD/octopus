@@ -97,11 +97,12 @@ const Account: Types.NextPage<Props> = (props): JSX.Element => {
                         Draft publications
                     </h2>
                     {draftPublications.length ? (
-                        <div className="rouned-md relative lg:w-2/3">
+                        <div className="rouned-md relative space-y-4 lg:w-2/3">
                             {draftPublications.map((publication: Interfaces.Publication, index) => (
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
+                                    className="flex"
                                 >
                                     <Components.PublicationSimpleResult publication={publication} />
                                 </Components.Link>
@@ -126,6 +127,7 @@ const Account: Types.NextPage<Props> = (props): JSX.Element => {
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                    className="flex"
                                 >
                                     <Components.PublicationSimpleResult publication={publication} />
                                 </Components.Link>

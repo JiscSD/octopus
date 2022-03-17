@@ -33,7 +33,7 @@ const Breakdown: React.FC<Props> = (props): JSX.Element => {
     );
 
     return (
-        <div className="grid w-full gap-8 rounded-3xl border border-grey-100 bg-white px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600 lg:w-fit lg:grid-cols-[max-content_auto]">
+        <div className="grid w-full gap-8 rounded-3xl border border-grey-100 bg-white px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600 lg:w-1/2 3xl:grid-cols-3">
             {/** circle */}
             <div className="relative mx-auto">
                 <Components.ProgressCircle values={values} width={100} height={100} thickness={20} />
@@ -79,7 +79,7 @@ const Breakdown: React.FC<Props> = (props): JSX.Element => {
                                 value={Helpers.percentage(valuePercentage, highestPercentage)}
                                 color={value.color}
                                 width={max}
-                                className="col-span-2 mt-3 h-4 lg:col-span-1 lg:mt-0 lg:h-full"
+                                className="col-span-2 mt-1 h-4 lg:col-span-1 lg:mt-0 lg:h-full"
                             />
                         </div>
                     );

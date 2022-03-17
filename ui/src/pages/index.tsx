@@ -47,7 +47,7 @@ const Home: Types.NextPage = (): JSX.Element => {
                             </Components.Link>
                             <button
                                 aria-label="Open search"
-                                className="flex w-52 items-center justify-between rounded-lg bg-teal-500 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
+                                className="flex w-52 items-center justify-between rounded-lg bg-teal-400 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
                                 onClick={(e) => toggleCmdPalette()}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 text-white transition-colors duration-500 dark:text-teal-500" />
@@ -65,50 +65,53 @@ const Home: Types.NextPage = (): JSX.Element => {
                 <Components.LearnAboutOctopus />
 
                 <section className="container mx-auto px-8 py-16">
-                    <h2 className="mx-auto mb-6 block w-fit font-montserrat text-2xl font-bold text-grey-900 transition-colors duration-500 dark:text-white lg:mb-16">
-                        Get started with Octopus
-                    </h2>
+                    <Components.PageSubTitle text="Get started with Octopus" className="text-center" />
 
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                        <Components.Paper>
-                            <OutlineIcons.DesktopComputerIcon className="mb-8 h-10 w-10 text-teal-500" />
-                            <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
-                                Browse publications
-                            </h3>
-                            <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                Browse our most recent publications, and different types of publication. You don&apos;t
-                                need to log in.
-                            </p>
-                            <Components.ExtendedLink
-                                href={Config.urls.browsePublications.path}
-                                title="Browse publications"
-                            />
-                        </Components.Paper>
-                        <Components.Paper>
-                            <OutlineIcons.SearchIcon className="mb-8 h-10 w-10 text-teal-500" />
-                            <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
-                                Search publications
-                            </h3>
-                            <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                Anyone can read any publication on Octopus. Search by keyword, title or author to
-                                discover more.
-                            </p>
-                            <Components.ExtendedLink href={Config.urls.search.path} title="Search publications" />
-                        </Components.Paper>
-                        <Components.Paper>
-                            <OutlineIcons.PencilIcon className="mb-8 h-10 w-10 text-teal-500" />
-                            <h3 className="mb-6 block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
-                                Publish your work
-                            </h3>
-                            <p className="mb-8 block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                                Publishing in Octopus is free and simple, with eight publications types aligned with the
-                                scientific process.
-                            </p>
-                            <Components.ExtendedLink
-                                href={Config.urls.createPublication.path}
-                                title="Publish your work"
-                            />
-                        </Components.Paper>
+                    <div className="grid grid-cols-1 gap-4 lg:mt-16 lg:grid-cols-2 2xl:grid-cols-3">
+                        <Components.ActionCard
+                            title="Create an account"
+                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
+                            icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.orcidLogin.path}
+                            linkText="Create an account"
+                        />
+                        <Components.ActionCard
+                            title="Learm more account Octopus"
+                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
+                            icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.about.path}
+                            linkText="Learn more"
+                        />
+
+                        <Components.ActionCard
+                            title="Browse publications"
+                            content="Browse our most recent publications, and different types of publication. You don't need to log in."
+                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.browsePublications.path}
+                            linkText="Browse publications"
+                        />
+                        <Components.ActionCard
+                            title="Search publications"
+                            content="Anyone can read any publication on Octopus. Search by keyword, title or author to discover more."
+                            icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.search.path}
+                            linkText="Search publications"
+                        />
+
+                        <Components.ActionCard
+                            title="Publish your work"
+                            content="Publishing in Octopus is free and simple, with eight publications types aligned with the scientific process."
+                            icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.createPublication.path}
+                            linkText="Publish your work"
+                        />
+                        <Components.ActionCard
+                            title="Need help?"
+                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
+                            icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.faq.path}
+                            linkText="See FAQ's"
+                        />
                     </div>
                 </section>
             </Layouts.Standard>
