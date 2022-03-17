@@ -48,10 +48,10 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     return (
         <>
             <NextNprogress
-                color={darkMode ? '#348cb1' : '#c4e1ee'}
+                color={'#348cb1'}
                 startPosition={0.3}
                 stopDelayMs={200}
-                height={3}
+                height={4}
                 showOnShallow={false}
                 options={{
                     showSpinner: false

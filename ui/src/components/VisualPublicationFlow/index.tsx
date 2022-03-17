@@ -16,23 +16,25 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
     }, [props.position]);
 
     return (
-        <Framer.motion.div
-            initial={{ opacity: 0, ...varients }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ type: 'spring', stiffness: 75, delay: 0.5 }}
+        <div
             className={`relative ${props.position === 'LEFT' ? 'lg:ml-4 lg:pl-12' : 'lg:mr-4 lg:pr-12'} ${
                 props.className ?? ''
             }`}
         >
-            <div className="rounded-2xl border-2 border-dashed border-teal-500 p-2 lg:p-6">
+            <Framer.motion.div
+                initial={{ opacity: 0, ...varients }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring', stiffness: 75, delay: 0.5 }}
+                className="rounded-2xl border-2 border-dashed border-teal-500 p-2 lg:p-6"
+            >
                 <h3 className="mb-2 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:text-lg">
                     {props.title}
                 </h3>
                 <p className="text-grey-800 transition-colors duration-500 dark:text-grey-50">{props.content}</p>
-            </div>
+            </Framer.motion.div>
             <Framer.motion.span
-                initial={{ opacity: 0, y: -40 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ type: 'spring', stiffness: 100, delay: 0.75 }}
@@ -42,8 +44,13 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
                 title={`${props.title} link`}
             >
                 {props.icon}
+                <span
+                    className={`absolute top-1/2 -z-10 h-1 w-6 -translate-y-1/2 bg-teal-500 ${
+                        props.position === 'LEFT' ? '-left-4' : '-right-4'
+                    }`}
+                />
             </Framer.motion.span>
-        </Framer.motion.div>
+        </div>
     );
 };
 
