@@ -78,7 +78,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     <Framer.MotionConfig reducedMotion="user">
                         <div className={darkMode ? 'dark' : ''}>
                             <div className="relative">
-                                <div className="absolute inset-0 z-0 bg-gradient-to-b from-white to-teal-50 opacity-100 transition-opacity duration-500 dark:opacity-0" />
+                                <div className="absolute inset-0 z-0 bg-gradient-to-b from-teal-50 to-teal-100 opacity-100 transition-opacity duration-500 dark:opacity-0" />
                                 <div className="absolute inset-0 z-0 bg-grey-800 opacity-0 transition-opacity duration-500 dark:opacity-100" />
                                 <div className="relative z-10">
                                     <Components.CommandPalette />

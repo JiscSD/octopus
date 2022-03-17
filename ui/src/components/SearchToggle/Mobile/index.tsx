@@ -8,7 +8,7 @@ const Mobile: React.FC = (): JSX.Element => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
-        <div className="flex items-center justify-center p-1">
+        <div className="flex items-center justify-center p-1 lg:hidden">
             <button
                 onClick={(e) => toggleCmdPalette()}
                 aria-label="Search"

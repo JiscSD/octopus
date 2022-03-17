@@ -317,7 +317,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                             className="col-span-12 lg:col-span-3 xl:col-span-4"
                             onSubmit={handlerSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative w-full">
+                            <label htmlFor="search-query" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>

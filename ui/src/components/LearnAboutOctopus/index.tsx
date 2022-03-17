@@ -39,7 +39,7 @@ const LearnAboutOctopus = () => (
         </Framer.motion.div>
 
         <div className="container mx-auto px-8">
-            <div className="mb-10 grid grid-cols-1 gap-10 md:mb-16 lg:mx-auto lg:mb-28 lg:grid-cols-12 ">
+            <div className="my-10 grid grid-cols-1 gap-10 md:my-16 lg:my-28 lg:grid-cols-12 3xl:px-52">
                 <GridItem title="Free and quick to publish">
                     Octopus is designed to help researchers get their work published quickly, easily and freely. Break
                     away from the tyranny of &apos;papers&apos; and publish your work faster!

@@ -13,12 +13,8 @@ type Props = {
 const Mobile: React.FC<Props> = (props): JSX.Element => {
     const [open, setOpen] = React.useState(false);
 
-    const toggle = () => {
-        setOpen(!open);
-    };
-
     return (
-        <div className="relative h-8 w-8">
+        <div className="relative block h-8 w-8 lg:hidden">
             <button
                 aria-label="Mobile Navigation Menu"
                 onClick={(e) => setOpen((prevState) => !prevState)}

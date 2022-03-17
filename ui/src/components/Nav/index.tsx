@@ -4,7 +4,6 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Stores from '@stores';
-import * as Hooks from '@hooks';
 import * as Types from '@types';
 
 const defaultValues = [
@@ -19,7 +18,6 @@ const defaultValues = [
 ];
 
 const Nav: React.FC = (): JSX.Element => {
-    const screens = Hooks.useWindowSize();
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const [items, setItems] = React.useState<Interfaces.NavMenuItem[]>([...defaultValues]);
 
@@ -32,7 +30,7 @@ const Nav: React.FC = (): JSX.Element => {
                     value: `${Config.urls.viewUser.path}/${user.id}`,
                     subItems: [
                         {
-                            label: 'Public profile',
+                            label: 'Profile',
                             value: `${Config.urls.viewUser.path}/${user.id}`
                         },
                         {
@@ -48,7 +46,12 @@ const Nav: React.FC = (): JSX.Element => {
         }
     }, [user]);
 
-    return <>{screens.sm ? <Components.NavMobile items={items} /> : <Components.NavDesktop items={items} />}</>;
+    return (
+        <>
+            <Components.NavMobile items={items} />
+            <Components.NavDesktop items={items} />
+        </>
+    );
 };
 
 export default Nav;
