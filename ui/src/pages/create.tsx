@@ -3,7 +3,6 @@ import Head from 'next/head';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/outline';
 
-import * as Assets from '@assets';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -39,53 +38,12 @@ type Props = {
     token: string;
 };
 
-const publicationTypes = [
-    {
-        id: 'PROBLEM',
-        heading: 'Research Problem',
-        content: 'a neatly defined scientific problem.'
-    },
-    {
-        id: 'HYPOTHESIS',
-        heading: 'Hypothesis',
-        content:
-            'an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
-    },
-    {
-        id: 'PROTOCOL',
-        heading: 'Protocol',
-        content: 'a practical method of testing an existing published Hypothesis.'
-    },
-    {
-        id: 'DATA',
-        heading: 'Data',
-        content:
-            'raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
-    },
-    {
-        id: 'ANALYSIS',
-        heading: 'Analysis',
-        content: 'a statistical or thematic analysis of existing published Data or Results.'
-    },
-    {
-        id: 'INTERPRETATION',
-        heading: 'Interpretation',
-        content: 'a discussion around an existing published Analysis.'
-    },
-    {
-        id: 'REAL_WORLD_APPLICATION',
-        heading: 'Real-world Application',
-        content: 'real world applications arising from an existing published Interpretation.'
-    }
-];
-
 const Create: Types.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const [title, setTitle] = React.useState<string>('');
     const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');
     const [confirmed, setConfirmed] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
-    const [showPublicationTypes, setShowPublicationTypes] = React.useState<boolean>(false);
 
     const createPublication = async () => {
         setError(null);
@@ -187,7 +145,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                             </select>
                         </div>
                         <div className="text-grey-800 transition-colors duration-500 dark:text-white">
-                            {publicationTypes.map((publicationType) => (
+                            {Config.values.publicationTypesInformation.map((publicationType) => (
                                 <div className="mt-8" key={publicationType.id}>
                                     <Components.Link
                                         href="#"
@@ -200,7 +158,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                                 </div>
                             ))}
                         </div>
-                        <label htmlFor="confirm" className="my-6 flex items-center">
+                        <label htmlFor="confirm" className="mt-20 mb-6 flex items-center">
                             <input
                                 required
                                 id="confirm"
@@ -216,13 +174,13 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                             </span>
                         </label>
 
-                        <Components.ActionButton
+                        <Components.Button
                             title="Create this publication"
+                            disabled={!publicationType || !title.length || !confirmed}
+                            onClick={createPublication}
                             icon={
                                 <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
                             }
-                            disabled={!publicationType || !title.length || !confirmed}
-                            callback={createPublication}
                         />
                     </div>
                 </section>
