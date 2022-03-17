@@ -96,30 +96,19 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
             <title>{Config.urls.faq.title}</title>
         </Head>
 
-        <Layouts.Standard fixedHeader={false}>
-            {' '}
-            <Components.SectionTwo
-                className="bg-teal-50 dark:bg-grey-800"
-                waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
-            >
-                {/* Frequently asked questions section */}
-                <div className="container mx-auto flex flex-col gap-6 px-8 py-16 lg:w-8/12">
-                    <h2 className="mb-6 block font-montserrat text-xl font-bold text-grey-900 dark:text-teal-300 md:text-2xl lg:col-span-2 xl:mb-8">
-                        Frequently asked questions
-                    </h2>
+        <Layouts.Information>
+            <section className="container mx-auto flex flex-col gap-6 px-8 pb-16 lg:w-8/12">
+                <Components.PageTitle text=" Frequently asked questions" />
 
-                    {faqContents.map((faqContent) => (
-                        <Components.Accordion
-                            key={faqContent.id}
-                            heading={faqContent.heading}
-                            content={faqContent.content}
-                        />
-                    ))}
-                </div>
-            </Components.SectionTwo>
-        </Layouts.Standard>
+                {faqContents.map((faqContent) => (
+                    <Components.Accordion
+                        key={faqContent.id}
+                        heading={faqContent.heading}
+                        content={faqContent.content}
+                    />
+                ))}
+            </section>
+        </Layouts.Information>
     </>
 );
 

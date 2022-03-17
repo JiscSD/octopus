@@ -57,13 +57,13 @@ const Browse: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.browsePublications.title}</title>
             </Head>
 
-            <Layouts.Standard fixedHeader={true}>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36">
+            <Layouts.Standard>
+                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16">
                     <Components.PageTitle text="Browse all publications" />
                 </section>
                 <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                     <aside className="relative col-span-2 hidden lg:block">
-                        <div className="sticky top-28">
+                        <div className="sticky top-16">
                             <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
                                 Publication type
                             </h2>

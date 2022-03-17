@@ -214,8 +214,8 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.search.title}</title>
             </Head>
 
-            <Layouts.Standard fixedHeader={true}>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-36 lg:pb-0">
+            <Layouts.Standard>
+                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16 lg:pb-0">
                     <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
                 </section>
                 <section
@@ -350,7 +350,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="sticky top-28 space-y-5"
+                                className="sticky top-16 space-y-5"
                             >
                                 <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
                                     Publication types

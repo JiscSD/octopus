@@ -7,10 +7,10 @@ import * as Assets from '@assets';
 
 const Footer: React.FC = (): JSX.Element => (
     <>
-        <Assets.WaveOne
-            waveFillTop="fill-teal-500 dark:fill-grey-600"
-            waveFillMiddle="fill-teal-600 dark:fill-grey-700"
-            waveFillBottom="fill-teal-700 dark:fill-grey-800"
+        <Assets.Wave
+            top="fill-teal-500 dark:fill-grey-600"
+            middle="fill-teal-600 dark:fill-grey-700"
+            bottom="fill-teal-700 dark:fill-grey-800"
         />
         <footer className="relative bg-teal-700 py-28 transition-all duration-500 dark:bg-grey-800 print:hidden">
             <div className="container mx-auto grid grid-cols-1 gap-8 px-8 md:grid-cols-4">
