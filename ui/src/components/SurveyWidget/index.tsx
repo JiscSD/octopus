@@ -12,8 +12,8 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
 
     return (
         <Framer.motion.div
-            initial={{ opacity: 0, x: '-100%' }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, translateX: '-100%' }}
+            animate={{ opacity: 1, translateX: 0 }}
             transition={{ delay: 0.5 }}
             className={`fixed left-0 ${
                 !feedback ? '-bottom-[14.25rem]' : 'bottom-0'
