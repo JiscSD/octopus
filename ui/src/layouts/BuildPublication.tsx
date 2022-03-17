@@ -88,7 +88,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
             // const { message } = err as Interfaces.JSONResponseError;
             setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
-            console.log(err);
         }
 
         setPublishModalVisibility(false);
@@ -104,7 +103,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
-            console.log(err);
         }
 
         setSaveExitModalVisibility(false);
