@@ -24,6 +24,7 @@ const ActionCard: React.FC<Props> = (props): React.ReactElement => (
             link
             href={props.link}
             title={props.linkText}
+            iconPosition="RIGHT"
             icon={
                 <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
             }

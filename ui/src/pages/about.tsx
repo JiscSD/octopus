@@ -129,6 +129,7 @@ const About: NextPage = (): React.ReactElement => (
                     link
                     href="#"
                     title="Join our user community"
+                    iconPosition="RIGHT"
                     icon={
                         <OutlineIcons.ExternalLinkIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
                     }

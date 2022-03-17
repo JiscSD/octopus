@@ -1,6 +1,7 @@
 import React from 'react';
 
 import * as Interfaces from '@interfaces';
+import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 
@@ -76,12 +77,23 @@ const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
                 </div>
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800">Licence:</span>
-                    <span className="text-right text-sm font-medium text-grey-800">
-                        {
+                    <Components.Link
+                        href={
                             Config.values.licenceTypes.find((licence) => licence.value === props.publication.licence)
-                                ?.nicename
+                                ?.link || ''
                         }
-                    </span>
+                        title="licence"
+                        openNew={true}
+                        className="text-right text-sm font-medium text-grey-800 underline"
+                    >
+                        <>
+                            {
+                                Config.values.licenceTypes.find(
+                                    (licence) => licence.value === props.publication.licence
+                                )?.nicename
+                            }
+                        </>
+                    </Components.Link>
                 </div>
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800">DOI:</span>

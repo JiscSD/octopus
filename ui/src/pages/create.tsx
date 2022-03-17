@@ -178,6 +178,7 @@ const Create: Types.NextPage<Props> = (props): JSX.Element => {
                             title="Create this publication"
                             disabled={!publicationType || !title.length || !confirmed}
                             onClick={createPublication}
+                            iconPosition="RIGHT"
                             icon={
                                 <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
                             }

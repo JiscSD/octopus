@@ -9,7 +9,7 @@ type Props = {
 };
 
 const VisualChain: React.FC<Props> = (props): JSX.Element => (
-    <div>
+    <div className="print:hidden">
         {Config.values.publicationTypes.map((type, index) => {
             return type !== 'PEER_REVIEW' ? (
                 <div

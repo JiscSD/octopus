@@ -7,6 +7,7 @@ type Props = {
     href?: string;
     link?: boolean;
     icon?: React.ReactElement;
+    iconPosition?: 'LEFT' | 'RIGHT';
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
@@ -31,7 +32,8 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     const childStyles = React.useMemo(() => {
         return `
-            ${props.icon ? 'mr-2 pr-2' : ''}
+            ${props.iconPosition === 'LEFT' ? 'ml-4' : ''}
+            ${props.iconPosition === 'RIGHT' ? 'mr-4' : ''}
             py-2
             font-montserrat
             text-sm
@@ -47,14 +49,15 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-teal-400
             dark:border-b-teal-500
             `;
-    }, [props.icon]);
+    }, [props.iconPosition]);
 
     if (props.link && props.href) {
         return (
             <Components.Link href={props.href} title={props.title} className={parentStyles}>
                 <>
+                    {props.iconPosition === 'LEFT' && props.icon}
                     <span className={childStyles}>{props.title}</span>
-                    {props.icon}
+                    {props.iconPosition === 'RIGHT' && props.icon}
                 </>
             </Components.Link>
         );
@@ -69,8 +72,9 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
                 disabled={props.disabled}
                 className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
             >
+                {props.iconPosition === 'LEFT' && props.icon}
                 <span className={childStyles}>{props.title}</span>
-                {props.icon}
+                {props.iconPosition === 'RIGHT' && props.icon}
             </button>
         );
     }

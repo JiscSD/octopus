@@ -27,7 +27,7 @@ const Desktop: React.FC<Props> = (props): JSX.Element => (
                             <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white">
                                 <span className="flex items-center">
                                     {item.label}
-                                    <OutlineIcons.ChevronDownIcon className="ml-2 h-4 w-4 text-grey-500" />
+                                    <OutlineIcons.ChevronDownIcon className="ml-2 h-4 w-4 text-grey-500 transition-colors duration-500 dark:text-teal-500" />
                                 </span>
                             </HeadlessUI.Menu.Button>
                             <HeadlessUI.Transition

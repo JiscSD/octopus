@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/outline';
@@ -96,18 +96,16 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                         <div className="mt-12 print:hidden lg:flex">
                             <Components.Button
                                 title="Download as PDF"
+                                onClick={() => window.print()}
+                                className="mr-6 mb-4 lg:mb-0"
+                                iconPosition="RIGHT"
                                 icon={
                                     <OutlineIcons.DocumentDownloadIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
                                 }
-                                onClick={() => window.print()}
-                                className="mr-6 mb-4 lg:mb-0"
                             />
                             {props.publication.type !== 'PEER_REVIEW' && (
                                 <Components.Button
                                     title="Write a review"
-                                    icon={
-                                        <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
-                                    }
                                     onClick={() => {
                                         router.push({
                                             pathname: `${Config.urls.createPublication.path}`,
@@ -118,6 +116,10 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                         });
                                     }}
                                     className="mr-6 mb-4 lg:mb-0"
+                                    iconPosition="RIGHT"
+                                    icon={
+                                        <OutlineIcons.PencilIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 group-hover:text-teal-800" />
+                                    }
                                 />
                             )}
                         </div>
@@ -128,7 +130,7 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                 </header>
 
                 <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                    <aside className="col-span-2 hidden pt-12 lg:block">
+                    <aside className="col-span-2 hidden pt-12 print:hidden lg:block">
                         <Components.PublicationSidebar jumpToList={sectionList} />
                     </aside>
                     <div className="lg:col-span-6">
@@ -155,17 +157,10 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                     key={link.id}
                                                     className="flex items-center font-semibold leading-3 text-pink-500"
                                                 >
-                                                    <span className="mr-4 text-sm">
-                                                        {Helpers.formatPublicationType(link.publicationToRef.type)}
-                                                    </span>
-                                                    <Components.Link
-                                                        href={`${Config.urls.viewPublication.path}/${link.publicationToRef.id}`}
-                                                        className="flex w-fit items-end rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                    >
-                                                        <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                            {link.publicationToRef.title}
-                                                        </span>
-                                                    </Components.Link>
+                                                    <Components.PublicationLink
+                                                        publicationRef={link.publicationToRef}
+                                                        showType={true}
+                                                    />
                                                 </Components.ListItem>
                                             ))}
                                             {linkedPublicationsFrom.map((link) => (
@@ -173,17 +168,10 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                                                     key={link.id}
                                                     className="flex items-center font-semibold leading-3 text-pink-500"
                                                 >
-                                                    <span className="mr-4 text-sm">
-                                                        {Helpers.formatPublicationType(link.publicationFromRef.type)}
-                                                    </span>
-                                                    <Components.Link
-                                                        href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
-                                                        className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                    >
-                                                        <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                            {link.publicationFromRef.title}
-                                                        </span>
-                                                    </Components.Link>
+                                                    <Components.PublicationLink
+                                                        publicationRef={link.publicationFromRef}
+                                                        showType={true}
+                                                    />
                                                 </Components.ListItem>
                                             ))}
                                         </>
@@ -203,15 +191,14 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                             <Components.PublicationContentSection id="problems" title="Linked problems">
                                 <Components.List ordered={false}>
                                     {problems.map((link) => (
-                                        <Components.ListItem key={link.id}>
-                                            <Components.Link
-                                                href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
-                                                className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                            >
-                                                <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                    {link.publicationFromRef.title}{' '}
-                                                </span>
-                                            </Components.Link>
+                                        <Components.ListItem
+                                            key={link.id}
+                                            className="flex items-center font-semibold leading-3 text-pink-500"
+                                        >
+                                            <Components.PublicationLink
+                                                publicationRef={link.publicationFromRef}
+                                                showType={false}
+                                            />
                                         </Components.ListItem>
                                     ))}
                                 </Components.List>
@@ -222,15 +209,14 @@ const Publication: Types.NextPage<Props> = (props): JSX.Element => {
                             <Components.PublicationContentSection id="peer-reviews" title="Peer reviews">
                                 <Components.List ordered={false}>
                                     {peerReviews.map((link) => (
-                                        <Components.ListItem key={link.id}>
-                                            <Components.Link
-                                                href={`${Config.urls.viewPublication.path}/${link.publicationFromRef.id}`}
-                                                className="block w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                                            >
-                                                <span className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                                    {link.publicationFromRef.title}{' '}
-                                                </span>
-                                            </Components.Link>
+                                        <Components.ListItem
+                                            key={link.id}
+                                            className="flex items-center font-semibold leading-3 text-pink-500"
+                                        >
+                                            <Components.PublicationLink
+                                                publicationRef={link.publicationFromRef}
+                                                showType={false}
+                                            />
                                         </Components.ListItem>
                                     ))}
                                 </Components.List>

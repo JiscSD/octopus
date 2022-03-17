@@ -76,7 +76,7 @@ const Home: Types.NextPage = (): JSX.Element => {
                             linkText="Create an account"
                         />
                         <Components.ActionCard
-                            title="Learm more account Octopus"
+                            title="Learn more account Octopus"
                             content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
                             icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.about.path}
