@@ -9,20 +9,14 @@ type GridItemProps = {
 };
 
 const GridItem: React.FC<GridItemProps> = (props) => (
-    <Framer.motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.25 }}
-        className="col-span-1 transition-all duration-500 lg:col-span-6 xl:col-span-3"
-    >
+    <div className="col-span-1 transition-all duration-500 lg:col-span-6 xl:col-span-3">
         <h3 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white">
             {props.title}
         </h3>
         <p className="block text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:text-base">
             {props.children}
         </p>
-    </Framer.motion.div>
+    </div>
 );
 
 const LearnAboutOctopus = () => (

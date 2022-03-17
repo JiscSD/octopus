@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 type Props = {
     href: string;
+    title?: string;
     className?: string;
     scroll?: boolean;
     openNew?: boolean;
@@ -18,6 +19,7 @@ const CustomLink: React.FC<Props> = (props): JSX.Element => (
                 props.className ? props.className : ''
             }`}
             target={props.openNew ? '_blank' : ''}
+            title={props.title}
             rel={props.openNew ? 'noreferrer noopener' : ''}
             aria-label={props.ariaLabel}
             onClick={props.onClick}
