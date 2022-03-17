@@ -22,8 +22,8 @@ const GridItem: React.FC<GridItemProps> = (props) => (
 const LearnAboutOctopus = () => (
     <>
         <Framer.motion.div
-            initial={{ opacity: 0, transform: 'translateY(5%)' }}
-            animate={{ opacity: 1, transform: 'translateY(0)' }}
+            initial={{ opacity: 0, y: '5%)' }}
+            animate={{ opacity: 1, y: 0 }}
             className="container mx-auto mb-10 gap-6 px-8 transition-all duration-500 lg:mb-24"
         >
             <Components.HTMLVideo
