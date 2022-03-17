@@ -67,7 +67,7 @@ const Home: Types.NextPage = (): JSX.Element => {
                 <section className="container mx-auto px-8 py-16">
                     <Components.PageSubTitle text="Get started with Octopus" className="text-center" />
 
-                    <div className="grid grid-cols-1 gap-4 lg:mt-16 lg:grid-cols-2 2xl:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-8 lg:mt-16 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3 2xl:gap-16">
                         <Components.ActionCard
                             title="Create an account"
                             content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"

@@ -49,7 +49,7 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
             >
                 <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
                 <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white">
-                    {props.user.firstName[0]}. {props.user?.lastName}
+                    {props.user.firstName}. {props.user?.lastName}
                 </span>
                 <Components.Link
                     href={`https://orcid.org/${props.user.orcid}`}
