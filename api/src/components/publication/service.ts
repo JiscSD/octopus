@@ -1,61 +1,13 @@
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 import * as I from 'interface';
 
-export const getAll = async (filters: I.PublicationFilters) => {
-    const query = {
+export const getAllByIds = async (ids: Array<string>) => {
+    const publications = await client.prisma.publication.findMany({
         where: {
-            type: {
-                in: (filters.type.split(',') as I.PublicationType[]) || [
-                    'PROBLEM',
-                    'PROTOCOL',
-                    'ANALYSIS',
-                    'REAL_WORLD_APPLICATION',
-                    'HYPOTHESIS',
-                    'DATA',
-                    'INTERPRETATION',
-                    'PEER_REVIEW'
-                ]
-            },
-            currentStatus: 'LIVE'
-        }
-    };
-
-    if (filters.search) {
-        //@ts-ignore
-        query.where.OR = [
-            {
-                title: {
-                    search: filters.search?.replace(/ /gi, '|')
-                }
-            },
-            {
-                content: {
-                    search: filters.search?.replace(/ /gi, '|')
-                }
-            },
-            {
-                user: {
-                    firstName: {
-                        search: filters.search?.replace(/ /gi, '|')
-                    }
-                }
-            },
-            {
-                user: {
-                    lastName: {
-                        search: filters.search?.replace(/ /gi, '|')
-                    }
-                }
+            id: {
+                in: ids
             }
-        ];
-    }
-
-    // @ts-ignore
-    const publications = await prisma.publication.findMany({
-        ...query,
-        orderBy: {
-            [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
         },
         include: {
             user: {
@@ -66,26 +18,14 @@ export const getAll = async (filters: I.PublicationFilters) => {
                     orcid: true
                 }
             }
-        },
-        take: Number(filters.limit) || 10,
-        skip: Number(filters.offset) || 0
+        }
     });
 
-    // @ts-ignore
-    const totalPublications = await prisma.publication.count(query);
-
-    return {
-        data: publications,
-        metadata: {
-            total: totalPublications,
-            limit: Number(filters.limit) || 10,
-            offset: Number(filters.offset) || 0
-        }
-    };
+    return publications;
 };
 
 export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
-    const updatedPublication = await prisma.publication.update({
+    const updatedPublication = await client.prisma.publication.update({
         where: {
             id
         },
@@ -96,7 +36,7 @@ export const update = async (id: string, updateContent: I.UpdatePublicationReque
 };
 
 export const isIdInUse = async (id: string) => {
-    const publication = await prisma.publication.count({
+    const publication = await client.prisma.publication.count({
         where: {
             id
         }
@@ -106,7 +46,7 @@ export const isIdInUse = async (id: string) => {
 };
 
 export const get = async (id: string) => {
-    const publication = await prisma.publication.findFirst({
+    const publication = await client.prisma.publication.findFirst({
         where: {
             id
         },
@@ -202,7 +142,7 @@ export const get = async (id: string) => {
 };
 
 export const deletePublication = async (id: string) => {
-    const deletedPublication = await prisma.publication.delete({
+    const deletedPublication = await client.prisma.publication.delete({
         where: {
             id
         }
@@ -211,8 +151,64 @@ export const deletePublication = async (id: string) => {
     return deletedPublication;
 };
 
+export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
+    const publication = await client.search.create({
+        index: 'publications',
+        id: data.id,
+        body: data
+    });
+
+    return publication;
+};
+
+export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
+    const publications = await client.search.search({
+        index: 'publications',
+        body: {
+            from: filters.offset,
+            size: filters.limit,
+            sort: [
+                {
+                    [filters.orderBy || 'publishedDate']: {
+                        order: filters.orderDirection
+                    }
+                }
+            ],
+            query: {
+                bool: {
+                    should: {
+                        multi_match: {
+                            query: filters.search,
+                            fuzziness: 'auto',
+                            fields: ['title^2', 'cleanContent', 'keywords', 'description']
+                        }
+                    },
+                    must: {
+                        terms: {
+                            type: (filters.type
+                                .split(',')
+                                .map((type) => type.toLowerCase()) as I.PublicationType[]) || [
+                                'problem',
+                                'protocol',
+                                'analysis',
+                                'real_world_application',
+                                'hypothesis',
+                                'data',
+                                'interpretation',
+                                'peer_review'
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    return publications;
+};
+
 export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
-    const publication = await prisma.publication.create({
+    const publication = await client.prisma.publication.create({
         data: {
             title: e.title,
             type: e.type,
@@ -295,7 +291,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
     }
 
     // @ts-ignore
-    const updatedPublication = await prisma.publication.update(query);
+    const updatedPublication = await client.prisma.publication.update(query);
 
     return updatedPublication;
 };
@@ -306,7 +302,7 @@ export const createFlag = async (
     category: I.PublicationFlagCategoryEnum,
     comments: string
 ) => {
-    const flag = await prisma.publicationFlags.create({
+    const flag = await client.prisma.publicationFlags.create({
         data: {
             comments,
             category,

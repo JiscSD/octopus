@@ -53,6 +53,8 @@ functions:
                   path: ${self:custom.versions.v1}/healthcheck
                   method: get
                   cors: true
+    seedOpenSearch:
+        handler: src/lib/testUtils.openSearchSeed
     getPublications:
         handler: src/components/publication/routes.getAll
         warmup: true
