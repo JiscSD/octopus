@@ -9,7 +9,7 @@ type Props = {
     publications: Interfaces.Publication[];
 };
 
-const Breakdown: React.FC<Props> = (props): JSX.Element => {
+const Breakdown: React.FC<Props> = (props): React.ReactElement => {
     const values = React.useMemo(
         () => [
             ...Config.values.publicationTypes.map((type) => {

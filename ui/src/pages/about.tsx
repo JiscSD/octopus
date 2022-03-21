@@ -79,7 +79,7 @@ const About: NextPage = (): React.ReactElement => (
 
             <section className="container mx-auto px-8 lg:mb-6">
                 <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white lg:text-xl">
-                    <OutlineIcons.LinkIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
+                    <OutlineIcons.UserCircleIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white shadow transition-colors duration-500" />
                     Peer Review
                 </div>
                 <div className="mx-auto block w-10/12 text-center text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:w-5/12 lg:text-base">

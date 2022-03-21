@@ -41,7 +41,7 @@ type Props = {
     publication: Interfaces.Publication;
 };
 
-const Publication: Types.NextPage<Props> = (props): JSX.Element => {
+const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
 
     const linkedPublicationsTo = props.publication.linkedTo;

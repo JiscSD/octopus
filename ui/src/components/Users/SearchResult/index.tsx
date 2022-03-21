@@ -11,7 +11,7 @@ type Props = {
     className?: string;
 };
 
-const SearchResult: React.FC<Props> = (props): JSX.Element => {
+const SearchResult: React.FC<Props> = (props): React.ReactElement => {
     return (
         <Framer.motion.div
             initial={{ opacity: 0 }}

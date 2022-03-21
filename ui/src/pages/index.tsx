@@ -14,7 +14,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 };
 
-const Home: Types.NextPage = (): JSX.Element => {
+const Home: Types.NextPage = (): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (

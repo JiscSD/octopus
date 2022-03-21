@@ -4,7 +4,7 @@ import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 import * as Types from '@types';
 
-const Desktop: React.FC = (): JSX.Element => {
+const Desktop: React.FC = (): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     return (
         <button

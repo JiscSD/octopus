@@ -9,7 +9,7 @@ type Props = {
     items: Interfaces.NavMenuItem[];
 };
 
-const Desktop: React.FC<Props> = (props): JSX.Element => (
+const Desktop: React.FC<Props> = (props): React.ReactElement => (
     <nav className="hidden lg:block">
         <ul className="flex items-center">
             {props.items.map((item) => (

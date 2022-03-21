@@ -39,7 +39,7 @@ type Props = {
     user: Interfaces.User;
 };
 
-const Author: Types.NextPage<Props> = (props): JSX.Element => {
+const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const [publicationLimit, setPublicationLimit] = React.useState(1);
 
     return (

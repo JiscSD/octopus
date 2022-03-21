@@ -9,7 +9,7 @@ type Props = {
     fixed?: boolean;
 };
 
-const Header: React.FC<Props> = (props): JSX.Element => {
+const Header: React.FC<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
 
     return (

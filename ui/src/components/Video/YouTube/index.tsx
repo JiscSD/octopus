@@ -8,7 +8,7 @@ type Props = {
     height: number;
 };
 
-const YouTube: React.FC<Props> = (props): JSX.Element => (
+const YouTube: React.FC<Props> = (props): React.ReactElement => (
     <div className="flex h-fit w-full rounded-lg bg-white p-2 transition-colors duration-500 dark:bg-teal-500 ">
         <iframe
             width={props.width}

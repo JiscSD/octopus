@@ -7,7 +7,7 @@ type Props = {
     content: string;
 };
 
-const ParseHTML: React.FC<Props> = (props): JSX.Element => {
+const ParseHTML: React.FC<Props> = (props): React.ReactElement => {
     /**
      * @description Sets the CSS rules for markdown or html content
      * @see https://tailwindcss.com/docs/typography-plugin

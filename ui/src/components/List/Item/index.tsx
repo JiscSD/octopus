@@ -5,7 +5,7 @@ type Props = {
     children: React.ReactElement[] | React.ReactElement;
 };
 
-const Item: React.FC<Props> = (props): JSX.Element => (
+const Item: React.FC<Props> = (props): React.ReactElement => (
     <li className={`relative mb-1 flex ${props.className ? props.className : ''}`}>{props.children}</li>
 );
 

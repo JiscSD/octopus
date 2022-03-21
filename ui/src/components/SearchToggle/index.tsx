@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as Components from '@components';
 
-const Search: React.FC = (): JSX.Element => {
+const Search: React.FC = (): React.ReactElement => {
     return (
         <>
             <Components.SearchMobile />

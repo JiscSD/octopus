@@ -25,7 +25,7 @@ import * as Config from '@config';
 //     }
 // };
 
-// const Rating: React.FC<RateProps> = (props): JSX.Element => {
+// const Rating: React.FC<RateProps> = (props): React.ReactElement => {
 //     const arrangeStars = (value: number) => {
 //         return (
 //             <div className="flex items-center justify-end">
@@ -53,7 +53,7 @@ type Props = {
     publication: Interfaces.Publication;
 };
 
-const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
+const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className="w-full rounded-xl lg:w-fit">
             <div className="space-y-2 rounded-lg bg-teal-100 px-6 py-6 transition-colors duration-500">

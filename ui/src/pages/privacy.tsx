@@ -5,7 +5,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const Privacy: Types.NextPage = (): JSX.Element => {
+const Privacy: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>

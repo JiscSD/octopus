@@ -6,7 +6,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const Documentation: Types.NextPage = (): JSX.Element => (
+const Documentation: Types.NextPage = (): React.ReactElement => (
     <>
         <Head>
             <meta name="description" content={Config.urls.documentation.description} />

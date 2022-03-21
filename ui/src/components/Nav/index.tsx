@@ -17,7 +17,7 @@ const defaultValues = [
     }
 ];
 
-const Nav: React.FC = (): JSX.Element => {
+const Nav: React.FC = (): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const [items, setItems] = React.useState<Interfaces.NavMenuItem[]>([...defaultValues]);
 

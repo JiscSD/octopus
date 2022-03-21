@@ -9,7 +9,7 @@ type Props = {
     className?: string;
 };
 
-const ExtendedLink: React.FC<Props> = (props): JSX.Element => {
+const ExtendedLink: React.FC<Props> = (props): React.ReactElement => {
     return (
         <Components.Link
             href={props.href}

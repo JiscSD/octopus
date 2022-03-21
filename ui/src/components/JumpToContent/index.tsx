@@ -1,6 +1,6 @@
 import React from 'react';
 
-const JumpToContent: React.FC = (): JSX.Element => (
+const JumpToContent: React.FC = (): React.ReactElement => (
     <a
         id="top"
         href="#content"

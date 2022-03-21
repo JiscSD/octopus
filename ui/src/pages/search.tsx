@@ -118,7 +118,7 @@ type Props = {
     error: string | null;
 };
 
-const Search: Types.NextPage<Props> = (props): JSX.Element => {
+const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params

@@ -47,7 +47,7 @@ type Props = {
     errors: Errors;
 };
 
-const Browse: Types.NextPage<Props> = (props): JSX.Element => {
+const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
     return (
         <>
             <Head>

@@ -6,7 +6,7 @@ type Props = {
     content: string;
 };
 
-const Accordion: React.FC<Props> = (props): JSX.Element => (
+const Accordion: React.FC<Props> = (props): React.ReactElement => (
     <HeadlessUI.Disclosure>
         {({ open }) => (
             <>

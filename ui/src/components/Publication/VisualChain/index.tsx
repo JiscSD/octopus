@@ -8,7 +8,7 @@ type Props = {
     highlighted: Types.PublicationType;
 };
 
-const VisualChain: React.FC<Props> = (props): JSX.Element => (
+const VisualChain: React.FC<Props> = (props): React.ReactElement => (
     <div className="print:hidden">
         {Config.values.publicationTypes.map((type, index) => {
             return type !== 'PEER_REVIEW' ? (

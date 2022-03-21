@@ -12,7 +12,7 @@ import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const CommandPalette: React.FC = (): JSX.Element => {
+const CommandPalette: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);

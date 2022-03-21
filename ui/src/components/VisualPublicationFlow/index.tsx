@@ -61,7 +61,7 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
             className="row-start-1 row-end-1 !pt-0 lg:col-start-1 lg:col-end-2"
             title="Research Problem"
             content="A neatly defined scientific problem."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.BeakerIcon className="h-5 w-5 text-white" />}
             position="RIGHT"
         />
         <GridItem
@@ -105,13 +105,6 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
             content="Real world applications arising from an existing published Interpretation."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
             position="RIGHT"
-        />
-        <GridItem
-            className="row-start-8 row-end-8 !pb-0 lg:col-start-2 lg:col-end-2"
-            title="Peer Review"
-            content="A considered, detailed review of any of the above kinds of publication."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
-            position="LEFT"
         />
     </section>
 );

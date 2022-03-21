@@ -6,7 +6,7 @@ type Props = {
     children: React.ReactChildren | React.ReactChild;
 };
 
-const ContentSection: React.FC<Props> = (props): JSX.Element => {
+const ContentSection: React.FC<Props> = (props): React.ReactElement => {
     return (
         <article id={props.id} className="pt-12">
             <h2 className="mb-4 block font-montserrat text-2xl font-semibold text-grey-800 transition-colors duration-500 dark:text-teal-500">

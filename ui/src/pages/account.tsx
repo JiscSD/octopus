@@ -46,7 +46,7 @@ type Props = {
     user: Interfaces.User;
 };
 
-const Account: Types.NextPage<Props> = (props): JSX.Element => {
+const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const livePublications = React.useMemo(
         () => props.user.Publication.filter((publication) => publication.currentStatus === 'LIVE'),
         [props.user.Publication]

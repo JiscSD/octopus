@@ -5,7 +5,7 @@ type Props = {
     children: React.ReactChild | React.ReactChildren;
 };
 
-const Overlay: React.FC<Props> = (props): JSX.Element => (
+const Overlay: React.FC<Props> = (props): React.ReactElement => (
     <Framer.AnimatePresence>
         <Framer.motion.div
             initial={{ opacity: 0 }}

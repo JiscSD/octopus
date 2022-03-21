@@ -38,7 +38,7 @@ type Props = {
     token: string;
 };
 
-const Create: Types.NextPage<Props> = (props): JSX.Element => {
+const Create: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const [title, setTitle] = React.useState<string>('');
     const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');

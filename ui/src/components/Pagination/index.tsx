@@ -9,7 +9,7 @@ type Props = {
     total: number;
 };
 
-const Pagination: React.FC<Props> = (props): JSX.Element => {
+const Pagination: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className="flex items-center justify-between px-4 py-3 sm:px-6">
             <div className="flex flex-1 justify-between sm:hidden">

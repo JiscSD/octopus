@@ -2,7 +2,7 @@ import React from 'react';
 import * as SolidIcons from '@heroicons/react/solid';
 import * as Framer from 'framer-motion';
 
-const ScrollToTop: React.FC = (): JSX.Element => {
+const ScrollToTop: React.FC = (): React.ReactElement => {
     return (
         <Framer.motion.button
             aria-label="Scroll to Top"

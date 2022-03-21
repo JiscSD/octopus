@@ -87,7 +87,7 @@ const faqContents = [
 
 // This page needs to be completed.
 
-const Faq: NextPage<Props> = (props): JSX.Element => (
+const Faq: NextPage<Props> = (props): React.ReactElement => (
     <>
         <Head>
             <meta name="description" content={Config.urls.faq.description} />

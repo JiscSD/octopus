@@ -10,7 +10,7 @@ type Props = {
     items: Interfaces.NavMenuItem[];
 };
 
-const Mobile: React.FC<Props> = (props): JSX.Element => {
+const Mobile: React.FC<Props> = (props): React.ReactElement => {
     const [open, setOpen] = React.useState(false);
 
     return (

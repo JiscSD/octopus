@@ -4,7 +4,7 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
 
-const LogIn: React.FC = (): JSX.Element => (
+const LogIn: React.FC = (): React.ReactElement => (
     <Components.Link
         href={Config.urls.orcidLogin.path}
         className="flex items-center rounded-md bg-orcid p-1 lg:mr-4 lg:p-2"

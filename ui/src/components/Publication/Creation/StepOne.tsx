@@ -9,7 +9,7 @@ import * as Types from '@types';
 /**
  * @description Edit title
  */
-const StepOne: React.FC = (): JSX.Element => {
+const StepOne: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
     const updateTitle = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateTitle

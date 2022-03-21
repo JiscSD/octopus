@@ -54,7 +54,7 @@ type Props = {
     token: string;
 };
 
-const Login: Types.NextPage<Props> = (props): JSX.Element => {
+const Login: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 

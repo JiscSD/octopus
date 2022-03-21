@@ -8,7 +8,7 @@ type Props = {
     publication: Interfaces.CorePublication;
 };
 
-const SimpleResult: React.FC<Props> = (props): JSX.Element => (
+const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
     <div className="w-full rounded border border-transparent bg-white p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
         <div className="lg: flex justify-between">
             <div className="mb-3 flex items-end text-sm">

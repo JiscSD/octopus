@@ -6,7 +6,7 @@ type Props = {
     className?: string;
 };
 
-const Twitter: React.FC<Props> = (props): JSX.Element => (
+const Twitter: React.FC<Props> = (props): React.ReactElement => (
     <svg
         height={props.height}
         width={props.width}

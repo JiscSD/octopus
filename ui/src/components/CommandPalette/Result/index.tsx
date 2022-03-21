@@ -16,7 +16,7 @@ type Props = {
     className?: string;
 };
 
-const Result: React.FC<Props> = (props): JSX.Element => {
+const Result: React.FC<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (

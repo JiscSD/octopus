@@ -9,7 +9,7 @@ import * as Types from '@types';
 /**
  * @description Edit Licence, COI & soon to be description & keywords
  */
-const StepThree: React.FC = (): JSX.Element => {
+const StepThree: React.FC = (): React.ReactElement => {
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
     );

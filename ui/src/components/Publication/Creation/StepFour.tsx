@@ -5,7 +5,7 @@ import * as Stores from '@stores';
 import * as Assets from '@assets';
 import * as Types from '@types';
 
-const StepFour: React.FC = (): JSX.Element | null => {
+const StepFour: React.FC = (): React.ReactElement | null => {
     const content: string = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.content
     );

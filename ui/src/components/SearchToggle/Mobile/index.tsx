@@ -4,7 +4,7 @@ import * as SolidIcon from '@heroicons/react/solid';
 import * as Stores from '@stores';
 import * as Types from '@types';
 
-const Mobile: React.FC = (): JSX.Element => {
+const Mobile: React.FC = (): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (

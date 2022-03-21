@@ -18,7 +18,7 @@ type Props = {
     className?: string;
 };
 
-const Alert: React.FC<Props> = (props): JSX.Element => {
+const Alert: React.FC<Props> = (props): React.ReactElement => {
     const [show, setShow] = React.useState(false);
     const [classes, setClasses] = React.useState({
         title: '',

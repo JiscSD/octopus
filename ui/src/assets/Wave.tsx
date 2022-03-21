@@ -7,7 +7,7 @@ type Props = {
     bottom: string;
 };
 
-const Wave: React.FC<Props> = (props): JSX.Element => (
+const Wave: React.FC<Props> = (props): React.ReactElement => (
     <svg
         id="visual"
         viewBox="0 0 1500 200"

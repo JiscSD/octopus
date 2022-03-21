@@ -5,7 +5,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const Accessibility: Types.NextPage = (): JSX.Element => {
+const Accessibility: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>

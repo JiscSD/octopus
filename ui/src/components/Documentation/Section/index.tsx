@@ -10,7 +10,7 @@ type SectionProps = {
     entry: Interfaces.DocumentationEntry;
 };
 
-const DocumentationSection: React.FC<SectionProps> = (props): JSX.Element => {
+const DocumentationSection: React.FC<SectionProps> = (props): React.ReactElement => {
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
 
     return (

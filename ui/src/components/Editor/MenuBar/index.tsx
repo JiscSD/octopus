@@ -35,7 +35,7 @@ type MenuBarProps = {
     className?: string;
 };
 
-const MenuBar: React.FC<MenuBarProps> = (props): JSX.Element | null => {
+const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
     return props.editor ? (
         <nav
             className={`grid grid-cols-8 justify-evenly gap-2 lg:grid-cols-14 xl:grid-cols-21 ${

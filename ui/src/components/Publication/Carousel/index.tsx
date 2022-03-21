@@ -8,7 +8,7 @@ type Props = {
     publications: Interfaces.Publication[];
 };
 
-const Carousel: React.FC<Props> = (props): JSX.Element => {
+const Carousel: React.FC<Props> = (props): React.ReactElement => {
     const container = React.useRef<HTMLDivElement | any>();
 
     return (

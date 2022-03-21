@@ -16,7 +16,7 @@ type Props = {
     values: Data[];
 };
 
-const Circle: React.FC<Props> = (props): JSX.Element => (
+const Circle: React.FC<Props> = (props): React.ReactElement => (
     <Charts.PieChart
         data={props.values}
         animate={true}

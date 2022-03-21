@@ -5,7 +5,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const Terms: Types.NextPage = (): JSX.Element => {
+const Terms: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>

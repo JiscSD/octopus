@@ -12,7 +12,7 @@ type Props = {
     onClick?: () => void;
 };
 
-const CustomLink: React.FC<Props> = (props): JSX.Element => (
+const CustomLink: React.FC<Props> = (props): React.ReactElement => (
     <Link href={props.href} scroll={props.scroll}>
         <a
             className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${

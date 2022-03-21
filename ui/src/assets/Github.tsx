@@ -6,7 +6,7 @@ type Props = {
     className?: string;
 };
 
-const Github: React.FC<Props> = (props): JSX.Element => (
+const Github: React.FC<Props> = (props): React.ReactElement => (
     <svg
         height={props.height}
         width={props.width}

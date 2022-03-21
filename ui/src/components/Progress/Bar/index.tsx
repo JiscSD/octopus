@@ -8,7 +8,7 @@ type Props = {
     className?: string;
 };
 
-const Bar: React.FC<Props> = (props): JSX.Element => (
+const Bar: React.FC<Props> = (props): React.ReactElement => (
     <div
         style={{ width: props.width ? props.width : 0 }}
         className={`relative ${props.className ? props.className : ''}`}

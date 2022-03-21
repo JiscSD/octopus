@@ -5,7 +5,7 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
 
-const Footer: React.FC = (): JSX.Element => (
+const Footer: React.FC = (): React.ReactElement => (
     <>
         <Assets.Wave
             top="fill-teal-500 dark:fill-grey-600"

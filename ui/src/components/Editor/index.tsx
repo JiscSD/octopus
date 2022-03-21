@@ -16,7 +16,7 @@ type EditorProps = {
     changeCallback: (content: string) => void;
 };
 
-const Editor: React.FC<EditorProps> = (props): JSX.Element => {
+const Editor: React.FC<EditorProps> = (props): React.ReactElement => {
     const editorConstructor = TipTap.useEditor({
         extensions: [
             StarterKit,

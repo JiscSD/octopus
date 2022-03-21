@@ -7,7 +7,7 @@ type Props = {
     children: React.ReactNode;
 };
 
-const Information: React.FC<Props> = (props): JSX.Element => (
+const Information: React.FC<Props> = (props): React.ReactElement => (
     <>
         <Components.JumpToContent />
         <Components.SurveyWidget />

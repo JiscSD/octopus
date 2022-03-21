@@ -12,7 +12,7 @@ type Props = {
     buttonClassName?: string;
 };
 
-const Card: React.FC<Props> = (props): JSX.Element => {
+const Card: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className="rounded-lg shadow">
             <div
