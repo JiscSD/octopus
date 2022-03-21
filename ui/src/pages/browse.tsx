@@ -107,7 +107,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                     title="There was a problem fetching the latest publications"
                                     details={[props.errors.latest]}
                                     severity="ERROR"
-                                    allowDismiss={true}
+                                    allowDismiss={false}
                                 />
                             )}
                         </div>

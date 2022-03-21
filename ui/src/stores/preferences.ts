@@ -10,7 +10,7 @@ type State = {
 };
 
 let store: any = (set: any): Types.PreferencesStoreTypes => ({
-    darkMode: false,
+    darkMode: true,
     toggleDarkMode: () => set((state: State) => ({ darkMode: !state.darkMode })),
     feedback: true,
     toggleFeedback: () => set((state: State) => ({ feedback: !state.feedback }))

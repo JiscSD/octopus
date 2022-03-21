@@ -1,9 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-
 import * as OutlineIcons from '@heroicons/react/outline';
-import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
