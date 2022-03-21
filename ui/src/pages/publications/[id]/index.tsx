@@ -37,6 +37,40 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 };
 
+type RenderLinksProps = {
+    to: Interfaces.LinkTo[];
+    from: Interfaces.LinkFrom[];
+};
+
+const RenderLinks: React.FC<RenderLinksProps> = (props): React.ReactElement => {
+    const cache: Types.PublicationType[] = [];
+    const links: { id: string; ref: Interfaces.PublicationRef }[] = [];
+
+    props.to.map((item) => links.push({ id: item.id, ref: item.publicationToRef }));
+    props.from.map((item) => links.push({ id: item.id, ref: item.publicationFromRef }));
+
+    return (
+        <Components.List ordered={true}>
+            {links.map((link) => {
+                let show = false;
+                if (!cache.includes(link.ref.type)) {
+                    cache.push(link.ref.type);
+                    show = true;
+                }
+
+                return (
+                    <Components.ListItem
+                        key={link.id}
+                        className="flex items-center font-semibold leading-3 text-pink-500"
+                    >
+                        <Components.PublicationLink publicationRef={link.ref} showType={show} />
+                    </Components.ListItem>
+                );
+            })}
+        </Components.List>
+    );
+};
+
 type Props = {
     publication: Interfaces.Publication;
 };
@@ -45,7 +79,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
 
     const linkedPublicationsTo = props.publication.linkedTo;
-
     const linkedPublicationsFrom = props.publication.linkedFrom.filter(
         (link) => link.publicationFromRef.type !== 'PROBLEM' && link.publicationFromRef.type !== 'PEER_REVIEW'
     );
@@ -133,7 +166,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <aside className="col-span-2 hidden pt-12 print:hidden lg:block">
                         <Components.PublicationSidebar jumpToList={sectionList} />
                     </aside>
-                    <div className="lg:col-span-6">
+                    <article className="lg:col-span-6">
                         {/** Authors */}
                         <Components.PublicationContentSection id="authors" title="Authors">
                             <Components.Link
@@ -150,32 +183,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="linked-publications" title="Linked publications">
                             <>
                                 {linkedPublicationsTo.length || linkedPublicationsFrom.length ? (
-                                    <Components.List ordered={false}>
-                                        <>
-                                            {linkedPublicationsTo.map((link) => (
-                                                <Components.ListItem
-                                                    key={link.id}
-                                                    className="flex items-center font-semibold leading-3 text-pink-500"
-                                                >
-                                                    <Components.PublicationLink
-                                                        publicationRef={link.publicationToRef}
-                                                        showType={true}
-                                                    />
-                                                </Components.ListItem>
-                                            ))}
-                                            {linkedPublicationsFrom.map((link) => (
-                                                <Components.ListItem
-                                                    key={link.id}
-                                                    className="flex items-center font-semibold leading-3 text-pink-500"
-                                                >
-                                                    <Components.PublicationLink
-                                                        publicationRef={link.publicationFromRef}
-                                                        showType={true}
-                                                    />
-                                                </Components.ListItem>
-                                            ))}
-                                        </>
-                                    </Components.List>
+                                    <RenderLinks to={linkedPublicationsTo} from={linkedPublicationsFrom} />
                                 ) : (
                                     <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                         {`This ${Helpers.formatPublicationType(
@@ -188,7 +196,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                         {/* Linked from problems */}
                         {!!showProblems && (
-                            <Components.PublicationContentSection id="problems" title="Linked problems">
+                            <Components.PublicationContentSection
+                                id="problems"
+                                title={`Problems created from this ${Helpers.formatPublicationType(
+                                    props.publication.type
+                                )}`}
+                            >
                                 <Components.List ordered={false}>
                                     {problems.map((link) => (
                                         <Components.ListItem
@@ -205,8 +218,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.PublicationContentSection>
                         )}
 
+                        {/* Linked peer reviews */}
                         {!!showPeerReviews && (
-                            <Components.PublicationContentSection id="peer-reviews" title="Peer reviews">
+                            <Components.PublicationContentSection
+                                id="peer-reviews"
+                                title={`Peer reviews created from this ${Helpers.formatPublicationType(
+                                    props.publication.type
+                                )}`}
+                            >
                                 <Components.List ordered={false}>
                                     {peerReviews.map((link) => (
                                         <Components.ListItem
@@ -249,7 +268,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                       )} does not have any specified conflicts of interest.`}
                             </p>
                         </Components.PublicationContentSection>
-                    </div>
+                    </article>
                 </section>
             </Layouts.Standard>
         </>

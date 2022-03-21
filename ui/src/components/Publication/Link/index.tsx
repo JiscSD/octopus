@@ -3,10 +3,7 @@ import React from 'react';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
 
 type Props = {
     publicationRef: Interfaces.PublicationRef;
@@ -16,7 +13,9 @@ type Props = {
 const Link: React.FC<Props> = (props) => (
     <div className="mb-2">
         {props.showType && (
-            <span className="mr-4 block text-sm">{Helpers.formatPublicationType(props.publicationRef.type)}</span>
+            <span className="mt-2 mb-1 mr-4 block text-sm">
+                {Helpers.formatPublicationType(props.publicationRef.type)}
+            </span>
         )}
         <Components.Link
             href={`${Config.urls.viewPublication.path}/${props.publicationRef.id}`}
