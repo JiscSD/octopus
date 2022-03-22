@@ -14,9 +14,9 @@ type Props = {
 const ActionCard: React.FC<Props> = (props): React.ReactElement => (
     <div className="space-y-6 rounded-xl bg-white py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
-        <h3 className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
+        <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
             {props.title}
-        </h3>
+        </span>
         <p className="block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
             {props.content}
         </p>

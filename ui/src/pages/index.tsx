@@ -39,7 +39,7 @@ const Home: Types.NextPage = (): React.ReactElement => {
                         <div className="mx-auto flex w-fit space-x-6">
                             <Components.Link
                                 href={Config.urls.about.path}
-                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-500 dark:hover:bg-teal-600"
+                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
                             >
                                 <span className="text-center font-montserrat text-sm leading-none tracking-wide">
                                     Learn more

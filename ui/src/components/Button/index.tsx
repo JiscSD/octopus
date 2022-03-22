@@ -68,6 +68,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             <button
                 type="button"
                 title={props.title}
+                name={props.title}
                 onClick={props.onClick}
                 disabled={props.disabled}
                 className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
