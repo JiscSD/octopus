@@ -53,7 +53,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     if (props.link && props.href) {
         return (
-            <Components.Link href={props.href} title={props.title} className={parentStyles}>
+            <Components.Link href={props.href} title={props.title} ariaLabel={props.title} className={parentStyles}>
                 <>
                     {props.iconPosition === 'LEFT' && props.icon}
                     <span className={childStyles}>{props.title}</span>
@@ -69,6 +69,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
                 type="button"
                 title={props.title}
                 name={props.title}
+                aria-label={props.title}
                 onClick={props.onClick}
                 disabled={props.disabled}
                 className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}

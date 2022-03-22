@@ -21,12 +21,16 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
         >
             <button
                 className="mb-3 block rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                name="Open Close Label"
+                aria-label="Open Close Label"
                 onClick={() => toggleFeedback()}
             >
                 Help us improve Octopus
             </button>
             <button
                 onClick={() => toggleFeedback()}
+                name="Open Close icon"
+                aria-label="Open Close icon"
                 className="absolute top-[5.35%] right-5 rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 {!feedback ? (
