@@ -9,7 +9,7 @@ type Props = {
 };
 
 const YouTube: React.FC<Props> = (props): React.ReactElement => (
-    <div className="flex h-fit w-full rounded-lg bg-white p-2 transition-colors duration-500 dark:bg-teal-500 ">
+    <div className="flex h-fit w-full rounded-lg bg-white-50 p-2 transition-colors duration-500 dark:bg-teal-500 ">
         <iframe
             width={props.width}
             height={props.height}

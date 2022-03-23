@@ -84,7 +84,7 @@ const CommandPalette: React.FC = (): React.ReactElement => {
                                     <span className="sr-only">Use setting</span>
                                     <span
                                         aria-hidden="true"
-                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white-50 shadow ring-0 transition duration-200 ease-in-out ${
                                             searchType === 'publications' ? 'translate-x-5' : 'translate-x-0'
                                         }`}
                                     />
@@ -100,7 +100,7 @@ const CommandPalette: React.FC = (): React.ReactElement => {
                                     ref={searchInput}
                                     type="text"
                                     placeholder={`Search ${searchType}`}
-                                    className="w-full rounded bg-transparent px-2 py-1 text-base leading-loose tracking-wide text-white outline-0 focus:ring-2 focus:ring-yellow-500"
+                                    className="w-full rounded bg-transparent px-2 py-1 text-base leading-loose tracking-wide text-white-50 outline-0 focus:ring-2 focus:ring-yellow-500"
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
                                     onKeyDown={(e: React.KeyboardEvent) => {

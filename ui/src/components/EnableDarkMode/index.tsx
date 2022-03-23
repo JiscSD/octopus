@@ -13,7 +13,9 @@ const EnableDarkMode: React.FC = (): React.ReactElement => {
         <HeadlessUI.Switch
             checked={darkMode}
             onChange={toggleDarkMode}
-            className="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer items-center rounded-full border-2 border-teal-500 bg-white transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            className={`relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer items-center rounded-full border-2 border-teal-500 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+                darkMode ? 'bg-grey-800' : 'bg-white-50'
+            }`}
         >
             <span className="sr-only">Use setting</span>
             <span
@@ -35,7 +37,7 @@ const EnableDarkMode: React.FC = (): React.ReactElement => {
                     }`}
                     aria-hidden="true"
                 >
-                    <OutlineIcons.SunIcon className="h-7 w-7 text-teal-500 transition-all" />
+                    <OutlineIcons.SunIcon className="h-7 w-7 text-white-50 transition-all" />
                 </span>
             </span>
         </HeadlessUI.Switch>

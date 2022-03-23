@@ -16,7 +16,7 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                 <li key={item.value} className="first:ml-0 last:mr-0 md:mx-1 lg:mx-2">
                     {!item.subItems && (
                         <Components.Link href={item.value} className=" p-2 ">
-                            <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                            <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 {item.label}
                             </span>
                         </Components.Link>
@@ -24,7 +24,7 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
 
                     {item.subItems?.length && (
                         <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
-                            <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white">
+                            <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50">
                                 <span className="flex items-center">
                                     {item.label}
                                     <OutlineIcons.ChevronDownIcon className="ml-2 h-4 w-4 text-grey-500 transition-colors duration-500 dark:text-teal-500" />
@@ -41,12 +41,12 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                             >
                                 <HeadlessUI.Menu.Items
                                     as="ul"
-                                    className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
+                                    className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                 >
                                     {item.subItems.map((subItem, index) => (
                                         <li
                                             key={index}
-                                            className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white"
+                                            className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                         >
                                             <HeadlessUI.Menu.Item>
                                                 <div>

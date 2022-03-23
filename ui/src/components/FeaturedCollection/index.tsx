@@ -9,7 +9,7 @@ type Props = {
 
 const FeaturedCollection: React.FC<Props> = (props): React.ReactElement => (
     <div className="rounded-xl bg-teal-100 p-6 transition-colors duration-500 dark:bg-grey-700 lg:p-10">
-        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
+        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
             Featured publications
         </h2>
         <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">

@@ -90,7 +90,10 @@ module.exports = {
                 800: 'hsl(46, 100%, 15%)', // #4d3b00
                 900: 'hsl(46, 100%, 5%)' // #1a1400
             },
-            white: '#ffffff',
+            white: {
+                50: '#ffffff',
+                100: '#f3f3f3'
+            },
             black: '#000000',
             orcid: '#437405'
         },

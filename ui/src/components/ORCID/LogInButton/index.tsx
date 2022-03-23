@@ -10,8 +10,8 @@ const LogIn: React.FC = (): React.ReactElement => (
         ariaLabel="Sign in with ORCID"
         className="flex items-center rounded-md bg-orcid p-1 lg:mr-4 lg:p-2"
     >
-        <Assets.ORCID width={20} height={20} className="fill-white" />
-        <span className="ml-2 hidden text-xs text-white lg:block">Sign in with ORCID</span>
+        <Assets.ORCID width={20} height={20} className="fill-white-50" />
+        <span className="ml-2 hidden text-xs text-white-50 lg:block">Sign in with ORCID</span>
     </Components.Link>
 );
 

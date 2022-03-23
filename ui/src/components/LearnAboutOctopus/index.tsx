@@ -10,7 +10,7 @@ type GridItemProps = {
 
 const GridItem: React.FC<GridItemProps> = (props) => (
     <div className="col-span-1 transition-all duration-500 lg:col-span-6 xl:col-span-3">
-        <h2 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white">
+        <h2 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white-50">
             {props.title}
         </h2>
         <p className="block text-sm leading-6 tracking-wide text-grey-700 transition-colors duration-500 dark:text-grey-200 lg:text-base">

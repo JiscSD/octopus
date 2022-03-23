@@ -46,7 +46,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="paragraph"
                 onClick={() => props.editor?.chain().focus().setParagraph().run()}
-                className={props.editor?.isActive('paragraph') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor?.isActive('paragraph') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <LetterIcon letter="p" />
             </MenuBarOption>
@@ -54,7 +54,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="h2"
                 onClick={() => props.editor?.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={props.editor.isActive('heading', { level: 2 }) ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('heading', { level: 2 }) ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <LetterIcon letter="h2" />
             </MenuBarOption>
@@ -62,7 +62,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="h3"
                 onClick={() => props.editor?.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={props.editor.isActive('heading', { level: 3 }) ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('heading', { level: 3 }) ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <LetterIcon letter="h3" />
             </MenuBarOption>
@@ -70,7 +70,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="h4"
                 onClick={() => props.editor?.chain().focus().toggleHeading({ level: 4 }).run()}
-                className={props.editor.isActive('heading', { level: 4 }) ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('heading', { level: 4 }) ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <LetterIcon letter="h4" />
             </MenuBarOption>
@@ -78,7 +78,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="bold"
                 onClick={() => props.editor?.chain().focus().toggleBold().run()}
-                className={props.editor.isActive('bold') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('bold') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaBold />
             </MenuBarOption>
@@ -86,7 +86,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="italic"
                 onClick={() => props.editor?.chain().focus().toggleItalic().run()}
-                className={props.editor.isActive('italic') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('italic') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaItalic />
             </MenuBarOption>
@@ -94,7 +94,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="strike"
                 onClick={() => props.editor?.chain().focus().toggleStrike().run()}
-                className={props.editor.isActive('strike') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('strike') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaStrikethrough />
             </MenuBarOption>
@@ -102,7 +102,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="bullet list"
                 onClick={() => props.editor?.chain().focus().toggleBulletList().run()}
-                className={props.editor.isActive('bulletList') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('bulletList') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaListUl />
             </MenuBarOption>
@@ -110,7 +110,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="ordered list"
                 onClick={() => props.editor?.chain().focus().toggleOrderedList().run()}
-                className={props.editor.isActive('orderedList') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('orderedList') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaListOl />
             </MenuBarOption>
@@ -118,7 +118,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="code block"
                 onClick={() => props.editor?.chain().focus().toggleCodeBlock().run()}
-                className={props.editor.isActive('codeBlock') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('codeBlock') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaCode />
             </MenuBarOption>
@@ -126,7 +126,7 @@ const MenuBar: React.FC<MenuBarProps> = (props): React.ReactElement | null => {
                 editor={props.editor}
                 title="blockquote"
                 onClick={() => props.editor?.chain().focus().toggleBlockquote().run()}
-                className={props.editor.isActive('blockquote') ? '!bg-teal-500 !text-white' : ''}
+                className={props.editor.isActive('blockquote') ? '!bg-teal-500 !text-white-50' : ''}
             >
                 <ReactIconsFA.FaQuoteLeft />
             </MenuBarOption>

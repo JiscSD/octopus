@@ -21,7 +21,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
+        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
             props.className ? props.className : ''
         }`}
     >
@@ -171,7 +171,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 onClick={() => {
                                     router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
                                 }}
-                                className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
+                                className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
                             >
                                 Preview publication
                             </button>
@@ -189,8 +189,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 <button
                                     onClick={() => props.setStep(index)}
                                     className={`${
-                                        index === props.currentStep ? 'bg-teal-500 text-white' : ''
-                                    } dark:hovertext-white w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50`}
+                                        index === props.currentStep ? 'bg-teal-500 text-white-50' : ''
+                                    } w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50`}
                                 >
                                     {parse(step.title)}
                                 </button>

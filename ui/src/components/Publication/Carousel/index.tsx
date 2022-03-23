@@ -45,7 +45,7 @@ const Carousel: React.FC<Props> = (props): React.ReactElement => {
             </button>
 
             {/** Fade off */}
-            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-white transition-colors duration-500 dark:to-grey-800 md:block" />
+            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-white-50 transition-colors duration-500 dark:to-grey-800 md:block" />
         </div>
     );
 };

@@ -21,7 +21,7 @@ const Skeleton: React.FC<Props> = (props): React.ReactElement => (
                 rounded-md
                 border
                 border-transparent
-                bg-white
+                bg-white-50
                 py-4
                 px-4
                 shadow

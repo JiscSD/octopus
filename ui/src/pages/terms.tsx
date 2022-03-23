@@ -16,7 +16,7 @@ const Terms: Types.NextPage = (): React.ReactElement => {
             </Head>
 
             <Layouts.Information>
-                <section className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white lg:w-8/12">
+                <section className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12">
                     <Components.PageTitle text="Terms" />
                     <h2 className="text-xl font-medium">Licence</h2>
                     <p className="mb-4">This project code is licensed under the GNU General Public Licence v3.0.</p>

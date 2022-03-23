@@ -34,7 +34,7 @@ const StepThree: React.FC = (): React.ReactElement => {
             <div className="mt-20 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
                 <label
                     htmlFor="licence"
-                    className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white"
+                    className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50"
                 >
                     Which{' '}
                     <Components.Link
@@ -52,7 +52,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                         name="publicationType"
                         value={licence}
                         onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
-                        className="mb-4 block w-fit rounded-md border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white lg:mb-0"
+                        className="mb-4 block w-fit rounded-md border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50 lg:mb-0"
                         required
                     >
                         {Config.values.licenceTypes.map((type) => (
@@ -63,7 +63,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                     </select>
                     <button
                         onClick={() => setShowLicenceDetails((prevState) => !prevState)}
-                        className="rounded bg-teal-500 px-3 py-1 text-xs font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:ml-8"
+                        className="rounded bg-teal-500 px-3 py-1 text-xs font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:ml-8"
                     >
                         {showLicenceDetails ? 'Hide licence information' : 'Not sure which licence to choose?'}
                     </button>
@@ -72,7 +72,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                     <Framer.motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-grey-800 transition-colors duration-500 dark:text-white"
+                        className="text-grey-800 transition-colors duration-500 dark:text-white-50"
                     >
                         {Config.values.licenceTypes.map((type) => (
                             <div key={type.value} className="mt-8">
@@ -91,13 +91,13 @@ const StepThree: React.FC = (): React.ReactElement => {
             </div>
             <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
                 <div className="mb-6 flex items-end">
-                    <h2 className="font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                    <h2 className="font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Do this publication have a conflict of interest?
                     </h2>
                     {conflictOfInterestStatus && (
                         <label
                             htmlFor="conflictOfInterestStatus"
-                            className="ml-4 block text-xs text-grey-800 transition-colors duration-500 dark:text-white"
+                            className="ml-4 block text-xs text-grey-800 transition-colors duration-500 dark:text-white-50"
                         >
                             You must specify a reason for the conflict of interest
                         </label>
@@ -114,7 +114,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                         onChange={(e) => updateConflictOfInterestStatus(e.target.checked)}
                         className="rounded-sm border border-teal-500 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                     />
-                    <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white">
+                    <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                         This publication does have a conflict of interest.
                     </span>
                 </label>
@@ -125,7 +125,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                         value={conflictOfInterestText}
                         rows={6}
                         onChange={(e) => updateConflictOfInterestText(e.target.value)}
-                        className="w-full rounded border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 dark:text-white"
+                        className="w-full rounded border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 dark:text-white-50"
                         required
                     />
                 )}

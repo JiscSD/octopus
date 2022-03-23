@@ -29,7 +29,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                 overflow-hidden
                 border-b
                 border-grey-50
-                bg-white
+                bg-white-50
                 py-4
                 px-4
                 outline-0
@@ -48,7 +48,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                 `}
             >
                 <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
-                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {props.user.firstName}. {props.user?.lastName}
                 </span>
                 <Components.Link

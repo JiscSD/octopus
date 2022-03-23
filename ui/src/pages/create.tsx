@@ -88,7 +88,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:grid-cols-3 lg:gap-8 lg:pt-16">
                     {error ? <Components.Alert severity="ERROR" title={error} className="mt-2" /> : null}
                     <aside className="mb-8 lg:col-start-3 lg:col-end-4 lg:row-start-1 lg:row-end-1 lg:mb-0">
-                        <h2 className="mb-6 font-montserrat text-2xl text-grey-800 transition-colors duration-500 dark:text-white">
+                        <h2 className="mb-6 font-montserrat text-2xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Creating a publication
                         </h2>
                         <ul>
@@ -111,7 +111,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                     </aside>
                     <div className="lg:col-start-1 lg:col-end-3 lg:row-start-1 lg:row-end-1">
                         <div className="mb-12">
-                            <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                            <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Publication title
                             </label>
                             <input
@@ -119,14 +119,14 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                className="block w-10/12 rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                                className="block w-10/12 rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
                             />
                         </div>
 
                         <div className="mb-12">
                             <label
                                 htmlFor="publicationType"
-                                className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white"
+                                className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50"
                             >
                                 Type of publication
                             </label>
@@ -135,7 +135,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                                 name="publicationType"
                                 value={publicationType ?? ''}
                                 onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
-                                className="block w-fit rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white"
+                                className="block w-fit rounded-md border bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
                             >
                                 {Config.values.publicationTypes.map((type) => (
                                     <option key={type} value={type}>
@@ -144,7 +144,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                                 ))}
                             </select>
                         </div>
-                        <div className="text-grey-800 transition-colors duration-500 dark:text-white">
+                        <div className="text-grey-800 transition-colors duration-500 dark:text-white-50">
                             {Config.values.publicationTypesInformation.map((publicationType) => (
                                 <div className="mt-8" key={publicationType.id}>
                                     <Components.Link
@@ -169,7 +169,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                                 onChange={() => setConfirmed((prev) => !prev)}
                                 className="rounded-sm border-teal-500 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                             />
-                            <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white">
+                            <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 I confirm this is the correct publication type.
                             </span>
                         </label>
@@ -180,7 +180,7 @@ const Create: Types.NextPage<Props> = (props): React.ReactElement => {
                             onClick={createPublication}
                             iconPosition="RIGHT"
                             icon={
-                                <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
+                                <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                             }
                         />
                     </div>

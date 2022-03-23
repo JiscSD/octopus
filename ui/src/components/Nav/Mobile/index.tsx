@@ -21,7 +21,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 <OutlineIcons.MenuIcon
-                    className={`h-8 w-8 text-teal-500 dark:text-white ${
+                    className={`h-8 w-8 text-teal-500 dark:text-white-50 ${
                         open && 'text-grey-100'
                     } transition-colors duration-500 `}
                 />
@@ -38,7 +38,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.25 }}
                             exit={{ opacity: 0 }}
-                            className="absolute top-10 right-0 z-20 w-max rounded bg-white px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
+                            className="absolute top-10 right-0 z-20 w-max rounded bg-white-50 px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
                         >
                             <ul>
                                 {props.items.map((item) => (
@@ -47,7 +47,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                             href={item.value}
                                             className="rounded border-transparent pl-2 pr-6 outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
-                                            <span className="text-grey-900 dark:text-white">{item.label}</span>
+                                            <span className="text-grey-900 dark:text-white-50">{item.label}</span>
                                         </Components.Link>
                                     </li>
                                 ))}

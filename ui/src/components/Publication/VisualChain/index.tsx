@@ -18,9 +18,9 @@ const VisualChain: React.FC<Props> = (props): React.ReactElement => (
                 >
                     <span
                         title={type}
-                        className={`text-grey-800 transition-colors duration-500 dark:text-white ${
+                        className={`text-grey-800 transition-colors duration-500 dark:text-white-50 ${
                             props.highlighted === type
-                                ? `font-bold underline decoration-pink-500 underline-offset-2`
+                                ? `font-bold underline decoration-teal-500 underline-offset-2`
                                 : `${
                                       Config.values.publicationTypes[index + 1] === props.highlighted ||
                                       Config.values.publicationTypes[index - 1] === props.highlighted

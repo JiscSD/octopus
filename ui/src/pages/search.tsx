@@ -352,7 +352,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 exit={{ opacity: 0 }}
                                 className="sticky top-16 space-y-5"
                             >
-                                <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white">
+                                <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                                     Publication types
                                 </legend>
                                 {Config.values.publicationTypes.map((type) => (
@@ -381,7 +381,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <div className="ml-3 text-sm">
                                             <label
                                                 htmlFor={type}
-                                                className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white"
+                                                className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
                                                 aria-disabled={!results || searchType !== 'publications'}
                                             >
                                                 {Helpers.formatPublicationType(type)}
@@ -394,7 +394,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     onClick={resetFilters}
                                     className="!mt-8 flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500"
                                 >
-                                    <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white">
+                                    <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
                                         Clear filters
                                     </span>
                                     <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
@@ -476,7 +476,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                                 setOffset((prev) => prev - limit);
                                                             }}
                                                             disabled={offset === 0}
-                                                            className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
+                                                            className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                                         >
                                                             Previous
                                                         </button>
@@ -485,13 +485,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                 setOffset((prev) => prev + limit);
                                                             }}
-                                                            className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white"
+                                                            className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                                             disabled={limit + offset > results.metadata.total}
                                                         >
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                                         Showing {offset + 1} -{' '}
                                                         {limit + offset > results.metadata.total
                                                             ? results.metadata.total

@@ -64,7 +64,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                     <aside className="relative col-span-2 hidden lg:block">
                         <div className="sticky top-16">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
+                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Publication type
                             </h2>
                             <Components.Link
@@ -92,7 +92,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                     </aside>
                     <article className="lg:col-span-6">
                         <div className="mb-16">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white">
+                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Latest publications
                             </h2>
                             <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">

@@ -40,7 +40,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             font-semibold
 
             text-grey-800
-            dark:text-white
+            dark:text-white-50
 
             transition-colors
             duration-500

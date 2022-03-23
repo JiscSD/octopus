@@ -12,9 +12,9 @@ type Props = {
 };
 
 const ActionCard: React.FC<Props> = (props): React.ReactElement => (
-    <div className="space-y-6 rounded-xl bg-white py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
+    <div className="space-y-6 rounded-xl bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
-        <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white">
+        <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.title}
         </span>
         <p className="block font-normal text-grey-800 transition-colors duration-500 dark:text-grey-50">
@@ -26,7 +26,7 @@ const ActionCard: React.FC<Props> = (props): React.ReactElement => (
             title={props.linkText}
             iconPosition="RIGHT"
             icon={
-                <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white" />
+                <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
             }
         />
     </div>

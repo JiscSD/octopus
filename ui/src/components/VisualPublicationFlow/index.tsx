@@ -28,7 +28,7 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
                 transition={{ type: 'spring', stiffness: 75, delay: 0.5 }}
                 className="rounded-2xl border-2 border-dashed border-teal-500 p-2 lg:p-6"
             >
-                <h3 className="mb-2 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:text-lg">
+                <h3 className="mb-2 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:text-lg">
                     {props.title}
                 </h3>
                 <p className="text-grey-800 transition-colors duration-500 dark:text-grey-50">{props.content}</p>
@@ -61,49 +61,49 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
             className="row-start-1 row-end-1 !pt-0 lg:col-start-1 lg:col-end-2"
             title="Research Problem"
             content="A neatly defined scientific problem."
-            icon={<OutlineIcons.BeakerIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.BeakerIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
         <GridItem
             className="row-start-2 row-end-2 lg:col-start-2 lg:col-end-2"
             title="Hypothesis/Rationale"
             content="An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
         <GridItem
             className="row-start-3 row-end-3 lg:col-start-1 lg:col-end-2"
             title="Methods/Protocols"
             content="A practical method of testing an existing published Hypothesis."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
         <GridItem
             className="row-start-4 row-end-4 lg:col-start-2 lg:col-end-2"
             title="Data/Results"
             content="Raw data or summarised results collected according to an existing published Method (can be linked to a data repository)."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
         <GridItem
             className="row-start-5 row-end-5 lg:col-start-1 lg:col-end-2"
             title="Analysis"
             content="A statistical or thematic analysis of existing published Data or Results."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
         <GridItem
             className="row-start-6 row-end-6 lg:col-start-2 lg:col-end-2"
             title="Interpretation"
             content="A discussion around an existing published Analysis."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
         <GridItem
             className="row-start-7 row-end-7 lg:col-start-1 lg:col-end-2"
             title="Real-world Application"
             content="Real world applications arising from an existing published Interpretation."
-            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white" />}
+            icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
     </section>

@@ -32,7 +32,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
             border
             border-teal-100
             !border-b-transparent
-            bg-white
+            bg-white-50
             py-4
             px-4
             outline-0
@@ -54,7 +54,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-500">
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
-                <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white">
+                <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {props.publication.title}
                 </h2>
 

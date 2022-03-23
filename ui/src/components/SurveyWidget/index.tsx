@@ -34,9 +34,9 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
                 className="absolute top-[5.35%] right-5 rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 {!feedback ? (
-                    <OutlineIcons.ChevronUpIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white" />
+                    <OutlineIcons.ChevronUpIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50" />
                 ) : (
-                    <OutlineIcons.XCircleIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white" />
+                    <OutlineIcons.XCircleIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50" />
                 )}
             </button>
             <span className="mb-2 block text-sm">

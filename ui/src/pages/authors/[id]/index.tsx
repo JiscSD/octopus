@@ -54,11 +54,11 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                 <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">
                     <div className="mb-8 flex items-center">
                         <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
-                        <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
+                        <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
                             {props.user.firstName} {props.user.lastName}
                         </h1>
                     </div>
-                    <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white">
+                    <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                         ORCID:{' '}
                         <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
                             <span className="font-semibold text-teal-500">{props.user.orcid}</span>
@@ -67,14 +67,14 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                 </header>
 
                 <section id="content" className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Research breakdown
                     </h2>
                     <Components.PublicationBreakdown publications={props.user.Publication} />
                 </section>
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Employment
                     </h2>
                     <div className="2xl:w-2/3">
@@ -84,7 +84,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 records={props.user.employment}
                             />
                         ) : (
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white">
+                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 No history available.
                             </p>
                         )}
@@ -92,7 +92,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Education
                     </h2>
                     <div className="2xl:w-2/3">
@@ -102,7 +102,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 records={props.user.education}
                             />
                         ) : (
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white">
+                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 No history available.
                             </p>
                         )}
@@ -110,7 +110,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
 
                 <section className="container mx-auto mb-16 px-8">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
                     {props.user.Publication.length ? (
