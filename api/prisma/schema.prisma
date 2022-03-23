@@ -36,6 +36,7 @@ model User {
 
     Publication      Publication[]
     PublicationFlags PublicationFlags[]
+    CoAuthors        CoAuthors[]
 }
 
 enum PublicationStatusEnum {
@@ -90,14 +91,16 @@ model Publication {
     currentStatus PublicationStatusEnum @default(DRAFT)
 
     createdBy String
+    coAuthors String[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
-    linkedTo   Links[] @relation("from")
-    linkedFrom Links[] @relation("to")
+    linkedTo   Links[]     @relation("from")
+    linkedFrom Links[]     @relation("to")
+    CoAuthors  CoAuthors[] @relation("publicationId")
 
     publicationStatus PublicationStatus[]
     publicationFlags  PublicationFlags[]
@@ -141,4 +144,18 @@ model PublicationFlags {
     publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 
     @@unique([publicationId, category, createdBy])
+}
+
+model CoAuthors {
+    id                String  @id @default(cuid())
+    publicationId     String
+    email             String
+    code              String  @unique @default(cuid())
+    linkedUser        String?
+    confirmedCoAuthor Boolean @default(false)
+
+    user        User?       @relation(fields: [linkedUser], references: [id], onDelete: Cascade)
+    publication Publication @relation("publicationId", fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, email])
 }

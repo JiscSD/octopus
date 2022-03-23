@@ -264,3 +264,17 @@ export interface ORCIDUser {
         };
     };
 }
+
+/**
+ * @description Coauthor
+ */
+export interface CreateCoAuthorRequestBody {
+    email: string;
+    publicationId: string;
+    linkedUser?: string;
+    confirmedCoAuthor?: string;
+}
+
+export interface CreateCoAuthorPathParams {
+    id: string;
+}
