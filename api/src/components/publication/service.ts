@@ -162,28 +162,25 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 };
 
 export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
+    console.log(filters);
     const publications = await client.search.search({
         index: 'publications',
         body: {
             from: filters.offset,
             size: filters.limit,
-            sort: [
-                {
-                    [filters.orderBy || 'publishedDate']: {
-                        order: filters.orderDirection
-                    }
-                }
-            ],
+            sort: ['_score'],
             query: {
                 bool: {
-                    should: {
+                    must: {
                         multi_match: {
                             query: filters.search,
                             fuzziness: 'auto',
-                            fields: ['title^2', 'cleanContent', 'keywords', 'description']
+                            type: 'most_fields',
+                            operator: 'or',
+                            fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
                         }
                     },
-                    must: {
+                    filter: {
                         terms: {
                             type: (filters.type
                                 .split(',')
@@ -196,7 +193,8 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                                 'data',
                                 'interpretation',
                                 'peer_review'
-                            ]
+                            ],
+                            _name: 'type'
                         }
                     }
                 }

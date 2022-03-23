@@ -62,9 +62,7 @@ export const search = async (
     query: string | null = null,
     publicationType: string | null = null,
     limit: number | null = null,
-    offset: number | null = null,
-    orderBy: Types.OrderBySearchOption | null = null,
-    orderDirection: Types.OrderDirectionSearchOption | null = null
+    offset: number | null = null
 ): Promise<Interfaces.SearchResults> => {
     let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
     let params: string = '';
@@ -72,8 +70,6 @@ export const search = async (
     // Global search params
     limit && (params += '&limit=' + limit);
     offset && (params += '&offset=' + offset);
-    orderBy && (params += '&orderBy=' + orderBy);
-    orderDirection && (params += '&orderDirection=' + orderDirection);
     query && (params += '&search=' + query);
 
     // publication specific params

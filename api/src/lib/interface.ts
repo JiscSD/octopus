@@ -101,7 +101,7 @@ export interface UpdatePublicationRequestBody {
     id?: string;
 }
 
-export type PublicationOrderBy = 'publishedDate' | 'title';
+export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
@@ -109,8 +109,6 @@ export interface PublicationFilters {
     search?: string;
     limit?: string;
     offset?: string;
-    orderBy?: PublicationOrderBy;
-    orderDirection?: OrderDirection;
     type: string;
 }
 

@@ -14,8 +14,12 @@ export const getAll = async (
 
         const publications = await publicationService.getAllByIds(publicationIds);
 
+        const publicationsOrderedBySearch = publicationIds.map((publicationId) =>
+            publications.find((publication) => publication.id === publicationId)
+        );
+
         return response.json(200, {
-            data: publications,
+            data: publicationsOrderedBySearch,
             metadata: {
                 total: openSearchPublications.body.hits.total.value,
                 limit: Number(event.queryStringParameters.limit) || 10,

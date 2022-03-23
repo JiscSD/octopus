@@ -20,8 +20,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-    let orderBy: string | string[] | null = null;
-    let orderDirection: string | string[] | null = null;
 
     // defaults to results
     let results: Interfaces.Publication[] | Interfaces.User[] | [] = [];
@@ -36,8 +34,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
-    if (context.query.orderBy) orderBy = context.query.orderBy;
-    if (context.query.orderDirection) orderDirection = context.query.orderDirection;
 
     // only if a search type is provided
     if (searchType) {
@@ -47,29 +43,15 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
-        if (Array.isArray(orderBy)) orderBy = orderBy[0];
-        if (Array.isArray(orderDirection)) orderDirection = orderDirection[0];
 
         // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
         limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
         offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
 
-        // ensure the strings provided for ordering are as we expect them to be, else ignore them
-        orderBy && ['createdAt', 'updatedAt'].includes(orderBy) ? null : (orderBy = null);
-        orderDirection && ['asc', 'desc'].includes(orderDirection) ? null : (orderDirection = null);
-
         // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
-                const response = await api.search(
-                    searchType,
-                    query,
-                    publicationTypes,
-                    limit,
-                    offset,
-                    orderBy as Types.OrderBySearchOption, // to please ts, we must tom hanks it, even though we can be sure of the value
-                    orderDirection as Types.OrderDirectionSearchOption // to please ts, we must tom hanks it, even though we can be sure of the value
-                );
+                const response = await api.search(searchType, query, publicationTypes, limit, offset);
                 results = response.data;
                 metadata = response.metadata;
                 error = null;
@@ -82,9 +64,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
-        orderDirection || 'asc'
-    }`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -93,8 +73,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publicationTypes,
             limit,
             offset,
-            orderBy,
-            orderDirection,
             fallback: {
                 [swrKey]: results
             },
@@ -109,8 +87,6 @@ type Props = {
     publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
-    orderBy: string | null;
-    orderDirection: string | null;
     error: string | null;
 };
 
@@ -126,15 +102,11 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
-    const [orderBy, setOrderBy] = React.useState(props.orderBy ? props.orderBy : 'updatedAt');
-    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection ? props.orderDirection : 'asc');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'publishedDate'}&orderDirection=${
-        orderDirection || 'asc'
-    }`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -173,7 +145,6 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                 { shallow: true }
             );
         }
-        setOrderBy('updatedAt');
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
         setSearchType(e.target.value);
@@ -182,8 +153,6 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
-        setOrderBy('updatedAt');
-        setOrderDirection('asc');
         setOffset(0);
         setLimit(10);
         if (searchType === 'publications') setPublicationTypes(Config.values.publicationTypes.join(','));
@@ -191,7 +160,7 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
 
     React.useEffect(() => {
         setOffset(0);
-    }, [searchType, query, publicationTypes, limit, orderBy, orderDirection]);
+    }, [searchType, query, publicationTypes, limit]);
 
     return (
         <>
@@ -236,70 +205,6 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     <option value="users">Authors</option>
                                 </select>
                             </label>
-
-                            <label htmlFor="order-by" className="relative col-span-12 block lg:col-span-2">
-                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                    Ordering
-                                </span>
-                                <select
-                                    name="order-by"
-                                    id="order-by"
-                                    onChange={(e) => setOrderBy(e.target.value)}
-                                    value={orderBy}
-                                    className="col-span-2 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                    disabled={isValidating}
-                                >
-                                    <option value="updatedAt">Date updated</option>
-                                    <option value="createdAt">Date created</option>
-                                    {searchType === 'publications' && <option value="title">Publication title</option>}
-                                    {searchType === 'publications' && (
-                                        <option value="publishedDate">Published date</option>
-                                    )}
-                                    {searchType === 'users' && <option value="firstName">First name</option>}
-                                    {searchType === 'users' && <option value="lastName">Last name</option>}
-                                </select>
-                            </label>
-
-                            <label htmlFor="order-direction" className="relative col-span-8 block lg:col-span-2">
-                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                    Direction
-                                </span>
-                                <select
-                                    name="order-direction"
-                                    id="order-direction"
-                                    onChange={(e) => setOrderDirection(e.target.value)}
-                                    value={orderDirection}
-                                    className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                    disabled={isValidating}
-                                >
-                                    <option value="asc">Ascending</option>
-                                    <option value="desc">Descending</option>
-                                </select>
-                            </label>
-
-                            <label
-                                htmlFor="order-direction"
-                                className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
-                            >
-                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                    Showing
-                                </span>
-                                <select
-                                    name="order-direction"
-                                    id="order-direction"
-                                    onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                                    value={limit}
-                                    className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                    disabled={isValidating}
-                                >
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </label>
-
                             <form
                                 name="query-form"
                                 id="query-form"
@@ -331,6 +236,28 @@ const Search: Types.NextPage<Props> = (props): JSX.Element => {
                                     </button>
                                 </label>
                             </form>
+                            <label
+                                htmlFor="order-direction"
+                                className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
+                            >
+                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                    Showing
+                                </span>
+                                <select
+                                    name="order-direction"
+                                    id="order-direction"
+                                    onChange={(e) => setLimit(parseInt(e.target.value, 10))}
+                                    value={limit}
+                                    className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
+                                    disabled={isValidating}
+                                >
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </label>
                         </fieldset>
 
                         <aside className="relative col-span-3 hidden lg:block">
