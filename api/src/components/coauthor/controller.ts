@@ -11,7 +11,7 @@ export const create = async (
 
         // Does the publication exist?
         if (!publication) {
-            return response.json(403, {
+            return response.json(404, {
                 message: 'This publication does not exist.'
             });
         }
@@ -38,7 +38,7 @@ export const create = async (
             );
 
             if (isUserAlreadyCoAuthor) {
-                return response.json(404, { message: 'This email has already been added as a co-author.' });
+                return response.json(409, { message: 'This email has already been added as a co-author.' });
             }
         }
 
