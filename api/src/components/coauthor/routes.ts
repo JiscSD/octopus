@@ -10,3 +10,8 @@ export const create = middy(coAuthorController.create)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(coAuthorSchema.create, 'body'));
+
+export const deleteCoAuthor = middy(coAuthorController.deleteCoAuthor)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());

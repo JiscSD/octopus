@@ -165,3 +165,11 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
                   method: post
                   cors: true
+    deleteCoAuthor:
+        handler: src/components/coauthor/routes.deleteCoAuthor
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
+                  method: delete
+                  cors: true

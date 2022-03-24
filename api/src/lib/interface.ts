@@ -278,3 +278,8 @@ export interface CreateCoAuthorRequestBody {
 export interface CreateCoAuthorPathParams {
     id: string;
 }
+
+export interface DeleteCoAuthorPathParams {
+    id: string;
+    coauthor: string;
+}

@@ -7,10 +7,27 @@ export const create = async (e: I.CreateCoAuthorRequestBody, publicationId: stri
         data: {
             publicationId,
             email: e.email
+        },
+        select: {
+            id: true,
+            publicationId: true,
+            email: true,
+            linkedUser: true,
+            confirmedCoAuthor: true
         }
     });
 
     return create;
+};
+
+export const deleteCoAuthor = async (id: string) => {
+    const deleteCoAuthor = await prisma.coAuthors.delete({
+        where: {
+            id
+        }
+    });
+
+    return deleteCoAuthor;
 };
 
 export const isUserAlreadyCoAuthor = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
