@@ -58,9 +58,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
 
     const sectionList = [
-        { title: 'Authors', href: 'authors' },
+        { title: 'Publication chain', href: 'publication-chain' },
         { title: 'Main text', href: 'main-text' },
-        { title: 'Linked publications', href: 'linked-publications' },
         ...list,
         { title: 'Conflict of interest', href: 'coi' }
     ];
@@ -75,7 +74,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
-                    <header className="pb-8">
+                    <header className="">
                         <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
                             {props.publication.title}
                         </h1>
@@ -90,7 +89,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </Components.Link>
 
                         {props.publication.type !== 'PEER_REVIEW' && (
-                            <div className="mb-8 hidden xl:block">
+                            <div className="hidden xl:block">
                                 <Components.PublicationVisualChain highlighted={props.publication.type} />
                             </div>
                         )}
@@ -100,7 +99,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </header>
 
-                    <Components.PublicationContentSection id="linked-publications" title="Publication chain" hasBreak>
+                    <Components.PublicationContentSection id="publication-chain" title="Publication chain" hasBreak>
                         <>
                             <p className="mb-8 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 All publications live within a chain. Since this publication is a{' '}
@@ -228,7 +227,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
-                        <Components.PublicationRatings publication={props.publication} />
+                        <Components.PublicationRatings publication={props.publication} sectionList={sectionList} />
                     </div>
                 </aside>
             </Layouts.Publication>

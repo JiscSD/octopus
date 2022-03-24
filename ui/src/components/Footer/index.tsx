@@ -8,8 +8,8 @@ import * as Assets from '@assets';
 const Footer: React.FC = (): React.ReactElement => (
     <>
         <Assets.Wave
-            top="fill-teal-500 dark:fill-grey-600"
-            middle="fill-teal-600 dark:fill-grey-700"
+            top="fill-teal-200 dark:fill-grey-600"
+            middle="fill-teal-400 dark:fill-grey-700"
             bottom="fill-teal-700 dark:fill-grey-800"
         />
         <footer className="relative bg-teal-700 py-28 transition-all duration-500 dark:bg-grey-800 print:hidden">

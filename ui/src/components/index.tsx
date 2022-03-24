@@ -63,3 +63,4 @@ export { default as LearnAboutOctopus } from './LearnAboutOctopus';
 export { default as VisualPublicationFlow } from './VisualPublicationFlow';
 export { default as ActionCard } from './ActionCard';
 export { default as RenderLinks } from './RenderLinks';
+export { default as LatestPublications } from './LatestPublications';

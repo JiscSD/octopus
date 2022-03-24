@@ -32,11 +32,11 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                 bg-white-50
                 py-4
                 px-4
+                shadow
                 outline-0
-                transition-all
+                transition-colors
                 duration-500
                 hover:opacity-95
-                focus:rounded
                 focus:border-transparent
                 focus:opacity-95
                 focus:ring-2

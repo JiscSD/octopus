@@ -9,12 +9,13 @@ import * as Config from '@config';
 
 type Props = {
     publication: Interfaces.Publication;
+    sectionList?: { title: string; href: string }[];
 };
 
 const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     return (
-        <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 transition-colors duration-500 xl:w-full">
+        <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
             <div className="flex">
                 <span className="mr-2 text-sm font-semibold text-grey-800">Publication type:</span>
                 <span className="text-right text-sm font-medium text-grey-800">
@@ -36,7 +37,7 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                     }
                     title="licence"
                     openNew={true}
-                    className="text-right text-sm font-medium text-teal-600 underline"
+                    className="text-right text-sm font-medium text-teal-600 hover:underline"
                 >
                     <div className="flex items-center">
                         {
@@ -53,7 +54,7 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                 <Components.Link
                     href={`https://doi.org/${props.publication.doi}`}
                     ariaLabel={`DOI Link ${props.publication.doi}`}
-                    className="flex items-center text-right text-sm font-medium text-teal-600 underline"
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                     openNew={true}
                 >
                     <span>{props.publication.doi ?? '10.X/octopus.12345.6'}</span>
@@ -65,9 +66,9 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                 <Components.Link
                     href="#peer-reviews"
                     ariaLabel="Peer review count"
-                    className="flex items-center text-right text-sm font-medium text-teal-600 underline"
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                 >
-                    (7)
+                    7 (Read reviews)
                 </Components.Link>
             </div>
 
@@ -80,17 +81,16 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                 </div>
             </div>
             <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800">Download PDF:</span>
+                <span className="mr-2 text-sm font-semibold text-grey-800">Download:</span>
                 <button
                     aria-label="Print button"
                     onClick={() => window.print()}
-                    className="flex items-center text-right text-sm font-medium text-teal-600 underline"
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                 >
-                    Click here
+                    pdf
                 </button>
             </div>
             <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800">Write a review:</span>
                 <button
                     aria-label="Write review button"
                     onClick={() => {
@@ -102,11 +102,35 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                             }
                         });
                     }}
-                    className="flex items-center text-right text-sm font-medium text-teal-600 underline"
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                 >
-                    Click here
+                    Write a review
                 </button>
             </div>
+            <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-grey-300" />
+                </div>
+                <div className="relative flex justify-center">
+                    <span className="bg-white-50 px-2 text-xs text-grey-500">Sections</span>
+                </div>
+            </div>
+            {!!props.sectionList && (
+                <div className="space-y-2">
+                    {props.sectionList.map((section) => (
+                        <button
+                            key={section.href}
+                            aria-label={section.title}
+                            onClick={() =>
+                                document.getElementById(section.href)?.scrollIntoView({ behavior: 'smooth' })
+                            }
+                            className="mr-2 mb-2 block text-sm font-medium text-teal-600 hover:underline"
+                        >
+                            {section.title}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

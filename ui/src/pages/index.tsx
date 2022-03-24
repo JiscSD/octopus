@@ -2,19 +2,54 @@ import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
+import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import * as api from '@api';
+
+interface Errors {
+    latest: null | string;
+}
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    const errors: Errors = {
+        latest: null
+    };
+
+    let latest: unknown = [];
+    try {
+        const latestResponse = await api.search(
+            'publications',
+            null,
+            Config.values.publicationTypes.join(),
+            10,
+            0,
+            'publishedDate',
+            'asc'
+        );
+        latest = latestResponse.data as Interfaces.Publication[];
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        errors.latest = message;
+    }
+
     return {
-        props: {}
+        props: {
+            latest,
+            errors
+        }
     };
 };
 
-const Home: Types.NextPage = (): React.ReactElement => {
+type Props = {
+    latest: Interfaces.Publication[];
+    errors: Errors;
+};
+
+const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
@@ -62,7 +97,7 @@ const Home: Types.NextPage = (): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto px-8 py-16">
+                <section className="container mx-auto px-8 py-16 2xl:pb-28">
                     {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
@@ -113,7 +148,9 @@ const Home: Types.NextPage = (): React.ReactElement => {
                     </div>
                 </section>
 
-                {/* <Components.LearnAboutOctopus /> */}
+                <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
+                    <Components.LatestPublications publications={props.latest} />
+                </section>
             </Layouts.Standard>
         </>
     );

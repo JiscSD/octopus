@@ -430,35 +430,36 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
                                 {!error && !isValidating && !!results?.data && (
                                     <>
-                                        {results.data.map((result: any, index: number) => {
-                                            let classes = '';
-                                            index === 0 ? (classes += 'rounded-t-lg ') : null;
-                                            index === results.data.length - 1
-                                                ? (classes +=
-                                                      'rounded-b-lg !border-b-teal-100 dark:!border-b-transparent')
-                                                : null;
+                                        <div className="rounded">
+                                            {results.data.map((result: any, index: number) => {
+                                                let classes = '';
+                                                index === 0 ? (classes += 'rounded-t') : null;
+                                                index === results.data.length - 1
+                                                    ? (classes += '!border-b-transparent !rounded-b')
+                                                    : null;
 
-                                            if (searchType === 'publications') {
-                                                return (
-                                                    <Components.Delay key={result.id} delay={index * 50}>
+                                                if (searchType === 'publications') {
+                                                    return (
+                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.PublicationSearchResult
                                                             publication={result}
                                                             className={classes}
                                                         />
-                                                    </Components.Delay>
-                                                );
-                                            }
-                                            if (searchType === 'users') {
-                                                return (
-                                                    <Components.Delay key={result.id} delay={index * 50}>
+                                                        // </Components.Delay>
+                                                    );
+                                                }
+                                                if (searchType === 'users') {
+                                                    return (
+                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.UserSearchResult
                                                             user={result}
                                                             className={classes}
                                                         />
-                                                    </Components.Delay>
-                                                );
-                                            }
-                                        })}
+                                                        // </Components.Delay>
+                                                    );
+                                                }
+                                            })}
+                                        </div>
 
                                         {!isValidating && !!results.data.length && (
                                             <Components.Delay delay={results.data.length * 50}>

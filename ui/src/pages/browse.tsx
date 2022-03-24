@@ -47,75 +47,56 @@ type Props = {
     errors: Errors;
 };
 
-const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
-    return (
-        <>
-            <Head>
-                <meta name="description" content={Config.urls.browsePublications.description} />
-                <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
-                <link rel="canonical" href={Config.urls.browsePublications.canonical} />
-                <title>{Config.urls.browsePublications.title}</title>
-            </Head>
+const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
+    <>
+        <Head>
+            <meta name="description" content={Config.urls.browsePublications.description} />
+            <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
+            <link rel="canonical" href={Config.urls.browsePublications.canonical} />
+            <title>{Config.urls.browsePublications.title}</title>
+        </Head>
 
-            <Layouts.Standard>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16">
-                    <Components.PageTitle text="Browse all publications" />
-                </section>
-                <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                    <aside className="relative col-span-2 hidden lg:block">
-                        <div className="sticky top-16">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Publication type
-                            </h2>
+        <Layouts.Standard>
+            <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16">
+                <Components.PageTitle text="Browse all publications" />
+            </section>
+            <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                <aside className="relative col-span-2 hidden lg:block">
+                    <div className="sticky top-16">
+                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Publication type
+                        </h2>
+                        <Components.Link
+                            href={`${
+                                Config.urls.search.path
+                            }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                            className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                        >
+                            <span className="font-medium text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
+                                All
+                            </span>
+                        </Components.Link>
+                        {Config.values.publicationTypes.map((type) => (
                             <Components.Link
-                                href={`${
-                                    Config.urls.search.path
-                                }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                                key={type}
+                                href={`${Config.urls.search.path}?for=publications&type=${type}`}
                                 className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                             >
-                                <span className="font-medium text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
-                                    All
+                                <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
+                                    {Helpers.formatPublicationType(type)}
                                 </span>
                             </Components.Link>
-                            {Config.values.publicationTypes.map((type) => (
-                                <Components.Link
-                                    key={type}
-                                    href={`${Config.urls.search.path}?for=publications&type=${type}`}
-                                    className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                                >
-                                    <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
-                                        {Helpers.formatPublicationType(type)}
-                                    </span>
-                                </Components.Link>
-                            ))}
-                        </div>
-                    </aside>
-                    <article className="lg:col-span-6">
-                        <div className="mb-16">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Latest publications
-                            </h2>
-                            <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
-                                See the latest publications that have been uploaded to Octopus
-                            </h3>
-
-                            {/** If there are no latest or there was an error, we do show an alert */}
-                            {!props.errors.latest ? (
-                                <Components.PublicationCarousel publications={props.latest} />
-                            ) : (
-                                <Components.Alert
-                                    title="There was a problem fetching the latest publications"
-                                    details={[props.errors.latest]}
-                                    severity="ERROR"
-                                    allowDismiss={false}
-                                />
-                            )}
-                        </div>
-                    </article>
-                </section>
-            </Layouts.Standard>
-        </>
-    );
-};
+                        ))}
+                    </div>
+                </aside>
+                <article className="lg:col-span-6">
+                    <div className="mb-16">
+                        <Components.LatestPublications publications={props.latest} />
+                    </div>
+                </article>
+            </section>
+        </Layouts.Standard>
+    </>
+);
 
 export default Browse;
