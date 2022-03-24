@@ -22,6 +22,17 @@ describe('create coauthor', () => {
         expect(coauthor.status).toEqual(200);
     });
 
+    test('Cannot create a co-author without a valid email', async () => {
+        const coauthor = await testUtils.agent
+            .post(`/publications/${publication.user1Draft}/coauthor`)
+            .query({ apiKey: '987654321' })
+            .send({
+                email: 'test'
+            });
+
+        expect(coauthor.status).toEqual(422);
+    });
+
     test('Cannot create a co-author record if the user is not the author of a publication', async () => {
         const coauthor = await testUtils.agent
             .post(`/publications/${publication.user1Draft}/coauthor`)
@@ -53,6 +64,26 @@ describe('create coauthor', () => {
             });
 
         expect(coauthor.status).toEqual(403);
+    });
+
+    test('Cannot create a co-author record when a record is already there for email&publicationId', async () => {
+        const coauthor = await testUtils.agent
+            .post(`/publications/${publication.user1Draft}/coauthor`)
+            .query({ apiKey: '123456789' })
+            .send({
+                email: 'emailtest@emailtest.com'
+            });
+
+        expect(coauthor.status).toEqual(200);
+
+        const duplicate = await testUtils.agent
+            .post(`/publications/${publication.user1Draft}/coauthor`)
+            .query({ apiKey: '123456789' })
+            .send({
+                email: 'emailtest@emailtest.com'
+            });
+
+        expect(duplicate.status).toEqual(409);
     });
 
     test('Cannot create a co-author record when a record is already there for email&publicationId', async () => {

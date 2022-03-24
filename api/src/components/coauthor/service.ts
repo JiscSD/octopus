@@ -3,8 +3,6 @@ import prisma from 'lib/client';
 import * as I from 'interface';
 
 export const create = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
-    console.log(publicationId);
-    console.log(e);
     const create = await prisma.coAuthors.create({
         data: {
             publicationId,
