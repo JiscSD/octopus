@@ -6,11 +6,11 @@ type Props = {
     children: React.ReactElement[] | React.ReactElement;
 };
 
-const List: React.FC<Props> = (props): JSX.Element => {
+const List: React.FC<Props> = (props): React.ReactElement => {
     return props.ordered ? (
-        <ol className={props.className ? props.className : ''}>{props.children}</ol>
+        <ol className={props.className ?? ''}>{props.children}</ol>
     ) : (
-        <ul className={props.className ? props.className : ''}>{props.children}</ul>
+        <ul className={props.className ?? ''}>{props.children}</ul>
     );
 };
 

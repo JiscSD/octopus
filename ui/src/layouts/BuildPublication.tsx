@@ -21,7 +21,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
+        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
             props.className ? props.className : ''
         }`}
     >
@@ -88,7 +88,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
             // const { message } = err as Interfaces.JSONResponseError;
             setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
-            console.log(err);
         }
 
         setPublishModalVisibility(false);
@@ -104,7 +103,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
-            console.log(err);
         }
 
         setSaveExitModalVisibility(false);
@@ -136,82 +134,71 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
-            <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
-                <Components.Header fixed={true} />
-                <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-36">
-                    <section className="col-span-12 p-8 lg:col-span-9">
-                        <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
-                            <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                {Object.values(props.steps)[props.currentStep].subTitle}
-                            </span>
-                            <div className="grid grid-cols-4 gap-4">
+            <Components.Header fixed={true} />
+            <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-28">
+                <section className="col-span-12 p-8 lg:col-span-9">
+                    <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
+                        <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                            {Object.values(props.steps)[props.currentStep].subTitle}
+                        </span>
+                        <div className="grid grid-cols-4 gap-4">
+                            <NavigationButton
+                                text="Delete draft"
+                                onClick={() => console.log('attempt to delete')}
+                                className="bg-pink-500"
+                            />
+                            <NavigationButton
+                                text="Save and exit"
+                                onClick={() => setSaveExitModalVisibility(true)}
+                                className="bg-purple-400"
+                            />
+                            <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prevStep} />
+                            {props.currentStep < props.steps.length - 1 && (
                                 <NavigationButton
-                                    text="Delete draft"
-                                    onClick={() => console.log('attempt to delete')}
-                                    className="bg-pink-500"
+                                    text="Next"
+                                    disabled={props.currentStep >= props.steps.length - 1}
+                                    onClick={nextStep}
                                 />
+                            )}
+                            {props.currentStep === props.steps.length - 1 && (
                                 <NavigationButton
-                                    text="Save and exit"
-                                    onClick={() => setSaveExitModalVisibility(true)}
+                                    text="Publish"
+                                    onClick={() => setPublishModalVisibility(true)}
                                     className="bg-purple-400"
                                 />
-                                <NavigationButton
-                                    text="Previous"
-                                    disabled={props.currentStep <= 0}
-                                    onClick={prevStep}
-                                />
-                                {props.currentStep < props.steps.length - 1 && (
-                                    <NavigationButton
-                                        text="Next"
-                                        disabled={props.currentStep >= props.steps.length - 1}
-                                        onClick={nextStep}
-                                    />
-                                )}
-                                {props.currentStep === props.steps.length - 1 && (
-                                    <NavigationButton
-                                        text="Publish"
-                                        onClick={() => setPublishModalVisibility(true)}
-                                        className="bg-purple-400"
-                                    />
-                                )}
-                                <button
-                                    onClick={() => {
-                                        router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
-                                    }}
-                                    className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
-                                >
-                                    Preview publication
-                                </button>
-                            </div>
+                            )}
+                            <button
+                                onClick={() => {
+                                    router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+                                }}
+                                className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
+                            >
+                                Preview publication
+                            </button>
                         </div>
-                        {!!error && (
-                            <Components.Alert
-                                severity="ERROR"
-                                title={error}
-                                allowDismiss={false}
-                                className="mb-12 w-fit"
-                            />
-                        )}
-                        <div className="mb-12">{props.children}</div>
-                    </section>
-                    <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
-                        <ul className="sticky top-24 space-y-4 lg:mb-8">
-                            {props.steps.map((step, index) => (
-                                <li key={step.title}>
-                                    <button
-                                        onClick={() => props.setStep(index)}
-                                        className={`${
-                                            index === props.currentStep ? 'bg-teal-500 text-white' : ''
-                                        } dark:hovertext-white w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50`}
-                                    >
-                                        {parse(step.title)}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </aside>
-                </main>
-            </div>
+                    </div>
+                    {!!error && (
+                        <Components.Alert severity="ERROR" title={error} allowDismiss={false} className="mb-12 w-fit" />
+                    )}
+                    <div className="mb-12">{props.children}</div>
+                </section>
+                <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
+                    <ul className="sticky top-24 space-y-4 lg:mb-8">
+                        {props.steps.map((step, index) => (
+                            <li key={step.title}>
+                                <button
+                                    onClick={() => props.setStep(index)}
+                                    className={`${
+                                        index === props.currentStep ? 'bg-teal-500 text-white-50' : ''
+                                    } w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50`}
+                                >
+                                    {parse(step.title)}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </aside>
+            </main>
         </>
     );
 };

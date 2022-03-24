@@ -46,7 +46,7 @@ type Props = {
     user: Interfaces.User;
 };
 
-const Account: Types.NextPage<Props> = (props): JSX.Element => {
+const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const livePublications = React.useMemo(
         () => props.user.Publication.filter((publication) => publication.currentStatus === 'LIVE'),
         [props.user.Publication]
@@ -67,85 +67,80 @@ const Account: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{`Author: ${props.user.orcid} - ${Config.urls.account.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
-                <Components.SectionTwo
-                    className="bg-teal-50 dark:bg-grey-800"
-                    waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                    waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                    waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
-                >
-                    <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">
-                        <div className="mb-8 flex items-center">
-                            <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
-                            <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white md:text-3xl xl:text-3xl xl:leading-tight">
-                                {props.user.firstName} {props.user.lastName}
-                            </h1>
-                        </div>
-                        <div className="items-end lg:flex">
-                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white lg:mb-0 lg:border-r">
-                                ORCID:{' '}
-                                <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
-                                    <span className="font-semibold text-teal-500">{props.user.orcid}</span>
-                                </Components.Link>
-                            </h2>
-                            <Components.Link
-                                href={`${Config.urls.viewUser.path}/${props.user.id}`}
-                                className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
-                            >
-                                <h3 className="block font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white">
-                                    View live author page
-                                </h3>
+                <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">
+                    <div className="mb-8 flex items-center">
+                        <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
+                        <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
+                            {props.user.firstName} {props.user.lastName}
+                        </h1>
+                    </div>
+                    <div className="items-end lg:flex">
+                        <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
+                            ORCID:{' '}
+                            <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
+                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                             </Components.Link>
+                        </h2>
+                        <Components.Link
+                            href={`${Config.urls.viewUser.path}/${props.user.id}`}
+                            className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
+                        >
+                            <h3 className="block font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                View live author page
+                            </h3>
+                        </Components.Link>
+                    </div>
+                </header>
+
+                <section id="content" className="container mx-auto mb-16 px-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        Draft publications
+                    </h2>
+                    {draftPublications.length ? (
+                        <div className="rouned-md relative space-y-4 lg:w-2/3">
+                            {draftPublications.map((publication: Interfaces.Publication, index) => (
+                                <Components.Link
+                                    key={publication.id}
+                                    href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
+                                    className="flex"
+                                >
+                                    <Components.PublicationSimpleResult publication={publication} />
+                                </Components.Link>
+                            ))}
                         </div>
-                    </header>
+                    ) : (
+                        <Components.Alert
+                            severity="INFO"
+                            title="You do not currently have any draft publications"
+                            className="w-fit"
+                        />
+                    )}
+                </section>
 
-                    <section id="content" className="container mx-auto mb-16 px-8">
-                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
-                            Draft publications
-                        </h2>
-                        {draftPublications.length ? (
-                            <div className="rouned-md relative lg:w-2/3">
-                                {draftPublications.map((publication: Interfaces.Publication, index) => (
-                                    <Components.Link
-                                        key={publication.id}
-                                        href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
-                                    >
-                                        <Components.PublicationSimpleResult publication={publication} />
-                                    </Components.Link>
-                                ))}
-                            </div>
-                        ) : (
-                            <Components.Alert
-                                severity="INFO"
-                                title="You do not currently have any draft publications"
-                                className="w-fit"
-                            />
-                        )}
-                    </section>
-
-                    <section className="container mx-auto mb-16 px-8">
-                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white lg:mb-8">
-                            Live publications
-                        </h2>
-                        {livePublications.length ? (
-                            <div className="rouned-md relative lg:w-2/3">
-                                {livePublications.map((publication: Interfaces.Publication, index) => (
-                                    <Components.Link
-                                        key={publication.id}
-                                        href={`${Config.urls.viewPublication.path}/${publication.id}`}
-                                    >
-                                        <Components.PublicationSimpleResult publication={publication} />
-                                    </Components.Link>
-                                ))}
-                            </div>
-                        ) : (
-                            <Components.Alert
-                                severity="INFO"
-                                title="You do not currently have any live publications"
-                                className="w-fit"
-                            />
-                        )}
-                    </section>
-                </Components.SectionTwo>
+                <section className="container mx-auto mb-16 px-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        Live publications
+                    </h2>
+                    {livePublications.length ? (
+                        <div className="rouned-md relative lg:w-2/3">
+                            {livePublications.map((publication: Interfaces.Publication, index) => (
+                                <Components.Link
+                                    key={publication.id}
+                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                    className="flex"
+                                >
+                                    <Components.PublicationSimpleResult publication={publication} />
+                                </Components.Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <Components.Alert
+                            severity="INFO"
+                            title="You do not currently have any live publications"
+                            className="w-fit"
+                        />
+                    )}
+                </section>
             </Layouts.Standard>
         </>
     );

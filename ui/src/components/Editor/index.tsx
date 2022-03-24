@@ -16,7 +16,7 @@ type EditorProps = {
     changeCallback: (content: string) => void;
 };
 
-const Editor: React.FC<EditorProps> = (props): JSX.Element => {
+const Editor: React.FC<EditorProps> = (props): React.ReactElement => {
     const editorConstructor = TipTap.useEditor({
         extensions: [
             StarterKit,
@@ -30,7 +30,7 @@ const Editor: React.FC<EditorProps> = (props): JSX.Element => {
         ],
         editorProps: {
             attributes: {
-                class: `${Config.values.HTMLStyles} rounded-b border border-t-0 border-grey-100 dark:border-teal-500 p-4 outline-0 focus:ring-2 focus:ring-yellow-400 min-h-[400px] 2xl:min-h-[600px] bg-white dark:bg-grey-700`
+                class: `${Config.values.HTMLStyles} rounded-b border border-t-0 border-grey-100 dark:border-teal-500 p-4 outline-0 focus:ring-2 focus:ring-yellow-400 min-h-[400px] 2xl:min-h-[600px] bg-white-50 dark:bg-grey-700`
             }
         },
         onUpdate: ({ editor }) => props.changeCallback(editor.getHTML()),

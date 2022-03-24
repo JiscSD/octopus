@@ -5,7 +5,7 @@ type Props = {
     delay: number;
 };
 
-const Delay: React.FC<Props> = (props): JSX.Element => {
+const Delay: React.FC<Props> = (props): React.ReactElement => {
     const [done, setDone] = React.useState(false);
 
     React.useEffect(() => {

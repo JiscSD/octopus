@@ -11,7 +11,7 @@ type Props = {
     className?: string;
 };
 
-const SearchResult: React.FC<Props> = (props): JSX.Element => {
+const SearchResult: React.FC<Props> = (props): React.ReactElement => {
     return (
         <Framer.motion.div
             initial={{ opacity: 0 }}
@@ -29,14 +29,14 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
                 overflow-hidden
                 border-b
                 border-grey-50
-                bg-white
+                bg-white-50
                 py-4
                 px-4
+                shadow
                 outline-0
-                transition-all
+                transition-colors
                 duration-500
                 hover:opacity-95
-                focus:rounded
                 focus:border-transparent
                 focus:opacity-95
                 focus:ring-2
@@ -48,8 +48,8 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => {
                 `}
             >
                 <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
-                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white">
-                    {props.user.firstName[0]}. {props.user?.lastName}
+                <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    {props.user.firstName}. {props.user?.lastName}
                 </span>
                 <Components.Link
                     href={`https://orcid.org/${props.user.orcid}`}

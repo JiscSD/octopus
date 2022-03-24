@@ -8,7 +8,7 @@ type Props = {
     publications: Interfaces.Publication[];
 };
 
-const Carousel: React.FC<Props> = (props): JSX.Element => {
+const Carousel: React.FC<Props> = (props): React.ReactElement => {
     const container = React.useRef<HTMLDivElement | any>();
 
     return (
@@ -45,7 +45,7 @@ const Carousel: React.FC<Props> = (props): JSX.Element => {
             </button>
 
             {/** Fade off */}
-            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 md:block" />
+            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-white-50 transition-colors duration-500 dark:to-grey-800 md:block" />
         </div>
     );
 };

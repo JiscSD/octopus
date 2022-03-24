@@ -5,7 +5,7 @@ type Props = {
     count: number;
 };
 
-const Skeleton: React.FC<Props> = (props): JSX.Element => (
+const Skeleton: React.FC<Props> = (props): React.ReactElement => (
     <>
         {new Array(props.count).fill(0).map((_, index) => (
             <Framer.motion.div
@@ -21,7 +21,7 @@ const Skeleton: React.FC<Props> = (props): JSX.Element => (
                 rounded-md
                 border
                 border-transparent
-                bg-white
+                bg-white-50
                 py-4
                 px-4
                 shadow

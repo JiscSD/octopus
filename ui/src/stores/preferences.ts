@@ -6,11 +6,14 @@ import * as Types from '@types';
 
 type State = {
     darkMode: boolean;
+    feedback: boolean;
 };
 
 let store: any = (set: any): Types.PreferencesStoreTypes => ({
-    darkMode: false,
-    toggle: () => set((state: State) => ({ darkMode: !state.darkMode }))
+    darkMode: true,
+    toggleDarkMode: () => set((state: State) => ({ darkMode: !state.darkMode })),
+    feedback: true,
+    toggleFeedback: () => set((state: State) => ({ feedback: !state.feedback }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
