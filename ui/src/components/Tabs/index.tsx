@@ -11,7 +11,7 @@ type Props = {
     content: TabEntry[];
 };
 
-const Tabs: React.FC<Props> = (props): JSX.Element => {
+const Tabs: React.FC<Props> = (props): React.ReactElement => {
     const [active, setActive] = React.useState<React.ReactNode>(props.content[0]);
 
     return (

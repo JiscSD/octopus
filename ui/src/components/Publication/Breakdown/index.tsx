@@ -9,7 +9,7 @@ type Props = {
     publications: Interfaces.Publication[];
 };
 
-const Breakdown: React.FC<Props> = (props): JSX.Element => {
+const Breakdown: React.FC<Props> = (props): React.ReactElement => {
     const values = React.useMemo(
         () => [
             ...Config.values.publicationTypes.map((type) => {
@@ -33,12 +33,12 @@ const Breakdown: React.FC<Props> = (props): JSX.Element => {
     );
 
     return (
-        <div className="grid w-full gap-8 rounded-3xl border border-grey-100 bg-white px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600 lg:w-fit lg:grid-cols-[max-content_auto]">
+        <div className="grid w-full gap-8 rounded-3xl border border-grey-100 bg-white-50 px-8 py-10 transition-colors duration-500 dark:border-grey-400 dark:bg-grey-600 lg:w-1/2 3xl:grid-cols-3">
             {/** circle */}
             <div className="relative mx-auto">
                 <Components.ProgressCircle values={values} width={100} height={100} thickness={20} />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <span className="mb-4 block text-center font-montserrat text-5xl font-medium text-teal-500 transition-colors duration-500 dark:text-white">
+                    <span className="mb-4 block text-center font-montserrat text-5xl font-medium text-teal-500 transition-colors duration-500 dark:text-white-50">
                         {totalCount}
                     </span>
                     <span className="block text-center font-montserrat text-2xl transition-colors duration-500 dark:text-grey-50">
@@ -79,7 +79,7 @@ const Breakdown: React.FC<Props> = (props): JSX.Element => {
                                 value={Helpers.percentage(valuePercentage, highestPercentage)}
                                 color={value.color}
                                 width={max}
-                                className="col-span-2 mt-3 h-4 lg:col-span-1 lg:mt-0 lg:h-full"
+                                className="col-span-2 mt-1 h-4 lg:col-span-1 lg:mt-0 lg:h-full"
                             />
                         </div>
                     );

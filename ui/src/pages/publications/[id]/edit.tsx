@@ -89,7 +89,7 @@ type Props = {
     error: string | null;
 };
 
-const Edit: Types.NextPage<Props> = (props): JSX.Element => {
+const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     let defaultStep = props.step ? parseInt(props.step) : 0;
     defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;

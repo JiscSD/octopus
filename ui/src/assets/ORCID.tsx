@@ -6,7 +6,7 @@ type Props = {
     className?: string;
 };
 
-const ORCID: React.FC<Props> = (props): JSX.Element => (
+const ORCID: React.FC<Props> = (props): React.ReactElement => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         width={props.width}

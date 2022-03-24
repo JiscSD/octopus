@@ -9,11 +9,11 @@ type Props = {
     className?: string;
 };
 
-const ExtendedLink: React.FC<Props> = (props): JSX.Element => {
+const ExtendedLink: React.FC<Props> = (props): React.ReactElement => {
     return (
         <Components.Link
             href={props.href}
-            className={`group inline-flex items-center rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white ${
+            className={`group inline-flex items-center rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white-50 ${
                 props.className ? props.className : ''
             }`}
         >
