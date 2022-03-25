@@ -5,7 +5,7 @@ import * as Stores from '@stores';
 import * as Assets from '@assets';
 import * as Types from '@types';
 
-const StepFour: React.FC = (): JSX.Element | null => {
+const StepFour: React.FC = (): React.ReactElement | null => {
     const content: string = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.content
     );
@@ -23,7 +23,7 @@ const StepFour: React.FC = (): JSX.Element | null => {
 
     return (
         <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
-            <h2 className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+            <h2 className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                 This publications full text
             </h2>
             {!loading ? (

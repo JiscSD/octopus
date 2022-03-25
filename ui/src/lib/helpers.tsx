@@ -104,7 +104,7 @@ export const findPreviousPublicationType = (type: Types.PublicationType) => {
 /**
  * @description Returns the string of the key for the current os
  */
-export const setOSKey = (): string | JSX.Element => {
+export const setOSKey = (): string | React.ReactElement => {
     if (window.navigator.appVersion.indexOf('Mac')) {
         return <>&#8984;K</>;
     } else {

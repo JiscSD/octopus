@@ -6,7 +6,7 @@ type Props = {
     className?: string;
 };
 
-const Logo: React.FC<Props> = (props): JSX.Element => {
+const Logo: React.FC<Props> = (props): React.ReactElement => {
     return (
         <svg
             version="1.0"

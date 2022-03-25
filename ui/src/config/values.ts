@@ -12,6 +12,46 @@ export const publicationTypes: Types.PublicationType[] = [
     'PEER_REVIEW'
 ];
 
+export const publicationTypesInformation = [
+    {
+        id: 'PROBLEM',
+        heading: 'Research Problem',
+        content: 'A neatly defined scientific problem.'
+    },
+    {
+        id: 'HYPOTHESIS',
+        heading: 'Hypothesis',
+        content:
+            'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
+    },
+    {
+        id: 'PROTOCOL',
+        heading: 'Protocol',
+        content: 'A practical method of testing an existing published Hypothesis.'
+    },
+    {
+        id: 'DATA',
+        heading: 'Data',
+        content:
+            'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+    },
+    {
+        id: 'ANALYSIS',
+        heading: 'Analysis',
+        content: 'A statistical or thematic analysis of existing published Data or Results.'
+    },
+    {
+        id: 'INTERPRETATION',
+        heading: 'Interpretation',
+        content: 'A discussion around an existing published Analysis.'
+    },
+    {
+        id: 'REAL_WORLD_APPLICATION',
+        heading: 'Real-world Application',
+        content: 'Real world applications arising from an existing published Interpretation.'
+    }
+];
+
 export const licenceTypes: Interfaces.LicenceTypeShape[] = [
     {
         value: 'CC_BY',
@@ -58,4 +98,4 @@ export const licenceTypes: Interfaces.LicenceTypeShape[] = [
 ];
 
 export const HTMLStyles =
-    'table prose max-w-none text-grey-800 transition-colors duration-500 prose-headings:text-teal-700 prose-a:text-grey-800 prose-a:underline prose-a:decoration-teal-500 prose-a:decoration-2 prose-a:underline-offset-1 prose-a:outline-none focus:prose-a:bg-yellow-300 prose-blockquote:border-teal-500 prose-blockquote:text-grey-600 prose-strong:text-grey-800 dark:text-grey-100 dark:prose-headings:text-teal-400 dark:prose-a:text-white dark:focus:prose-a:text-grey-800 dark:prose-blockquote:text-grey-300 dark:prose-strong:text-teal-300  w-full';
+    'table prose max-w-none text-grey-800 transition-colors duration-500 prose-headings:font-medium prose-headings:font-montserrat prose-headings:text-grey-800 prose-a:text-grey-800 prose-a:underline prose-a:decoration-teal-500 prose-a:decoration-2 prose-a:underline-offset-1 prose-a:outline-none focus:prose-a:bg-yellow-300 prose-blockquote:border-teal-500 prose-blockquote:text-grey-600 prose-strong:text-grey-800 dark:text-grey-100 dark:prose-headings:text-white-50 dark:prose-a:text-white-50 dark:focus:prose-a:text-grey-800 dark:prose-blockquote:text-grey-300 dark:prose-strong:text-teal-300 w-full';

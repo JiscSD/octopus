@@ -13,7 +13,7 @@ type Props = {
     className?: string;
 };
 
-const SearchResult: React.FC<Props> = (props): JSX.Element => (
+const SearchResult: React.FC<Props> = (props): React.ReactElement => (
     <Framer.motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -28,16 +28,18 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             grid-cols-1
             items-start
             overflow-hidden
+            rounded-none
             border-b
             border-grey-50
-            bg-white
+            bg-white-50
             py-4
             px-4
+            shadow
             outline-0
-            transition-all
+            transition-colors
             duration-500
             hover:opacity-95
-            focus:rounded
+            focus:overflow-hidden
             focus:border-transparent
             focus:opacity-95
             focus:ring-2
@@ -49,10 +51,10 @@ const SearchResult: React.FC<Props> = (props): JSX.Element => (
             `}
         >
             <div className="z-10 col-span-11 w-full">
-                <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-500">
+                <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400">
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
-                <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white">
+                <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {props.publication.title}
                 </h2>
 

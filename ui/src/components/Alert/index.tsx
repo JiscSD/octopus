@@ -18,7 +18,7 @@ type Props = {
     className?: string;
 };
 
-const Alert: React.FC<Props> = (props): JSX.Element => {
+const Alert: React.FC<Props> = (props): React.ReactElement => {
     const [show, setShow] = React.useState(false);
     const [classes, setClasses] = React.useState({
         title: '',
@@ -43,22 +43,22 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.background = 'bg-yellow-200 dark:bg-yellow-500';
                 break;
             case 'ERROR':
-                classesCopy.title = 'text-grey-800 dark:text-white';
+                classesCopy.title = 'text-grey-800 dark:text-white-50';
                 classesCopy.details = 'text-grey-800 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.XCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
                 classesCopy.background = 'bg-pink-100 dark:bg-pink-500';
                 break;
             case 'SUCCESS':
-                classesCopy.title = 'text-grey-800 dark:text-white';
-                classesCopy.details = 'text-grey-700 dark:text-white';
+                classesCopy.title = 'text-grey-800 dark:text-white-50';
+                classesCopy.details = 'text-grey-700 dark:text-white-50';
                 classesCopy.icon = (
                     <OutlineIcons.CheckCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -66,11 +66,11 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 break;
             default:
                 // Info
-                classesCopy.title = 'text-grey-800 dark:text-white';
+                classesCopy.title = 'text-grey-800 dark:text-white-50';
                 classesCopy.details = 'text-grey-700 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.InformationCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -117,7 +117,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                             openNew={props.supportLink.external}
                                             className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
                                         >
-                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white transition-colors duration-500">
+                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
                                                 {props.supportLink.text}
                                             </span>
                                         </Components.Link>
@@ -127,7 +127,7 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                         <button
                                             type="button"
                                             onClick={() => setShow(false)}
-                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                                         >
                                             Dismiss
                                         </button>

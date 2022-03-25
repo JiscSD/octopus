@@ -13,7 +13,7 @@ import * as api from '@api';
 /**
  * @description Edit links
  */
-const StepTwo: React.FC = (): JSX.Element => {
+const StepTwo: React.FC = (): React.ReactElement => {
     const draftedPublication = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.draftedPublication
     );
@@ -99,11 +99,11 @@ const StepTwo: React.FC = (): JSX.Element => {
                     Whilst this publication is in draft mode, you can later edit these links.
                 </p>
             </Components.Modal>
-            <h1 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+            <h1 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                 What publications do you want to linked to?
             </h1>
 
-            <p className="mb-6 block text-grey-800 transition-colors duration-500 dark:text-white">
+            <p className="mb-6 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                 <span>
                     A{' '}
                     <Components.Link
@@ -134,7 +134,7 @@ const StepTwo: React.FC = (): JSX.Element => {
             )}
 
             <div className="my-4 border-t border-grey-100 py-4 transition-colors duration-500 dark:border-grey-700 lg:my-10 lg:pt-6">
-                <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Publications already linked to this one
                 </h2>
                 here
@@ -142,11 +142,11 @@ const StepTwo: React.FC = (): JSX.Element => {
 
             <div className="my-4 border-t border-grey-100 py-4 transition-colors duration-500 dark:border-grey-700 lg:my-10 lg:pt-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white">
+                    <h2 className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Add new links to this publication?
                     </h2>
                     <button
-                        className="rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed"
+                        className="rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed"
                         onClick={() => setConfirmSaveLinks(true)}
                     >
                         Save &amp; create links
@@ -163,7 +163,7 @@ const StepTwo: React.FC = (): JSX.Element => {
                                     if (availablePublication.id !== forPublicationsID) {
                                         return (
                                             <button
-                                                className="mb-2 whitespace-nowrap bg-white text-left text-sm"
+                                                className="mb-2 whitespace-nowrap bg-white-50 text-left text-sm"
                                                 onClick={() => manageAvailableToAdd(availablePublication)}
                                                 key={availablePublication.id}
                                             >
