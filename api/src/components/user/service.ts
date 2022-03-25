@@ -1,9 +1,9 @@
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 import * as I from 'interface';
 
 export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
-    const user = await prisma.user.upsert({
+    const user = await client.prisma.user.upsert({
         select: {
             email: true,
             id: true,
@@ -51,7 +51,7 @@ export const getAll = async (filters: I.UserFilters) => {
     }
 
     // @ts-ignore
-    const users = await prisma.user.findMany({
+    const users = await client.prisma.user.findMany({
         take: Number(filters.limit) || 10,
         skip: Number(filters.offset) || 0,
         orderBy: {
@@ -79,7 +79,7 @@ export const getAll = async (filters: I.UserFilters) => {
     });
 
     // @ts-ignore
-    const totalUsers = await prisma.user.count(query);
+    const totalUsers = await client.prisma.user.count(query);
 
     return {
         data: users,
@@ -92,7 +92,7 @@ export const getAll = async (filters: I.UserFilters) => {
 };
 
 export const getByApiKey = async (apiKey: string) => {
-    const user = await prisma.user.findFirst({
+    const user = await client.prisma.user.findFirst({
         where: {
             apiKey
         }
@@ -102,7 +102,7 @@ export const getByApiKey = async (apiKey: string) => {
 };
 
 export const get = async (id: string) => {
-    const user = await prisma.user.findFirst({
+    const user = await client.prisma.user.findFirst({
         where: {
             id
         },
@@ -145,7 +145,7 @@ export const get = async (id: string) => {
 };
 
 export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>) => {
-    const userPublications = await prisma.user.findFirst({
+    const userPublications = await client.prisma.user.findFirst({
         where: {
             id
         },

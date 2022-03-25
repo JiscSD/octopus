@@ -20,8 +20,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-    let orderBy: string | string[] | null = null;
-    let orderDirection: string | string[] | null = null;
 
     // defaults to results
     let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
@@ -36,8 +34,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
-    if (context.query.orderBy) orderBy = context.query.orderBy;
-    if (context.query.orderDirection) orderDirection = context.query.orderDirection;
 
     // only if a search type is provided
     if (searchType) {
@@ -47,33 +43,15 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
-        if (Array.isArray(orderBy)) orderBy = orderBy[0];
-        if (Array.isArray(orderDirection)) orderDirection = orderDirection[0];
 
         // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
         limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
         offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
 
-        // ensure the strings provided for ordering are as we expect them to be, else ignore them
-        if (searchType === 'publications') {
-            orderBy && ['title', 'publishedDate'].includes(orderBy) ? null : (orderBy = null);
-        } else {
-            orderBy && ['createdAt', 'updatedAt'].includes(orderBy) ? null : (orderBy = null);
-        }
-
-        orderDirection && ['asc', 'desc'].includes(orderDirection) ? null : (orderDirection = null);
-
+        // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
-                const response = await api.search(
-                    searchType,
-                    query,
-                    publicationTypes,
-                    limit,
-                    offset,
-                    orderBy as Types.PublicationOrderBySearchOption | Types.UserOrderBySearchOption,
-                    orderDirection as Types.OrderDirectionSearchOption
-                );
+                const response = await api.search(searchType, query, publicationTypes, limit, offset);
                 results = response.data;
                 metadata = response.metadata;
                 error = null;
@@ -86,9 +64,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'createdAt'}&orderDirection=${
-        orderDirection || 'desc'
-    }`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -97,8 +73,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publicationTypes,
             limit,
             offset,
-            orderBy,
-            orderDirection,
             fallback: {
                 [swrKey]: results
             },
@@ -113,8 +87,6 @@ type Props = {
     publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
-    orderBy: string | null;
-    orderDirection: string | null;
     error: string | null;
 };
 
@@ -130,17 +102,11 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
-    const [orderBy, setOrderBy] = React.useState(
-        props.orderBy ? props.orderBy : searchType === 'publications' ? 'publishedDate' : 'updatedAt'
-    );
-    const [orderDirection, setOrderDirection] = React.useState(props.orderDirection ? props.orderDirection : 'desc');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}&orderBy=${orderBy || 'publishedDate'}&orderDirection=${
-        orderDirection || 'desc'
-    }`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -148,6 +114,27 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
         setQuery(searchTerm);
+    };
+
+    const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (value === 'users') {
+            const paramsListCopy = { ...router.query };
+            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
+            router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
+        }
+        if (value === 'publications') {
+            router.push(
+                {
+                    query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
+                },
+                undefined,
+                { shallow: true }
+            );
+        }
+        setQuery('');
+        searchInputRef.current && (searchInputRef.current.value = '');
+        setSearchType(e.target.value);
     };
 
     const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -163,46 +150,19 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
 
-    const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        if (value === 'users') {
-            const paramsListCopy = { ...router.query };
-            setOrderBy('updatedAt');
-            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
-            router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
-        }
-        if (value === 'publications') {
-            setOrderBy('publishedDate');
-            router.push(
-                {
-                    query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
-                },
-                undefined,
-                { shallow: true }
-            );
-        }
-        setQuery('');
-        searchInputRef.current && (searchInputRef.current.value = '');
-        setSearchType(e.target.value);
-    };
-
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
-        setOrderDirection('desc');
         setOffset(0);
         setLimit(10);
         if (searchType === 'publications') {
             setPublicationTypes(Config.values.publicationTypes.join(','));
-            setOrderBy('publishedDate');
-        } else if (searchType === 'users') {
-            setOrderBy('updatedAt');
         }
     };
 
     React.useEffect(() => {
         setOffset(0);
-    }, [searchType, query, publicationTypes, limit, orderBy, orderDirection]);
+    }, [searchType, query, publicationTypes, limit]);
 
     return (
         <>
@@ -239,52 +199,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             >
                                 <option value="publications">Publications</option>
                                 <option value="users">Authors</option>
-                            </select>
-                        </label>
-
-                        <label htmlFor="order-by" className="relative col-span-12 block lg:col-span-2">
-                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                Ordering
-                            </span>
-                            <select
-                                name="order-by"
-                                id="order-by"
-                                onChange={(e) => setOrderBy(e.target.value)}
-                                value={orderBy}
-                                className="col-span-2 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                disabled={isValidating}
-                            >
-                                {searchType === 'publications' && (
-                                    <>
-                                        <option value="publishedDate">Published date</option>
-                                        <option value="title">Publication title</option>
-                                    </>
-                                )}
-                                {searchType === 'users' && (
-                                    <>
-                                        <option value="firstName">First name</option>
-                                        <option value="lastName">Last name</option>
-                                        <option value="updatedAt">Date updated</option>
-                                        <option value="createdAt">Date created</option>
-                                    </>
-                                )}
-                            </select>
-                        </label>
-
-                        <label htmlFor="order-direction" className="relative col-span-8 block lg:col-span-2">
-                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                Direction
-                            </span>
-                            <select
-                                name="order-direction"
-                                id="order-direction"
-                                onChange={(e) => setOrderDirection(e.target.value)}
-                                value={orderDirection}
-                                className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                disabled={isValidating}
-                            >
-                                <option value="asc">Ascending</option>
-                                <option value="desc">Descending</option>
                             </select>
                         </label>
 

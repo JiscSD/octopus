@@ -1,7 +1,7 @@
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 export const create = async (fromPublicationId: string, toPublicationId: string) => {
-    const link = await prisma.links.create({
+    const link = await client.prisma.links.create({
         data: {
             publicationFrom: fromPublicationId,
             publicationTo: toPublicationId
@@ -12,7 +12,7 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
 };
 
 export const doesLinkExist = async (fromPublicationId: string, toPublicationId: string) => {
-    const link = await prisma.links.findFirst({
+    const link = await client.prisma.links.findFirst({
         where: {
             publicationFrom: fromPublicationId,
             publicationTo: toPublicationId
@@ -23,7 +23,7 @@ export const doesLinkExist = async (fromPublicationId: string, toPublicationId: 
 };
 
 export const deleteLink = async (id: string) => {
-    const deletedLink = await prisma.links.delete({
+    const deletedLink = await client.prisma.links.delete({
         where: {
             id
         }
@@ -33,7 +33,7 @@ export const deleteLink = async (id: string) => {
 };
 
 export const get = async (id: string) => {
-    const link = await prisma.links.findFirst({
+    const link = await client.prisma.links.findFirst({
         include: {
             publicationFromRef: {
                 select: {
