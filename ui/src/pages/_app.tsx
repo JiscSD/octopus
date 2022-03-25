@@ -64,7 +64,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         fetcher: (resource) => api.get(resource, undefined),
                         fallback: pageProps.fallback,
                         errorRetryCount: 3,
-                        refreshInterval: 60000, // for dev
+                        refreshInterval: 600000000, // for dev
                         onError: (error, key) => {
                             if (error.status === 403) {
                                 console.log('403 error');

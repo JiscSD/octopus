@@ -52,3 +52,11 @@ module "postgres" {
   db_version              = var.db_version
   backup_retention_period = var.backup_retention_period
 }
+
+module "elasticsearch" {
+  source             = "../modules/elasticsearch"
+  private_subnet_ids = module.network.private_subnet_ids
+  environment        = local.environment
+  vpc_id             = module.network.vpc_id
+  instance_size      = var.elasticsearch_instance_size
+}
