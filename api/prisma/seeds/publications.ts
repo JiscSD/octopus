@@ -71,7 +71,7 @@ const publicationSeeds = [
                 id: 'test-user-1'
             }
         },
-        CoAuthors: {
+        coAuthors: {
             create: {
                 id: 'testCoAuthor',
                 email: 'testemail@test.com'

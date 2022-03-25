@@ -19,7 +19,7 @@ describe('create coauthor', () => {
                 email: 'emailtest@emailtest.com'
             });
 
-        expect(coauthor.status).toEqual(200);
+        expect(coauthor.status).toEqual(201);
     });
 
     test('Cannot create a co-author without a valid email', async () => {
@@ -74,7 +74,7 @@ describe('create coauthor', () => {
                 email: 'emailtest@emailtest.com'
             });
 
-        expect(coauthor.status).toEqual(200);
+        expect(coauthor.status).toEqual(201);
 
         const duplicate = await testUtils.agent
             .post(`/publications/${publication.user1Draft}/coauthor`)

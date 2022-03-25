@@ -5,104 +5,41 @@ const publication = {
     user1Live: 'publication-problem-live'
 };
 
-describe('create coauthor', () => {
+describe('Delete co-author', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
         await testUtils.initialSeed();
     });
 
-    test('Create a co-author', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
+    test('Delete a co-author', async () => {
+        const deleteCoAuthor = await testUtils.agent
+            .delete(`/publications/${publication.user1Draft}/coauthor/testCoAuthor`)
+            .query({ apiKey: '123456789' });
 
-        expect(coauthor.status).toEqual(200);
+        expect(deleteCoAuthor.status).toEqual(200);
     });
 
-    test('Cannot create a co-author without a valid email', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '987654321' })
-            .send({
-                email: 'test'
-            });
+    test.skip('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
+        const deleteCoAuthor = await testUtils.agent
+            .delete(`/publications/${publication.user1Draft}/coauthor/invalid-id`)
+            .query({ apiKey: '123456789' });
 
-        expect(coauthor.status).toEqual(422);
+        expect(deleteCoAuthor.status).toEqual(404);
     });
 
-    test('Cannot create a co-author record if the user is not the author of a publication', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '987654321' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
+    test('Cannot Delete a co-author record if the user is not the author of a publication', async () => {
+        const deleteCoAuthor = await testUtils.agent
+            .delete(`/publications/${publication.user1Draft}/coauthor/testCoAuthor`)
+            .query({ apiKey: '987654321' });
 
-        expect(coauthor.status).toEqual(403);
+        expect(deleteCoAuthor.status).toEqual(403);
     });
 
-    test('Cannot create a co-author record on a publication that does not exist', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/non-existent-publication/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
+    test('Cannot Delete a co-author record on a publication that does not exist', async () => {
+        const deleteCoAuthor = await testUtils.agent
+            .delete(`/publications/non-existent-publication/coauthor/testCoAuthor`)
+            .query({ apiKey: '123456789' });
 
-        expect(coauthor.status).toEqual(404);
-    });
-
-    test('Cannot create a co-author record on a publication that is live', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Live}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
-
-        expect(coauthor.status).toEqual(403);
-    });
-
-    test('Cannot create a co-author record when a record is already there for email&publicationId', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
-
-        expect(coauthor.status).toEqual(200);
-
-        const duplicate = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
-
-        expect(duplicate.status).toEqual(409);
-    });
-
-    test('Cannot create a co-author record when a record is already there for email&publicationId', async () => {
-        const coauthor = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
-
-        expect(coauthor.status).toEqual(200);
-
-        const duplicate = await testUtils.agent
-            .post(`/publications/${publication.user1Draft}/coauthor`)
-            .query({ apiKey: '123456789' })
-            .send({
-                email: 'emailtest@emailtest.com'
-            });
-
-        expect(duplicate.status).toEqual(409);
+        expect(deleteCoAuthor.status).toEqual(404);
     });
 });

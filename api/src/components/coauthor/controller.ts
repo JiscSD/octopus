@@ -44,7 +44,7 @@ export const create = async (
 
         const coAuthor = await coAuthorService.create(event.body, event?.pathParameters.id);
 
-        return response.json(200, coAuthor);
+        return response.json(201, coAuthor);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
@@ -65,11 +65,13 @@ export const deleteCoAuthor = async (
         }
 
         // Does the coauthor record exist?
-        if (!publication.coAuthors.includes(event?.pathParameters.coauthor)) {
-            return response.json(404, {
-                message: 'This coauthor has not been added to this publication.'
-            });
-        }
+        // const coAuthorId = publication.coAuthors.filter((coAuthor) => coAuthor.id);
+        // console.log(coAuthorId);
+        // if (coAuthorId?.forEach !== event?.pathParameters.coauthor) {
+        //     return response.json(404, {
+        //         message: 'This coauthor has not been added to this publication.'
+        //     });
+        // }
 
         // Is this user the author of the publication?
         if (publication?.user.id !== event?.user.id) {
@@ -80,7 +82,7 @@ export const deleteCoAuthor = async (
 
         await coAuthorService.deleteCoAuthor(event?.pathParameters.coauthor);
 
-        return response.json(201, { message: 'Co-author deleted from this publication' });
+        return response.json(200, { message: 'Co-author deleted from this publication' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
