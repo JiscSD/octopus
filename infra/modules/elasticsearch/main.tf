@@ -111,7 +111,7 @@ resource "aws_ssm_parameter" "elasticsearch_domain" {
 }
 
 resource "aws_ssm_parameter" "elasticsearch_endpoint" {
-  name      = "elasticsearch_domain_${var.environment}_octopus"
+  name      = "elasticsearch_endpoint_${var.environment}_octopus"
   type      = "String"
   value     = aws_elasticsearch_domain.elasticsearch.endpoint
   overwrite = true
