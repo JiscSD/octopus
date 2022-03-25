@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["fullTextSearch"]
@@ -12,31 +9,101 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model User {
+    id               String             @id @default(cuid())
+    orcid            String             @unique
+    firstName        String
+    lastName         String?
+    email            String?
+    role             Role               @default(USER)
+    locked           Boolean            @default(false)
+    apiKey           String             @unique @default(uuid())
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    employment       Json[]
+    works            Json[]
+    education        Json[]
+    coAuthors        CoAuthors[]
+    Publication      Publication[]
+    PublicationFlags PublicationFlags[]
+}
+
+model Publication {
+    id                       String                @id @default(cuid())
+    url_slug                 String                @unique @default(cuid())
+    type                     PublicationType
+    title                    String?
+    licence                  LicenceType?
+    conflictOfInterestStatus Boolean?              @default(false)
+    conflictOfInterestText   String?
+    description              String?
+    keywords                 String[]
+    content                  String?
+    doi                      String?
+    publishedDate            DateTime?
+    currentStatus            PublicationStatusEnum @default(DRAFT)
+    createdBy                String
+    createdAt                DateTime              @default(now())
+    updatedAt                DateTime              @updatedAt
+    user                     User                  @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    coAuthors                CoAuthors[]
+    linkedTo                 Links[]               @relation("from")
+    linkedFrom               Links[]               @relation("to")
+    publicationFlags         PublicationFlags[]
+    publicationStatus        PublicationStatus[]
+}
+
+model Links {
+    id                 String      @id @default(cuid())
+    publicationFrom    String
+    publicationTo      String
+    active             Boolean?    @default(true)
+    createdAt          DateTime    @default(now())
+    updatedAt          DateTime    @updatedAt
+    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
+    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+
+    @@unique([publicationFrom, publicationTo])
+}
+
+model PublicationStatus {
+    id            String                @id @default(cuid())
+    publicationId String
+    status        PublicationStatusEnum
+    createdAt     DateTime              @default(now())
+    publication   Publication           @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+}
+
+model PublicationFlags {
+    id            String                      @id @default(cuid())
+    publicationId String
+    category      PublicationFlagCategoryEnum
+    comments      String
+    createdBy     String
+    createdAt     DateTime                    @default(now())
+    user          User                        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    publication   Publication                 @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, category, createdBy])
+}
+
+model CoAuthors {
+    id                String      @id @default(cuid())
+    publicationId     String
+    email             String
+    code              String      @unique @default(cuid())
+    confirmedCoAuthor Boolean     @default(false)
+    linkedUser        String?
+    user              User?       @relation(fields: [linkedUser], references: [id])
+    publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, email])
+}
+
 enum Role {
     SUPER_USER
     FUNDER
     USER
-}
-
-model User {
-    id         String  @id @default(cuid())
-    orcid      String  @unique
-    firstName  String
-    lastName   String?
-    email      String?
-    works      Json[]
-    employment Json[]
-    education  Json[]
-    role       Role    @default(USER)
-    locked     Boolean @default(false)
-    apiKey     String  @unique @default(uuid())
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    Publication      Publication[]
-    PublicationFlags PublicationFlags[]
-    CoAuthors        CoAuthors[]
 }
 
 enum PublicationStatusEnum {
@@ -72,90 +139,4 @@ enum LicenceType {
     CC_BY_NC
     CC_BY_NC_SA
     CC_BY_NC_ND
-}
-
-model Publication {
-    id                       String          @id @default(cuid())
-    url_slug                 String          @unique @default(cuid())
-    type                     PublicationType
-    title                    String?
-    licence                  LicenceType?
-    conflictOfInterestStatus Boolean?        @default(false)
-    conflictOfInterestText   String?
-    description              String?
-    keywords                 String[]
-    content                  String?
-    doi                      String?
-    publishedDate            DateTime?
-
-    currentStatus PublicationStatusEnum @default(DRAFT)
-
-    createdBy String
-    coAuthors String[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-
-    linkedTo   Links[]     @relation("from")
-    linkedFrom Links[]     @relation("to")
-    CoAuthors  CoAuthors[] @relation("publicationId")
-
-    publicationStatus PublicationStatus[]
-    publicationFlags  PublicationFlags[]
-}
-
-model Links {
-    id              String   @id @default(cuid())
-    publicationFrom String
-    publicationTo   String
-    active          Boolean? @default(true)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
-    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
-
-    @@unique([publicationFrom, publicationTo])
-}
-
-model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
-
-    createdAt DateTime @default(now())
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-}
-
-model PublicationFlags {
-    id            String                      @id @default(cuid())
-    publicationId String
-    category      PublicationFlagCategoryEnum
-    comments      String
-    createdBy     String
-
-    createdAt DateTime @default(now())
-
-    user        User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, category, createdBy])
-}
-
-model CoAuthors {
-    id                String  @id @default(cuid())
-    publicationId     String
-    email             String
-    code              String  @unique @default(cuid())
-    linkedUser        String?
-    confirmedCoAuthor Boolean @default(false)
-
-    user        User?       @relation(fields: [linkedUser], references: [id], onDelete: Cascade)
-    publication Publication @relation("publicationId", fields: [publicationId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, email])
 }

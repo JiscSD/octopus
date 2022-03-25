@@ -137,6 +137,12 @@ export const get = async (id: string) => {
                     lastName: true
                 }
             },
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true
+                }
+            },
             linkedTo: {
                 where: {
                     publicationToRef: {
