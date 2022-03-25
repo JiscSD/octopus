@@ -283,3 +283,12 @@ export interface DeleteCoAuthorPathParams {
     id: string;
     coauthor: string;
 }
+
+export interface ConfirmCoAuthorPathParams {
+    publicationId: string;
+}
+
+export interface ConfirmCoAuthorQueryParams {
+    email: string;
+    code: string;
+}

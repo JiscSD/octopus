@@ -124,3 +124,28 @@ export const resendCoAuthor = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const confirmCoAuthor = async (
+    event: I.AuthenticatedAPIRequest<undefined, I.ConfirmCoAuthorQueryParams, I.ConfirmCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event?.pathParameters.publicationId);
+
+        // Does the publication exist?
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        await coAuthorService.confirmCoAuthor(
+            event.user.id,
+            event?.queryStringParameters.email,
+            event?.queryStringParameters.code
+        );
+
+        return response.json(200, { message: 'This co-author has been confirmed.' });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
