@@ -87,3 +87,40 @@ export const deleteCoAuthor = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const resendCoAuthor = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event?.pathParameters.id);
+
+        // Does the publication exist?
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        // Does the coauthor record exist?
+        // const coAuthorId = publication.coAuthors.filter((coAuthor) => coAuthor.id);
+        // console.log(coAuthorId);
+        // if (coAuthorId?.forEach !== event?.pathParameters.coauthor) {
+        //     return response.json(404, {
+        //         message: 'This coauthor has not been added to this publication.'
+        //     });
+        // }
+
+        // Is this user the author of the publication?
+        if (publication?.user.id !== event?.user.id) {
+            return response.json(403, {
+                message: 'You do not have the right permissions for this action.'
+            });
+        }
+
+        await coAuthorService.resendCoAuthor(event?.pathParameters.coauthor);
+
+        return response.json(200, { message: 'A new code has been generated for co-author.' });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

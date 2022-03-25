@@ -1,4 +1,5 @@
 import prisma from 'lib/client';
+import cuid from 'cuid';
 
 import * as I from 'interface';
 
@@ -28,6 +29,19 @@ export const deleteCoAuthor = async (id: string) => {
     });
 
     return deleteCoAuthor;
+};
+
+export const resendCoAuthor = async (id: string) => {
+    const resendCoAuthor = await prisma.coAuthors.update({
+        where: {
+            id
+        },
+        data: {
+            code: cuid()
+        }
+    });
+
+    return resendCoAuthor;
 };
 
 export const isUserAlreadyCoAuthor = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
