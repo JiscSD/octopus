@@ -30,6 +30,7 @@ export { default as PublicationCreationStepTwo } from './Publication/Creation/St
 export { default as PublicationCreationStepThree } from './Publication/Creation/StepThree';
 export { default as PublicationCreationStepFour } from './Publication/Creation/StepFour';
 export { default as PublicationCreationStepFive } from './Publication/Creation/StepFive';
+export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationLink } from './Publication/Link';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as HTMLVideo } from './Video/HTML';

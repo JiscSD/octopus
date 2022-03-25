@@ -22,10 +22,12 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     }, [content]);
 
     return (
-        <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
-            <h2 className="mb-6 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                This publications full text
-            </h2>
+        <div className="pb-16 transition-colors duration-500 dark:border-grey-700">
+            <Components.PublicationCreationStepTitle text="Main text" />
+            <span className="mb-4 block text-xs leading-snug text-grey-700">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non
+                provident repudiandae, nobis possimus, id ipsam suscipit.
+            </span>
             {!loading ? (
                 <Components.Editor content={content} changeCallback={updateContent} />
             ) : (

@@ -5,6 +5,7 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
+import * as Assets from '@assets';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
@@ -97,7 +98,49 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto px-8 py-16 2xl:pb-28">
+                <section className="container mx-auto py-16 px-8 2xl:py-28">
+                    <div className="mb-16 grid grid-cols-3">
+                        <div className="mt-8 space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2 flex justify-end">
+                            <Assets.Window />
+                        </div>
+                    </div>
+                    <div className="mb-16 grid grid-cols-3">
+                        <div className="mt-8 space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2 flex justify-end">
+                            <Assets.Window />
+                        </div>
+                    </div>
+                    <div className="mb-16 grid grid-cols-3">
+                        <div className="mt-8 space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2 flex justify-end">
+                            <Assets.Window />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="container mx-auto border-t border-grey-100 px-8 py-16 2xl:py-28 ">
                     {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
@@ -149,7 +192,19 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
 
                 <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
-                    <Components.LatestPublications publications={props.latest} />
+                    <div className="grid grid-cols-3 gap-x-32">
+                        <div className="mt-8 space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2">
+                            <Components.LatestPublications publications={props.latest} />
+                        </div>
+                    </div>
                 </section>
             </Layouts.Standard>
         </>

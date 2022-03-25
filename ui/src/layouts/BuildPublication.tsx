@@ -5,6 +5,7 @@ import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
+import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -15,17 +16,21 @@ type NavigationButtonProps = {
     disabled?: boolean;
     onClick: () => void;
     className?: string;
+    icon: React.ReactElement;
+    iconPosition: 'LEFT' | 'RIGHT';
 };
 
 const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
+        className={`flex items-center space-x-2 rounded-sm py-1 text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
             props.className ? props.className : ''
         }`}
     >
-        {props.text}
+        {props.iconPosition === 'LEFT' && props.icon}
+        <span>{props.text}</span>
+        {props.iconPosition === 'RIGHT' && props.icon}
     </button>
 );
 
@@ -41,6 +46,7 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
+    const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
     const content = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.content);
     const licence = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.licence);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(
@@ -137,36 +143,51 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             <Components.Header fixed={true} />
             <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-28">
                 <section className="col-span-12 p-8 lg:col-span-9">
-                    <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
-                        <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                            {Object.values(props.steps)[props.currentStep].subTitle}
+                    <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
+                        <span className="block font-montserrat text-lg font-semibold text-teal-500 transition-colors duration-500 dark:text-teal-400">
+                            {Helpers.formatPublicationType(type)}
                         </span>
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="flex space-x-8">
                             <NavigationButton
-                                text="Delete draft"
-                                onClick={() => console.log('attempt to delete')}
-                                className="bg-pink-500"
+                                text="Previous"
+                                disabled={props.currentStep <= 0}
+                                onClick={prevStep}
+                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-500" />}
+                                iconPosition="LEFT"
                             />
-                            <NavigationButton
-                                text="Save and exit"
-                                onClick={() => setSaveExitModalVisibility(true)}
-                                className="bg-purple-400"
-                            />
-                            <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prevStep} />
                             {props.currentStep < props.steps.length - 1 && (
                                 <NavigationButton
                                     text="Next"
                                     disabled={props.currentStep >= props.steps.length - 1}
                                     onClick={nextStep}
+                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500" />}
+                                    iconPosition="RIGHT"
                                 />
                             )}
                             {props.currentStep === props.steps.length - 1 && (
                                 <NavigationButton
                                     text="Publish"
                                     onClick={() => setPublishModalVisibility(true)}
-                                    className="bg-purple-400"
+                                    className=""
+                                    icon={<OutlineIcons.StarIcon className="h-4 w-4 text-teal-500" />}
+                                    iconPosition="RIGHT"
                                 />
                             )}
+                            <NavigationButton
+                                text="Save and exit"
+                                onClick={() => setSaveExitModalVisibility(true)}
+                                className=""
+                                icon={<OutlineIcons.SaveAsIcon className="h-4 w-4 text-teal-500" />}
+                                iconPosition="RIGHT"
+                            />
+                            <NavigationButton
+                                text="Delete draft"
+                                onClick={() => console.log('attempt to delete')}
+                                className=""
+                                icon={<OutlineIcons.TrashIcon className="h-4 w-4 text-teal-500" />}
+                                iconPosition="RIGHT"
+                            />
+
                             <button
                                 onClick={() => {
                                     router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
@@ -188,9 +209,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <li key={step.title}>
                                 <button
                                     onClick={() => props.setStep(index)}
-                                    className={`${
-                                        index === props.currentStep ? 'bg-teal-500 text-white-50' : ''
-                                    } w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50`}
+                                    className={`rounded py-1 px-2 text-left font-montserrat text-base underline decoration-transparent decoration-2 outline-0 transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
+                                        index === props.currentStep ? '!decoration-teal-500' : ''
+                                    }`}
                                 >
                                     {parse(step.title)}
                                 </button>

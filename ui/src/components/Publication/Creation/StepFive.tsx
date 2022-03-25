@@ -19,14 +19,18 @@ const IncompleteIcon = () => (
  */
 const StepFive = () => {
     const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
-    const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
+    const type: Types.PublicationType = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.type
+    );
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
     );
     const conflictOfInterestText = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
     );
-    const licence = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.licence);
+    const licence: Types.LicenceType = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.licence
+    );
     const content: string = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.content
     );
@@ -34,7 +38,7 @@ const StepFive = () => {
     return (
         <div className="text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
             <div className="relative mt-20 border-b border-grey-100 pb-8 transition-colors duration-500 dark:border-grey-700">
-                <span className="mb-4 block font-montserrat text-xl font-semibold text-pink-500">
+                <span className="mb-4 block font-montserrat text-xl font-semibold text-teal-500">
                     {Helpers.formatPublicationType(type)}
                 </span>
                 <h1 className="mb-4 block font-montserrat text-3xl text-grey-800 transition-colors duration-500 dark:text-white-50">
@@ -53,12 +57,12 @@ const StepFive = () => {
                     Creative commons licence
                 </span>
                 <Components.Link
-                    href={`${Config.values.licenceTypes.find((type) => type.value === licence)?.link}`}
+                    href={Config.values.octopusInformation.licences[licence].link}
                     openNew={true}
                     className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
                 >
                     <strong className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {Config.values.licenceTypes.find((type) => type.value === licence)?.nicename} 4.0
+                        {Config.values.octopusInformation.licences[licence].nicename}
                     </strong>
                 </Components.Link>
                 {licence ? <CompletedIcon /> : <IncompleteIcon />}
