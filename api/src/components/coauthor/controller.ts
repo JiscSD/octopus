@@ -65,13 +65,14 @@ export const deleteCoAuthor = async (
         }
 
         // Does the coauthor record exist?
-        // const coAuthorId = publication.coAuthors.filter((coAuthor) => coAuthor.id);
-        // console.log(coAuthorId);
-        // if (coAuthorId?.forEach !== event?.pathParameters.coauthor) {
-        //     return response.json(404, {
-        //         message: 'This coauthor has not been added to this publication.'
-        //     });
-        // }
+        const pathParamId = event?.pathParameters.coauthor;
+        const coAuthors = publication.coAuthors;
+
+        if (!coAuthors?.some((coAuthor) => coAuthor.id === pathParamId)) {
+            return response.json(404, {
+                message: 'This coauthor has not been added to this publication.'
+            });
+        }
 
         // Is this user the author of the publication?
         if (publication?.user.id !== event?.user.id) {
@@ -102,13 +103,14 @@ export const resendCoAuthor = async (
         }
 
         // Does the coauthor record exist?
-        // const coAuthorId = publication.coAuthors.filter((coAuthor) => coAuthor.id);
-        // console.log(coAuthorId);
-        // if (coAuthorId?.forEach !== event?.pathParameters.coauthor) {
-        //     return response.json(404, {
-        //         message: 'This coauthor has not been added to this publication.'
-        //     });
-        // }
+        const pathParamId = event?.pathParameters.coauthor;
+        const coAuthors = publication.coAuthors;
+
+        if (!coAuthors?.some((coAuthor) => coAuthor.id === pathParamId)) {
+            return response.json(404, {
+                message: 'This coauthor has not been added to this publication.'
+            });
+        }
 
         // Is this user the author of the publication?
         if (publication?.user.id !== event?.user.id) {
