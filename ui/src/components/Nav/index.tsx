@@ -30,7 +30,7 @@ const Nav: React.FC = (): React.ReactElement => {
                     value: `${Config.urls.viewUser.path}/${user.id}`,
                     subItems: [
                         {
-                            label: 'Profile',
+                            label: 'Public profile',
                             value: `${Config.urls.viewUser.path}/${user.id}`
                         },
                         {

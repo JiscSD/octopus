@@ -20,7 +20,8 @@
         "start:int": "NEXT_PUBLIC_ENV=int next start -p 3000",
         "lint": "next lint",
         "format:check": "npx prettier --check src/",
-        "format:write": "npx prettier --write src/"
+        "format:write": "npx prettier --write src/",
+        "lighthouse": "NEXT_PUBLIC_ENV=int lhci autorun"
     },
     "dependencies": {
         "@atlaskit/code": "^14.3.2",
@@ -51,6 +52,7 @@
         "zustand": "^3.6.9"
     },
     "devDependencies": {
+        "@lhci/cli": "^0.8.2",
         "@tailwindcss/typography": "^0.5.0",
         "@types/js-cookie": "^3.0.1",
         "@types/jsonwebtoken": "^8.5.8",

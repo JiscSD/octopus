@@ -31,6 +31,7 @@ export { default as PublicationCreationStepThree } from './Publication/Creation/
 export { default as PublicationCreationStepFour } from './Publication/Creation/StepFour';
 export { default as PublicationCreationStepFive } from './Publication/Creation/StepFive';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
+export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
 export { default as PublicationLink } from './Publication/Link';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as HTMLVideo } from './Video/HTML';
@@ -65,3 +66,4 @@ export { default as VisualPublicationFlow } from './VisualPublicationFlow';
 export { default as ActionCard } from './ActionCard';
 export { default as RenderLinks } from './RenderLinks';
 export { default as LatestPublications } from './LatestPublications';
+export { default as MockupFlow } from './MockupFlow';

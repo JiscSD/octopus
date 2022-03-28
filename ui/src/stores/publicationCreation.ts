@@ -1,10 +1,14 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import * as Interfaces from '@interfaces';
 import * as Types from '@types';
+import * as Interfaces from '@interfaces';
 
 let store: any = (set: (params: any) => void) => ({
+    error: null,
+    setError: (error: string | null) => set((state: Types.PublicationCreationStoreType) => ({ error })),
+    id: '',
+    updateId: (id: string) => set((state: Types.PublicationCreationStoreType) => ({ id })),
     title: '',
     updateTitle: (title: string) => set((state: Types.PublicationCreationStoreType) => ({ title })),
     type: 'PROBLEM',
@@ -19,19 +23,12 @@ let store: any = (set: (params: any) => void) => ({
     conflictOfInterestText: '',
     updateConflictOfInterestText: (conflictOfInterestText: string) =>
         set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestText })),
-    linkedFromPublication: null,
-    updateLinkedFromPublication: (linkedFromPublication: Interfaces.Publication | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ linkedFromPublication })),
-    forPublicationsID: null,
-    updateForPublicationsID: (forPublicationsID: string | string[] | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ forPublicationsID })),
-    draftedPublication: null,
-    updateDraftedPublication: (draftedPublication: Interfaces.Publication | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ draftedPublication }))
+    linkTo: [],
+    updateLinkTo: (linkTo: Array<Interfaces.LinkTo>) => set((state: Types.PublicationCreationStoreType) => ({ linkTo }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
 
-const usePublicationCreationStore = create(store);
+const usePublicationCreationStore = create<Types.PublicationCreationStoreType>(store);
 
 export default usePublicationCreationStore;

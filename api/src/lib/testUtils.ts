@@ -40,11 +40,12 @@ export const openSearchSeed = async () => {
     }
 };
 
-// export const clearDB = async (): Promise<void> => {
-//     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
-//     const deletePublications = client.prisma.publication.deleteMany();
-//     const deleteUsers = client.prisma.user.deleteMany();
+// TODO: This was commented out?
+export const clearDB = async (): Promise<void> => {
+    const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
+    const deletePublications = client.prisma.publication.deleteMany();
+    const deleteUsers = client.prisma.user.deleteMany();
 
-//     // @ts-ignore
-//     await prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
-// };
+    // @ts-ignore
+    await prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+};

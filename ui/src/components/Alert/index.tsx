@@ -93,9 +93,9 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="flex">
-                        <div className="flex-shrink-0">{classes.icon}</div>
-                        <div className="ml-3">
+                    <div className="grid grid-cols-16">
+                        <div className="col-span-1 row-span-2 mr-4">{classes.icon}</div>
+                        <div className="col-span-15">
                             <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                 {props.title}
                             </h3>
@@ -109,30 +109,28 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                 </div>
                             )}
 
-                            <div className="mt-6">
-                                <div className="-mx-2 -my-1.5 flex">
-                                    {props.supportLink && (
-                                        <Components.Link
-                                            href={props.supportLink.url}
-                                            openNew={props.supportLink.external}
-                                            className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
-                                        >
-                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
-                                                {props.supportLink.text}
-                                            </span>
-                                        </Components.Link>
-                                    )}
+                            <div className="mt-3 flex">
+                                {props.supportLink && (
+                                    <Components.Link
+                                        href={props.supportLink.url}
+                                        openNew={props.supportLink.external}
+                                        className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    >
+                                        <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
+                                            {props.supportLink.text}
+                                        </span>
+                                    </Components.Link>
+                                )}
 
-                                    {props.allowDismiss && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setShow(false)}
-                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                                        >
-                                            Dismiss
-                                        </button>
-                                    )}
-                                </div>
+                                {props.allowDismiss && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShow(false)}
+                                        className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                    >
+                                        Dismiss
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

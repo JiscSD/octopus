@@ -68,6 +68,17 @@ export const put = async (url: string, body: Interfaces.JSON, token: string | un
     return response;
 };
 
+export const destroy = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.delete(url, token ? headers : undefined);
+    return response;
+};
+
 export const search = async (
     searchType: string | Types.SearchType,
     query: string | null = null,

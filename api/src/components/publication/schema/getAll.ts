@@ -18,8 +18,8 @@ const getAllSchema: I.Schema = {
             default: 0
         },
         search: {
-            type: 'string',
-            default: ''
+            type: 'string'
+            // default: ''
         }
     },
     additionalProperties: false

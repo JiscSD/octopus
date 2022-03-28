@@ -162,8 +162,7 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 };
 
 export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
-    console.log(filters);
-    const publications = await client.search.search({
+    const query = {
         index: 'publications',
         body: {
             from: filters.offset,
@@ -171,15 +170,6 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
             sort: ['_score'],
             query: {
                 bool: {
-                    must: {
-                        multi_match: {
-                            query: filters.search,
-                            fuzziness: 'auto',
-                            type: 'most_fields',
-                            operator: 'or',
-                            fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
-                        }
-                    },
                     filter: {
                         terms: {
                             type: (filters.type
@@ -200,7 +190,23 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 }
             }
         }
-    });
+    };
+
+    if (filters.search) {
+        // TODO: Only apply the multimatch if a search term is provided, an empty string returns nothing
+        // @ts-ignore
+        query.body.query.bool.must = {
+            multi_match: {
+                query: filters.search,
+                fuzziness: 'auto',
+                type: 'most_fields',
+                operator: 'or',
+                fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
+            }
+        };
+    }
+
+    const publications = await client.search.search(query);
 
     return publications;
 };
