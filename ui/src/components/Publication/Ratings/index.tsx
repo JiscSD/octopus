@@ -124,19 +124,6 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                     <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
                     <span className="ml-1">json</span>
                 </button>
-                {/* <button
-                    aria-label="Download JSON"
-                    onClick={() =>
-                        handleDownload(
-                            'https://int.api.octopus.ac/v1/publications/publication-user-4-data-1-live',
-                            'file'
-                        )
-                    }
-                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
-                >
-                    <Image src="/images/xml.svg" alt="PDF Icon" width={18} height={18} />
-                    <span className="ml-1">xml</span>
-                </button> */}
             </div>
             <div className="flex">
                 <button
