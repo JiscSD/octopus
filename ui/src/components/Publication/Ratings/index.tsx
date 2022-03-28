@@ -115,7 +115,7 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                     aria-label="Download JSON"
                     onClick={() =>
                         handleDownload(
-                            'https://int.api.octopus.ac/v1/publications/publication-user-4-data-1-live',
+                            `https://int.api.octopus.ac/v1/publications/${props.publication.id}`,
                             `${props.publication.id}.json`
                         )
                     }
