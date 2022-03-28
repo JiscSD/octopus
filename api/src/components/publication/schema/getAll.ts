@@ -20,6 +20,10 @@ const getAllSchema: I.Schema = {
         search: {
             type: 'string',
             default: ''
+        },
+        exclude: {
+            type: 'string',
+            default: ''
         }
     },
     additionalProperties: false
