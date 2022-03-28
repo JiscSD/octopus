@@ -72,7 +72,7 @@ export const deletePublication = async (
 
         await publicationService.deletePublication(event.pathParameters.id);
 
-        return response.json(201, { message: `Publication ${event.pathParameters.id} deleted` });
+        return response.json(200, { message: `Publication ${event.pathParameters.id} deleted` });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
@@ -84,7 +84,7 @@ export const create = async (
     try {
         const publication = await publicationService.create(event.body, event.user);
 
-        return response.json(200, publication);
+        return response.json(201, publication);
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
@@ -205,7 +205,7 @@ export const createFlag = async (
             event.body.comments
         );
 
-        return response.json(200, flag);
+        return response.json(201, flag);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

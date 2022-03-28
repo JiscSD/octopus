@@ -21,7 +21,7 @@ describe('Create publication', () => {
                 keywords: ['science', 'technology']
             });
 
-        expect(createPublicationRequest.status).toEqual(200);
+        expect(createPublicationRequest.status).toEqual(201);
 
         expect(createPublicationRequest.body.user.id).toEqual('test-user-1');
         expect(createPublicationRequest.body.publicationStatus.length).toEqual(1);
@@ -43,7 +43,7 @@ describe('Create publication', () => {
                 content: 'Content'
             });
 
-        expect(createPublicationRequest.status).toEqual(200);
+        expect(createPublicationRequest.status).toEqual(201);
     });
 
     test('Valid publication not created by user that does not exist (401)', async () => {
@@ -127,7 +127,7 @@ describe('Create publication', () => {
                 content: 'Content'
             });
 
-        expect(createPublicationRequest.status).toEqual(200);
+        expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.publishedDate).toBeNull();
     });
 });
