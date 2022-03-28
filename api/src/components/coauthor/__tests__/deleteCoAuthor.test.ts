@@ -19,7 +19,7 @@ describe('Delete co-author', () => {
         expect(deleteCoAuthor.status).toEqual(200);
     });
 
-    test.skip('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
+    test('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
         const deleteCoAuthor = await testUtils.agent
             .delete(`/publications/${publication.user1Draft}/coauthor/invalid-id`)
             .query({ apiKey: '123456789' });

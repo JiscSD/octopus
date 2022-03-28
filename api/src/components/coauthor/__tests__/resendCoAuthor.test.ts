@@ -19,7 +19,7 @@ describe('Resend new code for co-author', () => {
         expect(resendCoAuthor.status).toEqual(200);
     });
 
-    test.skip('Cannot Resend new code for co-author without a valid id/coauthor has not been added to this publication', async () => {
+    test('Cannot Resend new code for co-author without a valid id/coauthor has not been added to this publication', async () => {
         const resendCoAuthor = await testUtils.agent
             .patch(`/publications/${publication.user1Draft}/coauthor/invalid-id`)
             .query({ apiKey: '123456789' });
