@@ -1,11 +1,23 @@
 import React from 'react';
 import * as Router from 'next/router';
+import Image from 'next/image';
 import * as OutlineIcons from '@heroicons/react/outline';
+import fileDownload from 'js-file-download';
+import axios from 'axios';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
+
+const handleDownload = async (url: string, fileName: string) => {
+    const res = await axios.get(url, {
+        responseType: 'blob'
+    });
+
+    // @ts-ignore
+    fileDownload(res.data, fileName);
+};
 
 type Props = {
     publication: Interfaces.Publication;
@@ -14,6 +26,11 @@ type Props = {
 
 const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
+
+    const peerReviewCount = props.publication.linkedFrom.filter(
+        (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
+    ).length;
+
     return (
         <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
             <div className="flex">
@@ -61,16 +78,20 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                     <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>
-            <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800">Peer reviews:</span>
-                <Components.Link
-                    href="#peer-reviews"
-                    ariaLabel="Peer review count"
-                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
-                >
-                    7 (Read reviews)
-                </Components.Link>
-            </div>
+            {props.publication.type !== 'PEER_REVIEW' && (
+                <div className="flex">
+                    <span className="mr-2 text-sm font-semibold text-grey-800">Peer reviews:</span>
+                    <Components.Link
+                        href="#peer-reviews"
+                        ariaLabel="Peer review count"
+                        className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                    >
+                        {peerReviewCount === 0
+                            ? 'Write a review'
+                            : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
+                    </Components.Link>
+                </div>
+            )}
 
             <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -85,10 +106,37 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                 <button
                     aria-label="Print button"
                     onClick={() => window.print()}
+                    className="mr-4 flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                >
+                    <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
+                    <span className="ml-1">pdf</span>
+                </button>
+                <button
+                    aria-label="Download JSON"
+                    onClick={() =>
+                        handleDownload(
+                            'https://int.api.octopus.ac/v1/publications/publication-user-4-data-1-live',
+                            `${props.publication.id}.json`
+                        )
+                    }
+                    className="mr-4 flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                >
+                    <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
+                    <span className="ml-1">json</span>
+                </button>
+                {/* <button
+                    aria-label="Download JSON"
+                    onClick={() =>
+                        handleDownload(
+                            'https://int.api.octopus.ac/v1/publications/publication-user-4-data-1-live',
+                            'file'
+                        )
+                    }
                     className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                 >
-                    pdf
-                </button>
+                    <Image src="/images/xml.svg" alt="PDF Icon" width={18} height={18} />
+                    <span className="ml-1">xml</span>
+                </button> */}
             </div>
             <div className="flex">
                 <button
