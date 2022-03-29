@@ -60,6 +60,20 @@ export const confirmCoAuthor = async (userId: string, email: string, code: strin
     return resendCoAuthor;
 };
 
+export const resetCoAuthors = async (publicationId: string) => {
+    const resetCoAuthors = await prisma.coAuthors.updateMany({
+        where: {
+            publicationId
+        },
+        data: {
+            confirmedCoAuthor: false,
+            code: cuid()
+        }
+    });
+
+    return resetCoAuthors;
+};
+
 export const isUserAlreadyCoAuthor = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
     const publication = await prisma.coAuthors.count({
         where: {

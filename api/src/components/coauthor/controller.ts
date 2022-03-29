@@ -151,3 +151,31 @@ export const confirmCoAuthor = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const resetCoAuthors = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.ConfirmCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event?.pathParameters.publicationId);
+
+        // Does the publication exist?
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        // Is this user the author of the publication?
+        if (publication?.user.id !== event?.user.id) {
+            return response.json(403, {
+                message: 'You do not have the right permissions for this action.'
+            });
+        }
+
+        await coAuthorService.resetCoAuthors(event?.pathParameters.publicationId);
+
+        return response.json(200, { message: 'The co-authors for this publication have been reset.' });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
