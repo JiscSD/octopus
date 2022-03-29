@@ -153,10 +153,10 @@ export const confirmCoAuthor = async (
 };
 
 export const resetCoAuthors = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.ConfirmCoAuthorPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event?.pathParameters.publicationId);
+        const publication = await publicationService.get(event?.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -172,7 +172,7 @@ export const resetCoAuthors = async (
             });
         }
 
-        await coAuthorService.resetCoAuthors(event?.pathParameters.publicationId);
+        await coAuthorService.resetCoAuthors(event?.pathParameters.id);
 
         return response.json(200, { message: 'The co-authors for this publication have been reset.' });
     } catch (err) {

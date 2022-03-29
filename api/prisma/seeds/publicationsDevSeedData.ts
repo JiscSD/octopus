@@ -153,6 +153,14 @@ const newPublicationSeeds = [
                 id: users.user1
             }
         },
+        coAuthors: {
+            create: {
+                id: 'testCoAuthorTrue',
+                email: 'testemail@test.com',
+                code: 'testcode',
+                confirmedCoAuthor: true
+            }
+        },
         publicationStatus: {
             create: [
                 {
