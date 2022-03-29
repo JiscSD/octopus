@@ -170,6 +170,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
             sort: ['_score'],
             query: {
                 bool: {
+                    must_not: {
+                        terms: {
+                            _id: filters.exclude.split(',')
+                        }
+                    },
                     filter: {
                         terms: {
                             type: (filters.type
@@ -193,7 +198,6 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
     };
 
     if (filters.search) {
-        // TODO: Only apply the multimatch if a search term is provided, an empty string returns nothing
         // @ts-ignore
         query.body.query.bool.must = {
             multi_match: {

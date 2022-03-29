@@ -110,6 +110,7 @@ export interface PublicationFilters {
     limit?: string;
     offset?: string;
     type: string;
+    exclude: string;
 }
 
 /**
