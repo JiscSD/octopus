@@ -101,7 +101,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const saveExit = async () => {
         setError(null);
         try {
-            saveCurrent();
+            await saveCurrent();
             router.push({
                 pathname: Config.urls.browsePublications.path
             });

@@ -18,7 +18,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     // We need to watch the content from the store as it goes from null to the default state of '' if this is a new publication.
     // Because of that, lets make use of it by adding a loading state with a loading icon
     React.useEffect(() => {
-        setTimeout(() => setLoading(false), 800);
+        setLoading(false);
     }, [content]);
 
     return (
@@ -29,7 +29,8 @@ const StepFour: React.FC = (): React.ReactElement | null => {
                 provident repudiandae, nobis possimus, id ipsam suscipit.
             </span>
             {!loading ? (
-                <Components.Editor content={content} changeCallback={updateContent} />
+                // <Components.Editor content={content} changeCallback={updateContent} />
+                <Components.TextEditor defaultContent={content} contentChangeHandler={updateContent} />
             ) : (
                 <div className="mt-16 flex animate-bounce justify-center">
                     <Assets.Logo width={60} height={60} className="fill-teal-500" />

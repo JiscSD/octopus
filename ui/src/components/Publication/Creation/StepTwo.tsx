@@ -140,7 +140,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
                         leaveTo="opacity-0"
                         afterLeave={() => setSearch('')}
                     >
-                        <HeadlessUI.Combobox.Options className="absolute mt-2 w-2/3 rounded bg-white-50 shadow">
+                        <HeadlessUI.Combobox.Options className="absolute mt-2 max-h-96 w-2/3 overflow-scroll rounded bg-white-50 shadow">
                             {!isValidating &&
                                 results.data.map((publication: Interfaces.Publication, index: number) => (
                                     <HeadlessUI.Combobox.Option
@@ -154,7 +154,20 @@ const StepTwo: React.FC = (): React.ReactElement => {
                                         }
                                         value={publication}
                                     >
-                                        {publication.title}
+                                        <div className="space-y-2">
+                                            <span className="font-montserrat text-sm font-medium text-teal-600">
+                                                {Helpers.formatPublicationType(publication.type)}
+                                            </span>
+                                            <p className="text-grey-800">{publication.title}</p>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-xs text-grey-700">
+                                                    {Helpers.formatDate(publication.publishedDate)},
+                                                </span>
+                                                <span className="text-sm text-grey-700">
+                                                    {publication.user.firstName[0]}. {publication.user.lastName}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </HeadlessUI.Combobox.Option>
                                 ))}
                         </HeadlessUI.Combobox.Options>

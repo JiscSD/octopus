@@ -61,6 +61,7 @@ export { default as ORCIDLogOutButton } from './ORCID/LogOutButton';
 export { default as Modal } from './Modal';
 export { default as Editor } from './Editor';
 export { default as EditorMenuBar } from './Editor/MenuBar';
+export { default as TextEditor } from './TextEditor';
 export { default as LearnAboutOctopus } from './LearnAboutOctopus';
 export { default as VisualPublicationFlow } from './VisualPublicationFlow';
 export { default as ActionCard } from './ActionCard';

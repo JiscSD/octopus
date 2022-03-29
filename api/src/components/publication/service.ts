@@ -200,7 +200,7 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 fuzziness: 'auto',
                 type: 'most_fields',
                 operator: 'or',
-                fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
+                fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
             }
         };
     }

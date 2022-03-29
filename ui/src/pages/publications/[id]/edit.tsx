@@ -33,8 +33,8 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Full text',
-        subTitle: 'Full text',
+        title: 'Main text',
+        subTitle: 'Main text',
         component: <Components.PublicationCreationStepFour />,
         icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },

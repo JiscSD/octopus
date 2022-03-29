@@ -19,13 +19,16 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
     return (
         <tr key={props.link.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                <div>
-                    <p className="mb-2">{props.link.publicationToRef.title}</p>
+                <div className="space-y-2">
+                    <span className="font-montserrat text-sm font-medium text-teal-600">
+                        {Helpers.formatPublicationType(props.link.publicationToRef.type)}
+                    </span>
+                    <p className="text-grey-800">{props.link.publicationToRef.title}</p>
                     <div className="flex items-center space-x-2">
                         <span className="text-xs text-grey-700">
                             {Helpers.formatDate(props.link.publicationToRef.publishedDate)},
                         </span>
-                        <span className="text-xs text-grey-700">
+                        <span className="text-sm text-grey-700">
                             {props.link.publicationToRef.user.firstName[0]}. {props.link.publicationToRef.user.lastName}
                         </span>
                     </div>
