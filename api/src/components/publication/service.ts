@@ -180,6 +180,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                             fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
                         }
                     },
+                    must_not: {
+                        terms: {
+                            _id: filters.exclude.split(',')
+                        }
+                    },
                     filter: {
                         terms: {
                             type: (filters.type
