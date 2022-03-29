@@ -1,4 +1,3 @@
-import { NetworkInterfaceBase } from 'os';
 import React from 'react';
 
 import * as Interfaces from '@interfaces';
@@ -48,14 +47,18 @@ export type PublicationCreationStoreType = {
     updateType: (type: PublicationType) => void;
     content: string;
     updateContent: (content: string) => void;
+    description: string;
+    updateDescription: (description: string) => void;
+    keywords: string[];
+    updateKeywords: (keywords: string) => void;
     licence: LicenceType;
     updateLicence: (licence: LicenceType) => void;
     conflictOfInterestStatus: boolean;
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => void;
     conflictOfInterestText: string;
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
-    linkTo: Array<Interfaces.LinkTo>;
-    updateLinkTo: (linkTo: Array<Interfaces.LinkTo>) => void;
+    linkTo: Interfaces.LinkTo[];
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

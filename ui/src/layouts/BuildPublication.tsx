@@ -50,6 +50,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const setError = Stores.usePublicationCreationStore((state) => state.setError);
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const type = Stores.usePublicationCreationStore((state) => state.type);
+    const description = Stores.usePublicationCreationStore((state) => state.description);
+    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
     const content = Stores.usePublicationCreationStore((state) => state.content);
     const licence = Stores.usePublicationCreationStore((state) => state.licence);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
@@ -63,6 +65,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const nextStep = () => props.setStep((prevState: number) => prevState + 1);
 
     const saveCurrent = async () => {
+        if (keywords.length) {
+            console.log(keywords);
+        }
+
         if (conflictOfInterestStatus && !conflictOfInterestText.length) {
             props.setStep(2);
             throw new Error('You must provide a conflict of interest reason.');
@@ -73,6 +79,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             {
                 title,
                 content,
+                description,
                 licence,
                 conflictOfInterestStatus,
                 conflictOfInterestText

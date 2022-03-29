@@ -15,22 +15,16 @@ import * as api from '@api';
 
 const steps: Interfaces.PublicationBuildingStep[] = [
     {
-        title: 'Publication title',
-        subTitle: 'Publication title & type information',
+        title: 'Page 1',
+        subTitle: 'Page 1',
         component: <Components.PublicationCreationStepOne />,
-        icon: <OutlineIcons.CubeIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
     {
-        title: 'Manage links',
-        subTitle: 'Manage links',
+        title: 'Structural links',
+        subTitle: 'Structural links',
         component: <Components.PublicationCreationStepTwo />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
-    },
-    {
-        title: 'Additional information',
-        subTitle: 'Additional information',
-        component: <Components.PublicationCreationStepThree />,
-        icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-teal-400" />
     },
     {
         title: 'Main text',
@@ -39,7 +33,13 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Review & Publish',
+        title: 'Page 3',
+        subTitle: 'Page 3',
+        component: <Components.PublicationCreationStepThree />,
+        icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-teal-400" />
+    },
+    {
+        title: 'Review & publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
         icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
