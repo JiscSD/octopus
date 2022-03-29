@@ -81,7 +81,7 @@ export const destroy = async (url: string, token: string | undefined): Promise<A
 
 export const search = async (
     searchType: string | Types.SearchType,
-    query: string | null = null,
+    search: string | null = null,
     publicationType: string | null = null,
     limit: number | null = null,
     offset: number | null = null
@@ -92,7 +92,7 @@ export const search = async (
     // Global search params
     limit && (params += '&limit=' + limit);
     offset && (params += '&offset=' + offset);
-    query && (params += '&search=' + query);
+    search && (params += '&search=' + search);
 
     // publication specific params
     searchType === 'publications' && publicationType && (params += '&type=' + publicationType);

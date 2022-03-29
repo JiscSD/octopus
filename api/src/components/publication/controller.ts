@@ -8,7 +8,6 @@ export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
 ): Promise<I.JSONResponse> => {
     try {
-        // TODO: If search isnt present or is empty, no results are returned, not good for when we just want to get anything not by search
         const openSearchPublications = await publicationService.getOpenSearchRecords(event.queryStringParameters);
 
         const publicationIds = openSearchPublications.body.hits.hits.map((hit) => hit._id);

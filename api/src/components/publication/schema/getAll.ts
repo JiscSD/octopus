@@ -21,8 +21,7 @@ const getAllSchema: I.Schema = {
             type: 'string'
         },
         exclude: {
-            type: 'string',
-            default: ''
+            type: 'string'
         }
     },
     additionalProperties: false

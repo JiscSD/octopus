@@ -168,14 +168,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
             <main className="grid min-h-screen grid-cols-12">
-                <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-grey-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
+                <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-teal-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
                     <ul className="sticky top-0 space-y-2">
                         {props.steps.map((step, index) => (
                             <li key={step.title}>
                                 <button
                                     onClick={() => props.setStep(index)}
                                     className={`flex w-full items-center space-x-4 py-4 pl-8 pr-2 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
-                                        index === props.currentStep ? 'bg-grey-600 text-white-50' : ''
+                                        index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
                                     }`}
                                 >
                                     {step.icon}
@@ -191,7 +191,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 </aside>
                 <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
                     <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
-                        <span className="block font-montserrat text-lg font-semibold text-teal-500 transition-colors duration-500 dark:text-teal-400">
+                        <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
                             {Helpers.formatPublicationType(type)}
                         </span>
                         <div className="flex space-x-8">
@@ -199,7 +199,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Previous"
                                 disabled={props.currentStep <= 0}
                                 onClick={prevStep}
-                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-500" />}
+                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="LEFT"
                             />
                             {props.currentStep < props.steps.length - 1 && (
@@ -207,7 +207,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     text="Next"
                                     disabled={props.currentStep >= props.steps.length - 1}
                                     onClick={nextStep}
-                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500" />}
+                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                     iconPosition="RIGHT"
                                 />
                             )}
@@ -217,7 +217,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     onClick={() => setPublishModalVisibility(true)}
                                     className=""
                                     disabled={!!error}
-                                    icon={<OutlineIcons.StarIcon className="h-5 w-5 text-teal-500" />}
+                                    icon={<OutlineIcons.StarIcon className="h-5 w-5 text-teal-600" />}
                                     iconPosition="RIGHT"
                                 />
                             )}
@@ -225,14 +225,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Save and exit"
                                 onClick={() => setSaveExitModalVisibility(true)}
                                 className=""
-                                icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-500" />}
+                                icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
                             <NavigationButton
                                 text="Delete draft"
                                 onClick={() => setDeleteModalVisibility(true)}
                                 className=""
-                                icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-500" />}
+                                icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
 

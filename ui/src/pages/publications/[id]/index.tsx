@@ -84,7 +84,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="2 mb-8 block w-fit rounded outline-0 hover:underline focus:ring-2 focus:ring-yellow-400"
                         >
                             <p className="text-normal block leading-relaxed text-teal-600 transition-colors duration-500 dark:text-grey-100">
-                                {props.publication.user.firstName} {props.publication.user.lastName}
+                                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                             </p>
                         </Components.Link>
 

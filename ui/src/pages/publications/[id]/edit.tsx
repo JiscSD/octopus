@@ -18,31 +18,31 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         title: 'Publication title',
         subTitle: 'Publication title & type information',
         component: <Components.PublicationCreationStepOne />,
-        icon: <OutlineIcons.CubeIcon className="h-6 w-6 text-grey-400" />
+        icon: <OutlineIcons.CubeIcon className="h-6 w-6 text-teal-400" />
     },
     {
         title: 'Manage links',
         subTitle: 'Manage links',
         component: <Components.PublicationCreationStepTwo />,
-        icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-grey-400" />
+        icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
     },
     {
         title: 'Additional information',
         subTitle: 'Additional information',
         component: <Components.PublicationCreationStepThree />,
-        icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-grey-400" />
+        icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-teal-400" />
     },
     {
         title: 'Full text',
         subTitle: 'Full text',
         component: <Components.PublicationCreationStepFour />,
-        icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-grey-400" />
+        icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
     {
         title: 'Review & Publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
-        icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-grey-400" />
+        icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
     }
 ];
 

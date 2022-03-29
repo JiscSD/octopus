@@ -5,7 +5,7 @@ import * as seeds from 'prisma/seeds';
 
 jest.setTimeout(60000);
 
-export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.stage}/v1`);
+export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
 export const initialSeed = async (): Promise<void> => {
     await client.prisma.user.createMany({ data: seeds.users });

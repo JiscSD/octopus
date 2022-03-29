@@ -9,7 +9,7 @@ import * as authorizationService from 'authorization/service';
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
         let callbackURL = '';
-        switch (process.env.stage) {
+        switch (process.env.STAGE) {
             case 'local':
                 callbackURL = 'https://localhost:3001/login';
                 break;
@@ -17,7 +17,7 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 callbackURL = 'https://octopus.ac/login';
                 break;
             default:
-                callbackURL = `https://${process.env.stage}.octopus.ac/login`;
+                callbackURL = `https://${process.env.STAGE}.octopus.ac/login`;
         }
 
         const orcidRequest = await axios.post(

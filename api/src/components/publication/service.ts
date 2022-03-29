@@ -170,11 +170,6 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
             sort: ['_score'],
             query: {
                 bool: {
-                    must_not: {
-                        terms: {
-                            _id: filters.exclude.split(',')
-                        }
-                    },
                     filter: {
                         terms: {
                             type: (filters.type
@@ -206,6 +201,15 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 type: 'most_fields',
                 operator: 'or',
                 fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2']
+            }
+        };
+    }
+
+    if (filters.exclude) {
+        // @ts-ignore
+        query.body.query.bool.must_not = {
+            terms: {
+                _id: filters.exclude.split(',')
             }
         };
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 
 type Props = {
     link: Interfaces.LinkTo;
@@ -20,9 +21,14 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div>
                     <p className="mb-2">{props.link.publicationToRef.title}</p>
-                    <p className="text-xs text-grey-700">
-                        {props.link.publicationToRef.user.firstName} {props.link.publicationToRef.user.lastName}
-                    </p>
+                    <div className="flex items-center space-x-2">
+                        <span className="text-xs text-grey-700">
+                            {Helpers.formatDate(props.link.publicationToRef.publishedDate)},
+                        </span>
+                        <span className="text-xs text-grey-700">
+                            {props.link.publicationToRef.user.firstName[0]}. {props.link.publicationToRef.user.lastName}
+                        </span>
+                    </div>
                 </div>
             </td>
             <td className="space-nowrap py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
