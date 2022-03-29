@@ -34,7 +34,7 @@ export type UserType = {
 
 export type AuthStoreType = {
     user: null | UserType;
-    setUser: (user: UserType) => void;
+    setUser: (user: null | UserType) => void;
 };
 
 export type PublicationCreationStoreType = {
