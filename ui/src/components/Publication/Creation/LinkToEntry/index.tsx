@@ -34,7 +34,7 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             </td>
-            <td className="space-nowrap py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 <button onClick={handleClick} className="rounded-full">
                     {loading ? (
                         <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600" />

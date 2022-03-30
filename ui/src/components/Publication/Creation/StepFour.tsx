@@ -19,8 +19,8 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     }, [content]);
 
     return (
-        <div className="space-y-16">
-            <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
+        <div className="space-y-12 2xl:space-y-16">
+            <div>
                 <Components.PublicationCreationStepTitle text="Main text" />
                 <span className="mb-4 block text-xs leading-snug text-grey-700">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non
@@ -36,7 +36,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
                 )}
             </div>
 
-            <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
+            <div>
                 <Components.PublicationCreationStepTitle text="Description" />
                 <span className="mb-2 block text-xs leading-snug text-grey-700">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non
@@ -51,7 +51,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
                 ></textarea>
             </div>
 
-            <div className="">
+            <div>
                 <Components.PublicationCreationStepTitle text="Keywords" />
                 <span className="mb-2 block text-xs leading-snug text-grey-700">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non

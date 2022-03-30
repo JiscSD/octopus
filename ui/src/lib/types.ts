@@ -49,7 +49,7 @@ export type PublicationCreationStoreType = {
     updateContent: (content: string) => void;
     description: string;
     updateDescription: (description: string) => void;
-    keywords: string[];
+    keywords: string;
     updateKeywords: (keywords: string) => void;
     licence: LicenceType;
     updateLicence: (licence: LicenceType) => void;

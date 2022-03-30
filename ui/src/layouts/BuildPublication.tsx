@@ -65,8 +65,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const nextStep = () => props.setStep((prevState: number) => prevState + 1);
 
     const saveCurrent = async () => {
+        let formattedKeywords: string[] = [];
         if (keywords.length) {
-            console.log(keywords);
+            formattedKeywords = keywords
+                .replace(/\n/g, ',') // replace new lines with comma
+                .split(',') // split by comma
+                .map((word) => word.trim()) // trim each keywords white space
+                .filter((word) => word.length); // dont include any empty string entries
         }
 
         if (conflictOfInterestStatus && !conflictOfInterestText.length) {
@@ -80,6 +85,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title,
                 content,
                 description,
+                keywords: formattedKeywords,
                 licence,
                 conflictOfInterestStatus,
                 conflictOfInterestText
@@ -242,15 +248,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
-
-                            <button
-                                onClick={() => {
-                                    router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
-                                }}
-                                className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
-                            >
-                                Preview publication
-                            </button>
                         </div>
                     </div>
                     {!!error && (

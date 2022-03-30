@@ -88,7 +88,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
     };
 
     return (
-        <div className="space-y-6 lg:w-10/12 lg:space-y-10">
+        <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
                 <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">

@@ -106,6 +106,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const updateId = Stores.usePublicationCreationStore((state) => state.updateId);
     const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
     const updateType = Stores.usePublicationCreationStore((state) => state.updateType);
+    const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
+    const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
     const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
     const updateLicence = Stores.usePublicationCreationStore((state) => state.updateLicence);
     const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
@@ -118,13 +120,19 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     React.useEffect(() => {
         if (props.draftedPublication.id) updateId(props.draftedPublication.id);
-        if (props.draftedPublication?.title) updateTitle(props.draftedPublication.title);
-        if (props.draftedPublication?.type) updateType(props.draftedPublication.type);
-        if (props.draftedPublication?.content) updateContent(props.draftedPublication.content);
-        if (props.draftedPublication?.licence) updateLicence(props.draftedPublication.licence);
-        if (props.draftedPublication?.conflictOfInterestStatus)
+        if (props.draftedPublication.title) updateTitle(props.draftedPublication.title);
+        if (props.draftedPublication.type) updateType(props.draftedPublication.type);
+        if (props.draftedPublication.description) updateDescription(props.draftedPublication.description);
+        if (props.draftedPublication.keywords.length) {
+            updateKeywords(props.draftedPublication.keywords.join(', '));
+        } else {
+            updateKeywords('');
+        }
+        if (props.draftedPublication.content) updateContent(props.draftedPublication.content);
+        if (props.draftedPublication.licence) updateLicence(props.draftedPublication.licence);
+        if (props.draftedPublication.conflictOfInterestStatus)
             updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        if (props.draftedPublication?.conflictOfInterestText)
+        if (props.draftedPublication.conflictOfInterestText)
             updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
         updateLinkTo(props.draftedPublication.linkedTo);
     }, []);

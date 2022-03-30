@@ -7,7 +7,6 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import Gapcursor from '@tiptap/extension-gapcursor';
 import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/solid';
 import * as FAIcons from 'react-icons/fa';
@@ -424,7 +423,6 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 types: ['heading', 'paragraph'],
                 alignments: ['left', 'center', 'right']
             }),
-            Gapcursor,
             Table.configure({
                 resizable: true
             }),
@@ -436,7 +434,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         onSelectionUpdate: () => setLoading(true),
         editorProps: {
             attributes: {
-                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[350px]`
+                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[80px] xl:min-h-[150px] 2xl:min-h-[350px]`
             }
         },
         content: props.defaultContent
