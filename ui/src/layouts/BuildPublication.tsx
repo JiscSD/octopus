@@ -1,6 +1,6 @@
 import React from 'react';
-import parse from 'html-react-parser';
 import * as Router from 'next/router';
+import * as ReactIconsFA from 'react-icons/fa';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
@@ -8,7 +8,6 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 
 type NavigationButtonProps = {
@@ -56,10 +55,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const licence = Stores.usePublicationCreationStore((state) => state.licence);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
     const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
+    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
 
-    const [saveExitModalVisibility, setSaveExitModalVisibility] = React.useState(false);
+    const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
+    const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
 
     const prevStep = () => props.setStep((prevState: number) => prevState - 1);
     const nextStep = () => props.setStep((prevState: number) => prevState + 1);
@@ -111,19 +112,28 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setPublishModalVisibility(false);
     };
 
-    const saveExit = async () => {
+    const save = async () => {
         setError(null);
         try {
             await saveCurrent();
-            router.push({
-                pathname: Config.urls.browsePublications.path
-            });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
         }
 
-        setSaveExitModalVisibility(false);
+        setSaveModalVisibility(false);
+    };
+
+    const preview = async () => {
+        try {
+            await saveCurrent();
+            router.push({
+                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+            });
+        } catch (err) {
+            const { message } = err as Interfaces.JSONResponseError;
+            setError(message);
+        }
     };
 
     const deleteExit = async () => {
@@ -140,15 +150,24 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setDeleteModalVisibility(false);
     };
 
+    React.useEffect(() => {
+        if (!title) return setIsReadyToPreview(false);
+        if (!content) return setIsReadyToPreview(false);
+        if (!licence) return setIsReadyToPreview(false);
+        if (!linkTos.length) return setIsReadyToPreview(false);
+        if (conflictOfInterestStatus && !conflictOfInterestText.length) return setIsReadyToPreview(false);
+        setIsReadyToPreview(true);
+    }, [title, content, licence, conflictOfInterestStatus, conflictOfInterestText, linkTos]);
+
     return (
         <>
             <Components.Modal
-                open={saveExitModalVisibility}
-                setOpen={setSaveExitModalVisibility}
-                positiveActionCallback={saveExit}
-                positiveButtonText="Save and exit"
+                open={saveModalVisibility}
+                setOpen={setSaveModalVisibility}
+                positiveActionCallback={save}
+                positiveButtonText="Save"
                 cancelButtonText="Cancel"
-                title="Are you sure you want to leave?"
+                title="Are you sure you want to save your changes?"
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
@@ -162,7 +181,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
-                icon={<OutlineIcons.AcademicCapIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudUploadIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
@@ -215,30 +234,37 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="LEFT"
                             />
-                            {props.currentStep < props.steps.length - 1 && (
-                                <NavigationButton
-                                    text="Next"
-                                    disabled={props.currentStep >= props.steps.length - 1}
-                                    onClick={nextStep}
-                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                                    iconPosition="RIGHT"
-                                />
-                            )}
-                            {props.currentStep === props.steps.length - 1 && (
-                                <NavigationButton
-                                    text="Publish"
-                                    onClick={() => setPublishModalVisibility(true)}
-                                    className=""
-                                    disabled={!!error}
-                                    icon={<OutlineIcons.StarIcon className="h-5 w-5 text-teal-600" />}
-                                    iconPosition="RIGHT"
-                                />
-                            )}
+
                             <NavigationButton
-                                text="Save and exit"
-                                onClick={() => setSaveExitModalVisibility(true)}
+                                text="Next"
+                                disabled={props.currentStep >= props.steps.length - 1}
+                                onClick={nextStep}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Preview"
+                                onClick={preview}
+                                disabled={!isReadyToPreview}
+                                icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Publish"
+                                onClick={() => setPublishModalVisibility(true)}
                                 className=""
-                                icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Save"
+                                onClick={() => setSaveModalVisibility(true)}
+                                className=""
+                                // icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
                             <NavigationButton

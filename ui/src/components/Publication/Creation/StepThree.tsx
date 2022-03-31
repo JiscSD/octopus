@@ -23,8 +23,8 @@ const StepThree: React.FC = (): React.ReactElement => {
     );
 
     return (
-        <div className="mb-6 space-y-12 lg:mb-10">
-            <div className="pb-16 transition-colors duration-500 dark:border-grey-700">
+        <div className="space-y-12 2xl:space-y-16">
+            <div>
                 <div className="mb-6">
                     <Components.PublicationCreationStepTitle text="Do this publication have a conflict of interest?" />
                 </div>
@@ -37,7 +37,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                         type="checkbox"
                         checked={!conflictOfInterestStatus}
                         onChange={(e) => updateConflictOfInterestStatus(!e.target.checked)}
-                        className="rounded-sm border border-teal-500 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
+                        className="rounded-sm border border-grey-100 shadow outline-0  focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                     />
                     <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                         This publication <strong>does not</strong> have a conflict of interest.
@@ -58,7 +58,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                             value={conflictOfInterestText}
                             rows={6}
                             onChange={(e) => updateConflictOfInterestText(e.target.value)}
-                            className="w-full rounded border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 dark:text-white-50"
+                            className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                             required
                         />
                     </>

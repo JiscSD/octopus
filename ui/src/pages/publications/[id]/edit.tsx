@@ -76,6 +76,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
+    if (draftedPublication?.currentStatus !== 'DRAFT') {
+        return {
+            notFound: true
+        };
+    }
+
     return {
         props: {
             draftedPublication,

@@ -20,8 +20,8 @@ const StepOne: React.FC = (): React.ReactElement => {
     );
 
     return (
-        <div className="space-y-6 lg:w-10/12 lg:space-y-10">
-            <div className="border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
+        <div className="space-y-12 2xl:space-y-16">
+            <div>
                 <Components.PublicationCreationStepTitle text="Title" />
                 <span className="mb-2 block text-xs leading-snug text-grey-700">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non
@@ -32,10 +32,10 @@ const StepOne: React.FC = (): React.ReactElement => {
                     type="text"
                     value={title}
                     onChange={(e) => updateTitle(e.target.value)}
-                    className="bg-white-60 block w-full rounded-md border border-grey-100 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                    className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
                 />
             </div>
-            <div className="pb-16">
+            <div>
                 <Components.PublicationCreationStepTitle text="Creative commons licence" />
                 <div className="items-center lg:flex">
                     <select
@@ -43,7 +43,7 @@ const StepOne: React.FC = (): React.ReactElement => {
                         name="publicationType"
                         value={licence}
                         onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
-                        className="mb-4 block w-fit rounded-md border border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50 lg:mb-0"
+                        className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white-50 lg:mb-0"
                         required
                     >
                         {Object.values(Config.values.octopusInformation.licences).map((type) => (

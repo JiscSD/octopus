@@ -30,71 +30,38 @@ const StepFive = () => {
     }, [linkedTo.length, setError]);
 
     return (
-        <div className="text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-            <div className="relative mt-20 border-b border-grey-100 pb-8 transition-colors duration-500 dark:border-grey-700">
-                <h1 className="mb-4 block font-montserrat text-3xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {title}
-                </h1>
+        <div className="space-y-8">
+            <div className="relative">
+                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Title
+                </span>
                 {title.length ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
-            <div className="relative mt-10 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
-                <span className="mb-8 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Chosen publications to link
+            <div className="relative">
+                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Links
                 </span>
-                {linkedTo.length ? (
-                    linkedTo.map((link) => (
-                        <p
-                            key={link.id}
-                            className="mb-2 text-grey-800 transition-colors duration-500 dark:text-white-50"
-                        >
-                            {link.publicationToRef.title}
-                        </p>
-                    ))
-                ) : (
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">No links created</p>
-                )}
                 {linkedTo.length ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
-            <div className="relative mt-10 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
-                <span className="mb-8 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
+            <div className="relative">
+                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Creative commons licence
                 </span>
-                <Components.Link
-                    href={Config.values.octopusInformation.licences[licence].link}
-                    openNew={true}
-                    className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
-                >
-                    <strong className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {Config.values.octopusInformation.licences[licence].nicename}
-                    </strong>
-                </Components.Link>
                 {licence ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
 
-            <div className="relative mt-10 border-b border-grey-100 pb-16 transition-colors duration-500 dark:border-grey-700">
-                <span className="mb-8 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
+            <div className="relative">
+                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Conflict of interest
                 </span>
-                {conflictOfInterestStatus ? (
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {conflictOfInterestText.length
-                            ? conflictOfInterestText
-                            : 'You have selected there is a conflict of interest, but have not provided a reason.'}
-                    </p>
-                ) : (
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        Specified that there is <strong>no</strong> conflict of interest
-                    </p>
-                )}
                 {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
                 {!conflictOfInterestStatus && <CompletedIcon />}
             </div>
 
-            <div className="relative mt-10 pb-16">
-                <span className="mb-8 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
+            <div className="relative">
+                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Full text
                 </span>
-                <Components.ParseHTML content={content} />
                 {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
             </div>
         </div>
