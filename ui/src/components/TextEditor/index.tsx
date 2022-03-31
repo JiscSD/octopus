@@ -446,7 +446,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
     }, [textEditor]);
 
     return textEditor ? (
-        <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow">
+        <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
             <MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
             <tiptap.EditorContent editor={textEditor} />
         </div>
