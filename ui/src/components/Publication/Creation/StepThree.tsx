@@ -73,9 +73,9 @@ const StepThree: React.FC = (): React.ReactElement => {
                     <>
                         <label
                             htmlFor="conflictOfInterestStatus"
-                            className="mb-4 block text-xs text-grey-800 transition-colors duration-500 dark:text-white-50"
+                            className="mb-4 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50"
                         >
-                            You must specify a reason for the conflict of interest
+                            Please detail any conflicts of interest related to this publication.
                         </label>
                         <textarea
                             id="conflictOfInterestStatus"

@@ -62,12 +62,12 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
             <div className="flex">
                 <span className="mr-2 text-sm font-semibold text-grey-800">DOI:</span>
                 <Components.Link
-                    href={`https://doi.org/${props.publication.doi}`}
+                    href="#"
                     ariaLabel={`DOI Link ${props.publication.doi}`}
                     className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
                     openNew={true}
                 >
-                    <span>{props.publication.doi ?? '10.X/octopus.12345.6'}</span>
+                    <span>{props.publication.doi ?? 'Coming soon...'}</span>
                     <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>

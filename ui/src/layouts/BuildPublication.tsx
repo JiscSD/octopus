@@ -216,7 +216,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     </ul>
                     <div className="fixed bottom-6 px-8">
                         <span className="block font-montserrat text-sm text-white-100">Need help?</span>
-                        <span className="block font-montserrat text-xs text-white-100">Check out our FAQs</span>
+                        <span className="block font-montserrat text-xs text-white-100">
+                            Check out our{' '}
+                            <Components.Link openNew={true} href="/faq" className="underline">
+                                FAQs
+                            </Components.Link>
+                        </span>
                     </div>
                 </aside>
                 <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
@@ -252,6 +257,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <NavigationButton
                                 text="Publish"
                                 onClick={() => setPublishModalVisibility(true)}
+                                disabled={!isReadyToPreview}
                                 className=""
                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
