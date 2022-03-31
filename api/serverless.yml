@@ -157,3 +157,12 @@ functions:
                   path: ${self:custom.versions.v1}/links/{id}
                   method: delete
                   cors: true
+    # Ratings
+    createRatings:
+        handler: src/components/rating/routes.upsert
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/ratings
+                  method: post
+                  cors: true

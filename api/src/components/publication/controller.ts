@@ -8,7 +8,7 @@ export const getAll = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publications = await publicationService.getAll(event.queryStringParameters);
-
+ 
         return response.json(200, publications);
     } catch (err) {
         console.log(err);
