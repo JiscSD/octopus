@@ -26,10 +26,9 @@ const StepThree: React.FC = (): React.ReactElement => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <div className="mb-6">
-                    <Components.PublicationCreationStepTitle text="Do this publication have a conflict of interest?" />
+                    <Components.PublicationCreationStepTitle text="Does this publication have any conflicts of interest?" />
                 </div>
-
-                <label htmlFor="conflictOfInterestStatus" className="mb-6 flex items-center">
+                {/* <label htmlFor="conflictOfInterestStatus" className="mb-6 flex items-center">
                     <input
                         required
                         id="conflictOfInterestStatus"
@@ -42,7 +41,33 @@ const StepThree: React.FC = (): React.ReactElement => {
                     <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                         This publication <strong>does not</strong> have a conflict of interest.
                     </span>
-                </label>
+                </label> */}
+                <fieldset className="mb-2 space-x-6">
+                    <label className="inline-flex items-center">
+                        <input
+                            type="radio"
+                            name="coi"
+                            value="true"
+                            checked={conflictOfInterestStatus}
+                            id="coi-true"
+                            onChange={() => updateConflictOfInterestStatus(true)}
+                        />
+                        <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Yes
+                        </span>
+                    </label>
+                    <label className="inline-flex items-center">
+                        <input
+                            type="radio"
+                            name="coi"
+                            value="false"
+                            checked={!conflictOfInterestStatus}
+                            id="coi-false"
+                            onChange={() => updateConflictOfInterestStatus(false)}
+                        />
+                        <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
+                    </label>
+                </fieldset>
 
                 {conflictOfInterestStatus && (
                     <>

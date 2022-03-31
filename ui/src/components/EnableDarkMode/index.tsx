@@ -29,7 +29,7 @@ const EnableDarkMode: React.FC = (): React.ReactElement => {
                     }`}
                     aria-hidden="true"
                 >
-                    <OutlineIcons.MoonIcon className="h-7 w-7 text-teal-500 transition-all" />
+                    <OutlineIcons.SunIcon className="h-7 w-7 text-teal-500 transition-all" />
                 </span>
                 <span
                     className={`absolute inset-0 flex h-full w-full items-center justify-center transition-opacity ${
@@ -37,7 +37,7 @@ const EnableDarkMode: React.FC = (): React.ReactElement => {
                     }`}
                     aria-hidden="true"
                 >
-                    <OutlineIcons.SunIcon className="h-7 w-7 text-white-50 transition-all" />
+                    <OutlineIcons.MoonIcon className="h-7 w-7 text-white-50 transition-all" />
                 </span>
             </span>
         </HeadlessUI.Switch>

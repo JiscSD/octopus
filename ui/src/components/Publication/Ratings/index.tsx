@@ -55,7 +55,6 @@ const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
                 >
                     <div className="flex items-center">
                         {Config.values.octopusInformation.licences[props.publication.licence].nicename}
-                        <span className="ml-1">4.0</span>
                         <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
                     </div>
                 </Components.Link>

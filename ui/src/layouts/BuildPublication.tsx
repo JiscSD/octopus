@@ -171,7 +171,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
-                    Changes to your publication will be saved and it&apos;s status kept as draft.
+                    Changes to your publication will be saved and it will be stored as a draft.
                 </p>
             </Components.Modal>
             <Components.Modal
@@ -194,9 +194,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to delete this publication?"
                 icon={<OutlineIcons.TrashIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm">
-                    You are about to delete this draft publication, all progress will be lost.
-                </p>
+                <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
             <main className="grid min-h-screen grid-cols-12">

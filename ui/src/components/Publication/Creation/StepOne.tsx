@@ -23,9 +23,9 @@ const StepOne: React.FC = (): React.ReactElement => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Title" />
-                <span className="mb-2 block text-xs leading-snug text-grey-700">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia placeat delectus soluta mollitia, non
-                    provident repudiandae, nobis possimus, id ipsam suscipit.
+                <span className="mb-2 block text-xs leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                    Titles should be concise, specific, and informative. This will help relevant readers find your
+                    material.
                 </span>
                 <input
                     required
@@ -43,7 +43,7 @@ const StepOne: React.FC = (): React.ReactElement => {
                         name="publicationType"
                         value={licence}
                         onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
-                        className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white-50 lg:mb-0"
+                        className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
                         required
                     >
                         {Object.values(Config.values.octopusInformation.licences).map((type) => (
@@ -66,8 +66,19 @@ const StepOne: React.FC = (): React.ReactElement => {
                         >
                             <strong>{Config.values.octopusInformation.licences[licence].fullName}</strong>
                         </Components.Link>
-                        <span className="block text-sm lg:w-10/12">
+                        <span className="mb-2 block text-sm lg:w-10/12">
                             {Config.values.octopusInformation.licences[licence].description}
+                        </span>
+                        <span className="block text-sm lg:w-10/12">
+                            View all Creative{' '}
+                            <Components.Link
+                                href="https://creativecommons.org/about/cclicenses/"
+                                openNew
+                                className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                            >
+                                Commons licenses
+                            </Components.Link>
+                            .
                         </span>
                     </div>
                 </Framer.motion.div>

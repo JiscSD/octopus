@@ -434,7 +434,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         onSelectionUpdate: () => setLoading(true),
         editorProps: {
             attributes: {
-                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[80px] xl:min-h-[150px] 2xl:min-h-[350px]`
+                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[80px] xl:min-h-[150px] 2xl:min-h-[350px] dark:text-grey-800`
             }
         },
         content: props.defaultContent

@@ -30,7 +30,11 @@ const StepTwo: React.FC = (): React.ReactElement => {
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
     const formattedAsString = availableLinkTypes.join(',');
 
-    const swrKey = `/publications?type=${formattedAsString}&limit=10${search.length > 2 ? `&search=${search}` : ''}`;
+    const excludedIds = [currentPublicationId, ...linkTos.map((link) => link.publicationToRef.id)];
+
+    const swrKey = `/publications?type=${formattedAsString}&limit=10${
+        search.length > 2 ? `&search=${search}` : ''
+    }&exclude=${excludedIds.join(',')}`;
 
     const {
         data: { data: results = { data: [], metadata: { limit: 10, offset: 0, total: 0 } } } = {},
@@ -92,7 +96,10 @@ const StepTwo: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    <span>This publicaiton can link to: </span>
+                    <span>
+                        All publications must be linked to at least one Octopus publication. This publication can be
+                        linked to:{' '}
+                    </span>
                     {availableLinkTypes.map((type, index) => (
                         <span key={type}>
                             <Components.Link
@@ -105,6 +112,14 @@ const StepTwo: React.FC = (): React.ReactElement => {
                             {index !== availableLinkTypes.length - 1 ? ', ' : '.'}
                         </span>
                     ))}
+                </p>
+                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Most publications link to the previous stage of the research process, for instance an Analysis will
+                    link to Data. Problems and Reviews can be attached to any other publication type.
+                </p>
+                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    These links will appear on the publication page, and will shape the structure of content on the
+                    platform.
                 </p>
             </div>
 
@@ -127,9 +142,9 @@ const StepTwo: React.FC = (): React.ReactElement => {
                             disabled={isValidating || createMutateLoading || !selectedPublication}
                         >
                             {createMutateLoading ? (
-                                <OutlineIcons.RefreshIcon className="h-8 w-8 animate-reverse-spin text-teal-600" />
+                                <OutlineIcons.RefreshIcon className="h-8 w-8 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                             ) : (
-                                <OutlineIcons.PlusCircleIcon className="h-8 w-8 text-teal-600" />
+                                <OutlineIcons.PlusCircleIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                             )}
                         </button>
                     </div>
@@ -211,7 +226,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
             ) : (
                 <Components.Alert
                     severity="INFO"
-                    title="This publication current does not have any linked publications."
+                    title="This publication does not have any linked publications."
                     className="w-fit"
                 />
             )}

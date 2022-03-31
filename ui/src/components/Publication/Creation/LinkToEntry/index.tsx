@@ -20,15 +20,17 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
         <tr key={props.link.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
-                    <span className="font-montserrat text-sm font-medium text-teal-600">
+                    <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-400">
                         {Helpers.formatPublicationType(props.link.publicationToRef.type)}
                     </span>
-                    <p className="text-grey-800">{props.link.publicationToRef.title}</p>
+                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        {props.link.publicationToRef.title}
+                    </p>
                     <div className="flex items-center space-x-2">
-                        <span className="text-xs text-grey-700">
+                        <span className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100">
                             {Helpers.formatDate(props.link.publicationToRef.publishedDate)},
                         </span>
-                        <span className="text-sm text-grey-700">
+                        <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
                             {props.link.publicationToRef.user.firstName[0]}. {props.link.publicationToRef.user.lastName}
                         </span>
                     </div>
@@ -37,9 +39,9 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
             <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 <button onClick={handleClick} className="rounded-full">
                     {loading ? (
-                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600" />
+                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                     ) : (
-                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600" />
+                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                     )}
                 </button>
             </td>

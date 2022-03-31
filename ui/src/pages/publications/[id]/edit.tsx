@@ -15,14 +15,14 @@ import * as api from '@api';
 
 const steps: Interfaces.PublicationBuildingStep[] = [
     {
-        title: 'Page 1',
-        subTitle: 'Page 1',
+        title: 'Key information',
+        subTitle: 'Key information',
         component: <Components.PublicationCreationStepOne />,
         icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
     {
-        title: 'Structural links',
-        subTitle: 'Structural links',
+        title: 'Linked publications',
+        subTitle: 'Linked publications',
         component: <Components.PublicationCreationStepTwo />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
     },
@@ -33,10 +33,10 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Page 3',
-        subTitle: 'Page 3',
+        title: 'Conflict of interest',
+        subTitle: 'Conflict of interest',
         component: <Components.PublicationCreationStepThree />,
-        icon: <OutlineIcons.PencilAltIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     {
         title: 'Review & publish',

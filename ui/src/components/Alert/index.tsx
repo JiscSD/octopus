@@ -66,15 +66,15 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 break;
             default:
                 // Info
-                classesCopy.title = 'text-grey-800 dark:text-white-50';
-                classesCopy.details = 'text-grey-700 dark:text-grey-50';
+                classesCopy.title = 'text-white-100 dark:text-white-50';
+                classesCopy.details = 'text-white-100 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.InformationCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
+                        className={`h-5 w-5 text-white-100 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-blue-200 dark:bg-blue-500';
+                classesCopy.background = 'bg-teal-700 dark:bg-blue-500';
         }
 
         setClasses(classesCopy);
@@ -93,9 +93,9 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="grid grid-cols-16">
+                    <div className="grid grid-cols-20">
                         <div className="col-span-1 row-span-2 mr-4">{classes.icon}</div>
-                        <div className="col-span-15">
+                        <div className="col-span-19">
                             <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                 {props.title}
                             </h3>
@@ -109,8 +109,8 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                 </div>
                             )}
 
-                            <div className="mt-3 flex">
-                                {props.supportLink && (
+                            {props.supportLink && (
+                                <div className="mt-3 flex">
                                     <Components.Link
                                         href={props.supportLink.url}
                                         openNew={props.supportLink.external}
@@ -120,9 +120,11 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                             {props.supportLink.text}
                                         </span>
                                     </Components.Link>
-                                )}
+                                </div>
+                            )}
 
-                                {props.allowDismiss && (
+                            {props.allowDismiss && (
+                                <div className="mt-3 flex">
                                     <button
                                         type="button"
                                         onClick={() => setShow(false)}
@@ -130,8 +132,8 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                     >
                                         Dismiss
                                     </button>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </Framer.motion.div>
