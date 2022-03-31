@@ -94,6 +94,8 @@ These github-actions workflows run on every push:
 
 ### UI
 
+-   **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
+-   **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
 -   **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
 
 All checks will need to pass in order for a PR to be reviewed and merged.

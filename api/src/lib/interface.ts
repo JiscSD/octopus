@@ -67,6 +67,18 @@ export interface CreatePublicationRequestBody {
     content?: string;
 }
 
+export interface OpenSearchPublication {
+    id: string;
+    type: PublicationType;
+    title: string | null;
+    licence?: LicenceType | null;
+    description?: string | null;
+    keywords?: string[];
+    content?: string | null;
+    cleanContent?: string | null;
+    publishedDate?: Date | null;
+}
+
 export interface GetPublicationPathParams {
     id: string;
 }
@@ -89,7 +101,7 @@ export interface  UpdatePublicationRequestBody {
     id?: string;
 }
 
-export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
@@ -97,9 +109,8 @@ export interface PublicationFilters {
     search?: string;
     limit?: string;
     offset?: string;
-    orderBy?: PublicationOrderBy;
-    orderDirection?: OrderDirection;
     type: string;
+    exclude: string;
 }
 
 /**

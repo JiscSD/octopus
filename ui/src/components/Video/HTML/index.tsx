@@ -11,10 +11,10 @@ type Props = {
     className?: string;
 };
 
-const HTML: React.FC<Props> = (props): JSX.Element => (
+const HTML: React.FC<Props> = (props): React.ReactElement => (
     <figure
         aria-label={props.title}
-        className={`h-fit w-full rounded-lg bg-white p-2 transition-colors duration-500 dark:bg-teal-500 ${
+        className={`h-fit w-full rounded-lg bg-teal-400 p-2 transition-colors duration-500 dark:bg-teal-500 ${
             props.className ? props.className : ''
         }`}
     >

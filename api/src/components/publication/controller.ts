@@ -2,14 +2,30 @@ import * as response from 'lib/response';
 import * as helpers from 'lib/helpers';
 import * as publicationService from 'publication/service';
 import * as I from 'interface';
+import htmlToText from 'html-to-text';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
 ): Promise<I.JSONResponse> => {
     try {
-        const publications = await publicationService.getAll(event.queryStringParameters);
- 
-        return response.json(200, publications);
+        const openSearchPublications = await publicationService.getOpenSearchRecords(event.queryStringParameters);
+
+        const publicationIds = openSearchPublications.body.hits.hits.map((hit) => hit._id);
+
+        const publications = await publicationService.getAllByIds(publicationIds);
+
+        const publicationsOrderedBySearch = publicationIds.map((publicationId) =>
+            publications.find((publication) => publication.id === publicationId)
+        );
+
+        return response.json(200, {
+            data: publicationsOrderedBySearch,
+            metadata: {
+                total: openSearchPublications.body.hits.total.value,
+                limit: Number(event.queryStringParameters.limit) || 10,
+                offset: Number(event.queryStringParameters.offset) || 0
+            }
+        });
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
@@ -172,6 +188,19 @@ export const updateStatus = async (
             event.pathParameters.status,
             isReadyToPublish
         );
+
+        // now that the publication is LIVE, we store in opensearch
+        await publicationService.createOpenSearchRecord({
+            id: updatedPublication.id,
+            type: updatedPublication.type,
+            title: updatedPublication.title,
+            licence: updatedPublication.licence,
+            description: updatedPublication.description,
+            keywords: updatedPublication.keywords,
+            content: updatedPublication.content,
+            publishedDate: updatedPublication.publishedDate,
+            cleanContent: htmlToText.convert(updatedPublication.content)
+        });
 
         return response.json(200, updatedPublication);
     } catch (err) {

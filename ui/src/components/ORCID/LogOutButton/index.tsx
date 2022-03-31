@@ -6,7 +6,7 @@ import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const LogOutButton: React.FC = (): JSX.Element => {
+const LogOutButton: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 

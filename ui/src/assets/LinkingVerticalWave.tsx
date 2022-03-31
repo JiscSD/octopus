@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LinkingVerticalWave: React.FC = (): JSX.Element => {
+const LinkingVerticalWave: React.FC = (): React.ReactElement => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="220" height="1200" viewBox="0 0 220 1200">
             <g fill="none" strokeWidth="8" transform="rotate(90 50 50)">

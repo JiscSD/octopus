@@ -22,3 +22,7 @@ variable "backup_retention_period" {
 variable "domain_name" {
   type = string
 }
+
+variable "elasticsearch_instance_size" {
+  type = string
+}

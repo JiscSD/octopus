@@ -21,38 +21,28 @@ export interface PublicationStatus {
     id: string;
 }
 
+export interface PublicationRef {
+    id: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatus;
+    type: Types.PublicationType;
+    user: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
+}
+
 export interface LinkTo {
     id: string;
-    publicationToRef: {
-        id: string;
-        title: string;
-        publishedDate: string;
-        currentStatus: PublicationStatus;
-        type: Types.PublicationType;
-        user: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            orcid: string;
-        };
-    };
+    publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
     id: string;
-    publicationFromRef: {
-        id: string;
-        title: string;
-        publishedDate: string;
-        currentStatus: PublicationStatus;
-        type: Types.PublicationType;
-        user: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            orcid: string;
-        };
-    };
+    publicationFromRef: PublicationRef;
 }
 
 export interface CorePublication {

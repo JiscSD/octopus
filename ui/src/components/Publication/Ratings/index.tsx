@@ -1,90 +1,171 @@
 import React from 'react';
+import * as Router from 'next/router';
+import Image from 'next/image';
 import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import fileDownload from 'js-file-download';
+import axios from 'axios';
 
 import * as Interfaces from '@interfaces';
+import * as Components from '@components';
 import * as Helpers from '@helpers';
+import * as Config from '@config';
 
-type RateProps = {
-    title: string;
-    value: number;
-};
+const handleDownload = async (url: string, fileName: string) => {
+    const res = await axios.get(url, {
+        responseType: 'blob'
+    });
 
-const Rating: React.FC<RateProps> = (props): JSX.Element => {
-    const arrangeStars = (value: number) => {
-        return (
-            <div className="flex items-center justify-end">
-                {new Array(value).fill(0).map((_, i) => (
-                    <SolidIcons.StarIcon key={i} className="h-6 w-6 text-teal-700" />
-                ))}
-                {new Array(5 - value).fill(0).map((_, i) => (
-                    <OutlineIcons.StarIcon key={i} className="h-6 w-6 text-teal-700" />
-                ))}
-            </div>
-        );
-    };
-
-    return (
-        <div className="mb-2 grid grid-cols-2 items-center gap-8">
-            <span className="font-montserrat text-sm font-medium text-grey-800">
-                {props.title}({props.value})
-            </span>
-            {arrangeStars(props.value)}
-        </div>
-    );
+    // @ts-ignore
+    fileDownload(res.data, fileName);
 };
 
 type Props = {
     publication: Interfaces.Publication;
+    sectionList?: { title: string; href: string }[];
 };
 
-const RatingsCollection: React.FC<Props> = (props): JSX.Element => {
-    // Mock
-    const data = {
-        wellDefined: {
-            title: 'Well defined',
-            value: 3
-        },
-        original: {
-            title: 'Original',
-            value: 2
-        },
-        valid: {
-            title: 'Scientifically valid',
-            value: 4
-        }
-    };
+const RatingsCollection: React.FC<Props> = (props): React.ReactElement => {
+    const router = Router.useRouter();
+
+    const peerReviewCount = props.publication.linkedFrom.filter(
+        (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
+    ).length;
 
     return (
-        <div className="w-full rounded-xl lg:w-fit">
-            <div className="rounded-t-lg bg-teal-100 px-8 py-6 transition-colors duration-500">
-                {/* {Object.values(ratings).map((rate: RateProps, index) => (
-                    <Rating key={index} title={rate.title} value={rate.value} />
-                ))} */}
-
-                {/* <button
-                    type="button"
-                    onClick={(e) => writeReview(e)}
-                    className="f my-6 block rounded border-transparent text-sm font-bold underline outline-0 focus:ring-2 focus:ring-yellow-400"
+        <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
+            <div className="flex">
+                <span className="mr-2 text-sm font-semibold text-grey-800">Publication type:</span>
+                <span className="text-right text-sm font-medium text-grey-800">
+                    {Helpers.formatPublicationType(props.publication.type)}
+                </span>
+            </div>
+            <div className="flex">
+                <span className="mr-2 text-sm font-semibold text-grey-800">Published:</span>
+                <time className="text-right text-sm font-medium text-grey-800">
+                    {Helpers.formatDate(props.publication.publishedDate)}
+                </time>
+            </div>
+            <div className="flex">
+                <span className="mr-2 text-sm font-semibold text-grey-800">Licence:</span>
+                <Components.Link
+                    href={
+                        Config.values.licenceTypes.find((licence) => licence.value === props.publication.licence)
+                            ?.link || ''
+                    }
+                    title="licence"
+                    openNew={true}
+                    className="text-right text-sm font-medium text-teal-600 hover:underline"
                 >
-                    Rate this publication
-                </button> */}
-
+                    <div className="flex items-center">
+                        {
+                            Config.values.licenceTypes.find((licence) => licence.value === props.publication.licence)
+                                ?.nicename
+                        }
+                        <span className="ml-1">4.0</span>
+                        <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                    </div>
+                </Components.Link>
+            </div>
+            <div className="flex">
+                <span className="mr-2 text-sm font-semibold text-grey-800">DOI:</span>
+                <Components.Link
+                    href={`https://doi.org/${props.publication.doi}`}
+                    ariaLabel={`DOI Link ${props.publication.doi}`}
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                    openNew={true}
+                >
+                    <span>{props.publication.doi ?? '10.X/octopus.12345.6'}</span>
+                    <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                </Components.Link>
+            </div>
+            {props.publication.type !== 'PEER_REVIEW' && (
                 <div className="flex">
-                    <span className="mr-2 text-sm font-semibold text-grey-800">Published:</span>
-                    <time className="text-right text-sm font-medium text-grey-800">
-                        {Helpers.formatDate(props.publication.publishedDate)}
-                    </time>
+                    <span className="mr-2 text-sm font-semibold text-grey-800">Peer reviews:</span>
+                    <Components.Link
+                        href="#peer-reviews"
+                        ariaLabel="Peer review count"
+                        className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                    >
+                        {peerReviewCount === 0
+                            ? 'Write a review'
+                            : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
+                    </Components.Link>
+                </div>
+            )}
+
+            <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-grey-300" />
+                </div>
+                <div className="relative flex justify-center">
+                    <span className="bg-white-50 px-2 text-xs text-grey-500">Actions</span>
                 </div>
             </div>
-            <button
-                type="button"
-                onClick={() => window.print()}
-                className="flex w-full items-center justify-between rounded rounded-b-lg border-transparent bg-teal-700 px-8 py-6 font-montserrat font-semibold text-white outline-0 transition-colors duration-500 hover:text-grey-100 focus:ring-2 focus:ring-yellow-400"
-            >
-                Download as PDF
-                <OutlineIcons.DownloadIcon className="h-6 w-6" />
-            </button>
+            <div className="flex">
+                <span className="mr-2 text-sm font-semibold text-grey-800">Download:</span>
+                <button
+                    aria-label="Print button"
+                    onClick={() => window.print()}
+                    className="mr-4 flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                >
+                    <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
+                    <span className="ml-1">pdf</span>
+                </button>
+                <button
+                    aria-label="Download JSON"
+                    onClick={() =>
+                        handleDownload(
+                            `https://int.api.octopus.ac/v1/publications/${props.publication.id}`,
+                            `${props.publication.id}.json`
+                        )
+                    }
+                    className="mr-4 flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                >
+                    <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
+                    <span className="ml-1">json</span>
+                </button>
+            </div>
+            <div className="flex">
+                <button
+                    aria-label="Write review button"
+                    onClick={() => {
+                        router.push({
+                            pathname: `${Config.urls.createPublication.path}`,
+                            query: {
+                                for: props.publication.id,
+                                type: 'PEER_REVIEW'
+                            }
+                        });
+                    }}
+                    className="flex items-center text-right text-sm font-medium text-teal-600 hover:underline"
+                >
+                    Write a review
+                </button>
+            </div>
+            <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-grey-300" />
+                </div>
+                <div className="relative flex justify-center">
+                    <span className="bg-white-50 px-2 text-xs text-grey-500">Sections</span>
+                </div>
+            </div>
+            {!!props.sectionList && (
+                <div className="space-y-2">
+                    {props.sectionList.map((section) => (
+                        <button
+                            key={section.href}
+                            aria-label={section.title}
+                            onClick={() =>
+                                document.getElementById(section.href)?.scrollIntoView({ behavior: 'smooth' })
+                            }
+                            className="mr-2 mb-2 block text-sm font-medium text-teal-600 hover:underline"
+                        >
+                            {section.title}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

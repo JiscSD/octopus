@@ -12,7 +12,7 @@ import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const CommandPalette: React.FC = (): JSX.Element => {
+const CommandPalette: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();
     const searchInput = React.useRef<HTMLInputElement | null>(null);
     const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
@@ -60,7 +60,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
         showCmdPalette && (
             <Components.Overlay>
                 <ClickAwayListener onClickAway={() => toggleCmdPalette()}>
-                    <div className="mx-auto md:w-[620px]">
+                    <div className="mx-auto md:w-[720px]">
                         <div className="relative z-50 mx-4 flex flex-col items-center justify-between rounded-t-lg bg-grey-800 px-6 pt-4 pb-2 sm:flex-row">
                             <span className="mr-2 text-sm text-grey-100">
                                 {!isValidating && !error && results?.data && 'Results found: ' + results?.data?.length}
@@ -84,7 +84,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     <span className="sr-only">Use setting</span>
                                     <span
                                         aria-hidden="true"
-                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white-50 shadow ring-0 transition duration-200 ease-in-out ${
                                             searchType === 'publications' ? 'translate-x-5' : 'translate-x-0'
                                         }`}
                                     />
@@ -100,7 +100,7 @@ const CommandPalette: React.FC = (): JSX.Element => {
                                     ref={searchInput}
                                     type="text"
                                     placeholder={`Search ${searchType}`}
-                                    className="w-full rounded bg-transparent px-2 py-1 text-base leading-loose tracking-wide text-white outline-0 focus:ring-2 focus:ring-yellow-500"
+                                    className="w-full rounded bg-transparent px-2 py-1 text-base leading-loose tracking-wide text-white-50 outline-0 focus:ring-2 focus:ring-yellow-500"
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
                                     onKeyDown={(e: React.KeyboardEvent) => {
