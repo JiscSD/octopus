@@ -9,10 +9,15 @@ export const initialDevSeed = async (): Promise<void> => {
     // Create users
     await prisma.user.createMany({ data: SeedData.usersDevSeedData });
 
-    // TODO: Errors if index doesnt exist first, works second run on
-    // await client.search.indices.delete({
-    //     index: 'publications'
-    // });
+    const doesIndexExists = await client.search.indices.exists({
+        index: 'publications'
+    });
+
+    if (doesIndexExists.body) {
+        await client.search.indices.delete({
+            index: 'publications'
+        });
+    }
 
     // Create publications
     // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
