@@ -99,26 +99,11 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
                         <Components.ActionCard
-                            title="Create an account"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
-                            icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.orcidLogin.path}
-                            linkText="Create an account"
-                        />
-                        <Components.ActionCard
-                            title="Learn more account Octopus"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
-                            icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.about.path}
-                            linkText="Learn more"
-                        />
-
-                        <Components.ActionCard
-                            title="Browse publications"
-                            content="Browse our most recent publications, and different types of publication. You don't need to log in."
-                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.browsePublications.path}
-                            linkText="Browse publications"
+                            title="Publish your work"
+                            content="Publishing in Octopus is free and simple, with eight publications types aligned with the scientific process."
+                            icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.createPublication.path}
+                            linkText="Publish your work"
                         />
                         <Components.ActionCard
                             title="Search publications"
@@ -127,17 +112,31 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             link={Config.urls.search.path}
                             linkText="Search publications"
                         />
-
                         <Components.ActionCard
-                            title="Publish your work"
-                            content="Publishing in Octopus is free and simple, with eight publications types aligned with the scientific process."
-                            icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.createPublication.path}
-                            linkText="Publish your work"
+                            title="Browse publications"
+                            content="View recent publications and  and browse by publication type."
+                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.browsePublications.path}
+                            linkText="Browse publications"
                         />
                         <Components.ActionCard
+                            title="Create an account"
+                            content="Octopus accounts are created via ORCID login."
+                            icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.orcidLogin.path}
+                            linkText="Create an account"
+                        />
+                        <Components.ActionCard
+                            title="Learn more account Octopus"
+                            content="Read more about what makes Octopus different, as well as our priorities and plans."
+                            icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.about.path}
+                            linkText="Learn more"
+                        />
+
+                        <Components.ActionCard
                             title="Need help?"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
+                            content="Review our FAQs to find out more about how the platform works."
                             icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.faq.path}
                             linkText="See FAQ's"
@@ -145,7 +144,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
+                {/* <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
                     <div className="grid grid-cols-3 gap-x-32">
                         <div className="space-y-4">
                             <Components.PageSubTitle text="Lorem ipsum" />
@@ -159,7 +158,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.LatestPublications publications={props.latest} />
                         </div>
                     </div>
-                </section>
+                </section> */}
             </Layouts.Standard>
         </>
     );

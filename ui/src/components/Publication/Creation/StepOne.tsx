@@ -23,7 +23,7 @@ const StepOne: React.FC = (): React.ReactElement => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Title" />
-                <span className="mb-2 block text-xs leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Titles should be concise, specific, and informative. This will help relevant readers find your
                     material.
                 </span>
@@ -70,13 +70,13 @@ const StepOne: React.FC = (): React.ReactElement => {
                             {Config.values.octopusInformation.licences[licence].description}
                         </span>
                         <span className="block text-sm lg:w-10/12">
-                            View all Creative{' '}
+                            View all{' '}
                             <Components.Link
                                 href="https://creativecommons.org/about/cclicenses/"
                                 openNew
                                 className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
                             >
-                                Commons licenses
+                                Creative Commons licenses
                             </Components.Link>
                             .
                         </span>

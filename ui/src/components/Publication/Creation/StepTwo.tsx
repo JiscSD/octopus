@@ -111,7 +111,8 @@ const StepTwo: React.FC = (): React.ReactElement => {
                             </Components.Link>
                             {index !== availableLinkTypes.length - 1 ? ', ' : '.'}
                         </span>
-                    ))}
+                    ))}{' '}
+                    <span>The search results below have been filtered to display only these publications.</span>
                 </p>
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Most publications link to the previous stage of the research process, for instance an Analysis will

@@ -56,7 +56,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
 
-    if (showProblems) list.push({ title: 'Problems', href: 'problems' });
+    if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
 
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
 
@@ -112,7 +112,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <Components.PublicationContentSection id="publication-chain" title="Publication chain" hasBreak>
                         <>
                             <p className="mb-8 block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                All publications live within a chain. Since this publication is a{' '}
+                                All Octopus publications are linked in a chain aligned with the stages of the research
+                                process. Since this publication is a{' '}
                                 <Components.Link
                                     href="#"
                                     className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"

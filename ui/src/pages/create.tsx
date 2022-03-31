@@ -116,13 +116,12 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     <div className="mb-20">
                         <Components.PageSubTitle text="Type of publication" className="!mb-4" />
                         <SupportText text="Octopus has 8 publication types which align with the scientific process." />
-                        <SupportText text={Config.values.octopusInformation.publications[publicationType].content} />
                         <select
                             id="publicationType"
                             name="publicationType"
                             value={publicationType}
                             onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
-                            className="block w-fit rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                            className="mb-2 block w-fit rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                         >
                             {Config.values.publicationTypes.map((type) => (
                                 <option key={type} value={type}>
@@ -130,6 +129,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                                 </option>
                             ))}
                         </select>
+                        <SupportText text={Config.values.octopusInformation.publications[publicationType].content} />
                     </div>
 
                     <label htmlFor="confirm" className="mb-2 flex items-center">

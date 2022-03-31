@@ -33,7 +33,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
 
             <div>
                 <Components.PublicationCreationStepTitle text="Description" />
-                <span className="mb-2 block text-xs leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. We recommend around 160 characters
                     in length.
                 </span>
@@ -48,7 +48,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
 
             <div>
                 <Components.PublicationCreationStepTitle text="Keywords" />
-                <span className="mb-2 block text-xs leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include up to 10 keywords relating to your content. These can be comma-separated and/or line
                     separated.
                 </span>
