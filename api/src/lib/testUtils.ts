@@ -40,12 +40,20 @@ export const openSearchSeed = async () => {
     }
 };
 
-// TODO: This was commented out?
 export const clearDB = async (): Promise<void> => {
     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
     const deletePublications = client.prisma.publication.deleteMany();
     const deleteUsers = client.prisma.user.deleteMany();
 
-    // @ts-ignore
-    await prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+    await client.prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+
+    const doesIndexExists = await client.search.indices.exists({
+        index: 'publications'
+    });
+
+    if (doesIndexExists.body) {
+        await client.search.indices.delete({
+            index: 'publications'
+        });
+    }
 };
