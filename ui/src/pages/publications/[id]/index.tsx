@@ -14,8 +14,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publication: Interfaces.Publication | null = null;
     let error: string | null = null;
 
+    const cookies = context.req.cookies;
+    const token = cookies[Config.keys.cookieStorage.token];
+
     try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, undefined);
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, token);
         publication = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -74,6 +77,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
+                    {props.publication.currentStatus === 'DRAFT' && (
+                        <div className="mb-2 rounded border-l-4 border-teal-700 bg-teal-600 p-4 shadow">
+                            <p className="text-sm text-white-50">
+                                This publication is in draft mode, and is not publically visible.
+                            </p>
+                        </div>
+                    )}
                     <header className="">
                         <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
                             {props.publication.title}

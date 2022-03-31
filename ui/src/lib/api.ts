@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
