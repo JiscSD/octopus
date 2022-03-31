@@ -21,7 +21,7 @@
         ]
     },
     "scripts": {
-        "start:local": "JWT_SECRET=test nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
+        "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
         "seed:local": "npx prisma migrate reset --force",
         "test:local": "stage=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"

@@ -2,143 +2,143 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch"]
-    binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
-    SUPER_USER
-    FUNDER
-    USER
+  SUPER_USER
+  FUNDER
+  USER
 }
 
 model User {
-    id         String  @id @default(cuid())
-    orcid      String  @unique
-    firstName  String
-    lastName   String?
-    email      String?
-    works      Json[]
-    employment Json[]
-    education  Json[]
-    role       Role    @default(USER)
-    locked     Boolean @default(false)
-    apiKey     String  @unique @default(uuid())
+  id         String  @id @default(cuid())
+  orcid      String  @unique
+  firstName  String
+  lastName   String?
+  email      String?
+  works      Json[]
+  employment Json[]
+  education  Json[]
+  role       Role    @default(USER)
+  locked     Boolean @default(false)
+  apiKey     String  @unique @default(uuid())
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    Publication      Publication[]
-    PublicationFlags PublicationFlags[]
+  Publication      Publication[]
+  PublicationFlags PublicationFlags[]
 }
 
 enum PublicationStatusEnum {
-    DRAFT
-    LIVE
-    HIDDEN
+  DRAFT
+  LIVE
+  HIDDEN
 }
 
 enum PublicationType {
-    PROBLEM
-    PROTOCOL
-    ANALYSIS
-    REAL_WORLD_APPLICATION
-    HYPOTHESIS
-    DATA
-    INTERPRETATION
-    PEER_REVIEW
+  PROBLEM
+  PROTOCOL
+  ANALYSIS
+  REAL_WORLD_APPLICATION
+  HYPOTHESIS
+  DATA
+  INTERPRETATION
+  PEER_REVIEW
 }
 
 enum PublicationFlagCategoryEnum {
-    PLAGIARISM
-    ETHICAL_ISSUES
-    MISREPRESENTATION
-    UNDECLARED_IMAGE_MANIPULATION
-    COPYRIGHT
-    INAPPROPRIATE
+  PLAGIARISM
+  ETHICAL_ISSUES
+  MISREPRESENTATION
+  UNDECLARED_IMAGE_MANIPULATION
+  COPYRIGHT
+  INAPPROPRIATE
 }
 
 enum LicenceType {
-    CC_BY
-    CC_BY_SA
-    CC_BY_ND
-    CC_BY_NC
-    CC_BY_NC_SA
-    CC_BY_NC_ND
+  CC_BY
+  CC_BY_SA
+  CC_BY_ND
+  CC_BY_NC
+  CC_BY_NC_SA
+  CC_BY_NC_ND
 }
 
 model Publication {
-    id                       String          @id @default(cuid())
-    url_slug                 String          @unique @default(cuid())
-    type                     PublicationType
-    title                    String?
-    licence                  LicenceType?
-    conflictOfInterestStatus Boolean?        @default(false)
-    conflictOfInterestText   String?
-    description              String?
-    keywords                 String[]
-    content                  String?
-    doi                      String?
-    publishedDate            DateTime?
+  id                       String          @id @default(cuid())
+  url_slug                 String          @unique @default(cuid())
+  type                     PublicationType
+  title                    String?
+  licence                  LicenceType?
+  conflictOfInterestStatus Boolean?        @default(false)
+  conflictOfInterestText   String?
+  description              String?
+  keywords                 String[]
+  content                  String?
+  doi                      String?
+  publishedDate            DateTime?
 
-    currentStatus PublicationStatusEnum @default(DRAFT)
+  currentStatus PublicationStatusEnum @default(DRAFT)
 
-    createdBy String
+  createdBy String
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  user User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
-    linkedTo   Links[] @relation("from")
-    linkedFrom Links[] @relation("to")
+  linkedTo   Links[] @relation("from")
+  linkedFrom Links[] @relation("to")
 
-    publicationStatus PublicationStatus[]
-    publicationFlags  PublicationFlags[]
+  publicationStatus PublicationStatus[]
+  publicationFlags  PublicationFlags[]
 }
 
 model Links {
-    id              String   @id @default(cuid())
-    publicationFrom String
-    publicationTo   String
-    active          Boolean? @default(true)
+  id              String   @id @default(cuid())
+  publicationFrom String
+  publicationTo   String
+  active          Boolean? @default(true)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
-    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+  publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
+  publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
 
-    @@unique([publicationFrom, publicationTo])
+  @@unique([publicationFrom, publicationTo])
 }
 
 model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
+  id            String                @id @default(cuid())
+  publicationId String
+  status        PublicationStatusEnum
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model PublicationFlags {
-    id            String                      @id @default(cuid())
-    publicationId String
-    category      PublicationFlagCategoryEnum
-    comments      String
-    createdBy     String
+  id            String                      @id @default(cuid())
+  publicationId String
+  category      PublicationFlagCategoryEnum
+  comments      String
+  createdBy     String
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    user        User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 
-    @@unique([publicationId, category, createdBy])
+  @@unique([publicationId, category, createdBy])
 }

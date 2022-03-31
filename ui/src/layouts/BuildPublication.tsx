@@ -1,13 +1,13 @@
 import React from 'react';
-import parse from 'html-react-parser';
 import * as Router from 'next/router';
+import * as ReactIconsFA from 'react-icons/fa';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
+import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 
 type NavigationButtonProps = {
@@ -15,22 +15,26 @@ type NavigationButtonProps = {
     disabled?: boolean;
     onClick: () => void;
     className?: string;
+    icon: React.ReactElement;
+    iconPosition: 'LEFT' | 'RIGHT';
 };
 
 const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed ${
+        className={`flex items-center space-x-2 rounded-sm py-1 text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
             props.className ? props.className : ''
         }`}
     >
-        {props.text}
+        {props.iconPosition === 'LEFT' && props.icon}
+        <span>{props.text}</span>
+        {props.iconPosition === 'RIGHT' && props.icon}
     </button>
 );
 
 type BuildPublicationProps = {
-    steps: { title: string; subTitle: string }[];
+    steps: Interfaces.PublicationBuildingStep[];
     currentStep: number;
     setStep: any; //Not sure what type we can use for a state setter than has access tp previous state
     publication: Interfaces.Publication;
@@ -40,24 +44,37 @@ type BuildPublicationProps = {
 
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
-    const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
-    const content = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.content);
-    const licence = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.licence);
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
-    );
-    const conflictOfInterestText = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
-    );
+    const user = Stores.useAuthStore((state) => state.user);
+    const error = Stores.usePublicationCreationStore((state) => state.error);
+    const setError = Stores.usePublicationCreationStore((state) => state.setError);
+    const title = Stores.usePublicationCreationStore((state) => state.title);
+    const type = Stores.usePublicationCreationStore((state) => state.type);
+    const description = Stores.usePublicationCreationStore((state) => state.description);
+    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
+    const content = Stores.usePublicationCreationStore((state) => state.content);
+    const licence = Stores.usePublicationCreationStore((state) => state.licence);
+    const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
+    const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
+    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
 
-    const [saveExitModalVisibility, setSaveExitModalVisibility] = React.useState(false);
+    const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+    const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
+    const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
 
     const prevStep = () => props.setStep((prevState: number) => prevState - 1);
     const nextStep = () => props.setStep((prevState: number) => prevState + 1);
 
     const saveCurrent = async () => {
+        let formattedKeywords: string[] = [];
+        if (keywords.length) {
+            formattedKeywords = keywords
+                .replace(/\n/g, ',') // replace new lines with comma
+                .split(',') // split by comma
+                .map((word) => word.trim()) // trim each keywords white space
+                .filter((word) => word.length); // dont include any empty string entries
+        }
+
         if (conflictOfInterestStatus && !conflictOfInterestText.length) {
             props.setStep(2);
             throw new Error('You must provide a conflict of interest reason.');
@@ -68,6 +85,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             {
                 title,
                 content,
+                description,
+                keywords: formattedKeywords,
                 licence,
                 conflictOfInterestStatus,
                 conflictOfInterestText
@@ -79,7 +98,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const publish = async () => {
         setError(null);
         try {
-            saveCurrent();
+            await saveCurrent();
             await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
             router.push({
                 pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
@@ -93,34 +112,66 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setPublishModalVisibility(false);
     };
 
-    const saveExit = async () => {
+    const save = async () => {
         setError(null);
         try {
-            saveCurrent();
-            router.push({
-                pathname: Config.urls.browsePublications.path
-            });
+            await saveCurrent();
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
         }
 
-        setSaveExitModalVisibility(false);
+        setSaveModalVisibility(false);
     };
+
+    const preview = async () => {
+        try {
+            await saveCurrent();
+            router.push({
+                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+            });
+        } catch (err) {
+            const { message } = err as Interfaces.JSONResponseError;
+            setError(message);
+        }
+    };
+
+    const deleteExit = async () => {
+        setError(null);
+        try {
+            await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
+            router.push({
+                pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
+            });
+        } catch (err) {
+            setError('There was a problem deleting this publicaiton');
+        }
+
+        setDeleteModalVisibility(false);
+    };
+
+    React.useEffect(() => {
+        if (!title) return setIsReadyToPreview(false);
+        if (!content) return setIsReadyToPreview(false);
+        if (!licence) return setIsReadyToPreview(false);
+        if (!linkTos.length) return setIsReadyToPreview(false);
+        if (conflictOfInterestStatus && !conflictOfInterestText.length) return setIsReadyToPreview(false);
+        setIsReadyToPreview(true);
+    }, [title, content, licence, conflictOfInterestStatus, conflictOfInterestText, linkTos]);
 
     return (
         <>
             <Components.Modal
-                open={saveExitModalVisibility}
-                setOpen={setSaveExitModalVisibility}
-                positiveActionCallback={saveExit}
-                positiveButtonText="Save and exit"
+                open={saveModalVisibility}
+                setOpen={setSaveModalVisibility}
+                positiveActionCallback={save}
+                positiveButtonText="Save"
                 cancelButtonText="Cancel"
-                title="Are you sure you want to leave?"
+                title="Are you sure you want to save your changes?"
                 icon={<OutlineIcons.SaveIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
-                    Changes to your publication will be saved and it&apos;s status kept as draft.
+                    Changes to your publication will be saved and it will be stored as a draft.
                 </p>
             </Components.Modal>
             <Components.Modal
@@ -130,74 +181,104 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
-                icon={<OutlineIcons.AcademicCapIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudUploadIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
-            <Components.Header fixed={true} />
-            <main className="container mx-auto grid min-h-screen grid-cols-12 gap-4 lg:pt-28">
-                <section className="col-span-12 p-8 lg:col-span-9">
-                    <div className="mb-12 flex flex-col items-center lg:flex-row lg:justify-between">
-                        <span className="mb-4 block text-xxs font-bold uppercase tracking-widest text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                            {Object.values(props.steps)[props.currentStep].subTitle}
-                        </span>
-                        <div className="grid grid-cols-4 gap-4">
-                            <NavigationButton
-                                text="Delete draft"
-                                onClick={() => console.log('attempt to delete')}
-                                className="bg-pink-500"
-                            />
-                            <NavigationButton
-                                text="Save and exit"
-                                onClick={() => setSaveExitModalVisibility(true)}
-                                className="bg-purple-400"
-                            />
-                            <NavigationButton text="Previous" disabled={props.currentStep <= 0} onClick={prevStep} />
-                            {props.currentStep < props.steps.length - 1 && (
-                                <NavigationButton
-                                    text="Next"
-                                    disabled={props.currentStep >= props.steps.length - 1}
-                                    onClick={nextStep}
-                                />
-                            )}
-                            {props.currentStep === props.steps.length - 1 && (
-                                <NavigationButton
-                                    text="Publish"
-                                    onClick={() => setPublishModalVisibility(true)}
-                                    className="bg-purple-400"
-                                />
-                            )}
-                            <button
-                                onClick={() => {
-                                    router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
-                                }}
-                                className="block rounded bg-teal-500 px-3 py-1 text-sm font-medium text-white-50 outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed lg:hidden"
-                            >
-                                Preview publication
-                            </button>
-                        </div>
-                    </div>
-                    {!!error && (
-                        <Components.Alert severity="ERROR" title={error} allowDismiss={false} className="mb-12 w-fit" />
-                    )}
-                    <div className="mb-12">{props.children}</div>
-                </section>
-                <aside className="relative hidden h-full border-l border-grey-100 pt-8 pl-8 transition-colors duration-500 dark:border-grey-700 lg:col-span-3 lg:block">
-                    <ul className="sticky top-24 space-y-4 lg:mb-8">
+            <Components.Modal
+                open={deleteModalVisibility}
+                setOpen={setDeleteModalVisibility}
+                positiveActionCallback={deleteExit}
+                positiveButtonText="Yes, delete this draft"
+                cancelButtonText="Cancel"
+                title="Are you sure you want to delete this publication?"
+                icon={<OutlineIcons.TrashIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+            >
+                <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
+            </Components.Modal>
+            <Components.Header fixed={false} hasBorder={false} />
+            <main className="grid min-h-screen grid-cols-12">
+                <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-teal-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
+                    <ul className="sticky top-0 space-y-2">
                         {props.steps.map((step, index) => (
                             <li key={step.title}>
                                 <button
                                     onClick={() => props.setStep(index)}
-                                    className={`${
-                                        index === props.currentStep ? 'bg-teal-500 text-white-50' : ''
-                                    } w-full rounded py-1 pl-2 text-left text-base outline-0 transition-colors duration-150 hover:bg-teal-600 hover:text-grey-50 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50`}
+                                    className={`flex w-full items-center space-x-4 py-4 pl-8 pr-2 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
+                                        index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
+                                    }`}
                                 >
-                                    {parse(step.title)}
+                                    {step.icon}
+                                    <span className="-mb-1">{step.title}</span>
                                 </button>
                             </li>
                         ))}
                     </ul>
+                    <div className="fixed bottom-6 px-8">
+                        <span className="block font-montserrat text-sm text-white-100">Need help?</span>
+                        <span className="block font-montserrat text-xs text-white-100">Check out our FAQs</span>
+                    </div>
                 </aside>
+                <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
+                    <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
+                        <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
+                            {Helpers.formatPublicationType(type)}
+                        </span>
+                        <div className="flex space-x-8">
+                            <NavigationButton
+                                text="Previous"
+                                disabled={props.currentStep <= 0}
+                                onClick={prevStep}
+                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                                iconPosition="LEFT"
+                            />
+
+                            <NavigationButton
+                                text="Next"
+                                disabled={props.currentStep >= props.steps.length - 1}
+                                onClick={nextStep}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Preview"
+                                onClick={preview}
+                                disabled={!isReadyToPreview}
+                                icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Publish"
+                                onClick={() => setPublishModalVisibility(true)}
+                                className=""
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+
+                            <NavigationButton
+                                text="Save"
+                                onClick={() => setSaveModalVisibility(true)}
+                                className=""
+                                // icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                            <NavigationButton
+                                text="Delete draft"
+                                onClick={() => setDeleteModalVisibility(true)}
+                                className=""
+                                icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                        </div>
+                    </div>
+                    {!!error && (
+                        <Components.Alert severity="ERROR" title={error} allowDismiss className="mb-12 w-fit" />
+                    )}
+                    <div className="mb-12">{props.children}</div>
+                </section>
             </main>
         </>
     );

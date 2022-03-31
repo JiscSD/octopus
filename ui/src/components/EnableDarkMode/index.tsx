@@ -20,24 +20,24 @@ const EnableDarkMode: React.FC = (): React.ReactElement => {
             <span className="sr-only">Use setting</span>
             <span
                 className={`pointer-events-none relative inline-block h-5 w-5 transform rounded-full shadow ring-0 transition duration-200 ease-in-out ${
-                    !darkMode ? 'translate-x-5' : 'translate-x-1'
+                    darkMode ? 'translate-x-5' : 'translate-x-1'
                 }`}
             >
                 <span
                     className={`absolute inset-0 flex h-full w-full items-center justify-center transition-opacity ${
-                        !darkMode ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in'
+                        darkMode ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in'
                     }`}
                     aria-hidden="true"
                 >
-                    <OutlineIcons.SunIcon className="h-7 w-7 text-white-50 transition-all" />
+                    <OutlineIcons.SunIcon className="h-7 w-7 text-teal-500 transition-all" />
                 </span>
                 <span
                     className={`absolute inset-0 flex h-full w-full items-center justify-center transition-opacity ${
-                        !darkMode ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out'
+                        darkMode ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out'
                     }`}
                     aria-hidden="true"
                 >
-                    <OutlineIcons.MoonIcon className="h-7 w-7 text-teal-500 transition-all" />
+                    <OutlineIcons.MoonIcon className="h-7 w-7 text-white-50 transition-all" />
                 </span>
             </span>
         </HeadlessUI.Switch>

@@ -18,12 +18,10 @@ const getAllSchema: I.Schema = {
             default: 0
         },
         search: {
-            type: 'string',
-            default: ''
+            type: 'string'
         },
         exclude: {
-            type: 'string',
-            default: ''
+            type: 'string'
         }
     },
     additionalProperties: false

@@ -5,7 +5,7 @@ import * as seeds from 'prisma/seeds';
 
 jest.setTimeout(60000);
 
-export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.stage}/v1`);
+export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
 export const initialSeed = async (): Promise<void> => {
     await client.prisma.user.createMany({ data: seeds.users });
@@ -40,11 +40,20 @@ export const openSearchSeed = async () => {
     }
 };
 
-// export const clearDB = async (): Promise<void> => {
-//     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
-//     const deletePublications = client.prisma.publication.deleteMany();
-//     const deleteUsers = client.prisma.user.deleteMany();
+export const clearDB = async (): Promise<void> => {
+    const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
+    const deletePublications = client.prisma.publication.deleteMany();
+    const deleteUsers = client.prisma.user.deleteMany();
 
-//     // @ts-ignore
-//     await prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
-// };
+    await client.prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+
+    const doesIndexExists = await client.search.indices.exists({
+        index: 'publications'
+    });
+
+    if (doesIndexExists.body) {
+        await client.search.indices.delete({
+            index: 'publications'
+        });
+    }
+};

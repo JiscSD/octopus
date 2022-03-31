@@ -41,3 +41,25 @@
         @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
 }
+
+@layer components {
+    [type='text'],
+    [type='email'],
+    [type='url'],
+    [type='password'],
+    [type='number'],
+    [type='date'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='search'],
+    [type='tel'],
+    [type='time'],
+    [type='week'],
+    textarea,
+    select,
+    select[multiple],
+    [type='checkbox'],
+    [type='radio'] {
+        @apply focus:border-grey-100;
+    }
+}

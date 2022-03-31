@@ -14,8 +14,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publication: Interfaces.Publication | null = null;
     let error: string | null = null;
 
+    const cookies = context.req.cookies;
+    const token = cookies[Config.keys.cookieStorage.token];
+
     try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, undefined);
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, token);
         publication = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -74,6 +77,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
+                    {props.publication.currentStatus === 'DRAFT' && (
+                        <Components.Alert
+                            className="mb-4"
+                            severity="INFO"
+                            title="This is a draft publication, and only visible to authors."
+                        />
+                    )}
                     <header className="">
                         <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
                             {props.publication.title}
@@ -84,7 +94,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="2 mb-8 block w-fit rounded outline-0 hover:underline focus:ring-2 focus:ring-yellow-400"
                         >
                             <p className="text-normal block leading-relaxed text-teal-600 transition-colors duration-500 dark:text-grey-100">
-                                {props.publication.user.firstName} {props.publication.user.lastName}
+                                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                             </p>
                         </Components.Link>
 

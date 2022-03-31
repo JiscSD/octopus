@@ -21,15 +21,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     let latest: unknown = [];
     try {
-        const latestResponse = await api.search(
-            'publications',
-            null,
-            Config.values.publicationTypes.join(),
-            10,
-            0,
-            'publishedDate',
-            'asc'
-        );
+        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 10, 0);
         latest = latestResponse.data as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -97,7 +89,12 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto px-8 py-16 2xl:pb-28">
+                {/** Mockup flow not ready */}
+                {/* <section className="container mx-auto py-16 px-8 2xl:py-28">
+                    <Components.MockupFlow />
+                </section> */}
+
+                <section className="container mx-auto px-8 py-16 2xl:py-28 ">
                     {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
@@ -149,7 +146,19 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
 
                 <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
-                    <Components.LatestPublications publications={props.latest} />
+                    <div className="grid grid-cols-3 gap-x-32">
+                        <div className="space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-100">
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2">
+                            <Components.LatestPublications publications={props.latest} />
+                        </div>
+                    </div>
                 </section>
             </Layouts.Standard>
         </>

@@ -28,12 +28,12 @@ const createPublicationSchema: I.Schema = {
         },
         description: {
             type: 'string',
-            maxLength: 160
+            maxLength: 160 // TODO: Re look at this cap
         },
         keywords: {
             type: 'array',
             items: { type: 'string' },
-            maxItems: 10
+            maxItems: 50 // TODO: Look at this
         },
         conflictOfInterestStatus: {
             type: 'boolean'
