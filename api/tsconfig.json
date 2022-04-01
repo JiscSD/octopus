@@ -42,6 +42,9 @@
             "authorization/*": [
                 "src/components/authorization/*"
             ],
+            "rating/*": [
+                "src/components/rating/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],
