@@ -1,5 +1,5 @@
 import * as testUtils from 'lib/testUtils';
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 //                      TEST IDEAS:  
 // - User can leave a review on another user’s publication 
@@ -149,7 +149,7 @@ describe('Create publication ratings', () => {
                 value: '8'
             });
 
-        const checkForRating = await prisma.publicationRatings.findFirst({
+        const checkForRating = await client.prisma.publicationRatings.findFirst({
             where: {
                 id: 'publication-problem-live-test-user-2-PROBLEM_ORIGINAL'
             }

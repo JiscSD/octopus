@@ -1,4 +1,4 @@
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 import * as Helpers from 'lib/helpers'
 import * as I from 'interface';
 
@@ -14,7 +14,7 @@ export const upsert = async (
 ) => {
     const id = `${publication}-${user}-${category}`;
 
-    const ratingRow = await prisma.publicationRatings.upsert({
+    const ratingRow = await client.prisma.publicationRatings.upsert({
         where: {
             id
         },
