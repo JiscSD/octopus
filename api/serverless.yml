@@ -7,6 +7,7 @@ plugins:
     - serverless-offline
     - serverless-pseudo-parameters
     - serverless-dotenv-plugin
+    - serverless-webpack-prisma
 
 provider:
     name: aws
@@ -22,7 +23,7 @@ provider:
             - ${ssm:/${self:provider.stage}_octopus_private_subnet_az2}
             - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
     environment:
-        stage: ${self:provider.stage}
+        STAGE: ${self:provider.stage}
         ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
         ELASTICSEARCH_PASSWORD: ${ssm:/elasticsearch_password_${self:provider.stage}_octopus}
         ELASTICSEARCH_ENDPOINT: ${ssm:/elasticsearch_endpoint_${self:provider.stage}_octopus}

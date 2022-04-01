@@ -6,10 +6,12 @@ module.exports = {
                 'http://localhost:3000/',
                 'http://localhost:3000/browse',
                 'http://localhost:3000/about',
-                'http://localhost:3000/create',
+                // 'http://localhost:3000/create', // Cant yet test on create due to login
                 'http://localhost:3000/terms',
                 'http://localhost:3000/privacy',
-                'http://localhost:3000/search'
+                'http://localhost:3000/search',
+                'http://localhost:3000/accessibility',
+                'http://localhost:3000/faq'
             ]
         },
         assert: {

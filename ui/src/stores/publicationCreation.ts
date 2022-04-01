@@ -2,36 +2,55 @@ import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 import * as Interfaces from '@interfaces';
+import * as Config from '@config';
 import * as Types from '@types';
 
 let store: any = (set: (params: any) => void) => ({
+    // Errors whilst editing
+    error: null,
+    setError: (error: string | null) => set(() => ({ error })),
+
+    // ID
+    id: '',
+    updateId: (id: string) => set(() => ({ id })),
+
+    // Title
     title: '',
-    updateTitle: (title: string) => set((state: Types.PublicationCreationStoreType) => ({ title })),
-    type: 'PROBLEM',
-    updateType: (type: Types.PublicationType) => set((state: Types.PublicationCreationStoreType) => ({ type })),
+    updateTitle: (title: string) => set(() => ({ title })),
+
+    // Type
+    type: Config.values.octopusInformation.publications.PROBLEM.id,
+    updateType: (type: Types.PublicationType) => set(() => ({ type })),
+
+    // Content
     content: '',
-    updateContent: (content: string) => set((state: Types.PublicationCreationStoreType) => ({ content })),
-    licence: 'CC_BY',
-    updateLicence: (licence: Types.LicenceType) => set((state: Types.PublicationCreationStoreType) => ({ licence })),
+    updateContent: (content: string) => set(() => ({ content })),
+
+    // Description
+    description: '',
+    updateDescription: (description: string) => set(() => ({ description })),
+
+    // Keywords
+    keywords: [],
+    updateKeywords: (keywords: string[]) => set(() => ({ keywords })),
+
+    // Licence
+    licence: Config.values.octopusInformation.licences.CC_BY.value,
+    updateLicence: (licence: Types.LicenceType) => set(() => ({ licence })),
+
+    // COI
     conflictOfInterestStatus: true,
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) =>
-        set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestStatus })),
+    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
-    updateConflictOfInterestText: (conflictOfInterestText: string) =>
-        set((state: Types.PublicationCreationStoreType) => ({ conflictOfInterestText })),
-    linkedFromPublication: null,
-    updateLinkedFromPublication: (linkedFromPublication: Interfaces.Publication | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ linkedFromPublication })),
-    forPublicationsID: null,
-    updateForPublicationsID: (forPublicationsID: string | string[] | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ forPublicationsID })),
-    draftedPublication: null,
-    updateDraftedPublication: (draftedPublication: Interfaces.Publication | null) =>
-        set((state: Types.PublicationCreationStoreType) => ({ draftedPublication }))
+    updateConflictOfInterestText: (conflictOfInterestText: string) => set(() => ({ conflictOfInterestText })),
+
+    // Links
+    linkTo: [],
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
 
-const usePublicationCreationStore = create(store);
+const usePublicationCreationStore = create<Types.PublicationCreationStoreType>(store);
 
 export default usePublicationCreationStore;
