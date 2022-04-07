@@ -292,3 +292,11 @@ export interface ConfirmCoAuthorQueryParams {
     email: string;
     code: string;
 }
+
+export interface ChangeCoAuthorRequestBody {
+    confirmedCoAuthor: boolean;
+}
+export interface ChangeCoAuthorPathParams {
+    publicationId: string;
+    userId: string;
+}

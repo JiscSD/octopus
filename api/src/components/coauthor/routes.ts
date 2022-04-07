@@ -26,6 +26,16 @@ export const confirmCoAuthor = middy(coAuthorController.confirmCoAuthor)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
+export const denyCoAuthor = middy(coAuthorController.denyCoAuthor)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
+
+export const changeCoAuthor = middy(coAuthorController.changeCoAuthor)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
+
 export const resetCoAuthors = middy(coAuthorController.resetCoAuthors)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())

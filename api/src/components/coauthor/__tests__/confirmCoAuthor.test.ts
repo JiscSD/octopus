@@ -12,18 +12,19 @@ describe('Confirm that user is a co-author', () => {
     });
 
     test('Confirm that user is a co-author', async () => {
-        const resendCoAuthor = await testUtils.agent
+        const confirmCoAuthor = await testUtils.agent
             .patch(`/confirm-co-authorship/${publication.user1Draft}`)
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '987654321', email: 'testemail@test.com', code: 'test' });
 
-        expect(resendCoAuthor.status).toEqual(200);
+        expect(confirmCoAuthor.status).toEqual(200);
+        expect(confirmCoAuthor?.body.CoauthorsConfirmed).toEqual(1);
     });
 
     test('Cannot Resend new code for co-author on a publication that does not exist', async () => {
-        const resendCoAuthor = await testUtils.agent
+        const confirmCoAuthor = await testUtils.agent
             .patch(`/confirm-co-authorship/non-existent-publication`)
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '987654321', email: 'testemail@test.com', code: 'test' });
 
-        expect(resendCoAuthor.status).toEqual(404);
+        expect(confirmCoAuthor.status).toEqual(404);
     });
 });

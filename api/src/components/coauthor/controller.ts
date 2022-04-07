@@ -140,13 +140,39 @@ export const confirmCoAuthor = async (
             });
         }
 
-        await coAuthorService.confirmCoAuthor(
+        const coAuthorConfirmed = await coAuthorService.confirmCoAuthor(
             event.user.id,
+            event?.pathParameters.publicationId,
             event?.queryStringParameters.email,
             event?.queryStringParameters.code
         );
 
-        return response.json(200, { message: 'This co-author has been confirmed.' });
+        return response.json(200, { CoauthorsConfirmed: coAuthorConfirmed });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const denyCoAuthor = async (
+    event: I.APIRequest<undefined, I.ConfirmCoAuthorQueryParams, I.ConfirmCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event?.pathParameters.publicationId);
+
+        // Does the publication exist?
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        const coAuthorDenied = await coAuthorService.denyCoAuthor(
+            event?.pathParameters.publicationId,
+            event?.queryStringParameters.email,
+            event?.queryStringParameters.code
+        );
+
+        return response.json(200, { CoauthorsDenied: coAuthorDenied });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
@@ -172,9 +198,37 @@ export const resetCoAuthors = async (
             });
         }
 
-        await coAuthorService.resetCoAuthors(event?.pathParameters.id);
+        const coAuthorsReset = await coAuthorService.resetCoAuthors(event?.pathParameters.id);
 
-        return response.json(200, { message: 'The co-authors for this publication have been reset.' });
+        return response.json(200, { coAuthorsReset: coAuthorsReset });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const changeCoAuthor = async (
+    event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.ChangeCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event?.pathParameters.publicationId);
+
+        // Does the publication exist?
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        // Is this user the correct user?
+        //todo
+
+        await coAuthorService.changeCoAuthor(
+            event?.pathParameters.publicationId,
+            event?.pathParameters.userId,
+            event?.body.confirmedCoAuthor
+        );
+
+        return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }

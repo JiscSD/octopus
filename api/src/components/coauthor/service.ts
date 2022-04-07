@@ -44,20 +44,48 @@ export const resendCoAuthor = async (id: string) => {
     return resendCoAuthor;
 };
 
-export const confirmCoAuthor = async (userId: string, email: string, code: string) => {
-    const resendCoAuthor = await prisma.coAuthors.updateMany({
-        // updateMany so both email and code can be confirmed.
+export const confirmCoAuthor = async (userId: string, publicationId: string, email: string, code: string) => {
+    const confirmCoAuthor = await prisma.coAuthors.updateMany({
+        // updateMany so pubId, email and code can be confirmed.
         where: {
+            publicationId,
             email,
             code
         },
         data: {
-            confirmedCoAuthor: true,
             linkedUser: userId
         }
     });
 
-    return resendCoAuthor;
+    return confirmCoAuthor.count;
+};
+
+export const denyCoAuthor = async (publicationId: string, email: string, code: string) => {
+    const denyCoAuthor = await prisma.coAuthors.deleteMany({
+        // deleteMany so pubId, email and code can be confirmed.
+        where: {
+            publicationId,
+            email,
+            code
+        }
+    });
+
+    return denyCoAuthor.count;
+};
+
+export const changeCoAuthor = async (publicationId: string, userId: string, confirmedCoAuthor: boolean) => {
+    const changeCoAuthor = await prisma.coAuthors.updateMany({
+        // updateMany so pubId, email and code can be confirmed.
+        where: {
+            publicationId,
+            linkedUser: userId
+        },
+        data: {
+            confirmedCoAuthor
+        }
+    });
+    console.log(changeCoAuthor);
+    return changeCoAuthor;
 };
 
 export const resetCoAuthors = async (publicationId: string) => {
@@ -70,7 +98,7 @@ export const resetCoAuthors = async (publicationId: string) => {
             code: cuid()
         }
     });
-
+    console.log(resetCoAuthors);
     return resetCoAuthors;
 };
 
