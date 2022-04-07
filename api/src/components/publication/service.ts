@@ -44,7 +44,6 @@ export const isIdInUse = async (id: string) => {
 
     return Boolean(publication);
 };
-
 export const get = async (id: string) => {
     const publication = await client.prisma.publication.findFirst({
         where: {

@@ -8,5 +8,3 @@ const elasticSearchNode = `${process.env.ELASTICSEARCH_PROTOCOL}://${process.env
 export const search = new Client({
     node: elasticSearchNode
 });
-
-// console.log(process.env);
