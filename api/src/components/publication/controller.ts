@@ -1,6 +1,7 @@
 import * as response from 'lib/response';
 import * as helpers from 'lib/helpers';
 import * as publicationService from 'publication/service';
+import * as ratingService from 'rating/service';
 import * as I from 'interface';
 import htmlToText from 'html-to-text';
 
@@ -38,14 +39,17 @@ export const get = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
+        const aggregate = await ratingService.getAggregate(event.pathParameters.id);
+        const overall = await ratingService.getOverall(event.pathParameters.id);
+
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, publication);
+            return response.json(200, { ...publication, ratings: { aggregate, overall } });
         }
 
         // only certain users can see a DRAFT publication
         if (event.user?.id === publication?.user.id) {
-            return response.json(200, publication);
+            return response.json(200, { ...publication, ratings: { aggregate, overall } });
         }
 
         return response.json(404, {
