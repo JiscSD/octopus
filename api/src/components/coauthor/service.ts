@@ -73,8 +73,8 @@ export const denyCoAuthor = async (publicationId: string, email: string, code: s
     return denyCoAuthor.count;
 };
 
-export const changeCoAuthor = async (publicationId: string, userId: string, confirmedCoAuthor: boolean) => {
-    const changeCoAuthor = await prisma.coAuthors.updateMany({
+export const updateCoAuthor = async (publicationId: string, userId: string, confirmedCoAuthor: boolean) => {
+    const updateCoAuthor = await prisma.coAuthors.updateMany({
         // updateMany so pubId, email and code can be confirmed.
         where: {
             publicationId,
@@ -84,8 +84,8 @@ export const changeCoAuthor = async (publicationId: string, userId: string, conf
             confirmedCoAuthor
         }
     });
-    console.log(changeCoAuthor);
-    return changeCoAuthor;
+    console.log(updateCoAuthor);
+    return updateCoAuthor;
 };
 
 export const resetCoAuthors = async (publicationId: string) => {

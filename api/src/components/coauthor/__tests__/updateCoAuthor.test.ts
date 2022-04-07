@@ -23,7 +23,7 @@ describe.skip('Change user response as a co-author', () => {
 
     test('Cannot change user repsonse as a co-author on a publication that does not exist', async () => {
         const resendCoAuthor = await testUtils.agent
-            .patch(`/confirm-co-authorship/non-existent-publication/`)
+            .patch(`/confirm-co-authorship/non-existent-publication/test-user-2`)
             .query({ apiKey: '123456789' });
 
         expect(resendCoAuthor.status).toEqual(404);

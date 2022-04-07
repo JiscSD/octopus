@@ -205,8 +205,8 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor/
                   method: patch
                   cors: true
-    changeCoAuthor:
-        handler: src/components/coauthor/routes.changeCoAuthor
+    updateCoAuthor:
+        handler: src/components/coauthor/routes.updateCoAuthor
         warmup: true
         events:
             - http:

@@ -206,7 +206,7 @@ export const resetCoAuthors = async (
     }
 };
 
-export const changeCoAuthor = async (
+export const updateCoAuthor = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.ChangeCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
@@ -222,7 +222,7 @@ export const changeCoAuthor = async (
         // Is this user the correct user?
         //todo
 
-        await coAuthorService.changeCoAuthor(
+        await coAuthorService.updateCoAuthor(
             event?.pathParameters.publicationId,
             event?.pathParameters.userId,
             event?.body.confirmedCoAuthor
