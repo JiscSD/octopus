@@ -1,5 +1,5 @@
 import * as testUtils from 'lib/testUtils';
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 describe('Delete publications', () => {
     beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('Delete publications', () => {
 
         expect(getPublication.status).toEqual(200);
 
-        const checkForPublication = await prisma.publication.count({
+        const checkForPublication = await client.prisma.publication.count({
             where: {
                 id: 'publication-problem-draft'
             }
@@ -30,7 +30,7 @@ describe('Delete publications', () => {
 
         expect(getPublication.status).toEqual(403);
 
-        const checkForPublication = await prisma.publication.count({
+        const checkForPublication = await client.prisma.publication.count({
             where: {
                 id: 'publication-problem-live'
             }

@@ -21,15 +21,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     let latest: unknown = [];
     try {
-        const latestResponse = await api.search(
-            'publications',
-            null,
-            Config.values.publicationTypes.join(),
-            10,
-            0,
-            'publishedDate',
-            'asc'
-        );
+        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 10, 0);
         latest = latestResponse.data as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -97,40 +89,15 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto px-8 py-16 2xl:pb-28">
+                {/** Mockup flow not ready */}
+                {/* <section className="container mx-auto py-16 px-8 2xl:py-28">
+                    <Components.MockupFlow />
+                </section> */}
+
+                <section className="container mx-auto px-8 py-16 2xl:py-28 ">
                     {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
-                        <Components.ActionCard
-                            title="Create an account"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
-                            icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.orcidLogin.path}
-                            linkText="Create an account"
-                        />
-                        <Components.ActionCard
-                            title="Learn more account Octopus"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
-                            icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.about.path}
-                            linkText="Learn more"
-                        />
-
-                        <Components.ActionCard
-                            title="Browse publications"
-                            content="Browse our most recent publications, and different types of publication. You don't need to log in."
-                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.browsePublications.path}
-                            linkText="Browse publications"
-                        />
-                        <Components.ActionCard
-                            title="Search publications"
-                            content="Anyone can read any publication on Octopus. Search by keyword, title or author to discover more."
-                            icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.search.path}
-                            linkText="Search publications"
-                        />
-
                         <Components.ActionCard
                             title="Publish your work"
                             content="Publishing in Octopus is free and simple, with eight publications types aligned with the scientific process."
@@ -139,8 +106,37 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             linkText="Publish your work"
                         />
                         <Components.ActionCard
+                            title="Search publications"
+                            content="Anyone can read any publication on Octopus. Search by keyword, title or author to discover more."
+                            icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.search.path}
+                            linkText="Search publications"
+                        />
+                        <Components.ActionCard
+                            title="Browse publications"
+                            content="View recent publications and  and browse by publication type."
+                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.browsePublications.path}
+                            linkText="Browse publications"
+                        />
+                        <Components.ActionCard
+                            title="Create an account"
+                            content="Octopus accounts are created via ORCID login."
+                            icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.orcidLogin.path}
+                            linkText="Create an account"
+                        />
+                        <Components.ActionCard
+                            title="Learn more account Octopus"
+                            content="Read more about what makes Octopus different, as well as our priorities and plans."
+                            icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.about.path}
+                            linkText="Learn more"
+                        />
+
+                        <Components.ActionCard
                             title="Need help?"
-                            content="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum blanditiis, harum voluptatem, voluptate vero non"
+                            content="Review our FAQs to find out more about how the platform works."
                             icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.faq.path}
                             linkText="See FAQ's"
@@ -148,9 +144,21 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </section>
 
-                <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
-                    <Components.LatestPublications publications={props.latest} />
-                </section>
+                {/* <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
+                    <div className="grid grid-cols-3 gap-x-32">
+                        <div className="space-y-4">
+                            <Components.PageSubTitle text="Lorem ipsum" />
+                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-100">
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
+                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
+                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
+                            </p>
+                        </div>
+                        <div className="col-span-2">
+                            <Components.LatestPublications publications={props.latest} />
+                        </div>
+                    </div>
+                </section> */}
             </Layouts.Standard>
         </>
     );

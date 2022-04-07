@@ -21,7 +21,7 @@
         ]
     },
     "scripts": {
-        "start:local": "JWT_SECRET=test nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
+        "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
         "seed:local": "npx prisma migrate reset --force",
         "test:local": "stage=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"
@@ -31,6 +31,7 @@
         "@middy/do-not-wait-for-empty-event-loop": "^2.5.4",
         "@middy/http-json-body-parser": "^2.5.4",
         "@middy/validator": "^2.5.4",
+        "@opensearch-project/opensearch": "^1.0.2",
         "@prisma/client": "^3.8.1",
         "@types/cheerio": "^0.22.30",
         "@types/jest": "^27.4.0",
@@ -42,11 +43,13 @@
         "ajv-formats": "^2.1.1",
         "axios": "^0.26.0",
         "cheerio": "^1.0.0-rc.10",
+        "html-to-text": "^8.1.0",
         "jsonwebtoken": "^8.5.1",
         "luxon": "^2.3.0",
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
-        "prisma": "^3.10.0"
+        "prisma": "^3.10.0",
+        "string-strip-html": "^9.1.6"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.89",
@@ -70,6 +73,7 @@
         "serverless-plugin-warmup": "^6.2.0",
         "serverless-pseudo-parameters": "^2.6.1",
         "serverless-webpack": "^5.6.0",
+        "serverless-webpack-prisma": "^1.1.0",
         "source-map-support": "^0.5.21",
         "supertest": "^6.2.1",
         "ts-jest": "^27.1.2",

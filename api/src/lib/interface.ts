@@ -67,6 +67,18 @@ export interface CreatePublicationRequestBody {
     content?: string;
 }
 
+export interface OpenSearchPublication {
+    id: string;
+    type: PublicationType;
+    title: string | null;
+    licence?: LicenceType | null;
+    description?: string | null;
+    keywords?: string[];
+    content?: string | null;
+    cleanContent?: string | null;
+    publishedDate?: Date | null;
+}
+
 export interface GetPublicationPathParams {
     id: string;
 }
@@ -89,7 +101,7 @@ export interface UpdatePublicationRequestBody {
     id?: string;
 }
 
-export type PublicationOrderBy = 'id' | 'createdAt' | 'updatedAt' | 'title';
+export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
@@ -97,9 +109,8 @@ export interface PublicationFilters {
     search?: string;
     limit?: string;
     offset?: string;
-    orderBy?: PublicationOrderBy;
-    orderDirection?: OrderDirection;
     type: string;
+    exclude: string;
 }
 
 /**
@@ -299,4 +310,38 @@ export interface ChangeCoAuthorRequestBody {
 export interface ChangeCoAuthorPathParams {
     publicationId: string;
     userId: string;
+}
+
+/* @description Ratings
+ */
+
+export type Ratings =
+    | 'PROBLEM_WELL_DEFINED'
+    | 'PROBLEM_ORIGINAL'
+    | 'PROBLEM_IMPORTANT'
+    | 'HYPOTHESIS_WELL_DEFINED'
+    | 'HYPOTHESIS_ORIGINAL'
+    | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
+    | 'METHOD_CLEAR'
+    | 'METHOD_ORIGINAL'
+    | 'METHOD_APPROPRIATE_TEST_OF_HYPOTHESIS'
+    | 'DATA_WELL_ANNOTATED'
+    | 'DATA_SIZE_OF_DATASET'
+    | 'DATA_FOLLOWED_PROTOCOL'
+    | 'ANALYSIS_CLEAR'
+    | 'ANALYSIS_ORIGINAL'
+    | 'ANALYSIS_APPROPRIATE_METHODOLOGY'
+    | 'INTERPRETATION_CLEAR'
+    | 'INTERPRETATION_INSIGHTFUL'
+    | 'INTERPRETATION_CONSISTENT_WITH_DATA'
+    | 'REAL_WORLD_APPLICATION_CLEAR'
+    | 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT'
+    | 'REAL_WORLD_APPLICATION_IMPACTFUL'
+    | 'REVIEW_CLEAR'
+    | 'REVIEW_INSIGHTFUL'
+    | 'REVIEW_ORIGINAL';
+
+export interface CreateRatingRequestBody {
+    type: Ratings;
+    value: number;
 }

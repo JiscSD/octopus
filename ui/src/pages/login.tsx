@@ -56,11 +56,12 @@ type Props = {
 
 const Login: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
+    const setUser = Stores.useAuthStore((state) => state.setUser);
 
     React.useEffect(() => {
         const decodedJWT = Helpers.setAndReturnJWT(props.token);
-        setUser(decodedJWT);
+        // @ts-ignore
+        if (decodedJWT) setUser({ ...decodedJWT, token: props.token });
         setTimeout(
             () =>
                 router.push({

@@ -143,7 +143,8 @@ export interface DocumentationEntryQueryParams {
 export interface PublicationBuildingStep {
     title: string;
     subTitle: string;
-    component: React.ReactNode;
+    component: React.ReactElement;
+    icon: React.ReactElement;
 }
 
 export interface LicenceTypeShape {

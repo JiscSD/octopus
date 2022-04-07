@@ -1,48 +1,89 @@
 import React from 'react';
+import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
 import * as Stores from '@stores';
+import * as Config from '@config';
 import * as Types from '@types';
 
 /**
  * @description Edit title
  */
 const StepOne: React.FC = (): React.ReactElement => {
-    const title = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.title);
-    const updateTitle = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateTitle
+    const title = Stores.usePublicationCreationStore((state) => state.title);
+    const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
+    const licence: Types.LicenceType = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.licence
     );
-    const type = Stores.usePublicationCreationStore((state: Types.PublicationCreationStoreType) => state.type);
+    const updateLicence = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateLicence
+    );
 
     return (
-        <>
-            <div className="mb-6 lg:mb-10">
-                <label className="mb-4 block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Publication title
-                </label>
+        <div className="space-y-12 2xl:space-y-16">
+            <div>
+                <Components.PublicationCreationStepTitle text="Title" />
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                    Titles should be concise, specific, and informative. This will help relevant readers find your
+                    material.
+                </span>
                 <input
                     required
                     type="text"
                     value={title}
                     onChange={(e) => updateTitle(e.target.value)}
-                    className="block w-10/12 rounded-md  border-teal-500 bg-transparent text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
+                    className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
                 />
             </div>
-            <div className="mb-6">
-                <span className="mb-4 block font-montserrat text-2xl font-semibold text-pink-500">
-                    {Helpers.formatPublicationType(type)}
-                </span>
-                <p className="text-grey-800 dark:text-white-50">
-                    You have selected the publication type &quot;{Helpers.formatPublicationType(type)}&quot;.
-                </p>
-                <p className="mt-2 text-grey-800 dark:text-white-50">
-                    Please note that this cannot be changed. If you wish to change publication type, you must delete
-                    this publication and create a new one.
-                </p>
+            <div>
+                <Components.PublicationCreationStepTitle text="Creative commons licence" />
+                <div className="items-center lg:flex">
+                    <select
+                        id="licence"
+                        name="publicationType"
+                        value={licence}
+                        onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
+                        className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
+                        required
+                    >
+                        {Object.values(Config.values.octopusInformation.licences).map((type) => (
+                            <option key={type.value} value={type.value}>
+                                {Config.values.octopusInformation.licences[type.value].nicename}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <Framer.motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-grey-800 transition-colors duration-500 dark:text-white-50"
+                >
+                    <div className="mt-8">
+                        <Components.Link
+                            href={Config.values.octopusInformation.licences[licence].link}
+                            openNew={true}
+                            className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
+                        >
+                            <strong>{Config.values.octopusInformation.licences[licence].fullName}</strong>
+                        </Components.Link>
+                        <span className="mb-2 block text-sm lg:w-10/12">
+                            {Config.values.octopusInformation.licences[licence].description}
+                        </span>
+                        <span className="block text-sm lg:w-10/12">
+                            View all{' '}
+                            <Components.Link
+                                href="https://creativecommons.org/about/cclicenses/"
+                                openNew
+                                className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                            >
+                                Creative Commons licenses
+                            </Components.Link>
+                            .
+                        </span>
+                    </div>
+                </Framer.motion.div>
             </div>
-        </>
+        </div>
     );
 };
 

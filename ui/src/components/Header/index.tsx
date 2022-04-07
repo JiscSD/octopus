@@ -8,6 +8,7 @@ import * as Assets from '@assets';
 
 type Props = {
     fixed?: boolean;
+    hasBorder?: boolean;
 };
 
 const Header: React.FC<Props> = (props): React.ReactElement => {
@@ -21,7 +22,11 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                 }`}
             >
                 <div className="container mx-auto px-8">
-                    <div className={`flex items-center justify-between border-b border-grey-200 py-6`}>
+                    <div
+                        className={`flex items-center justify-between py-6 transition-colors duration-500 ${
+                            props.hasBorder ? 'border-b border-grey-200 dark:border-grey-400' : ''
+                        }`}
+                    >
                         <Components.Link href={Config.urls.home.path} className="flex items-center border-transparent">
                             <Assets.Logo
                                 height={30}

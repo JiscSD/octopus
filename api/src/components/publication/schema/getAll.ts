@@ -17,19 +17,11 @@ const getAllSchema: I.Schema = {
             type: 'number',
             default: 0
         },
-        orderBy: {
-            type: 'string',
-            enum: ['id', 'createdAt', 'updatedAt', 'publishedDate', 'title'],
-            default: 'updatedAt'
-        },
-        orderDirection: {
-            type: 'string',
-            enum: ['asc', 'desc'],
-            default: 'desc'
-        },
         search: {
-            type: 'string',
-            default: ''
+            type: 'string'
+        },
+        exclude: {
+            type: 'string'
         }
     },
     additionalProperties: false

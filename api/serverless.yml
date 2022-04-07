@@ -7,6 +7,7 @@ plugins:
     - serverless-offline
     - serverless-pseudo-parameters
     - serverless-dotenv-plugin
+    - serverless-webpack-prisma
 
 provider:
     name: aws
@@ -22,7 +23,10 @@ provider:
             - ${ssm:/${self:provider.stage}_octopus_private_subnet_az2}
             - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
     environment:
-        stage: ${self:provider.stage}
+        STAGE: ${self:provider.stage}
+        ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
+        ELASTICSEARCH_PASSWORD: ${ssm:/elasticsearch_password_${self:provider.stage}_octopus}
+        ELASTICSEARCH_ENDPOINT: ${ssm:/elasticsearch_endpoint_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -53,6 +57,8 @@ functions:
                   path: ${self:custom.versions.v1}/healthcheck
                   method: get
                   cors: true
+    seedOpenSearch:
+        handler: src/lib/testUtils.openSearchSeed
     getPublications:
         handler: src/components/publication/routes.getAll
         warmup: true
@@ -157,6 +163,7 @@ functions:
                   path: ${self:custom.versions.v1}/links/{id}
                   method: delete
                   cors: true
+    # CoAuthors
     createCoAuthor:
         handler: src/components/coauthor/routes.create
         warmup: true
@@ -212,4 +219,13 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/confirm-co-authorship/{publicationId}/{userId}
                   method: patch
+                  cors: true
+    # Ratings
+    createRatings:
+        handler: src/components/rating/routes.upsert
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/ratings
+                  method: post
                   cors: true

@@ -38,7 +38,7 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ type: 'spring', stiffness: 100, delay: 0.75 }}
-                className={`absolute top-6 hidden rounded-full bg-teal-500 p-1 lg:block ${
+                className={`absolute top-6 z-10 hidden rounded-full bg-teal-500 p-1 lg:block ${
                     props.position === 'LEFT' ? '-left-0' : '-right-0'
                 }`}
                 title={`${props.title} link`}

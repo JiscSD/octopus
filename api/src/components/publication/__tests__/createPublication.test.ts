@@ -1,5 +1,4 @@
 import * as testUtils from 'lib/testUtils';
-// import prisma from 'lib/client';
 
 describe('Create publication', () => {
     beforeEach(async () => {
