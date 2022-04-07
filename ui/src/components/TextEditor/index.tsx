@@ -165,7 +165,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <HeadlessUi.Listbox.Options className="absolute z-50 mt-1 max-h-60 w-fit rounded-md bg-white-50 py-1 text-base shadow-sm sm:text-sm">
+                                <HeadlessUi.Listbox.Options className="absolute z-40 mt-1 max-h-60 w-fit rounded-md bg-white-50 py-1 text-base shadow-sm sm:text-sm">
                                     {headingOptions.map((heading, index) => (
                                         <HeadlessUi.Listbox.Option
                                             key={index}

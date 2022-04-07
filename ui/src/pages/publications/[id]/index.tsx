@@ -105,7 +105,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         )}
 
                         <div className="block xl:hidden">
-                            <Components.PublicationRatings publication={props.publication} />
+                            <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
+                                <Components.PublicationSidebarCardGeneral publication={props.publication} />
+                                <Components.PublicationSidebarCardRatings publication={props.publication} />
+                                <Components.PublicationSidebarCardActions publication={props.publication} />
+                                <Components.PublicationSidebarCardSections sectionList={sectionList} />
+                            </div>
                         </div>
                     </header>
 
@@ -238,7 +243,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
-                        <Components.PublicationRatings publication={props.publication} sectionList={sectionList} />
+                        <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
+                            <Components.PublicationSidebarCardGeneral publication={props.publication} />
+                            <Components.PublicationSidebarCardRatings publication={props.publication} />
+                            <Components.PublicationSidebarCardActions publication={props.publication} />
+                            <Components.PublicationSidebarCardSections sectionList={sectionList} />
+                        </div>
                     </div>
                 </aside>
             </Layouts.Publication>

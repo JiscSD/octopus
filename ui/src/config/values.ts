@@ -18,6 +18,10 @@ interface OctopusInformation {
             id: Types.PublicationType;
             heading: string;
             content: string;
+            ratings: {
+                id: Types.Ratings;
+                value: string;
+            }[];
         };
     };
     licences: {
@@ -36,44 +40,84 @@ export const octopusInformation: OctopusInformation = {
         PROBLEM: {
             id: 'PROBLEM',
             heading: 'Research Problem',
-            content: 'A neatly defined scientific problem.'
+            content: 'A neatly defined scientific problem.',
+            ratings: [
+                { id: 'PROBLEM_WELL_DEFINED', value: 'Well defined' },
+                { id: 'PROBLEM_ORIGINAL', value: 'Original' },
+                { id: 'PROBLEM_IMPORTANT', value: 'Important' }
+            ]
         },
         HYPOTHESIS: {
             id: 'HYPOTHESIS',
             heading: 'Hypothesis',
             content:
-                'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.'
+                'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
+            ratings: [
+                { id: 'HYPOTHESIS_ORIGINAL', value: 'Original' },
+                { id: 'HYPOTHESIS_SCIENTIFICALLY_VALID', value: 'scientifically valid' },
+                { id: 'HYPOTHESIS_WELL_DEFINED', value: 'Well defined' }
+            ]
         },
         PROTOCOL: {
             id: 'PROTOCOL',
             heading: 'Protocol',
-            content: 'A practical method of testing an existing published Hypothesis.'
+            content: 'A practical method of testing an existing published Hypothesis.',
+            ratings: [
+                { id: 'PROTOCOL_CLEAR', value: 'Clear' },
+                { id: 'PROTOCOL_ORIGINAL', value: 'Original' },
+                { id: 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS', value: 'Appropriate' }
+            ]
         },
         DATA: {
             id: 'DATA',
             heading: 'Data',
             content:
-                'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+                'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
+            ratings: [
+                { id: 'DATA_WELL_ANNOTATED', value: 'Well annotated' },
+                { id: 'DATA_SIZE_OF_DATASET', value: 'Size of dataset' },
+                { id: 'DATA_FOLLOWED_PROTOCOL', value: 'Followed protcol' }
+            ]
         },
         ANALYSIS: {
             id: 'ANALYSIS',
             heading: 'Analysis',
-            content: 'A statistical or thematic analysis of existing published Data or Results.'
+            content: 'A statistical or thematic analysis of existing published Data or Results.',
+            ratings: [
+                { id: 'ANALYSIS_ORIGINAL', value: 'Original' },
+                { id: 'ANALYSIS_CLEAR', value: 'Clear' },
+                { id: 'ANALYSIS_APPROPRIATE_METHODOLOGY', value: 'Appropriate mathodology' }
+            ]
         },
         INTERPRETATION: {
             id: 'INTERPRETATION',
             heading: 'Interpretation',
-            content: 'A discussion around an existing published Analysis.'
+            content: 'A discussion around an existing published Analysis.',
+            ratings: [
+                { id: 'INTERPRETATION_INSIGHTFUL', value: 'Insightful' },
+                { id: 'INTERPRETATION_CONSISTENT_WITH_DATA', value: 'Consistent with data' },
+                { id: 'INTERPRETATION_CLEAR', value: 'Clear' }
+            ]
         },
         REAL_WORLD_APPLICATION: {
             id: 'REAL_WORLD_APPLICATION',
             heading: 'Real-world Application',
-            content: 'Real world applications arising from an existing published Interpretation.'
+            content: 'Real world applications arising from an existing published Interpretation.',
+            ratings: [
+                { id: 'REAL_WORLD_APPLICATION_IMPACTFUL', value: 'Impactful' },
+                { id: 'REAL_WORLD_APPLICATION_CLEAR', value: 'Clear' },
+                { id: 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT', value: 'Appropriate to implement' }
+            ]
         },
         PEER_REVIEW: {
             id: 'PEER_REVIEW',
             heading: '',
-            content: ''
+            content: '',
+            ratings: [
+                { id: 'REVIEW_CLEAR', value: 'Clear' },
+                { id: 'REVIEW_INSIGHTFUL', value: 'Insightful' },
+                { id: 'REVIEW_ORIGINAL', value: 'Original' }
+            ]
         }
     },
     licences: {

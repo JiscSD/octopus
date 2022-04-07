@@ -3,9 +3,9 @@ import * as publicationService from 'publication/service';
 import * as ratingService from 'rating/service';
 import * as I from 'interface';
 
-export const upsert  = async (
+export const upsert = async (
     event: I.AuthenticatedAPIRequest<I.CreateRatingRequestBody, undefined, I.GetPublicationPathParams>
-    ) => {
+) => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -13,17 +13,17 @@ export const upsert  = async (
         if (publication?.currentStatus !== 'LIVE') {
             return response.json(404, {
                 message: 'You cant rate a non live publication'
-            })
+            });
         }
-            
+
         // Ensure the request is trying to create a rating on a real publication
         if (!publication) {
             return response.json(404, {
                 message: 'No publication by the provided ID'
-            })
+            });
         }
 
-        // Ensure the user isn't rating their own publication 
+        // Ensure the user isn't rating their own publication
         if (publication.user.id === event?.user.id) {
             return response.json(403, {
                 message: 'Cannot rate your own publication'
@@ -39,13 +39,13 @@ export const upsert  = async (
         }
 
         const rating = await ratingService.upsert(
-            event.pathParameters.id, 
-            event.user.id, 
+            event.pathParameters.id,
+            event.user.id,
             event.body.type,
-            event.body.value,
-        )
-        
-        // passed all of the if else statements, create a rating 
+            event.body.value
+        );
+
+        // passed all of the if else statements, create a rating
         return response.json(200, rating);
     } catch (err) {
         console.log(err);

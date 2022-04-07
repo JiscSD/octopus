@@ -66,3 +66,9 @@
         @apply focus:border-grey-100;
     }
 }
+
+@layer utilities {
+    .arrow-clip {
+        clip-path: polygon(100% 0, 0 0, 50% 100%);
+    }
+}

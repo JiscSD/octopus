@@ -92,7 +92,7 @@ export interface UpdateStatusPathParams {
     status: 'LIVE';
 }
 
-export interface  UpdatePublicationRequestBody {
+export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
     licence?: LicenceType;
@@ -287,9 +287,9 @@ export type Ratings =
     | 'HYPOTHESIS_WELL_DEFINED'
     | 'HYPOTHESIS_ORIGINAL'
     | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'METHOD_CLEAR'
-    | 'METHOD_ORIGINAL'
-    | 'METHOD_APPROPRIATE_TEST_OF_HYPOTHESIS'
+    | 'PROTOCOL_CLEAR'
+    | 'PROTOCOL_ORIGINAL'
+    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
     | 'DATA_WELL_ANNOTATED'
     | 'DATA_SIZE_OF_DATASET'
     | 'DATA_FOLLOWED_PROTOCOL'
@@ -304,7 +304,7 @@ export type Ratings =
     | 'REAL_WORLD_APPLICATION_IMPACTFUL'
     | 'REVIEW_CLEAR'
     | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL'
+    | 'REVIEW_ORIGINAL';
 
 export interface CreateRatingRequestBody {
     type: Ratings;
