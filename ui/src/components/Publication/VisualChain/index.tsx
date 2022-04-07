@@ -8,8 +8,8 @@ type Props = {
     highlighted: Types.PublicationType;
 };
 
-const VisualChain: React.FC<Props> = (props): JSX.Element => (
-    <div>
+const VisualChain: React.FC<Props> = (props): React.ReactElement => (
+    <div className="print:hidden">
         {Config.values.publicationTypes.map((type, index) => {
             return type !== 'PEER_REVIEW' ? (
                 <div
@@ -18,9 +18,9 @@ const VisualChain: React.FC<Props> = (props): JSX.Element => (
                 >
                     <span
                         title={type}
-                        className={`text-grey-800 transition-colors duration-500 dark:text-white ${
+                        className={`text-grey-800 transition-colors duration-500 dark:text-white-50 ${
                             props.highlighted === type
-                                ? `font-bold underline decoration-pink-500 underline-offset-2`
+                                ? `font-bold underline decoration-teal-500 underline-offset-2`
                                 : `${
                                       Config.values.publicationTypes[index + 1] === props.highlighted ||
                                       Config.values.publicationTypes[index - 1] === props.highlighted

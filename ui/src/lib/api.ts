@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
@@ -57,14 +56,34 @@ export const patch = async (url: string, body: Interfaces.JSON, token: string | 
     return response;
 };
 
+export const put = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.put(url, body, token ? headers : undefined);
+    return response;
+};
+
+export const destroy = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+    const headers = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    const response = await api.delete(url, token ? headers : undefined);
+    return response;
+};
+
 export const search = async (
     searchType: string | Types.SearchType,
-    query: string | null = null,
+    search: string | null = null,
     publicationType: string | null = null,
     limit: number | null = null,
-    offset: number | null = null,
-    orderBy: Types.OrderBySearchOption | null = null,
-    orderDirection: Types.OrderDirectionSearchOption | null = null
+    offset: number | null = null
 ): Promise<Interfaces.SearchResults> => {
     let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
     let params: string = '';
@@ -72,9 +91,7 @@ export const search = async (
     // Global search params
     limit && (params += '&limit=' + limit);
     offset && (params += '&offset=' + offset);
-    orderBy && (params += '&orderBy=' + orderBy);
-    orderDirection && (params += '&orderDirection=' + orderDirection);
-    query && (params += '&search=' + query);
+    search && (params += '&search=' + search);
 
     // publication specific params
     searchType === 'publications' && publicationType && (params += '&type=' + publicationType);

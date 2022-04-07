@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
 
@@ -14,29 +15,34 @@ import * as api from '@api';
 
 const steps: Interfaces.PublicationBuildingStep[] = [
     {
-        title: 'Publication title',
-        subTitle: 'Publication title & type information',
-        component: <Components.PublicationCreationStepOne />
+        title: 'Key information',
+        subTitle: 'Key information',
+        component: <Components.PublicationCreationStepOne />,
+        icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
     {
-        title: 'Manage links',
-        subTitle: 'Manage links',
-        component: <Components.PublicationCreationStepTwo />
+        title: 'Linked publications',
+        subTitle: 'Linked publications',
+        component: <Components.PublicationCreationStepTwo />,
+        icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
     },
     {
-        title: 'Additional information',
-        subTitle: 'Additional information',
-        component: <Components.PublicationCreationStepThree />
+        title: 'Main text',
+        subTitle: 'Main text',
+        component: <Components.PublicationCreationStepFour />,
+        icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Full text',
-        subTitle: 'Full text',
-        component: <Components.PublicationCreationStepFour />
+        title: 'Conflict of interest',
+        subTitle: 'Conflict of interest',
+        component: <Components.PublicationCreationStepThree />,
+        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Review & Publish',
+        title: 'Review & publish',
         subTitle: 'Review your publications content',
-        component: <Components.PublicationCreationStepFive />
+        component: <Components.PublicationCreationStepFive />,
+        icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
     }
 ];
 
@@ -53,12 +59,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.for) forPublicationID = context.query.for;
     if (context.query.step) step = context.query.step;
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
-    // we're only dealing with one provided publication to link to from params for now.
-    // future feature to support multiple
     if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
     if (Array.isArray(step)) step = step[0];
 
-    // handle pre loading a drafted publication & passing it as a page prop
     if (draftedPublicationID) {
         try {
             const response = await api.get(`${Config.endpoints.publications}/${draftedPublicationID}`, token);
@@ -68,6 +71,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             error = message;
         }
     } else {
+        return {
+            notFound: true
+        };
+    }
+
+    if (draftedPublication?.currentStatus !== 'DRAFT') {
         return {
             notFound: true
         };
@@ -92,7 +101,7 @@ type Props = {
     error: string | null;
 };
 
-const Edit: Types.NextPage<Props> = (props): JSX.Element => {
+const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     let defaultStep = props.step ? parseInt(props.step) : 0;
     defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;
@@ -100,42 +109,38 @@ const Edit: Types.NextPage<Props> = (props): JSX.Element => {
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
 
-    const updateTitle = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateTitle
-    );
-    const updateType = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateType
-    );
-    const updateContent = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateContent
-    );
-    const updateLicence = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateLicence
-    );
+    const updateId = Stores.usePublicationCreationStore((state) => state.updateId);
+    const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
+    const updateType = Stores.usePublicationCreationStore((state) => state.updateType);
+    const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
+    const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
+    const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
+    const updateLicence = Stores.usePublicationCreationStore((state) => state.updateLicence);
     const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestStatus
+        (state) => state.updateConflictOfInterestStatus
     );
     const updateConflictOfInterestText = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
+        (state) => state.updateConflictOfInterestText
     );
-    const updateForPublicationsID = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateForPublicationsID
-    );
-    const updateDraftedPublication = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateDraftedPublication
-    );
+    const updateLinkTo = Stores.usePublicationCreationStore((state) => state.updateLinkTo);
 
     React.useEffect(() => {
-        updateDraftedPublication(props.draftedPublication);
-        if (props.draftedPublication?.title) updateTitle(props.draftedPublication.title);
-        if (props.draftedPublication?.type) updateType(props.draftedPublication.type);
-        if (props.draftedPublication?.content) updateContent(props.draftedPublication.content);
-        if (props.draftedPublication?.licence) updateLicence(props.draftedPublication.licence);
-        if (props.draftedPublication?.conflictOfInterestStatus)
+        if (props.draftedPublication.id) updateId(props.draftedPublication.id);
+        if (props.draftedPublication.title) updateTitle(props.draftedPublication.title);
+        if (props.draftedPublication.type) updateType(props.draftedPublication.type);
+        if (props.draftedPublication.description) updateDescription(props.draftedPublication.description);
+        if (props.draftedPublication.keywords.length) {
+            updateKeywords(props.draftedPublication.keywords.join(', '));
+        } else {
+            updateKeywords('');
+        }
+        if (props.draftedPublication.content) updateContent(props.draftedPublication.content);
+        if (props.draftedPublication.licence) updateLicence(props.draftedPublication.licence);
+        if (props.draftedPublication.conflictOfInterestStatus)
             updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        if (props.draftedPublication?.conflictOfInterestText)
+        if (props.draftedPublication.conflictOfInterestText)
             updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
-        if (props.forPublicationID) updateForPublicationsID(props.forPublicationID);
+        updateLinkTo(props.draftedPublication.linkedTo);
     }, []);
 
     React.useEffect(() => {

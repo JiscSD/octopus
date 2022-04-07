@@ -16,58 +16,48 @@ A new way to publish your scientific work that's fast, free and fair.
 
 ---
 
-## Monorepo file structure
+## Running locally
+
+To run this application locally you will need:
+
+-   [Node v14](https://nodejs.org/en/blog/release/v14.17.3/)
+-   [Docker](https://www.docker.com/)
+-   [Serverless Framework](https://www.serverless.com/)
+-   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+
+First, you will need to setup the databases and email server:
 
 ```bash
-├── 📁 .github
-│   ├── 📁 ISSUE_TEMPLATE
-│   │   └── 📄 config.yml                          # issue template
-│   │
-│   ├── 📁 workflows
-│   │   ├── 📄 api-tasks.yml                       # github actions for api tasks
-│   │   └── 📄 ui-tasks.yml                        # github actions for ui tasks
-│   │
-│   ├── 📄 CODE-OF-CONDUCT.md                      # project code of conduct
-│   ├── 📄 CONTRIBUTING.md                         # project contributing guidelines
-│   └── 📄 PULL_REQUEST_TEMPLATE.md                # pull request template
-│
-├── 📁 api
-│   ├── 📁 prisma
-│   │   ├── 📁 migrations                          # prisma migration files
-│   │   ├── 📁 seeds                               # prisma test and int seed files
-│   │   └── 📄 schema.prisma                       # prisma schema
-│   │
-│   ├── 📁 src
-│   │   ├── 📁 components
-│   │   ├── 📁 config
-│   │   ├── 📁 lib
-│   │   ├── 📁 middleware
-│   │   └── 📁 utilities
-│   │
-│   ├── 📄 .gitignore
-│   ├── 📄 package.json
-│   ├── 📄 serverless.yml
-│   └── 📄 README.md                                # api read me
-│
-├── 📁 infra
-│   ├── 📁 create-app                              # terraform project for env infrastructure
-│   ├── 📁 modules                                 # terraform modules
-│   └── 📄 README.md                               # infra read me
-│
-├── 📁 ui
-│   ├── 📁 public
-│   ├── 📁 src
-│   ├── 📄 lighthouserc.js                         # lighthouse ci accessibility tool config
-│   ├── 📄 tailwind.config.js                      # tailwind config
-│   ├── 📄 package.json
-│   ├── 📄 .gitignore
-│   └── 📄 README.md                               # ui read me
-│
-│
-├── 📄 .gitignore
-├── 📄 COPYING                                     # full licence text
-├── 📄 docker-compose.yml                          # docker config
-└── 📄 README.md                                   # full project read me
+$ ~/octopus docker-compose up
+```
+
+Before running the API, you will need to set the following `ENV` variables in `/api/.env`
+
+```bash
+DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
+ORCID_SECRET=ORCID_SECRET_FROM_APP
+ORCID_ID=APP-ORCID_APP_ID_FROM_APP
+JWT_SECRET=abcdefghijklmnopqrstuvwxyz
+STAGE=local
+ELASTICSEARCH_PROTOCOL=http
+ELASTICSEARCH_USER=admin
+ELASTICSEARCH_PASSWORD=admin
+ELASTICSEARCH_ENDPOINT=localhost:9200
+```
+
+Then you can seed the database and start the API:
+
+```bash
+$ ~/octopus/api npm install
+$ ~/octopus/api npm run seed:local
+$ ~/octopus/api npm run start:local
+```
+
+To start the UI, simple:
+
+```bash
+$ ~/octopus/ui npm install
+$ ~/octopus/ui npm run dev
 ```
 
 ---
@@ -94,6 +84,8 @@ These github-actions workflows run on every push:
 
 ### UI
 
+-   **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
+-   **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
 -   **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
 
 All checks will need to pass in order for a PR to be reviewed and merged.
@@ -169,3 +161,59 @@ Everyone interacting with this codebase should adhere to our [Code of Conduct](.
 
 Octopus is available under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  
 See [COPYING](/COPYING) for the full licence text.
+
+---
+
+## Monorepo file structure
+
+```bash
+├── 📁 .github
+│   ├── 📁 ISSUE_TEMPLATE
+│   │   └── 📄 config.yml                          # issue template
+│   │
+│   ├── 📁 workflows
+│   │   ├── 📄 api-tasks.yml                       # github actions for api tasks
+│   │   └── 📄 ui-tasks.yml                        # github actions for ui tasks
+│   │
+│   ├── 📄 CODE-OF-CONDUCT.md                      # project code of conduct
+│   ├── 📄 CONTRIBUTING.md                         # project contributing guidelines
+│   └── 📄 PULL_REQUEST_TEMPLATE.md                # pull request template
+│
+├── 📁 api
+│   ├── 📁 prisma
+│   │   ├── 📁 migrations                          # prisma migration files
+│   │   ├── 📁 seeds                               # prisma test and int seed files
+│   │   └── 📄 schema.prisma                       # prisma schema
+│   │
+│   ├── 📁 src
+│   │   ├── 📁 components
+│   │   ├── 📁 config
+│   │   ├── 📁 lib
+│   │   ├── 📁 middleware
+│   │   └── 📁 utilities
+│   │
+│   ├── 📄 .gitignore
+│   ├── 📄 package.json
+│   ├── 📄 serverless.yml
+│   └── 📄 README.md                                # api read me
+│
+├── 📁 infra
+│   ├── 📁 create-app                              # terraform project for env infrastructure
+│   ├── 📁 modules                                 # terraform modules
+│   └── 📄 README.md                               # infra read me
+│
+├── 📁 ui
+│   ├── 📁 public
+│   ├── 📁 src
+│   ├── 📄 lighthouserc.js                         # lighthouse ci accessibility tool config
+│   ├── 📄 tailwind.config.js                      # tailwind config
+│   ├── 📄 package.json
+│   ├── 📄 .gitignore
+│   └── 📄 README.md                               # ui read me
+│
+│
+├── 📄 .gitignore
+├── 📄 COPYING                                     # full licence text
+├── 📄 docker-compose.yml                          # docker config
+└── 📄 README.md                                   # full project read me
+```

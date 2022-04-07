@@ -18,7 +18,7 @@ type Props = {
     className?: string;
 };
 
-const Alert: React.FC<Props> = (props): JSX.Element => {
+const Alert: React.FC<Props> = (props): React.ReactElement => {
     const [show, setShow] = React.useState(false);
     const [classes, setClasses] = React.useState({
         title: '',
@@ -43,22 +43,22 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 classesCopy.background = 'bg-yellow-200 dark:bg-yellow-500';
                 break;
             case 'ERROR':
-                classesCopy.title = 'text-grey-800 dark:text-white';
+                classesCopy.title = 'text-grey-800 dark:text-white-50';
                 classesCopy.details = 'text-grey-800 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.XCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
                 classesCopy.background = 'bg-pink-100 dark:bg-pink-500';
                 break;
             case 'SUCCESS':
-                classesCopy.title = 'text-grey-800 dark:text-white';
-                classesCopy.details = 'text-grey-700 dark:text-white';
+                classesCopy.title = 'text-grey-800 dark:text-white-50';
+                classesCopy.details = 'text-grey-700 dark:text-white-50';
                 classesCopy.icon = (
                     <OutlineIcons.CheckCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
@@ -66,15 +66,15 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                 break;
             default:
                 // Info
-                classesCopy.title = 'text-grey-800 dark:text-white';
-                classesCopy.details = 'text-grey-700 dark:text-grey-50';
+                classesCopy.title = 'text-white-100 dark:text-white-50';
+                classesCopy.details = 'text-white-100 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.InformationCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white ${classes.icon}`}
+                        className={`h-5 w-5 text-white-100 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-blue-200 dark:bg-blue-500';
+                classesCopy.background = 'bg-teal-700 dark:bg-blue-500';
         }
 
         setClasses(classesCopy);
@@ -93,9 +93,9 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="flex">
-                        <div className="flex-shrink-0">{classes.icon}</div>
-                        <div className="ml-3">
+                    <div className="grid grid-cols-20">
+                        <div className="col-span-1 row-span-2 mr-4">{classes.icon}</div>
+                        <div className="col-span-19">
                             <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                 {props.title}
                             </h3>
@@ -109,31 +109,31 @@ const Alert: React.FC<Props> = (props): JSX.Element => {
                                 </div>
                             )}
 
-                            <div className="mt-6">
-                                <div className="-mx-2 -my-1.5 flex">
-                                    {props.supportLink && (
-                                        <Components.Link
-                                            href={props.supportLink.url}
-                                            openNew={props.supportLink.external}
-                                            className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
-                                        >
-                                            <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white transition-colors duration-500">
-                                                {props.supportLink.text}
-                                            </span>
-                                        </Components.Link>
-                                    )}
-
-                                    {props.allowDismiss && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setShow(false)}
-                                            className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                                        >
-                                            Dismiss
-                                        </button>
-                                    )}
+                            {props.supportLink && (
+                                <div className="mt-3 flex">
+                                    <Components.Link
+                                        href={props.supportLink.url}
+                                        openNew={props.supportLink.external}
+                                        className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
+                                    >
+                                        <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
+                                            {props.supportLink.text}
+                                        </span>
+                                    </Components.Link>
                                 </div>
-                            </div>
+                            )}
+
+                            {props.allowDismiss && (
+                                <div className="mt-3 flex">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShow(false)}
+                                        className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                    >
+                                        Dismiss
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </Framer.motion.div>

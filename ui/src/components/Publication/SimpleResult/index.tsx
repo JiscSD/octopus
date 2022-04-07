@@ -8,8 +8,8 @@ type Props = {
     publication: Interfaces.CorePublication;
 };
 
-const SimpleResult: React.FC<Props> = (props): JSX.Element => (
-    <div className="my-4 rounded border border-transparent bg-white p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
+const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
+    <div className="w-full rounded border border-transparent bg-white-50 p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
         <div className="lg: flex justify-between">
             <div className="mb-3 flex items-end text-sm">
                 {props.publication.currentStatus === 'LIVE' ? (
@@ -41,7 +41,7 @@ const SimpleResult: React.FC<Props> = (props): JSX.Element => (
             </div>
             <span className="text-xs leading-3 text-teal-500 empty:hidden">{props.publication.doi}</span>
         </div>
-        <span className="block font-montserrat text-grey-800 transition-colors duration-500 dark:text-white">
+        <span className="block font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.publication.title}
         </span>
     </div>

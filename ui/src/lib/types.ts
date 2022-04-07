@@ -7,7 +7,9 @@ export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'ne
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
-    toggle: (e: React.FormEvent<HTMLButtonElement>) => void;
+    toggleDarkMode: () => void;
+    feedback: boolean;
+    toggleFeedback: () => void;
 };
 
 export type GlobalsStoreType = {
@@ -15,37 +17,57 @@ export type GlobalsStoreType = {
     toggleCmdPalette: () => void;
 };
 
+export type UserType = {
+    createdAt: string;
+    email: string | null;
+    exp: number;
+    firstName: string;
+    iat: number;
+    id: string;
+    lastName: string;
+    locked: boolean;
+    orcid: string;
+    role: string;
+    token: string;
+};
+
 export type AuthStoreType = {
-    user: null | {};
-    setUser: (user: any) => void;
+    user: null | UserType;
+    setUser: (user: null | UserType) => void;
 };
 
 export type PublicationCreationStoreType = {
+    error: null | string;
+    setError: (error: string | null) => void;
+    id: string;
+    updateId: (id: string) => void;
     title: string;
-    updateTitle: () => void;
+    updateTitle: (title: string) => void;
     type: PublicationType;
-    updateType: () => void;
+    updateType: (type: PublicationType) => void;
     content: string;
-    updateContent: () => void;
+    updateContent: (content: string) => void;
+    description: string;
+    updateDescription: (description: string) => void;
+    keywords: string;
+    updateKeywords: (keywords: string) => void;
     licence: LicenceType;
-    updateLicence: () => void;
+    updateLicence: (licence: LicenceType) => void;
     conflictOfInterestStatus: boolean;
-    updateConflictOfInterestStatus: () => void;
+    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => void;
     conflictOfInterestText: string;
-    updateConflictOfInterestText: () => void;
-    linkedFromPublication: Interfaces.Publication | null;
-    updateLinkedFromPublication: () => void;
-    forPublicationsID: string | null;
-    updateForPublicationsID: () => void;
-    draftedPublication: Interfaces.Publication | null;
-    updateDraftedPublication: () => void;
+    updateConflictOfInterestText: (conflictOfInterestText: string) => void;
+    linkTo: Interfaces.LinkTo[];
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
 
 export type SearchType = 'publications' | 'users';
 
-export type OrderBySearchOption = 'createdAt' | 'updatedAt' | 'publishedDate';
+export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
+
+export type UserOrderBySearchOption = 'updatedAt' | 'createdAt';
 
 export type OrderDirectionSearchOption = 'asc' | 'desc';
 

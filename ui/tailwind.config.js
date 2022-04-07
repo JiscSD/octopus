@@ -19,7 +19,7 @@ module.exports = {
                 900: 'hsl(216, 20%, 5%)' // #0a0c0f
             },
             teal: {
-                50: 'hsl(197, 54%, 95%)', // #ebf5f9
+                50: 'hsl(197, 54%, 99%)',
                 100: 'hsl(199, 55%, 85%)', // #c4e1ee
                 200: 'hsl(198, 55%, 75%)', // #9ccde2
                 300: 'hsl(198, 54%, 65%)', // #75b9d6
@@ -90,7 +90,10 @@ module.exports = {
                 800: 'hsl(46, 100%, 15%)', // #4d3b00
                 900: 'hsl(46, 100%, 5%)' // #1a1400
             },
-            white: '#ffffff',
+            white: {
+                50: '#ffffff',
+                100: '#f3f3f3'
+            },
             black: '#000000',
             orcid: '#437405'
         },
@@ -118,6 +121,59 @@ module.exports = {
                 19: 'repeat(19, minmax(0, 1fr))',
                 20: 'repeat(20, minmax(0, 1fr))',
                 21: 'repeat(21, minmax(0, 1fr))'
+            },
+            gridRowStart: {
+                8: '8',
+                9: '9',
+                10: '10',
+                11: '11',
+                12: '12',
+                13: '13',
+                14: '14',
+                15: '15',
+                16: '16',
+                17: '17',
+                18: '18',
+                19: '19',
+                20: '20',
+                21: '21'
+            },
+            gridRowEnd: {
+                8: '8',
+                9: '9',
+                10: '10',
+                11: '11',
+                12: '12',
+                13: '13',
+                14: '14',
+                15: '15',
+                16: '16',
+                17: '17',
+                18: '18',
+                19: '19',
+                20: '20',
+                21: '21'
+            },
+            gridColumn: {
+                'span-13': 'span 13 / span 13',
+                'span-14': 'span 14 / span 14',
+                'span-15': 'span 15 / span 15',
+                'span-16': 'span 16 / span 16',
+                'span-17': 'span 17 / span 17',
+                'span-18': 'span 18 / span 18',
+                'span-19': 'span 19 / span 19',
+                'span-20': 'span 20 / span 20',
+                'span-21': 'span 21 / span 21'
+            },
+            animation: {
+                'reverse-spin': 'reverse-spin 1s linear infinite'
+            },
+            keyframes: {
+                'reverse-spin': {
+                    from: {
+                        transform: 'rotate(360deg)'
+                    }
+                }
             }
         }
     },

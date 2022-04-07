@@ -148,37 +148,30 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
-            <Components.SectionTwo
-                className="bg-teal-50 dark:bg-grey-800"
-                waveFillTop="fill-teal-100 dark:fill-grey-500 transition-colors duration-500"
-                waveFillMiddle="fill-teal-200 dark:fill-grey-600 transition-colors duration-500"
-                waveFillBottom="fill-teal-700 dark:fill-grey-800 transition-colors duration-500"
-            >
-                {/* Frequently asked questions section */}
-                <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
-                    <Components.PageTitle text="Frequently asked questions" />
-                </section>
+            {/* Frequently asked questions section */}
+            <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
+                <Components.PageTitle text="Frequently asked questions" />
+            </section>
 
-                <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                    <aside className="col-span-2 pt-4 lg:block">
-                        <Components.FaqSidebar jumpToList={questionsAside} />
-                    </aside>
-                    <div className="pt-14 lg:col-span-6 lg:pt-0">
-                        {faqContents.map((faqContent) => (
-                            <div key={faqContent.id} id={faqContent.id} className="mx-auto pt-4 lg:w-10/12">
-                                <dl className="divide-y">
-                                    <dt className="mb-1 text-lg font-medium leading-6 text-grey-900 transition-colors duration-500 dark:text-white">
-                                        {faqContent.heading}
-                                    </dt>
-                                    <dd className="mb-14 pt-2 text-base leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                                        {parse(faqContent.content)}
-                                    </dd>
-                                </dl>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            </Components.SectionTwo>
+            <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                <aside className="col-span-2 pt-4 lg:block">
+                    <Components.FaqSidebar jumpToList={questionsAside} />
+                </aside>
+                <div className="pt-14 lg:col-span-6 lg:pt-0">
+                    {faqContents.map((faqContent) => (
+                        <div key={faqContent.id} id={faqContent.id} className="mx-auto pt-4 lg:w-10/12">
+                            <dl className="divide-y">
+                                <dt className="dark:text-white mb-1 text-lg font-medium leading-6 text-grey-900 transition-colors duration-500">
+                                    {faqContent.heading}
+                                </dt>
+                                <dd className="mb-14 pt-2 text-base leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                                    {parse(faqContent.content)}
+                                </dd>
+                            </dl>
+                        </div>
+                    ))}
+                </div>
+            </section>
         </Layouts.Standard>
     </>
 );

@@ -3,7 +3,7 @@ import * as config from 'config';
 
 let host;
 
-switch (process.env.stage) {
+switch (process.env.STAGE) {
     case 'local':
         host = 'https://api.localhost/local';
         break;

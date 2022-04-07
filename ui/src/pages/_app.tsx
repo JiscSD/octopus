@@ -1,5 +1,6 @@
 import React from 'react';
 import * as SWR from 'swr';
+import * as Framer from 'framer-motion';
 import NextNprogress from 'nextjs-progressbar';
 
 import * as Components from '@components';
@@ -36,6 +37,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
 
     React.useEffect(() => {
         isMounted.current = true;
+        // window.matchMedia('(prefers-color-scheme: dark)').matches === !darkMode ? toggleDarkMode() : null; // If we want to set the mode to the system, not good.
         setUpCmdPalListeners();
         setLoading(false);
         return () => {
@@ -47,10 +49,10 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     return (
         <>
             <NextNprogress
-                color={darkMode ? '#348cb1' : '#c4e1ee'}
+                color={'#348cb1'}
                 startPosition={0.3}
                 stopDelayMs={200}
-                height={3}
+                height={4}
                 showOnShallow={false}
                 options={{
                     showSpinner: false
@@ -62,7 +64,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         fetcher: (resource) => api.get(resource, undefined),
                         fallback: pageProps.fallback,
                         errorRetryCount: 3,
-                        refreshInterval: 60000, // for dev
+                        refreshInterval: 600000000, // for dev
                         onError: (error, key) => {
                             if (error.status === 403) {
                                 console.log('403 error');
@@ -74,11 +76,14 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         }
                     }}
                 >
-                    <div className={`font-inter antialiased ${darkMode ? 'dark' : ''}`}>
-                        <Components.CommandPalette />
-
-                        <Component {...pageProps} />
-                    </div>
+                    <Framer.MotionConfig reducedMotion="user">
+                        <div className={darkMode ? 'dark' : ''}>
+                            <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
+                                <Components.CommandPalette />
+                                <Component {...pageProps} />
+                            </div>
+                        </div>
+                    </Framer.MotionConfig>
                 </SWR.SWRConfig>
             )}
         </>

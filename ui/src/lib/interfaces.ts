@@ -21,38 +21,28 @@ export interface PublicationStatus {
     id: string;
 }
 
+export interface PublicationRef {
+    id: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatus;
+    type: Types.PublicationType;
+    user: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
+}
+
 export interface LinkTo {
     id: string;
-    publicationToRef: {
-        id: string;
-        title: string;
-        publishedDate: string;
-        currentStatus: PublicationStatus;
-        type: Types.PublicationType;
-        user: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            orcid: string;
-        };
-    };
+    publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
     id: string;
-    publicationFromRef: {
-        id: string;
-        title: string;
-        publishedDate: string;
-        currentStatus: PublicationStatus;
-        type: Types.PublicationType;
-        user: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            orcid: string;
-        };
-    };
+    publicationFromRef: PublicationRef;
 }
 
 export interface CorePublication {
@@ -81,11 +71,34 @@ export interface Publication extends CorePublication {
     conflictOfInterestText: string | null;
 }
 
-export interface User {
+export interface CoreUser {
     id: string;
     firstName: string;
     lastName: string;
     orcid: string;
+}
+
+export interface OrcidDateRecord {
+    day: string | null;
+    month: string | null;
+    year: string | null;
+}
+
+export interface OrcidHistoryRecord {
+    department: string | null;
+    organisation: string | null;
+    role: string | null;
+    startDate: OrcidDateRecord;
+    endDate: OrcidDateRecord;
+}
+
+export interface EmploymentRecord extends OrcidHistoryRecord {}
+
+export interface EducationRecord extends OrcidHistoryRecord {}
+
+export interface User extends CoreUser {
+    education: EducationRecord[];
+    employment: EmploymentRecord[];
     Publication: Publication[];
 }
 
@@ -130,7 +143,8 @@ export interface DocumentationEntryQueryParams {
 export interface PublicationBuildingStep {
     title: string;
     subTitle: string;
-    component: React.ReactNode;
+    component: React.ReactElement;
+    icon: React.ReactElement;
 }
 
 export interface LicenceTypeShape {

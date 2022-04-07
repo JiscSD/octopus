@@ -16,7 +16,7 @@ type Props = {
     className?: string;
 };
 
-const Result: React.FC<Props> = (props): JSX.Element => {
+const Result: React.FC<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
     return (
@@ -37,7 +37,7 @@ const Result: React.FC<Props> = (props): JSX.Element => {
                     <span className="leading-0 inline-flex font-montserrat text-xs font-semibold tracking-wide text-teal-300 empty:hidden">
                         {props.meta}
                     </span>
-                    <span className="mt-1 block text-base tracking-wide text-white">{props.title}</span>
+                    <span className="mt-1 block text-base tracking-wide text-white-50">{props.title}</span>
                     <div className="leading-0 my-2 flex justify-between font-montserrat text-xs text-xxs font-medium tracking-wide text-grey-100 empty:hidden">
                         {props.excerpt && <span className="block">{props.excerpt}</span>}
                         {props.date && <span className="block">{props.date}</span>}

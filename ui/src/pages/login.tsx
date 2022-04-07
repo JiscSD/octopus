@@ -37,7 +37,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
-        console.log(error);
     }
 
     if (!token || error) {
@@ -55,13 +54,14 @@ type Props = {
     token: string;
 };
 
-const Login: Types.NextPage<Props> = (props): JSX.Element => {
+const Login: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
+    const setUser = Stores.useAuthStore((state) => state.setUser);
 
     React.useEffect(() => {
         const decodedJWT = Helpers.setAndReturnJWT(props.token);
-        setUser(decodedJWT);
+        // @ts-ignore
+        if (decodedJWT) setUser({ ...decodedJWT, token: props.token });
         setTimeout(
             () =>
                 router.push({
@@ -78,9 +78,9 @@ const Login: Types.NextPage<Props> = (props): JSX.Element => {
                 <title>{Config.urls.orcidLoginCallback.title}</title>
             </Head>
 
-            <main className="flex h-screen w-full flex-col items-center justify-center bg-teal-50 dark:bg-grey-800">
+            <main className="flex h-screen w-full flex-col items-center justify-center bg-white-50 dark:bg-grey-800">
                 <Assets.Logo width={100} height={100} className="block animate-bounce fill-teal-500" />
-                <h1 className="mb-4 block font-montserrat text-lg font-semibold text-grey-800 dark:text-white">
+                <h1 className="mb-4 block font-montserrat text-lg font-semibold text-grey-800 dark:text-white-50">
                     Logging you into Octopus
                 </h1>
             </main>
