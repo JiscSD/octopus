@@ -1,5 +1,5 @@
 import * as testUtils from 'lib/testUtils';
-import prisma from 'lib/client';
+import * as client from 'lib/client';
 
 const publication = {
     user1Draft: 'publication-protocol-draft'
@@ -18,7 +18,7 @@ describe('reset coauthors', () => {
 
         expect(coauthor.status).toEqual(200);
 
-        const findCoAuthors = await prisma.coAuthors.findMany({
+        const findCoAuthors = await client.prisma.coAuthors.findMany({
             where: {
                 publicationId: publication.user1Draft
             }
