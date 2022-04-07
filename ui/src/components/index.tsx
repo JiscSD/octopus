@@ -44,7 +44,6 @@ export { default as UserHistoryTable } from './Users/HistoryTable';
 export { default as PageTitle } from './PageTitle';
 export { default as PageSubTitle } from './PageSubTitle';
 export { default as Alert } from './Alert';
-export { default as Accordion } from './Accordion';
 export { default as Search } from './SearchToggle';
 export { default as SearchDesktop } from './SearchToggle/Desktop';
 export { default as SearchMobile } from './SearchToggle/Mobile';
