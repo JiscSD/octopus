@@ -1,5 +1,5 @@
-@import url('./montsrrat.css');
-@import url('https://rsms.me/inter/inter.css');
+@import url('./fonts/montsrrat.css');
+@import url('./fonts/inter.css');
 
 @tailwind base;
 @tailwind components;
