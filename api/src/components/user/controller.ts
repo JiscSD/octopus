@@ -28,10 +28,13 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetUserPar
     }
 };
 
-export const getPublications = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>) => {
+export const getPublications = async (
+    event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
+) => {
     try {
-        const statuses: Array<I.ValidStatuses> = event.pathParameters.id === event.user?.id ? ['DRAFT', 'LIVE'] : ['LIVE'];
-        
+        const statuses: Array<I.ValidStatuses> =
+            event.pathParameters.id === event.user?.id ? ['DRAFT', 'LIVE'] : ['LIVE'];
+
         const userPublications = await userService.getPublications(event.pathParameters.id, statuses);
 
         if (!userPublications) {

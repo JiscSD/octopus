@@ -1,12 +1,12 @@
 import * as testUtils from 'lib/testUtils';
 import * as client from 'lib/client';
 
-//                      TEST IDEAS:  
-// - User can leave a review on another user’s publication 
-// - User cannot leave a review on their own publication 
-// - User needs to be authenticated to leave a review 
-// - Publication needs to exist for user to leave a review 
-// - Rating value cannot be less than 0 or more than 10 
+//                      TEST IDEAS:
+// - User can leave a review on another user’s publication
+// - User cannot leave a review on their own publication
+// - User needs to be authenticated to leave a review
+// - Publication needs to exist for user to leave a review
+// - Rating value cannot be less than 0 or more than 10
 // - Must be a valid rating category based on the publication type
 // - If the publication is in draft state we cannot leave a review
 
@@ -15,7 +15,7 @@ describe('Create publication ratings', () => {
         await testUtils.clearDB();
         await testUtils.initialSeed();
     });
-    
+
     test('User can leave a review on another users publication', async () => {
         const createRatingRequest = await testUtils.agent
             .post('/publications/publication-problem-live/ratings')
@@ -32,14 +32,14 @@ describe('Create publication ratings', () => {
 
     test('User cannot leave a review on their own publication', async () => {
         const createRatingRequest = await testUtils.agent
-        .post('/publications/publication-problem-live/ratings')
-        .query({
-            apiKey: '123456789'
-        })
-        .send({
-            type: 'PROBLEM_ORIGINAL',
-            value: '1'
-        });
+            .post('/publications/publication-problem-live/ratings')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM_ORIGINAL',
+                value: '1'
+            });
 
         expect(createRatingRequest.status).toEqual(403);
     });
@@ -155,7 +155,6 @@ describe('Create publication ratings', () => {
             }
         });
 
-        expect(checkForRating?.rating).toEqual(8)
+        expect(checkForRating?.rating).toEqual(8);
     });
-
 });
