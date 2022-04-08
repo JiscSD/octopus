@@ -10,63 +10,79 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Types from '@types';
 import * as api from '@api';
 
 type ActionProps = {
-    publication: Interfaces.Publication;
+    id: string;
+    type: Types.PublicationType;
 };
 
 type RatingSelectorProps = {
     title: string;
+    description: string;
     labels: string[];
-    value: number[];
+    value?: number[];
     callback: (value: number[]) => void;
     disabled: boolean;
 };
 
 const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElement => (
     <div>
-        <p className="mb-4 text-left text-sm text-grey-500">{props.title}</p>
-        <div className="mb-12">
-            <ReactRange.Range
-                step={1}
-                min={0}
-                max={10}
-                disabled={props.disabled}
-                values={props.value}
-                onChange={(values) => props.callback(values)}
-                renderMark={({ props, index }) => (
-                    <div {...props} style={{ ...props.style }} className="relative -bottom-2 h-4 w-0.5 bg-teal-200">
-                        <span className="absolute -left-full -bottom-full text-xxs text-grey-500">{index}</span>
-                    </div>
-                )}
-                renderTrack={({ props: trackProps, children }) => (
-                    <div
-                        {...trackProps}
-                        style={{ ...trackProps.style }}
-                        className={`h-2 w-full rounded-sm bg-teal-200 ${props.disabled ? 'opacity-50' : ''}`}
-                    >
-                        {children}
-                    </div>
-                )}
-                renderThumb={({ props: rangeProps, isDragged }) => (
-                    <div
-                        {...rangeProps}
-                        style={{ ...rangeProps.style }}
-                        className="relative h-4 w-4 rounded-full border-transparent bg-teal-600 outline-0 focus:ring-2 focus:ring-yellow-400"
-                    >
-                        {isDragged && (
+        <p className="mb-1 text-left text-base text-grey-700">{props.title}</p>
+        <p className="mb-4 text-left text-xs text-grey-500">{props.description}</p>
+        <div className="mb-12 grid grid-cols-8 items-start gap-4">
+            <div className="col-span-7">
+                <ReactRange.Range
+                    step={1}
+                    min={0}
+                    max={10}
+                    disabled={props.disabled}
+                    values={props.value ?? [5]}
+                    onChange={(values) => props.callback(values)}
+                    renderMark={({ props: markProps, index }) => (
+                        <div
+                            {...markProps}
+                            style={{ ...markProps.style }}
+                            className="relative -bottom-2 h-4 w-0.5 bg-teal-200"
+                        >
                             <span
-                                className={`absolute -top-7 left-1/2 z-50 w-fit -translate-x-1/2 whitespace-nowrap rounded bg-teal-700 px-2 py-0.5 text-xs text-white-50 
-                                                ${props.value[0] === 0 && '!left-0 !translate-x-0'} 
-                                                ${props.value[0] === 10 && '!right-0 !-translate-x-full'}`}
+                                className={`absolute -bottom-full text-xxs text-grey-500 
+                                ${index === 0 ? 'left-0' : ''} ${index === 10 ? 'right-0 left-auto' : ''}`}
                             >
-                                {props.labels[props.value[0]]}
+                                {(index === 0 && props.labels[0]) || (index === 10 && props.labels[10])}
                             </span>
-                        )}
-                    </div>
-                )}
-            />
+                        </div>
+                    )}
+                    renderTrack={({ props: trackProps, children }) => (
+                        <div
+                            {...trackProps}
+                            style={{ ...trackProps.style }}
+                            className={`h-2 w-full rounded-sm bg-teal-200 ${props.disabled ? 'opacity-50' : ''}`}
+                        >
+                            {children}
+                        </div>
+                    )}
+                    renderThumb={({ props: rangeProps, isDragged }) => (
+                        <div
+                            {...rangeProps}
+                            style={{ ...rangeProps.style }}
+                            className="relative h-4 w-4 rounded-full border-transparent bg-teal-600 outline-0 focus:ring-2 focus:ring-yellow-400"
+                        >
+                            {/* {isDragged && (
+                                <span
+                                    className={`absolute -top-7 left-1/2 z-50 w-fit -translate-x-1/2 whitespace-nowrap rounded bg-teal-700 px-2 py-0.5 text-xs text-white-50
+                                                ${props.value[0] === 0 && '!left-0 !translate-x-0'}
+                                                ${props.value[0] === 10 && '!right-0 !-translate-x-full'}`}
+                                >
+                                    {props.labels[props.value[0]]}
+                                </span>
+                            )} */}
+                        </div>
+                    )}
+                />
+            </div>
+            <span className="col-span-1 text-sm text-grey-800">{props.value ? props.value[0] : 'N/A'}</span>
         </div>
     </div>
 );
@@ -76,43 +92,49 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const SWRConfig = SWR.useSWRConfig();
     const user = Stores.useAuthStore((state) => state.user);
     const [showModel, setShowModel] = React.useState(false);
-    const [firstRatingValue, setFirstRatingValue] = React.useState([5]);
-    const [secondRatingValue, setSecondRatingValue] = React.useState([5]);
-    const [thirdRatingValue, setThirdRatingValue] = React.useState([5]);
+    const [firstRatingValue, setFirstRatingValue] = React.useState<number[] | undefined>();
+    const [secondRatingValue, setSecondRatingValue] = React.useState<number[] | undefined>();
+    const [thirdRatingValue, setThirdRatingValue] = React.useState<number[] | undefined>();
     const [error, setError] = React.useState<string | undefined>();
     const [submitting, setSubmitting] = React.useState(false);
 
     const save = async () => {
         setSubmitting(true);
         try {
-            await api.post(
-                `${Config.endpoints.publications}/${props.publication.id}/ratings`,
-                {
-                    type: Config.values.octopusInformation.publications[props.publication.type].ratings[0].id,
-                    value: firstRatingValue[0]
-                },
-                user?.token
-            );
+            if (firstRatingValue) {
+                await api.post(
+                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    {
+                        type: Config.values.octopusInformation.publications[props.type].ratings[0].id,
+                        value: firstRatingValue[0]
+                    },
+                    user?.token
+                );
+            }
 
-            await api.post(
-                `${Config.endpoints.publications}/${props.publication.id}/ratings`,
-                {
-                    type: Config.values.octopusInformation.publications[props.publication.type].ratings[1].id,
-                    value: secondRatingValue[0]
-                },
-                user?.token
-            );
+            if (secondRatingValue) {
+                await api.post(
+                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    {
+                        type: Config.values.octopusInformation.publications[props.type].ratings[1].id,
+                        value: secondRatingValue[0]
+                    },
+                    user?.token
+                );
+            }
 
-            await api.post(
-                `${Config.endpoints.publications}/${props.publication.id}/ratings`,
-                {
-                    type: Config.values.octopusInformation.publications[props.publication.type].ratings[2].id,
-                    value: thirdRatingValue[0]
-                },
-                user?.token
-            );
+            if (thirdRatingValue) {
+                await api.post(
+                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    {
+                        type: Config.values.octopusInformation.publications[props.type].ratings[2].id,
+                        value: thirdRatingValue[0]
+                    },
+                    user?.token
+                );
+            }
 
-            SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
+            SWRConfig.mutate(`${Config.endpoints.publications}/${props.id}`);
             setShowModel(false);
         } catch (err) {
             console.log(err);
@@ -125,9 +147,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         if (!showModel) {
             // Takes into account closing transition time
             setTimeout(() => {
-                setFirstRatingValue([5]);
-                setSecondRatingValue([5]);
-                setThirdRatingValue([5]);
+                setFirstRatingValue(undefined);
+                setSecondRatingValue(undefined);
+                setThirdRatingValue(undefined);
                 setError(undefined);
                 setSubmitting(false);
             }, 200);
@@ -149,35 +171,39 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     {!!submitting && (
                         <OutlineIcons.RefreshIcon className="absolute right-4 top-4 h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                     )}
+                    <p className="mt-4 mb-8 text-left text-sm text-grey-700">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet quisquam facere fuga doloremque
+                        animi unde nihil debitis.
+                    </p>
                     <div className="mb-8">
                         {!!error && <Components.Alert severity="ERROR" title={error} className="my-4 text-left" />}
-                        <div className="mb-20 mt-8 space-y-16">
+                        <div className="mb-20 space-y-12">
                             <RatingSelector
-                                title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .value
+                                title={Config.values.octopusInformation.publications[props.type].ratings[0].value}
+                                description={
+                                    Config.values.octopusInformation.publications[props.type].ratings[0].description
                                 }
-                                labels={['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
+                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
                                 value={firstRatingValue}
                                 callback={setFirstRatingValue}
                                 disabled={submitting}
                             />
                             <RatingSelector
-                                title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .value
+                                title={Config.values.octopusInformation.publications[props.type].ratings[1].value}
+                                description={
+                                    Config.values.octopusInformation.publications[props.type].ratings[1].description
                                 }
-                                labels={['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
+                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
                                 value={secondRatingValue}
                                 callback={setSecondRatingValue}
                                 disabled={submitting}
                             />
                             <RatingSelector
-                                title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .value
+                                title={Config.values.octopusInformation.publications[props.type].ratings[2].value}
+                                description={
+                                    Config.values.octopusInformation.publications[props.type].ratings[2].description
                                 }
-                                labels={['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']}
+                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
                                 value={thirdRatingValue}
                                 callback={setThirdRatingValue}
                                 disabled={submitting}
@@ -210,10 +236,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 <button
                     aria-label="Download JSON"
                     onClick={() =>
-                        Helpers.blobFileDownload(
-                            `https://int.api.octopus.ac/v1/publications/${props.publication.id}`,
-                            `${props.publication.id}.json`
-                        )
+                        Helpers.blobFileDownload(`${Config.endpoints.publications}/${props.id}`, `${props.id}.json`)
                     }
                     className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
                 >
@@ -222,30 +245,40 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 </button>
             </div>
 
-            {/** Button actions */}
-            <button
-                aria-label="Write review button"
-                onClick={() => {
-                    router.push({
-                        pathname: `${Config.urls.createPublication.path}`,
-                        query: {
-                            for: props.publication.id,
-                            type: 'PEER_REVIEW'
-                        }
-                    });
-                }}
-                className="flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
-            >
-                Write a review
-            </button>
-            {!!user && (
-                <button
-                    aria-label="Rate this publication"
-                    onClick={() => setShowModel(true)}
-                    className="flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
-                >
-                    Rate this publication
-                </button>
+            {user ? (
+                <>
+                    <button
+                        aria-label="Write review button"
+                        onClick={() => {
+                            router.push({
+                                pathname: `${Config.urls.createPublication.path}`,
+                                query: {
+                                    for: props.id,
+                                    type: 'PEER_REVIEW'
+                                }
+                            });
+                        }}
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                    >
+                        Write a review
+                    </button>
+                    <button
+                        aria-label="Rate this publication"
+                        onClick={() => setShowModel(true)}
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                    >
+                        Rate this publication
+                    </button>
+                </>
+            ) : (
+                <>
+                    <Components.Link
+                        href={Config.urls.orcidLogin.path}
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                    >
+                        Sign in to rate & review
+                    </Components.Link>
+                </>
             )}
         </>
     );

@@ -9,6 +9,23 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
+type SidebarCardProps = {
+    publication: Interfaces.Publication;
+    sectionList: {
+        title: string;
+        href: string;
+    }[];
+};
+
+const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
+    <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
+        <Components.PublicationSidebarCardGeneral publication={props.publication} />
+        <Components.PublicationSidebarCardRatings id={props.publication.id} type={props.publication.type} />
+        <Components.PublicationSidebarCardActions id={props.publication.id} type={props.publication.type} />
+        <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
+    </div>
+);
+
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
@@ -105,12 +122,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         )}
 
                         <div className="block xl:hidden">
-                            <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
-                                <Components.PublicationSidebarCardGeneral publication={props.publication} />
-                                <Components.PublicationSidebarCardRatings publication={props.publication} />
-                                <Components.PublicationSidebarCardActions publication={props.publication} />
-                                <Components.PublicationSidebarCardSections sectionList={sectionList} />
-                            </div>
+                            <SidebarCard publication={props.publication} sectionList={sectionList} />
                         </div>
                     </header>
 
@@ -243,12 +255,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
-                        <div className="w-fit space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 xl:w-full">
-                            <Components.PublicationSidebarCardGeneral publication={props.publication} />
-                            <Components.PublicationSidebarCardRatings publication={props.publication} />
-                            <Components.PublicationSidebarCardActions publication={props.publication} />
-                            <Components.PublicationSidebarCardSections sectionList={sectionList} />
-                        </div>
+                        <SidebarCard publication={props.publication} sectionList={sectionList} />
                     </div>
                 </aside>
             </Layouts.Publication>

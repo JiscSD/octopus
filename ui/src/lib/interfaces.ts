@@ -69,6 +69,7 @@ export interface Publication extends CorePublication {
     linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
+    ratings: Rating;
 }
 
 export interface CoreUser {
@@ -152,4 +153,51 @@ export interface LicenceTypeShape {
     nicename: string;
     description: string;
     link: string;
+}
+
+export interface Rating {
+    aggregate: RatingEntry[];
+    overall: {
+        _avg: {
+            rating: number;
+        };
+        _count: {
+            rating: number;
+        };
+    };
+}
+
+export interface RatingEntry {
+    id: string;
+    category: Types.Ratings;
+    _count: {
+        id: number;
+    };
+    _avg: {
+        rating: number;
+    };
+}
+
+export interface OctopusInformation {
+    publications: {
+        [key in Types.PublicationType]: {
+            id: Types.PublicationType;
+            heading: string;
+            content: string;
+            ratings: {
+                id: Types.Ratings;
+                value: string;
+                description: string;
+            }[];
+        };
+    };
+    licences: {
+        [key in Types.LicenceType]: {
+            value: Types.LicenceType;
+            nicename: string;
+            fullName: string;
+            description: string;
+            link: string;
+        };
+    };
 }

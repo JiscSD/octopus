@@ -12,39 +12,16 @@ export const publicationTypes: Types.PublicationType[] = [
     'PEER_REVIEW'
 ];
 
-interface OctopusInformation {
-    publications: {
-        [key in Types.PublicationType]: {
-            id: Types.PublicationType;
-            heading: string;
-            content: string;
-            ratings: {
-                id: Types.Ratings;
-                value: string;
-            }[];
-        };
-    };
-    licences: {
-        [key in Types.LicenceType]: {
-            value: Types.LicenceType;
-            nicename: string;
-            fullName: string;
-            description: string;
-            link: string;
-        };
-    };
-}
-
-export const octopusInformation: OctopusInformation = {
+export const octopusInformation: Interfaces.OctopusInformation = {
     publications: {
         PROBLEM: {
             id: 'PROBLEM',
             heading: 'Research Problem',
             content: 'A neatly defined scientific problem.',
             ratings: [
-                { id: 'PROBLEM_WELL_DEFINED', value: 'Well defined' },
-                { id: 'PROBLEM_ORIGINAL', value: 'Original' },
-                { id: 'PROBLEM_IMPORTANT', value: 'Important' }
+                { id: 'PROBLEM_WELL_DEFINED', value: 'Well defined', description: 'Lorem ipsum' },
+                { id: 'PROBLEM_ORIGINAL', value: 'Original', description: 'Lorem ipsum' },
+                { id: 'PROBLEM_IMPORTANT', value: 'Important', description: 'Lorem ipsum' }
             ]
         },
         HYPOTHESIS: {
@@ -53,9 +30,9 @@ export const octopusInformation: OctopusInformation = {
             content:
                 'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
             ratings: [
-                { id: 'HYPOTHESIS_ORIGINAL', value: 'Original' },
-                { id: 'HYPOTHESIS_SCIENTIFICALLY_VALID', value: 'scientifically valid' },
-                { id: 'HYPOTHESIS_WELL_DEFINED', value: 'Well defined' }
+                { id: 'HYPOTHESIS_ORIGINAL', value: 'Original', description: 'Lorem ipsum' },
+                { id: 'HYPOTHESIS_SCIENTIFICALLY_VALID', value: 'scientifically valid', description: 'Lorem ipsum' },
+                { id: 'HYPOTHESIS_WELL_DEFINED', value: 'Well defined', description: 'Lorem ipsum' }
             ]
         },
         PROTOCOL: {
@@ -63,9 +40,9 @@ export const octopusInformation: OctopusInformation = {
             heading: 'Protocol',
             content: 'A practical method of testing an existing published Hypothesis.',
             ratings: [
-                { id: 'PROTOCOL_CLEAR', value: 'Clear' },
-                { id: 'PROTOCOL_ORIGINAL', value: 'Original' },
-                { id: 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS', value: 'Appropriate' }
+                { id: 'PROTOCOL_CLEAR', value: 'Clear', description: 'Lorem ipsum' },
+                { id: 'PROTOCOL_ORIGINAL', value: 'Original', description: 'Lorem ipsum' },
+                { id: 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS', value: 'Appropriate', description: 'Lorem ipsum' }
             ]
         },
         DATA: {
@@ -74,9 +51,9 @@ export const octopusInformation: OctopusInformation = {
             content:
                 'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
             ratings: [
-                { id: 'DATA_WELL_ANNOTATED', value: 'Well annotated' },
-                { id: 'DATA_SIZE_OF_DATASET', value: 'Size of dataset' },
-                { id: 'DATA_FOLLOWED_PROTOCOL', value: 'Followed protcol' }
+                { id: 'DATA_WELL_ANNOTATED', value: 'Well annotated', description: 'Lorem ipsum' },
+                { id: 'DATA_SIZE_OF_DATASET', value: 'Size of dataset', description: 'Lorem ipsum' },
+                { id: 'DATA_FOLLOWED_PROTOCOL', value: 'Followed protcol', description: 'Lorem ipsum' }
             ]
         },
         ANALYSIS: {
@@ -84,9 +61,9 @@ export const octopusInformation: OctopusInformation = {
             heading: 'Analysis',
             content: 'A statistical or thematic analysis of existing published Data or Results.',
             ratings: [
-                { id: 'ANALYSIS_ORIGINAL', value: 'Original' },
-                { id: 'ANALYSIS_CLEAR', value: 'Clear' },
-                { id: 'ANALYSIS_APPROPRIATE_METHODOLOGY', value: 'Appropriate mathodology' }
+                { id: 'ANALYSIS_ORIGINAL', value: 'Original', description: 'Lorem ipsum' },
+                { id: 'ANALYSIS_CLEAR', value: 'Clear', description: 'Lorem ipsum' },
+                { id: 'ANALYSIS_APPROPRIATE_METHODOLOGY', value: 'Appropriate mathodology', description: 'Lorem ipsum' }
             ]
         },
         INTERPRETATION: {
@@ -94,9 +71,13 @@ export const octopusInformation: OctopusInformation = {
             heading: 'Interpretation',
             content: 'A discussion around an existing published Analysis.',
             ratings: [
-                { id: 'INTERPRETATION_INSIGHTFUL', value: 'Insightful' },
-                { id: 'INTERPRETATION_CONSISTENT_WITH_DATA', value: 'Consistent with data' },
-                { id: 'INTERPRETATION_CLEAR', value: 'Clear' }
+                { id: 'INTERPRETATION_INSIGHTFUL', value: 'Insightful', description: 'Lorem ipsum' },
+                {
+                    id: 'INTERPRETATION_CONSISTENT_WITH_DATA',
+                    value: 'Consistent with data',
+                    description: 'Lorem ipsum'
+                },
+                { id: 'INTERPRETATION_CLEAR', value: 'Clear', description: 'Lorem ipsum' }
             ]
         },
         REAL_WORLD_APPLICATION: {
@@ -104,9 +85,13 @@ export const octopusInformation: OctopusInformation = {
             heading: 'Real-world Application',
             content: 'Real world applications arising from an existing published Interpretation.',
             ratings: [
-                { id: 'REAL_WORLD_APPLICATION_IMPACTFUL', value: 'Impactful' },
-                { id: 'REAL_WORLD_APPLICATION_CLEAR', value: 'Clear' },
-                { id: 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT', value: 'Appropriate to implement' }
+                { id: 'REAL_WORLD_APPLICATION_IMPACTFUL', value: 'Impactful', description: 'Lorem ipsum' },
+                { id: 'REAL_WORLD_APPLICATION_CLEAR', value: 'Clear', description: 'Lorem ipsum' },
+                {
+                    id: 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT',
+                    value: 'Appropriate to implement',
+                    description: 'Lorem ipsum'
+                }
             ]
         },
         PEER_REVIEW: {
@@ -114,9 +99,9 @@ export const octopusInformation: OctopusInformation = {
             heading: '',
             content: '',
             ratings: [
-                { id: 'REVIEW_CLEAR', value: 'Clear' },
-                { id: 'REVIEW_INSIGHTFUL', value: 'Insightful' },
-                { id: 'REVIEW_ORIGINAL', value: 'Original' }
+                { id: 'REVIEW_CLEAR', value: 'Clear', description: 'Lorem ipsum' },
+                { id: 'REVIEW_INSIGHTFUL', value: 'Insightful', description: 'Lorem ipsum' },
+                { id: 'REVIEW_ORIGINAL', value: 'Original', description: 'Lorem ipsum' }
             ]
         }
     },
