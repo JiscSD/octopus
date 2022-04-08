@@ -29,8 +29,8 @@ type RatingSelectorProps = {
 
 const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElement => (
     <div>
-        <p className="mb-1 text-left text-base text-grey-700">{props.title}</p>
-        <p className="mb-4 text-left text-xs text-grey-500">{props.description}</p>
+        <p className="mb-1 text-left font-montserrat text-base font-medium text-grey-700">{props.title}</p>
+        <p className="mb-4 text-left font-montserrat text-xs text-grey-500">{props.description}</p>
         <div className="mb-12 grid grid-cols-8 items-start gap-4">
             <div className="col-span-7">
                 <ReactRange.Range
@@ -44,10 +44,12 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                         <div
                             {...markProps}
                             style={{ ...markProps.style }}
-                            className="relative -bottom-2 h-4 w-0.5 bg-teal-200"
+                            className={`relative -bottom-2 h-4 w-0.5 transition-colors duration-500 ${
+                                props.value ? 'bg-teal-200' : 'bg-grey-100'
+                            }`}
                         >
                             <span
-                                className={`absolute -bottom-full text-xxs text-grey-500 
+                                className={`absolute -bottom-full text-xxs text-grey-500
                                 ${index === 0 ? 'left-0' : ''} ${index === 10 ? 'right-0 left-auto' : ''}`}
                             >
                                 {(index === 0 && props.labels[0]) || (index === 10 && props.labels[10])}
@@ -58,7 +60,8 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                         <div
                             {...trackProps}
                             style={{ ...trackProps.style }}
-                            className={`h-2 w-full rounded-sm bg-teal-200 ${props.disabled ? 'opacity-50' : ''}`}
+                            className={`h-2 w-full rounded-sm transition-colors duration-500 
+                            ${props.value ? 'bg-teal-200' : 'bg-grey-100'} ${props.disabled ? 'opacity-50' : ''}`}
                         >
                             {children}
                         </div>
@@ -67,7 +70,9 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                         <div
                             {...rangeProps}
                             style={{ ...rangeProps.style }}
-                            className="relative h-4 w-4 rounded-full border-transparent bg-teal-600 outline-0 focus:ring-2 focus:ring-yellow-400"
+                            className={`relative h-4 w-4 rounded-full border-transparent outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 ${
+                                props.value ? 'bg-teal-600' : 'bg-grey-300'
+                            }`}
                         >
                             {/* {isDragged && (
                                 <span
@@ -82,7 +87,9 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                     )}
                 />
             </div>
-            <span className="col-span-1 text-sm text-grey-800">{props.value ? props.value[0] : 'N/A'}</span>
+            <span className="col-span-1 font-montserrat text-sm font-medium text-grey-700">
+                {props.value ? props.value[0] : 'N/A'}
+            </span>
         </div>
     </div>
 );
@@ -91,6 +98,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const SWRConfig = SWR.useSWRConfig();
     const user = Stores.useAuthStore((state) => state.user);
+    const notificationStore = Stores.useNoficiationStore();
     const [showModel, setShowModel] = React.useState(false);
     const [firstRatingValue, setFirstRatingValue] = React.useState<number[] | undefined>();
     const [secondRatingValue, setSecondRatingValue] = React.useState<number[] | undefined>();
@@ -136,6 +144,13 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
 
             SWRConfig.mutate(`${Config.endpoints.publications}/${props.id}`);
             setShowModel(false);
+            notificationStore.setTitle('You did it!');
+            notificationStore.setIcon(
+                <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />
+            );
+            notificationStore.setMessage('Lorem ipsum dolor sit amet consectetur, adipisicing elit.');
+            notificationStore.setDismiss(true);
+            notificationStore.toggleVisibility(true);
         } catch (err) {
             console.log(err);
             const { message } = err as Interfaces.JSONResponseError;
@@ -171,7 +186,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     {!!submitting && (
                         <OutlineIcons.RefreshIcon className="absolute right-4 top-4 h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                     )}
-                    <p className="mt-4 mb-8 text-left text-sm text-grey-700">
+                    <p className="mt-4 mb-8 text-left text-xs text-grey-700">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet quisquam facere fuga doloremque
                         animi unde nihil debitis.
                     </p>
@@ -213,22 +228,17 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 </>
             </Components.Modal>
 
-            <div className="relative py-2">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-grey-300" />
-                </div>
-                <div className="relative flex justify-center">
-                    <span className="bg-white-50 px-2 text-xs text-grey-500">Actions</span>
-                </div>
-            </div>
+            <Components.SectioBreak name="Actions" />
 
             {/** Download options */}
             <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800">Download:</span>
+                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                    Download:
+                </span>
                 <button
                     aria-label="Print button"
                     onClick={() => window.print()}
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                 >
                     <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
                     <span className="ml-1">pdf</span>
@@ -238,7 +248,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     onClick={() =>
                         Helpers.blobFileDownload(`${Config.endpoints.publications}/${props.id}`, `${props.id}.json`)
                     }
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                 >
                     <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
                     <span className="ml-1">json</span>
@@ -258,14 +268,14 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 }
                             });
                         }}
-                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >
                         Write a review
                     </button>
                     <button
                         aria-label="Rate this publication"
                         onClick={() => setShowModel(true)}
-                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >
                         Rate this publication
                     </button>
@@ -274,7 +284,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 <>
                     <Components.Link
                         href={Config.urls.orcidLogin.path}
-                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >
                         Sign in to rate & review
                     </Components.Link>

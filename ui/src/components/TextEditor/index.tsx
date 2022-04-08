@@ -196,7 +196,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                     <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
 
-                    <div className="flex overflow-scroll">
+                    <div className="flex">
                         <button
                             type="button"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}

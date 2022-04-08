@@ -59,7 +59,7 @@ const Modal: React.FC<Props> = (props) => {
                                 <div className="mt-3 text-center sm:mt-5">
                                     <HeadlessUI.Dialog.Title
                                         as="h3"
-                                        className="text-lg font-medium leading-6 text-grey-900"
+                                        className="font-montserrat text-lg font-medium leading-6 text-grey-900"
                                     >
                                         {props.title}
                                     </HeadlessUI.Dialog.Title>

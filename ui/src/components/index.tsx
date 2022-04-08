@@ -71,3 +71,5 @@ export { default as PublicationSidebarCardGeneral } from './Publication/SidebarC
 export { default as PublicationSidebarCardRatings } from './Publication/SidebarCard/Ratings';
 export { default as PublicationSidebarCardActions } from './Publication/SidebarCard/Actions';
 export { default as PublicationSidebarCardSections } from './Publication/SidebarCard/Sections';
+export { default as SectioBreak } from './SectionBreak';
+export { default as Notification } from './Notification';

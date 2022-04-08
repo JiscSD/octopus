@@ -30,17 +30,17 @@
         @apply !px-3;
     }
 
-    .table table {
+    .custom-table table {
         @apply table-fixed;
     }
-    .table tr:nth-child(event) {
+    .custom-table tr:nth-child(event) {
         @apply bg-white-50 dark:bg-grey-800;
     }
-    .table tr:nth-child(odd) {
+    .custom-table tr:nth-child(odd) {
         @apply bg-grey-50 dark:bg-grey-900;
     }
-    .table th,
-    .table td {
+    .custom-table th,
+    .custom-table td {
         @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
 }

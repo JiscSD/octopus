@@ -3,6 +3,7 @@ import useSWR from 'swr';
 import * as Framer from 'framer-motion';
 
 import * as Interfaces from '@interfaces';
+import * as Components from '@components';
 import * as Config from '@config';
 import * as Types from '@types';
 
@@ -16,10 +17,10 @@ const Rating: React.FC<RatingProps> = (props): React.ReactElement => {
     const average = props.ratings?.aggregate.find((aggregate) => aggregate.category === props.ratingType);
     return (
         <div>
-            <span className="mb-1 block text-xs text-grey-700">
+            <span className="mb-1 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
                 {props.label} ({average ? average._count.id : '0'})
             </span>
-            <span className="relative block h-2 w-full overflow-hidden rounded bg-teal-200">
+            <span className="relative block h-2 w-full overflow-hidden rounded bg-teal-200 transition-colors duration-500 dark:bg-teal-100">
                 <Framer.motion.span
                     initial={{ width: '0%' }}
                     animate={{ width: `${average?._avg.rating}0%`, type: 'spring' }}
@@ -43,14 +44,7 @@ const Ratings: React.FC<RatingsProps> = (props): React.ReactElement => {
 
     return (
         <>
-            <div className="relative py-2">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-grey-300" />
-                </div>
-                <div className="relative flex justify-center">
-                    <span className="bg-white-50 px-2 text-xs text-grey-500">Ratings</span>
-                </div>
-            </div>
+            <Components.SectioBreak name="Ratings" />
             <div className="space-y-3">
                 {Config.values.octopusInformation.publications[props.type].ratings.map((rating) => (
                     <Rating key={rating.id} label={rating.value} ratingType={rating.id} ratings={data?.data.ratings} />

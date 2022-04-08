@@ -36,6 +36,19 @@ export type AuthStoreType = {
     setUser: (user: null | UserType) => void;
 };
 
+export type NoficiationStoreType = {
+    visible: boolean;
+    toggleVisibility: (value: boolean) => void;
+    title: string | undefined;
+    setTitle: (value: string | undefined) => void;
+    message: string | undefined;
+    setMessage: (value: string | undefined) => void;
+    icon: React.ReactElement | undefined;
+    setIcon: (value: React.ReactElement | undefined) => void;
+    dismiss: boolean;
+    setDismiss: (value: boolean) => void;
+};
+
 export type PublicationCreationStoreType = {
     error: null | string;
     setError: (error: string | null) => void;
