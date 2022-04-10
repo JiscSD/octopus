@@ -11,32 +11,19 @@ export const create = middy(coAuthorController.create)
     .use(middleware.authentication())
     .use(middleware.validator(coAuthorSchema.create, 'body'));
 
-export const deleteCoAuthor = middy(coAuthorController.deleteCoAuthor)
+export const remove = middy(coAuthorController.remove)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
-export const resendCoAuthor = middy(coAuthorController.resendCoAuthor)
+export const link = middy(coAuthorController.link)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
+    .use(middleware.authentication(true))
+    .use(middleware.validator(coAuthorSchema.link, 'body'));
 
-export const confirmCoAuthor = middy(coAuthorController.confirmCoAuthor)
+export const update = middy(coAuthorController.update)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
-
-export const denyCoAuthor = middy(coAuthorController.denyCoAuthor)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
-
-export const updateCoAuthor = middy(coAuthorController.updateCoAuthor)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
-
-export const resetCoAuthors = middy(coAuthorController.resetCoAuthors)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
+    .use(middleware.authentication())
+    .use(middleware.validator(coAuthorSchema.update, 'body'));

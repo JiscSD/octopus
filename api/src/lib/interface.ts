@@ -281,9 +281,6 @@ export interface ORCIDUser {
  */
 export interface CreateCoAuthorRequestBody {
     email: string;
-    publicationId: string;
-    linkedUser?: string;
-    confirmedCoAuthor?: string;
 }
 
 export interface CreateCoAuthorPathParams {
@@ -296,20 +293,20 @@ export interface DeleteCoAuthorPathParams {
 }
 
 export interface ConfirmCoAuthorPathParams {
-    publicationId: string;
+    id: string;
 }
 
-export interface ConfirmCoAuthorQueryParams {
+export interface ConfirmCoAuthorBody {
     email: string;
     code: string;
+    approve: boolean;
 }
 
 export interface ChangeCoAuthorRequestBody {
-    confirmedCoAuthor: boolean;
+    confirm: boolean;
 }
-export interface ChangeCoAuthorPathParams {
-    publicationId: string;
-    userId: string;
+export interface UpdateCoAuthorPathParams {
+    id: string;
 }
 
 /* @description Ratings

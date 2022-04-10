@@ -46,6 +46,13 @@ const publicationSeeds = [
                 id: 'test-user-1'
             }
         },
+        coAuthors: {
+            create: {
+                id: 'testCoAuthorLive',
+                email: 'live-test@test.com',
+                code: 'test'
+            }
+        },
         publicationStatus: {
             create: [
                 {
@@ -72,11 +79,19 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'testCoAuthor',
-                email: 'testemail@test.com',
-                code: 'test'
-            }
+            create: [
+                {
+                    id: 'testCoAuthor',
+                    email: 'testemail@test.com',
+                    code: 'test'
+                },
+                {
+                    id: 'testCoAuthor2',
+                    email: 'testemai2l@test.com',
+                    code: 'test2',
+                    linkedUser: 'test-user-3'
+                }
+            ]
         },
         publicationStatus: {
             create: [

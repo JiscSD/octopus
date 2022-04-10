@@ -1,13 +1,11 @@
 import * as client from 'lib/client';
 import cuid from 'cuid';
 
-import * as I from 'interface';
-
-export const create = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
+export const create = async (email: string, publicationId: string) => {
     const create = await client.prisma.coAuthors.create({
         data: {
             publicationId,
-            email: e.email
+            email
         },
         select: {
             id: true,
@@ -46,7 +44,6 @@ export const resendCoAuthor = async (id: string) => {
 
 export const confirmCoAuthor = async (userId: string, publicationId: string, email: string, code: string) => {
     const confirmCoAuthor = await client.prisma.coAuthors.updateMany({
-        // updateMany so pubId, email and code can be confirmed.
         where: {
             publicationId,
             email,
@@ -62,7 +59,6 @@ export const confirmCoAuthor = async (userId: string, publicationId: string, ema
 
 export const denyCoAuthor = async (publicationId: string, email: string, code: string) => {
     const denyCoAuthor = await client.prisma.coAuthors.deleteMany({
-        // deleteMany so pubId, email and code can be confirmed.
         where: {
             publicationId,
             email,
@@ -73,18 +69,16 @@ export const denyCoAuthor = async (publicationId: string, email: string, code: s
     return denyCoAuthor.count;
 };
 
-export const updateCoAuthor = async (publicationId: string, userId: string, confirmedCoAuthor: boolean) => {
+export const updateCoAuthor = async (publicationId: string, userId: string, confirm: boolean) => {
     const updateCoAuthor = await client.prisma.coAuthors.updateMany({
-        // updateMany so pubId, email and code can be confirmed.
         where: {
             publicationId,
             linkedUser: userId
         },
         data: {
-            confirmedCoAuthor
+            confirmedCoAuthor: confirm
         }
     });
-    console.log(updateCoAuthor);
     return updateCoAuthor;
 };
 
@@ -98,19 +92,14 @@ export const resetCoAuthors = async (publicationId: string) => {
             code: cuid()
         }
     });
-    console.log(resetCoAuthors);
     return resetCoAuthors;
 };
 
-export const isUserAlreadyCoAuthor = async (e: I.CreateCoAuthorRequestBody, publicationId: string) => {
+export const isUserAlreadyCoAuthor = async (email: string, publicationId: string) => {
     const publication = await client.prisma.coAuthors.count({
         where: {
-            email: {
-                contains: e.email
-            },
-            publicationId: {
-                contains: publicationId
-            }
+            email: email,
+            publicationId
         }
     });
 

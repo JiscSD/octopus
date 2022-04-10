@@ -79,6 +79,7 @@ export const get = async (id: string) => {
             coAuthors: {
                 select: {
                     id: true,
+                    email: true,
                     linkedUser: true
                 }
             },

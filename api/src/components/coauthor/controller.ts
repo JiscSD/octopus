@@ -7,7 +7,7 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateCoAuthorRequestBody, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event?.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -30,19 +30,16 @@ export const create = async (
             });
         }
 
-        // Is the email already added to this publication as a coauthor?
-        if (event?.body.email) {
-            const isUserAlreadyCoAuthor = await coAuthorService.isUserAlreadyCoAuthor(
-                event.body,
-                event?.pathParameters.id
-            );
+        const isUserAlreadyCoAuthor = await coAuthorService.isUserAlreadyCoAuthor(
+            event.body.email,
+            event.pathParameters.id
+        );
 
-            if (isUserAlreadyCoAuthor) {
-                return response.json(409, { message: 'This email has already been added as a co-author.' });
-            }
+        if (isUserAlreadyCoAuthor) {
+            return response.json(409, { message: 'This email has already been added as a co-author.' });
         }
 
-        const coAuthor = await coAuthorService.create(event.body, event?.pathParameters.id);
+        const coAuthor = await coAuthorService.create(event.body.email, event.pathParameters.id);
 
         return response.json(201, coAuthor);
     } catch (err) {
@@ -51,11 +48,11 @@ export const create = async (
     }
 };
 
-export const deleteCoAuthor = async (
+export const remove = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event?.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -64,24 +61,28 @@ export const deleteCoAuthor = async (
             });
         }
 
-        // Does the coauthor record exist?
-        const pathParamId = event?.pathParameters.coauthor;
-        const coAuthors = publication.coAuthors;
-
-        if (!coAuthors?.some((coAuthor) => coAuthor.id === pathParamId)) {
-            return response.json(404, {
-                message: 'This coauthor has not been added to this publication.'
-            });
-        }
-
         // Is this user the author of the publication?
-        if (publication?.user.id !== event?.user.id) {
+        if (publication.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have the right permissions for this action.'
             });
         }
 
-        await coAuthorService.deleteCoAuthor(event?.pathParameters.coauthor);
+        // Is the publication in draft?
+        if (publication.currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: 'This publication is LIVE and therefore cannot be edited.'
+            });
+        }
+
+        // Is the coauthor actually a coauthor of this publication
+        if (!publication.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthor)) {
+            return response.json(404, {
+                message: 'This coauthor has not been added to this publication.'
+            });
+        }
+
+        await coAuthorService.deleteCoAuthor(event.pathParameters.coauthor);
 
         return response.json(200, { message: 'Co-author deleted from this publication' });
     } catch (err) {
@@ -89,11 +90,11 @@ export const deleteCoAuthor = async (
     }
 };
 
-export const resendCoAuthor = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
+export const link = async (
+    event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.ConfirmCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event?.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -102,74 +103,63 @@ export const resendCoAuthor = async (
             });
         }
 
-        // Does the coauthor record exist?
-        const pathParamId = event?.pathParameters.coauthor;
-        const coAuthors = publication.coAuthors;
-
-        if (!coAuthors?.some((coAuthor) => coAuthor.id === pathParamId)) {
-            return response.json(404, {
-                message: 'This coauthor has not been added to this publication.'
-            });
-        }
-
-        // Is this user the author of the publication?
-        if (publication?.user.id !== event?.user.id) {
+        // Is the publication in draft?
+        if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
-                message: 'You do not have the right permissions for this action.'
+                message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
 
-        await coAuthorService.resendCoAuthor(event?.pathParameters.coauthor);
+        if (event.body.approve) {
+            if (!event.user) {
+                return response.json(403, {
+                    message: 'To link yourself as a co-author, you must be logged in.'
+                });
+            }
 
-        return response.json(200, { message: 'A new code has been generated for co-author.' });
-    } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
+            // Cannot link user to co-author if it is the owner
+            if (publication.user.id === event.user.id) {
+                return response.json(404, {
+                    message: 'You cannot link yourself as the co-author, if you are the creator.'
+                });
+            }
 
-export const confirmCoAuthor = async (
-    event: I.AuthenticatedAPIRequest<undefined, I.ConfirmCoAuthorQueryParams, I.ConfirmCoAuthorPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event?.pathParameters.publicationId);
+            // User is already linked as a co-author
+            if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
+                return response.json(404, {
+                    message: 'You cannot link yourself as the co-author, if you are the creator.'
+                });
+            }
 
-        // Does the publication exist?
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
-            });
-        }
+            // email has already been linked
+            const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
 
-        const coAuthorConfirmed = await coAuthorService.confirmCoAuthor(
-            event.user.id,
-            event?.pathParameters.publicationId,
-            event?.queryStringParameters.email,
-            event?.queryStringParameters.code
-        );
+            if (!coAuthorByEmail) {
+                return response.json(404, {
+                    message: 'Email not found as a co-author.'
+                });
+            }
 
-        return response.json(200, { CoauthorsConfirmed: coAuthorConfirmed });
-    } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
+            if (coAuthorByEmail.linkedUser) {
+                return response.json(404, {
+                    message: 'User has already been linked to this publication.'
+                });
+            }
 
-export const denyCoAuthor = async (
-    event: I.APIRequest<undefined, I.ConfirmCoAuthorQueryParams, I.ConfirmCoAuthorPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event?.pathParameters.publicationId);
+            const coAuthorConfirmed = await coAuthorService.confirmCoAuthor(
+                event.user.id,
+                event.pathParameters.id,
+                event.body.email,
+                event.body.code
+            );
 
-        // Does the publication exist?
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
-            });
+            return response.json(200, { CoauthorsConfirmed: coAuthorConfirmed });
         }
 
         const coAuthorDenied = await coAuthorService.denyCoAuthor(
-            event?.pathParameters.publicationId,
-            event?.queryStringParameters.email,
-            event?.queryStringParameters.code
+            event.pathParameters.id,
+            event.body.email,
+            event.body.code
         );
 
         return response.json(200, { CoauthorsDenied: coAuthorDenied });
@@ -178,11 +168,11 @@ export const denyCoAuthor = async (
     }
 };
 
-export const resetCoAuthors = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
+export const update = async (
+    event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event?.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -191,42 +181,21 @@ export const resetCoAuthors = async (
             });
         }
 
-        // Is this user the author of the publication?
-        if (publication?.user.id !== event?.user.id) {
+        // Is the publication in draft?
+        if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
-                message: 'You do not have the right permissions for this action.'
+                message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
 
-        const coAuthorsReset = await coAuthorService.resetCoAuthors(event?.pathParameters.id);
-
-        return response.json(200, { coAuthorsReset: coAuthorsReset });
-    } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
-export const updateCoAuthor = async (
-    event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.ChangeCoAuthorPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event?.pathParameters.publicationId);
-
-        // Does the publication exist?
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
+        // Is the coauthor actually a coauthor of this publication
+        if (!publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user.id)) {
+            return response.json(403, {
+                message: 'You are not a co-author of this publication.'
             });
         }
 
-        // Is this user the correct user?
-        //todo
-
-        await coAuthorService.updateCoAuthor(
-            event?.pathParameters.publicationId,
-            event?.pathParameters.userId,
-            event?.body.confirmedCoAuthor
-        );
+        await coAuthorService.updateCoAuthor(event.pathParameters.id, event.user.id, event.body.confirm);
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {

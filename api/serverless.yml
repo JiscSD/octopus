@@ -173,51 +173,27 @@ functions:
                   method: post
                   cors: true
     deleteCoAuthor:
-        handler: src/components/coauthor/routes.deleteCoAuthor
+        handler: src/components/coauthor/routes.remove
         warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
                   method: delete
                   cors: true
-    resendCoAuthor:
-        handler: src/components/coauthor/routes.resendCoAuthor
+    linkCoAuthor:
+        handler: src/components/coauthor/routes.link
         warmup: true
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
-                  method: patch
-                  cors: true
-    confirmCoAuthor:
-        handler: src/components/coauthor/routes.confirmCoAuthor
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/confirm-co-authorship/{publicationId}
-                  method: patch
-                  cors: true
-    denyCoAuthor:
-        handler: src/components/coauthor/routes.denyCoAuthor
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/confirm-co-authorship/{publicationId}
-                  method: delete
-                  cors: true
-    resetCoAuthors:
-        handler: src/components/coauthor/routes.resetCoAuthors
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor/
+                  path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
                   method: patch
                   cors: true
     updateCoAuthor:
-        handler: src/components/coauthor/routes.updateCoAuthor
+        handler: src/components/coauthor/routes.update
         warmup: true
         events:
             - http:
-                  path: ${self:custom.versions.v1}/confirm-co-authorship/{publicationId}/{userId}
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor
                   method: patch
                   cors: true
     # Ratings

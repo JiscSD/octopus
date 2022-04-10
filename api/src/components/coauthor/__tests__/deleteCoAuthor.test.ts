@@ -1,10 +1,5 @@
 import * as testUtils from 'lib/testUtils';
 
-const publication = {
-    user1Draft: 'publication-problem-draft',
-    user1Live: 'publication-problem-live'
-};
-
 describe('Delete co-author', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
@@ -13,7 +8,7 @@ describe('Delete co-author', () => {
 
     test('Delete a co-author', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete(`/publications/${publication.user1Draft}/coauthor/testCoAuthor`)
+            .delete(`/publications/publication-problem-draft/coauthor/testCoAuthor`)
             .query({ apiKey: '123456789' });
 
         expect(deleteCoAuthor.status).toEqual(200);
@@ -21,7 +16,7 @@ describe('Delete co-author', () => {
 
     test('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete(`/publications/${publication.user1Draft}/coauthor/invalid-id`)
+            .delete(`/publications/publication-problem-draft/coauthor/invalid-id`)
             .query({ apiKey: '123456789' });
 
         expect(deleteCoAuthor.status).toEqual(404);
@@ -29,10 +24,18 @@ describe('Delete co-author', () => {
 
     test('Cannot Delete a co-author record if the user is not the author of a publication', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete(`/publications/${publication.user1Draft}/coauthor/testCoAuthor`)
+            .delete(`/publications/publication-problem-draft/coauthor/testCoAuthor`)
             .query({ apiKey: '987654321' });
 
         expect(deleteCoAuthor.status).toEqual(403);
+    });
+
+    test('Cannot Delete a co-author record if the publication is live', async () => {
+        const deleteCoAuthor = await testUtils.agent
+            .delete(`/publications/publication-problem-draft/coauthor/testCoAuthorLive`)
+            .query({ apiKey: '123456789' });
+
+        expect(deleteCoAuthor.status).toEqual(404);
     });
 
     test('Cannot Delete a co-author record on a publication that does not exist', async () => {
