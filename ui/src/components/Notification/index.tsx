@@ -26,7 +26,7 @@ const Notification = (): React.ReactElement => {
                 setIcon(undefined);
                 setDismiss(false);
             }
-        }, 3000);
+        }, 4000);
     }, [visible]);
 
     return (

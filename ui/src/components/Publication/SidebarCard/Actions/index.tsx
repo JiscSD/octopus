@@ -98,7 +98,11 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const SWRConfig = SWR.useSWRConfig();
     const user = Stores.useAuthStore((state) => state.user);
-    const notificationStore = Stores.useNoficiationStore();
+    const setTitle = Stores.useNoficiationStore((state) => state.setTitle);
+    const setMessage = Stores.useNoficiationStore((state) => state.setMessage);
+    const setIcon = Stores.useNoficiationStore((state) => state.setIcon);
+    const setDismiss = Stores.useNoficiationStore((state) => state.setDismiss);
+    const toggleVisibility = Stores.useNoficiationStore((state) => state.toggleVisibility);
     const [showModel, setShowModel] = React.useState(false);
     const [firstRatingValue, setFirstRatingValue] = React.useState<number[] | undefined>();
     const [secondRatingValue, setSecondRatingValue] = React.useState<number[] | undefined>();
@@ -144,13 +148,11 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
 
             SWRConfig.mutate(`${Config.endpoints.publications}/${props.id}`);
             setShowModel(false);
-            notificationStore.setTitle('You did it!');
-            notificationStore.setIcon(
-                <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />
-            );
-            notificationStore.setMessage('Lorem ipsum dolor sit amet consectetur, adipisicing elit.');
-            notificationStore.setDismiss(true);
-            notificationStore.toggleVisibility(true);
+            setTitle('Ratings saved');
+            setIcon(<OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />);
+            setMessage('Your ratings have now been saved, you can re rate this publication at any time.');
+            setDismiss(true);
+            toggleVisibility(true);
         } catch (err) {
             console.log(err);
             const { message } = err as Interfaces.JSONResponseError;
