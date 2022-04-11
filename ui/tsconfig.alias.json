@@ -17,14 +17,8 @@
             "@mocks": [
                 "./src/mocks"
             ],
-            "@hooks": [
-                "./src/hooks"
-            ],
             "@stores": [
                 "./src/stores"
-            ],
-            "@templates": [
-                "./src/templates"
             ],
             "@interfaces": [
                 "./src/lib/interfaces"
