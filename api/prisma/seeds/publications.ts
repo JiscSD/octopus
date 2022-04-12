@@ -53,6 +53,15 @@ const publicationSeeds = [
                 code: 'test'
             }
         },
+        publicationRatings: {
+            create: [
+                {
+                    userId: 'test-user-2',
+                    rating: 5,
+                    category: 'PROBLEM_WELL_DEFINED'
+                }
+            ]
+        },
         publicationStatus: {
             create: [
                 {
