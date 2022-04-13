@@ -15,7 +15,7 @@ const MockupFlow: React.FC = (): React.ReactElement => (
                 </p>
             </div>
             <div className="col-span-2 flex justify-end">
-                <Assets.Window />
+                <Assets.Window width={800} height={400} />
             </div>
         </div>
         <div className="mb-16 grid grid-cols-3">
@@ -28,7 +28,7 @@ const MockupFlow: React.FC = (): React.ReactElement => (
                 </p>
             </div>
             <div className="col-span-2 flex justify-end">
-                <Assets.Window />
+                <Assets.Window width={800} height={400} />
             </div>
         </div>
         <div className="mb-16 grid grid-cols-3">
@@ -41,7 +41,7 @@ const MockupFlow: React.FC = (): React.ReactElement => (
                 </p>
             </div>
             <div className="col-span-2 flex justify-end">
-                <Assets.Window />
+                <Assets.Window width={800} height={400} />
             </div>
         </div>
     </>
