@@ -17,7 +17,7 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(200);
+        expect(createFlag.status).toEqual(201);
     });
 
     test('User cannot create a valid flag on LIVE publication they created', async () => {
@@ -59,7 +59,7 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(200);
+        expect(createFlag.status).toEqual(201);
 
         const createFlagAttempt2 = await testUtils.agent
             .post('/publications/publication-interpretation-live/flag')
@@ -99,7 +99,7 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(200);
+        expect(createFlag.status).toEqual(201);
 
         const createFlagAttempt2 = await testUtils.agent
             .post('/publications/publication-interpretation-live/flag')
@@ -111,6 +111,6 @@ describe('Create flags on publications', () => {
                 category: 'COPYRIGHT'
             });
 
-        expect(createFlagAttempt2.status).toEqual(200);
+        expect(createFlagAttempt2.status).toEqual(201);
     });
 });

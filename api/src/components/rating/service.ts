@@ -33,7 +33,7 @@ export const getAggregate = async (id: string | Array<string>) => {
                 in: Array.isArray(id) ? id : [id]
             }
         },
-        by: ['category', 'id'],
+        by: ['category', 'publicationId'],
         _count: {
             id: true
         },

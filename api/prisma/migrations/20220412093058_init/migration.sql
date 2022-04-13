@@ -25,6 +25,9 @@ CREATE TABLE "User" (
     "apiKey" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "employment" JSONB[],
+    "works" JSONB[],
+    "education" JSONB[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -74,6 +77,18 @@ CREATE TABLE "PublicationStatus" (
 );
 
 -- CreateTable
+CREATE TABLE "CoAuthors" (
+    "id" TEXT NOT NULL,
+    "publicationId" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "confirmedCoAuthor" BOOLEAN NOT NULL DEFAULT false,
+    "linkedUser" TEXT,
+
+    CONSTRAINT "CoAuthors_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "PublicationFlags" (
     "id" TEXT NOT NULL,
     "publicationId" TEXT NOT NULL,
@@ -83,6 +98,17 @@ CREATE TABLE "PublicationFlags" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "PublicationFlags_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PublicationRatings" (
+    "id" TEXT NOT NULL,
+    "publicationId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL,
+    "category" TEXT NOT NULL,
+
+    CONSTRAINT "PublicationRatings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -98,7 +124,13 @@ CREATE UNIQUE INDEX "Publication_url_slug_key" ON "Publication"("url_slug");
 CREATE UNIQUE INDEX "Links_publicationFrom_publicationTo_key" ON "Links"("publicationFrom", "publicationTo");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "CoAuthors_publicationId_email_key" ON "CoAuthors"("publicationId", "email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "PublicationFlags_publicationId_category_createdBy_key" ON "PublicationFlags"("publicationId", "category", "createdBy");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PublicationRatings_publicationId_userId_category_key" ON "PublicationRatings"("publicationId", "userId", "category");
 
 -- AddForeignKey
 ALTER TABLE "Publication" ADD CONSTRAINT "Publication_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -113,7 +145,19 @@ ALTER TABLE "Links" ADD CONSTRAINT "Links_publicationTo_fkey" FOREIGN KEY ("publ
 ALTER TABLE "PublicationStatus" ADD CONSTRAINT "PublicationStatus_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "CoAuthors" ADD CONSTRAINT "CoAuthors_linkedUser_fkey" FOREIGN KEY ("linkedUser") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CoAuthors" ADD CONSTRAINT "CoAuthors_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "PublicationFlags" ADD CONSTRAINT "PublicationFlags_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PublicationFlags" ADD CONSTRAINT "PublicationFlags_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PublicationRatings" ADD CONSTRAINT "PublicationRatings_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PublicationRatings" ADD CONSTRAINT "PublicationRatings_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
