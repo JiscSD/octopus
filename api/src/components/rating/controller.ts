@@ -29,6 +29,7 @@ export const upsert = async (
                 message: 'Cannot rate your own publication'
             });
         }
+
         // Helper method to check if the publication type & rating category submitted is ok
         const isRatingCategoryValid = ratingService.isValid(publication.type, event.body.type);
 

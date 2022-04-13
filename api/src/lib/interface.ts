@@ -342,3 +342,11 @@ export interface CreateRatingRequestBody {
     type: Ratings;
     value: number;
 }
+
+export interface OctopusInformation {
+    publications: {
+        [key in PublicationType]: {
+            ratingCategories: Ratings[];
+        };
+    };
+}

@@ -188,6 +188,10 @@ export interface OctopusInformation {
                 id: Types.Ratings;
                 value: string;
                 description: string;
+                labels: {
+                    negative: string;
+                    positive: string;
+                };
             }[];
         };
     };

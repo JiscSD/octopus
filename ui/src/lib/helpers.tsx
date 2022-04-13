@@ -12,7 +12,7 @@ import * as Types from '@types';
  * @description Truncates a string
  */
 export const truncateString = (value: string, length: number): string => {
-    return `${value.substring(0, length)}...`;
+    return value.length ? `${value.substring(0, length)}...` : '...';
 };
 
 /**

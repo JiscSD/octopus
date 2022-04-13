@@ -3,6 +3,7 @@ import * as SWR from 'swr';
 import Image from 'next/image';
 import * as Router from 'next/router';
 import * as ReactRange from 'react-range';
+import * as SolidIcons from '@heroicons/react/solid';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
@@ -10,18 +11,17 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Assets from '@assets';
 import * as Types from '@types';
 import * as api from '@api';
-
-type ActionProps = {
-    id: string;
-    type: Types.PublicationType;
-};
 
 type RatingSelectorProps = {
     title: string;
     description: string;
-    labels: string[];
+    labels: {
+        negative: string;
+        positive: string;
+    };
     value?: number[];
     callback: (value: number[]) => void;
     disabled: boolean;
@@ -29,8 +29,12 @@ type RatingSelectorProps = {
 
 const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElement => (
     <div>
-        <p className="mb-1 text-left font-montserrat text-base font-medium text-grey-700">{props.title}</p>
-        <p className="mb-4 text-left font-montserrat text-xs text-grey-500">{props.description}</p>
+        <p
+            className="mb-3 flex items-center text-left font-montserrat font-medium text-grey-700"
+            title={props.description}
+        >
+            {props.title} <OutlineIcons.InformationCircleIcon className="ml-2 w-5 text-teal-600 hover:cursor-pointer" />
+        </p>
         <div className="mb-12 grid grid-cols-8 items-start gap-4">
             <div className="col-span-7">
                 <ReactRange.Range
@@ -44,16 +48,27 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                         <div
                             {...markProps}
                             style={{ ...markProps.style }}
-                            className={`relative -bottom-2 h-4 w-0.5 transition-colors duration-500 ${
+                            className={`relative -bottom-2 h-4 w-0.5 pb-2 transition-colors duration-500 ${
                                 props.value ? 'bg-teal-200' : 'bg-grey-100'
                             }`}
                         >
-                            <span
-                                className={`absolute -bottom-full text-xxs text-grey-500
-                                ${index === 0 ? 'left-0' : ''} ${index === 10 ? 'right-0 left-auto' : ''}`}
+                            <div
+                                className={`absolute -bottom-7 w-max text-xxs text-grey-800
+                                ${index === 0 ? '-left-[7px]' : ''} ${index === 10 ? '-right-[9px] left-auto' : ''}`}
                             >
-                                {(index === 0 && props.labels[0]) || (index === 10 && props.labels[10])}
-                            </span>
+                                {(index === 0 && (
+                                    <span title={props.labels.negative} className="flex items-end">
+                                        <SolidIcons.InformationCircleIcon className="mr-1 w-4 text-teal-600" />
+                                        {Helpers.truncateString(props.labels.negative, 20)}
+                                    </span>
+                                )) ||
+                                    (index === 10 && (
+                                        <span title={props.labels.positive} className="flex items-end">
+                                            {Helpers.truncateString(props.labels.positive, 20)}
+                                            <SolidIcons.InformationCircleIcon className="ml-1 w-4 text-teal-600" />
+                                        </span>
+                                    ))}
+                            </div>
                         </div>
                     )}
                     renderTrack={({ props: trackProps, children }) => (
@@ -66,33 +81,28 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                             {children}
                         </div>
                     )}
-                    renderThumb={({ props: rangeProps, isDragged }) => (
+                    renderThumb={({ props: rangeProps }) => (
                         <div
                             {...rangeProps}
                             style={{ ...rangeProps.style }}
                             className={`relative h-4 w-4 rounded-full border-transparent outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 ${
                                 props.value ? 'bg-teal-600' : 'bg-grey-300'
                             }`}
-                        >
-                            {/* {isDragged && (
-                                <span
-                                    className={`absolute -top-7 left-1/2 z-50 w-fit -translate-x-1/2 whitespace-nowrap rounded bg-teal-700 px-2 py-0.5 text-xs text-white-50
-                                                ${props.value[0] === 0 && '!left-0 !translate-x-0'}
-                                                ${props.value[0] === 10 && '!right-0 !-translate-x-full'}`}
-                                >
-                                    {props.labels[props.value[0]]}
-                                </span>
-                            )} */}
-                        </div>
+                        />
                     )}
                 />
             </div>
-            <span className="col-span-1 font-montserrat text-sm font-medium text-grey-700">
-                {props.value ? props.value[0] : 'N/A'}
+            <span className="col-span-1 text-sm font-medium text-grey-700">
+                {props.value ? `${props.value[0]}/10` : 'N/A'}
             </span>
         </div>
     </div>
 );
+
+type ActionProps = {
+    id: string;
+    type: Types.PublicationType;
+};
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const router = Router.useRouter();
@@ -154,7 +164,6 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             setDismiss(true);
             toggleVisibility(true);
         } catch (err) {
-            console.log(err);
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
         }
@@ -181,26 +190,27 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 positiveActionCallback={save}
                 positiveButtonText="Submit my rating"
                 cancelButtonText="Cancel"
-                title="Rate this publication"
+                title={`Rate this ${Config.values.octopusInformation.publications[props.type].heading}`}
                 disableButtons={submitting}
             >
                 <>
                     {!!submitting && (
-                        <OutlineIcons.RefreshIcon className="absolute right-4 top-4 h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                        <Assets.Spinner width={25} height={25} className="absolute top-5 right-5 stroke-teal-500" />
                     )}
-                    <p className="mt-4 mb-8 text-left text-xs text-grey-700">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet quisquam facere fuga doloremque
-                        animi unde nihil debitis.
+                    <p className="mt-4 mb-6 text-xs text-grey-700">
+                        Once you have read this publication, please help other readers by rating it.{' '}
+                        <br className="hidden xl:block" />
+                        The categories for rating have been chosen to reward good work:
                     </p>
-                    <div className="mb-8">
+                    <div className="mb-6">
                         {!!error && <Components.Alert severity="ERROR" title={error} className="my-4 text-left" />}
-                        <div className="mb-20 space-y-12">
+                        <div className="space-y-14">
                             <RatingSelector
                                 title={Config.values.octopusInformation.publications[props.type].ratings[0].value}
                                 description={
                                     Config.values.octopusInformation.publications[props.type].ratings[0].description
                                 }
-                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
+                                labels={Config.values.octopusInformation.publications[props.type].ratings[0].labels}
                                 value={firstRatingValue}
                                 callback={setFirstRatingValue}
                                 disabled={submitting}
@@ -210,7 +220,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 description={
                                     Config.values.octopusInformation.publications[props.type].ratings[1].description
                                 }
-                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
+                                labels={Config.values.octopusInformation.publications[props.type].ratings[1].labels}
                                 value={secondRatingValue}
                                 callback={setSecondRatingValue}
                                 disabled={submitting}
@@ -220,13 +230,18 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 description={
                                     Config.values.octopusInformation.publications[props.type].ratings[2].description
                                 }
-                                labels={['Bad', '', '', '', '', '', '', '', '', '', 'Good']}
+                                labels={Config.values.octopusInformation.publications[props.type].ratings[2].labels}
                                 value={thirdRatingValue}
                                 callback={setThirdRatingValue}
                                 disabled={submitting}
                             />
                         </div>
                     </div>
+                    <p className="text-xs text-grey-600">
+                        All your ratings are stored against your username in order to detect any `gaming` of the system.
+                        Receiving money, favours or services in return for rating a publication is a matter of
+                        scientific misconduct and could result in action being taken.
+                    </p>
                 </>
             </Components.Modal>
 

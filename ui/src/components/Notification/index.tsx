@@ -32,7 +32,7 @@ const Notification = (): React.ReactElement => {
     return (
         <div
             aria-live="assertive"
-            className="fixed right-12 bottom-12 z-40 flex w-full flex-col items-center space-y-4 sm:items-end"
+            className="fixed right-5 bottom-8 z-40 flex w-11/12 flex-col items-center space-y-4 sm:items-end lg:bottom-12 lg:right-12 lg:w-full"
         >
             <HeadlessUI.Transition
                 show={visible}
