@@ -29,14 +29,23 @@ type RatingSelectorProps = {
 
 const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElement => (
     <div>
-        <p
-            className="mb-3 flex items-center text-left font-montserrat font-medium text-grey-700"
-            title={props.description}
-        >
-            {props.title} <OutlineIcons.InformationCircleIcon className="ml-2 w-5 text-teal-600 hover:cursor-pointer" />
+        <div className="flex items-center justify-between space-x-4">
+            <p
+                className="mb-1 flex items-center text-left font-montserrat font-medium text-grey-700"
+                title={props.description}
+            >
+                {props.title}{' '}
+                <OutlineIcons.InformationCircleIcon className="ml-2 block w-5 text-teal-600 hover:cursor-pointer lg:hidden" />
+            </p>
+            <span className="col-span-1 text-xs font-medium text-grey-700">
+                {props.value ? `${props.value[0]}/10` : 'N/A'}
+            </span>
+        </div>
+        <p className="mb-3 hidden w-11/12 text-left font-montserrat text-xs font-medium text-grey-700 lg:block">
+            {props.description}
         </p>
-        <div className="mb-12 grid grid-cols-8 items-start gap-4">
-            <div className="col-span-7">
+        <div className="mb-12 items-start">
+            <div className="">
                 <ReactRange.Range
                     step={1}
                     min={0}
@@ -53,20 +62,29 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                             }`}
                         >
                             <div
-                                className={`absolute -bottom-7 w-max text-xxs text-grey-800
-                                ${index === 0 ? '-left-[7px]' : ''} ${index === 10 ? '-right-[9px] left-auto' : ''}`}
+                                className={`absolute -bottom-6 w-max text-xxs text-grey-800 ${
+                                    index === 0 ? '-left-full' : ''
+                                } ${index === 10 ? '-right-[5px] left-auto' : ''}`}
                             >
+                                {index !== 0 && index !== 10 && index}
                                 {(index === 0 && (
-                                    <span title={props.labels.negative} className="flex items-end">
-                                        <SolidIcons.InformationCircleIcon className="mr-1 w-4 text-teal-600" />
-                                        {Helpers.truncateString(props.labels.negative, 20)}
-                                    </span>
+                                    <>
+                                        {index}
+                                        <span title={props.labels.negative} className="absolute -left-1 flex items-end">
+                                            <SolidIcons.InformationCircleIcon className="mr-1 w-4 text-teal-600" />
+                                        </span>
+                                    </>
                                 )) ||
                                     (index === 10 && (
-                                        <span title={props.labels.positive} className="flex items-end">
-                                            {Helpers.truncateString(props.labels.positive, 20)}
-                                            <SolidIcons.InformationCircleIcon className="ml-1 w-4 text-teal-600" />
-                                        </span>
+                                        <>
+                                            {index}
+                                            <span
+                                                title={props.labels.positive}
+                                                className="absolute -left-1 flex items-end"
+                                            >
+                                                <SolidIcons.InformationCircleIcon className="ml-1 w-4 text-teal-600" />
+                                            </span>
+                                        </>
                                     ))}
                             </div>
                         </div>
@@ -92,9 +110,6 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                     )}
                 />
             </div>
-            <span className="col-span-1 text-sm font-medium text-grey-700">
-                {props.value ? `${props.value[0]}/10` : 'N/A'}
-            </span>
         </div>
     </div>
 );
@@ -197,14 +212,14 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     {!!submitting && (
                         <Assets.Spinner width={25} height={25} className="absolute top-5 right-5 stroke-teal-500" />
                     )}
-                    <p className="mt-4 mb-6 text-xs text-grey-700">
+                    <p className="mt-4 mb-8 text-xs text-grey-700">
                         Once you have read this publication, please help other readers by rating it.{' '}
                         <br className="hidden xl:block" />
                         The categories for rating have been chosen to reward good work:
                     </p>
-                    <div className="mb-6">
+                    <div className="mb-20">
                         {!!error && <Components.Alert severity="ERROR" title={error} className="my-4 text-left" />}
-                        <div className="space-y-14">
+                        <div className="space-y-16">
                             <RatingSelector
                                 title={Config.values.octopusInformation.publications[props.type].ratings[0].value}
                                 description={
@@ -237,7 +252,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             />
                         </div>
                     </div>
-                    <p className="text-xs text-grey-600">
+                    <p className="block text-xs text-grey-600">
                         All your ratings are stored against your username in order to detect any `gaming` of the system.
                         Receiving money, favours or services in return for rating a publication is a matter of
                         scientific misconduct and could result in action being taken.
