@@ -92,7 +92,7 @@ export interface UpdateStatusPathParams {
     status: 'LIVE';
 }
 
-export interface  UpdatePublicationRequestBody {
+export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
     licence?: LicenceType;
@@ -277,7 +277,39 @@ export interface ORCIDUser {
 }
 
 /**
- * @description Ratings
+ * @description Coauthor
+ */
+export interface CreateCoAuthorRequestBody {
+    email: string;
+}
+
+export interface CreateCoAuthorPathParams {
+    id: string;
+}
+
+export interface DeleteCoAuthorPathParams {
+    id: string;
+    coauthor: string;
+}
+
+export interface ConfirmCoAuthorPathParams {
+    id: string;
+}
+
+export interface ConfirmCoAuthorBody {
+    email: string;
+    code: string;
+    approve: boolean;
+}
+
+export interface ChangeCoAuthorRequestBody {
+    confirm: boolean;
+}
+export interface UpdateCoAuthorPathParams {
+    id: string;
+}
+
+/* @description Ratings
  */
 
 export type Ratings =
@@ -304,7 +336,7 @@ export type Ratings =
     | 'REAL_WORLD_APPLICATION_IMPACTFUL'
     | 'REVIEW_CLEAR'
     | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL'
+    | 'REVIEW_ORIGINAL';
 
 export interface CreateRatingRequestBody {
     type: Ratings;

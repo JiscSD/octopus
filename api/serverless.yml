@@ -163,6 +163,39 @@ functions:
                   path: ${self:custom.versions.v1}/links/{id}
                   method: delete
                   cors: true
+    # CoAuthors
+    createCoAuthor:
+        handler: src/components/coauthor/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor
+                  method: post
+                  cors: true
+    deleteCoAuthor:
+        handler: src/components/coauthor/routes.remove
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
+                  method: delete
+                  cors: true
+    linkCoAuthor:
+        handler: src/components/coauthor/routes.link
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
+                  method: patch
+                  cors: true
+    updateCoAuthor:
+        handler: src/components/coauthor/routes.update
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor
+                  method: patch
+                  cors: true
     # Ratings
     createRatings:
         handler: src/components/rating/routes.upsert

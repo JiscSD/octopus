@@ -12,7 +12,7 @@ describe('Delete publications', () => {
             apiKey: '123456789'
         });
 
-        expect(getPublication.status).toEqual(201);
+        expect(getPublication.status).toEqual(200);
 
         const checkForPublication = await client.prisma.publication.count({
             where: {
