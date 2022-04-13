@@ -165,7 +165,7 @@ export interface CreateFlagPathParams {
 
 export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
-    comments: string;
+    comment: string;
 }
 
 export interface AuthorizeRequestBody {
@@ -341,4 +341,16 @@ export type Ratings =
 export interface CreateRatingRequestBody {
     type: Ratings;
     value: number;
+}
+
+export interface CreateFlagCommentBody {
+    comment: string;
+}
+
+export interface CreateFlagCommentPathParams {
+    id: string;
+}
+
+export interface ResolveFlagPathParams {
+    id: string;
 }

@@ -14,11 +14,11 @@ const updatedPublicationSchema: I.Schema = {
                 'INAPPROPRIATE'
             ]
         },
-        comments: {
+        comment: {
             type: 'string'
         }
     },
-    required: ['comments', 'category'],
+    required: ['comment', 'category'],
     additionalProperties: false
 };
 

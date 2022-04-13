@@ -53,34 +53,53 @@ const publicationSeeds = [
                 code: 'test'
             }
         },
+        publicationFlags: {
+            create: {
+                id: 'publication-problem-live-flag',
+                createdBy: 'test-user-2',
+                category: 'PLAGIARISM',
+                flagComments: {
+                    create: {
+                        createdBy: 'test-user-2',
+                        comment: 'This is a comment'
+                    }
+                }
+            }
+        },
         publicationRatings: {
             create: [
                 {
+                    id: 'publication-problem-live-test-user-2-PROBLEM_WELL_DEFINED',
                     userId: 'test-user-2',
                     rating: 5,
                     category: 'PROBLEM_WELL_DEFINED'
                 },
                 {
+                    id: 'publication-problem-live-test-user-2-PROBLEM_ORIGINAL',
                     userId: 'test-user-2',
                     rating: 10,
                     category: 'PROBLEM_ORIGINAL'
                 },
                 {
+                    id: 'publication-problem-live-test-user-2-PROBLEM_IMPORTANT',
                     userId: 'test-user-2',
                     rating: 8,
                     category: 'PROBLEM_IMPORTANT'
                 },
                 {
+                    id: 'publication-problem-live-test-user-3-PROBLEM_WELL_DEFINED',
                     userId: 'test-user-3',
                     rating: 7,
                     category: 'PROBLEM_WELL_DEFINED'
                 },
                 {
+                    id: 'publication-problem-live-test-user-3-PROBLEM_ORIGINAL',
                     userId: 'test-user-3',
                     rating: 8,
                     category: 'PROBLEM_ORIGINAL'
                 },
                 {
+                    id: 'publication-problem-live-test-user-3-PROBLEM_IMPORTANT',
                     userId: 'test-user-3',
                     rating: 6,
                     category: 'PROBLEM_IMPORTANT'
@@ -149,6 +168,20 @@ const publicationSeeds = [
         user: {
             connect: {
                 id: 'test-user-1'
+            }
+        },
+        publicationFlags: {
+            create: {
+                id: 'publication-hypothesis-live-flag',
+                createdBy: 'test-user-2',
+                category: 'PLAGIARISM',
+                resolved: true,
+                flagComments: {
+                    create: {
+                        createdBy: 'test-user-2',
+                        comment: 'This is a comment'
+                    }
+                }
             }
         },
         publicationStatus: {

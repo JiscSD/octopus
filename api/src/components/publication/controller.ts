@@ -231,14 +231,95 @@ export const createFlag = async (
             });
         }
 
+        const doesDuplicateFlagExist = await publicationService.doesDuplicateFlagExist(
+            event.pathParameters.id,
+            event.body.category,
+            event.user.id
+        );
+
+        if (doesDuplicateFlagExist) {
+            return response.json(404, {
+                message: 'An unresolved flag created by you, for this publication and category already exists.'
+            });
+        }
+
         const flag = await publicationService.createFlag(
             event.pathParameters.id,
             event.user.id,
             event.body.category,
-            event.body.comments
+            event.body.comment
         );
 
-        return response.json(201, flag);
+        return response.json(200, flag);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const createFlagComment = async (
+    event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
+) => {
+    try {
+        const flag = await publicationService.getFlag(event.pathParameters.id);
+
+        if (!flag) {
+            return response.json(404, {
+                message: 'This flag does not exist.'
+            });
+        }
+
+        if (flag.resolved) {
+            return response.json(403, {
+                message: 'You cannot comment on a flag that has already been resolved.'
+            });
+        }
+
+        // The user attempting to leave a comment, is not the flag creator, or the publication owner
+        if (flag.createdBy !== event.user.id && flag.publication.user.id !== event.user.id) {
+            return response.json(403, {
+                message: 'You do not have permission to comment on this flag.'
+            });
+        }
+
+        const flagComment = await publicationService.createFlagComment(
+            event.pathParameters.id,
+            event.body.comment,
+            event.user.id
+        );
+
+        return response.json(200, flagComment);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>) => {
+    try {
+        const flag = await publicationService.getFlag(event.pathParameters.id);
+
+        if (!flag) {
+            return response.json(404, {
+                message: 'This flag does not exist.'
+            });
+        }
+
+        if (flag.createdBy !== event.user.id && event.user.role !== 'SUPER_USER') {
+            return response.json(403, {
+                message: 'You do not have permission to resolve this flag.'
+            });
+        }
+
+        if (flag.resolved) {
+            return response.json(403, {
+                message: 'This flag has already been resolved.'
+            });
+        }
+
+        const resolveFlag = await publicationService.resolveFlag(event.pathParameters.id);
+
+        return response.json(200, resolveFlag);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

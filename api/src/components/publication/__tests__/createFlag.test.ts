@@ -13,11 +13,11 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(201);
+        expect(createFlag.status).toEqual(200);
     });
 
     test('User cannot create a valid flag on LIVE publication they created', async () => {
@@ -27,7 +27,7 @@ describe('Create flags on publications', () => {
                 apiKey: '123456789'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
@@ -41,25 +41,25 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'INVALID_CATEGORY'
             });
 
         expect(createFlag.status).toEqual(422);
     });
 
-    test('User cannot create a duplicate flag', async () => {
+    test('User cannot create a duplicate flag for an unresolved flag', async () => {
         const createFlag = await testUtils.agent
             .post('/publications/publication-interpretation-live/flag')
             .query({
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(201);
+        expect(createFlag.status).toEqual(200);
 
         const createFlagAttempt2 = await testUtils.agent
             .post('/publications/publication-interpretation-live/flag')
@@ -67,11 +67,11 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlagAttempt2.status).toEqual(500);
+        expect(createFlagAttempt2.status).toEqual(404);
     });
 
     test('Cannot create a valid flag for a publication that is in DRAFT', async () => {
@@ -81,7 +81,7 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
@@ -95,11 +95,11 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(201);
+        expect(createFlag.status).toEqual(200);
 
         const createFlagAttempt2 = await testUtils.agent
             .post('/publications/publication-interpretation-live/flag')
@@ -107,10 +107,10 @@ describe('Create flags on publications', () => {
                 apiKey: '987654321'
             })
             .send({
-                comments: 'Comments',
+                comment: 'Comments',
                 category: 'COPYRIGHT'
             });
 
-        expect(createFlagAttempt2.status).toEqual(201);
+        expect(createFlagAttempt2.status).toEqual(200);
     });
 });
