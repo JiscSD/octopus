@@ -158,9 +158,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     );
 
     // State that represents the current range sliders
-    const [firstRatingValue, setFirstRatingValue] = React.useState<number | undefined>();
-    const [secondRatingValue, setSecondRatingValue] = React.useState<number | undefined>();
-    const [thirdRatingValue, setThirdRatingValue] = React.useState<number | undefined>();
+    const [firstRatingValue, setFirstRatingValue] = React.useState<number | undefined | null>();
+    const [secondRatingValue, setSecondRatingValue] = React.useState<number | undefined | null>();
+    const [thirdRatingValue, setThirdRatingValue] = React.useState<number | undefined | null>();
 
     // Misc state
     const [error, setError] = React.useState<string | undefined>();
