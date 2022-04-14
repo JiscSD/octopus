@@ -12,7 +12,6 @@ import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Assets from '@assets';
-import * as Types from '@types';
 import * as api from '@api';
 
 type RatingSelectorProps = {
@@ -22,8 +21,8 @@ type RatingSelectorProps = {
         negative: string;
         positive: string;
     };
-    value?: number[];
-    callback: (value: number[]) => void;
+    value?: number;
+    callback: (value: number) => void;
     disabled: boolean;
 };
 
@@ -38,7 +37,7 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                 <OutlineIcons.InformationCircleIcon className="ml-2 block w-5 text-teal-600 hover:cursor-pointer lg:hidden" />
             </p>
             <span className="col-span-1 text-xs font-medium text-grey-700">
-                {props.value ? `${props.value[0]}/10` : 'N/A'}
+                {props.value ? `${props.value}/10` : 'N/A'}
             </span>
         </div>
         <p className="mb-3 hidden w-11/12 text-left font-montserrat text-xs font-medium text-grey-700 lg:block">
@@ -51,8 +50,8 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                     min={0}
                     max={10}
                     disabled={props.disabled}
-                    values={props.value ?? [5]}
-                    onChange={(values) => props.callback(values)}
+                    values={props.value ? [props.value] : [5]}
+                    onChange={(values) => props.callback(values[0])}
                     renderMark={({ props: markProps, index }) => (
                         <div
                             {...markProps}
@@ -115,87 +114,128 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
 );
 
 type ActionProps = {
-    id: string;
-    type: Types.PublicationType;
+    publication: Interfaces.Publication;
 };
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const SWRConfig = SWR.useSWRConfig();
     const user = Stores.useAuthStore((state) => state.user);
-    const setTitle = Stores.useNoficiationStore((state) => state.setTitle);
-    const setMessage = Stores.useNoficiationStore((state) => state.setMessage);
-    const setIcon = Stores.useNoficiationStore((state) => state.setIcon);
-    const setDismiss = Stores.useNoficiationStore((state) => state.setDismiss);
-    const toggleVisibility = Stores.useNoficiationStore((state) => state.toggleVisibility);
+    const setToast = Stores.useToastStore((state) => state.setToast);
     const [showModel, setShowModel] = React.useState(false);
-    const [firstRatingValue, setFirstRatingValue] = React.useState<number[] | undefined>();
-    const [secondRatingValue, setSecondRatingValue] = React.useState<number[] | undefined>();
-    const [thirdRatingValue, setThirdRatingValue] = React.useState<number[] | undefined>();
+
+    // Computed value of the first rating
+    const originalFirstRating = React.useMemo(
+        () =>
+            props.publication.ratings.aggregate.find(
+                (rating) =>
+                    rating.category ===
+                    Config.values.octopusInformation.publications[props.publication.type].ratings[0].id
+            )?._avg.rating,
+        [props.publication]
+    );
+
+    // Computed value of the second rating
+    const originalSecondRating = React.useMemo(
+        () =>
+            props.publication.ratings.aggregate.find(
+                (rating) =>
+                    rating.category ===
+                    Config.values.octopusInformation.publications[props.publication.type].ratings[1].id
+            )?._avg.rating,
+        [props.publication]
+    );
+
+    // Computed value of the third rating
+    const originalThirdRating = React.useMemo(
+        () =>
+            props.publication.ratings.aggregate.find(
+                (rating) =>
+                    rating.category ===
+                    Config.values.octopusInformation.publications[props.publication.type].ratings[2].id
+            )?._avg.rating,
+        [props.publication]
+    );
+
+    // State that represents the current range sliders
+    const [firstRatingValue, setFirstRatingValue] = React.useState<number | undefined>();
+    const [secondRatingValue, setSecondRatingValue] = React.useState<number | undefined>();
+    const [thirdRatingValue, setThirdRatingValue] = React.useState<number | undefined>();
+
+    // Misc state
     const [error, setError] = React.useState<string | undefined>();
     const [submitting, setSubmitting] = React.useState(false);
+
+    // When the publication from ssr changes, set the range slider state to the computed values.
+    // This is important because moving between publications is not a page refresh, but nexts re-generates the ssr props
+    // which tells us that the publicaiton has changed, there fore the computed values will have changed, so re set
+    // the range slider states.
+    React.useEffect(() => {
+        setFirstRatingValue(originalFirstRating);
+        setSecondRatingValue(originalSecondRating);
+        setThirdRatingValue(originalThirdRating);
+    }, [originalFirstRating, originalSecondRating, originalThirdRating]);
 
     const save = async () => {
         setSubmitting(true);
         try {
-            if (firstRatingValue) {
+            // Only post new first rating value if it is truthy && does not match it's original value
+            if (firstRatingValue && firstRatingValue !== originalFirstRating) {
                 await api.post(
-                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.type].ratings[0].id,
-                        value: firstRatingValue[0]
+                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[0].id,
+                        value: firstRatingValue
                     },
                     user?.token
                 );
             }
 
-            if (secondRatingValue) {
+            // Only post new second rating value if it is truthy && does not match it's original value
+            if (secondRatingValue && secondRatingValue !== originalSecondRating) {
                 await api.post(
-                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.type].ratings[1].id,
-                        value: secondRatingValue[0]
+                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[1].id,
+                        value: secondRatingValue
                     },
                     user?.token
                 );
             }
 
-            if (thirdRatingValue) {
+            // Only post new third rating value if it is truthy && does not match it's original value
+            if (thirdRatingValue && thirdRatingValue !== originalThirdRating) {
                 await api.post(
-                    `${Config.endpoints.publications}/${props.id}/ratings`,
+                    `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.type].ratings[2].id,
-                        value: thirdRatingValue[0]
+                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[2].id,
+                        value: thirdRatingValue
                     },
                     user?.token
                 );
             }
 
-            SWRConfig.mutate(`${Config.endpoints.publications}/${props.id}`);
+            // Tell SWR that we have possibly posted some data, i.e mutated a route, so revalidate
+            SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
+
+            // Close the model
             setShowModel(false);
-            setTitle('Ratings saved');
-            setIcon(<OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />);
-            setMessage('Your ratings have now been saved, you can re rate this publication at any time.');
-            setDismiss(true);
-            toggleVisibility(true);
+
+            // Mount a new toast for successful response
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Ratings saved',
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'Your ratings have now been saved, you can re rate this publication at any time.'
+            });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
         }
-    };
 
-    React.useEffect(() => {
-        if (!showModel) {
-            // Takes into account closing transition time
-            setTimeout(() => {
-                setFirstRatingValue(undefined);
-                setSecondRatingValue(undefined);
-                setThirdRatingValue(undefined);
-                setError(undefined);
-                setSubmitting(false);
-            }, 200);
-        }
-    }, [showModel]);
+        setSubmitting(false);
+    };
 
     return (
         <>
@@ -205,7 +245,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 positiveActionCallback={save}
                 positiveButtonText="Submit my rating"
                 cancelButtonText="Cancel"
-                title={`Rate this ${Config.values.octopusInformation.publications[props.type].heading}`}
+                title={`Rate this ${Config.values.octopusInformation.publications[props.publication.type].heading}`}
                 disableButtons={submitting}
             >
                 <>
@@ -221,31 +261,52 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         {!!error && <Components.Alert severity="ERROR" title={error} className="my-4 text-left" />}
                         <div className="space-y-16">
                             <RatingSelector
-                                title={Config.values.octopusInformation.publications[props.type].ratings[0].value}
-                                description={
-                                    Config.values.octopusInformation.publications[props.type].ratings[0].description
+                                title={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
+                                        .value
                                 }
-                                labels={Config.values.octopusInformation.publications[props.type].ratings[0].labels}
+                                description={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
+                                        .description
+                                }
+                                labels={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
+                                        .labels
+                                }
                                 value={firstRatingValue}
                                 callback={setFirstRatingValue}
                                 disabled={submitting}
                             />
                             <RatingSelector
-                                title={Config.values.octopusInformation.publications[props.type].ratings[1].value}
-                                description={
-                                    Config.values.octopusInformation.publications[props.type].ratings[1].description
+                                title={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
+                                        .value
                                 }
-                                labels={Config.values.octopusInformation.publications[props.type].ratings[1].labels}
+                                description={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
+                                        .description
+                                }
+                                labels={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
+                                        .labels
+                                }
                                 value={secondRatingValue}
                                 callback={setSecondRatingValue}
                                 disabled={submitting}
                             />
                             <RatingSelector
-                                title={Config.values.octopusInformation.publications[props.type].ratings[2].value}
-                                description={
-                                    Config.values.octopusInformation.publications[props.type].ratings[2].description
+                                title={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
+                                        .value
                                 }
-                                labels={Config.values.octopusInformation.publications[props.type].ratings[2].labels}
+                                description={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
+                                        .description
+                                }
+                                labels={
+                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
+                                        .labels
+                                }
                                 value={thirdRatingValue}
                                 callback={setThirdRatingValue}
                                 disabled={submitting}
@@ -278,7 +339,10 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 <button
                     aria-label="Download JSON"
                     onClick={() =>
-                        Helpers.blobFileDownload(`${Config.endpoints.publications}/${props.id}`, `${props.id}.json`)
+                        Helpers.blobFileDownload(
+                            `${Config.endpoints.publications}/${props.publication.id}`,
+                            `${props.publication.id}.json`
+                        )
                     }
                     className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                 >
@@ -295,7 +359,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             router.push({
                                 pathname: `${Config.urls.createPublication.path}`,
                                 query: {
-                                    for: props.id,
+                                    for: props.publication.id,
                                     type: 'PEER_REVIEW'
                                 }
                             });

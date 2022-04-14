@@ -205,3 +205,11 @@ export interface OctopusInformation {
         };
     };
 }
+
+export interface ToastState {
+    visible: boolean;
+    title: null | string;
+    message: null | string;
+    icon: null | React.ReactElement;
+    dismiss: boolean;
+}

@@ -79,7 +79,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     <Framer.MotionConfig reducedMotion="user">
                         <div className={darkMode ? 'dark' : ''}>
                             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
-                                <Components.Notification />
+                                <Components.Toast />
                                 <Components.CommandPalette />
                                 <Component {...pageProps} />
                             </div>

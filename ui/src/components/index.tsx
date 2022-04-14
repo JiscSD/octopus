@@ -72,4 +72,4 @@ export { default as PublicationSidebarCardRatings } from './Publication/SidebarC
 export { default as PublicationSidebarCardActions } from './Publication/SidebarCard/Actions';
 export { default as PublicationSidebarCardSections } from './Publication/SidebarCard/Sections';
 export { default as SectioBreak } from './SectionBreak';
-export { default as Notification } from './Notification';
+export { default as Toast } from './Toast';
