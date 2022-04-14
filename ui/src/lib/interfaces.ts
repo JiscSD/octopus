@@ -174,7 +174,7 @@ export interface RatingEntry {
         id: number;
     };
     _avg: {
-        rating: number;
+        rating: number | null;
     };
 }
 
