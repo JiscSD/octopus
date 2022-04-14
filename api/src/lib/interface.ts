@@ -165,7 +165,7 @@ export interface CreateFlagPathParams {
 
 export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
-    comments: string;
+    comment: string;
 }
 
 export interface AuthorizeRequestBody {
@@ -349,4 +349,15 @@ export interface OctopusInformation {
             ratingCategories: Ratings[];
         };
     };
+}
+export interface CreateFlagCommentBody {
+    comment: string;
+}
+
+export interface CreateFlagCommentPathParams {
+    id: string;
+}
+
+export interface ResolveFlagPathParams {
+    id: string;
 }

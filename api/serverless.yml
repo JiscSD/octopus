@@ -205,3 +205,19 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/ratings
                   method: post
                   cors: true
+    createFlagComment:
+        handler: src/components/publication/routes.createFlagComment
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/flag/{id}/comment
+                  method: post
+                  cors: true
+    resolveFlag:
+        handler: src/components/publication/routes.resolveFlag
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/flag/{id}/resolve
+                  method: post
+                  cors: true
