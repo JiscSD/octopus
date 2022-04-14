@@ -12,9 +12,9 @@ const upsert: I.Schema = {
                 'HYPOTHESIS_WELL_DEFINED',
                 'HYPOTHESIS_ORIGINAL',
                 'HYPOTHESIS_SCIENTIFICALLY_VALID',
-                'METHOD_CLEAR',
-                'METHOD_ORIGINAL',
-                'METHOD_APPROPRIATE_TEST_OF_HYPOTHESIS',
+                'PROTOCOL_CLEAR',
+                'PROTOCOL_ORIGINAL',
+                'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS',
                 'DATA_WELL_ANNOTATED',
                 'DATA_SIZE_OF_DATASET',
                 'DATA_FOLLOWED_PROTOCOL',
@@ -34,7 +34,7 @@ const upsert: I.Schema = {
         },
         value: {
             type: 'number',
-            maximum: 10, 
+            maximum: 10,
             minimum: 0
         }
     },

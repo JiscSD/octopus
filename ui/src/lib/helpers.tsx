@@ -2,8 +2,9 @@ import React from 'react';
 import JWT from 'jsonwebtoken';
 import Cookies from 'js-cookie';
 import * as luxon from 'luxon';
+import fileDownload from 'js-file-download';
+import axios from 'axios';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Types from '@types';
 
@@ -11,7 +12,7 @@ import * as Types from '@types';
  * @description Truncates a string
  */
 export const truncateString = (value: string, length: number): string => {
-    return `${value.substring(0, length)}...`;
+    return value.length ? `${value.substring(0, length)}...` : '...';
 };
 
 /**
@@ -221,4 +222,13 @@ export const publicationsAvailabletoPublication = (publicationType: Types.Public
     }
 
     return available;
+};
+
+export const blobFileDownload = async (url: string, fileName: string) => {
+    const res = await axios.get(url, {
+        responseType: 'blob'
+    });
+
+    // @ts-ignore
+    fileDownload(res.data, fileName);
 };

@@ -165,7 +165,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                             >
-                                <HeadlessUi.Listbox.Options className="absolute z-50 mt-1 max-h-60 w-fit rounded-md bg-white-50 py-1 text-base shadow-sm sm:text-sm">
+                                <HeadlessUi.Listbox.Options className="absolute z-40 mt-1 max-h-60 w-fit rounded-md bg-white-50 py-1 text-base shadow-sm sm:text-sm">
                                     {headingOptions.map((heading, index) => (
                                         <HeadlessUi.Listbox.Option
                                             key={index}
@@ -196,7 +196,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                     <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
 
-                    <div className="flex overflow-scroll">
+                    <div className="flex">
                         <button
                             type="button"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}

@@ -319,9 +319,9 @@ export type Ratings =
     | 'HYPOTHESIS_WELL_DEFINED'
     | 'HYPOTHESIS_ORIGINAL'
     | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'METHOD_CLEAR'
-    | 'METHOD_ORIGINAL'
-    | 'METHOD_APPROPRIATE_TEST_OF_HYPOTHESIS'
+    | 'PROTOCOL_CLEAR'
+    | 'PROTOCOL_ORIGINAL'
+    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
     | 'DATA_WELL_ANNOTATED'
     | 'DATA_SIZE_OF_DATASET'
     | 'DATA_FOLLOWED_PROTOCOL'
@@ -343,6 +343,13 @@ export interface CreateRatingRequestBody {
     value: number;
 }
 
+export interface OctopusInformation {
+    publications: {
+        [key in PublicationType]: {
+            ratingCategories: Ratings[];
+        };
+    };
+}
 export interface CreateFlagCommentBody {
     comment: string;
 }
