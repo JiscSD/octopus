@@ -21,7 +21,7 @@ type RatingSelectorProps = {
         negative: string;
         positive: string;
     };
-    value?: number;
+    value: number | null | undefined;
     callback: (value: number) => void;
     disabled: boolean;
 };
