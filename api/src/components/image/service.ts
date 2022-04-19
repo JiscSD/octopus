@@ -64,3 +64,15 @@ export const destroy = async (id: string) => {
 
     return image;
 };
+
+export const getAll = async (user: string) => {
+    const images = await client.prisma.images.findMany({
+        where: {
+            user
+        }
+    });
+
+    console.log(images);
+
+    return images;
+};

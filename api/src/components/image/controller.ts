@@ -43,3 +43,13 @@ export const destroy = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getAll = async (event: I.AuthenticatedAPIRequest) => {
+    try {
+        const images = await imageService.getAll(event.user.id);
+
+        return response.json(200, images);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

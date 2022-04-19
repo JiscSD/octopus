@@ -226,7 +226,7 @@ functions:
         warmup: true
         events:
             - http:
-                  path: ${self:custom.versions.v1}/image
+                  path: ${self:custom.versions.v1}/images
                   method: post
                   cors: true
     deleteImage:
@@ -234,6 +234,14 @@ functions:
         warmup: true
         events:
             - http:
-                  path: ${self:custom.versions.v1}/image/{id}
+                  path: ${self:custom.versions.v1}/images/{id}
                   method: delete
+                  cors: true
+    getAllImages:
+        handler: src/components/image/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/images
+                  method: get
                   cors: true
