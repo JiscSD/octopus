@@ -22,8 +22,8 @@
     },
     "scripts": {
         "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
-        "seed:local": "npx prisma migrate reset --force",
-        "test:local": "stage=local jest --runInBand --testTimeout=60000",
+        "seed:local": "STAGE=local npx prisma migrate reset --force",
+        "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "format": "npx prettier --write src/"
     },
     "dependencies": {
@@ -41,8 +41,10 @@
         "@types/nodemailer": "^6.4.4",
         "ajv": "^8.8.2",
         "ajv-formats": "^2.1.1",
+        "aws-sdk": "^2.1114.0",
         "axios": "^0.26.0",
         "cheerio": "^1.0.0-rc.10",
+        "file-type": "^16.5.3",
         "html-to-text": "^8.1.0",
         "jsonwebtoken": "^8.5.1",
         "luxon": "^2.3.0",

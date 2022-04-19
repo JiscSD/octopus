@@ -88,12 +88,10 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </div>
                 </section>
-
                 {/** Mockup flow not ready */}
                 {/* <section className="container mx-auto py-16 px-8 2xl:py-28">
                     <Components.MockupFlow />
                 </section> */}
-
                 <section className="container mx-auto px-8 py-16 2xl:py-28 ">
                     {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
 
@@ -143,7 +141,6 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                     </div>
                 </section>
-
                 {/* <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
                     <div className="grid grid-cols-3 gap-x-32">
                         <div className="space-y-4">

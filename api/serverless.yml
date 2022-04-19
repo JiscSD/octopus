@@ -221,3 +221,27 @@ functions:
                   path: ${self:custom.versions.v1}/flag/{id}/resolve
                   method: post
                   cors: true
+    createImage:
+        handler: src/components/image/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/images
+                  method: post
+                  cors: true
+    deleteImage:
+        handler: src/components/image/routes.destroy
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/images/{id}
+                  method: delete
+                  cors: true
+    getAllImages:
+        handler: src/components/image/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/images
+                  method: get
+                  cors: true

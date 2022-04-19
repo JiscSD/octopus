@@ -1,6 +1,6 @@
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
-import * as coAuthorService from './service';
+import * as coAuthorService from 'coauthor/service';
 import * as I from 'interface';
 
 export const create = async (
