@@ -28,6 +28,22 @@ model User {
     PublicationFlags   PublicationFlags[]
     PublicationRatings PublicationRatings[]
     flagComments       FlagComments[]
+    Images             Images[]
+}
+
+model Images {
+    id         String         @id @default(cuid())
+    name       String
+    user       String
+    extension  ImageExtension
+    uploadedBy User           @relation(fields: [user], references: [id], onDelete: Cascade)
+    createdAt  DateTime       @default(now())
+}
+
+enum ImageExtension {
+    png
+    jpg
+    jpeg
 }
 
 model Publication {

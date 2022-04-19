@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.2"
 
 services:
     db:
@@ -26,6 +26,19 @@ services:
         ports:
             - 1025:1025
             - 8025:8025
+
+    localstack:
+        image: localstack/localstack:latest
+        ports:
+            - '4510-4559:4510-4559'
+            - '4566:4566'
+        environment:
+            - SERVICES=s3
+            - DEBUG=1
+            - DATA_DIR=/tmp/localstack/data
+        volumes:
+            - './.localstack:/tmp/localstack'
+            - '/var/run/docker.sock:/var/run/docker.sock'
 
     opensearch-node1:
         image: opensearchproject/opensearch:1.2.4

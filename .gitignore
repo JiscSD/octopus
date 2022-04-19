@@ -2,6 +2,8 @@
 node_modules
 jspm_packages
 
+.localstack
+
 # Serverless directories
 .serverless
 

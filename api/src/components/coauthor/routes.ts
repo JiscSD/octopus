@@ -2,8 +2,8 @@ import middy from '@middy/core';
 
 import * as middleware from 'middleware';
 
-import * as coAuthorController from './controller';
-import * as coAuthorSchema from './schema';
+import * as coAuthorController from 'coauthor/controller';
+import * as coAuthorSchema from 'coauthor/schema';
 
 export const create = middy(coAuthorController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))

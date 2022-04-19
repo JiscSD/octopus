@@ -60,3 +60,8 @@ module "elasticsearch" {
   vpc_id             = module.network.vpc_id
   instance_size      = var.elasticsearch_instance_size
 }
+
+module "s3" {
+  source             = "../modules/s3"
+  environment        = local.environment
+}

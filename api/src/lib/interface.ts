@@ -1,5 +1,12 @@
 import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role } from '@prisma/client';
-export { PublicationType, LicenceType, PublicationStatusEnum, PublicationFlagCategoryEnum, Role } from '@prisma/client';
+export {
+    PublicationType,
+    LicenceType,
+    PublicationStatusEnum,
+    PublicationFlagCategoryEnum,
+    Role,
+    ImageExtension
+} from '@prisma/client';
 
 import {
     APIGatewayProxyEventV2,
@@ -309,6 +316,11 @@ export interface UpdateCoAuthorPathParams {
     id: string;
 }
 
+export interface ImageSentBody {
+    name: string;
+    image: string;
+}
+
 /* @description Ratings
  */
 
@@ -359,5 +371,9 @@ export interface CreateFlagCommentPathParams {
 }
 
 export interface ResolveFlagPathParams {
+    id: string;
+}
+
+export interface DestroyImagePathParams {
     id: string;
 }

@@ -232,3 +232,15 @@ export const blobFileDownload = async (url: string, fileName: string) => {
     // @ts-ignore
     fileDownload(res.data, fileName);
 };
+
+export const getBase64FromFile = async (file: Blob) =>
+    new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+            resolve(fileReader.result);
+        };
+        fileReader.onerror = (error) => {
+            reject(error);
+        };
+    });

@@ -42,8 +42,14 @@
             "authorization/*": [
                 "src/components/authorization/*"
             ],
+            "image/*": [
+                "src/components/image/*"
+            ],
             "rating/*": [
                 "src/components/rating/*"
+            ],
+            "coauthor/*": [
+                "src/components/coauthor/*"
             ],
             "lib/*": [
                 "src/lib/*"
