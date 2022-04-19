@@ -44,11 +44,6 @@ type Props = {
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
 
-    const x = async (e: any) => {
-        const y = await Helpers.getBase64FromFile(e.target.files[0]);
-        console.log(y);
-    };
-
     return (
         <>
             <Head>
@@ -93,8 +88,6 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </div>
                 </section>
-                <input type="file" onChange={x} />
-                cd
                 {/** Mockup flow not ready */}
                 {/* <section className="container mx-auto py-16 px-8 2xl:py-28">
                     <Components.MockupFlow />
