@@ -8,7 +8,12 @@ jest.setTimeout(60000);
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
 export const initialSeed = async (): Promise<void> => {
-    await client.prisma.user.createMany({ data: seeds.users });
+    for (let user of seeds.users) {
+        await client.prisma.user.create({
+            // @ts-ignore
+            data: user
+        });
+    }
 
     // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
     for (let publication of seeds.publications) {

@@ -1,6 +1,7 @@
 import * as client from 'lib/client';
 
 import * as I from 'interface';
+import { ResponseError } from '@opensearch-project/opensearch/lib/errors';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -61,12 +62,15 @@ export const get = async (id: string) => {
                 }
             },
             publicationFlags: {
+                where: {
+                    resolved: false
+                },
                 select: {
                     category: true,
-                    comments: true,
                     createdBy: true,
                     id: true,
-                    createdAt: true
+                    createdAt: true,
+                    flagComments: true
                 }
             },
             user: {
@@ -74,6 +78,13 @@ export const get = async (id: string) => {
                     id: true,
                     firstName: true,
                     lastName: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    email: true,
+                    linkedUser: true
                 }
             },
             linkedTo: {
@@ -311,15 +322,20 @@ export const createFlag = async (
     publication: string,
     user: string,
     category: I.PublicationFlagCategoryEnum,
-    comments: string
+    comment: string
 ) => {
     const flag = await client.prisma.publicationFlags.create({
         data: {
-            comments,
             category,
             user: {
                 connect: {
                     id: user
+                }
+            },
+            flagComments: {
+                create: {
+                    comment,
+                    createdBy: user
                 }
             },
             publication: {
@@ -333,12 +349,54 @@ export const createFlag = async (
     return flag;
 };
 
+export const getFlag = async (id: string) => {
+    const flag = await client.prisma.publicationFlags.findFirst({
+        where: {
+            id
+        },
+        include: {
+            publication: {
+                include: {
+                    user: true
+                }
+            }
+        }
+    });
+
+    return flag;
+};
+
+export const createFlagComment = async (id: string, comment: string, user: string) => {
+    const flagComment = await client.prisma.flagComments.create({
+        data: {
+            flagId: id,
+            comment,
+            createdBy: user
+        }
+    });
+
+    return flagComment;
+};
+
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
         if (!publication.conflictOfInterestText?.length) return false;
     }
 
     return true;
+};
+
+export const doesDuplicateFlagExist = async (publication, category, user) => {
+    const flag = await client.prisma.publicationFlags.findFirst({
+        where: {
+            publicationId: publication,
+            createdBy: user,
+            category,
+            resolved: false
+        }
+    });
+
+    return flag;
 };
 
 export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
@@ -356,4 +414,17 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && !hasPublishDate && isAttemptToLive) isReady = true;
 
     return isReady;
+};
+
+export const resolveFlag = async (id: string) => {
+    const resolveFlag = await client.prisma.publicationFlags.update({
+        where: {
+            id
+        },
+        data: {
+            resolved: true
+        }
+    });
+
+    return resolveFlag;
 };

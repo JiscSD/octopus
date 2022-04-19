@@ -13,9 +13,9 @@ import '../styles/globals.css';
 const App = ({ Component, pageProps }: Types.AppProps) => {
     const isMounted = React.useRef(false);
     const [loading, setLoading] = React.useState(true);
-    const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);
-    const showCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
+    const darkMode = Stores.usePreferencesStore((state) => state.darkMode);
+    const showCmdPalette = Stores.useGlobalsStore((state) => state.showCmdPalette);
+    const toggleCmdPalette = Stores.useGlobalsStore((state) => state.toggleCmdPalette);
 
     const setUpCmdPalListeners = React.useCallback(() => {
         if (isMounted.current === true) {
@@ -79,6 +79,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     <Framer.MotionConfig reducedMotion="user">
                         <div className={darkMode ? 'dark' : ''}>
                             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
+                                <Components.Toast />
                                 <Components.CommandPalette />
                                 <Component {...pageProps} />
                             </div>

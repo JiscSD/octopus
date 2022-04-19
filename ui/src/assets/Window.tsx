@@ -1,11 +1,19 @@
-const Window = () => (
+import React from 'react';
+
+type Props = {
+    height: number;
+    width: number;
+    className?: string;
+};
+
+const Window: React.FC<Props> = (props): React.ReactElement => (
     <svg
-        width="800"
-        height="489"
-        viewBox="0 0 800 489"
-        fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="overflow-hidden rounded-md"
+        width={props.width}
+        height={props.height}
+        viewBox={`0 0 ${props.width} ${props.height}`}
+        fill="none"
+        className={`overflow-hidden rounded-md ${props.className ?? ''}`}
     >
         <path
             d="M4.8 51C2.1408 51 0 48.8676 0 46.2188V25.5794V4.78131V5.62668e-05H4.8H795.2H800V4.78131V25.5794V46.2188C800 48.8676 797.859 51 795.2 51H4.8V51Z"

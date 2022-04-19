@@ -14,7 +14,7 @@ describe('Get individual user', () => {
     });
 
     test('User not found', async () => {
-        const user = await testUtils.agent.get('/users/test-user-3');
+        const user = await testUtils.agent.get('/users/test-user-100');
 
         expect(user.status).toEqual(404);
     });

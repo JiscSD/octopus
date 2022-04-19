@@ -9,6 +9,23 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
+type SidebarCardProps = {
+    publication: Interfaces.Publication;
+    sectionList: {
+        title: string;
+        href: string;
+    }[];
+};
+
+const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
+    <div className="w-full space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 dark:bg-grey-900">
+        <Components.PublicationSidebarCardGeneral publication={props.publication} />
+        <Components.PublicationSidebarCardRatings id={props.publication.id} type={props.publication.type} />
+        <Components.PublicationSidebarCardActions publication={props.publication} />
+        <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
+    </div>
+);
+
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
@@ -91,11 +108,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                         <Components.Link
                             href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}
-                            className="2 mb-8 block w-fit rounded outline-0 hover:underline focus:ring-2 focus:ring-yellow-400"
+                            className="2 text-normal mb-8 block w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                         >
-                            <p className="text-normal block leading-relaxed text-teal-600 transition-colors duration-500 dark:text-grey-100">
+                            <>
                                 {props.publication.user.firstName[0]}. {props.publication.user.lastName}
-                            </p>
+                            </>
                         </Components.Link>
 
                         {props.publication.type !== 'PEER_REVIEW' && (
@@ -105,7 +122,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         )}
 
                         <div className="block xl:hidden">
-                            <Components.PublicationRatings publication={props.publication} />
+                            <SidebarCard publication={props.publication} sectionList={sectionList} />
                         </div>
                     </header>
 
@@ -116,7 +133,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 process. Since this publication is a{' '}
                                 <Components.Link
                                     href="#"
-                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                 >
                                     <>{Helpers.formatPublicationType(props.publication.type)}</>
                                 </Components.Link>
@@ -126,7 +143,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         The publications preceeding this are{' '}
                                         <Components.Link
                                             href="#"
-                                            className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                            className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                         >
                                             <>
                                                 {Helpers.formatPublicationType(
@@ -143,7 +160,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             The publications following this are{' '}
                                             <Components.Link
                                                 href="#"
-                                                className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                                className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                             >
                                                 <>
                                                     {Helpers.formatPublicationType(
@@ -238,7 +255,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
-                        <Components.PublicationRatings publication={props.publication} sectionList={sectionList} />
+                        <SidebarCard publication={props.publication} sectionList={sectionList} />
                     </div>
                 </aside>
             </Layouts.Publication>

@@ -92,7 +92,7 @@ export interface UpdateStatusPathParams {
     status: 'LIVE';
 }
 
-export interface  UpdatePublicationRequestBody {
+export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
     licence?: LicenceType;
@@ -165,7 +165,7 @@ export interface CreateFlagPathParams {
 
 export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
-    comments: string;
+    comment: string;
 }
 
 export interface AuthorizeRequestBody {
@@ -277,7 +277,39 @@ export interface ORCIDUser {
 }
 
 /**
- * @description Ratings
+ * @description Coauthor
+ */
+export interface CreateCoAuthorRequestBody {
+    email: string;
+}
+
+export interface CreateCoAuthorPathParams {
+    id: string;
+}
+
+export interface DeleteCoAuthorPathParams {
+    id: string;
+    coauthor: string;
+}
+
+export interface ConfirmCoAuthorPathParams {
+    id: string;
+}
+
+export interface ConfirmCoAuthorBody {
+    email: string;
+    code: string;
+    approve: boolean;
+}
+
+export interface ChangeCoAuthorRequestBody {
+    confirm: boolean;
+}
+export interface UpdateCoAuthorPathParams {
+    id: string;
+}
+
+/* @description Ratings
  */
 
 export type Ratings =
@@ -287,9 +319,9 @@ export type Ratings =
     | 'HYPOTHESIS_WELL_DEFINED'
     | 'HYPOTHESIS_ORIGINAL'
     | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'METHOD_CLEAR'
-    | 'METHOD_ORIGINAL'
-    | 'METHOD_APPROPRIATE_TEST_OF_HYPOTHESIS'
+    | 'PROTOCOL_CLEAR'
+    | 'PROTOCOL_ORIGINAL'
+    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
     | 'DATA_WELL_ANNOTATED'
     | 'DATA_SIZE_OF_DATASET'
     | 'DATA_FOLLOWED_PROTOCOL'
@@ -304,9 +336,28 @@ export type Ratings =
     | 'REAL_WORLD_APPLICATION_IMPACTFUL'
     | 'REVIEW_CLEAR'
     | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL'
+    | 'REVIEW_ORIGINAL';
 
 export interface CreateRatingRequestBody {
     type: Ratings;
     value: number;
+}
+
+export interface OctopusInformation {
+    publications: {
+        [key in PublicationType]: {
+            ratingCategories: Ratings[];
+        };
+    };
+}
+export interface CreateFlagCommentBody {
+    comment: string;
+}
+
+export interface CreateFlagCommentPathParams {
+    id: string;
+}
+
+export interface ResolveFlagPathParams {
+    id: string;
 }

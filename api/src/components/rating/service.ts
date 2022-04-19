@@ -2,8 +2,8 @@ import * as client from 'lib/client';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 
-export const isValid = (pubType: string, ratingType: string) =>
-    Boolean(Helpers.PublicationInformation[pubType].ratingCategories.includes(ratingType));
+export const isValid = (pubType: I.PublicationType, ratingType: I.Ratings) =>
+    Boolean(Helpers.OctopusInformation.publications[pubType].ratingCategories.includes(ratingType));
 
 export const upsert = async (publication: string, user: string, category: I.Ratings, rating: number) => {
     const id = `${publication}-${user}-${category}`;
@@ -33,7 +33,7 @@ export const getAggregate = async (id: string | Array<string>) => {
                 in: Array.isArray(id) ? id : [id]
             }
         },
-        by: ['category', 'id'],
+        by: ['category', 'publicationId'],
         _count: {
             id: true
         },
