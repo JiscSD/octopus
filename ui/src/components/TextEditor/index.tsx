@@ -341,7 +341,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     name: props.editor.getAttributes('image').title,
                                     alt: props.editor.getAttributes('image').alt,
                                     base64: null,
-                                    url: null
+                                    url: null,
+                                    width: ''
                                 });
                                 setImageModalOpen(true);
                             }}
@@ -512,7 +513,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 className="border-1 inline-flex items-center rounded border border-grey-300 bg-white-50 py-1.5 text-xs font-medium text-grey-700 first:px-2.5 hover:bg-grey-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                                 onClick={() => {
                                     setImageModalOpen(false);
-                                    setImage({ name: '', alt: '', base64: null, url: null });
+                                    setImage({ name: '', alt: '', base64: null, url: null, width: '' });
                                 }}
                             >
                                 Cancel
