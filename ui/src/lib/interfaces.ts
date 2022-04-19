@@ -213,3 +213,11 @@ export interface ToastState {
     icon: null | React.ReactElement;
     dismiss: boolean;
 }
+
+export interface TextEditorImage {
+    name: string;
+    alt: string;
+    base64: null | string;
+    url: null | string;
+    width: null | string;
+}

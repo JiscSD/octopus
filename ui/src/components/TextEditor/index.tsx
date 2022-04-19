@@ -2,16 +2,21 @@ import React from 'react';
 import * as tiptap from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/solid';
+import * as HeadlessUi from '@headlessui/react';
 import * as FAIcons from 'react-icons/fa';
 
+import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
+import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Api from '@api';
 
 type LetterIconType = {
     letter: string;
@@ -31,6 +36,8 @@ interface MenuBarProps {
 }
 
 const MenuBar: React.FC<MenuBarProps> = (props) => {
+    const user = Stores.useAuthStore((state) => state.user);
+
     const headingOptions = React.useMemo(
         () => [
             {
@@ -75,6 +82,14 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     const [selected, setSelected] = React.useState(headingOptions[0]);
     const [linkModalOpen, setLinkModalOpen] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState('');
+    const [imageModalOpen, setImageModalOpen] = React.useState(false);
+    const [image, setImage] = React.useState<Interfaces.TextEditorImage>({
+        name: '',
+        alt: '',
+        base64: null,
+        url: null,
+        width: null
+    });
 
     const openLinkModal = React.useCallback(() => {
         setLinkUrl(props.editor.getAttributes('link').href);
@@ -100,6 +115,40 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         props.editor.chain().focus().extendMarkRange('link').unsetLink().run();
         closeLinkModal();
     }, [props.editor, closeLinkModal]);
+
+    const uploadImage = React.useCallback(async () => {
+        const imageRes = await Api.post(
+            '/images',
+            {
+                name: image.name,
+                image: image.base64
+            },
+            user?.token
+        );
+
+        props.editor.commands.setImage({
+            src: `http://localhost:4566/science-octopus-publishing-images-local/${imageRes.data.id}`,
+            alt: image.alt,
+            title: image.name
+        });
+
+        setImageModalOpen(false);
+    }, [props.editor, image.alt, image.base64, image.name, user?.token]);
+
+    const handleUploadImage = React.useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const base64 = await Helpers.getBase64FromFile(e.target.files[0]);
+            const fileName = e.target.files[0].name;
+
+            setImage((prevState) => ({
+                ...prevState,
+                base64,
+                name: fileName,
+                width: `${50}px`,
+                height: `${300}px`
+            }));
+        }
+    }, []);
 
     React.useEffect(() => {
         if (props.editor) {
@@ -287,6 +336,22 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            onClick={() => {
+                                setImage({
+                                    name: props.editor.getAttributes('image').title,
+                                    alt: props.editor.getAttributes('image').alt,
+                                    base64: null,
+                                    url: null
+                                });
+                                setImageModalOpen(true);
+                            }}
+                            className={props.editor.isActive('image') ? activeMenuIconStyles : menuIconStyles}
+                        >
+                            <FAIcons.FaImage className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                        </button>
+                        <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
+                        <button
+                            type="button"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -359,6 +424,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                     </div>
                 </div>
+                {/* Link modal */}
                 <HeadlessUi.Dialog
                     open={linkModalOpen}
                     onClose={() => setLinkModalOpen(false)}
@@ -379,6 +445,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="text"
                                     name="link"
                                     id="link"
+                                    accept="image/png, image/jpeg, image/jpg"
                                     className="block w-full rounded-md border-grey-300 shadow-sm placeholder:font-light focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
                                 />
                             </div>
@@ -396,6 +463,65 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 onClick={saveLink}
                             >
                                 Add link
+                            </button>
+                        </div>
+                    </div>
+                </HeadlessUi.Dialog>
+
+                {/* Image upload modal */}
+                <HeadlessUi.Dialog
+                    open={imageModalOpen}
+                    onClose={() => setImageModalOpen(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto max-w-sm rounded bg-white-50 p-4 shadow-sm">
+                        <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                            <section>
+                                <label htmlFor="alt" className="mt-4 block text-sm font-medium text-grey-700">
+                                    Alt text
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        value={image.alt}
+                                        onChange={(e) => {
+                                            const value = e.currentTarget.value;
+                                            setImage((prevState) => ({ ...prevState, alt: value }));
+                                        }}
+                                        type="text"
+                                        name="alt"
+                                        id="alt"
+                                        className="block w-full rounded-md border-grey-300 shadow-sm placeholder:font-light focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
+                                    />
+                                </div>
+
+                                <input
+                                    type="file"
+                                    onChange={handleUploadImage}
+                                    accept="image/png, image/jpeg, image/jpg"
+                                />
+                            </section>
+                            <section>URL stuff here</section>
+                            <section>library here</section>
+                        </HeadlessUi.Dialog.Description>
+
+                        <div className="mt-6 flex justify-between">
+                            <button
+                                className="border-1 inline-flex items-center rounded border border-grey-300 bg-white-50 py-1.5 text-xs font-medium text-grey-700 first:px-2.5 hover:bg-grey-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                                onClick={() => {
+                                    setImageModalOpen(false);
+                                    setImage({ name: '', alt: '', base64: null, url: null });
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="bg-sky-50 text-sky-900 hover:bg-sky-100 inline-flex items-center rounded border px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                                onClick={uploadImage}
+                            >
+                                Add image
                             </button>
                         </div>
                     </div>
@@ -428,7 +554,10 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             }),
             TableRow,
             TableHeader,
-            TableCell
+            TableCell,
+            Image.configure({
+                inline: true
+            })
         ],
         onUpdate: ({ editor }) => props.contentChangeHandler(editor.getHTML()),
         onSelectionUpdate: () => setLoading(true),
