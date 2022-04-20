@@ -18,8 +18,8 @@ export const octopusInformation: Interfaces.OctopusInformation = {
             id: 'PROBLEM',
             heading: 'Research Problem',
             content: 'A neatly defined scientific problem.',
-            ratings: [
-                {
+            ratings: {
+                PROBLEM_WELL_DEFINED: {
                     id: 'PROBLEM_WELL_DEFINED',
                     value: 'Well defined',
                     description:
@@ -29,7 +29,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clearly defined'
                     }
                 },
-                {
+                PROBLEM_ORIGINAL: {
                     id: 'PROBLEM_ORIGINAL',
                     value: 'Non-derivative',
                     description:
@@ -39,7 +39,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An original problem not previously described'
                     }
                 },
-                {
+                PROBLEM_IMPORTANT: {
                     id: 'PROBLEM_IMPORTANT',
                     value: 'Important',
                     description:
@@ -49,15 +49,15 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'A problem of great importance'
                     }
                 }
-            ]
+            }
         },
         HYPOTHESIS: {
             id: 'HYPOTHESIS',
             heading: 'Hypothesis',
             content:
                 'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
-            ratings: [
-                {
+            ratings: {
+                HYPOTHESIS_WELL_DEFINED: {
                     id: 'HYPOTHESIS_WELL_DEFINED',
                     value: 'Well defined',
                     description:
@@ -67,7 +67,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clearly defined'
                     }
                 },
-                {
+                HYPOTHESIS_ORIGINAL: {
                     id: 'HYPOTHESIS_ORIGINAL',
                     value: 'Non-derivative',
                     description:
@@ -77,7 +77,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An original hypothesis not previously described'
                     }
                 },
-                {
+                HYPOTHESIS_SCIENTIFICALLY_VALID: {
                     id: 'HYPOTHESIS_SCIENTIFICALLY_VALID',
                     value: 'Theoretically valid',
                     description:
@@ -87,14 +87,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'A theoretically valid hypothesis/rationale'
                     }
                 }
-            ]
+            }
         },
         PROTOCOL: {
             id: 'PROTOCOL',
             heading: 'Protocol',
             content: 'A practical method of testing an existing published Hypothesis.',
-            ratings: [
-                {
+            ratings: {
+                PROTOCOL_CLEAR: {
                     id: 'PROTOCOL_CLEAR',
                     value: 'Details clear',
                     description:
@@ -104,7 +104,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and reproducible'
                     }
                 },
-                {
+                PROTOCOL_ORIGINAL: {
                     id: 'PROTOCOL_ORIGINAL',
                     value: 'Non-derivative',
                     description:
@@ -114,7 +114,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An original method not previously described'
                     }
                 },
-                {
+                PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS: {
                     id: 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS',
                     value: 'Theoretically appropriate',
                     description:
@@ -124,15 +124,15 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An appropriate & insightful follow-on from the linked hypothesis/rationale'
                     }
                 }
-            ]
+            }
         },
         DATA: {
             id: 'DATA',
             heading: 'Data',
             content:
                 'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
-            ratings: [
-                {
+            ratings: {
+                DATA_WELL_ANNOTATED: {
                     id: 'DATA_WELL_ANNOTATED',
                     value: 'Reusable',
                     description:
@@ -142,7 +142,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and reusable'
                     }
                 },
-                {
+                DATA_SIZE_OF_DATASET: {
                     id: 'DATA_SIZE_OF_DATASET',
                     value: 'Valuable',
                     description:
@@ -152,7 +152,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'A very large and important dataset'
                     }
                 },
-                {
+                DATA_FOLLOWED_PROTOCOL: {
                     id: 'DATA_FOLLOWED_PROTOCOL',
                     value: 'Protocol adherence',
                     description:
@@ -162,14 +162,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Carefully collected and reported'
                     }
                 }
-            ]
+            }
         },
         ANALYSIS: {
             id: 'ANALYSIS',
             heading: 'Analysis',
             content: 'A statistical or thematic analysis of existing published Data or Results.',
-            ratings: [
-                {
+            ratings: {
+                ANALYSIS_CLEAR: {
                     id: 'ANALYSIS_CLEAR',
                     value: 'Details clear',
                     description:
@@ -179,7 +179,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and reproducible'
                     }
                 },
-                {
+                ANALYSIS_ORIGINAL: {
                     id: 'ANALYSIS_ORIGINAL',
                     value: 'Non-derivative',
                     description:
@@ -189,7 +189,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An original analysis not previously carried out on this data'
                     }
                 },
-                {
+                ANALYSIS_APPROPRIATE_METHODOLOGY: {
                     id: 'ANALYSIS_APPROPRIATE_METHODOLOGY',
                     value: 'Appropriate methodology',
                     description:
@@ -199,14 +199,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An appropriate & insightful analysis given the data and research question'
                     }
                 }
-            ]
+            }
         },
         INTERPRETATION: {
             id: 'INTERPRETATION',
             heading: 'Interpretation',
             content: 'A discussion around an existing published Analysis.',
-            ratings: [
-                {
+            ratings: {
+                INTERPRETATION_CLEAR: {
                     id: 'INTERPRETATION_CLEAR',
                     value: 'Clearly written',
                     description:
@@ -216,7 +216,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and understandable'
                     }
                 },
-                {
+                INTERPRETATION_INSIGHTFUL: {
                     id: 'INTERPRETATION_INSIGHTFUL',
                     value: 'Insightful',
                     description: 'Please assess whether this interpretation is original and insightful.',
@@ -225,7 +225,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An original and insightful interpretation not previously described'
                     }
                 },
-                {
+                INTERPRETATION_CONSISTENT_WITH_DATA: {
                     id: 'INTERPRETATION_CONSISTENT_WITH_DATA',
                     value: 'Consistent with data',
                     description:
@@ -235,14 +235,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An appropriate interpretation completely supported by the evidence'
                     }
                 }
-            ]
+            }
         },
         REAL_WORLD_APPLICATION: {
             id: 'REAL_WORLD_APPLICATION',
             heading: 'Real-world Application',
             content: 'Real world applications arising from an existing published Interpretation.',
-            ratings: [
-                {
+            ratings: {
+                REAL_WORLD_APPLICATION_CLEAR: {
                     id: 'REAL_WORLD_APPLICATION_CLEAR',
                     value: 'Details clear',
                     description:
@@ -252,7 +252,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and understandable'
                     }
                 },
-                {
+                REAL_WORLD_APPLICATION_IMPACTFUL: {
                     id: 'REAL_WORLD_APPLICATION_IMPACTFUL',
                     value: 'Impactful',
                     description: 'please assess how much impact this application could have within its field.',
@@ -261,7 +261,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An application promising major impact'
                     }
                 },
-                {
+                REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT: {
                     id: 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT',
                     value: 'Appropriate',
                     description:
@@ -271,14 +271,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An appropriate application well supported by evidence'
                     }
                 }
-            ]
+            }
         },
         PEER_REVIEW: {
             id: 'PEER_REVIEW',
             heading: 'Review',
             content: '',
-            ratings: [
-                {
+            ratings: {
+                REVIEW_CLEAR: {
                     id: 'REVIEW_CLEAR',
                     value: 'Clearly written',
                     description:
@@ -288,7 +288,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Perfectly clear and understandable'
                     }
                 },
-                {
+                REVIEW_INSIGHTFUL: {
                     id: 'REVIEW_INSIGHTFUL',
                     value: 'Insightful',
                     description:
@@ -298,7 +298,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'An highly insightful review'
                     }
                 },
-                {
+                REVIEW_ORIGINAL: {
                     id: 'REVIEW_ORIGINAL',
                     value: 'Original',
                     description:
@@ -308,7 +308,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
                         positive: 'Gives many insights not previously described'
                     }
                 }
-            ]
+            }
         }
     },
     licences: {

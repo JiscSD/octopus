@@ -377,3 +377,7 @@ export interface ResolveFlagPathParams {
 export interface DestroyImagePathParams {
     id: string;
 }
+
+export interface GerRatingsQueryParams {
+    user?: string;
+}

@@ -185,14 +185,16 @@ export interface OctopusInformation {
             heading: string;
             content: string;
             ratings: {
-                id: Types.Ratings;
-                value: string;
-                description: string;
-                labels: {
-                    negative: string;
-                    positive: string;
+                [key in Types.Ratings]?: {
+                    id: Types.Ratings;
+                    value: string;
+                    description: string;
+                    labels: {
+                        negative: string;
+                        positive: string;
+                    };
                 };
-            }[];
+            };
         };
     };
     licences: {
@@ -212,4 +214,12 @@ export interface ToastState {
     message: null | string;
     icon: null | React.ReactElement;
     dismiss: boolean;
+}
+
+export interface APIRatingShape {
+    id: string;
+    publicationId: string;
+    userId: string;
+    rating: number;
+    category: Types.Ratings;
 }

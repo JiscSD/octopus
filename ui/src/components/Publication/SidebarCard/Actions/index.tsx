@@ -1,5 +1,5 @@
 import React from 'react';
-import * as SWR from 'swr';
+import useSWR, * as SWR from 'swr';
 import Image from 'next/image';
 import * as Router from 'next/router';
 import * as ReactRange from 'react-range';
@@ -121,37 +121,22 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [showModel, setShowModel] = React.useState(false);
 
-    // Computed value of the first rating
+    const { data = { data: [] } } = useSWR(`/publications/${props.publication.id}/ratings?user=${user?.id}`, null, {
+        fallback: []
+    });
+
+    // Computed value of the ratings previously given
     const originalFirstRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[0].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(0, data.data, props.publication.type),
+        [data, props.publication.type]
     );
-
-    // Computed value of the second rating
     const originalSecondRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[1].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(1, data.data, props.publication.type),
+        [data, props.publication.type]
     );
-
-    // Computed value of the third rating
     const originalThirdRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[2].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(2, data.data, props.publication.type),
+        [data, props.publication.type]
     );
 
     // State that represents the current range sliders
@@ -184,7 +169,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[0].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[0].id,
                         value: firstRatingValue
                     },
                     user?.token
@@ -199,7 +186,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[1].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[1].id,
                         value: secondRatingValue
                     },
                     user?.token
@@ -214,7 +203,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[2].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[2].id,
                         value: thirdRatingValue
                     },
                     user?.token
@@ -268,16 +259,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         <div className="space-y-16">
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].labels
                                 }
                                 value={firstRatingValue}
                                 callback={setFirstRatingValue}
@@ -285,16 +279,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             />
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].labels
                                 }
                                 value={secondRatingValue}
                                 callback={setSecondRatingValue}
@@ -302,16 +299,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             />
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].labels
                                 }
                                 value={thirdRatingValue}
                                 callback={setThirdRatingValue}

@@ -17,8 +17,6 @@ type RatingProps = {
 const Rating: React.FC<RatingProps> = (props): React.ReactElement => {
     const average = props.ratings?.aggregate.find((aggregate) => aggregate.category === props.ratingType);
 
-    console.log(average);
-
     const percentage = React.useMemo(() => {
         return average?._avg.rating ? Helpers.percentage(Math.round(average._avg.rating), 10) : 0;
     }, [average]);
@@ -54,7 +52,7 @@ const Ratings: React.FC<RatingsProps> = (props): React.ReactElement => {
         <>
             <Components.SectioBreak name="Ratings" />
             <div className="space-y-3">
-                {Config.values.octopusInformation.publications[props.type].ratings.map((rating) => (
+                {Object.values(Config.values.octopusInformation.publications[props.type].ratings).map((rating) => (
                     <Rating key={rating.id} label={rating.value} ratingType={rating.id} ratings={data?.data.ratings} />
                 ))}
             </div>
