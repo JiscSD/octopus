@@ -1,7 +1,6 @@
 import * as client from 'lib/client';
 
 import * as I from 'interface';
-import { ResponseError } from '@opensearch-project/opensearch/lib/errors';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
