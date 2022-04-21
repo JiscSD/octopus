@@ -55,14 +55,14 @@ export const upsert = async (
 };
 
 export const get = async (
-    event: I.AuthenticatedAPIRequest<undefined, I.GerRatingsQueryParams, I.GetPublicationPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, I.GetRatingsQueryParams, I.GetPublicationPathParams>
 ) => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
         if (publication?.currentStatus !== 'LIVE') {
             return response.json(404, {
-                message: 'You cant rate a non live publication'
+                message: 'You cannot view ratings for a publication that is not LIVE.'
             });
         }
 
@@ -72,7 +72,7 @@ export const get = async (
             });
         }
 
-        const ratings = await ratingService.getRatingsByUser(publication.id, event?.queryStringParameters?.user);
+        const ratings = await ratingService.getRatingsByUser(publication.id, event.queryStringParameters?.user);
 
         return response.json(200, ratings);
     } catch (err) {
