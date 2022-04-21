@@ -378,6 +378,6 @@ export interface DestroyImagePathParams {
     id: string;
 }
 
-export interface GerRatingsQueryParams {
+export interface GetRatingsQueryParams {
     user?: string;
 }
