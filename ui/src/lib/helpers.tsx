@@ -5,6 +5,7 @@ import * as luxon from 'luxon';
 import fileDownload from 'js-file-download';
 import axios from 'axios';
 
+import * as Interfaces from '@interfaces';
 import * as Config from '@config';
 import * as Types from '@types';
 
@@ -244,3 +245,13 @@ export const getBase64FromFile = async (file: Blob): Promise<string> =>
             reject(error);
         };
     });
+
+export const findRating = (
+    index: number,
+    ratingList: Interfaces.APIRatingShape[],
+    publicationType: Types.PublicationType
+): number | null => {
+    const ratingType = Object.values(Config.values.octopusInformation.publications[publicationType].ratings)[index].id;
+    const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
+    return found ? found.rating : null;
+};

@@ -30,41 +30,56 @@ const StepFive = () => {
     }, [linkedTo.length, setError]);
 
     return (
-        <div className="space-y-8">
-            <div className="relative">
-                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Title
-                </span>
-                {title.length ? <CompletedIcon /> : <IncompleteIcon />}
-            </div>
-            <div className="relative">
-                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Links
-                </span>
-                {linkedTo.length ? <CompletedIcon /> : <IncompleteIcon />}
-            </div>
-            <div className="relative">
-                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Creative commons licence
-                </span>
-                {licence ? <CompletedIcon /> : <IncompleteIcon />}
-            </div>
+        <>
+            <Components.PublicationCreationStepTitle text="Review &#38; publish" />
+            <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
+                Your publication will go live as soon as you select Publish. At this point the publication will be
+                date-stamped and a DOI created, establishing the work as yours.
+            </p>
+            <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
+                It will appear publicly on your personal page for other researchers, institutions and funders to see,
+                alongside others’ subsequent reviews and ratings of it.
+            </p>
+            <p className="mb-10 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
+                Please note that publications cannot be edited post-publication.
+            </p>
 
-            <div className="relative">
-                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Conflict of interest
-                </span>
-                {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
-                {!conflictOfInterestStatus && <CompletedIcon />}
-            </div>
+            <div className="space-y-8">
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Title
+                    </span>
+                    {title.length ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Links
+                    </span>
+                    {linkedTo.length ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Creative commons licence
+                    </span>
+                    {licence ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
 
-            <div className="relative">
-                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Full text
-                </span>
-                {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Conflict of interest
+                    </span>
+                    {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
+                    {!conflictOfInterestStatus && <CompletedIcon />}
+                </div>
+
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Full text
+                    </span>
+                    {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

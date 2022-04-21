@@ -9,3 +9,8 @@ export const upsert = middy(ratingsController.upsert)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(ratingSchema.upsert, 'body'));
+
+export const get = middy(ratingsController.get)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.validator(ratingSchema.get, 'queryStringParameters'));

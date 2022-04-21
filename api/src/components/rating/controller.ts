@@ -53,3 +53,30 @@ export const upsert = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const get = async (
+    event: I.AuthenticatedAPIRequest<undefined, I.GetRatingsQueryParams, I.GetPublicationPathParams>
+) => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        if (publication?.currentStatus !== 'LIVE') {
+            return response.json(404, {
+                message: 'You cannot view ratings for a publication that is not LIVE.'
+            });
+        }
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'No publication by the provided ID'
+            });
+        }
+
+        const ratings = await ratingService.getRatingsByUser(publication.id, event.queryStringParameters?.user);
+
+        return response.json(200, ratings);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

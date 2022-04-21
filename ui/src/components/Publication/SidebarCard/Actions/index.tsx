@@ -1,5 +1,5 @@
 import React from 'react';
-import * as SWR from 'swr';
+import useSWR, * as SWR from 'swr';
 import Image from 'next/image';
 import * as Router from 'next/router';
 import * as ReactRange from 'react-range';
@@ -37,78 +37,75 @@ const RatingSelector: React.FC<RatingSelectorProps> = (props): React.ReactElemen
                 <OutlineIcons.InformationCircleIcon className="ml-2 block w-5 text-teal-600 hover:cursor-pointer lg:hidden" />
             </p>
             <span className="col-span-1 text-xs font-medium text-grey-700">
-                {props.value ? `${props.value}/10` : 'N/A'}
+                {props.value || props.value === 0 ? `${props.value}/10` : 'N/A'}
             </span>
         </div>
         <p className="mb-3 hidden w-11/12 text-left font-montserrat text-xs font-medium text-grey-700 lg:block">
             {props.description}
         </p>
         <div className="mb-12 items-start">
-            <div className="">
-                <ReactRange.Range
-                    step={1}
-                    min={0}
-                    max={10}
-                    disabled={props.disabled}
-                    values={props.value ? [props.value] : [5]}
-                    onChange={(values) => props.callback(values[0])}
-                    renderMark={({ props: markProps, index }) => (
+            <ReactRange.Range
+                step={1}
+                min={0}
+                max={10}
+                disabled={props.disabled}
+                values={props.value || props.value === 0 ? [props.value] : [5]}
+                onChange={(values) => props.callback(values[0])}
+                renderMark={({ props: markProps, index }) => (
+                    <div
+                        {...markProps}
+                        style={{ ...markProps.style }}
+                        className={`relative -bottom-2 h-4 w-0.5 pb-2 transition-colors duration-500 ${
+                            props.value || props.value === 0 ? 'bg-teal-200' : 'bg-grey-100'
+                        }`}
+                    >
                         <div
-                            {...markProps}
-                            style={{ ...markProps.style }}
-                            className={`relative -bottom-2 h-4 w-0.5 pb-2 transition-colors duration-500 ${
-                                props.value ? 'bg-teal-200' : 'bg-grey-100'
-                            }`}
+                            className={`absolute -bottom-6 w-max text-xxs text-grey-800 ${
+                                index === 0 ? '-left-full' : ''
+                            } ${index === 10 ? '-right-[5px] left-auto' : ''}`}
                         >
-                            <div
-                                className={`absolute -bottom-6 w-max text-xxs text-grey-800 ${
-                                    index === 0 ? '-left-full' : ''
-                                } ${index === 10 ? '-right-[5px] left-auto' : ''}`}
-                            >
-                                {index !== 0 && index !== 10 && index}
-                                {(index === 0 && (
+                            {index !== 0 && index !== 10 && index}
+                            {(index === 0 && (
+                                <>
+                                    {index}
+                                    <span title={props.labels.negative} className="absolute -left-1 flex items-end">
+                                        <SolidIcons.InformationCircleIcon className="mr-1 w-4 text-teal-600" />
+                                    </span>
+                                </>
+                            )) ||
+                                (index === 10 && (
                                     <>
                                         {index}
-                                        <span title={props.labels.negative} className="absolute -left-1 flex items-end">
-                                            <SolidIcons.InformationCircleIcon className="mr-1 w-4 text-teal-600" />
+                                        <span title={props.labels.positive} className="absolute -left-1 flex items-end">
+                                            <SolidIcons.InformationCircleIcon className="ml-1 w-4 text-teal-600" />
                                         </span>
                                     </>
-                                )) ||
-                                    (index === 10 && (
-                                        <>
-                                            {index}
-                                            <span
-                                                title={props.labels.positive}
-                                                className="absolute -left-1 flex items-end"
-                                            >
-                                                <SolidIcons.InformationCircleIcon className="ml-1 w-4 text-teal-600" />
-                                            </span>
-                                        </>
-                                    ))}
-                            </div>
+                                ))}
                         </div>
-                    )}
-                    renderTrack={({ props: trackProps, children }) => (
-                        <div
-                            {...trackProps}
-                            style={{ ...trackProps.style }}
-                            className={`h-2 w-full rounded-sm transition-colors duration-500 
-                            ${props.value ? 'bg-teal-200' : 'bg-grey-100'} ${props.disabled ? 'opacity-50' : ''}`}
-                        >
-                            {children}
-                        </div>
-                    )}
-                    renderThumb={({ props: rangeProps }) => (
-                        <div
-                            {...rangeProps}
-                            style={{ ...rangeProps.style }}
-                            className={`relative h-4 w-4 rounded-full border-transparent outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 ${
-                                props.value ? 'bg-teal-600' : 'bg-grey-300'
-                            }`}
-                        />
-                    )}
-                />
-            </div>
+                    </div>
+                )}
+                renderTrack={({ props: trackProps, children }) => (
+                    <div
+                        {...trackProps}
+                        style={{ ...trackProps.style }}
+                        className={`h-2 w-full rounded-sm transition-colors duration-500 
+                            ${props.value || props.value === 0 ? 'bg-teal-200' : 'bg-grey-100'} ${
+                            props.disabled ? 'opacity-50' : ''
+                        }`}
+                    >
+                        {children}
+                    </div>
+                )}
+                renderThumb={({ props: rangeProps }) => (
+                    <div
+                        {...rangeProps}
+                        style={{ ...rangeProps.style }}
+                        className={`relative h-4 w-4 rounded-full border-transparent outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 ${
+                            props.value || props.value === 0 ? 'bg-teal-600' : 'bg-grey-300'
+                        }`}
+                    />
+                )}
+            />
         </div>
     </div>
 );
@@ -124,37 +121,22 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [showModel, setShowModel] = React.useState(false);
 
-    // Computed value of the first rating
+    const { data = { data: [] } } = useSWR(`/publications/${props.publication.id}/ratings?user=${user?.id}`, null, {
+        fallback: []
+    });
+
+    // Computed value of the ratings previously given
     const originalFirstRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[0].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(0, data.data, props.publication.type),
+        [data, props.publication.type]
     );
-
-    // Computed value of the second rating
     const originalSecondRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[1].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(1, data.data, props.publication.type),
+        [data, props.publication.type]
     );
-
-    // Computed value of the third rating
     const originalThirdRating = React.useMemo(
-        () =>
-            props.publication.ratings.aggregate.find(
-                (rating) =>
-                    rating.category ===
-                    Config.values.octopusInformation.publications[props.publication.type].ratings[2].id
-            )?._avg.rating,
-        [props.publication]
+        () => Helpers.findRating(2, data.data, props.publication.type),
+        [data, props.publication.type]
     );
 
     // State that represents the current range sliders
@@ -180,11 +162,16 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         setSubmitting(true);
         try {
             // Only post new first rating value if it is truthy && does not match it's original value
-            if (firstRatingValue && firstRatingValue !== originalFirstRating) {
+            if (
+                (firstRatingValue && firstRatingValue !== originalFirstRating) ||
+                (firstRatingValue === 0 && firstRatingValue !== originalFirstRating)
+            ) {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[0].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[0].id,
                         value: firstRatingValue
                     },
                     user?.token
@@ -192,11 +179,16 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             }
 
             // Only post new second rating value if it is truthy && does not match it's original value
-            if (secondRatingValue && secondRatingValue !== originalSecondRating) {
+            if (
+                (secondRatingValue && secondRatingValue !== originalSecondRating) ||
+                (secondRatingValue === 0 && secondRatingValue !== originalSecondRating)
+            ) {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[1].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[1].id,
                         value: secondRatingValue
                     },
                     user?.token
@@ -204,11 +196,16 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             }
 
             // Only post new third rating value if it is truthy && does not match it's original value
-            if (thirdRatingValue && thirdRatingValue !== originalThirdRating) {
+            if (
+                (thirdRatingValue && thirdRatingValue !== originalThirdRating) ||
+                (thirdRatingValue === 0 && thirdRatingValue !== originalThirdRating)
+            ) {
                 await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/ratings`,
                     {
-                        type: Config.values.octopusInformation.publications[props.publication.type].ratings[2].id,
+                        type: Object.values(
+                            Config.values.octopusInformation.publications[props.publication.type].ratings
+                        )[2].id,
                         value: thirdRatingValue
                     },
                     user?.token
@@ -262,16 +259,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         <div className="space-y-16">
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[0]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[0].labels
                                 }
                                 value={firstRatingValue}
                                 callback={setFirstRatingValue}
@@ -279,16 +279,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             />
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[1]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[1].labels
                                 }
                                 value={secondRatingValue}
                                 callback={setSecondRatingValue}
@@ -296,16 +299,19 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             />
                             <RatingSelector
                                 title={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .value
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].value
                                 }
                                 description={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .description
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].description
                                 }
                                 labels={
-                                    Config.values.octopusInformation.publications[props.publication.type].ratings[2]
-                                        .labels
+                                    Object.values(
+                                        Config.values.octopusInformation.publications[props.publication.type].ratings
+                                    )[2].labels
                                 }
                                 value={thirdRatingValue}
                                 callback={setThirdRatingValue}

@@ -16,6 +16,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     const darkMode = Stores.usePreferencesStore((state) => state.darkMode);
     const showCmdPalette = Stores.useGlobalsStore((state) => state.showCmdPalette);
     const toggleCmdPalette = Stores.useGlobalsStore((state) => state.toggleCmdPalette);
+    const user = Stores.useAuthStore((state) => state.user);
 
     const setUpCmdPalListeners = React.useCallback(() => {
         if (isMounted.current === true) {
@@ -60,7 +61,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
             {!loading && (
                 <SWR.SWRConfig
                     value={{
-                        fetcher: (resource) => api.get(resource, undefined),
+                        fetcher: (resource) => api.get(resource, user?.token),
                         fallback: pageProps.fallback,
                         errorRetryCount: 3,
                         refreshInterval: 600000000, // for dev

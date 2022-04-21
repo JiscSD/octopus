@@ -96,10 +96,13 @@ const StepTwo: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    <span>
-                        All publications must be linked to at least one Octopus publication. This publication can be
-                        linked to:{' '}
-                    </span>
+                    All publications in Octopus are linked to each other to form research chains, branching down from
+                    research Problems to Real world implementations.
+                </p>
+
+                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Your {Helpers.formatPublicationType(type)} must be linked from at least one other publication on
+                    Octopus. {Helpers.formatPublicationType(type)} can be linked from{' '}
                     {availableLinkTypes.map((type, index) => (
                         <span key={type}>
                             <Components.Link
@@ -112,15 +115,14 @@ const StepTwo: React.FC = (): React.ReactElement => {
                             {index !== availableLinkTypes.length - 1 ? ', ' : '.'}
                         </span>
                     ))}{' '}
-                    <span>The search results below have been filtered to display only these publications.</span>
+                    The search box below has been filtered to only show publications that can be linked to your
+                    publication type.
                 </p>
+
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    Most publications link to the previous stage of the research process, for instance an Analysis will
-                    link to Data. Problems and Reviews can be attached to any other publication type.
-                </p>
-                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    These links will appear on the publication page, and will shape the structure of content on the
-                    platform.
+                    This approach structures the content of the platform and makes your work more discoverable. It also
+                    helps you avoid repeating work, as there is no need to keep re-writing descriptions of well-known
+                    Problems, or Methods etc.
                 </p>
             </div>
 
