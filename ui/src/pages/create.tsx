@@ -32,14 +32,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 };
 
-const Title = ({ text }: { text: string }): React.ReactElement => (
-    <label className="mb-4 block font-montserrat text-xl font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-        {text}
-    </label>
-);
-
-const SupportText = ({ text }: { text: string }): React.ReactElement => (
-    <span className="mb-2 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">{text}</span>
+const SupportText: React.FC = (props): React.ReactElement => (
+    <span className="mb-3 block w-full text-sm text-grey-700 transition-colors duration-500 dark:text-white-100 xl:w-1/2">
+        {props.children}
+    </span>
 );
 
 type PageProps = {
@@ -98,12 +94,21 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 <section className="container mx-auto px-8 py-16">
                     {error ? <Components.Alert severity="ERROR" title={error} className="mt-2" /> : null}
 
-                    <div className="mb-12">
-                        <Components.PageSubTitle text="Publication title" className="!mb-4" />
-                        <SupportText
-                            text="Titles should be concise, specific, and informative – this will help relevant readers find
-                            your material."
-                        />
+                    <div className="mb-10">
+                        <Components.PageSubTitle text="Create a publication" className="!mb-4" />
+                        <SupportText>
+                            There are no rules on style and layout of publications. You should, however, continue to be
+                            guided by any relevant reporting guidelines for your field, such as the EQUATOR guidelines
+                            in health research. You will also be given the opportunity to link to additional resources
+                            deposited on specialist platforms (such as data or code repositories).
+                        </SupportText>
+                    </div>
+
+                    <div className="mb-10">
+                        <Components.PageSubTitle text="Title" className="!mb-4" />
+                        <SupportText>
+                            Titles should be concise, specific, and informative to help others find your work.
+                        </SupportText>
                         <input
                             required
                             type="text"
@@ -113,15 +118,32 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         />
                     </div>
 
-                    <div className="mb-20">
+                    <div className="mb-12">
                         <Components.PageSubTitle text="Type of publication" className="!mb-4" />
-                        <SupportText text="Octopus has 8 publication types which align with the scientific process." />
+                        <SupportText>
+                            Octopus has 8 publication types which closely align with the research process and move away
+                            from the traditional research paper. These are linked to form a research chain, from initial
+                            Problem to Real-world Application. You will no longer need to structure your publications
+                            like a paper, with an abstract and introduction, as the publication chain itself serves this
+                            role. You will be asked to write a very short description to aid discovery.{' '}
+                            <Components.Link
+                                href={Config.urls.about.path}
+                                ariaLabel="Read more about the Octopus publication types."
+                                title="Read more about the Octopus publication types."
+                                className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                            >
+                                Read more about the Octopus publication types
+                            </Components.Link>
+                        </SupportText>
+                        <SupportText>
+                            Note that publication type cannot be changed once you click &apos;next&apos;
+                        </SupportText>
                         <select
                             id="publicationType"
                             name="publicationType"
                             value={publicationType}
                             onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
-                            className="mb-2 block w-fit rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                            className="my-4 block w-fit rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                         >
                             {Config.values.publicationTypes.map((type) => (
                                 <option key={type} value={type}>
@@ -129,7 +151,9 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                                 </option>
                             ))}
                         </select>
-                        <SupportText text={Config.values.octopusInformation.publications[publicationType].content} />
+                        <SupportText>
+                            {Config.values.octopusInformation.publications[publicationType].content}
+                        </SupportText>
                     </div>
 
                     <label htmlFor="confirm" className="mb-2 flex items-center">

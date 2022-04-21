@@ -24,8 +24,7 @@ const StepOne: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Title" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Titles should be concise, specific, and informative. This will help relevant readers find your
-                    material.
+                    Titles should be concise, specific, and informative to help others find your work.
                 </span>
                 <input
                     required
@@ -37,6 +36,12 @@ const StepOne: React.FC = (): React.ReactElement => {
             </div>
             <div>
                 <Components.PublicationCreationStepTitle text="Creative commons licence" />
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                    You retain the copyright to your work, and can choose what licence you would like to assign it.
+                </span>
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                    Contact the Octopus team if you would like to use a license that isn’t listed.
+                </span>
                 <div className="items-center lg:flex">
                     <select
                         id="licence"

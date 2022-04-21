@@ -60,3 +60,20 @@ export const getOverall = async (id: string) => {
 
     return overallRatings;
 };
+
+export const getRatingsByUser = async (publicationId: string, userId?: string) => {
+    const query = {
+        where: {
+            AND: [{ publicationId }]
+        }
+    };
+
+    if (userId) {
+        // @ts-ignore
+        query.where.AND.push({ userId });
+    }
+
+    const ratings = await client.prisma.publicationRatings.findMany(query);
+
+    return ratings;
+};
