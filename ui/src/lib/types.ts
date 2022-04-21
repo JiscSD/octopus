@@ -118,3 +118,5 @@ export type Ratings =
     | 'REVIEW_CLEAR'
     | 'REVIEW_INSIGHTFUL'
     | 'REVIEW_ORIGINAL';
+
+export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';

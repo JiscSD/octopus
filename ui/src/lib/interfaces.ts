@@ -221,6 +221,7 @@ export interface TextEditorImage {
     alt: string;
     base64: null | string;
     url: null | string;
+    libraryUrl: null | string;
     width: null | string;
 }
 export interface APIRatingShape {

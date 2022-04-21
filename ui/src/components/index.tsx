@@ -12,9 +12,6 @@ export { default as Button } from './Button';
 export { default as JumpToContent } from './JumpToContent';
 export { default as Pill } from './Pill';
 export { default as ParseHTML } from './ParseHTML';
-export { default as Tabs } from './Tabs';
-export { default as Tab } from './Tabs/Tab';
-export { default as TabHead } from './Tabs/TabHead';
 export { default as PublicationSidebar } from './Publication/Sidebar';
 export { default as PublicationContentSection } from './Publication/ContentSection';
 export { default as PublicationCard } from './Publication/Card';
@@ -71,3 +68,6 @@ export { default as PublicationSidebarCardActions } from './Publication/SidebarC
 export { default as PublicationSidebarCardSections } from './Publication/SidebarCard/Sections';
 export { default as SectioBreak } from './SectionBreak';
 export { default as Toast } from './Toast';
+export { default as Tabs } from './Tabs';
+export { default as FileUpload } from './FileUpload';
+export { default as URLSourceUpload } from './URLSourceUpload';
