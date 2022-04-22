@@ -29,7 +29,7 @@ const Tabs: React.FC<Props> = (props): React.ReactElement => {
                 </nav>
             </header>
 
-            <section>{props.tabBody.map((body, index) => index === current && body)}</section>
+            <section className="mx-4 mt-8">{props.tabBody.map((body, index) => index === current && body)}</section>
         </div>
     );
 };

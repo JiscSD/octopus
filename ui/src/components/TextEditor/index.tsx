@@ -152,19 +152,20 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     };
 
     // For file upload
-    const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const base64 = await Helpers.getBase64FromFile(e.target.files[0]);
-            const fileName = e.target.files[0].name;
+    const handleUploadImage = async (files: FileList) => {
+        if (files.length) {
+            for (const file of Array.from(files)) {
+                const base64 = await Helpers.getBase64FromFile(file);
 
-            setImage({
-                base64,
-                name: fileName,
-                width: `${50}px`,
-                alt: '',
-                url: null,
-                libraryUrl: null
-            });
+                setImage({
+                    base64,
+                    name: file.name,
+                    width: `${50}px`,
+                    alt: '',
+                    url: null,
+                    libraryUrl: null
+                });
+            }
         }
     };
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import * as HeadlessUI from '@headlessui/react';
 
+import * as Components from '@components';
+
 type Props = {
     open: boolean;
     setOpen: any; // state setter
@@ -66,24 +68,22 @@ const Modal: React.FC<Props> = (props) => {
                                     <div className="mt-2">{props.children}</div>
                                 </div>
                             </div>
-                            <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-                                <button
-                                    type="button"
-                                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-2 sm:text-sm"
+                            <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
+                                <Components.ModalButton
                                     onClick={() => props.positiveActionCallback()}
                                     disabled={props.disableButtons}
-                                >
-                                    {props.positiveButtonText}
-                                </button>
-                                <button
-                                    type="button"
-                                    className="mt-3 inline-flex w-full justify-center rounded-md border border-grey-300 bg-pink-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-pink-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                    text={props.positiveButtonText}
+                                    title={props.positiveButtonText}
+                                    actionType="POSITIVE"
+                                />
+                                <Components.ModalButton
                                     onClick={() => props.setOpen(false)}
                                     disabled={props.disableButtons}
                                     ref={cancelButtonRef}
-                                >
-                                    {props.cancelButtonText}
-                                </button>
+                                    text={props.cancelButtonText}
+                                    title={props.cancelButtonText}
+                                    actionType="NEGATIVE"
+                                />
                             </div>
                         </div>
                     </HeadlessUI.Transition.Child>
