@@ -123,50 +123,35 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         closeLinkModal();
     }, [props.editor, closeLinkModal]);
 
-    const uploadImage = async () => {
+    // For File upload
+    const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
         setLoading(true);
 
-        try {
-            const imageRes = await api.post(
-                '/images',
-                {
-                    name: image.name,
-                    image: image.base64
-                },
-                user?.token
-            );
+        for (const file of files) {
+            try {
+                const response = await api.post(
+                    '/images',
+                    {
+                        name: file.name,
+                        image: file.base64
+                    },
+                    user?.token
+                );
 
-            props.editor.commands.setImage({
-                src: `http://localhost:4566/science-octopus-publishing-images-local/${imageRes.data.id}`,
-                alt: image.alt,
-                title: image.name
-            });
+                props.editor.commands.setImage({
+                    src: `http://localhost:4566/science-octopus-publishing-images-local/${response.data.id}`,
+                    alt: file.name,
+                    title: image.name
+                });
 
-            setImageModalVisible(false);
-        } catch (err) {
-            console.log(err); // Error 500 internal server error
-            setError('Some message');
+                setImageModalVisible(false);
+            } catch (err) {
+                console.log(err);
+                setError('Some message');
+            }
         }
 
         setLoading(false);
-    };
-
-    // For file upload
-    const handleUploadImage = async (files: FileList) => {
-        if (files.length) {
-            for (const file of Array.from(files)) {
-                const base64 = await Helpers.getBase64FromFile(file);
-
-                setImage({
-                    base64,
-                    name: file.name,
-                    width: `${50}px`,
-                    alt: '',
-                    url: null,
-                    libraryUrl: null
-                });
-            }
-        }
     };
 
     // For URL source upload
@@ -180,6 +165,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         clearImageAndCloseModal();
     };
 
+    // Clears the image state and closes the modal
     const clearImageAndCloseModal = () => {
         setImageModalVisible(false);
         setImage({
@@ -528,8 +514,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 tabBody={[
                                     <Components.FileUpload
                                         key="file-upload"
-                                        inputCallBack={(e) => handleUploadImage(e)}
-                                        positiveActionCallback={uploadImage}
+                                        positiveActionCallback={handleUploadImage}
                                         negativeActionCallback={clearImageAndCloseModal}
                                         loading={loading}
                                     />,

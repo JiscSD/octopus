@@ -231,3 +231,8 @@ export interface APIRatingShape {
     rating: number;
     category: Types.Ratings;
 }
+
+export interface ImagePreview {
+    name: string;
+    base64: string;
+}
