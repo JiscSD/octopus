@@ -29,21 +29,19 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
     return (
         <section key="file-upload" className="relative">
             {!!previewBase64.length && (
-                <div className="mb-4 grid grid-cols-4 gap-2">
+                <div className="mb-8 grid max-h-72 grid-cols-4 gap-4 overflow-y-auto overflow-x-hidden rounded p-4">
                     {previewBase64.map((file, index) => (
-                        <div key={index} className="relative">
-                            <img src={file.base64} alt="preview" width={100} />
-                            <button
-                                onClick={() =>
-                                    setPreviewBase64((prevState) => [
-                                        ...prevState.filter((item) => item.base64 !== file.base64)
-                                    ])
-                                }
-                                className="absolute right-2 top-2 h-4 w-4 bg-grey-400"
-                            >
-                                X
-                            </button>
-                        </div>
+                        <Components.ImagePreview
+                            key={index}
+                            id={file.name}
+                            source={file.base64}
+                            showClose
+                            close={() =>
+                                setPreviewBase64((prevState) => [
+                                    ...prevState.filter((item) => item.base64 !== file.base64)
+                                ])
+                            }
+                        />
                     ))}
                 </div>
             )}

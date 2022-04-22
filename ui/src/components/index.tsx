@@ -13,6 +13,7 @@ export { default as FeaturedCollection } from './FeaturedCollection';
 export { default as FileUpload } from './FileUpload';
 export { default as Footer } from './Footer';
 export { default as Header } from './Header';
+export { default as ImagePreview } from './ImagePreview';
 export { default as JumpToContent } from './JumpToContent';
 export { default as LatestPublications } from './LatestPublications';
 export { default as LearnAboutOctopus } from './LearnAboutOctopus';

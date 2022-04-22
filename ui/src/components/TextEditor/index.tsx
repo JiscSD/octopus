@@ -510,7 +510,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
                         <HeadlessUi.Dialog.Description>
                             <Components.Tabs
-                                tabHead={['File upload', 'URL source', 'Image library']}
+                                tabHead={['File upload', 'URL source']}
                                 tabBody={[
                                     <Components.FileUpload
                                         key="file-upload"
@@ -523,8 +523,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                         image={image}
                                         positiveActionCallback={handleURLSourceUpload}
                                         negativeActionCallback={clearImageAndCloseModal}
-                                    />,
-                                    <section key="image-library">hello2</section>
+                                    />
                                 ]}
                             />
                         </HeadlessUi.Dialog.Description>
