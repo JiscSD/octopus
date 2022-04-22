@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import * as tiptap from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
@@ -15,7 +14,6 @@ import * as FAIcons from 'react-icons/fa';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
