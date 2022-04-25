@@ -2,7 +2,7 @@ import React from 'react';
 import * as tiptap from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import { default as TipTapImage } from '@tiptap/extension-image';
+import TipTapImage from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
@@ -125,30 +125,31 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
         setLoading(true);
 
-        for (const file of files) {
-            try {
-                const response = await api.post(
+        const syncFiles = await Promise.allSettled(
+            files.map((file) =>
+                api.post<{ id: string; name: string }>(
                     '/images',
                     {
                         name: file.name,
                         image: file.base64
                     },
                     user?.token
-                );
+                )
+            )
+        );
 
+        syncFiles.forEach((file) => {
+            // check status, only do it for fulfilled
+            if (file.status === 'fulfilled') {
                 props.editor.commands.setImage({
-                    src: `http://localhost:4566/science-octopus-publishing-images-local/${response.data.id}`,
-                    alt: file.name,
-                    title: image.name
+                    src: `${Config.urls.mediaBucket}/${file.value.data.id}`,
+                    alt: 'Coming soon',
+                    title: file.value.data.name
                 });
-
-                setImageModalVisible(false);
-            } catch (err) {
-                console.log(err);
-                setError('Some message');
             }
-        }
+        });
 
+        setImageModalVisible(false);
         setLoading(false);
     };
 

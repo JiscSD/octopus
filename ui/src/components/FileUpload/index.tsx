@@ -27,7 +27,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
     const { getRootProps, getInputProps, isDragActive } = DropZone.useDropzone({ onDrop });
 
     return (
-        <section key="file-upload" className="relative">
+        <section className="relative">
             {!!previewBase64.length && (
                 <div className="mb-8 grid max-h-72 grid-cols-4 gap-4 overflow-y-auto overflow-x-hidden rounded p-4">
                     {previewBase64.map((file, index) => (

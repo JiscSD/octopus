@@ -34,7 +34,11 @@ export const get = async (url: string, token: string | undefined): Promise<Axios
     return response;
 };
 
-export const post = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+export const post = async <T>(
+    url: string,
+    body: Interfaces.JSON,
+    token: string | undefined
+): Promise<AxiosResponse<T>> => {
     const headers = {
         headers: {
             Authorization: `Bearer ${token}`
