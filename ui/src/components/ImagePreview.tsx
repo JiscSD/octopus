@@ -14,7 +14,10 @@ const ImagePreview: React.FC<Props> = (props): React.ReactElement => (
         className="relative flex h-full w-full items-center justify-center rounded border-2 border-dashed border-grey-100 p-3"
     >
         {props.showClose && (
-            <button onClick={() => props.close()} className="absolute right-0 -top-3 h-4 w-4 rounded">
+            <button
+                onClick={() => props.close()}
+                className="absolute right-0 -top-3 h-4 w-4 rounded-full focus:outline-yellow-400"
+            >
                 <OutlineIcons.XCircleIcon className="h-7 w-7 rounded-full bg-white-50 text-pink-500" />
             </button>
         )}

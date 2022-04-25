@@ -19,7 +19,7 @@ const Tabs: React.FC<Props> = (props): React.ReactElement => {
                                     onClick={() => setCurrent(index)}
                                     className={`border-b-2 border-transparent p-4 ${
                                         index === current ? 'border-teal-500' : ''
-                                    } hover:border-grey-400`}
+                                    } hover:border-grey-400 focus:outline-none focus:ring-2 focus:ring-yellow-400`}
                                 >
                                     {head}
                                 </button>

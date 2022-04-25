@@ -19,7 +19,7 @@ const URLSourceUpload: React.FC<Props> = (props): React.ReactElement => {
                 placeholder="Paste in your url to an image"
                 onChange={(e) => setUrl(e.target.value)}
                 value={url ?? ''}
-                className="w-full rounded-md border-grey-100 px-4 py-3 text-sm text-grey-700 shadow placeholder:text-center placeholder:text-sm placeholder:text-grey-300"
+                className="w-full rounded-md border-grey-100 px-4 py-3 text-sm text-grey-700 shadow placeholder:text-center placeholder:text-sm placeholder:text-grey-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
 
             <div className="mx-auto h-60 w-60">
