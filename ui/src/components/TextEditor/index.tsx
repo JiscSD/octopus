@@ -2,16 +2,22 @@ import React from 'react';
 import * as tiptap from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
+import TipTapImage from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/solid';
+import * as HeadlessUi from '@headlessui/react';
 import * as FAIcons from 'react-icons/fa';
 
+import * as Interfaces from '@interfaces';
+import * as Components from '@components';
+import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Types from '@types';
+import * as api from '@api';
 
 type LetterIconType = {
     letter: string;
@@ -31,6 +37,8 @@ interface MenuBarProps {
 }
 
 const MenuBar: React.FC<MenuBarProps> = (props) => {
+    const user = Stores.useAuthStore((state) => state.user);
+
     const headingOptions = React.useMemo(
         () => [
             {
@@ -72,17 +80,29 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         [props.editor]
     );
 
+    const [activeImageUploadType, setActiveImageUploadType] = React.useState<Types.ImageUploadTypes>('FILE_UPLOAD');
     const [selected, setSelected] = React.useState(headingOptions[0]);
-    const [linkModalOpen, setLinkModalOpen] = React.useState(false);
+    const [linkModalVisible, setLinkModalVisible] = React.useState(false);
+    const [imageModalVisible, setImageModalVisible] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState('');
+    const [image, setImage] = React.useState<Interfaces.TextEditorImage>({
+        name: '',
+        alt: '',
+        base64: null,
+        url: null,
+        libraryUrl: null,
+        width: null
+    });
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState<null | string>(null);
 
     const openLinkModal = React.useCallback(() => {
         setLinkUrl(props.editor.getAttributes('link').href);
-        setLinkModalOpen(true);
+        setLinkModalVisible(true);
     }, [props.editor]);
 
     const closeLinkModal = React.useCallback(() => {
-        setLinkModalOpen(false);
+        setLinkModalVisible(false);
         setLinkUrl('');
     }, []);
 
@@ -100,6 +120,62 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         props.editor.chain().focus().extendMarkRange('link').unsetLink().run();
         closeLinkModal();
     }, [props.editor, closeLinkModal]);
+
+    // For File upload
+    const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
+        setLoading(true);
+
+        const syncFiles = await Promise.allSettled(
+            files.map((file) =>
+                api.post<{ id: string; name: string }>(
+                    '/images',
+                    {
+                        name: file.name,
+                        image: file.base64
+                    },
+                    user?.token
+                )
+            )
+        );
+
+        syncFiles.forEach((file) => {
+            // check status, only do it for fulfilled
+            if (file.status === 'fulfilled') {
+                props.editor.commands.setImage({
+                    src: `${Config.urls.mediaBucket}/${file.value.data.id}`,
+                    alt: 'Coming soon',
+                    title: file.value.data.name
+                });
+            }
+        });
+
+        setImageModalVisible(false);
+        setLoading(false);
+    };
+
+    // For URL source upload
+    const handleURLSourceUpload = (url: string) => {
+        props.editor.commands.setImage({
+            src: url,
+            alt: image.alt,
+            title: image.name
+        });
+
+        clearImageAndCloseModal();
+    };
+
+    // Clears the image state and closes the modal
+    const clearImageAndCloseModal = () => {
+        setImageModalVisible(false);
+        setImage({
+            name: '',
+            alt: '',
+            base64: null,
+            url: null,
+            width: '',
+            libraryUrl: null
+        });
+    };
 
     React.useEffect(() => {
         if (props.editor) {
@@ -287,6 +363,24 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            onClick={() => {
+                                setImage({
+                                    name: props.editor.getAttributes('image').title,
+                                    alt: props.editor.getAttributes('image').alt,
+                                    base64: null,
+                                    url: null,
+                                    width: '',
+                                    libraryUrl: null
+                                });
+                                setImageModalVisible(true);
+                            }}
+                            className={props.editor.isActive('image') ? activeMenuIconStyles : menuIconStyles}
+                        >
+                            <FAIcons.FaImage className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                        </button>
+                        <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
+                        <button
+                            type="button"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -359,9 +453,10 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                     </div>
                 </div>
+                {/* Link modal */}
                 <HeadlessUi.Dialog
-                    open={linkModalOpen}
-                    onClose={() => setLinkModalOpen(false)}
+                    open={linkModalVisible}
+                    onClose={() => setLinkModalVisible(false)}
                     className="fixed inset-0 z-10 overflow-y-auto"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
@@ -379,6 +474,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="text"
                                     name="link"
                                     id="link"
+                                    accept="image/png, image/jpeg, image/jpg"
                                     className="block w-full rounded-md border-grey-300 shadow-sm placeholder:font-light focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
                                 />
                             </div>
@@ -400,10 +496,44 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </div>
                     </div>
                 </HeadlessUi.Dialog>
+
+                {/* Image upload modal */}
+                <HeadlessUi.Dialog
+                    open={imageModalVisible}
+                    onClose={() => setImageModalVisible(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
+                        <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                            <Components.Tabs
+                                tabHead={['File upload', 'URL source']}
+                                tabBody={[
+                                    <Components.FileUpload
+                                        key="file-upload"
+                                        positiveActionCallback={handleUploadImage}
+                                        negativeActionCallback={clearImageAndCloseModal}
+                                        loading={loading}
+                                    />,
+                                    <Components.URLSourceUpload
+                                        key="url-source-upload"
+                                        image={image}
+                                        positiveActionCallback={handleURLSourceUpload}
+                                        negativeActionCallback={clearImageAndCloseModal}
+                                    />
+                                ]}
+                            />
+                        </HeadlessUi.Dialog.Description>
+                    </div>
+                </HeadlessUi.Dialog>
             </>
         )
     );
 };
+
+// handleURLSourceUpload(e.target.value)
 
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
@@ -428,7 +558,10 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             }),
             TableRow,
             TableHeader,
-            TableCell
+            TableCell,
+            TipTapImage.configure({
+                inline: true
+            })
         ],
         onUpdate: ({ editor }) => props.contentChangeHandler(editor.getHTML()),
         onSelectionUpdate: () => setLoading(true),

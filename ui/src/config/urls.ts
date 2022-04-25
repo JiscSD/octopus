@@ -1,21 +1,26 @@
 let host: string;
+let mediaBucket: string;
+const bucketName = 'science-octopus-publishing-images-local';
 let orcidAppiID: string;
 
 switch (process.env.NEXT_PUBLIC_ENV) {
     case 'local':
         host = 'https://localhost:3001';
+        mediaBucket = `http://localhost:4566/${bucketName}`;
         orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
         break;
     case 'prod':
         host = 'https://octopus.ac';
+        mediaBucket = `TODO/${bucketName}`;
         orcidAppiID = '';
         break;
     default:
         host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
+        mediaBucket = `TODO/${bucketName}`;
         orcidAppiID = '';
 }
 
-const base = {
+export const base = {
     title: 'Octopus. Built for Scientists.',
     host
 };
@@ -36,7 +41,6 @@ const urls = {
         ],
         canonical: `${base.host}/search`
     },
-
     // Publications
     createPublication: {
         path: '/create',
@@ -194,7 +198,8 @@ const urls = {
     },
     orcidLogin: {
         path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
-    }
+    },
+    mediaBucket
 };
 
 export default urls;

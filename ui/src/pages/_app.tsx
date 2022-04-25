@@ -38,7 +38,6 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
 
     React.useEffect(() => {
         isMounted.current = true;
-        // window.matchMedia('(prefers-color-scheme: dark)').matches === !darkMode ? toggleDarkMode() : null; // If we want to set the mode to the system, not good.
         setUpCmdPalListeners();
         setLoading(false);
         return () => {

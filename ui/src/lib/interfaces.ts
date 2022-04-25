@@ -216,10 +216,23 @@ export interface ToastState {
     dismiss: boolean;
 }
 
+export interface TextEditorImage {
+    name: string;
+    alt: string;
+    base64: null | string;
+    url: null | string;
+    libraryUrl: null | string;
+    width: null | string;
+}
 export interface APIRatingShape {
     id: string;
     publicationId: string;
     userId: string;
     rating: number;
     category: Types.Ratings;
+}
+
+export interface ImagePreview {
+    name: string;
+    base64: string;
 }

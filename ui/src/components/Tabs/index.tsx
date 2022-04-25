@@ -1,30 +1,35 @@
 import React from 'react';
 
-import * as Components from '@components';
-
-interface TabEntry {
-    title: string;
-    content: React.ReactNode;
-}
-
 type Props = {
-    content: TabEntry[];
+    tabHead: string[];
+    tabBody: React.ReactElement[];
 };
 
 const Tabs: React.FC<Props> = (props): React.ReactElement => {
-    const [active, setActive] = React.useState<React.ReactNode>(props.content[0]);
+    const [current, setCurrent] = React.useState(0);
 
     return (
-        <div className="tabs">
-            <div className="mb-12 flex">
-                {props.content.map((entry) => (
-                    <Components.TabHead key={entry.title} tab={entry} active={active} set={setActive} />
-                ))}
-            </div>
+        <div className="">
+            <header className="">
+                <nav className="">
+                    <ul className="flex justify-around">
+                        {props.tabHead.map((head, index) => (
+                            <li key={head}>
+                                <button
+                                    onClick={() => setCurrent(index)}
+                                    className={`border-b-2 border-transparent p-4 ${
+                                        index === current ? 'border-teal-500' : ''
+                                    } hover:border-grey-400 focus:outline-none focus:ring-2 focus:ring-yellow-400`}
+                                >
+                                    {head}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </header>
 
-            {props.content.map(
-                (entry) => entry === active && <Components.Tab key={entry.title}>{entry.content}</Components.Tab>
-            )}
+            <section className="mx-4 mt-8">{props.tabBody.map((body, index) => index === current && body)}</section>
         </div>
     );
 };
