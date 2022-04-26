@@ -78,6 +78,7 @@ export const OctopusInformation: I.OctopusInformation = {
         'bs',
         'br',
         'bg',
+        'bh',
         'my',
         'ca',
         'km',

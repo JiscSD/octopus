@@ -206,6 +206,7 @@ enum Languages {
     bs
     br
     bg
+    bh
     my
     ca
     km

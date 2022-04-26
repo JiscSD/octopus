@@ -206,6 +206,10 @@ export interface OctopusInformation {
             link: string;
         };
     };
+    languages: {
+        code: Types.Languages;
+        name: string;
+    }[];
 }
 
 export interface ToastState {
