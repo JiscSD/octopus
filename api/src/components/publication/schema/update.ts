@@ -1,6 +1,5 @@
-import ISO6391 from 'iso-639-1';
-
 import * as I from 'interface';
+import * as H from 'lib/helpers';
 
 const updatePublicationSchema: I.Schema = {
     type: 'object',
@@ -35,9 +34,7 @@ const updatePublicationSchema: I.Schema = {
         },
         language: {
             type: 'string',
-            enum: ISO6391.getAllCodes(),
-            maxLength: 2,
-            minLength: 2
+            enum: H.OctopusInformation.languages
         }
     },
     additionalProperties: false
