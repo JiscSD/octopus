@@ -58,6 +58,7 @@ model Publication {
     keywords                 String[]
     content                  String?
     doi                      String?
+    language                 String                @default("en") @db.VarChar(2)
     publishedDate            DateTime?
     currentStatus            PublicationStatusEnum @default(DRAFT)
     createdBy                String
