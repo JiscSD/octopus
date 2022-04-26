@@ -38,6 +38,9 @@ let store: any = (set: (params: any) => void) => ({
     licence: Config.values.octopusInformation.licences.CC_BY.value,
     updateLicence: (licence: Types.LicenceType) => set(() => ({ licence })),
 
+    language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
+    updateLanguage: (language: Types.Languages) => set(() => ({ language })),
+
     // COI
     conflictOfInterestStatus: true,
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),

@@ -20,6 +20,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
+    let language: string | string[] | null = null;
 
     // defaults to results
     let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
@@ -34,6 +35,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
+    if (context.query.language) language = context.query.language;
 
     // only if a search type is provided
     if (searchType) {
@@ -43,6 +45,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
+        if (Array.isArray(language)) language = language[0];
 
         // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
         limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
@@ -64,7 +67,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}`; // add language query param
 
     return {
         props: {
@@ -73,6 +76,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publicationTypes,
             limit,
             offset,
+            language,
             fallback: {
                 [swrKey]: results
             },
@@ -87,6 +91,7 @@ type Props = {
     publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
+    language: Types.Languages | null;
     error: string | null;
 };
 
@@ -102,6 +107,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
+    const [language, setLanguage] = React.useState<Types.Languages | null>(props.language ?? 'en');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
@@ -120,13 +126,22 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         const value = e.target.value;
         if (value === 'users') {
             const paramsListCopy = { ...router.query };
+
             if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
+            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'language')) delete paramsListCopy.language;
+
             router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
         if (value === 'publications') {
             router.push(
                 {
-                    query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
+                    query: {
+                        ...router.query,
+                        for: value,
+                        type: publicationTypes,
+                        query: searchInputRef.current?.value,
+                        language
+                    }
                 },
                 undefined,
                 { shallow: true }
@@ -148,6 +163,14 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         });
 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
+    };
+
+    const handleLanguageChange = (value: Types.Languages) => {
+        setLanguage(value);
+
+        router.push({ pathname: '/search', query: { ...router.query, language: value } }, undefined, {
+            shallow: true
+        });
     };
 
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -264,55 +287,82 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="sticky top-16 space-y-5"
+                                className="sticky top-16 space-y-6 divide-y divide-grey-100"
                             >
-                                <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    Publication types
-                                </legend>
-                                {Config.values.publicationTypes.map((type) => (
-                                    <div
-                                        key={type}
-                                        className={`relative flex items-start ${
-                                            searchType !== 'publications' && 'opacity-50'
-                                        }`}
-                                    >
-                                        <div className="flex h-5 items-center">
-                                            <input
-                                                id={type}
-                                                aria-describedby={type}
-                                                name={type}
-                                                type="checkbox"
-                                                className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                                                checked={
-                                                    publicationTypes
-                                                        ? publicationTypes.split(',').includes(type)
-                                                        : false
-                                                }
-                                                onChange={(e) => collatePublicationTypes(e, type)}
-                                                disabled={!results || searchType !== 'publications'}
-                                            />
-                                        </div>
-                                        <div className="ml-3 text-sm">
-                                            <label
-                                                htmlFor={type}
-                                                className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                aria-disabled={!results || searchType !== 'publications'}
+                                <div className="space-y-5">
+                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        Publication types
+                                    </legend>
+                                    <div className="space-y-3">
+                                        {Config.values.publicationTypes.map((type) => (
+                                            <div
+                                                key={type}
+                                                className={`relative flex items-start ${
+                                                    searchType !== 'publications' && 'opacity-50'
+                                                }`}
                                             >
-                                                {Helpers.formatPublicationType(type)}
-                                            </label>
-                                        </div>
+                                                <div className="flex h-5 items-center">
+                                                    <input
+                                                        id={type}
+                                                        aria-describedby={type}
+                                                        name={type}
+                                                        type="checkbox"
+                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
+                                                        checked={
+                                                            publicationTypes
+                                                                ? publicationTypes.split(',').includes(type)
+                                                                : false
+                                                        }
+                                                        onChange={(e) => collatePublicationTypes(e, type)}
+                                                        disabled={!results || searchType !== 'publications'}
+                                                    />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                    <label
+                                                        htmlFor={type}
+                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                        aria-disabled={!results || searchType !== 'publications'}
+                                                    >
+                                                        {Helpers.formatPublicationType(type)}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
 
-                                <button
-                                    onClick={resetFilters}
-                                    className="!mt-8 flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500"
-                                >
-                                    <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
-                                        Clear filters
-                                    </span>
-                                    <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
-                                </button>
+                                <div className="space-y-5 pt-6">
+                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        Publication language
+                                    </legend>
+                                    <select
+                                        name="language"
+                                        id="language"
+                                        disabled={searchType !== 'publications'}
+                                        onChange={(e) => handleLanguageChange(e.target.value as Types.Languages)}
+                                        defaultValue={language ?? 'en'}
+                                        className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 hover:cursor-pointer focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:mb-0"
+                                    >
+                                        {Config.values.octopusInformation.languages.map((entry) => (
+                                            <option key={entry.code} value={entry.code}>
+                                                {entry.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="pt-6">
+                                    <button
+                                        onClick={resetFilters}
+                                        disabled={searchType !== 'publications'}
+                                        className="flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50"
+                                    >
+                                        <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
+                                            Clear filters
+                                        </span>
+                                        <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
+                                    </button>
+                                </div>
                             </Framer.motion.fieldset>
                         </Framer.AnimatePresence>
                     </aside>
@@ -354,22 +404,20 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
                                                 if (searchType === 'publications') {
                                                     return (
-                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.PublicationSearchResult
+                                                            key={`publication-${index}-${result.id}`}
                                                             publication={result}
                                                             className={classes}
                                                         />
-                                                        // </Components.Delay>
                                                     );
                                                 }
                                                 if (searchType === 'users') {
                                                     return (
-                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.UserSearchResult
+                                                            key={`user-${index}-${result.id}`}
                                                             user={result}
                                                             className={classes}
                                                         />
-                                                        // </Components.Delay>
                                                     );
                                                 }
                                             })}

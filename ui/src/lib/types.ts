@@ -59,6 +59,8 @@ export type PublicationCreationStoreType = {
     updateKeywords: (keywords: string) => void;
     licence: LicenceType;
     updateLicence: (licence: LicenceType) => void;
+    language: Languages;
+    updateLanguage: (language: Languages) => void;
     conflictOfInterestStatus: boolean;
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => void;
     conflictOfInterestText: string;

@@ -116,6 +116,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
     const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
     const updateLicence = Stores.usePublicationCreationStore((state) => state.updateLicence);
+    const updateLanguage = Stores.usePublicationCreationStore((state) => state.updateLanguage);
     const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state) => state.updateConflictOfInterestStatus
     );
@@ -136,6 +137,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
         if (props.draftedPublication.content) updateContent(props.draftedPublication.content);
         if (props.draftedPublication.licence) updateLicence(props.draftedPublication.licence);
+        if (props.draftedPublication.language) updateLanguage(props.draftedPublication.language);
         if (props.draftedPublication.conflictOfInterestStatus)
             updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
         if (props.draftedPublication.conflictOfInterestText)

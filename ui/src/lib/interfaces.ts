@@ -60,6 +60,7 @@ export interface CorePublication {
     url_slug: string;
     licence: Types.LicenceType;
     content: string;
+    language: Types.Languages;
 }
 
 export interface Publication extends CorePublication {

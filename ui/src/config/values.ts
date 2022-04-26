@@ -423,7 +423,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
             name: 'Bulgarian'
         },
         {
-            code: 'bh',
+            code: 'bh', // TODO: remove this from the list
             name: 'Bihari languages'
         },
         {
