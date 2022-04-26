@@ -1,4 +1,5 @@
 import React from 'react';
+import * as NextRouter from 'next/router';
 
 import * as Components from '@components';
 import * as Config from '@config';

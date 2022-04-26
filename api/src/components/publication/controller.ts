@@ -34,7 +34,7 @@ export const getAll = async (
 };
 
 export const get = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetPublicationPathParams>
+    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -47,8 +47,18 @@ export const get = async (
             return response.json(200, { ...publication, ratings: { aggregate, overall } });
         }
 
-        // only certain users can see a DRAFT publication
-        if (event.user?.id === publication?.user.id) {
+        if (!publication) {
+            return response.json(404, {
+                message:
+                    'Publication is either not found, or you do not have permissions to view it in its current state.'
+            });
+        }
+
+        // only the owner or co-authors can view publications
+        if (
+            event.user?.id === publication.user.id ||
+            publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
+        ) {
             return response.json(200, { ...publication, ratings: { aggregate, overall } });
         }
 
@@ -56,6 +66,7 @@ export const get = async (
             message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
         });
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

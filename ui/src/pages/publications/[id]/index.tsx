@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -8,6 +9,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Stores from '@stores';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -68,6 +70,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const peerReviews = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
     const problems = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PROBLEM');
 
+    const coAuthors = props.publication.coAuthors;
+
+    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+
     const list = [];
 
     const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
@@ -98,8 +104,41 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Alert
                             className="mb-4"
                             severity="INFO"
-                            title="This is a draft publication, and only visible to authors."
-                        />
+                            title="This is a preview of a draft publication."
+                        >
+                            {props.publication.user.id === user?.id ? (
+                                <Components.Link
+                                    openNew={false}
+                                    title="Edit publication"
+                                    href={`${Config.urls.viewPublication.path}/${props.publication.id}/edit?step=4`}
+                                    className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                >
+                                    <OutlineIcons.PencilAltIcon className="h-4 w-4" />
+                                    <span>Edit or publish draft publication</span>
+                                </Components.Link>
+                            ) : (
+                                <>
+                                    <p className="mt-2 flex w-fit text-sm text-white-50">
+                                        Before this publication can be published, all co-authors, including you must
+                                        confirm you are happy with the state of this publication.
+                                    </p>
+                                    <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
+                                        <Components.ModalButton
+                                            onClick={() => {}}
+                                            text="Approve"
+                                            title="Approve"
+                                            actionType="POSITIVE"
+                                        />
+                                        <Components.ModalButton
+                                            onClick={() => {}}
+                                            text="Deny"
+                                            title="Deny"
+                                            actionType="NEGATIVE"
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </Components.Alert>
                     )}
                     <header className="">
                         <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">

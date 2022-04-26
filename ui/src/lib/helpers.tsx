@@ -161,7 +161,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
 
     if (!token) {
         context.res.writeHead(302, {
-            Location: Config.urls.orcidLogin.path
+            Location: `${Config.urls.orcidLogin.path}&state=${context.req.url || Config.urls.home.path}`
         });
         context.res.end();
     }

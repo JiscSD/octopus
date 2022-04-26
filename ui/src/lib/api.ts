@@ -49,7 +49,7 @@ export const post = async <T>(
     return response;
 };
 
-export const patch = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+export const patch = async (url: string, body: Interfaces.JSON, token?: string | undefined): Promise<AxiosResponse> => {
     const headers = {
         headers: {
             Authorization: `Bearer ${token}`

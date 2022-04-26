@@ -28,6 +28,7 @@ export interface APIRequest<
     body: BodyOverride;
     queryStringParameters: QueryStringParametersOverride;
     pathParameters: PathParamsOverride;
+    user?: User;
 }
 
 export interface AuthenticatedAPIRequest<

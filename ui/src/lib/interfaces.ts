@@ -70,6 +70,19 @@ export interface Publication extends CorePublication {
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
     ratings: Rating;
+    coAuthors: CoAuthor[];
+}
+
+export interface CoAuthor {
+    id: string;
+    linkedUser: null | string;
+    confirmedCoAuthor: boolean;
+    email: string;
+    user?: {
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
 }
 
 export interface CoreUser {

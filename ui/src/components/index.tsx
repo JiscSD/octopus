@@ -41,12 +41,15 @@ export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationContentSection } from './Publication/ContentSection';
 export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
+export { default as PublicationCreationCoAuthorEntry } from './Publication/Creation/CoAuthorEntry';
+
 export { default as PublicationCreationStepFive } from './Publication/Creation/StepFive';
 export { default as PublicationCreationStepFour } from './Publication/Creation/StepFour';
 export { default as PublicationCreationStepOne } from './Publication/Creation/StepOne';
 export { default as PublicationCreationStepThree } from './Publication/Creation/StepThree';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationCreationStepTwo } from './Publication/Creation/StepTwo';
+export { default as PublicationCreationCoAuthor } from './Publication/Creation/CoAuthor';
 export { default as PublicationLink } from './Publication/Link';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as PublicationSidebar } from './Publication/Sidebar';

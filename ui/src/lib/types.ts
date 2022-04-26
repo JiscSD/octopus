@@ -65,6 +65,8 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
+    coAuthors: Interfaces.CoAuthor[];
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

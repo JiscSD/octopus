@@ -14,8 +14,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let code: string | string[] | null = null;
     let token: any = null;
     let error: string | null = null;
+    let redirect: string | string[] | null = null;
 
     if (context.query.code) code = context.query.code;
+    if (context.query.state) redirect = context.query.state;
 
     if (!code) {
         return {
@@ -23,7 +25,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
+    if (!redirect) {
+        redirect = Config.urls.home.path;
+    }
+
     if (Array.isArray(code)) code = code[0];
+    if (Array.isArray(redirect)) redirect = redirect[0];
 
     try {
         const response = await api.post(
@@ -46,12 +53,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     return {
-        props: { token }
+        props: { token, redirect }
     };
 };
 
 type Props = {
     token: string;
+    redirect: string;
 };
 
 const Login: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -62,13 +70,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
         const decodedJWT = Helpers.setAndReturnJWT(props.token);
         // @ts-ignore
         if (decodedJWT) setUser({ ...decodedJWT, token: props.token });
-        setTimeout(
-            () =>
-                router.push({
-                    pathname: `${Config.urls.home.path}`
-                }),
-            300
-        );
+        setTimeout(() => router.push(props.redirect), 300);
     }, [props.token]);
 
     return (
