@@ -1,4 +1,5 @@
 import * as I from 'interface';
+import * as H from 'lib/helpers';
 
 const getAllSchema: I.Schema = {
     type: 'object',
@@ -22,6 +23,10 @@ const getAllSchema: I.Schema = {
         },
         exclude: {
             type: 'string'
+        },
+        language: {
+            type: 'string',
+            enum: H.OctopusInformation.languages
         }
     },
     additionalProperties: false
