@@ -1,3 +1,5 @@
+import ISO6391 from 'iso-639-1';
+
 import * as I from 'interface';
 
 const updatePublicationSchema: I.Schema = {
@@ -30,6 +32,12 @@ const updatePublicationSchema: I.Schema = {
         },
         conflictOfInterestText: {
             type: 'string'
+        },
+        language: {
+            type: 'string',
+            enum: ISO6391.getAllCodes(),
+            maxLength: 2,
+            minLength: 2
         }
     },
     additionalProperties: false
