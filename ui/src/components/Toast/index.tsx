@@ -4,7 +4,7 @@ import * as SolidIcons from '@heroicons/react/solid';
 
 import * as Stores from '@stores';
 
-const Toast = (): React.ReactElement => {
+const Toast: React.FC = (): React.ReactElement => {
     const toast = Stores.useToastStore((state) => state.toast);
     const clearToast = Stores.useToastStore((state) => state.clearToast);
 

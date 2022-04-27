@@ -244,7 +244,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </span>
                                 <input
                                     ref={searchInputRef}
-                                    autoFocus
                                     name="query"
                                     id="query"
                                     defaultValue={props.query ? props.query : ''}

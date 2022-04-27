@@ -253,14 +253,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                         >
                                             {({ selected }) => (
                                                 <>
-                                                    <span
+                                                    <button
                                                         className={`${
                                                             selected ? 'font-medium' : 'font-normal'
                                                         } block truncate`}
                                                         onClick={heading.onClick}
+                                                        aria-label="Select heading"
                                                     >
                                                         {heading.name}
-                                                    </span>
+                                                    </button>
                                                 </>
                                             )}
                                         </HeadlessUi.Listbox.Option>
