@@ -4,8 +4,6 @@ const AppDocument = () => (
     <NextDocument.Html lang="en">
         <NextDocument.Head>
             <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <meta name="robots" content="noindex, nofollow" />
 
             <link rel="icon" href="/meta/favicon.ico" />
             <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png" />
