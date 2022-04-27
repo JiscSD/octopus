@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
 import NextNprogress from 'nextjs-progressbar';
@@ -48,6 +49,11 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
 
     return (
         <>
+            <Head>
+                {/** TODO: Relook at this post launch */}
+                <meta name="robots" content="noindex, nofollow" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
             <NextNprogress
                 color={'#348cb1'}
                 startPosition={0.3}

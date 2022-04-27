@@ -1,3 +1,15 @@
 {
-    "extends": "next/core-web-vitals"
+    "extends": [
+        "next/core-web-vitals",
+        "plugin:jsx-a11y/recommended"
+    ],
+    "rules": {
+        "@next/next/no-img-element": "off",
+        "jsx-a11y/anchor-is-valid": "warn",
+        "jsx-a11y/no-static-element-interactions": "warn",
+        "jsx-a11y/click-events-have-key-events": "warn",
+        "jsx-a11y/no-redundant-roles": "warn",
+        "jsx-a11y/no-autofocus": "warn",
+        "jsx-a11y/media-has-caption": "warn"
+    }
 }
