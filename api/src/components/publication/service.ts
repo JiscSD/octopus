@@ -181,7 +181,9 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 bool: {
                     filter: {
                         terms: {
-                            type: filters.type.split(',').map((type) => type.toLowerCase()) || [
+                            type: (filters.type
+                                .split(',')
+                                .map((type) => type.toLowerCase()) as I.PublicationType[]) || [
                                 'problem',
                                 'protocol',
                                 'analysis',
