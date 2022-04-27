@@ -179,23 +179,21 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
             sort: ['_score'],
             query: {
                 bool: {
-                    filter: [
-                        {
-                            terms: {
-                                type: filters.type.split(',').map((type) => type.toLowerCase()) || [
-                                    'problem',
-                                    'protocol',
-                                    'analysis',
-                                    'real_world_application',
-                                    'hypothesis',
-                                    'data',
-                                    'interpretation',
-                                    'peer_review'
-                                ],
-                                _name: 'type'
-                            }
+                    filter: {
+                        terms: {
+                            type: filters.type.split(',').map((type) => type.toLowerCase()) || [
+                                'problem',
+                                'protocol',
+                                'analysis',
+                                'real_world_application',
+                                'hypothesis',
+                                'data',
+                                'interpretation',
+                                'peer_review'
+                            ],
+                            _name: 'type'
                         }
-                    ]
+                    }
                 }
             }
         }
@@ -221,15 +219,6 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 _id: filters.exclude.split(',')
             }
         };
-    }
-
-    if (filters.language) {
-        query.body.query.bool.filter.push({
-            // @ts-ignore TODO: This works, but has a type error?
-            term: {
-                language: filters.language
-            }
-        });
     }
 
     const publications = await client.search.search(query);

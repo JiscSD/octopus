@@ -20,7 +20,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-    let language: string | string[] | null = null;
 
     // defaults to results
     let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
@@ -35,7 +34,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
-    if (context.query.language) language = context.query.language;
 
     // only if a search type is provided
     if (searchType) {
@@ -45,7 +43,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
-        if (Array.isArray(language)) language = language[0];
 
         // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
         limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
@@ -76,7 +73,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publicationTypes,
             limit,
             offset,
-            language,
             fallback: {
                 [swrKey]: results
             },
@@ -91,7 +87,6 @@ type Props = {
     publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
-    language: Types.Languages | null;
     error: string | null;
 };
 
@@ -107,7 +102,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
-    const [language, setLanguage] = React.useState<Types.Languages | null>(props.language ?? 'en');
 
     // ugly complex swr key
     const swrKey = `/${searchType}?search=${query || ''}${
@@ -128,7 +122,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
             const paramsListCopy = { ...router.query };
 
             if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
-            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'language')) delete paramsListCopy.language;
 
             router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
@@ -139,8 +132,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         ...router.query,
                         for: value,
                         type: publicationTypes,
-                        query: searchInputRef.current?.value,
-                        language
+                        query: searchInputRef.current?.value
                     }
                 },
                 undefined,
@@ -163,14 +155,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         });
 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
-    };
-
-    const handleLanguageChange = (value: Types.Languages) => {
-        setLanguage(value);
-
-        router.push({ pathname: '/search', query: { ...router.query, language: value } }, undefined, {
-            shallow: true
-        });
     };
 
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -329,26 +313,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-
-                                <div className="space-y-5 pt-6">
-                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                        Publication language
-                                    </legend>
-                                    <select
-                                        name="language"
-                                        id="language"
-                                        disabled={searchType !== 'publications'}
-                                        onChange={(e) => handleLanguageChange(e.target.value as Types.Languages)}
-                                        defaultValue={language ?? 'en'}
-                                        className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 hover:cursor-pointer focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:mb-0"
-                                    >
-                                        {Config.values.octopusInformation.languages.map((entry) => (
-                                            <option key={entry.code} value={entry.code}>
-                                                {entry.name}
-                                            </option>
-                                        ))}
-                                    </select>
                                 </div>
 
                                 <div className="pt-6">
