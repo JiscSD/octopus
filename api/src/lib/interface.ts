@@ -119,7 +119,6 @@ export interface PublicationFilters {
     search?: string;
     limit?: string;
     offset?: string;
-    language?: string;
     type: string;
     exclude: string;
 }
