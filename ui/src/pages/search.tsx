@@ -64,7 +64,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}`; // add language query param
+    }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
