@@ -60,6 +60,7 @@ export interface CorePublication {
     url_slug: string;
     licence: Types.LicenceType;
     content: string;
+    language: Types.Languages;
 }
 
 export interface Publication extends CorePublication {
@@ -206,6 +207,10 @@ export interface OctopusInformation {
             link: string;
         };
     };
+    languages: {
+        code: Types.Languages;
+        name: string;
+    }[];
 }
 
 export interface ToastState {

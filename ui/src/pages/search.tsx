@@ -120,13 +120,20 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         const value = e.target.value;
         if (value === 'users') {
             const paramsListCopy = { ...router.query };
+
             if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
+
             router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
         }
         if (value === 'publications') {
             router.push(
                 {
-                    query: { ...router.query, for: value, type: publicationTypes, query: searchInputRef.current?.value }
+                    query: {
+                        ...router.query,
+                        for: value,
+                        type: publicationTypes,
+                        query: searchInputRef.current?.value
+                    }
                 },
                 undefined,
                 { shallow: true }
@@ -264,55 +271,62 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="sticky top-16 space-y-5"
+                                className="sticky top-16 space-y-6 divide-y divide-grey-100"
                             >
-                                <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    Publication types
-                                </legend>
-                                {Config.values.publicationTypes.map((type) => (
-                                    <div
-                                        key={type}
-                                        className={`relative flex items-start ${
-                                            searchType !== 'publications' && 'opacity-50'
-                                        }`}
-                                    >
-                                        <div className="flex h-5 items-center">
-                                            <input
-                                                id={type}
-                                                aria-describedby={type}
-                                                name={type}
-                                                type="checkbox"
-                                                className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                                                checked={
-                                                    publicationTypes
-                                                        ? publicationTypes.split(',').includes(type)
-                                                        : false
-                                                }
-                                                onChange={(e) => collatePublicationTypes(e, type)}
-                                                disabled={!results || searchType !== 'publications'}
-                                            />
-                                        </div>
-                                        <div className="ml-3 text-sm">
-                                            <label
-                                                htmlFor={type}
-                                                className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                aria-disabled={!results || searchType !== 'publications'}
+                                <div className="space-y-5">
+                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        Publication types
+                                    </legend>
+                                    <div className="space-y-3">
+                                        {Config.values.publicationTypes.map((type) => (
+                                            <div
+                                                key={type}
+                                                className={`relative flex items-start ${
+                                                    searchType !== 'publications' && 'opacity-50'
+                                                }`}
                                             >
-                                                {Helpers.formatPublicationType(type)}
-                                            </label>
-                                        </div>
+                                                <div className="flex h-5 items-center">
+                                                    <input
+                                                        id={type}
+                                                        aria-describedby={type}
+                                                        name={type}
+                                                        type="checkbox"
+                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
+                                                        checked={
+                                                            publicationTypes
+                                                                ? publicationTypes.split(',').includes(type)
+                                                                : false
+                                                        }
+                                                        onChange={(e) => collatePublicationTypes(e, type)}
+                                                        disabled={!results || searchType !== 'publications'}
+                                                    />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                    <label
+                                                        htmlFor={type}
+                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                        aria-disabled={!results || searchType !== 'publications'}
+                                                    >
+                                                        {Helpers.formatPublicationType(type)}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </div>
 
-                                <button
-                                    onClick={resetFilters}
-                                    className="!mt-8 flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500"
-                                >
-                                    <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
-                                        Clear filters
-                                    </span>
-                                    <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
-                                </button>
+                                <div className="pt-6">
+                                    <button
+                                        onClick={resetFilters}
+                                        disabled={searchType !== 'publications'}
+                                        className="flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50"
+                                    >
+                                        <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
+                                            Clear filters
+                                        </span>
+                                        <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
+                                    </button>
+                                </div>
                             </Framer.motion.fieldset>
                         </Framer.AnimatePresence>
                     </aside>
@@ -354,22 +368,20 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
                                                 if (searchType === 'publications') {
                                                     return (
-                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.PublicationSearchResult
+                                                            key={`publication-${index}-${result.id}`}
                                                             publication={result}
                                                             className={classes}
                                                         />
-                                                        // </Components.Delay>
                                                     );
                                                 }
                                                 if (searchType === 'users') {
                                                     return (
-                                                        // <Components.Delay key={result.id} delay={index * 50}>
                                                         <Components.UserSearchResult
+                                                            key={`user-${index}-${result.id}`}
                                                             user={result}
                                                             className={classes}
                                                         />
-                                                        // </Components.Delay>
                                                     );
                                                 }
                                             })}
