@@ -36,7 +36,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
 type BuildPublicationProps = {
     steps: Interfaces.PublicationBuildingStep[];
     currentStep: number;
-    setStep: any; //Not sure what type we can use for a state setter than has access tp previous state
+    setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
     token: string;
     children: React.ReactNode;
@@ -46,29 +46,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
     const store = Stores.usePublicationCreationStore();
+    const setToast = Stores.useToastStore((state) => state.setToast);
 
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
     const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
 
-    const prevStep = () => props.setStep((prevState: number) => prevState - 1);
-    const nextStep = () => props.setStep((prevState: number) => prevState + 1);
-
-    const saveCurrent = async () => {
-        let formattedKeywords: string[] = [];
-        if (store.keywords.length) {
-            formattedKeywords = store.keywords
-                .replace(/\n/g, ',') // replace new lines with comma
-                .split(',') // split by comma
-                .map((word) => word.trim()) // trim each keywords white space
-                .filter((word) => word.length); // dont include any empty string entries
-        }
-
-        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
-            props.setStep(3);
-            throw new Error('You must provide a conflict of interest reason.');
-        }
+    // Function called before action is taken, save, exit, preview, publish etc...
+    const saveCurrent = async (message?: string) => {
+        store.setError(null);
 
         await api.patch(
             `${Config.endpoints.publications}/${props.publication.id}`,
@@ -76,20 +63,50 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title: store.title,
                 content: store.content,
                 description: store.description,
-                keywords: formattedKeywords,
+                keywords: Helpers.formatKeywords(store.keywords),
                 licence: store.licence,
                 language: store.language,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
-                conflictOfInterestText: store.conflictOfInterestText
-                // ethicalStatement: store.ethicalStatement,
-                // ethicalStatementFreeText: store.ethicalStatementFreeText
+                conflictOfInterestText: store.conflictOfInterestText,
+                ethicalStatement: store.ethicalStatement,
+                ethicalStatementFreeText: store.ethicalStatement !== null ? store.ethicalStatementFreeText : null
             },
             props.token
         );
+
+        if (message) {
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: message,
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'lorem'
+            });
+        }
     };
 
+    /**
+     * @title Requesting to publish
+     * @description When requesting to go live, we carry out a few checks.
+     *              The api will tell us is we cannot go live, but prior to request
+     *              we can do some ui level checks & direct the author to the
+     *              correct step if a field is missing.
+     */
     const publish = async () => {
-        store.setError(null);
+        // Hard check on COI
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            props.setStep(3);
+            store.setError('You must provide a conflict of interest reason.');
+            return;
+        }
+
+        // Hard check on ETH Statement
+        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
+            props.setStep(4);
+            store.setError('You must select an ethical statement option.');
+            return;
+        }
+
         try {
             await saveCurrent();
             await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
@@ -97,18 +114,17 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
             });
         } catch (err) {
-            // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
-            // const { message } = err as Interfaces.JSONResponseError;
-            store.setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
         }
 
         setPublishModalVisibility(false);
     };
 
+    // Option selected from modal
     const save = async () => {
-        store.setError(null);
         try {
-            await saveCurrent();
+            await saveCurrent('Publication successfully saved');
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(message);
@@ -117,38 +133,41 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setSaveModalVisibility(false);
     };
 
-    const preview = async () => {
-        try {
-            await saveCurrent();
-            router.push({
-                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
-            });
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
-        }
-    };
-
+    // Option selected from modal
     const deleteExit = async () => {
-        store.setError(null);
         try {
             await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
             router.push({
                 pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
             });
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Draft successfully removed',
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'lorem'
+            });
         } catch (err) {
-            store.setError('There was a problem deleting this publicaiton');
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
         }
 
         setDeleteModalVisibility(false);
     };
 
+    // Monitor the stores state, and conditionally enable the publish button
     React.useEffect(() => {
         if (!store.title) return setIsReadyToPreview(false);
         if (!store.content) return setIsReadyToPreview(false);
         if (!store.licence) return setIsReadyToPreview(false);
         if (!store.linkTo.length) return setIsReadyToPreview(false);
-        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) return setIsReadyToPreview(false);
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            return setIsReadyToPreview(false);
+        }
+        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
+            return setIsReadyToPreview(false);
+        }
+
         setIsReadyToPreview(true);
     }, [
         store.title,
@@ -157,8 +176,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.conflictOfInterestStatus,
         store.conflictOfInterestText,
         store.linkTo,
-        store.type
+        store.type,
+        store.ethicalStatement
     ]);
+
+    // Reset the store when navigating away from the publication flow, this is why we have the save feature
+    // If I save a publication then go to create a new, my old data is still in the store, we dont want this
+    React.useEffect(() => {
+        return () => store.reset();
+    }, []);
 
     return (
         <>
@@ -234,7 +260,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <NavigationButton
                                 text="Previous"
                                 disabled={props.currentStep <= 0}
-                                onClick={prevStep}
+                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
                                 icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="LEFT"
                             />
@@ -242,14 +268,24 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <NavigationButton
                                 text="Next"
                                 disabled={props.currentStep >= props.steps.length - 1}
-                                onClick={nextStep}
+                                onClick={() => props.setStep((prevState: number) => prevState + 1)}
                                 icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
 
                             <NavigationButton
                                 text="Preview"
-                                onClick={preview}
+                                onClick={async () => {
+                                    try {
+                                        await saveCurrent();
+                                        router.push({
+                                            pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                        });
+                                    } catch (err) {
+                                        const { message } = err as Interfaces.JSONResponseError;
+                                        store.setError(message);
+                                    }
+                                }}
                                 disabled={!isReadyToPreview}
                                 icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"

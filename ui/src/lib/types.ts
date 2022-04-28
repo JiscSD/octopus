@@ -65,10 +65,11 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    ethicalStatement: 1 | 2;
-    ethicalStatementFreeText: string;
-    updateEthicalStatement: (ethicalStatement: 1 | 2) => void;
+    ethicalStatement: boolean | null;
+    ethicalStatementFreeText: string | null;
+    updateEthicalStatement: (ethicalStatement: boolean) => void;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    reset: () => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

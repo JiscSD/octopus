@@ -58,6 +58,8 @@ CREATE TABLE "Publication" (
     "licence" "LicenceType",
     "conflictOfInterestStatus" BOOLEAN DEFAULT false,
     "conflictOfInterestText" TEXT,
+    "ethicalStatement" BOOLEAN,
+    "ethicalStatementFreeText" TEXT,
     "description" TEXT,
     "keywords" TEXT[],
     "content" TEXT,

@@ -16,13 +16,13 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Ethical statement" />
                 <fieldset className="my-8 space-y-2">
-                    <label htmlFor="1" className="flex items-center space-x-2 hover:cursor-pointer">
+                    <label htmlFor="true" className="flex items-center space-x-2 hover:cursor-pointer">
                         <input
                             type="radio"
-                            name="1"
-                            id="1"
-                            checked={ethicalStatement === 1}
-                            onChange={() => updateEthicalStatement(1)}
+                            name="true"
+                            id="true"
+                            checked={ethicalStatement === true}
+                            onChange={() => updateEthicalStatement(true)}
                             className="hover:cursor-pointer"
                             aria-label="The results and data in this publication involved human or animal subjects."
                         />
@@ -33,10 +33,10 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
                     <label htmlFor="2" className="flex items-center space-x-2 hover:cursor-pointer">
                         <input
                             type="radio"
-                            name="2"
-                            id="2"
-                            checked={ethicalStatement === 2}
-                            onChange={() => updateEthicalStatement(2)}
+                            name="false"
+                            id="false"
+                            checked={typeof ethicalStatement !== 'object' && ethicalStatement === false}
+                            onChange={() => updateEthicalStatement(false)}
                             className="hover:cursor-pointer"
                             aria-label="The results and data in this publication does not involve human or animal subjects."
                         />
@@ -59,7 +59,7 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
                         rows={3}
                         className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                         required
-                        value={ethicalStatementFreeText}
+                        value={ethicalStatementFreeText ?? ''}
                         onChange={(e) => updateEthicalStatementFreeText(e.target.value)}
                     ></textarea>
                 </div>

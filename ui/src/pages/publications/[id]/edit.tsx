@@ -177,7 +177,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             store.updateLinkTo(props.draftedPublication.linkedTo);
         }
 
-        if (props.draftedPublication.ethicalStatement) {
+        if (props.draftedPublication.ethicalStatement !== null) {
             store.updateEthicalStatement(props.draftedPublication.ethicalStatement);
         }
         if (props.draftedPublication.ethicalStatementFreeText) {

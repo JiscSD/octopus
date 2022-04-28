@@ -40,12 +40,6 @@ model Images {
     createdAt  DateTime       @default(now())
 }
 
-enum ImageExtension {
-    png
-    jpg
-    jpeg
-}
-
 model Publication {
     id                       String                @id @default(cuid())
     url_slug                 String                @unique @default(cuid())
@@ -54,6 +48,8 @@ model Publication {
     licence                  LicenceType?
     conflictOfInterestStatus Boolean?              @default(false)
     conflictOfInterestText   String?
+    ethicalStatement         Boolean?
+    ethicalStatementFreeText String?
     description              String?
     keywords                 String[]
     content                  String?
@@ -139,6 +135,12 @@ model PublicationRatings {
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([publicationId, userId, category])
+}
+
+enum ImageExtension {
+    png
+    jpg
+    jpeg
 }
 
 enum Role {
