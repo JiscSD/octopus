@@ -53,6 +53,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
     const content = Stores.usePublicationCreationStore((state) => state.content);
     const licence = Stores.usePublicationCreationStore((state) => state.licence);
+    const language = Stores.usePublicationCreationStore((state) => state.language);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
     const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
     const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
@@ -88,6 +89,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 description,
                 keywords: formattedKeywords,
                 licence,
+                language,
                 conflictOfInterestStatus,
                 conflictOfInterestText
             },

@@ -1,11 +1,12 @@
-import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role } from '@prisma/client';
+import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role, Languages } from '@prisma/client';
 export {
     PublicationType,
     LicenceType,
     PublicationStatusEnum,
     PublicationFlagCategoryEnum,
     Role,
-    ImageExtension
+    ImageExtension,
+    Languages
 } from '@prisma/client';
 
 import {
@@ -73,6 +74,7 @@ export interface CreatePublicationRequestBody {
     description?: string;
     keywords?: string[];
     content?: string;
+    language?: Languages;
 }
 
 export interface OpenSearchPublication {
@@ -107,6 +109,7 @@ export interface UpdatePublicationRequestBody {
     description?: string;
     keywords?: string[];
     id?: string;
+    language?: Languages;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -393,6 +396,7 @@ export interface OctopusInformation {
             ratingCategories: Ratings[];
         };
     };
+    languages: Languages[];
 }
 export interface CreateFlagCommentBody {
     comment: string;

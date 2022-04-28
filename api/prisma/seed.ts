@@ -38,6 +38,7 @@ export const initialDevSeed = async (): Promise<void> => {
                     description: publication.description,
                     keywords: publication.keywords,
                     content: publication.content,
+                    language: 'en',
                     currentStatus: publication.currentStatus,
                     publishedDate: publication.publishedDate,
                     cleanContent: htmlToText.convert(publication.content)

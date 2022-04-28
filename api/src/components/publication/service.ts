@@ -245,6 +245,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             description: e.description,
             keywords: e.keywords,
             content: e.content,
+            language: e.language,
             user: {
                 connect: {
                     id: user.id

@@ -140,4 +140,58 @@ describe('Update publication', () => {
 
         expect(updatePublication.status).toEqual(422);
     });
+
+    // Language tests
+    test('Valid publication updated by real user when provided a correct ISO-639-1 language code', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                language: 'fr'
+            });
+
+        expect(createPublicationRequest.status).toEqual(200);
+        expect(createPublicationRequest.body.language).toEqual('fr');
+    });
+
+    test('Publication failed to be updated if language code provided is not out of the ISO-639-1 language list', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                language: 'zz' // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
+
+    test('Publication failed to be updated if language provided is less than 2 chars', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                language: 'e'
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
+
+    test('Publication failed to be updated if language provided is more than 2 chars', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                language: 'enn'
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
 });

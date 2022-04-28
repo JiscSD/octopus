@@ -1,4 +1,5 @@
 import * as I from 'interface';
+import * as H from 'lib/helpers';
 
 const createPublicationSchema: I.Schema = {
     type: 'object',
@@ -40,6 +41,10 @@ const createPublicationSchema: I.Schema = {
         },
         conflictOfInterestText: {
             type: 'string'
+        },
+        language: {
+            type: 'string',
+            enum: H.OctopusInformation.languages
         }
     },
     required: ['type', 'title'],

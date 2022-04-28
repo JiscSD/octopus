@@ -1,6 +1,6 @@
 import * as testUtils from 'lib/testUtils';
 
-describe(`Get a given user's publications`, () => {
+describe('Get a given users publications', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
         await testUtils.initialSeed();

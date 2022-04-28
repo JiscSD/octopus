@@ -31,7 +31,6 @@ export { default as ORCIDLogOutButton } from './ORCID/LogOutButton';
 export { default as Overlay } from './Overlay';
 export { default as PageSubTitle } from './PageSubTitle';
 export { default as PageTitle } from './PageTitle';
-export { default as Pagination } from './Pagination';
 export { default as ParseHTML } from './ParseHTML';
 export { default as Pill } from './Pill';
 export { default as ProgressBar } from './Progress/Bar';

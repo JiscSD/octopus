@@ -24,7 +24,9 @@
         "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
         "seed:local": "STAGE=local npx prisma migrate reset --force",
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
-        "format": "npx prettier --write src/"
+        "format:check": "npx prettier --check src/",
+        "format:write": "npx prettier --write src/",
+        "lint": "eslint src/"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.76.0",
@@ -33,7 +35,7 @@
         "@middy/http-json-body-parser": "^2.5.4",
         "@middy/validator": "^2.5.4",
         "@opensearch-project/opensearch": "^1.0.2",
-        "@prisma/client": "^3.8.1",
+        "@prisma/client": "^3.13.0",
         "@types/cheerio": "^0.22.30",
         "@types/jest": "^27.4.0",
         "@types/jsonwebtoken": "^8.5.7",
@@ -51,7 +53,6 @@
         "luxon": "^2.3.0",
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
-        "prisma": "^3.10.0",
         "string-strip-html": "^9.1.6"
     },
     "devDependencies": {
@@ -69,6 +70,7 @@
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
+        "prisma": "^3.13.0",
         "serverless-domain-manager": "^5.2.0",
         "serverless-dotenv-plugin": "^3.12.2",
         "serverless-middleware": "0.0.15",

@@ -3,6 +3,8 @@ import React from 'react';
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Assets from '@assets';
+import * as Config from '@config';
+import * as Types from '@types';
 
 const StepFour: React.FC = (): React.ReactElement | null => {
     const description = Stores.usePublicationCreationStore((state) => state.description);
@@ -11,6 +13,8 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
     const content: string = Stores.usePublicationCreationStore((state) => state.content);
     const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
+    const language = Stores.usePublicationCreationStore((state) => state.language);
+    const updateLanguage = Stores.usePublicationCreationStore((state) => state.updateLanguage);
 
     const [loading, setLoading] = React.useState(true);
 
@@ -29,6 +33,23 @@ const StepFour: React.FC = (): React.ReactElement | null => {
                         <Assets.Logo width={60} height={60} className="fill-teal-500" />
                     </div>
                 )}
+            </div>
+
+            <div>
+                <Components.PublicationCreationStepTitle text="Language" />
+                <select
+                    name="language"
+                    id="language"
+                    onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
+                    className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
+                    required
+                >
+                    {Config.values.octopusInformation.languages.map((entry) => (
+                        <option key={entry.code} selected={entry.code === language ?? 'en'} value={entry.code}>
+                            {entry.name}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div>

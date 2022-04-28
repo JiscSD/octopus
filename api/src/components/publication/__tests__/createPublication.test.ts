@@ -129,4 +129,85 @@ describe('Create publication', () => {
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.publishedDate).toBeNull();
     });
+
+    test('Valid publicatiom created by real user when provided a correct ISO-639-1 language code', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication language test 1',
+                content: 'Content',
+                language: 'fr'
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.language).toEqual('fr');
+    });
+
+    test('Publication failed to be created if language code provided is not out of the ISO-639-1 language list', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication language test 2',
+                content: 'Content',
+                language: 'zz' // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
+
+    test('Publication failed to be created if language provided is less than 2 chars', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication language test 3',
+                content: 'Content',
+                language: 'e'
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
+
+    test('Publication failed to be created if language provided is more than 2 chars', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication language test 4',
+                content: 'Content',
+                language: 'enn'
+            });
+
+        expect(createPublicationRequest.status).toEqual(422);
+    });
+
+    test('Publication created with default language code if no language code is provided', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication language test 5',
+                content: 'Content'
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.language).toEqual('en');
+    });
 });

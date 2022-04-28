@@ -107,7 +107,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
 
                             {props.details && (
                                 <div className={`mt-2 text-sm transition-colors duration-500 ${classes.details}`}>
-                                    <ul role="list" className="list-disc space-y-1 pl-5">
+                                    <ul className="list-disc space-y-1 pl-5">
                                         {props.details.map((detail) => (
                                             <li key={detail}>{detail}</li>
                                         ))}
