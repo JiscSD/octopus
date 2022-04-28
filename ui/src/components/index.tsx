@@ -36,7 +36,6 @@ export { default as ParseHTML } from './ParseHTML';
 export { default as Pill } from './Pill';
 export { default as ProgressBar } from './Progress/Bar';
 export { default as ProgressCircle } from './Progress/Circle';
-export { default as PublicationBreakdown } from './Publication/Breakdown';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationContentSection } from './Publication/ContentSection';

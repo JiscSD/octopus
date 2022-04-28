@@ -167,7 +167,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
             ).toString('base64')}`
         });
         context.res.end();
-        throw new Error('Sorry kid');
+        throw new Error('Token not valid');
     }
 
     return token;

@@ -66,13 +66,6 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h3>
                 </header>
 
-                {/* <section id="content" className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Research breakdown
-                    </h2>
-                    <Components.PublicationBreakdown publications={props.user.Publication} />
-                </section> */}
-
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Employment

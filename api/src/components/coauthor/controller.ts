@@ -106,12 +106,6 @@ export const link = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        console.log({
-            time: new Date().toISOString,
-            user: event.user,
-            body: event.body
-        });
-
         // Does the publication exist?
         if (!publication) {
             return response.json(404, {
