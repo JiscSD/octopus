@@ -35,7 +35,7 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="false"
                             id="false"
-                            checked={typeof ethicalStatement !== 'object' && ethicalStatement === false}
+                            checked={ethicalStatement === false}
                             onChange={() => updateEthicalStatement(false)}
                             className="hover:cursor-pointer"
                             aria-label="The results and data in this publication does not involve human or animal subjects."
