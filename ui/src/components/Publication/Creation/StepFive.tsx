@@ -2,7 +2,6 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
-import * as Config from '@config';
 import * as Stores from '@stores';
 
 const CompletedIcon = () => (
@@ -15,7 +14,7 @@ const IncompleteIcon = () => (
 /**
  * @description Content review
  */
-const StepFive = () => {
+const StepFive: React.FC = (): React.ReactElement => {
     const setError = Stores.usePublicationCreationStore((state) => state.setError);
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);

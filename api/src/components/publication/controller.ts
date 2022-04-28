@@ -11,7 +11,7 @@ export const getAll = async (
     try {
         const openSearchPublications = await publicationService.getOpenSearchRecords(event.queryStringParameters);
 
-        const publicationIds = openSearchPublications.body.hits.hits.map((hit) => hit._id);
+        const publicationIds = openSearchPublications.body.hits.hits.map((hit) => hit._id as string);
 
         const publications = await publicationService.getAllByIds(publicationIds);
 

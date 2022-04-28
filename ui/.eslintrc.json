@@ -4,12 +4,9 @@
         "plugin:jsx-a11y/recommended"
     ],
     "rules": {
-        "@next/next/no-img-element": "off",
-        "jsx-a11y/anchor-is-valid": "warn",
-        "jsx-a11y/no-static-element-interactions": "warn",
-        "jsx-a11y/click-events-have-key-events": "warn",
-        "jsx-a11y/no-redundant-roles": "warn",
-        "jsx-a11y/no-autofocus": "warn",
-        "jsx-a11y/media-has-caption": "warn"
+        // Disabled due to using an empty array in react monitor tools, useEffect, useCallback, useMemo
+        "react-hooks/exhaustive-deps": "off",
+        // Disabled due to genuine need of using native <img /> tags over Next/Image
+        "@next/next/no-img-element": "off"
     }
 }

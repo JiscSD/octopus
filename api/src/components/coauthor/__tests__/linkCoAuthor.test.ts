@@ -9,7 +9,7 @@ describe('Link co-author', () => {
 
     test('Link a co-author to a publication (allow)', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'testemail@test.com',
@@ -28,7 +28,7 @@ describe('Link co-author', () => {
 
     test('Link a co-author to a publication (do not allow) with authentication', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'testemail@test.com',
@@ -47,7 +47,7 @@ describe('Link co-author', () => {
 
     test('Link a co-author to a publication (do not allow) without authentication', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'testemail@test.com',
@@ -60,7 +60,7 @@ describe('Link co-author', () => {
 
     test('Cannot link as co-author if you are the creator', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'testemail@test.com',
@@ -73,7 +73,7 @@ describe('Link co-author', () => {
 
     test('Cannot link co-author if user has already been linked as another co-author', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '1234' })
             .send({
                 email: 'testemail@test.com',
@@ -86,7 +86,7 @@ describe('Link co-author', () => {
 
     test('Cannot override co-authoriship', async () => {
         const link = await testUtils.agent
-            .patch(`/publications/publication-problem-draft/link-coauthor`)
+            .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'testemai2l@test.com',
