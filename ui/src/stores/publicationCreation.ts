@@ -49,7 +49,13 @@ let store: any = (set: (params: any) => void) => ({
 
     // Links
     linkTo: [],
-    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo }))
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo })),
+
+    // Ethical statement
+    ethicalStatement: 1,
+    ethicalStatementFreeText: '',
+    updateEthicalStatement: (ethicalStatement: number) => set(() => ({ ethicalStatement })),
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

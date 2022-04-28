@@ -39,6 +39,12 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     {
+        title: 'Declarations',
+        subTitle: 'Declarations & statements',
+        component: <Components.PublicationCreationDelclarationsAndStatements />,
+        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+    },
+    {
         title: 'Review & publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
@@ -103,46 +109,80 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    let defaultStep = props.step ? parseInt(props.step) : 0;
-    defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;
+    const store = Stores.usePublicationCreationStore();
+
+    // Choose which flow steps/pages to include based on the publication type
+    const stepsToUse = React.useMemo(() => {
+        let arr = [];
+        switch (props.draftedPublication.type) {
+            case Config.values.octopusInformation.publications.DATA.id:
+                arr = steps;
+                break;
+            default:
+                arr = [steps[0], steps[1], steps[2], steps[3], steps[5]];
+        }
+        return arr;
+    }, [props.draftedPublication.type]);
+
+    // Choose which step to land the page on
+    let defaultStep = React.useMemo(() => {
+        let defaultStep = props.step ? parseInt(props.step) : 0;
+        defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;
+        return defaultStep;
+    }, [props.step]);
 
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
 
-    const updateId = Stores.usePublicationCreationStore((state) => state.updateId);
-    const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
-    const updateType = Stores.usePublicationCreationStore((state) => state.updateType);
-    const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
-    const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
-    const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
-    const updateLicence = Stores.usePublicationCreationStore((state) => state.updateLicence);
-    const updateLanguage = Stores.usePublicationCreationStore((state) => state.updateLanguage);
-    const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state) => state.updateConflictOfInterestStatus
-    );
-    const updateConflictOfInterestText = Stores.usePublicationCreationStore(
-        (state) => state.updateConflictOfInterestText
-    );
-    const updateLinkTo = Stores.usePublicationCreationStore((state) => state.updateLinkTo);
-
     React.useEffect(() => {
-        if (props.draftedPublication.id) updateId(props.draftedPublication.id);
-        if (props.draftedPublication.title) updateTitle(props.draftedPublication.title);
-        if (props.draftedPublication.type) updateType(props.draftedPublication.type);
-        if (props.draftedPublication.description) updateDescription(props.draftedPublication.description);
-        if (props.draftedPublication.keywords.length) {
-            updateKeywords(props.draftedPublication.keywords.join(', '));
-        } else {
-            updateKeywords('');
+        if (props.draftedPublication.id) {
+            store.updateId(props.draftedPublication.id);
         }
-        if (props.draftedPublication.content) updateContent(props.draftedPublication.content);
-        if (props.draftedPublication.licence) updateLicence(props.draftedPublication.licence);
-        if (props.draftedPublication.language) updateLanguage(props.draftedPublication.language);
-        if (props.draftedPublication.conflictOfInterestStatus)
-            updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        if (props.draftedPublication.conflictOfInterestText)
-            updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
-        updateLinkTo(props.draftedPublication.linkedTo);
+
+        if (props.draftedPublication.title) {
+            store.updateTitle(props.draftedPublication.title);
+        }
+
+        if (props.draftedPublication.type) {
+            store.updateType(props.draftedPublication.type);
+        }
+
+        if (props.draftedPublication.description) {
+            store.updateDescription(props.draftedPublication.description);
+        }
+
+        if (props.draftedPublication.keywords.length) {
+            store.updateKeywords(props.draftedPublication.keywords.join(', '));
+        } else {
+            store.updateKeywords('');
+        }
+
+        if (props.draftedPublication.content) {
+            store.updateContent(props.draftedPublication.content);
+        }
+
+        if (props.draftedPublication.licence) {
+            store.updateLicence(props.draftedPublication.licence);
+        }
+        if (props.draftedPublication.language) {
+            store.updateLanguage(props.draftedPublication.language);
+        }
+
+        if (props.draftedPublication.conflictOfInterestStatus) {
+            store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
+        }
+
+        if (props.draftedPublication.conflictOfInterestText) {
+            store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
+            store.updateLinkTo(props.draftedPublication.linkedTo);
+        }
+
+        if (props.draftedPublication.ethicalStatement) {
+            store.updateEthicalStatement(props.draftedPublication.ethicalStatement);
+        }
+        if (props.draftedPublication.ethicalStatementFreeText) {
+            store.updateEthicalStatementFreeText(props.draftedPublication.ethicalStatementFreeText);
+        }
     }, []);
 
     React.useEffect(() => {
@@ -165,14 +205,14 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
 
             <Layouts.BuildPublication
-                steps={steps}
+                steps={stepsToUse}
                 currentStep={currentStep}
                 setStep={setCurrentStep}
                 publication={publication}
                 token={props.token}
             >
                 {publication
-                    ? steps.map(
+                    ? stepsToUse.map(
                           (step, index) =>
                               index === currentStep && (
                                   <Framer.motion.section

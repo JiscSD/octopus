@@ -28,20 +28,7 @@ const StepThree: React.FC = (): React.ReactElement => {
                 <div className="mb-6">
                     <Components.PublicationCreationStepTitle text="Does this publication have any conflicts of interest?" />
                 </div>
-                {/* <label htmlFor="conflictOfInterestStatus" className="mb-6 flex items-center">
-                    <input
-                        required
-                        id="conflictOfInterestStatus"
-                        name="conflictOfInterestStatus"
-                        type="checkbox"
-                        checked={!conflictOfInterestStatus}
-                        onChange={(e) => updateConflictOfInterestStatus(!e.target.checked)}
-                        className="rounded-sm border border-grey-100 shadow outline-0  focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
-                    />
-                    <span className="ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        This publication <strong>does not</strong> have a conflict of interest.
-                    </span>
-                </label> */}
+
                 <fieldset className="mb-2 space-x-6">
                     <label className="inline-flex items-center">
                         <input

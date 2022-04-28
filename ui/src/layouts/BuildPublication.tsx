@@ -45,18 +45,7 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
-    const error = Stores.usePublicationCreationStore((state) => state.error);
-    const setError = Stores.usePublicationCreationStore((state) => state.setError);
-    const title = Stores.usePublicationCreationStore((state) => state.title);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
-    const description = Stores.usePublicationCreationStore((state) => state.description);
-    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
-    const content = Stores.usePublicationCreationStore((state) => state.content);
-    const licence = Stores.usePublicationCreationStore((state) => state.licence);
-    const language = Stores.usePublicationCreationStore((state) => state.language);
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
-    const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
-    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
+    const store = Stores.usePublicationCreationStore();
 
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
@@ -68,37 +57,39 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const saveCurrent = async () => {
         let formattedKeywords: string[] = [];
-        if (keywords.length) {
-            formattedKeywords = keywords
+        if (store.keywords.length) {
+            formattedKeywords = store.keywords
                 .replace(/\n/g, ',') // replace new lines with comma
                 .split(',') // split by comma
                 .map((word) => word.trim()) // trim each keywords white space
                 .filter((word) => word.length); // dont include any empty string entries
         }
 
-        if (conflictOfInterestStatus && !conflictOfInterestText.length) {
-            props.setStep(2);
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            props.setStep(3);
             throw new Error('You must provide a conflict of interest reason.');
         }
 
         await api.patch(
             `${Config.endpoints.publications}/${props.publication.id}`,
             {
-                title,
-                content,
-                description,
+                title: store.title,
+                content: store.content,
+                description: store.description,
                 keywords: formattedKeywords,
-                licence,
-                language,
-                conflictOfInterestStatus,
-                conflictOfInterestText
+                licence: store.licence,
+                language: store.language,
+                conflictOfInterestStatus: store.conflictOfInterestStatus,
+                conflictOfInterestText: store.conflictOfInterestText
+                // ethicalStatement: store.ethicalStatement,
+                // ethicalStatementFreeText: store.ethicalStatementFreeText
             },
             props.token
         );
     };
 
     const publish = async () => {
-        setError(null);
+        store.setError(null);
         try {
             await saveCurrent();
             await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
@@ -108,19 +99,19 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         } catch (err) {
             // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
             // const { message } = err as Interfaces.JSONResponseError;
-            setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
+            store.setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
         }
 
         setPublishModalVisibility(false);
     };
 
     const save = async () => {
-        setError(null);
+        store.setError(null);
         try {
             await saveCurrent();
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
+            store.setError(message);
         }
 
         setSaveModalVisibility(false);
@@ -134,32 +125,40 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
+            store.setError(message);
         }
     };
 
     const deleteExit = async () => {
-        setError(null);
+        store.setError(null);
         try {
             await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
             router.push({
                 pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
             });
         } catch (err) {
-            setError('There was a problem deleting this publicaiton');
+            store.setError('There was a problem deleting this publicaiton');
         }
 
         setDeleteModalVisibility(false);
     };
 
     React.useEffect(() => {
-        if (!title) return setIsReadyToPreview(false);
-        if (!content) return setIsReadyToPreview(false);
-        if (!licence) return setIsReadyToPreview(false);
-        if (!linkTos.length) return setIsReadyToPreview(false);
-        if (conflictOfInterestStatus && !conflictOfInterestText.length) return setIsReadyToPreview(false);
+        if (!store.title) return setIsReadyToPreview(false);
+        if (!store.content) return setIsReadyToPreview(false);
+        if (!store.licence) return setIsReadyToPreview(false);
+        if (!store.linkTo.length) return setIsReadyToPreview(false);
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) return setIsReadyToPreview(false);
         setIsReadyToPreview(true);
-    }, [title, content, licence, conflictOfInterestStatus, conflictOfInterestText, linkTos]);
+    }, [
+        store.title,
+        store.content,
+        store.licence,
+        store.conflictOfInterestStatus,
+        store.conflictOfInterestText,
+        store.linkTo,
+        store.type
+    ]);
 
     return (
         <>
@@ -229,7 +228,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
                     <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                            {Helpers.formatPublicationType(type)}
+                            {Helpers.formatPublicationType(store.type)}
                         </span>
                         <div className="flex space-x-8">
                             <NavigationButton
@@ -269,7 +268,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Save"
                                 onClick={() => setSaveModalVisibility(true)}
                                 className=""
-                                // icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
                                 icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
@@ -282,9 +280,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             />
                         </div>
                     </div>
-                    {!!error && (
-                        <Components.Alert severity="ERROR" title={error} allowDismiss className="mb-12 w-fit" />
-                    )}
+                    {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
                     <div className="mb-12">{props.children}</div>
                 </section>
             </main>

@@ -39,6 +39,7 @@ export { default as PublicationBreakdown } from './Publication/Breakdown';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationContentSection } from './Publication/ContentSection';
+export { default as PublicationCreationDelclarationsAndStatements } from './Publication/Creation/DeclarationsAndStatements';
 export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
 export { default as PublicationCreationStepFive } from './Publication/Creation/StepFive';
 export { default as PublicationCreationStepFour } from './Publication/Creation/StepFour';
