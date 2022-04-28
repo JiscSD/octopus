@@ -4,10 +4,10 @@ import * as Interfaces from '@interfaces';
 
 type Props = {
     heads: string[];
-    records: Interfaces.OrcidHistoryRecord[];
+    records: Interfaces.OrcidWorksRecord[];
 };
 
-const HistoryTable: React.FC<Props> = (props) => (
+const WorksTable: React.FC<Props> = (props) => (
     <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -32,23 +32,21 @@ const HistoryTable: React.FC<Props> = (props) => (
                             {props.records.map((record, index) => (
                                 <tr key={index}>
                                     <td className="space-nowrap py-4 pl-4 pr-3 text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                        {record.organisation}
+                                        {record.url ? (
+                                            <a href={record.url} className="underline">
+                                                {record.title}
+                                            </a>
+                                        ) : (
+                                            record.title
+                                        )}
                                     </td>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {record.role ?? 'Not specified'}
+                                        {record.doi ?? 'No DOI available.'}
                                     </td>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {record.department ?? 'Not specified'}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {`${record.startDate.year ? record.startDate.year : ''}${
-                                            record.startDate.month ? `-${record.startDate.month}` : ''
-                                        }${record.startDate.day ? `-${record.startDate.day}` : ''}`}
-                                    </td>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {`${record.endDate.year ? record.endDate.year : ''}${
-                                            record.endDate.month ? `-${record.endDate.month}` : ''
-                                        }${record.endDate.day ? `-${record.endDate.day}` : ''}`}
+                                        {`${record.publishedDate.year ? record.publishedDate.year : ''}${
+                                            record.publishedDate.month ? `-${record.publishedDate.month}` : ''
+                                        }${record.publishedDate.day ? `-${record.publishedDate.day}` : ''}`}
                                     </td>
                                 </tr>
                             ))}
@@ -60,4 +58,4 @@ const HistoryTable: React.FC<Props> = (props) => (
     </div>
 );
 
-export default HistoryTable;
+export default WorksTable;

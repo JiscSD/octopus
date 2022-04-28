@@ -66,12 +66,12 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h3>
                 </header>
 
-                <section id="content" className="container mx-auto px-8 pb-12 lg:pb-24">
+                {/* <section id="content" className="container mx-auto px-8 pb-12 lg:pb-24">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Research breakdown
                     </h2>
                     <Components.PublicationBreakdown publications={props.user.Publication} />
-                </section>
+                </section> */}
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
@@ -104,6 +104,24 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                         ) : (
                             <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 No history available.
+                            </p>
+                        )}
+                    </div>
+                </section>
+
+                <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        Works
+                    </h2>
+                    <div className="2xl:w-2/3">
+                        {props.user.works.length ? (
+                            <Components.UserWorksTable
+                                heads={['Title', 'DOI', 'Published date']}
+                                records={props.user.works}
+                            />
+                        ) : (
+                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                No works available.
                             </p>
                         )}
                     </div>

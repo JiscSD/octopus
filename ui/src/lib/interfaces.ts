@@ -106,14 +106,24 @@ export interface OrcidHistoryRecord {
     endDate: OrcidDateRecord;
 }
 
+export interface OrcidWorksRecord {
+    doi: string | null;
+    url: string | null;
+    publishedDate: OrcidDateRecord;
+    title: string | null;
+}
+
 export interface EmploymentRecord extends OrcidHistoryRecord {}
 
 export interface EducationRecord extends OrcidHistoryRecord {}
+
+export interface WorksRecord extends OrcidWorksRecord {}
 
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
     Publication: Publication[];
+    works: WorksRecord[];
 }
 
 export interface SearchResults {

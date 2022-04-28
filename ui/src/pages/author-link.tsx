@@ -17,11 +17,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publication = null;
 
     if (!context.query.code || !context.query.email || !context.query.approve || !context.query.publication) {
-        context.res.writeHead(302, {
-            Location: Config.urls.home.path
-        });
-        context.res.end();
-        return { props: {} };
+        return {
+            props: {
+                message: 'Invalid link.'
+            }
+        };
     }
 
     email = Array.isArray(context.query.email) ? context.query.email[0] : context.query.email;
@@ -30,18 +30,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     publication = Array.isArray(context.query.publication) ? context.query.publication[0] : context.query.publication;
 
     if (approve !== 'true' && approve !== 'false') {
-        context.res.writeHead(302, {
-            Location: Config.urls.home.path
-        });
-        context.res.end();
-        return { props: {} };
+        return {
+            redirect: { permanent: true, destination: Config.urls.home.path }
+        };
     }
 
     // check user credentials
     if (approve === 'true') {
-        const token = Helpers.guardPrivateRoute(context);
-
         try {
+            const token = Helpers.guardPrivateRoute(context);
+
             await api.patch(
                 `/publications/${publication}/link-coauthor`,
                 {
@@ -52,15 +50,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                 token
             );
         } catch (err) {
-            console.log(err);
-            return { props: {} };
+            return {
+                props: {
+                    message: 'There was an error linking you as a co-author.'
+                }
+            };
         }
 
-        context.res.writeHead(302, {
-            Location: `${Config.urls.viewPublication.path}/${publication}`
-        });
-        context.res.end();
-        return { props: {} };
+        return {
+            redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publication}` }
+        };
     }
 
     try {
@@ -70,22 +69,34 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             approve: false
         });
     } catch (err) {
-        console.log(err);
-        return { props: {} };
+        return {
+            props: {
+                message: 'There was an error denying this request.'
+            }
+        };
     }
 
-    context.res.writeHead(302, {
-        Location: `${Config.urls.viewPublication.path}/${publication}`
-    });
-    context.res.end();
-    return { props: {} };
+    return {
+        props: {},
+        redirect: { permanent: true, destination: Config.urls.home.path }
+    };
 };
 
-const AuthorLink: Types.NextPage = (): React.ReactElement => (
+type Props = {
+    message: string;
+};
+
+const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
     <>
         <Head>
             <meta name="robots" content="noindex, nofollow" />
         </Head>
+        <Layouts.Error
+            title="Page not found."
+            windowTitle={Config.urls[404].title}
+            content={props.message}
+            statusCode={404}
+        />
     </>
 );
 

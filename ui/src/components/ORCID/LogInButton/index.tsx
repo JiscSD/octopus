@@ -1,13 +1,16 @@
 import React from 'react';
-import * as NextRouter from 'next/router';
 
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
 
-const LogIn: React.FC = (): React.ReactElement => (
+type Props = {
+    currentPath: string;
+};
+
+const LogIn: React.FC<Props> = (props): React.ReactElement => (
     <Components.Link
-        href={Config.urls.orcidLogin.path}
+        href={`${Config.urls.orcidLogin.path}&state=${Buffer.from(props.currentPath, 'utf-8').toString('base64')}`}
         ariaLabel="Sign in with ORCID"
         className="flex items-center rounded-md bg-orcid p-1 lg:mr-4 lg:p-2"
     >

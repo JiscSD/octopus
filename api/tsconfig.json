@@ -68,6 +68,9 @@
             ],
             "utilities": [
                 "src/utilities"
+            ],
+            "email": [
+                "src/lib/email"
             ]
         }
     },

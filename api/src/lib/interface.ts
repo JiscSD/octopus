@@ -203,6 +203,12 @@ export interface UpdateUserInformation {
         startDate?: UserDates | null;
         endDate?: UserDates | null;
     }>;
+    works: Array<{
+        publishedDate?: UserDates | null;
+        doi?: string | null;
+        title?: string | null;
+        url?: string | null;
+    }>;
 }
 
 export interface DeletePublicationPathParams {
@@ -277,6 +283,31 @@ export interface ORCIDUser {
                         organization: {
                             name?: string;
                         };
+                    };
+                }>;
+            }>;
+        };
+        works: {
+            group: Array<{
+                'work-summary': Array<{
+                    'created-date': OrcidValue;
+                    'last-modified-date': OrcidValue;
+                    title: {
+                        title: OrcidValue;
+                    };
+                    url: OrcidValue;
+                    type: string;
+                    'publication-date'?: {
+                        year: OrcidValue;
+                        month: OrcidValue;
+                        day: OrcidValue;
+                    };
+                    'journal-title': OrcidValue;
+                    'external-ids': {
+                        'external-id': Array<{
+                            'external-id-type': string;
+                            'external-id-value': string;
+                        }>;
                     };
                 }>;
             }>;
@@ -381,4 +412,11 @@ export interface DestroyImagePathParams {
 
 export interface GetRatingsQueryParams {
     user?: string;
+}
+
+export interface EmailSendOptions {
+    to: string;
+    subject: string;
+    html: string;
+    text: string;
 }

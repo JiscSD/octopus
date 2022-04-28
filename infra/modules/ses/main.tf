@@ -19,10 +19,10 @@ resource "aws_ses_domain_identity_verification" "octopus_verification" {
   depends_on = [aws_route53_record.octopus_verification_record]
 }
 
-resource "aws_route53_record" "example_amazonses_dkim_record" {
+resource "aws_route53_record" "dkim_record" {
   count   = 3
   zone_id = "Z0024644REA9FF3O23MK"
-  name    = "${element(aws_ses_domain_dkim.octopus.dkim_tokens, count.index)}._domainkey"
+  name    = "${element(aws_ses_domain_dkim.octopus.dkim_tokens, count.index)}._domainkey.${var.environment}.octopus.ac"
   type    = "CNAME"
   ttl     = "600"
   records = ["${element(aws_ses_domain_dkim.octopus.dkim_tokens, count.index)}.dkim.amazonses.com"]

@@ -72,11 +72,28 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
             })
         );
 
+        console.log(JSON.stringify(userInformation['activities-summary'].works['group'], null, 4));
+
+        const works = userInformation['activities-summary'].works['group'].map((work) => ({
+            title: work['work-summary'][0].title.title.value || null,
+            doi:
+                work['work-summary'][0]['external-ids']['external-id'].find(
+                    (externalId) => externalId['external-id-type'] === 'doi'
+                )?.['external-id-value'] || null,
+            publishedDate: {
+                day: work['work-summary'][0]['publication-date']?.day?.value || null,
+                month: work['work-summary'][0]['publication-date']?.month?.value || null,
+                year: work['work-summary'][0]['publication-date']?.year?.value || null
+            },
+            url: work['work-summary'][0].url.value || null
+        }));
+
         const user = await userService.upsertUser(orcidRequest.data.orcid, {
             firstName: userInformation.person.name['given-names']?.value || '',
             lastName: userInformation.person.name['family-name']?.value || '',
             employment,
-            education
+            education,
+            works
         });
 
         const token = authorizationService.createJWT(user);

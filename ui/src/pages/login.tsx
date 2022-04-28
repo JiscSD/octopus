@@ -25,12 +25,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
-    if (!redirect) {
-        redirect = Config.urls.home.path;
-    }
-
     if (Array.isArray(code)) code = code[0];
-    if (Array.isArray(redirect)) redirect = redirect[0];
+
+    if (Array.isArray(redirect)) {
+        redirect = redirect[0];
+    } else if (redirect) {
+        redirect = Buffer.from(redirect || '', 'base64').toString('utf-8');
+    }
 
     try {
         const response = await api.post(
@@ -53,7 +54,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     return {
-        props: { token, redirect }
+        props: { token, redirect: redirect || Config.urls.home.path }
     };
 };
 

@@ -26,13 +26,13 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                             <span
                                 title={`${props.coAuthor.email} has given approval for this publication to published.`}
                             >
-                                <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid" />
+                                <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
                             </span>
                         ) : (
                             <span
                                 title={`${props.coAuthor.email} is yet to give approbal for this publication to be published.`}
                             >
-                                <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700" />
+                                <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
                             </span>
                         )}
                     </p>
@@ -61,7 +61,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                             </Components.Link>
                         ) : (
                             <span title={`${props.coAuthor.email} has not yet confirmed they are a co-author.`}>
-                                <OutlineIcons.MinusCircleIcon className="h-5 w-5 text-grey-600" />
+                                <OutlineIcons.MinusCircleIcon className="h-5 w-5 text-grey-600 transition-colors duration-500 dark:text-white-50" />
                             </span>
                         )}
                     </p>

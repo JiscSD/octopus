@@ -72,6 +72,7 @@ export { default as TextEditor } from './TextEditor';
 export { default as Toast } from './Toast';
 export { default as URLSourceUpload } from './URLSourceUpload';
 export { default as UserHistoryTable } from './Users/HistoryTable';
+export { default as UserWorksTable } from './Users/WorksTable';
 export { default as UserSearchResult } from './Users/SearchResult';
 export { default as HTMLVideo } from './Video/HTML';
 export { default as YouTubeVideo } from './Video/YouTube';

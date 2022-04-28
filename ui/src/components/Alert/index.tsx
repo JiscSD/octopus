@@ -63,7 +63,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-teal-300 dark:bg-teal-500';
+                classesCopy.background = 'bg-green-300 dark:bg-green-500';
                 break;
             default:
                 // Info

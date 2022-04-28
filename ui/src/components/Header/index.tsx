@@ -1,4 +1,5 @@
 import React from 'react';
+import * as NextRouter from 'next/router';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -13,6 +14,7 @@ type Props = {
 
 const Header: React.FC<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+    const router = NextRouter.useRouter();
 
     return (
         <>
@@ -40,7 +42,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                         <div className="flex items-center space-x-3 lg:space-x-4">
                             <Components.Search />
                             <Components.Nav />
-                            {!user && <Components.ORCIDLogInButton />}
+                            {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />}
                             <Components.EnableDarkMode />
                         </div>
                     </div>
