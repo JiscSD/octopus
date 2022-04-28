@@ -253,3 +253,11 @@ functions:
                   path: ${self:custom.versions.v1}/images
                   method: get
                   cors: true
+    createBookmark:
+        handler: src/components/image/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/bookmark
+                  method: post
+                  cors: true

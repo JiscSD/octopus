@@ -5,7 +5,7 @@ import * as imageService from 'image/service';
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.ImageSentBody>): Promise<I.JSONResponse> => {
     try {
-        const imageType = event.body.image.split(';')[0].split('/')[1];
+        const imageType = event.body.image?.split(';')[0].split('/')[1];
 
         if (imageType !== 'png' && imageType !== 'jpeg' && imageType !== 'jpg') {
             return response.json(422, { message: 'Invalid' });
