@@ -8,6 +8,7 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
+import * as Mammoth from 'mammoth';
 import * as SolidIcon from '@heroicons/react/solid';
 import * as HeadlessUi from '@headlessui/react';
 import * as FAIcons from 'react-icons/fa';
@@ -84,7 +85,9 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     const [selected, setSelected] = React.useState(headingOptions[0]);
     const [linkModalVisible, setLinkModalVisible] = React.useState(false);
     const [imageModalVisible, setImageModalVisible] = React.useState(false);
+    const [importModalVisible, setImportModalVisible] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState('');
+    const importDocumentInput = React.useRef(null);
     const [image, setImage] = React.useState<Interfaces.TextEditorImage>({
         name: '',
         alt: '',
@@ -175,6 +178,50 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             width: '',
             libraryUrl: null
         });
+    };
+
+    // Array buffer helper
+    function readFileInputEventAsArrayBuffer(file: any, callback: any) {
+        const reader = new FileReader();
+
+        reader.onload = function (loadEvent) {
+            var arrayBuffer = loadEvent.target?.result;
+            callback(arrayBuffer);
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // For document import
+    const handleImportDocument = async (e: React.SyntheticEvent) => {
+        const target = e.target as HTMLInputElement;
+
+        if (target.files?.length) {
+            readFileInputEventAsArrayBuffer(target.files[0], async (arrayBuffer: any) => {
+                const result = await Mammoth.convertToHtml(
+                    { arrayBuffer: arrayBuffer },
+                    {
+                        convertImage: Mammoth.images.imgElement((image) => {
+                            return image.read('base64').then(async (imageBuffer) => {
+                                const syncFile = await api.post<{ id: string; name: string }>(
+                                    '/images',
+                                    {
+                                        name: '',
+                                        image: 'data:' + image.contentType + ';base64,' + imageBuffer
+                                    },
+                                    user?.token
+                                );
+
+                                return {
+                                    src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
+                                };
+                            });
+                        })
+                    }
+                );
+                props.editor.commands.insertContent(result.value);
+            });
+        }
     };
 
     React.useEffect(() => {
@@ -381,6 +428,17 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            onClick={() => {
+                                setImportModalVisible(true);
+                            }}
+                            className={menuIconStyles}
+                        >
+                            <FAIcons.FaFileImport className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                        </button>
+
+                        <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
+                        <button
+                            type="button"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -525,6 +583,24 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     />
                                 ]}
                             />
+                        </HeadlessUi.Dialog.Description>
+                    </div>
+                </HeadlessUi.Dialog>
+
+                {/* Import document modal */}
+                <HeadlessUi.Dialog
+                    open={importModalVisible}
+                    onClose={() => setImportModalVisible(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
+                        <HeadlessUi.Dialog.Title className="sr-only">
+                            Import a Word document (.docx only)
+                        </HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                            <input ref={importDocumentInput} type="file" onChange={handleImportDocument} />
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
