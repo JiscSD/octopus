@@ -201,8 +201,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 const result = await Mammoth.convertToHtml(
                     { arrayBuffer: arrayBuffer },
                     {
-                        convertImage: Mammoth.images.imgElement((image) => {
-                            return image.read('base64').then(async (imageBuffer) => {
+                        convertImage: Mammoth.images.imgElement((image) =>
+                            image.read('base64').then(async (imageBuffer) => {
                                 const syncFile = await api.post<{ id: string; name: string }>(
                                     '/images',
                                     {
@@ -212,11 +212,13 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     user?.token
                                 );
 
+                                setImportModalVisible(false);
+
                                 return {
                                     src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
                                 };
-                            });
-                        })
+                            })
+                        )
                     }
                 );
                 props.editor.commands.insertContent(result.value);
