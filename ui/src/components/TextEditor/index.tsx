@@ -600,7 +600,12 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             Import a Word document (.docx only)
                         </HeadlessUi.Dialog.Title>
                         <HeadlessUi.Dialog.Description>
-                            <input ref={importDocumentInput} type="file" onChange={handleImportDocument} />
+                            <input
+                                ref={importDocumentInput}
+                                type="file"
+                                onChange={handleImportDocument}
+                                accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            />
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
