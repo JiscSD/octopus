@@ -31,7 +31,7 @@ switch (process.env.STAGE) {
             SES: { ses, aws }
         };
         from = `no-reply@${process.env.stage}.octopus.ac`;
-        baseURL = `https://${process.env}.octopus.ac`;
+        baseURL = `https://${process.env.stage}.octopus.ac`;
         break;
 }
 
