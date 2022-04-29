@@ -71,6 +71,19 @@ export interface Publication extends CorePublication {
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
     ratings: Rating;
+    coAuthors: CoAuthor[];
+}
+
+export interface CoAuthor {
+    id: string;
+    linkedUser: null | string;
+    confirmedCoAuthor: boolean;
+    email: string;
+    user?: {
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
 }
 
 export interface CoreUser {
@@ -94,14 +107,24 @@ export interface OrcidHistoryRecord {
     endDate: OrcidDateRecord;
 }
 
+export interface OrcidWorksRecord {
+    doi: string | null;
+    url: string | null;
+    publishedDate: OrcidDateRecord;
+    title: string | null;
+}
+
 export interface EmploymentRecord extends OrcidHistoryRecord {}
 
 export interface EducationRecord extends OrcidHistoryRecord {}
+
+export interface WorksRecord extends OrcidWorksRecord {}
 
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
     Publication: Publication[];
+    works: WorksRecord[];
 }
 
 export interface SearchResults {

@@ -161,9 +161,13 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
 
     if (!token) {
         context.res.writeHead(302, {
-            Location: Config.urls.orcidLogin.path
+            Location: `${Config.urls.orcidLogin.path}&state=${Buffer.from(
+                context.req.url || Config.urls.home.path,
+                'utf-8'
+            ).toString('base64')}`
         });
         context.res.end();
+        throw new Error('Token not valid');
     }
 
     return token;

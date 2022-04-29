@@ -79,7 +79,6 @@ describe('Create flags comments on a flag', () => {
             .send({
                 comments: 'Comments'
             });
-        // console.log(createFlagComment.body);
         expect(createFlagComment.status).toEqual(422);
     });
 });

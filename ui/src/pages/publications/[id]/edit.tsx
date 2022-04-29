@@ -39,6 +39,12 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     {
+        title: 'Co-authors',
+        subTitle: 'Co-authors',
+        component: <Components.PublicationCreationCoAuthor />,
+        icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
+    },
+    {
         title: 'Review & publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
@@ -124,6 +130,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         (state) => state.updateConflictOfInterestText
     );
     const updateLinkTo = Stores.usePublicationCreationStore((state) => state.updateLinkTo);
+    const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
 
     React.useEffect(() => {
         if (props.draftedPublication.id) updateId(props.draftedPublication.id);
@@ -143,6 +150,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         if (props.draftedPublication.conflictOfInterestText)
             updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
         updateLinkTo(props.draftedPublication.linkedTo);
+        updateCoAuthors(props.draftedPublication.coAuthors);
     }, []);
 
     React.useEffect(() => {

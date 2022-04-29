@@ -12,7 +12,8 @@ export const create = async (email: string, publicationId: string) => {
             publicationId: true,
             email: true,
             linkedUser: true,
-            confirmedCoAuthor: true
+            confirmedCoAuthor: true,
+            code: true
         }
     });
 

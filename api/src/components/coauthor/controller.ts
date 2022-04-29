@@ -2,6 +2,7 @@ import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as coAuthorService from 'coauthor/service';
 import * as I from 'interface';
+import * as email from 'email';
 
 export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateCoAuthorRequestBody, undefined, I.CreateCoAuthorPathParams>
@@ -40,6 +41,15 @@ export const create = async (
         }
 
         const coAuthor = await coAuthorService.create(event.body.email, event.pathParameters.id);
+
+        await email.notifyCoAuthor({
+            coAuthor: event.body.email,
+            userFirstName: event.user.firstName,
+            userLastName: event.user.lastName || '',
+            code: coAuthor.code,
+            publicationId: event.pathParameters.id,
+            publicationTitle: publication.title || 'No title yet'
+        });
 
         return response.json(201, coAuthor);
     } catch (err) {
@@ -127,7 +137,7 @@ export const link = async (
             // User is already linked as a co-author
             if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
                 return response.json(404, {
-                    message: 'You cannot link yourself as the co-author, if you are the creator.'
+                    message: 'You are already linked as another co-author'
                 });
             }
 

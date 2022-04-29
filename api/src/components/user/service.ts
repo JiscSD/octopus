@@ -21,7 +21,8 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
             firstName: updateUserInformation.firstName,
             lastName: updateUserInformation.lastName,
             employment: updateUserInformation.employment,
-            education: updateUserInformation.education
+            education: updateUserInformation.education,
+            works: updateUserInformation.works
         },
         create: {
             firstName: updateUserInformation.firstName,
@@ -117,6 +118,7 @@ export const get = async (id: string) => {
             updatedAt: true,
             employment: true,
             education: true,
+            works: true,
             Publication: {
                 select: {
                     id: true,

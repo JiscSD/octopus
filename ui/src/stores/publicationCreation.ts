@@ -49,7 +49,11 @@ let store: any = (set: (params: any) => void) => ({
 
     // Links
     linkTo: [],
-    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo }))
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo })),
+
+    // Co-authors
+    coAuthors: [],
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
