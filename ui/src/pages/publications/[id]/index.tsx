@@ -78,12 +78,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
-    const showProblems = problems.length && publication.type !== 'PEER_REVIEW';
-    const showPeerReviews = peerReviews.length && publication.type !== 'PEER_REVIEW';
+    const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
+    const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
+    const showEthicalStatement = props.publication.type === 'DATA';
 
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
-
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
+    if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
 
     const sectionList = [
         { title: 'Publication chain', href: 'publication-chain' },
@@ -360,6 +361,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </Components.ListItem>
                                 ))}
                             </Components.List>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Ethical statement */}
+                    {!!showEthicalStatement && (
+                        <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
+                            <>
+                                <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    {props.publication.ethicalStatement
+                                        ? 'The results and data in this publication involved human or animal subjects.'
+                                        : 'The results and data in this publication does not involve human or animal subjects.'}
+                                </p>
+                                {!!props.publication.ethicalStatementFreeText && (
+                                    <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                        {props.publication.ethicalStatementFreeText}
+                                    </p>
+                                )}
+                            </>
                         </Components.PublicationContentSection>
                     )}
 

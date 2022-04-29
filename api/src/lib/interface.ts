@@ -75,6 +75,8 @@ export interface CreatePublicationRequestBody {
     keywords?: string[];
     content?: string;
     language?: Languages;
+    ethicalStatement?: boolean;
+    ethicalStatementFreeText?: string;
 }
 
 export interface OpenSearchPublication {
@@ -110,6 +112,8 @@ export interface UpdatePublicationRequestBody {
     keywords?: string[];
     id?: string;
     language?: Languages;
+    ethicalStatement?: boolean;
+    ethicalStatementFreeText?: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';

@@ -259,3 +259,15 @@ export const findRating = (
     const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
     return found ? found.rating : null;
 };
+
+export const formatKeywords = (keywordsAsString: string): string[] => {
+    let formattedKeywords: string[] = [];
+    if (keywordsAsString.length) {
+        formattedKeywords = keywordsAsString
+            .replace(/\n/g, ',') // replace new lines with comma
+            .split(',') // split by comma
+            .map((word) => word.trim()) // trim each keywords white space
+            .filter((word) => word.length); // dont include any empty string entries
+    }
+    return formattedKeywords;
+};

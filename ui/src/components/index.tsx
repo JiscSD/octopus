@@ -38,6 +38,7 @@ export { default as ProgressCircle } from './Progress/Circle';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationContentSection } from './Publication/ContentSection';
+export { default as PublicationCreationDelclarationsAndStatements } from './Publication/Creation/DeclarationsAndStatements';
 export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
 export { default as PublicationCreationCoAuthorEntry } from './Publication/Creation/CoAuthorEntry';
 

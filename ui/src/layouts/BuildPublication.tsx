@@ -36,7 +36,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
 type BuildPublicationProps = {
     steps: Interfaces.PublicationBuildingStep[];
     currentStep: number;
-    setStep: any; //Not sure what type we can use for a state setter than has access tp previous state
+    setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
     token: string;
     children: React.ReactNode;
@@ -45,60 +45,68 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
-    const error = Stores.usePublicationCreationStore((state) => state.error);
-    const setError = Stores.usePublicationCreationStore((state) => state.setError);
-    const title = Stores.usePublicationCreationStore((state) => state.title);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
-    const description = Stores.usePublicationCreationStore((state) => state.description);
-    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
-    const content = Stores.usePublicationCreationStore((state) => state.content);
-    const licence = Stores.usePublicationCreationStore((state) => state.licence);
-    const language = Stores.usePublicationCreationStore((state) => state.language);
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
-    const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
-    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
+    const store = Stores.usePublicationCreationStore();
+    const setToast = Stores.useToastStore((state) => state.setToast);
 
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
     const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
 
-    const prevStep = () => props.setStep((prevState: number) => prevState - 1);
-    const nextStep = () => props.setStep((prevState: number) => prevState + 1);
-
-    const saveCurrent = async () => {
-        let formattedKeywords: string[] = [];
-        if (keywords.length) {
-            formattedKeywords = keywords
-                .replace(/\n/g, ',') // replace new lines with comma
-                .split(',') // split by comma
-                .map((word) => word.trim()) // trim each keywords white space
-                .filter((word) => word.length); // dont include any empty string entries
-        }
-
-        if (conflictOfInterestStatus && !conflictOfInterestText.length) {
-            props.setStep(2);
-            throw new Error('You must provide a conflict of interest reason.');
-        }
+    // Function called before action is taken, save, exit, preview, publish etc...
+    const saveCurrent = async (message?: string) => {
+        store.setError(null);
 
         await api.patch(
             `${Config.endpoints.publications}/${props.publication.id}`,
             {
-                title,
-                content,
-                description,
-                keywords: formattedKeywords,
-                licence,
-                language,
-                conflictOfInterestStatus,
-                conflictOfInterestText
+                title: store.title,
+                content: store.content,
+                description: store.description,
+                keywords: Helpers.formatKeywords(store.keywords),
+                licence: store.licence,
+                language: store.language,
+                conflictOfInterestStatus: store.conflictOfInterestStatus,
+                conflictOfInterestText: store.conflictOfInterestText,
+                ethicalStatement: store.ethicalStatement,
+                ethicalStatementFreeText: store.ethicalStatement !== null ? store.ethicalStatementFreeText : null
             },
             props.token
         );
+
+        if (message) {
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: message,
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'lorem'
+            });
+        }
     };
 
+    /**
+     * @title Requesting to publish
+     * @description When requesting to go live, we carry out a few checks.
+     *              The api will tell us is we cannot go live, but prior to request
+     *              we can do some ui level checks & direct the author to the
+     *              correct step if a field is missing.
+     */
     const publish = async () => {
-        setError(null);
+        // Hard check on COI
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            props.setStep(3);
+            store.setError('You must provide a conflict of interest reason.');
+            return;
+        }
+
+        // Hard check on ETH Statement
+        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
+            props.setStep(4);
+            store.setError('You must select an ethical statement option.');
+            return;
+        }
+
         try {
             await saveCurrent();
             await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
@@ -106,60 +114,77 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
             });
         } catch (err) {
-            // server is giving a nice response message, but that is not th err message recived, can not access response message due to throw
-            // const { message } = err as Interfaces.JSONResponseError;
-            setError('Publication is not ready to be made LIVE. Make sure all fields are filled in.'); // hard coded server response
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
         }
 
         setPublishModalVisibility(false);
     };
 
+    // Option selected from modal
     const save = async () => {
-        setError(null);
         try {
-            await saveCurrent();
+            await saveCurrent('Publication successfully saved');
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
+            store.setError(message);
         }
 
         setSaveModalVisibility(false);
     };
 
-    const preview = async () => {
-        try {
-            await saveCurrent();
-            router.push({
-                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
-            });
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
-        }
-    };
-
+    // Option selected from modal
     const deleteExit = async () => {
-        setError(null);
         try {
             await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
             router.push({
                 pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
             });
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Draft successfully removed',
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'lorem'
+            });
         } catch (err) {
-            setError('There was a problem deleting this publicaiton');
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
         }
 
         setDeleteModalVisibility(false);
     };
 
+    // Monitor the stores state, and conditionally enable the publish button
     React.useEffect(() => {
-        if (!title) return setIsReadyToPreview(false);
-        if (!content) return setIsReadyToPreview(false);
-        if (!licence) return setIsReadyToPreview(false);
-        if (!linkTos.length) return setIsReadyToPreview(false);
-        if (conflictOfInterestStatus && !conflictOfInterestText.length) return setIsReadyToPreview(false);
+        if (!store.title) return setIsReadyToPreview(false);
+        if (!store.content) return setIsReadyToPreview(false);
+        if (!store.licence) return setIsReadyToPreview(false);
+        if (!store.linkTo.length) return setIsReadyToPreview(false);
+        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            return setIsReadyToPreview(false);
+        }
+        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
+            return setIsReadyToPreview(false);
+        }
+
         setIsReadyToPreview(true);
-    }, [title, content, licence, conflictOfInterestStatus, conflictOfInterestText, linkTos]);
+    }, [
+        store.title,
+        store.content,
+        store.licence,
+        store.conflictOfInterestStatus,
+        store.conflictOfInterestText,
+        store.linkTo,
+        store.type,
+        store.ethicalStatement
+    ]);
+
+    // Reset the store when navigating away from the publication flow, this is why we have the save feature
+    // If I save a publication then go to create a new, my old data is still in the store, we dont want this
+    React.useEffect(() => {
+        return () => store.reset();
+    }, []);
 
     return (
         <>
@@ -170,7 +195,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Save"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to save your changes?"
-                icon={<OutlineIcons.SaveIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
+                icon={<OutlineIcons.SaveIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
                     Changes to your publication will be saved and it will be stored as a draft.
@@ -183,7 +208,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
-                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
@@ -194,7 +219,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, delete this draft"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to delete this publication?"
-                icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
+                icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
@@ -229,13 +254,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
                     <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                            {Helpers.formatPublicationType(type)}
+                            {Helpers.formatPublicationType(store.type)}
                         </span>
                         <div className="flex space-x-8">
                             <NavigationButton
                                 text="Previous"
                                 disabled={props.currentStep <= 0}
-                                onClick={prevStep}
+                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
                                 icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="LEFT"
                             />
@@ -243,14 +268,24 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <NavigationButton
                                 text="Next"
                                 disabled={props.currentStep >= props.steps.length - 1}
-                                onClick={nextStep}
+                                onClick={() => props.setStep((prevState: number) => prevState + 1)}
                                 icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
 
                             <NavigationButton
                                 text="Preview"
-                                onClick={preview}
+                                onClick={async () => {
+                                    try {
+                                        await saveCurrent();
+                                        router.push({
+                                            pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                        });
+                                    } catch (err) {
+                                        const { message } = err as Interfaces.JSONResponseError;
+                                        store.setError(message);
+                                    }
+                                }}
                                 disabled={!isReadyToPreview}
                                 icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
@@ -269,7 +304,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Save"
                                 onClick={() => setSaveModalVisibility(true)}
                                 className=""
-                                // icon={<OutlineIcons.SaveAsIcon className="h-5 w-5 text-teal-600" />}
                                 icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
                                 iconPosition="RIGHT"
                             />
@@ -282,9 +316,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             />
                         </div>
                     </div>
-                    {!!error && (
-                        <Components.Alert severity="ERROR" title={error} allowDismiss className="mb-12 w-fit" />
-                    )}
+                    {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
                     <div className="mb-12">{props.children}</div>
                 </section>
             </main>

@@ -61,6 +61,8 @@ export interface CorePublication {
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
+    ethicalStatement: boolean | null;
+    ethicalStatementFreeText: string | null;
 }
 
 export interface Publication extends CorePublication {
