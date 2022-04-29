@@ -41,14 +41,15 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
                             aria-label="The results and data in this publication does not involve human or animal subjects."
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                            The results and data in this publication does not involve human or animal subjects.{' '}
+                            The results and data in this publication does <strong>not</strong> involve human or animal
+                            subjects.{' '}
                         </span>
                     </label>
                 </fieldset>
 
                 <div className="mt-8">
                     <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                        Optional: Ethical approval for the data collection and sharing was given by:
+                        If relevant: Ethical approval for the data collection and sharing was given by:
                     </span>
                     <span className="mb-2 block text-xs leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                         You may wish to link to a copy of the approval letter from your ethical committee.
