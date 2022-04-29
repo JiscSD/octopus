@@ -74,7 +74,11 @@ let store: any = (set: (params: any) => void) => ({
     ethicalStatement: null,
     ethicalStatementFreeText: null,
     updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
-    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText }))
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
+
+    // Co-authors
+    coAuthors: [],
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

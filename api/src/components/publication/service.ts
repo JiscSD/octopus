@@ -84,7 +84,15 @@ export const get = async (id: string) => {
                 select: {
                     id: true,
                     email: true,
-                    linkedUser: true
+                    linkedUser: true,
+                    confirmedCoAuthor: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            orcid: true
+                        }
+                    }
                 }
             },
             linkedTo: {

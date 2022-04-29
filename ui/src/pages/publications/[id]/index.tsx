@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -8,6 +9,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Stores from '@stores';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -60,13 +62,19 @@ type Props = {
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
-    const linkedPublicationsTo = props.publication.linkedTo;
-    const linkedPublicationsFrom = props.publication.linkedFrom.filter(
+    const [publication, setPublication] = React.useState(props.publication);
+
+    const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
+
+    const linkedPublicationsTo = publication.linkedTo;
+    const linkedPublicationsFrom = publication.linkedFrom.filter(
         (link) => link.publicationFromRef.type !== 'PROBLEM' && link.publicationFromRef.type !== 'PEER_REVIEW'
     );
 
-    const peerReviews = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
-    const problems = props.publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PROBLEM');
+    const peerReviews = publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
+    const problems = publication.linkedFrom.filter((link) => link.publicationFromRef.type === 'PROBLEM');
+
+    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
 
     const list = [];
 
@@ -85,40 +93,159 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { title: 'Conflict of interest', href: 'coi' }
     ];
 
+    const currentCoAuthor = React.useMemo(
+        () => publication.coAuthors.find((coAuthor) => coAuthor.linkedUser === user?.id),
+        [publication, user?.id]
+    );
+
+    const alertSeverity = React.useMemo(() => {
+        if (publication.user.id === user?.id) {
+            return 'INFO';
+        }
+        if (currentCoAuthor?.confirmedCoAuthor) {
+            return 'SUCCESS';
+        }
+        if (!currentCoAuthor?.confirmedCoAuthor) {
+            return 'WARNING';
+        }
+        return 'INFO';
+    }, [publication, user?.id, currentCoAuthor?.confirmedCoAuthor]);
+
+    const getPublication = async () => {
+        const result = await api.get(`/publications/${publication.id}`, user?.token);
+        setPublication(result.data);
+    };
+
+    const updateCoAuthor = React.useCallback(
+        async (confirm: boolean) => {
+            await api.patch(
+                `/publications/${publication.id}/coauthor`,
+                {
+                    confirm
+                },
+                user?.token
+            );
+        },
+        [publication.id, user?.token]
+    );
+
     return (
         <>
             <Head>
-                <meta name="description" content={props.publication.description || ''} />
-                <meta name="keywords" content={props.publication.keywords.join(', ') || ''} />
-                <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${props.publication.url_slug}`} />
-                <title>{`${props.publication.title} - ${Config.urls.viewPublication.title}`}</title>
+                <meta name="description" content={publication.description || ''} />
+                <meta name="keywords" content={publication.keywords.join(', ') || ''} />
+                <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publication.url_slug}`} />
+                <title>{`${publication.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>
+            <Components.Modal
+                open={coAuthorModalState}
+                setOpen={setCoAuthorModalState}
+                positiveActionCallback={async () => {
+                    await updateCoAuthor(true);
+                    await getPublication();
+                    setCoAuthorModalState(false);
+                }}
+                negativeActionCallback={async () => {
+                    await updateCoAuthor(false);
+                    await getPublication();
+                    setCoAuthorModalState(false);
+                }}
+                positiveButtonText="Yes, this is ready to publish"
+                cancelButtonText="No, changes are needed"
+                title="Do you approve this publication?"
+            ></Components.Modal>
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
-                    {props.publication.currentStatus === 'DRAFT' && (
+                    {publication.currentStatus === 'DRAFT' && (
                         <Components.Alert
                             className="mb-4"
-                            severity="INFO"
-                            title="This is a draft publication, and only visible to authors."
-                        />
+                            severity={alertSeverity}
+                            title="This is a draft publication only visible to authors. "
+                        >
+                            {publication.user.id === user?.id ? (
+                                <Components.Link
+                                    openNew={false}
+                                    title="Edit publication"
+                                    href={`${Config.urls.viewPublication.path}/${publication.id}/edit?step=4`}
+                                    className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                >
+                                    <OutlineIcons.PencilAltIcon className="h-4 w-4" />
+                                    <span>Edit or publish draft publication</span>
+                                </Components.Link>
+                            ) : (
+                                <>
+                                    {currentCoAuthor?.confirmedCoAuthor ? (
+                                        <p className="mt-2 text-sm text-white-50">
+                                            You have approved this publication. Would you like to{' '}
+                                            <button
+                                                onClick={() => {
+                                                    setCoAuthorModalState(true);
+                                                }}
+                                                className="inline-block font-bold underline"
+                                            >
+                                                change your mind
+                                            </button>
+                                            ?
+                                        </p>
+                                    ) : (
+                                        <>
+                                            <p className="mt-2 text-sm text-grey-800">
+                                                You have not yet approved this publication. Would you like to{' '}
+                                                <button
+                                                    onClick={() => {
+                                                        setCoAuthorModalState(true);
+                                                    }}
+                                                    className="inline-block font-bold underline"
+                                                >
+                                                    approve
+                                                </button>
+                                                ?
+                                            </p>
+                                            <p className="mt-2 text-sm text-grey-800">
+                                                If any changes are required, please discuss with the submitting author.
+                                            </p>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </Components.Alert>
                     )}
                     <header className="">
                         <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
-                            {props.publication.title}
+                            {publication.title}
                         </h1>
 
-                        <Components.Link
-                            href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}
-                            className="2 text-normal mb-8 block w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                        >
-                            <>
-                                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
-                            </>
-                        </Components.Link>
+                        <p className="mb-8">
+                            <Components.Link
+                                href={`${Config.urls.viewUser.path}/${publication.user.id}`}
+                                className="2 text-normal w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                            >
+                                <>
+                                    {publication.user.firstName[0]}. {publication.user.lastName}
+                                </>
+                            </Components.Link>
 
-                        {props.publication.type !== 'PEER_REVIEW' && (
+                            {publication.coAuthors.map(
+                                (coAuthor) =>
+                                    coAuthor.user && (
+                                        <>
+                                            <span className="text-white-50">, </span>
+                                            <Components.Link
+                                                href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
+                                                className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                            >
+                                                <>
+                                                    {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
+                                                </>
+                                            </Components.Link>
+                                        </>
+                                    )
+                            )}
+                        </p>
+
+                        {publication.type !== 'PEER_REVIEW' && (
                             <div className="hidden xl:block">
-                                <Components.PublicationVisualChain highlighted={props.publication.type} />
+                                <Components.PublicationVisualChain highlighted={publication.type} />
                             </div>
                         )}
 
@@ -136,10 +263,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     href="#"
                                     className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                 >
-                                    <>{Helpers.formatPublicationType(props.publication.type)}</>
+                                    <>{Helpers.formatPublicationType(publication.type)}</>
                                 </Components.Link>
                                 .{' '}
-                                {props.publication.type !== 'PROBLEM' && (
+                                {publication.type !== 'PROBLEM' && (
                                     <>
                                         The publications preceeding this are{' '}
                                         <Components.Link
@@ -148,37 +275,36 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         >
                                             <>
                                                 {Helpers.formatPublicationType(
-                                                    Helpers.findPreviousPublicationType(props.publication.type)
+                                                    Helpers.findPreviousPublicationType(publication.type)
                                                 )}
                                             </>
                                         </Components.Link>
                                         .
                                     </>
                                 )}{' '}
-                                {props.publication.type !== 'PEER_REVIEW' &&
-                                    props.publication.type !== 'REAL_WORLD_APPLICATION' && (
-                                        <>
-                                            The publications following this are{' '}
-                                            <Components.Link
-                                                href="#"
-                                                className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                            >
-                                                <>
-                                                    {Helpers.formatPublicationType(
-                                                        Helpers.findNextPublicationType(props.publication.type)
-                                                    )}
-                                                </>
-                                            </Components.Link>
-                                            .
-                                        </>
-                                    )}
+                                {publication.type !== 'PEER_REVIEW' && publication.type !== 'REAL_WORLD_APPLICATION' && (
+                                    <>
+                                        The publications following this are{' '}
+                                        <Components.Link
+                                            href="#"
+                                            className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                        >
+                                            <>
+                                                {Helpers.formatPublicationType(
+                                                    Helpers.findNextPublicationType(publication.type)
+                                                )}
+                                            </>
+                                        </Components.Link>
+                                        .
+                                    </>
+                                )}
                             </p>
                             {linkedPublicationsTo.length || linkedPublicationsFrom.length ? (
                                 <Components.RenderLinks to={linkedPublicationsTo} from={linkedPublicationsFrom} />
                             ) : (
                                 <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {`This ${Helpers.formatPublicationType(
-                                        props.publication.type
+                                        publication.type
                                     )} does not have any linked to publications.`}
                                 </p>
                             )}
@@ -188,7 +314,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/** Full text */}
                     <Components.PublicationContentSection id="main-text" hasBreak>
                         <div className="mb-4">
-                            <Components.ParseHTML content={props.publication.content ?? ''} />
+                            <Components.ParseHTML content={publication.content ?? ''} />
                         </div>
                     </Components.PublicationContentSection>
 
@@ -196,9 +322,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {!!showProblems && (
                         <Components.PublicationContentSection
                             id="problems"
-                            title={`Problems created from this ${Helpers.formatPublicationType(
-                                props.publication.type
-                            )}`}
+                            title={`Problems created from this ${Helpers.formatPublicationType(publication.type)}`}
                             hasBreak
                         >
                             <Components.List ordered={false}>
@@ -221,9 +345,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {!!showPeerReviews && (
                         <Components.PublicationContentSection
                             id="peer-reviews"
-                            title={`Peer reviews created from this ${Helpers.formatPublicationType(
-                                props.publication.type
-                            )}`}
+                            title={`Peer reviews created from this ${Helpers.formatPublicationType(publication.type)}`}
                             hasBreak
                         >
                             <Components.List ordered={false}>
@@ -263,10 +385,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/** Conflict of interest */}
                     <Components.PublicationContentSection id="coi" title="Conflict of interest">
                         <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                            {props.publication.conflictOfInterestStatus
-                                ? props.publication.conflictOfInterestText
+                            {publication.conflictOfInterestStatus
+                                ? publication.conflictOfInterestText
                                 : `This ${Helpers.formatPublicationType(
-                                      props.publication.type
+                                      publication.type
                                   )} does not have any specified conflicts of interest.`}
                         </p>
                     </Components.PublicationContentSection>

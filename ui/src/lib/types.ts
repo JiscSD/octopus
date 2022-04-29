@@ -70,6 +70,8 @@ export type PublicationCreationStoreType = {
     updateEthicalStatement: (ethicalStatement: boolean) => void;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
     reset: () => void;
+    coAuthors: Interfaces.CoAuthor[];
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

@@ -195,7 +195,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Save"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to save your changes?"
-                icon={<OutlineIcons.SaveIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+                icon={<OutlineIcons.SaveIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
                     Changes to your publication will be saved and it will be stored as a draft.
@@ -208,7 +208,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
-                icon={<OutlineIcons.CloudUploadIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
@@ -219,7 +219,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, delete this draft"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to delete this publication?"
-                icon={<OutlineIcons.TrashIcon className="text-green-600 h-10 w-10" aria-hidden="true" />}
+                icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-green-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>

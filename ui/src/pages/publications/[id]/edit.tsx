@@ -45,6 +45,12 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
     {
+        title: 'Co-authors',
+        subTitle: 'Co-authors',
+        component: <Components.PublicationCreationCoAuthor />,
+        icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
+    },
+    {
         title: 'Review & publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
@@ -183,6 +189,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         if (props.draftedPublication.ethicalStatementFreeText) {
             store.updateEthicalStatementFreeText(props.draftedPublication.ethicalStatementFreeText);
         }
+
+        store.updateLinkTo(props.draftedPublication.linkedTo);
+        store.updateCoAuthors(props.draftedPublication.coAuthors);
     }, []);
 
     React.useEffect(() => {
