@@ -55,7 +55,7 @@ CREATE TABLE "Publication" (
     "url_slug" TEXT NOT NULL,
     "type" "PublicationType" NOT NULL,
     "title" TEXT,
-    "licence" "LicenceType",
+    "licence" "LicenceType" NOT NULL DEFAULT E'CC_BY',
     "conflictOfInterestStatus" BOOLEAN DEFAULT false,
     "conflictOfInterestText" TEXT,
     "ethicalStatement" BOOLEAN,

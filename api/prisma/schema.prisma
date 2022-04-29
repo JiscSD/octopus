@@ -45,7 +45,7 @@ model Publication {
     url_slug                 String                @unique @default(cuid())
     type                     PublicationType
     title                    String?
-    licence                  LicenceType?
+    licence                  LicenceType           @default(CC_BY)
     conflictOfInterestStatus Boolean?              @default(false)
     conflictOfInterestText   String?
     ethicalStatement         Boolean?

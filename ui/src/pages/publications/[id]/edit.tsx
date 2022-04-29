@@ -39,16 +39,16 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     {
-        title: 'Declarations',
-        subTitle: 'Declarations & statements',
-        component: <Components.PublicationCreationDelclarationsAndStatements />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
-    },
-    {
         title: 'Co-authors',
         subTitle: 'Co-authors',
         component: <Components.PublicationCreationCoAuthor />,
         icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
+    },
+    {
+        title: 'Declarations',
+        subTitle: 'Declarations & statements',
+        component: <Components.PublicationCreationDelclarationsAndStatements />,
+        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
     {
         title: 'Review & publish',
@@ -125,7 +125,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 arr = steps;
                 break;
             default:
-                arr = [steps[0], steps[1], steps[2], steps[3], steps[5]];
+                arr = [steps[0], steps[1], steps[2], steps[3], steps[4], steps[6]];
         }
         return arr;
     }, [props.draftedPublication.type]);
