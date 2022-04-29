@@ -8,11 +8,6 @@ const bookmarkedPublicationSeeds = [
         id: 'bookmark-2',
         publicationId: 'publication-hypothesis-live',
         userId: 'test-user-3'
-    },
-    {
-        id: 'bookmark-3',
-        publicationId: 'publication-problem-live',
-        userId: 'test-user-3'
     }
 ];
 

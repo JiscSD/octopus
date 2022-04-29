@@ -18,8 +18,17 @@ export const create = async (
 
         //check that the publication is live
         if (publication.currentStatus === 'DRAFT') {
-            return response.json(404, {
+            return response.json(403, {
                 message: 'You cannot bookmark a draft publication.'
+            });
+        }
+
+        // check to see if the user is the author or co author. if so throw an error
+        const isUserCoAuthor = publication.coAuthors.some((user) => user.id == event.user.id);
+
+        if (isUserCoAuthor || event.user.id === publication.user.id) {
+            return response.json(401, {
+                message: 'You cannot bookmark a publication you have authored or co-authored.'
             });
         }
 
@@ -32,19 +41,11 @@ export const create = async (
             });
         }
 
-        // check to see if the user is the author or co author. if so throw an error
-        const isUserCoAuthor = publication.coAuthors.some((user) => user.id == event.user.id);
-
-        if (isUserCoAuthor || event.user.id === publication.user.id) {
-            return response.json(404, {
-                message: 'You cannot bookmark a publication you have authored or co-authored.'
-            });
-        }
-
         await bookmarkService.create(event.pathParameters.id, event.user.id);
 
         return response.json(200, { message: 'You have bookmarked this publication.' });
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -78,9 +79,9 @@ export const remove = async (
             });
         }
 
-        await bookmarkService.remove(event.pathParameters.id, event.user.id);
+        await bookmarkService.remove(bookmark.id);
 
-        return response.json(200, { message: 'Co-author deleted from this publication' });
+        return response.json(200, { message: 'Bookmark deleted from this publication.' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }

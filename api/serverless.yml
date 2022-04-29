@@ -254,10 +254,18 @@ functions:
                   method: get
                   cors: true
     createBookmark:
-        handler: src/components/image/routes.create
+        handler: src/components/bookmark/routes.create
         warmup: true
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{publicationId}/bookmark
+                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
                   method: post
+                  cors: true
+    removeBookmark:
+        handler: src/components/bookmark/routes.remove
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
+                  method: delete
                   cors: true

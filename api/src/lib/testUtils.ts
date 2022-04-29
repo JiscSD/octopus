@@ -22,6 +22,10 @@ export const initialSeed = async (): Promise<void> => {
             data: publication
         });
     }
+
+    await client.prisma.publicationBookmarks.createMany({
+        data: seeds.bookmarkedPublicationSeeds
+    });
 };
 
 export const openSearchSeed = async () => {
@@ -49,8 +53,9 @@ export const clearDB = async (): Promise<void> => {
     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
     const deletePublications = client.prisma.publication.deleteMany();
     const deleteUsers = client.prisma.user.deleteMany();
+    const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
 
-    await client.prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+    await client.prisma.$transaction([deleteUsers, deletePublications, deleteBookmarks, deletePublicationStatuses]);
 
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'
