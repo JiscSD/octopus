@@ -10,25 +10,26 @@ datasource db {
 }
 
 model User {
-    id                 String               @id @default(cuid())
-    orcid              String               @unique
-    firstName          String
-    lastName           String?
-    email              String?
-    role               Role                 @default(USER)
-    locked             Boolean              @default(false)
-    apiKey             String               @unique @default(uuid())
-    createdAt          DateTime             @default(now())
-    updatedAt          DateTime             @updatedAt
-    employment         Json[]
-    works              Json[]
-    education          Json[]
-    coAuthors          CoAuthors[]
-    Publication        Publication[]
-    PublicationFlags   PublicationFlags[]
-    PublicationRatings PublicationRatings[]
-    flagComments       FlagComments[]
-    Images             Images[]
+    id                   String                 @id @default(cuid())
+    orcid                String                 @unique
+    firstName            String
+    lastName             String?
+    email                String?
+    role                 Role                   @default(USER)
+    locked               Boolean                @default(false)
+    apiKey               String                 @unique @default(uuid())
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    employment           Json[]
+    works                Json[]
+    education            Json[]
+    coAuthors            CoAuthors[]
+    Publication          Publication[]
+    PublicationFlags     PublicationFlags[]
+    PublicationRatings   PublicationRatings[]
+    flagComments         FlagComments[]
+    Images               Images[]
+    PublicationBookmarks PublicationBookmarks[]
 }
 
 model Images {
@@ -41,12 +42,12 @@ model Images {
 }
 
 model Publication {
-    id                       String                @id @default(cuid())
-    url_slug                 String                @unique @default(cuid())
+    id                       String                 @id @default(cuid())
+    url_slug                 String                 @unique @default(cuid())
     type                     PublicationType
     title                    String?
-    licence                  LicenceType           @default(CC_BY)
-    conflictOfInterestStatus Boolean?              @default(false)
+    licence                  LicenceType            @default(CC_BY)
+    conflictOfInterestStatus Boolean?               @default(false)
     conflictOfInterestText   String?
     ethicalStatement         Boolean?
     ethicalStatementFreeText String?
@@ -54,19 +55,20 @@ model Publication {
     keywords                 String[]
     content                  String?
     doi                      String?
-    language                 Languages             @default(en)
+    language                 Languages              @default(en)
     publishedDate            DateTime?
-    currentStatus            PublicationStatusEnum @default(DRAFT)
+    currentStatus            PublicationStatusEnum  @default(DRAFT)
     createdBy                String
-    createdAt                DateTime              @default(now())
-    updatedAt                DateTime              @updatedAt
-    user                     User                  @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    createdAt                DateTime               @default(now())
+    updatedAt                DateTime               @updatedAt
+    user                     User                   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     coAuthors                CoAuthors[]
-    linkedTo                 Links[]               @relation("from")
-    linkedFrom               Links[]               @relation("to")
+    linkedTo                 Links[]                @relation("from")
+    linkedFrom               Links[]                @relation("to")
     publicationFlags         PublicationFlags[]
     publicationRatings       PublicationRatings[]
     publicationStatus        PublicationStatus[]
+    PublicationBookmarks     PublicationBookmarks[]
 }
 
 model Links {
@@ -135,6 +137,16 @@ model PublicationRatings {
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([publicationId, userId, category])
+}
+
+model PublicationBookmarks {
+    id            String      @id @default(cuid())
+    publicationId String
+    userId        String
+    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, userId])
 }
 
 enum ImageExtension {

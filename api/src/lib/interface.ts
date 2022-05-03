@@ -360,6 +360,16 @@ export interface ImageSentBody {
     image: string;
 }
 
+// @description Bookmarks
+
+export interface CreateBookmarkPathParams {
+    id: string;
+}
+
+export interface RemoveBookmarkPathParams {
+    id: string;
+}
+
 /* @description Ratings
  */
 
