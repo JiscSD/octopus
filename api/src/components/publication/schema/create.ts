@@ -45,6 +45,13 @@ const createPublicationSchema: I.Schema = {
         language: {
             type: 'string',
             enum: H.OctopusInformation.languages
+        },
+        ethicalStatement: {
+            type: 'boolean'
+        },
+        ethicalStatementFreeText: {
+            type: 'string',
+            maxLength: 255
         }
     },
     required: ['type', 'title'],

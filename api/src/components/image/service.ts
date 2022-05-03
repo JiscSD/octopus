@@ -72,7 +72,5 @@ export const getAll = async (user: string) => {
         }
     });
 
-    console.log(images);
-
     return images;
 };

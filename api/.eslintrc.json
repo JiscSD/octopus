@@ -26,6 +26,7 @@
         "airbnb-typescript/base"
     ],
     "rules": {
+        // Prettier
         "prettier/prettier": [
             "error",
             {},
@@ -33,56 +34,45 @@
                 "usePrettierrc": true
             }
         ],
-        "indent": "off",
-        "consistent-return": "off",
+        // Base rules
         "object-curly-newline": "off",
+        "no-restricted-syntax": "off",
+        "no-underscore-dangle": "off",
+        "consistent-return": "off",
         "no-useless-return": "off",
         "no-await-in-loop": "off",
-        "no-restricted-syntax": "off",
-        "@typescript-eslint/indent": [
-            "error",
-            4
-        ],
-        "semi": "off",
-        "@typescript-eslint/semi": [
-            "error"
-        ],
-        "no-underscore-dangle": "off",
-        "@typescript-eslint/restrict-template-expressions": "warn",
-        "@typescript-eslint/ban-ts-comment": "warn",
         "no-extra-semi": "off",
-        "@typescript-eslint/no-extra-semi": [
-            "error"
-        ],
-        "no-console": "warn",
-        "import/prefer-default-export": "off",
-        "@typescript-eslint/no-empty-interface": [
-            "error",
-            {
-                "allowSingleExtends": false
-            }
-        ],
         "comma-dangle": "off",
-        "@typescript-eslint/comma-dangle": [
-            "error",
-            "never"
-        ],
-        "max-len": [
-            "warn",
-            {
-                "code": 200,
-                "comments": 120,
-                "ignoreComments": false,
-                "ignoreTrailingComments": true,
-                "ignoreUrls": true,
-                "ignoreStrings": true,
-                "ignoreTemplateLiterals": true,
-                "ignoreRegExpLiterals": true
-            }
-        ]
+        "no-console": "off",
+        "semi": "off",
+        // imports
+        "import/no-extraneous-dependencies": "off",
+        "import/prefer-default-export": "off",
+        "import/extensions": "off",
+        // TS
+        "@typescript-eslint/restrict-template-expressions": "off", // accessing possible undefined in template lit, e.g `https://${process.env.STAGE}.example.com` - process.env.stage could be undefined
+        "@typescript-eslint/no-unsafe-member-access": "off", // accessing a value from type any
+        "@typescript-eslint/no-unsafe-assignment": "off", // assigning a value from an any
+        "@typescript-eslint/no-empty-interface": "error", // no empty interfaces
+        "@typescript-eslint/no-unsafe-argument": "off", // For use of any as a param
+        "@typescript-eslint/no-unsafe-return": "warn", // warn if returning un typed values
+        "@typescript-eslint/no-extra-semi": "error", // prettier handles removing this, but error anyway
+        "@typescript-eslint/no-explicit-any": "off", // For use of `any`
+        "@typescript-eslint/ban-ts-comment": "off", // For use of ts-ignore & other ts- comments
+        "@typescript-eslint/no-unsafe-call": "off", // For calls on type `any`
+        "@typescript-eslint/comma-dangle": "off", // prettier says no trailing comma
+        "@typescript-eslint/no-shadow": "off", // out of module scope func names
+        "@typescript-eslint/quotes": "warn", // prettier says single quotes for strings
+        "@typescript-eslint/semi": "warn", // preitter says always huse semis
+        "@typescript-eslint/indent": 0 // prettier handles indenting
     },
     "overrides": [
         {
+            "files": [
+                "src/*.js",
+                "src/*.ts"
+            ],
+            "excludedFiles": "*.test.js",
             "rules": {
                 "require-jsdoc": "off",
                 "func-names": "off"

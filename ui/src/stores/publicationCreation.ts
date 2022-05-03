@@ -10,6 +10,25 @@ let store: any = (set: (params: any) => void) => ({
     error: null,
     setError: (error: string | null) => set(() => ({ error })),
 
+    reset: () =>
+        set(() => {
+            return {
+                id: '',
+                title: '',
+                type: Config.values.octopusInformation.publications.PROBLEM.id,
+                content: '',
+                description: '',
+                keywords: [],
+                licence: Config.values.octopusInformation.licences.CC_BY.value,
+                language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
+                conflictOfInterestStatus: true,
+                conflictOfInterestText: '',
+                linkTo: [],
+                ethicalStatement: null,
+                ethicalStatementFreeText: null
+            };
+        }),
+
     // ID
     id: '',
     updateId: (id: string) => set(() => ({ id })),
@@ -49,7 +68,17 @@ let store: any = (set: (params: any) => void) => ({
 
     // Links
     linkTo: [],
-    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo }))
+    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo })),
+
+    // Ethical statement
+    ethicalStatement: null,
+    ethicalStatementFreeText: null,
+    updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
+
+    // Co-authors
+    coAuthors: [],
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

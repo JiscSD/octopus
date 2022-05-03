@@ -65,3 +65,8 @@ module "s3" {
   source             = "../modules/s3"
   environment        = local.environment
 }
+
+module "ses" {
+    source = "../modules/ses"
+    environment = local.environment
+}

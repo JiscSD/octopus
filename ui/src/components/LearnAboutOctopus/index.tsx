@@ -8,7 +8,7 @@ type GridItemProps = {
     children: React.ReactChildren | React.ReactChild;
 };
 
-const GridItem: React.FC<GridItemProps> = (props) => (
+const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => (
     <div className="col-span-1 transition-all duration-500 lg:col-span-6 xl:col-span-3">
         <h2 className="mb-2 block font-montserrat text-lg font-semibold text-grey-900 decoration-teal-300 decoration-2 transition-colors duration-500 dark:text-white-50">
             {props.title}
@@ -19,7 +19,7 @@ const GridItem: React.FC<GridItemProps> = (props) => (
     </div>
 );
 
-const LearnAboutOctopus = () => (
+const LearnAboutOctopus: React.FC = (): React.ReactElement => (
     <>
         <Framer.motion.div
             initial={{ opacity: 0, translateY: '5%' }}

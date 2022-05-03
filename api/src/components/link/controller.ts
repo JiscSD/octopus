@@ -19,12 +19,12 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
 
         // the authenticated user is not the owner of the publication
         if (fromPublication.user.id !== event.user.id) {
-            return response.json(404, { message: `You do not have permission to create publication links` });
+            return response.json(404, { message: 'You do not have permission to create publication links' });
         }
 
         // peer reviews can only linkTo one thing
         if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
-            return response.json(404, { message: `Peer reviews can only have 1 link.` });
+            return response.json(404, { message: 'Peer reviews can only have 1 link.' });
         }
 
         // since we are not passing in a user, this should only return a publication if it is LIVE
@@ -52,7 +52,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         const doesLinkExist = await linkService.doesLinkExist(event.body.from, event.body.to);
 
         if (doesLinkExist) {
-            return response.json(404, { message: `Link already exists.` });
+            return response.json(404, { message: 'Link already exists.' });
         }
 
         const link = await linkService.create(event.body.from, event.body.to);

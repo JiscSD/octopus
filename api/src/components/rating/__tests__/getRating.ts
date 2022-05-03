@@ -9,26 +9,28 @@ describe('Get aggregate publication ratings', () => {
     test('Get all aggregate ratings for a publication', async () => {
         const publication = await testUtils.agent.get('/publications/publication-problem-live');
 
-        expect(publication.body.ratings.aggregate).toMatchObject([
-            {
-                _count: { id: 2 },
-                _avg: { rating: 7 },
-                category: 'PROBLEM_IMPORTANT',
-                publicationId: 'publication-problem-live'
-            },
-            {
-                _count: { id: 2 },
-                _avg: { rating: 6 },
-                category: 'PROBLEM_WELL_DEFINED',
-                publicationId: 'publication-problem-live'
-            },
-            {
-                _count: { id: 2 },
-                _avg: { rating: 9 },
-                category: 'PROBLEM_ORIGINAL',
-                publicationId: 'publication-problem-live'
-            }
-        ]);
+        expect(publication.body.ratings.aggregate.sort()).toMatchObject(
+            [
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 7 },
+                    category: 'PROBLEM_IMPORTANT',
+                    publicationId: 'publication-problem-live'
+                },
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 6 },
+                    category: 'PROBLEM_WELL_DEFINED',
+                    publicationId: 'publication-problem-live'
+                },
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 9 },
+                    category: 'PROBLEM_ORIGINAL',
+                    publicationId: 'publication-problem-live'
+                }
+            ].sort()
+        );
 
         expect(publication.body.ratings.overall).toMatchObject({
             _avg: { rating: 7.333333333333333 },
@@ -41,26 +43,28 @@ describe('Get aggregate publication ratings', () => {
             .get('/publications/publication-problem-live')
             .query({ apiKey: '123456789' });
 
-        expect(publication.body.ratings.aggregate).toMatchObject([
-            {
-                _count: { id: 2 },
-                _avg: { rating: 7 },
-                category: 'PROBLEM_IMPORTANT',
-                publicationId: 'publication-problem-live'
-            },
-            {
-                _count: { id: 2 },
-                _avg: { rating: 6 },
-                category: 'PROBLEM_WELL_DEFINED',
-                publicationId: 'publication-problem-live'
-            },
-            {
-                _count: { id: 2 },
-                _avg: { rating: 9 },
-                category: 'PROBLEM_ORIGINAL',
-                publicationId: 'publication-problem-live'
-            }
-        ]);
+        expect(publication.body.ratings.aggregate.sort()).toMatchObject(
+            [
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 7 },
+                    category: 'PROBLEM_IMPORTANT',
+                    publicationId: 'publication-problem-live'
+                },
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 6 },
+                    category: 'PROBLEM_WELL_DEFINED',
+                    publicationId: 'publication-problem-live'
+                },
+                {
+                    _count: { id: 2 },
+                    _avg: { rating: 9 },
+                    category: 'PROBLEM_ORIGINAL',
+                    publicationId: 'publication-problem-live'
+                }
+            ].sort()
+        );
 
         expect(publication.body.ratings.overall).toMatchObject({
             _avg: { rating: 7.333333333333333 },
