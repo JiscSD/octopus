@@ -35,6 +35,8 @@ interface MenuBarProps {
     editor: tiptap.Editor;
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    importModalVisible: boolean;
+    setImportModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MenuBar: React.FC<MenuBarProps> = (props) => {
@@ -85,7 +87,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     const [selected, setSelected] = React.useState(headingOptions[0]);
     const [linkModalVisible, setLinkModalVisible] = React.useState(false);
     const [imageModalVisible, setImageModalVisible] = React.useState(false);
-    const [importModalVisible, setImportModalVisible] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState('');
     const importDocumentInput = React.useRef(null);
     const [image, setImage] = React.useState<Interfaces.TextEditorImage>({
@@ -212,7 +213,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     user?.token
                                 );
 
-                                setImportModalVisible(false);
+                                props.setImportModalVisible(false);
 
                                 return {
                                     src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
@@ -430,17 +431,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
-                            onClick={() => {
-                                setImportModalVisible(true);
-                            }}
-                            className={menuIconStyles}
-                        >
-                            <FAIcons.FaFileImport className="h-3 w-3 text-grey-700" aria-hidden="true" />
-                        </button>
-
-                        <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
-                        <button
-                            type="button"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -591,8 +581,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                 {/* Import document modal */}
                 <HeadlessUi.Dialog
-                    open={importModalVisible}
-                    onClose={() => setImportModalVisible(false)}
+                    open={props.importModalVisible}
+                    onClose={() => props.setImportModalVisible(false)}
                     className="fixed inset-0 z-10 overflow-y-auto"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
@@ -625,6 +615,7 @@ interface TextEditorProps {
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
     const [loading, setLoading] = React.useState(true);
+    const [importModalVisible, setImportModalVisible] = React.useState(false);
 
     const textEditor = tiptap.useEditor({
         extensions: [
@@ -662,10 +653,28 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
     }, [textEditor]);
 
     return textEditor ? (
-        <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
-            <MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
-            <tiptap.EditorContent editor={textEditor} />
-        </div>
+        <>
+            <button
+                onClick={() => {
+                    setImportModalVisible(true);
+                }}
+                className={`mb-4 flex items-center space-x-2 rounded-sm py-1 text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
+            >
+                <FAIcons.FaFileWord className="h-5 w-5 text-teal-600" aria-hidden="true" />
+                <span>Import from Microsoft Word</span>
+            </button>
+
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+                <MenuBar
+                    editor={textEditor}
+                    loading={loading}
+                    setLoading={setLoading}
+                    importModalVisible={importModalVisible}
+                    setImportModalVisible={setImportModalVisible}
+                />
+                <tiptap.EditorContent editor={textEditor} />
+            </div>
+        </>
     ) : null;
 };
 
