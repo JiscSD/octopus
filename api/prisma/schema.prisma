@@ -143,6 +143,7 @@ model PublicationBookmarks {
     id            String      @id @default(cuid())
     publicationId String
     userId        String
+    createdAt     DateTime    @default(now())
     publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 

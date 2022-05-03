@@ -269,3 +269,19 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
                   method: delete
                   cors: true
+    getBookmark:
+        handler: src/components/bookmark/routes.get
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
+                  method: get
+                  cors: true
+    getAllBookmark:
+        handler: src/components/bookmark/routes.getAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/bookmarks
+                  method: get
+                  cors: true

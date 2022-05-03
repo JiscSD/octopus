@@ -86,3 +86,55 @@ export const remove = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const get = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetBookmarkPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus === 'DRAFT') {
+            return response.json(404, {
+                message: 'This publication is in a draft state, so no bookmark exists.'
+            });
+        }
+
+        const bookmark = await bookmarkService.get(event.pathParameters.id, event.user.id);
+
+        if (!bookmark) {
+            return response.json(404, {
+                message: 'No bookmark exists.'
+            });
+        }
+
+        return response.json(200, bookmark);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getAll = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetAllBookmarkPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const bookmarks = await bookmarkService.getAll(event.user.id);
+
+        if (!bookmarks) {
+            return response.json(404, {
+                message: 'No bookmarks exist'
+            });
+        }
+
+        return response.json(200, bookmarks);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

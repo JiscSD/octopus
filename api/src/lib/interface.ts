@@ -370,6 +370,13 @@ export interface RemoveBookmarkPathParams {
     id: string;
 }
 
+export interface GetBookmarkPathParams {
+    id: string;
+}
+
+export interface GetAllBookmarkPathParams {
+    id: string;
+}
 /* @description Ratings
  */
 
