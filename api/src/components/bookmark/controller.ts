@@ -110,9 +110,7 @@ export const get = async (
         const bookmark = await bookmarkService.get(event.pathParameters.id, event.user.id);
 
         if (!bookmark) {
-            return response.json(404, {
-                message: 'No bookmark exists.'
-            });
+            return response.json(200, false);
         }
 
         return response.json(200, bookmark);
