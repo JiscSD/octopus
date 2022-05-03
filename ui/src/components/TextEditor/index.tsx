@@ -654,11 +654,15 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
 
     return textEditor ? (
         <>
+            <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                Your publication can be added via the main text editor, or imported via a Word document (.docx). Once
+                imported, your publication can be further edited in the text field.
+            </span>
             <button
                 onClick={() => {
                     setImportModalVisible(true);
                 }}
-                className={`mb-4 flex items-center space-x-2 rounded-sm py-1 text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
+                className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
             >
                 <FAIcons.FaFileWord className="h-5 w-5 text-teal-600" aria-hidden="true" />
                 <span>Import from Microsoft Word</span>
