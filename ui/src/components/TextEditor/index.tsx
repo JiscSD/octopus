@@ -194,11 +194,13 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     }
 
     // For document import
-    const handleImportDocument = async (e: React.SyntheticEvent) => {
-        const target = e.target as HTMLInputElement;
+    const handleImportDocument = async (e: React.FormEvent, replace: boolean = false) => {
+        e.preventDefault();
 
-        if (target.files?.length) {
-            readFileInputEventAsArrayBuffer(target.files[0], async (arrayBuffer: any) => {
+        const fileList: React.RefObject<any> = importDocumentInput;
+
+        if (fileList.current?.files) {
+            readFileInputEventAsArrayBuffer(fileList.current?.files[0], async (arrayBuffer: any) => {
                 const result = await Mammoth.convertToHtml(
                     { arrayBuffer: arrayBuffer },
                     {
@@ -222,7 +224,11 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         )
                     }
                 );
-                props.editor.commands.insertContent(result.value);
+                if (replace) {
+                    props.editor.commands.setContent(result.value);
+                } else {
+                    props.editor.commands.insertContent(result.value);
+                }
             });
         }
     };
@@ -587,17 +593,39 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
                         <HeadlessUi.Dialog.Title className="sr-only">
                             Import a Word document (.docx only)
                         </HeadlessUi.Dialog.Title>
                         <HeadlessUi.Dialog.Description>
-                            <input
-                                ref={importDocumentInput}
-                                type="file"
-                                onChange={handleImportDocument}
-                                accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            />
+                            <label htmlFor="document-import">
+                                <input
+                                    name="document-import"
+                                    ref={importDocumentInput}
+                                    type="file"
+                                    aria-label="Choose a Word document"
+                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                />
+                                <span className="sr-only">Choose a Word document</span>
+                            </label>
+                            <div className="mt-6 flex justify-between space-x-4">
+                                <button
+                                    type="submit"
+                                    name="insert"
+                                    onClick={(e) => handleImportDocument(e, false)}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Insert
+                                </button>
+                                <button
+                                    type="submit"
+                                    name="replace"
+                                    onClick={(e) => handleImportDocument(e, true)}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Replace existing
+                                </button>
+                            </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
