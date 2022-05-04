@@ -201,33 +201,37 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
         if (fileList.current?.files) {
             readFileInputEventAsArrayBuffer(fileList.current?.files[0], async (arrayBuffer: any) => {
-                const result = await Mammoth.convertToHtml(
-                    { arrayBuffer: arrayBuffer },
-                    {
-                        convertImage: Mammoth.images.imgElement((image) =>
-                            image.read('base64').then(async (imageBuffer) => {
-                                const syncFile = await api.post<{ id: string; name: string }>(
-                                    '/images',
-                                    {
-                                        name: '',
-                                        image: 'data:' + image.contentType + ';base64,' + imageBuffer
-                                    },
-                                    user?.token
-                                );
+                try {
+                    const result = await Mammoth.convertToHtml(
+                        { arrayBuffer: arrayBuffer },
+                        {
+                            convertImage: Mammoth.images.imgElement((image) =>
+                                image.read('base64').then(async (imageBuffer) => {
+                                    const syncFile = await api.post<{ id: string; name: string }>(
+                                        '/images',
+                                        {
+                                            name: '',
+                                            image: 'data:' + image.contentType + ';base64,' + imageBuffer
+                                        },
+                                        user?.token
+                                    );
 
-                                props.setImportModalVisible(false);
+                                    props.setImportModalVisible(false);
 
-                                return {
-                                    src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
-                                };
-                            })
-                        )
+                                    return {
+                                        src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
+                                    };
+                                })
+                            )
+                        }
+                    );
+                    if (replace) {
+                        props.editor.commands.setContent(result.value);
+                    } else {
+                        props.editor.commands.insertContent(result.value);
                     }
-                );
-                if (replace) {
-                    props.editor.commands.setContent(result.value);
-                } else {
-                    props.editor.commands.insertContent(result.value);
+                } catch (err) {
+                    setError('Unable to import .docx file. Please re-save your document and try again.');
                 }
             });
         }
