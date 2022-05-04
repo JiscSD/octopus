@@ -212,15 +212,25 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
 
     if (filters.search) {
         // @ts-ignore
-        query.body.query.bool.must = {
-            multi_match: {
-                query: filters.search,
-                fuzziness: 'auto',
-                type: 'most_fields',
-                operator: 'or',
-                fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
+        query.body.query.bool.must = [
+            {
+                multi_match: {
+                    query: filters.search,
+                    fuzziness: 'auto',
+                    type: 'most_fields',
+                    operator: 'or',
+                    fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
+                }
+            },
+            {
+                range: {
+                    publishedDate: {
+                        gte: filters.dateFrom,
+                        lte: filters.dateTo
+                    }
+                }
             }
-        };
+        ];
     }
 
     if (filters.exclude) {

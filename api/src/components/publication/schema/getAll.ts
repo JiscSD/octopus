@@ -22,6 +22,12 @@ const getAllSchema: I.Schema = {
         },
         exclude: {
             type: 'string'
+        },
+        dateFrom: {
+            type: 'string'
+        },
+        dateTo: {
+            type: 'string'
         }
     },
     additionalProperties: false
