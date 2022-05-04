@@ -593,6 +593,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
                         <HeadlessUi.Dialog.Title className="sr-only">
                             Import a Word document (.docx only)
                         </HeadlessUi.Dialog.Title>
@@ -621,6 +622,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="submit"
                                     name="replace"
                                     onClick={(e) => handleImportDocument(e, true)}
+                                    disabled={props.editor.isEmpty}
                                     className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
                                 >
                                     Replace existing
