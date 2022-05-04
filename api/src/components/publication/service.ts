@@ -210,28 +210,34 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         }
     };
 
+    const must: any[] = [];
+
     if (filters.search) {
         // @ts-ignore
-        query.body.query.bool.must = [
-            {
-                multi_match: {
-                    query: filters.search,
-                    fuzziness: 'auto',
-                    type: 'most_fields',
-                    operator: 'or',
-                    fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
-                }
-            },
-            {
-                range: {
-                    publishedDate: {
-                        gte: filters.dateFrom,
-                        lte: filters.dateTo
-                    }
+        must.push({
+            multi_match: {
+                query: filters.search,
+                fuzziness: 'auto',
+                type: 'most_fields',
+                operator: 'or',
+                fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
+            }
+        });
+    }
+
+    if (filters.dateFrom || filters.dateTo) {
+        console.log(filters.dateFrom);
+        must.push({
+            range: {
+                publishedDate: {
+                    gte: filters.dateFrom,
+                    lte: filters.dateTo
                 }
             }
-        ];
+        });
     }
+    // @ts-ignore
+    query.body.query.bool.must = must;
 
     if (filters.exclude) {
         // @ts-ignore
