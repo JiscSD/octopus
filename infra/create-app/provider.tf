@@ -1,20 +1,20 @@
 provider "aws" {
-    region = "eu-west-1"
-    profile = "octopus"
+  region  = "eu-west-1"
+  profile = "octopus"
 }
 
 terraform {
-    required_version = "=0.14.6"
-    backend "s3" {
-        bucket                  = "octopus-app-tfstate"
-        key                     = "terraform.tfstate"
-        region                  = "eu-west-1"
-        profile                 = "octopus"
+  required_version = "=1.1.9"
+  backend "s3" {
+    bucket  = "octopus-app-tfstate"
+    key     = "terraform.tfstate"
+    region  = "eu-west-1"
+    profile = "octopus"
+  }
+  required_providers {
+    aws = {
+      version = "=4.12.1"
+      source  = "hashicorp/aws"
     }
-    required_providers {
-        aws = {
-            version = ">= 2.7.0"
-            source = "hashicorp/aws"
-        }
-    }
+  }
 }
