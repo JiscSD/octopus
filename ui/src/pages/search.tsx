@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
+import moment from 'moment';
 import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/solid';
@@ -20,6 +21,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
+    let dateFrom: string | string[] | null = null;
+    let dateTo: string | string[] | null = null;
 
     // defaults to results
     let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
@@ -34,6 +37,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
+    if (context.query.dateFrom) dateFrom = context.query.dateFrom;
+    if (context.query.dateTo) dateTo = context.query.dateTo;
 
     // only if a search type is provided
     if (searchType) {
@@ -43,6 +48,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
         if (Array.isArray(limit)) limit = limit[0];
         if (Array.isArray(offset)) offset = offset[0];
+        if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
+        if (Array.isArray(dateTo)) dateTo = dateTo[0];
 
         // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
         limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
@@ -62,9 +69,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         }
     }
 
+    const dateFromFormatted = moment.utc(dateFrom);
+    const dateToFormatted = moment.utc(dateTo);
+
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}${
+        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
+    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
 
     return {
         props: {
@@ -73,6 +85,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publicationTypes,
             limit,
             offset,
+            dateFrom,
+            dateTo,
             fallback: {
                 [swrKey]: results
             },
@@ -87,6 +101,8 @@ type Props = {
     publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
+    dateFrom: string | null;
+    dateTo: string | null;
     error: string | null;
 };
 
@@ -99,14 +115,22 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const [publicationTypes, setPublicationTypes] = React.useState(
         props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
     );
+    const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
+    const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
     // ugly complex swr key
+
+    const dateFromFormatted = moment.utc(dateFrom);
+    const dateToFormatted = moment.utc(dateTo);
+
     const swrKey = `/${searchType}?search=${query || ''}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}${
+        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
+    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -114,6 +138,22 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
         setQuery(searchTerm);
+    };
+
+    const handlerDateFormSubmit = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+
+        router.push(
+            {
+                query: {
+                    ...router.query,
+                    dateTo,
+                    dateFrom
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
     };
 
     const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -165,6 +205,8 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         if (searchType === 'publications') {
             setPublicationTypes(Config.values.publicationTypes.join(','));
         }
+        setDateFrom('');
+        setDateTo('');
     };
 
     React.useEffect(() => {
@@ -312,6 +354,46 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </div>
                                         ))}
                                     </div>
+                                    <form
+                                        name="date-form"
+                                        id="date-form"
+                                        className="col-span-12 lg:col-span-3 xl:col-span-4"
+                                        onSubmit={handlerDateFormSubmit}
+                                    >
+                                        <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                            Date Range
+                                        </legend>
+                                        <label htmlFor="date-from" className="relative block w-full">
+                                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                Date From:
+                                            </span>
+                                            <input
+                                                name="date-from"
+                                                id="date-from"
+                                                type="text"
+                                                placeholder="Date from..."
+                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                disabled={isValidating}
+                                                value={dateFrom}
+                                                onChange={(e) => setDateFrom(e.target.value)}
+                                            />
+                                        </label>
+                                        <label htmlFor="date-to" className="relative block w-full">
+                                            <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                Date to:
+                                            </span>
+                                            <input
+                                                name="date-to"
+                                                id="date-to"
+                                                type="text"
+                                                placeholder="Date to..."
+                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                disabled={isValidating}
+                                                value={dateTo}
+                                                onChange={(e) => setDateTo(e.target.value)}
+                                            />
+                                        </label>
+                                    </form>
                                 </div>
 
                                 <div className="pt-6">

@@ -44,6 +44,7 @@
         "js-file-download": "^0.4.12",
         "jsonwebtoken": "^8.5.1",
         "luxon": "^2.3.0",
+        "moment": "^2.29.3",
         "next": "^12.0.10",
         "nextjs-progressbar": "0.0.13",
         "react": "17.0.2",
