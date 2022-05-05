@@ -125,7 +125,9 @@ export interface PublicationFilters {
     limit?: string;
     offset?: string;
     type: string;
-    exclude: string;
+    exclude?: string;
+    dateFrom?: string;
+    dateTo?: string;
 }
 
 /**

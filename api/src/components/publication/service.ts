@@ -210,9 +210,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         }
     };
 
+    const must: any[] = [];
+
     if (filters.search) {
         // @ts-ignore
-        query.body.query.bool.must = {
+        must.push({
             multi_match: {
                 query: filters.search,
                 fuzziness: 'auto',
@@ -220,8 +222,20 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
                 operator: 'or',
                 fields: ['title^3', 'cleanContent', 'keywords^2', 'description^2'] // include author full names, DOI field, content below author & title
             }
-        };
+        });
     }
+
+    must.push({
+        range: {
+            publishedDate: {
+                gte: filters.dateFrom,
+                lte: filters.dateTo
+            }
+        }
+    });
+
+    // @ts-ignore
+    query.body.query.bool.must = must;
 
     if (filters.exclude) {
         // @ts-ignore
