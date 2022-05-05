@@ -55,9 +55,11 @@ CREATE TABLE "Publication" (
     "url_slug" TEXT NOT NULL,
     "type" "PublicationType" NOT NULL,
     "title" TEXT,
-    "licence" "LicenceType",
+    "licence" "LicenceType" NOT NULL DEFAULT E'CC_BY',
     "conflictOfInterestStatus" BOOLEAN DEFAULT false,
     "conflictOfInterestText" TEXT,
+    "ethicalStatement" BOOLEAN,
+    "ethicalStatementFreeText" TEXT,
     "description" TEXT,
     "keywords" TEXT[],
     "content" TEXT,
@@ -140,6 +142,15 @@ CREATE TABLE "PublicationRatings" (
     CONSTRAINT "PublicationRatings_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "PublicationBookmarks" (
+    "id" TEXT NOT NULL,
+    "publicationId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "PublicationBookmarks_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_orcid_key" ON "User"("orcid");
 
@@ -157,6 +168,9 @@ CREATE UNIQUE INDEX "CoAuthors_publicationId_email_key" ON "CoAuthors"("publicat
 
 -- CreateIndex
 CREATE UNIQUE INDEX "PublicationRatings_publicationId_userId_category_key" ON "PublicationRatings"("publicationId", "userId", "category");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PublicationBookmarks_publicationId_userId_key" ON "PublicationBookmarks"("publicationId", "userId");
 
 -- AddForeignKey
 ALTER TABLE "Images" ADD CONSTRAINT "Images_user_fkey" FOREIGN KEY ("user") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -196,3 +210,9 @@ ALTER TABLE "PublicationRatings" ADD CONSTRAINT "PublicationRatings_userId_fkey"
 
 -- AddForeignKey
 ALTER TABLE "PublicationRatings" ADD CONSTRAINT "PublicationRatings_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PublicationBookmarks" ADD CONSTRAINT "PublicationBookmarks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PublicationBookmarks" ADD CONSTRAINT "PublicationBookmarks_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;

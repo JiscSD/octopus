@@ -44,6 +44,7 @@ export const isIdInUse = async (id: string) => {
 
     return Boolean(publication);
 };
+
 export const get = async (id: string) => {
     const publication = await client.prisma.publication.findFirst({
         where: {
@@ -83,7 +84,15 @@ export const get = async (id: string) => {
                 select: {
                     id: true,
                     email: true,
-                    linkedUser: true
+                    linkedUser: true,
+                    confirmedCoAuthor: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            orcid: true
+                        }
+                    }
                 }
             },
             linkedTo: {
@@ -238,6 +247,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             keywords: e.keywords,
             content: e.content,
             language: e.language,
+            ethicalStatement: e.ethicalStatement,
+            ethicalStatementFreeText: e.ethicalStatementFreeText,
             user: {
                 connect: {
                     id: user.id
@@ -407,11 +418,20 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
     const hasPublishDate = Boolean(publication.publishedDate);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
 
     const isAttemptToLive = status === 'LIVE';
 
     // More external checks can be chained here for the future
-    if (hasAtLeastOneLinkTo && hasAllFields && conflictOfInterest && !hasPublishDate && isAttemptToLive) isReady = true;
+    if (
+        hasAtLeastOneLinkTo &&
+        hasAllFields &&
+        conflictOfInterest &&
+        !hasPublishDate &&
+        isDataAndHasEthicalStatement &&
+        isAttemptToLive
+    )
+        isReady = true;
 
     return isReady;
 };

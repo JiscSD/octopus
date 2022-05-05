@@ -1,4 +1,10 @@
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
-  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_public_access_block" "image_bucket" {
+  bucket = aws_s3_bucket.image_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = true
 }

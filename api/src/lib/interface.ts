@@ -29,6 +29,7 @@ export interface APIRequest<
     body: BodyOverride;
     queryStringParameters: QueryStringParametersOverride;
     pathParameters: PathParamsOverride;
+    user?: User;
 }
 
 export interface AuthenticatedAPIRequest<
@@ -74,6 +75,8 @@ export interface CreatePublicationRequestBody {
     keywords?: string[];
     content?: string;
     language?: Languages;
+    ethicalStatement?: boolean;
+    ethicalStatementFreeText?: string;
 }
 
 export interface OpenSearchPublication {
@@ -109,6 +112,8 @@ export interface UpdatePublicationRequestBody {
     keywords?: string[];
     id?: string;
     language?: Languages;
+    ethicalStatement?: boolean;
+    ethicalStatementFreeText?: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -205,6 +210,12 @@ export interface UpdateUserInformation {
         startDate?: UserDates | null;
         endDate?: UserDates | null;
     }>;
+    works: Array<{
+        publishedDate?: UserDates | null;
+        doi?: string | null;
+        title?: string | null;
+        url?: string | null;
+    }>;
 }
 
 export interface DeletePublicationPathParams {
@@ -283,6 +294,31 @@ export interface ORCIDUser {
                 }>;
             }>;
         };
+        works: {
+            group: Array<{
+                'work-summary': Array<{
+                    'created-date': OrcidValue;
+                    'last-modified-date': OrcidValue;
+                    title: {
+                        title: OrcidValue;
+                    };
+                    url: OrcidValue;
+                    type: string;
+                    'publication-date'?: {
+                        year: OrcidValue;
+                        month: OrcidValue;
+                        day: OrcidValue;
+                    };
+                    'journal-title': OrcidValue;
+                    'external-ids': {
+                        'external-id': Array<{
+                            'external-id-type': string;
+                            'external-id-value': string;
+                        }>;
+                    };
+                }>;
+            }>;
+        };
     };
 }
 
@@ -324,6 +360,23 @@ export interface ImageSentBody {
     image: string;
 }
 
+// @description Bookmarks
+
+export interface CreateBookmarkPathParams {
+    id: string;
+}
+
+export interface RemoveBookmarkPathParams {
+    id: string;
+}
+
+export interface GetBookmarkPathParams {
+    id: string;
+}
+
+export interface GetAllBookmarkPathParams {
+    id: string;
+}
 /* @description Ratings
  */
 
@@ -384,4 +437,11 @@ export interface DestroyImagePathParams {
 
 export interface GetRatingsQueryParams {
     user?: string;
+}
+
+export interface EmailSendOptions {
+    to: string;
+    subject: string;
+    html: string;
+    text: string;
 }

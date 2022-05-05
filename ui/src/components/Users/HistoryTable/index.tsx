@@ -41,16 +41,14 @@ const HistoryTable: React.FC<Props> = (props) => (
                                         {record.department ?? 'Not specified'}
                                     </td>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {record.startDate.day &&
-                                            record.startDate.month &&
-                                            record.startDate.year &&
-                                            `${record.startDate.day}/${record.startDate.month}/${record.startDate.year}`}
+                                        {`${record.startDate.year ? record.startDate.year : ''}${
+                                            record.startDate.month ? `-${record.startDate.month}` : ''
+                                        }${record.startDate.day ? `-${record.startDate.day}` : ''}`}
                                     </td>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
-                                        {record.endDate.day &&
-                                            record.endDate.month &&
-                                            record.endDate.year &&
-                                            `${record.endDate.day}/${record.endDate.month}/${record.endDate.year}`}
+                                        {`${record.endDate.year ? record.endDate.year : ''}${
+                                            record.endDate.month ? `-${record.endDate.month}` : ''
+                                        }${record.endDate.day ? `-${record.endDate.day}` : ''}`}
                                     </td>
                                 </tr>
                             ))}

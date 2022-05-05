@@ -8,7 +8,7 @@ describe('create coauthor', () => {
 
     test('Create a co-author', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/publication-problem-draft/coauthor`)
+            .post('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'emailtest@emailtest.com'
@@ -19,7 +19,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author without a valid email', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/publication-problem-draft/coauthor`)
+            .post('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'test'
@@ -30,7 +30,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record if the user is not the author of a publication', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/publication-problem-draft/coauthor`)
+            .post('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'emailtest@emailtest.com'
@@ -41,7 +41,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication that does not exist', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/non-existent-publication/coauthor`)
+            .post('/publications/non-existent-publication/coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'emailtest@emailtest.com'
@@ -52,7 +52,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication that is live', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/publication-problem-live/coauthor`)
+            .post('/publications/publication-problem-live/coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'emailtest@emailtest.com'
@@ -63,7 +63,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record when a record is already there for email & publicationId', async () => {
         const coauthor = await testUtils.agent
-            .post(`/publications/publication-problem-draft/coauthor`)
+            .post('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '123456789' })
             .send({
                 email: 'testemail@test.com'

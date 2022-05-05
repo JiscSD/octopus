@@ -1,5 +1,3 @@
-import React from 'react';
-
 import * as Interfaces from '@interfaces';
 
 export type { AppProps } from 'next/app';
@@ -67,6 +65,13 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
+    ethicalStatement: boolean | null;
+    ethicalStatementFreeText: string | null;
+    updateEthicalStatement: (ethicalStatement: boolean) => void;
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    reset: () => void;
+    coAuthors: Interfaces.CoAuthor[];
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

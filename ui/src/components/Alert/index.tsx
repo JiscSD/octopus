@@ -7,7 +7,7 @@ import * as Types from '@types';
 
 type Props = {
     severity: Types.Severity;
-    title: string;
+    title?: string;
     details?: string[];
     allowDismiss?: boolean;
     supportLink?: {
@@ -16,6 +16,7 @@ type Props = {
         external: boolean;
     };
     className?: string;
+    children?: React.ReactNode;
 };
 
 const Alert: React.FC<Props> = (props): React.ReactElement => {
@@ -43,15 +44,15 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 classesCopy.background = 'bg-yellow-200 dark:bg-yellow-500';
                 break;
             case 'ERROR':
-                classesCopy.title = 'text-grey-800 dark:text-white-50';
-                classesCopy.details = 'text-grey-800 dark:text-grey-50';
+                classesCopy.title = 'text-white-50 dark:text-white-50';
+                classesCopy.details = 'text-white-100 dark:text-grey-50';
                 classesCopy.icon = (
                     <OutlineIcons.XCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
+                        className={`h-5 w-5 text-white-50 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-pink-100 dark:bg-pink-500';
+                classesCopy.background = 'bg-red-500';
                 break;
             case 'SUCCESS':
                 classesCopy.title = 'text-grey-800 dark:text-white-50';
@@ -62,7 +63,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-teal-300 dark:bg-teal-500';
+                classesCopy.background = 'bg-green-300 dark:bg-green-500';
                 break;
             default:
                 // Info
@@ -74,7 +75,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-teal-700 dark:bg-blue-500';
+                classesCopy.background = 'bg-teal-700 dark:bg-teal-700';
         }
 
         setClasses(classesCopy);
@@ -96,12 +97,17 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                     <div className="grid grid-cols-20">
                         <div className="col-span-1 row-span-2 mr-4">{classes.icon}</div>
                         <div className="col-span-19">
-                            <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
-                                {props.title}
-                            </h3>
+                            {!!props.title && (
+                                <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
+                                    {props.title}
+                                </h3>
+                            )}
+
+                            {props.children}
+
                             {props.details && (
                                 <div className={`mt-2 text-sm transition-colors duration-500 ${classes.details}`}>
-                                    <ul role="list" className="list-disc space-y-1 pl-5">
+                                    <ul className="list-disc space-y-1 pl-5">
                                         {props.details.map((detail) => (
                                             <li key={detail}>{detail}</li>
                                         ))}

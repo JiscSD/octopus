@@ -36,6 +36,9 @@
             "user/*": [
                 "src/components/user/*"
             ],
+            "bookmark/*": [
+                "src/components/bookmark/*"
+            ],
             "link/*": [
                 "src/components/link/*"
             ],
@@ -68,6 +71,9 @@
             ],
             "utilities": [
                 "src/utilities"
+            ],
+            "email": [
+                "src/lib/email"
             ]
         }
     },

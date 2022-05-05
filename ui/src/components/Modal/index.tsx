@@ -8,6 +8,7 @@ type Props = {
     setOpen: any; // state setter
     positiveActionCallback: any; // state setter
     positiveButtonText: string;
+    negativeActionCallback?: any;
     cancelButtonText: string;
     title: string;
     icon?: React.ReactNode;
@@ -54,7 +55,7 @@ const Modal: React.FC<Props> = (props) => {
                         <div className="xl:max-w-2 relative inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:px-8 sm:py-6 sm:align-middle lg:max-w-xl">
                             <div>
                                 {!!props.icon && (
-                                    <div className="bg-green-100 mx-auto flex h-8 w-8 items-center justify-center rounded-full">
+                                    <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
                                         {props.icon}
                                     </div>
                                 )}
@@ -77,7 +78,11 @@ const Modal: React.FC<Props> = (props) => {
                                     actionType="POSITIVE"
                                 />
                                 <Components.ModalButton
-                                    onClick={() => props.setOpen(false)}
+                                    onClick={() =>
+                                        props.negativeActionCallback
+                                            ? props.negativeActionCallback()
+                                            : props.setOpen(false)
+                                    }
                                     disabled={props.disableButtons}
                                     ref={cancelButtonRef}
                                     text={props.cancelButtonText}

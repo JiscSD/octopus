@@ -8,7 +8,7 @@ jest.setTimeout(60000);
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
 export const initialSeed = async (): Promise<void> => {
-    for (let user of seeds.users) {
+    for (const user of seeds.users) {
         await client.prisma.user.create({
             // @ts-ignore
             data: user
@@ -16,12 +16,16 @@ export const initialSeed = async (): Promise<void> => {
     }
 
     // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
-    for (let publication of seeds.publications) {
+    for (const publication of seeds.publications) {
         await client.prisma.publication.create({
             // @ts-ignore
             data: publication
         });
     }
+
+    await client.prisma.publicationBookmarks.createMany({
+        data: seeds.bookmarkedPublicationSeeds
+    });
 };
 
 export const openSearchSeed = async () => {
@@ -49,8 +53,9 @@ export const clearDB = async (): Promise<void> => {
     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
     const deletePublications = client.prisma.publication.deleteMany();
     const deleteUsers = client.prisma.user.deleteMany();
+    const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
 
-    await client.prisma.$transaction([deleteUsers, deletePublications, deletePublicationStatuses]);
+    await client.prisma.$transaction([deleteUsers, deletePublications, deleteBookmarks, deletePublicationStatuses]);
 
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'

@@ -161,9 +161,13 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
 
     if (!token) {
         context.res.writeHead(302, {
-            Location: Config.urls.orcidLogin.path
+            Location: `${Config.urls.orcidLogin.path}&state=${Buffer.from(
+                context.req.url || Config.urls.home.path,
+                'utf-8'
+            ).toString('base64')}`
         });
         context.res.end();
+        throw new Error('Token not valid');
     }
 
     return token;
@@ -254,4 +258,16 @@ export const findRating = (
     const ratingType = Object.values(Config.values.octopusInformation.publications[publicationType].ratings)[index].id;
     const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
     return found ? found.rating : null;
+};
+
+export const formatKeywords = (keywordsAsString: string): string[] => {
+    let formattedKeywords: string[] = [];
+    if (keywordsAsString.length) {
+        formattedKeywords = keywordsAsString
+            .replace(/\n/g, ',') // replace new lines with comma
+            .split(',') // split by comma
+            .map((word) => word.trim()) // trim each keywords white space
+            .filter((word) => word.length); // dont include any empty string entries
+    }
+    return formattedKeywords;
 };
