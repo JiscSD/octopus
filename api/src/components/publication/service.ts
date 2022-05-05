@@ -225,17 +225,15 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         });
     }
 
-    if (filters.dateFrom || filters.dateTo) {
-        console.log(filters.dateFrom);
-        must.push({
-            range: {
-                publishedDate: {
-                    gte: filters.dateFrom,
-                    lte: filters.dateTo
-                }
+    must.push({
+        range: {
+            publishedDate: {
+                gte: filters.dateFrom,
+                lte: filters.dateTo
             }
-        });
-    }
+        }
+    });
+
     // @ts-ignore
     query.body.query.bool.must = must;
 
