@@ -698,8 +698,8 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 }}
                 className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
             >
-                <FAIcons.FaFileWord className="h-5 w-5 text-teal-600" aria-hidden="true" />
-                <span>Import from Microsoft Word</span>
+                <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
+                <span>Import from Microsoft Word (.docx)</span>
             </button>
 
             <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
