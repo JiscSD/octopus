@@ -106,6 +106,13 @@ const urls = {
         keywords: [],
         canonical: `${base.host}/account`
     },
+    myBookmarks: {
+        path: '/my-bookmarks',
+        title: `${base.title}`,
+        description: '',
+        keywords: [],
+        canonical: `${base.host}/authors`
+    },
 
     // Static Pages
     home: {

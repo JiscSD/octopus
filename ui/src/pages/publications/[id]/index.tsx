@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
 
+import jwt from 'jsonwebtoken';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -31,6 +32,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
+    let bookmark: boolean = false;
     let error: string | null = null;
 
     const cookies = context.req.cookies;
@@ -44,27 +46,55 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
+    try {
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/bookmark`, token);
+        bookmark = response.data;
+    } catch (err) {
+        console.log(err);
+    }
+
     if (!publication || error) {
         return {
             notFound: true
         };
     }
 
+    let isBookmarkVisible = false;
+
+    if (token) {
+        //check if user is author / co author. if so the bookmark icon won't display
+        const currentUser = jwt.decode(token) as any;
+
+        if (currentUser.id) {
+            const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
+            const isOwner = currentUser.id === publication.createdBy;
+
+            if (!isCoAuthor && !isOwner) {
+                isBookmarkVisible = true;
+            }
+        }
+    }
+
     return {
         props: {
-            publication
+            publication,
+            bookmark,
+            isBookmarkVisible
         }
     };
 };
 
 type Props = {
     publication: Interfaces.Publication;
+    bookmark: boolean;
+    isBookmarkVisible: boolean;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [publication, setPublication] = React.useState(props.publication);
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
+    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
     const linkedPublicationsTo = publication.linkedTo;
     const linkedPublicationsFrom = publication.linkedFrom.filter(
@@ -128,6 +158,26 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         },
         [publication.id, user?.token]
     );
+
+    const onBookmarkHandler = async () => {
+        if (isBookmarked) {
+            //delete the bookmark
+            try {
+                await api.destroy(`publications/${publication.id}/bookmark`, user?.token);
+                setIsBookmarked(false);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            //create the bookmark
+            try {
+                await api.post(`publications/${publication.id}/bookmark`, {}, user?.token);
+                setIsBookmarked(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
 
     return (
         <>
@@ -210,10 +260,28 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Alert>
                     )}
-                    <header className="">
-                        <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
-                            {publication.title}
-                        </h1>
+                    <header>
+                        <div className="grid w-full grid-cols-8">
+                            <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
+                                {publication.title}
+                            </h1>
+                            {props.isBookmarkVisible && (
+                                <div className="col-span-1 grid justify-items-end">
+                                    <button
+                                        className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
+                                        onClick={onBookmarkHandler}
+                                        aria-label="toggle-bookmark"
+                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                    >
+                                        <OutlineIcons.BookmarkIcon
+                                            className={`h-8 w-8 ${
+                                                isBookmarked ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
+                                            } text-blue-700 transition duration-150 dark:text-blue-50`}
+                                        />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                         <p className="mb-8">
                             <Components.Link
@@ -224,18 +292,16 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     {publication.user.firstName[0]}. {publication.user.lastName}
                                 </>
                             </Components.Link>
-
                             {publication.coAuthors.map(
                                 (coAuthor) =>
                                     coAuthor.user && (
                                         <>
-                                            <span className="text-white-50">, </span>
                                             <Components.Link
                                                 href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
                                                 className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                             >
                                                 <>
-                                                    {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
+                                                    , {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
                                                 </>
                                             </Components.Link>
                                         </>
