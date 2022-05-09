@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "allow_public_access" {
     ]
 
     resources = [
-      aws_s3_bucket.example.arn,
+      aws_s3_bucket.image_bucket.arn,
       "${aws_s3_bucket.image_bucket.id}/*",
     ]
   }
