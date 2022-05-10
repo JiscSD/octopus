@@ -133,6 +133,7 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: get
                   cors: true
+    # Auth
     authorization:
         handler: src/components/authorization/routes.authorize
         warmup: true
