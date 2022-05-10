@@ -5,6 +5,7 @@ const endpoints = {
     users: `${api.baseURL}/users`,
     ratings: `${api.baseURL}/ratings`,
     links: `${api.baseURL}/links`,
-    authorization: `${api.baseURL}/authorization`
+    authorization: `${api.baseURL}/authorization`,
+    bookmarks: `${api.baseURL}/bookmarks`
 };
 export default endpoints;

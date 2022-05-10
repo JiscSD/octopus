@@ -50,7 +50,38 @@ export const getAll = async (userId: string) => {
         select: {
             id: true,
             publicationId: true,
-            userId: true
+            userId: true,
+            publication: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true,
+                    currentStatus: true,
+                    url_slug: true,
+                    description: true,
+                    type: true,
+                    publishedDate: true,
+                    coAuthors: {
+                        select: {
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    id: true
+                                }
+                            }
+                        }
+                    },
+                    doi: true,
+                    updatedAt: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                }
+            }
         },
         orderBy: {
             createdAt: 'desc'
