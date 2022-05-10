@@ -46,12 +46,14 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                 <meta name="description" content={Config.urls.terms.description} />
                 <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.terms.canonical} />
-                <title>Complete your registration</title>
+                <title>{user?.email ? 'Verify your updated email address' : 'Complete your registration'}</title>
             </Head>
 
             <Layouts.Standard>
                 <section className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12">
-                    <Components.PageTitle text="Complete your registration" />
+                    <Components.PageTitle
+                        text={user?.email ? 'Verify your updated email address' : 'Complete your registration'}
+                    />
                     <form className="flex-column gap-4 space-y-4">
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
