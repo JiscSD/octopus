@@ -11,6 +11,8 @@ type Props = {
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
+    textSize?: string;
+    padding?: string;
 };
 
 const Button: React.FC<Props> = (props): React.ReactElement | null => {
@@ -34,9 +36,9 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
         return `
             ${props.iconPosition === 'LEFT' ? 'ml-4' : ''}
             ${props.iconPosition === 'RIGHT' ? 'mr-4' : ''}
-            py-2
+            ${props.padding ? props.padding : 'py-2'}
             font-montserrat
-            text-sm
+            text-${props.textSize ? props.textSize : 'sm'}
             font-semibold
 
             text-grey-800
