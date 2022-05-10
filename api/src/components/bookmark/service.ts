@@ -53,6 +53,7 @@ export const getAll = async (userId: string) => {
             userId: true,
             publication: {
                 select: {
+                    id: true,
                     title: true,
                     createdAt: true,
                     currentStatus: true,

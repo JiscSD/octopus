@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import JWT from 'jsonwebtoken';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -29,16 +28,31 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             user,
-            usersBookmarks
+            usersBookmarks,
+            token
         }
     };
 };
 
 type Props = {
     usersBookmarks: Interfaces.BookmarkedPublicationsData[];
+    token: string;
 };
 
 const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
+    const [userBookmarks, setUserBookmarks] = React.useState(props.usersBookmarks);
+
+    const deleteBookmark = async (publication: string) => {
+        try {
+            await api.destroy(`${Config.endpoints.publications}/${publication}/bookmark`, props.token);
+
+            const getBookmarks = await api.get(`${Config.endpoints.bookmarks}`, props.token);
+            setUserBookmarks(getBookmarks.data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <>
             <Head>
@@ -58,19 +72,15 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                 </header>
 
                 <section className="container mx-auto mb-16 px-8">
-                    {props.usersBookmarks.length ? (
+                    {userBookmarks.length ? (
                         <div className="relative rounded-md lg:w-2/3">
-                            {props.usersBookmarks.map((publication: Interfaces.BookmarkedPublicationsData) => (
-                                <Components.Link
-                                    key={publication.id}
-                                    href={`${Config.urls.viewPublication.path}/${publication.publicationId}`}
-                                    className="mb-5 flex"
-                                >
-                                    <Components.BookmarkedPublications
-                                        publication={publication.publication}
-                                        key={publication.id}
-                                    />
-                                </Components.Link>
+                            {userBookmarks.map((bookmark: Interfaces.BookmarkedPublicationsData) => (
+                                <Components.BookmarkedPublications
+                                    publication={bookmark.publication}
+                                    key={bookmark.id}
+                                    token={props.token}
+                                    onDelete={() => deleteBookmark(bookmark.publication.id)}
+                                />
                             ))}
                         </div>
                     ) : (

@@ -191,6 +191,7 @@ export interface BookmarkedPublicationsData {
 export interface BookmarkedPublication {
     id: string;
     title: string;
+    publicationId: string;
     createdAt: string;
     currentStatus: string;
     url_slug: string;
