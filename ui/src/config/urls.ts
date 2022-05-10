@@ -111,7 +111,7 @@ const urls = {
         title: `${base.title}`,
         description: '',
         keywords: [],
-        canonical: `${base.host}/authors`
+        canonical: `${base.host}/my-bookmarks`
     },
 
     // Static Pages

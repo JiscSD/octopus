@@ -22,7 +22,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         const response = await api.get(`${Config.endpoints.bookmarks}`, token);
         usersBookmarks = response.data;
     } catch (err) {
-        console.log('err');
+        console.log(err);
     }
 
     return {
