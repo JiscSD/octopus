@@ -8,3 +8,25 @@ resource "aws_s3_bucket_public_access_block" "image_bucket" {
   block_public_acls   = true
   block_public_policy = true
 }
+
+data "aws_iam_policy_document" "allow_public_access" {
+  statement {
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.image_bucket.arn}/*"
+    ]
+  }
+}
+
+resource "aws_s3_bucket_policy" "allow_public_access" {
+  bucket = aws_s3_bucket.image_bucket.id
+  policy = data.aws_iam_policy_document.allow_public_access.json
+}
