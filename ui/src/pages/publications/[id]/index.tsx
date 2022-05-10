@@ -81,10 +81,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
     const showEthicalStatement = props.publication.type === 'DATA';
+    const showRedFlags = !!props.publication.publicationFlags.length;
 
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
+    if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
         { title: 'Publication chain', href: 'publication-chain' },
@@ -378,6 +380,30 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         {props.publication.ethicalStatementFreeText}
                                     </p>
                                 )}
+                            </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Red flags */}
+                    {showRedFlags && (
+                        <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
+                            <>
+                                <div>
+                                    <h2>not resovled</h2>
+                                    {publication.publicationFlags
+                                        .filter((i) => !i.resolved)
+                                        .map((flag) => (
+                                            <p key={flag.id}>{flag.category}</p>
+                                        ))}
+                                </div>
+                                <div>
+                                    <h2>resovled</h2>
+                                    {publication.publicationFlags
+                                        .filter((i) => !!i.resolved)
+                                        .map((flag) => (
+                                            <p key={flag.id}>{flag.category}</p>
+                                        ))}
+                                </div>
                             </>
                         </Components.PublicationContentSection>
                     )}

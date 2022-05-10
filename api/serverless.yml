@@ -202,6 +202,13 @@ functions:
                   method: get
                   cors: true
     # Flags
+    getFlag:
+        handler: src/components/flag/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/flag/{id}
+                  method: get
+                  cors: true
     createFlag:
         handler: src/components/flag/routes.createFlag
         events:

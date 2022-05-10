@@ -62,22 +62,34 @@ export const get = async (id: string) => {
                 }
             },
             publicationFlags: {
-                where: {
-                    resolved: false
-                },
                 select: {
-                    category: true,
-                    createdBy: true,
                     id: true,
+                    category: true,
+                    resolved: true,
+                    createdBy: true,
                     createdAt: true,
-                    flagComments: true
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
                 }
             },
             user: {
                 select: {
                     id: true,
+                    orcid: true,
                     firstName: true,
-                    lastName: true
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
                 }
             },
             coAuthors: {

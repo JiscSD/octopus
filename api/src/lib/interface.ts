@@ -448,6 +448,10 @@ export interface EmailSendOptions {
     text: string;
 }
 
+export interface GetFlagByID {
+    id: string;
+}
+
 export interface GetFlagsByUserID {
     id: string;
 }

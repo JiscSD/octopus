@@ -74,6 +74,7 @@ export interface Publication extends CorePublication {
     conflictOfInterestText: string | null;
     ratings: Rating;
     coAuthors: CoAuthor[];
+    publicationFlags: Flag[];
 }
 
 export interface CoAuthor {
@@ -86,13 +87,6 @@ export interface CoAuthor {
         lastName: string;
         orcid: string;
     };
-}
-
-export interface CoreUser {
-    id: string;
-    firstName: string;
-    lastName: string;
-    orcid: string;
 }
 
 export interface OrcidDateRecord {
@@ -122,6 +116,16 @@ export interface EducationRecord extends OrcidHistoryRecord {}
 
 export interface WorksRecord extends OrcidWorksRecord {}
 
+export interface CoreUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string | null;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    orcid: string;
+}
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
@@ -265,4 +269,25 @@ export interface APIRatingShape {
 export interface ImagePreview {
     name: string;
     base64: string;
+}
+
+export interface FlagComment {
+    id: string;
+    flagId: string;
+    comment: string;
+    createdBy: string;
+    createdAt: string;
+    user: CoreUser;
+}
+export interface Flag {
+    id: string;
+    category: Types.RedFlagTypes;
+    publicationId: string;
+    resolved: boolean;
+    createdAt: string;
+    user: CoreUser;
+}
+
+export interface FlagWithComments extends Flag {
+    flagComments: FlagComment[];
 }

@@ -3,6 +3,16 @@ import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
 import * as I from 'interface';
 
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
+    try {
+        const flag = await flagService.get(event.pathParameters.id);
+        return response.json(200, flag);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>) => {
     try {
         const flags = await flagService.getByPublicationID(event.pathParameters.id);

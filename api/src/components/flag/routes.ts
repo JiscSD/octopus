@@ -22,6 +22,10 @@ export const resolveFlag = middy(flagController.resolveFlag)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
+export const get = middy(flagController.get)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser());
+
 export const getPublicationFlags = middy(flagController.getPublicationFlags)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser());

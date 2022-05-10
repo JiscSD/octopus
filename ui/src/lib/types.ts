@@ -128,6 +128,14 @@ export type Ratings =
 
 export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';
 
+export type RedFlagTypes =
+    | 'PLAGIARISM'
+    | 'ETHICAL_ISSUES'
+    | 'MISREPRESENTATION'
+    | 'UNDECLARED_IMAGE_MANIPULATION'
+    | 'COPYRIGHT'
+    | 'INAPPROPRIATE';
+
 export type Languages =
     | 'ab'
     | 'aa'

@@ -1,9 +1,72 @@
 import * as client from 'lib/client';
 
+export const get = async (id: string) => {
+    const flags = await client.prisma.publicationFlags.findFirst({
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            },
+            flagComments: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
+                }
+            }
+        },
+        where: {
+            id
+        }
+    });
+
+    return flags;
+};
+
 export const getByPublicationID = async (id: string) => {
     const flags = await client.prisma.publicationFlags.findMany({
         include: {
-            flagComments: true
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            },
+            flagComments: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
+                }
+            }
         },
         where: {
             publicationId: id
@@ -13,12 +76,39 @@ export const getByPublicationID = async (id: string) => {
     return flags;
 };
 
+/**
+ * This gets the flags created by a user
+ * keeping as this can be useful for profile pages
+ */
 export const getByUserID = async (id: string) => {
-    // this gets the flags created by a user
-    // keeping as this can be useful for profile pages
     const flags = await client.prisma.publicationFlags.findMany({
         include: {
-            flagComments: true
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            },
+            flagComments: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
+                }
+            }
         },
         where: {
             user: {
@@ -28,32 +118,4 @@ export const getByUserID = async (id: string) => {
     });
 
     return flags;
-};
-
-export const get = async (id: string) => {
-    const link = await client.prisma.links.findFirst({
-        include: {
-            publicationFromRef: {
-                select: {
-                    id: true,
-                    user: true,
-                    currentStatus: true,
-                    publicationStatus: true
-                }
-            },
-            publicationToRef: {
-                select: {
-                    id: true,
-                    user: true,
-                    currentStatus: true,
-                    publicationStatus: true
-                }
-            }
-        },
-        where: {
-            id
-        }
-    });
-
-    return link;
 };

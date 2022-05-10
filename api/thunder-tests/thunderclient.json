@@ -4,19 +4,13 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
     "name": "Publication",
-    "url": "{{host}}/{{version}}/publications/cl2j6h5cq0001k7qrp2hj130g?apiKey=1e95c446-aac4-49af-b3ed-82a79e0c9181",
+    "url": "{{host}}/{{version}}/publications/publication-user-3-peer-review-4-live",
     "method": "GET",
     "sortNum": 10000,
     "created": "2022-05-10T10:32:08.791Z",
-    "modified": "2022-05-10T10:33:21.399Z",
+    "modified": "2022-05-10T13:52:47.995Z",
     "headers": [],
-    "params": [
-      {
-        "name": "apiKey",
-        "value": "1e95c446-aac4-49af-b3ed-82a79e0c9181",
-        "isPath": false
-      }
-    ],
+    "params": [],
     "tests": []
   },
   {
@@ -210,16 +204,16 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "createFlag",
-    "url": "{{host}}/{{version}}/publications/publication-user-3-peer-review-4-live/flag?apiKey=000000001",
+    "url": "{{host}}/{{version}}/publications/publication-user-1-hypothesis-1-live/flag?apiKey=000000003",
     "method": "POST",
     "sortNum": 110000,
     "created": "2022-05-10T10:32:08.802Z",
-    "modified": "2022-05-10T11:34:56.070Z",
+    "modified": "2022-05-10T14:00:18.969Z",
     "headers": [],
     "params": [
       {
         "name": "apiKey",
-        "value": "000000001",
+        "value": "000000003",
         "isPath": false
       }
     ],
@@ -332,16 +326,16 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "resolveFlag",
-    "url": "{{host}}/{{version}}/flag/cl302t8an0037v06q832nu048/resolve?apiKey=000000001",
+    "url": "{{host}}/{{version}}/flag/cl307z9cx0043nn6qg2xtwsfu/resolve?apiKey=000000002",
     "method": "POST",
     "sortNum": 170000,
     "created": "2022-05-10T10:50:00.707Z",
-    "modified": "2022-05-10T11:44:57.314Z",
+    "modified": "2022-05-10T14:20:19.339Z",
     "headers": [],
     "params": [
       {
         "name": "apiKey",
-        "value": "000000001",
+        "value": "000000002",
         "isPath": false
       }
     ],
@@ -352,11 +346,11 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "getPublicationFlags",
-    "url": "{{host}}/{{version}}/flag/publication/publication-user-3-peer-review-4-live",
+    "url": "{{host}}/{{version}}/flag/publication/publication-user-1-hypothesis-1-live",
     "method": "GET",
     "sortNum": 180000,
     "created": "2022-05-10T13:22:13.827Z",
-    "modified": "2022-05-10T13:26:51.393Z",
+    "modified": "2022-05-10T14:20:03.704Z",
     "headers": [],
     "params": [],
     "tests": []
@@ -371,6 +365,20 @@
     "sortNum": 190000,
     "created": "2022-05-10T13:29:52.854Z",
     "modified": "2022-05-10T13:30:19.788Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "4bf27180-4891-4fa3-8756-f500efcdb5d9",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
+    "name": "getFlag",
+    "url": "{{host}}/{{version}}/flag/cl306s65o0037de6q7sazpvh8",
+    "method": "GET",
+    "sortNum": 200000,
+    "created": "2022-05-10T13:41:26.376Z",
+    "modified": "2022-05-10T13:42:02.347Z",
     "headers": [],
     "params": [],
     "tests": []
