@@ -55,11 +55,13 @@ custom:
         v1: v1
     serverless-offline:
         useChildProcesses: true
+    warmup:
+        default:
+            enabled: true
 functions:
     # App
     healthcheck:
         handler: src/components/application/routes.healthcheck
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/healthcheck
@@ -70,7 +72,6 @@ functions:
     # Publications
     getPublications:
         handler: src/components/publication/routes.getAll
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications
@@ -78,7 +79,6 @@ functions:
                   cors: true
     getPublication:
         handler: src/components/publication/routes.get
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
@@ -86,7 +86,6 @@ functions:
                   cors: true
     createPublication:
         handler: src/components/publication/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications
@@ -94,7 +93,6 @@ functions:
                   cors: true
     updateStatus:
         handler: src/components/publication/routes.updateStatus
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/status/{status}
@@ -102,7 +100,6 @@ functions:
                   cors: true
     updatePublication:
         handler: src/components/publication/routes.update
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
@@ -110,7 +107,6 @@ functions:
                   cors: true
     deletePublication:
         handler: src/components/publication/routes.deletePublication
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
@@ -119,7 +115,6 @@ functions:
     # Users
     getUsers:
         handler: src/components/user/routes.getAll
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/users
@@ -127,7 +122,6 @@ functions:
                   cors: true
     getUser:
         handler: src/components/user/routes.get
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/users/{id}
@@ -136,7 +130,6 @@ functions:
     # Auth
     authorization:
         handler: src/components/authorization/routes.authorize
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/authorization
@@ -144,7 +137,6 @@ functions:
                   cors: true
     getUserPublications:
         handler: src/components/user/routes.getPublications
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/users/{id}/publications
@@ -153,7 +145,6 @@ functions:
     # Links
     createLink:
         handler: src/components/link/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/links
@@ -161,7 +152,6 @@ functions:
                   cors: true
     deleteLink:
         handler: src/components/link/routes.deleteLink
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/links/{id}
@@ -170,7 +160,6 @@ functions:
     # CoAuthors
     createCoAuthor:
         handler: src/components/coauthor/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
@@ -178,7 +167,6 @@ functions:
                   cors: true
     deleteCoAuthor:
         handler: src/components/coauthor/routes.remove
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
@@ -186,7 +174,6 @@ functions:
                   cors: true
     linkCoAuthor:
         handler: src/components/coauthor/routes.link
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
@@ -194,7 +181,6 @@ functions:
                   cors: true
     updateCoAuthor:
         handler: src/components/coauthor/routes.update
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
@@ -203,7 +189,6 @@ functions:
     # Ratings
     createRatings:
         handler: src/components/rating/routes.upsert
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/ratings
@@ -211,7 +196,6 @@ functions:
                   cors: true
     getRatings:
         handler: src/components/rating/routes.get
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/ratings
@@ -220,7 +204,6 @@ functions:
     # Flags
     createFlag:
         handler: src/components/flag/routes.createFlag
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/flag
@@ -228,7 +211,6 @@ functions:
                   cors: true
     createFlagComment:
         handler: src/components/flag/routes.createFlagComment
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/{id}/comment
@@ -236,7 +218,6 @@ functions:
                   cors: true
     resolveFlag:
         handler: src/components/flag/routes.resolveFlag
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/{id}/resolve
@@ -245,7 +226,6 @@ functions:
     # Images
     createImage:
         handler: src/components/image/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/images
@@ -253,7 +233,6 @@ functions:
                   cors: true
     deleteImage:
         handler: src/components/image/routes.destroy
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/images/{id}
@@ -261,7 +240,6 @@ functions:
                   cors: true
     getAllImages:
         handler: src/components/image/routes.getAll
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/images
@@ -270,7 +248,6 @@ functions:
     # Bookmarks
     createBookmark:
         handler: src/components/bookmark/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
@@ -278,7 +255,6 @@ functions:
                   cors: true
     removeBookmark:
         handler: src/components/bookmark/routes.remove
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
@@ -286,7 +262,6 @@ functions:
                   cors: true
     getBookmark:
         handler: src/components/bookmark/routes.get
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
@@ -294,7 +269,6 @@ functions:
                   cors: true
     getAllBookmark:
         handler: src/components/bookmark/routes.getAll
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/bookmarks

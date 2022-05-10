@@ -214,7 +214,7 @@
     "method": "POST",
     "sortNum": 110000,
     "created": "2022-05-10T10:32:08.802Z",
-    "modified": "2022-05-10T10:54:29.541Z",
+    "modified": "2022-05-10T11:34:56.070Z",
     "headers": [],
     "params": [
       {
@@ -225,7 +225,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"comment\": \"Innappropriate\",\n    \"category\": \"INAPPROPRIATE\"\n}",
+      "raw": "{\n    \"comment\": \"My coment here\",\n    \"category\": \"INAPPROPRIATE\"\n}",
       "form": []
     },
     "tests": []
@@ -307,23 +307,44 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "createFlagComment",
-    "url": "",
-    "method": "GET",
+    "url": "{{host}}/{{version}}/flag/cl302t8an0037v06q832nu048/comment?apiKey=000000001",
+    "method": "POST",
     "sortNum": 160000,
     "created": "2022-05-10T10:49:50.875Z",
-    "modified": "2022-05-10T10:49:50.875Z",
-    "headers": []
+    "modified": "2022-05-10T11:43:36.003Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000001",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"comment\": \"Yosddwdwdwoo\"\n}",
+      "form": []
+    },
+    "tests": []
   },
   {
     "_id": "d80c8111-8329-476a-b056-2bac2a9debd3",
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "resolveFlag",
-    "url": "",
-    "method": "GET",
+    "url": "{{host}}/{{version}}/flag/cl302t8an0037v06q832nu048/resolve?apiKey=000000001",
+    "method": "POST",
     "sortNum": 170000,
     "created": "2022-05-10T10:50:00.707Z",
-    "modified": "2022-05-10T10:50:00.707Z",
-    "headers": []
+    "modified": "2022-05-10T11:44:57.314Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000001",
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]
