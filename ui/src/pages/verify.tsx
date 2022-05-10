@@ -115,7 +115,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                         </HeadlessUI.Transition>
                         <HeadlessUI.Transition
                             show={showCode}
-                            enter="delay-500 fade duration-500"
+                            enter="delay-100 fade duration-500"
                             enterFrom="opacity-0"
                             enterTo="opacity-100"
                             leave="fade duration-60"
