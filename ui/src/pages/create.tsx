@@ -63,18 +63,20 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 props.token
             );
 
-            const redirect = {
-                pathname: `${Config.urls.viewPublication.path}/${response.data.id}/edit`,
-                query: {}
-            };
-
             if (props.publicationForID) {
-                redirect.query = {
-                    for: props.publicationForID
-                };
+                await api.post(
+                    '/links',
+                    {
+                        to: props.publicationForID,
+                        from: response.data.id
+                    },
+                    props.token
+                );
             }
 
-            router.push(redirect);
+            router.push({
+                pathname: `${Config.urls.viewPublication.path}/${response.data.id}/edit`
+            });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
@@ -143,13 +145,20 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             name="publicationType"
                             value={publicationType}
                             onChange={(e) => setPublicationType(e.target.value as Types.PublicationType)}
+                            disabled={!!props.publicationType}
                             className="my-4 block w-fit rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                         >
-                            {Config.values.publicationTypes.map((type) => (
-                                <option key={type} value={type}>
-                                    {Helpers.formatPublicationType(type)}
+                            {props.publicationType ? (
+                                <option key={props.publicationType} value={props.publicationType}>
+                                    {Helpers.formatPublicationType(props.publicationType)}
                                 </option>
-                            ))}
+                            ) : (
+                                Config.values.publicationTypes.map((type) => (
+                                    <option key={type} value={type}>
+                                        {Helpers.formatPublicationType(type)}
+                                    </option>
+                                ))
+                            )}
                         </select>
                         <SupportText>
                             {Config.values.octopusInformation.publications[publicationType].content}

@@ -8,6 +8,7 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
+import * as Mammoth from 'mammoth';
 import * as SolidIcon from '@heroicons/react/solid';
 import * as HeadlessUi from '@headlessui/react';
 import * as FAIcons from 'react-icons/fa';
@@ -34,6 +35,8 @@ interface MenuBarProps {
     editor: tiptap.Editor;
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    importModalVisible: boolean;
+    setImportModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MenuBar: React.FC<MenuBarProps> = (props) => {
@@ -85,6 +88,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     const [linkModalVisible, setLinkModalVisible] = React.useState(false);
     const [imageModalVisible, setImageModalVisible] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState('');
+    const importDocumentInput = React.useRef(null);
     const [image, setImage] = React.useState<Interfaces.TextEditorImage>({
         name: '',
         alt: '',
@@ -175,6 +179,62 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             width: '',
             libraryUrl: null
         });
+    };
+
+    // Array buffer helper
+    function readFileInputEventAsArrayBuffer(file: any, callback: any) {
+        const reader = new FileReader();
+
+        reader.onload = function (loadEvent) {
+            var arrayBuffer = loadEvent.target?.result;
+            callback(arrayBuffer);
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    // For document import
+    const handleImportDocument = async (e: React.FormEvent, replace: boolean = false) => {
+        e.preventDefault();
+
+        const fileList: React.RefObject<any> = importDocumentInput;
+
+        if (fileList.current?.files) {
+            readFileInputEventAsArrayBuffer(fileList.current?.files[0], async (arrayBuffer: any) => {
+                try {
+                    const result = await Mammoth.convertToHtml(
+                        { arrayBuffer: arrayBuffer },
+                        {
+                            convertImage: Mammoth.images.imgElement((image) =>
+                                image.read('base64').then(async (imageBuffer) => {
+                                    const syncFile = await api.post<{ id: string; name: string }>(
+                                        '/images',
+                                        {
+                                            name: '',
+                                            image: 'data:' + image.contentType + ';base64,' + imageBuffer
+                                        },
+                                        user?.token
+                                    );
+
+                                    props.setImportModalVisible(false);
+
+                                    return {
+                                        src: `${Config.urls.mediaBucket}/${syncFile.data.id}`
+                                    };
+                                })
+                            )
+                        }
+                    );
+                    if (replace) {
+                        props.editor.commands.setContent(result.value);
+                    } else {
+                        props.editor.commands.insertContent(result.value);
+                    }
+                } catch (err) {
+                    setError('Unable to import .docx file. Please re-save your document and try again.');
+                }
+            });
+        }
     };
 
     React.useEffect(() => {
@@ -529,6 +589,53 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
+
+                {/* Import document modal */}
+                <HeadlessUi.Dialog
+                    open={props.importModalVisible}
+                    onClose={() => props.setImportModalVisible(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
+                        <HeadlessUi.Dialog.Title className="sr-only">
+                            Import a Word document (.docx only)
+                        </HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                            <label htmlFor="document-import">
+                                <input
+                                    name="document-import"
+                                    ref={importDocumentInput}
+                                    type="file"
+                                    aria-label="Choose a Word document"
+                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                />
+                                <span className="sr-only">Choose a Word document</span>
+                            </label>
+                            <div className="mt-6 flex justify-between space-x-4">
+                                <button
+                                    type="submit"
+                                    name="insert"
+                                    onClick={(e) => handleImportDocument(e, false)}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Insert
+                                </button>
+                                <button
+                                    type="submit"
+                                    name="replace"
+                                    onClick={(e) => handleImportDocument(e, true)}
+                                    disabled={props.editor.isEmpty}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Replace existing
+                                </button>
+                            </div>
+                        </HeadlessUi.Dialog.Description>
+                    </div>
+                </HeadlessUi.Dialog>
             </>
         )
     );
@@ -543,6 +650,7 @@ interface TextEditorProps {
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
     const [loading, setLoading] = React.useState(true);
+    const [importModalVisible, setImportModalVisible] = React.useState(false);
 
     const textEditor = tiptap.useEditor({
         extensions: [
@@ -580,10 +688,32 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
     }, [textEditor]);
 
     return textEditor ? (
-        <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
-            <MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
-            <tiptap.EditorContent editor={textEditor} />
-        </div>
+        <>
+            <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                Your publication can be added via the main text editor, or imported via a Word document (.docx). Once
+                imported, your publication can be further edited in the text field.
+            </span>
+            <button
+                onClick={() => {
+                    setImportModalVisible(true);
+                }}
+                className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
+            >
+                <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
+                <span>Import from Microsoft Word (.docx)</span>
+            </button>
+
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+                <MenuBar
+                    editor={textEditor}
+                    loading={loading}
+                    setLoading={setLoading}
+                    importModalVisible={importModalVisible}
+                    setImportModalVisible={setImportModalVisible}
+                />
+                <tiptap.EditorContent editor={textEditor} />
+            </div>
+        </>
     ) : null;
 };
 

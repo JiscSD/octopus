@@ -1,6 +1,6 @@
 let host: string;
 let mediaBucket: string;
-const bucketName = 'science-octopus-publishing-images-local';
+const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_ENV}`;
 let orcidAppiID: string;
 
 switch (process.env.NEXT_PUBLIC_ENV) {
@@ -11,13 +11,13 @@ switch (process.env.NEXT_PUBLIC_ENV) {
         break;
     case 'prod':
         host = 'https://octopus.ac';
-        mediaBucket = `TODO/${bucketName}`;
+        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = '';
         break;
     default:
         host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
-        mediaBucket = `TODO/${bucketName}`;
-        orcidAppiID = '';
+        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
+        orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
 }
 
 export const base = {

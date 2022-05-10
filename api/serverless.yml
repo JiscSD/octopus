@@ -32,6 +32,13 @@ provider:
             Project: Octopus
             Owner: 0 - 3 Years Innovation Team
             Name: Octopus API
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+            - 'lambda:InvokeFunction'
+            - 'ses:SendEmail'
+            - 'ses:SendRawEmail'
+        Resource: '*'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
