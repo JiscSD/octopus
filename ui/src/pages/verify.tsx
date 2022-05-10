@@ -32,7 +32,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             dismiss: true,
             title: 'Email sent',
             icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-            message: 'Please check your email for your verification code.'
+            message: 'Please check your inbox for your verification code.'
         });
     };
 
