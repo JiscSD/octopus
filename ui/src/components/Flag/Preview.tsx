@@ -1,12 +1,12 @@
+import * as Interfaces from '@interfaces';
+import React from 'react';
 
-import * as Interfaces from '@interfaces'
+type Props = {
+    flag: Interfaces.Flag;
+};
 
-type Props {
-    flag: 
-}
-
-const Preview = () => {
-    return <div>hello</div>;
+const Preview: React.FC<Props> = (props) => {
+    return <div>{props.flag.category}</div>;
 };
 
 export default Preview;
