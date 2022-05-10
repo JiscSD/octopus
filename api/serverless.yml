@@ -219,7 +219,7 @@ functions:
                   cors: true
     # Flags
     createFlag:
-        handler: src/components/publication/routes.createFlag
+        handler: src/components/flag/routes.createFlag
         warmup: true
         events:
             - http:
@@ -227,7 +227,7 @@ functions:
                   method: post
                   cors: true
     createFlagComment:
-        handler: src/components/publication/routes.createFlagComment
+        handler: src/components/flag/routes.createFlagComment
         warmup: true
         events:
             - http:
@@ -235,7 +235,7 @@ functions:
                   method: post
                   cors: true
     resolveFlag:
-        handler: src/components/publication/routes.resolveFlag
+        handler: src/components/flag/routes.resolveFlag
         warmup: true
         events:
             - http:
