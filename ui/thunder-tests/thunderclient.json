@@ -1,0 +1,305 @@
+[
+  {
+    "_id": "8ed4d968-ca4b-4dcc-a7dc-3a0b4cff49e3",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Publication",
+    "url": "{{host}}/{{version}}/publications/cl2j6h5cq0001k7qrp2hj130g?apiKey=1e95c446-aac4-49af-b3ed-82a79e0c9181",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-05-10T10:32:08.791Z",
+    "modified": "2022-05-10T10:33:21.399Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "1e95c446-aac4-49af-b3ed-82a79e0c9181",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "0ff790e9-2fbe-43a7-b802-e2b20ee27080",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Publications",
+    "url": "{{host}}/{{version}}/publications?type=DATA",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-05-10T10:32:08.793Z",
+    "modified": "2022-05-10T10:32:08.793Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "type",
+        "value": "DATA"
+      },
+      {
+        "name": "limit",
+        "value": "10",
+        "isDisabled": true
+      },
+      {
+        "name": "orderBy",
+        "value": "publishedDate",
+        "isDisabled": true
+      },
+      {
+        "name": "orderDirection",
+        "value": "asc",
+        "isDisabled": true
+      },
+      {
+        "name": "search",
+        "value": "covid",
+        "isDisabled": true
+      },
+      {
+        "name": "exclude",
+        "value": "publication-user-1-problem-1-live",
+        "isDisabled": true
+      },
+      {
+        "name": "language",
+        "value": "eu",
+        "isDisabled": true
+      }
+    ]
+  },
+  {
+    "_id": "78edebcd-f5d6-49eb-b115-9e0c5be23221",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Create Publication",
+    "url": "{{host}}/{{version}}/publications?apiKey=000000010",
+    "method": "POST",
+    "sortNum": 30000,
+    "created": "2022-05-10T10:32:08.794Z",
+    "modified": "2022-05-10T10:33:54.136Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000010",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"title\": \"test\",\n    \"type\": \"PROBLEM\",\n    \"language\": \"a\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "c7db69b8-d382-47f5-b740-3765d375e0c1",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Update Publication",
+    "url": "{{host}}/{{version}}/publications/publication-user-1-analysis-2-draft?apiKey=000000001",
+    "method": "PATCH",
+    "sortNum": 40000,
+    "created": "2022-05-10T10:32:08.795Z",
+    "modified": "2022-05-10T10:32:08.795Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000001"
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"language\": \"cu\"\n}"
+    }
+  },
+  {
+    "_id": "06b6e945-6453-4a9b-b222-58d4ac81037f",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Update Publication Status",
+    "url": "{{host}}/{{version}}/publications/publication-user-6-hypothesis-1-draft/status/LIVE?apiKey=000000006",
+    "method": "PUT",
+    "sortNum": 50000,
+    "created": "2022-05-10T10:32:08.796Z",
+    "modified": "2022-05-10T10:34:02.212Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000006",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "6b9b5913-36e9-41e0-8cb5-6acb461a1784",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "User publications",
+    "url": "{{host}}/{{version}}/users/test-user-4-juan-garcia/publications",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2022-05-10T10:32:08.797Z",
+    "modified": "2022-05-10T10:32:08.797Z",
+    "headers": []
+  },
+  {
+    "_id": "c88f6803-64ff-4f52-bdac-aae1b910ca26",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "25e2a744-1a8e-415c-89d8-1c894cd38c42",
+    "name": "Users",
+    "url": "{{host}}/{{version}}/users",
+    "method": "GET",
+    "sortNum": 70000,
+    "created": "2022-05-10T10:32:08.798Z",
+    "modified": "2022-05-10T10:34:08.468Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "c77febe5-502d-49e4-acb8-8c3f5b67b2de",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "25e2a744-1a8e-415c-89d8-1c894cd38c42",
+    "name": "User",
+    "url": "{{host}}/{{version}}/users/test-user-4-juan-garcia",
+    "method": "GET",
+    "sortNum": 80000,
+    "created": "2022-05-10T10:32:08.799Z",
+    "modified": "2022-05-10T10:32:08.799Z",
+    "headers": []
+  },
+  {
+    "_id": "3aba371c-acf3-4bed-9fc0-021743ba1cdc",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "546d8c2d-026c-44ba-9a5c-f2aa5682770e",
+    "name": "Healthcheck",
+    "url": "{{host}}/{{version}}/healthcheck",
+    "method": "GET",
+    "sortNum": 90000,
+    "created": "2022-05-10T10:32:08.800Z",
+    "modified": "2022-05-10T10:34:17.243Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "655de8e6-43ca-4960-8c90-fd298acc355f",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "81ff98e1-6af1-426e-832c-a5adede9d2f3",
+    "name": "Create Link",
+    "url": "{{host}}/{{version}}/links",
+    "method": "POST",
+    "sortNum": 100000,
+    "created": "2022-05-10T10:32:08.801Z",
+    "modified": "2022-05-10T10:34:21.986Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"to\": \"publication-user-2-problem-1-live\",\n    \"from\": \"publication-user-2-hypothesis-2-draft\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "4506fbba-6766-48d5-99e2-7b619b305e78",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
+    "name": "Create Flag",
+    "url": "{{host}}/{{version}}/publications/publication-data-live/flag?apiKey=123456789",
+    "method": "POST",
+    "sortNum": 110000,
+    "created": "2022-05-10T10:32:08.802Z",
+    "modified": "2022-05-10T10:34:26.604Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "123456789",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"comments\": \"Innappropriate\",\n    \"category\": \"INAPPROPRIATE\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "18a448b8-89fb-48e0-a2ec-a2f121c7f818",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "063f9d43-6348-40a3-85a4-4a930a2caed6",
+    "name": "ORCID Login Attempt",
+    "url": "{{host}}/{{version}}/authorization",
+    "method": "POST",
+    "sortNum": 120000,
+    "created": "2022-05-10T10:32:08.803Z",
+    "modified": "2022-05-10T10:32:08.803Z",
+    "headers": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"code\": \"YUopnZ\"\n}"
+    }
+  },
+  {
+    "_id": "70daaafc-853c-408f-baa1-4a135e4d942a",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ea04a462-ec97-40ef-8de0-20c3c167edca",
+    "name": "Create rating",
+    "url": "{{host}}/{{version}}/publications/publication-user-1-problem-1-live/ratings?apiKey=000000010",
+    "method": "POST",
+    "sortNum": 140000,
+    "created": "2022-05-10T10:32:08.806Z",
+    "modified": "2022-05-10T10:34:37.316Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "apiKey",
+        "value": "000000010",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"type\": \"PROBLEM_WELL_DEFINED\",\n    \"value\": 3\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "7a69850b-1c59-4adf-94bf-5b7c42fd31d5",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ea04a462-ec97-40ef-8de0-20c3c167edca",
+    "name": "Get rating",
+    "url": "{{host}}/{{version}}/publications/publication-user-2-protocol-1-live/ratings?user=test-user-10-fatima-akter",
+    "method": "GET",
+    "sortNum": 150000,
+    "created": "2022-05-10T10:32:08.807Z",
+    "modified": "2022-05-10T10:34:40.462Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "user",
+        "value": "test-user-10-fatima-akter",
+        "isPath": false
+      },
+      {
+        "name": "any",
+        "value": "aasas",
+        "isDisabled": true,
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"type\": \"PROTOCOL_ORIGINAL\",\n    \"value\": 5\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]

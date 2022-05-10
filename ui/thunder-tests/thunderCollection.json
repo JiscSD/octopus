@@ -1,0 +1,68 @@
+[
+  {
+    "_id": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "colName": "Octopus",
+    "created": "2022-05-10T10:32:08.781Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "88c0f928-30e9-470d-a972-cde912ec77c0",
+        "name": "Publication",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.787Z",
+        "sortNum": 10000
+      },
+      {
+        "_id": "25e2a744-1a8e-415c-89d8-1c894cd38c42",
+        "name": "User",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.790Z",
+        "sortNum": 20000
+      },
+      {
+        "_id": "546d8c2d-026c-44ba-9a5c-f2aa5682770e",
+        "name": "App",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.791Z",
+        "sortNum": 30000
+      },
+      {
+        "_id": "81ff98e1-6af1-426e-832c-a5adede9d2f3",
+        "name": "Link",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.792Z",
+        "sortNum": 40000
+      },
+      {
+        "_id": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
+        "name": "Flag",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.793Z",
+        "sortNum": 50000
+      },
+      {
+        "_id": "063f9d43-6348-40a3-85a4-4a930a2caed6",
+        "name": "Authorization",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.794Z",
+        "sortNum": 60000
+      },
+      {
+        "_id": "ea04a462-ec97-40ef-8de0-20c3c167edca",
+        "name": "Ratings",
+        "containerId": "",
+        "created": "2022-05-10T10:32:08.795Z",
+        "sortNum": 70000
+      }
+    ],
+    "settings": {
+      "headers": [],
+      "auth": {
+        "type": "bearer",
+        "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6bnVsbCwiaWQiOiJjbDFveGZpYzMwMDAwODJxcjQzMzV2cmdlIiwiY3JlYXRlZEF0IjoiMjAyMi0wNC0wN1QxMTozOToyNy41MDdaIiwiZmlyc3ROYW1lIjoiQXNobGV5IEpvaG4iLCJsYXN0TmFtZSI6IlJlZG1hbiIsImxvY2tlZCI6ZmFsc2UsIm9yY2lkIjoiMDAwMC0wMDAyLTQ5NzAtODkyOSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNjQ5MzMxNTY3LCJleHAiOjE2NDkzNjAzNjd9.1SNpfcC9n7r6LEza8b2E1Scw_mw5n4VgWaUpFlDwjGU"
+      },
+      "tests": [],
+      "envId": "350cf840-8b9b-4166-bd33-2d553e26d2d7"
+    }
+  }
+]
