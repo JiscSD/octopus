@@ -25,11 +25,6 @@ const Validate: Types.NextPage = (): React.ReactElement => {
     const [emailAddress, setEmailAddress] = React.useState('');
     const [showCode, setShowCode] = React.useState(false);
 
-    const submitEmail = () => {
-        setShowCode(true);
-        requestCode();
-    };
-
     const requestCode = () => {
         setShowCode(true);
         setToast({
@@ -112,7 +107,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                 </span>
                             </label>
                             <Components.Button
-                                onClick={submitEmail}
+                                onClick={requestCode}
                                 disabled={!Boolean(emailAddress)}
                                 title="Send code"
                                 className="justify-self-end px-0"
