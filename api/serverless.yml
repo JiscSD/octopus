@@ -33,12 +33,12 @@ provider:
             Owner: 0 - 3 Years Innovation Team
             Name: Octopus API
     iamRoleStatements:
-      - Effect: 'Allow'
-        Action:
-            - 'lambda:InvokeFunction'
-            - 'ses:SendEmail'
-            - 'ses:SendRawEmail'
-        Resource: '*'
+        - Effect: 'Allow'
+          Action:
+              - 'lambda:InvokeFunction'
+              - 'ses:SendEmail'
+              - 'ses:SendRawEmail'
+          Resource: '*'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
@@ -56,6 +56,7 @@ custom:
     serverless-offline:
         useChildProcesses: true
 functions:
+    # App
     healthcheck:
         handler: src/components/application/routes.healthcheck
         warmup: true
@@ -66,6 +67,7 @@ functions:
                   cors: true
     seedOpenSearch:
         handler: src/lib/testUtils.openSearchSeed
+    # Publications
     getPublications:
         handler: src/components/publication/routes.getAll
         warmup: true
@@ -88,14 +90,6 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications
-                  method: post
-                  cors: true
-    createLink:
-        handler: src/components/link/routes.create
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/links
                   method: post
                   cors: true
     updateStatus:
@@ -122,6 +116,7 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}
                   method: delete
                   cors: true
+    # Users
     getUsers:
         handler: src/components/user/routes.getAll
         warmup: true
@@ -138,14 +133,6 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: get
                   cors: true
-    createFlag:
-        handler: src/components/publication/routes.createFlag
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/flag
-                  method: post
-                  cors: true
     authorization:
         handler: src/components/authorization/routes.authorize
         warmup: true
@@ -161,6 +148,15 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/users/{id}/publications
                   method: get
+                  cors: true
+    # Links
+    createLink:
+        handler: src/components/link/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/links
+                  method: post
                   cors: true
     deleteLink:
         handler: src/components/link/routes.deleteLink
@@ -220,6 +216,15 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/ratings
                   method: get
                   cors: true
+    # Flags
+    createFlag:
+        handler: src/components/publication/routes.createFlag
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/flag
+                  method: post
+                  cors: true
     createFlagComment:
         handler: src/components/publication/routes.createFlagComment
         warmup: true
@@ -236,6 +241,7 @@ functions:
                   path: ${self:custom.versions.v1}/flag/{id}/resolve
                   method: post
                   cors: true
+    # Images
     createImage:
         handler: src/components/image/routes.create
         warmup: true
@@ -260,6 +266,7 @@ functions:
                   path: ${self:custom.versions.v1}/images
                   method: get
                   cors: true
+    # Bookmarks
     createBookmark:
         handler: src/components/bookmark/routes.create
         warmup: true
