@@ -153,7 +153,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 positiveButtonText="Yes, this is ready to publish"
                 cancelButtonText="No, changes are needed"
                 title="Do you approve this publication?"
-            ></Components.Modal>
+            />
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
                     {publication.currentStatus === 'DRAFT' && (

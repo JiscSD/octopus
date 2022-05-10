@@ -307,22 +307,22 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
     "name": "createFlagComment",
-    "url": "{{host}}/{{version}}/flag/cl302t8an0037v06q832nu048/comment?apiKey=000000001",
+    "url": "{{host}}/{{version}}/flag/cl306s65o0037de6q7sazpvh8/comment?apiKey=000000005",
     "method": "POST",
     "sortNum": 160000,
     "created": "2022-05-10T10:49:50.875Z",
-    "modified": "2022-05-10T11:43:36.003Z",
+    "modified": "2022-05-10T13:33:29.092Z",
     "headers": [],
     "params": [
       {
         "name": "apiKey",
-        "value": "000000001",
+        "value": "000000005",
         "isPath": false
       }
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"comment\": \"Yosddwdwdwoo\"\n}",
+      "raw": "{\n    \"comment\": \"ASH ASH\"\n}",
       "form": []
     },
     "tests": []
@@ -345,6 +345,34 @@
         "isPath": false
       }
     ],
+    "tests": []
+  },
+  {
+    "_id": "a2c1687b-cf6e-460f-a4dc-7f798aeadc8f",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
+    "name": "getPublicationFlags",
+    "url": "{{host}}/{{version}}/flag/publication/publication-user-3-peer-review-4-live",
+    "method": "GET",
+    "sortNum": 180000,
+    "created": "2022-05-10T13:22:13.827Z",
+    "modified": "2022-05-10T13:26:51.393Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "54bff48d-ca3c-4259-9f07-1c26e02f6751",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "ee05612c-d1a4-4a30-837a-1aac6ca25dcb",
+    "name": "getUserFlags",
+    "url": "{{host}}/{{version}}/flag/user/test-user-1b-victoria-allen",
+    "method": "GET",
+    "sortNum": 190000,
+    "created": "2022-05-10T13:29:52.854Z",
+    "modified": "2022-05-10T13:30:19.788Z",
+    "headers": [],
+    "params": [],
     "tests": []
   }
 ]

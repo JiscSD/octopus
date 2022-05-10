@@ -447,3 +447,11 @@ export interface EmailSendOptions {
     html: string;
     text: string;
 }
+
+export interface GetFlagsByUserID {
+    id: string;
+}
+
+export interface GetFlagsByPublicationID {
+    id: string;
+}

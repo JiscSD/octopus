@@ -223,6 +223,20 @@ functions:
                   path: ${self:custom.versions.v1}/flag/{id}/resolve
                   method: post
                   cors: true
+    getPublicationFlags:
+        handler: src/components/flag/routes.getPublicationFlags
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/flag/publication/{id}
+                  method: get
+                  cors: true
+    getUserFlags:
+        handler: src/components/flag/routes.getUserFlags
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/flag/user/{id}
+                  method: get
+                  cors: true
     # Images
     createImage:
         handler: src/components/image/routes.create
