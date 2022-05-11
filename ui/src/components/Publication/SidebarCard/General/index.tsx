@@ -15,6 +15,8 @@ const General: React.FC<Props> = (props): React.ReactElement => {
         (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
     ).length;
 
+    const activeRedFlagCount = props.publication.publicationFlags.filter((flag) => !flag.resolved).length;
+
     return (
         <>
             <div className="flex">
@@ -89,6 +91,13 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                             ? 'Write a review'
                             : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
                     </Components.Link>
+                </div>
+            )}
+            {!!activeRedFlagCount && (
+                <div className="flex">
+                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        Active red flags: {activeRedFlagCount}
+                    </span>
                 </div>
             )}
         </>

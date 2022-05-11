@@ -16,16 +16,18 @@ export type GlobalsStoreType = {
 };
 
 export type UserType = {
-    createdAt: string;
-    email: string | null;
-    exp: number;
-    firstName: string;
-    iat: number;
     id: string;
+    firstName: string;
     lastName: string;
-    locked: boolean;
-    orcid: string;
+    email: string | null;
     role: string;
+    createdAt: string;
+    updatedAt: string;
+    orcid: string;
+
+    exp: number;
+    iat: number;
+    locked: boolean;
     token: string;
 };
 

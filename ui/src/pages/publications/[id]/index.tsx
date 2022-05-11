@@ -1,16 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import jwt from 'jsonwebtoken';
+
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import * as Stores from '@stores';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -91,6 +91,8 @@ type Props = {
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
+    // TODO: This i causing a bug when switching between publications.
+    // We either only use props publication, or inform swr when mutation occur.
     const [publication, setPublication] = React.useState(props.publication);
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
@@ -180,6 +182,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             }
         }
     };
+
+    // TODO This is not reactive as it replies on props, so switching page is fine, but when mutations occur, then no.
+    //      This need to rely on some state which can revalidated, so when a flag is created it is instantly shown,
+    //      not after refresh.
+    const activeFlags = React.useMemo(
+        () => props.publication.publicationFlags.filter((i) => !i.resolved),
+        [props.publication]
+    );
+
+    // TODO Same as above.
+    const inactiveFlags = React.useMemo(
+        () => publication.publicationFlags.filter((i) => !!i.resolved),
+        [props.publication]
+    );
 
     return (
         <>
@@ -453,24 +469,36 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/* Red flags */}
                     {showRedFlags && (
                         <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
-                            <>
+                            <div className="mt-6 space-y-8">
                                 <div>
-                                    <h2>not resovled</h2>
-                                    {publication.publicationFlags
-                                        .filter((i) => !i.resolved)
-                                        .map((flag) => (
-                                            <p key={flag.id}>{flag.category}</p>
+                                    <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                        Active
+                                    </h2>
+                                    <div className="space-y-4">
+                                        {activeFlags.map((flag) => (
+                                            <Components.FlagPreview
+                                                key={flag.id}
+                                                publicationId={props.publication.id}
+                                                flag={flag}
+                                            />
                                         ))}
+                                    </div>
                                 </div>
                                 <div>
-                                    <h2>resovled</h2>
-                                    {publication.publicationFlags
-                                        .filter((i) => !!i.resolved)
-                                        .map((flag) => (
-                                            <p key={flag.id}>{flag.category}</p>
+                                    <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                        Resovled
+                                    </h2>
+                                    <div className="sapce-y-4">
+                                        {inactiveFlags.map((flag) => (
+                                            <Components.FlagPreview
+                                                key={flag.id}
+                                                publicationId={props.publication.id}
+                                                flag={flag}
+                                            />
                                         ))}
+                                    </div>
                                 </div>
-                            </>
+                            </div>
                         </Components.PublicationContentSection>
                     )}
 

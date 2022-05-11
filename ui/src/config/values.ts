@@ -1098,7 +1098,33 @@ export const octopusInformation: Interfaces.OctopusInformation = {
             code: 'zu',
             name: 'Zulu'
         }
-    ]
+    ],
+    redFlagReasons: {
+        PLAGIARISM: {
+            value: 'PLAGIARISM',
+            nicename: 'Plagiarism'
+        },
+        ETHICAL_ISSUES: {
+            value: 'ETHICAL_ISSUES',
+            nicename: 'Ethical issues'
+        },
+        MISREPRESENTATION: {
+            value: 'MISREPRESENTATION',
+            nicename: 'Misrepresentation'
+        },
+        UNDECLARED_IMAGE_MANIPULATION: {
+            value: 'UNDECLARED_IMAGE_MANIPULATION',
+            nicename: 'Undeclared image manipulation'
+        },
+        COPYRIGHT: {
+            value: 'COPYRIGHT',
+            nicename: 'Copyright'
+        },
+        INAPPROPRIATE: {
+            value: 'INAPPROPRIATE',
+            nicename: 'Inappropriate'
+        }
+    }
 };
 
 export const HTMLStyles = `

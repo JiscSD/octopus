@@ -272,6 +272,12 @@ export interface OctopusInformation {
         code: Types.Languages;
         name: string;
     }[];
+    redFlagReasons: {
+        [key in Types.RedFlagTypes]: {
+            value: Types.RedFlagTypes;
+            nicename: string;
+        };
+    };
 }
 
 export interface ToastState {
