@@ -10,6 +10,7 @@ import * as Stores from '@stores';
 import * as SolidIcons from '@heroicons/react/solid';
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
@@ -34,6 +35,20 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
             message: 'Please check your inbox for your verification code.'
         });
+            try {
+                const response = await api.post<{ email: string }>(
+                    Config.endpoints.users,
+                    {
+                        title,
+                        type: publicationType
+                    }
+                );
+            } catch (err) {
+                const { message } = err as Interfaces.JSONResponseError;
+                setError(message);
+            }
+        };
+
     };
 
     const resetForm = () => {

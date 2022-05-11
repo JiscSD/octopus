@@ -164,6 +164,14 @@ export interface GetUserParameters {
     id: string;
 }
 
+export interface RequestVerificationCodeParameters {
+    email: string;
+}
+
+export interface ConfirmVerificationCodeParameters {
+    code: string;
+}
+
 /**
  * @description Flags
  */
