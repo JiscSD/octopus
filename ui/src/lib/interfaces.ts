@@ -185,6 +185,38 @@ export interface LicenceTypeShape {
     link: string;
 }
 
+export interface BookmarkedPublicationsData {
+    id: string;
+    publicationId: string;
+    userId: string;
+    publication: BookmarkedPublication;
+}
+
+export interface BookmarkedPublication {
+    id: string;
+    title: string;
+    publicationId: string;
+    createdAt: string;
+    currentStatus: string;
+    url_slug: string;
+    description: string;
+    type: Types.PublicationType;
+    publishedDate: string;
+    coAuthors: Array<{
+        user: {
+            firstName: string;
+            lastName: string;
+            id: string;
+        };
+    }>;
+    doi: string;
+    updatedAt: string;
+    user: {
+        firstName: string;
+        lastName: string;
+    };
+}
+
 export interface Rating {
     aggregate: RatingEntry[];
     overall: {

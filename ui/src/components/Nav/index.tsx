@@ -37,6 +37,10 @@ const Nav: React.FC = (): React.ReactElement => {
                             label: 'My publications',
                             value: Config.urls.account.path
                         },
+                        {
+                            label: 'My bookmarks',
+                            value: Config.urls.myBookmarks.path
+                        },
                         <Components.ORCIDLogOutButton key={user.id} />
                     ]
                 }
