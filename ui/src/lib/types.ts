@@ -72,6 +72,8 @@ export type PublicationCreationStoreType = {
     reset: () => void;
     coAuthors: Interfaces.CoAuthor[];
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
+    funders: Interfaces.Funder[];
+    updateFunders: (funders: Interfaces.Funder[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

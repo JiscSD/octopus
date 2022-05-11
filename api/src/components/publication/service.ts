@@ -80,6 +80,16 @@ export const get = async (id: string) => {
                     lastName: true
                 }
             },
+            funders: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,

@@ -18,6 +18,7 @@ let store: any = (set: (params: any) => void) => ({
                 type: Config.values.octopusInformation.publications.PROBLEM.id,
                 content: '',
                 description: '',
+                funders: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
@@ -78,7 +79,11 @@ let store: any = (set: (params: any) => void) => ({
 
     // Co-authors
     coAuthors: [],
-    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors }))
+    updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors })),
+
+    // Funders
+    funders: [],
+    updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

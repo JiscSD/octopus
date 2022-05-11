@@ -49,6 +49,8 @@ export { default as PublicationCreationStepThree } from './Publication/Creation/
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationCreationStepTwo } from './Publication/Creation/StepTwo';
 export { default as PublicationCreationCoAuthor } from './Publication/Creation/CoAuthor';
+export { default as PublicationCreationFunders } from './Publication/Creation/Funders';
+
 export { default as PublicationLink } from './Publication/Link';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as PublicationSidebar } from './Publication/Sidebar';

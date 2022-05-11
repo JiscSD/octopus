@@ -74,6 +74,7 @@ export interface Publication extends CorePublication {
     conflictOfInterestText: string | null;
     ratings: Rating;
     coAuthors: CoAuthor[];
+    funders: Funder[];
 }
 
 export interface CoAuthor {
@@ -265,4 +266,13 @@ export interface APIRatingShape {
 export interface ImagePreview {
     name: string;
     base64: string;
+}
+
+export interface Funder {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror?: string;
+    id: string;
 }
