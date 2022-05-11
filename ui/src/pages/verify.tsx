@@ -26,29 +26,29 @@ const Validate: Types.NextPage = (): React.ReactElement => {
     const [emailAddress, setEmailAddress] = React.useState('');
     const [showCode, setShowCode] = React.useState(false);
 
-    const requestCode = () => {
-        setShowCode(true);
-        setToast({
-            visible: true,
-            dismiss: true,
-            title: 'Email sent',
-            icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-            message: 'Please check your inbox for your verification code.'
-        });
-            try {
-                const response = await api.post<{ email: string }>(
-                    Config.endpoints.users,
-                    {
-                        title,
-                        type: publicationType
-                    }
-                );
-            } catch (err) {
-                const { message } = err as Interfaces.JSONResponseError;
-                setError(message);
-            }
-        };
-
+    const requestCode = async () => {
+        try {
+            const response = await api.get(
+                `${Config.endpoints.verification}/${user?.id}?email=${emailAddress}`,
+                user?.token
+            );
+            setShowCode(true);
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Email sent',
+                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'Please check your inbox for your verification code.'
+            });
+        } catch (err) {
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Unable to send verification email',
+                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'Please check your email address and try again.'
+            });
+        }
     };
 
     const resetForm = () => {
