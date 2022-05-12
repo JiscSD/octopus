@@ -10,26 +10,35 @@ datasource db {
 }
 
 model User {
-    id                   String                 @id @default(cuid())
-    orcid                String                 @unique
-    firstName            String
-    lastName             String?
-    email                String?
-    role                 Role                   @default(USER)
-    locked               Boolean                @default(false)
-    apiKey               String                 @unique @default(uuid())
-    createdAt            DateTime               @default(now())
-    updatedAt            DateTime               @updatedAt
-    employment           Json[]
-    works                Json[]
-    education            Json[]
-    coAuthors            CoAuthors[]
-    Publication          Publication[]
-    PublicationFlags     PublicationFlags[]
-    PublicationRatings   PublicationRatings[]
-    flagComments         FlagComments[]
-    Images               Images[]
-    PublicationBookmarks PublicationBookmarks[]
+    id                      String                 @id @default(cuid())
+    orcid                   String                 @unique
+    firstName               String
+    lastName                String?
+    email                   String?
+    role                    Role                   @default(USER)
+    locked                  Boolean                @default(false)
+    apiKey                  String                 @unique @default(uuid())
+    createdAt               DateTime               @default(now())
+    updatedAt               DateTime               @updatedAt
+    employment              Json[]
+    works                   Json[]
+    education               Json[]
+    coAuthors               CoAuthors[]
+    Publication             Publication[]
+    PublicationFlags        PublicationFlags[]
+    PublicationRatings      PublicationRatings[]
+    flagComments            FlagComments[]
+    Images                  Images[]
+    PublicationBookmarks    PublicationBookmarks[]
+}
+
+model Verification {
+    id                      String                  @id @default(cuid())
+    orcid                   String                  @unique
+    code                    String
+    email                   String
+    createdAt               DateTime                @default(now())
+    updatedAt               DateTime                @updatedAt
 }
 
 model Images {

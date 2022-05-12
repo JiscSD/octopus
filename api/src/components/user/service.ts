@@ -36,6 +36,28 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
     return user;
 };
 
+export const updateEmail = async (orcid: string, email: string) => {
+    const user = await client.prisma.user.update({
+        select: {
+            email: true,
+            id: true,
+            createdAt: true,
+            firstName: true,
+            lastName: true,
+            locked: true,
+            orcid: true,
+            role: true
+        },
+        data: {
+            email
+        },
+        where: {
+            orcid
+        }
+    });
+    return user;
+};
+
 export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 
