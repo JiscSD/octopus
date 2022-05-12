@@ -25,14 +25,23 @@ const Validate: Types.NextPage = (): React.ReactElement => {
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [emailAddress, setEmailAddress] = React.useState('');
     const [showCode, setShowCode] = React.useState(false);
+    const [code, setCode] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
+
+    const submitEmail = () => {
+        setLoading(true);
+        requestCode();
+    };
 
     const requestCode = async () => {
         try {
-            const response = await api.get(
-                `${Config.endpoints.verification}/${user?.id}?email=${emailAddress}`,
-                user?.token
-            );
+            setCode('');
+
+            await api.get(`${Config.endpoints.verification}/${user?.orcid}?email=${emailAddress}`, user?.token);
+
             setShowCode(true);
+            setLoading(false);
+
             setToast({
                 visible: true,
                 dismiss: true,
@@ -41,6 +50,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                 message: 'Please check your inbox for your verification code.'
             });
         } catch (err) {
+            setLoading(false);
             setToast({
                 visible: true,
                 dismiss: true,
@@ -51,8 +61,28 @@ const Validate: Types.NextPage = (): React.ReactElement => {
         }
     };
 
+    const verifyCode = async () => {
+        try {
+            setLoading(true);
+
+            await api.post(`${Config.endpoints.verification}/${user?.orcid}`, { code }, user?.token);
+
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Incorrect code',
+                icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'Please try again.'
+            });
+        }
+    };
+
     const resetForm = () => {
         setShowCode(false);
+        setCode('');
     };
 
     return (
@@ -113,20 +143,26 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                 <input
                                     id="email"
                                     type="email"
-                                    className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 lg:w-1/2"
+                                    className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
                                     value={emailAddress}
                                     onChange={(e) => setEmailAddress(e.target.value)}
+                                    disabled={loading}
                                 />
                                 <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                     Please confirm your email address.
                                 </span>
                             </label>
-                            <Components.Button
-                                onClick={requestCode}
-                                disabled={!Boolean(emailAddress)}
-                                title="Send code"
-                                className="justify-self-end px-0"
-                            />
+                            <span className="flex items-center gap-2">
+                                <Components.Button
+                                    onClick={submitEmail}
+                                    disabled={!Boolean(emailAddress) || loading}
+                                    title="Send code"
+                                    className="justify-self-end px-0"
+                                />
+                                {loading && (
+                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                )}
+                            </span>
                         </HeadlessUI.Transition>
                         <HeadlessUI.Transition
                             show={showCode}
@@ -145,17 +181,26 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                 <input
                                     id="code"
                                     type="text"
-                                    className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 lg:w-1/2"
+                                    className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
                                     maxLength={7}
                                     placeholder="Enter your verification code"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
                                     autoComplete="off"
+                                    disabled={loading}
                                 />
                             </label>
-                            <Components.Button
-                                onClick={() => {}}
-                                title="Verify code"
-                                className="justify-self-end px-0"
-                            />
+                            <span className="flex items-center gap-2">
+                                <Components.Button
+                                    onClick={verifyCode}
+                                    disabled={!!!code.length || loading}
+                                    title="Verify code"
+                                    className="justify-self-end px-0"
+                                />
+                                {loading && (
+                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                )}
+                            </span>
                             <div className="mt-4 text-xs font-medium tracking-wider text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                 <div className="mb-2 text-lg text-grey-700 dark:text-grey-100">
                                     Not received your code?
