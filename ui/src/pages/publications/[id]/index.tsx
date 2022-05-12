@@ -278,6 +278,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Alert>
                     )}
+                    {!!publication.publicationFlags.filter((i) => !i.resolved).length && (
+                        <Components.Alert
+                            title="This publication has active red flags"
+                            severity="WARNING"
+                            className="mb-4 w-fit"
+                        >
+                            <button
+                                aria-label="View red flags"
+                                title="View red flags"
+                                onClick={() =>
+                                    document.getElementById('red-flags')?.scrollIntoView({ behavior: 'smooth' })
+                                }
+                                className="mt-2 block rounded border-transparent text-sm font-medium text-grey-800 underline outline-0 transition-colors duration-500 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                            >
+                                View flags
+                            </button>
+                        </Components.Alert>
+                    )}
                     <header>
                         <div className="grid w-full grid-cols-8">
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
