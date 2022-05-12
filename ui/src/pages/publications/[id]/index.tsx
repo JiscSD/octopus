@@ -470,34 +470,38 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {showRedFlags && (
                         <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
                             <div className="mt-6 space-y-8">
-                                <div>
-                                    <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
-                                        Active
-                                    </h2>
-                                    <div className="space-y-4">
-                                        {activeFlags.map((flag) => (
-                                            <Components.FlagPreview
-                                                key={flag.id}
-                                                publicationId={props.publication.id}
-                                                flag={flag}
-                                            />
-                                        ))}
+                                {!!activeFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Active
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {activeFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
-                                        Resovled
-                                    </h2>
-                                    <div className="sapce-y-4">
-                                        {inactiveFlags.map((flag) => (
-                                            <Components.FlagPreview
-                                                key={flag.id}
-                                                publicationId={props.publication.id}
-                                                flag={flag}
-                                            />
-                                        ))}
+                                )}
+                                {!!inactiveFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Resovled
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {inactiveFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </Components.PublicationContentSection>
                     )}

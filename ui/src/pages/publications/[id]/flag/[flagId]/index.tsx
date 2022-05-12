@@ -2,13 +2,16 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import jwt from 'jsonwebtoken';
-import useSWR, * as SWR from 'swr';
+import useSWR from 'swr';
 import * as Axios from 'axios';
+import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/solid';
+import * as Router from 'next/router';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -50,7 +53,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            publicationId: context.query.id,
+            flagId: context.query.flagId,
+            publication,
+            error,
             isCommentable,
             isResolvable,
             swrKey,
@@ -64,7 +69,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    publicationId: string;
+    flagId: string;
+    publication: Interfaces.Publication;
+    error: string | null;
     isCommentable: boolean;
     isResolvable: boolean;
     swrKey: string;
@@ -74,75 +81,229 @@ type Props = {
 };
 
 const FlagThread: NextPage<Props> = (props): JSX.Element => {
-    const { data, isValidating, error } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(props.swrKey, {
-        fallback: props.fallback
-    });
+    const router = Router.useRouter();
+    const { data, isValidating, error, mutate } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(
+        props.swrKey,
+        {
+            fallback: props.fallback
+        }
+    );
 
     const user = Stores.useAuthStore((state) => state.user);
+    const setToast = Stores.useToastStore((state) => state.setToast);
 
-    console.log({
-        data,
-        isValidating,
-        error
-    });
+    const [comment, setComment] = React.useState('');
+    const [submitting, setSubmitting] = React.useState(false);
+    const [submitError, setSubmitError] = React.useState<string | null>(null);
+    const [showResolveModal, setShowResolveModal] = React.useState(false);
 
-    if (data?.data) {
-        return (
-            <>
-                <Head>
-                    <meta name="description" content={Config.urls.viewFlagThread.description} />
-                    <link
-                        rel="canonical"
-                        href={`${Config.urls.viewFlagThread.canonical}/${props.publicationId}/flag/${data?.data.id}`}
-                    />
-                    <title>{`${Config.values.octopusInformation.redFlagReasons[data.data.category].nicename} - ${
-                        props.publicationId
-                    }`}</title>
-                </Head>
+    const submitComment = async () => {
+        setSubmitError(null);
+        setSubmitting(true);
 
-                <Layouts.Standard fixedHeader={false}>
-                    <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
-                        <Components.PageTitle
-                            text={`${Config.values.octopusInformation.redFlagReasons[data.data.category].nicename} - ${
-                                props.publicationId
-                            }`}
-                        />
-                    </section>
+        if (comment.length) {
+            try {
+                // Post off the comment to the thread
+                await api.post(
+                    `${Config.endpoints.flag}/${props.flagId}/comment`,
+                    {
+                        comment
+                    },
+                    user?.token
+                );
 
-                    {!!data.data.flagComments.length && (
+                // Reset the comment
+                setComment('');
+
+                // Inform swr this endpoint has had a mutation, so revalidate
+                mutate();
+
+                // Provide a user feedback toast
+                setToast({
+                    visible: true,
+                    dismiss: true,
+                    title: 'Comment saved',
+                    icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                    message: 'Your comment has now been saved.'
+                });
+            } catch (err) {
+                const { message } = err as Interfaces.JSONResponseError;
+                setSubmitError(message);
+            }
+        } else {
+            setSubmitError('You must provide a comment');
+        }
+
+        setSubmitting(false);
+    };
+
+    const resolve = async () => {
+        setSubmitError(null);
+        setSubmitting(true);
+
+        try {
+            // Post off to the resolve endpoint
+            await api.post(`${Config.endpoints.flag}/${props.flagId}/resolve`, {}, user?.token);
+
+            // Inform swr this endpoint has had a mutation, so revalidate
+            mutate();
+
+            // Close the modal
+            setShowResolveModal(false);
+
+            // Take the user to the publication in question
+            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+
+            // Provide a user feedback toast
+            setToast({
+                visible: true,
+                dismiss: true,
+                title: 'Red flag resolved',
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                message: 'This red flag has now been resolved.'
+            });
+        } catch (err) {}
+
+        setSubmitting(false);
+    };
+
+    return (
+        <>
+            <Head>
+                <meta name="description" content={Config.urls.viewFlagThread.description} />
+                <link
+                    rel="canonical"
+                    href={`${Config.urls.viewFlagThread.canonical}/${props.publication.id}/flag/${props.flagId}`}
+                />
+                <title>{`Red flag comment thread - ${props.publication.title}`}</title>
+            </Head>
+
+            <Layouts.Standard fixedHeader={false}>
+                {!!error && (
+                    <>
                         <section className="container mx-auto px-8">
-                            {data.data.flagComments.map((flagComment) => (
-                                <Components.FlagComment key={flagComment.id} flagComment={flagComment} />
-                            ))}
+                            <p>There was a problem loading this comment thread.</p>
                         </section>
-                    )}
-
-                    {!!user && props.isCommentable && (
-                        <section className="container mx-auto mt-12 px-8">
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-12 mb-2 lg:col-span-2 lg:mb-0">
-                                    <Components.Avatar user={user} className="hidden lg:flex" />
-                                    <span className="text-xs text-grey-500">
-                                        {user.firstName} {user.lastName}
-                                    </span>
-                                </div>
-                                <div className="col-span-12 lg:col-span-10">
-                                    <Components.FlagNewComment value="" onChange={(val) => console.log(val)} />
-                                    <Components.Button
-                                        title="Save comment"
-                                        onClick={() => console.log('lol')}
-                                        className="ml-auto mt-2 !flex"
+                    </>
+                )}
+                {!!data?.data && (
+                    <>
+                        {props.isResolvable && (
+                            <Components.Modal
+                                open={showResolveModal}
+                                setOpen={setShowResolveModal}
+                                title="Are you sure you want to resolve this red flag?"
+                                disableButtons={submitting}
+                                positiveButtonText="Resolve"
+                                positiveActionCallback={resolve}
+                                cancelButtonText="Cancel"
+                            >
+                                <p className="mt-4 mb-8 text-xs text-grey-700">
+                                    Once you resolve this flag, you will no longer be able to comment on this thread.
+                                    <br className="hidden xl:block" />
+                                    The flag will be marked as resolved on this publication.
+                                </p>
+                            </Components.Modal>
+                        )}
+                        <section className="container mx-auto px-8 pt-10 lg:gap-4 lg:pb-10 lg:pt-20 xl:px-44">
+                            <div className="mb-4 grid grid-cols-12 items-start">
+                                {data.data.resolved ? (
+                                    <OutlineIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
+                                ) : (
+                                    <SolidIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
+                                )}
+                                <div className="col-span-11 space-y-2">
+                                    <Components.PageTitle
+                                        text={`${
+                                            Config.values.octopusInformation.redFlagReasons[data.data.category].nicename
+                                        }${data.data.resolved ? ' - (Resolved)' : ''}`}
+                                        className="!mb-0"
                                     />
+                                    <h2>
+                                        <Components.Link
+                                            href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                                            className="text-teal-500 underline"
+                                        >
+                                            <>Publication{props.publication.title}</>
+                                        </Components.Link>
+                                    </h2>
+
+                                    <p className="text-grey-700">
+                                        This publication was red flagged on{' '}
+                                        <span className="italic">{Helpers.formatDate(data.data.createdAt)}</span>, by{' '}
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${data.data.user.id}`}
+                                            className="text-teal-500 underline"
+                                        >
+                                            <>
+                                                {data.data.user.firstName} {data.data.user.lastName}
+                                            </>
+                                        </Components.Link>
+                                    </p>
                                 </div>
                             </div>
                         </section>
-                    )}
-                </Layouts.Standard>
-            </>
-        );
-    }
 
-    return <></>;
+                        {!!data.data.flagComments.length && (
+                            <section
+                                className={`container mx-auto px-8 lg:space-y-6 xl:px-44 ${
+                                    data.data.resolved ? 'opacity-75' : ''
+                                }`}
+                            >
+                                {data.data.flagComments.map((flagComment) => (
+                                    <Components.FlagComment key={flagComment.id} flagComment={flagComment} />
+                                ))}
+                            </section>
+                        )}
+
+                        {!!user && props.isCommentable && !data.data.resolved && (
+                            <section className="container mx-auto mt-12 px-8 xl:px-44">
+                                <div className="grid grid-cols-12">
+                                    <div className="col-span-12 mb-2 lg:col-span-2 lg:mb-0">
+                                        <Components.Avatar user={user} className="hidden lg:flex" />
+                                        <span className="text-xs text-grey-500">
+                                            {user.firstName} {user.lastName}
+                                        </span>
+                                    </div>
+                                    <div className="col-span-12 lg:col-span-10">
+                                        {!!submitError && (
+                                            <Components.Alert title={submitError} severity="WARNING" className="mb-4" />
+                                        )}
+                                        <div className={submitting ? 'cursor-not-allowed select-none opacity-50' : ''}>
+                                            <Components.FlagNewComment
+                                                value={comment}
+                                                onChange={(value) => setComment(value)}
+                                            />
+                                            <div className="mt-2 ml-auto flex w-fit space-x-4">
+                                                {props.isResolvable && (
+                                                    <Components.Button
+                                                        title="Resolve flag"
+                                                        onClick={() => setShowResolveModal(true)}
+                                                        disabled={isValidating || submitting}
+                                                        iconPosition="RIGHT"
+                                                        icon={
+                                                            <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 text-teal-400" />
+                                                        }
+                                                    />
+                                                )}
+                                                <Components.Button
+                                                    title="Save comment"
+                                                    onClick={submitComment}
+                                                    disabled={isValidating || submitting}
+                                                    iconPosition="RIGHT"
+                                                    icon={<OutlineIcons.ChatIcon className="h-6 w-6 text-teal-400" />}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+                    </>
+                )}
+            </Layouts.Standard>
+        </>
+    );
 };
 
 export default FlagThread;

@@ -17,7 +17,7 @@ const Preview: React.FC<Props> = (props) => (
         href={`${Config.urls.viewFlagThread.path}/${props.publicationId}/flag/${props.flag.id}`}
         title={`View ${props.flag.resolved ? 'resolved' : ''} comment thread`}
         ariaLabel={`Red flag preview by ${props.flag.user.firstName} ${props.flag.user.lastName}`}
-        className={` block w-fit space-y-1 decoration-grey-800 dark:decoration-grey-100 ${
+        className={`block w-fit space-y-1 decoration-grey-800 dark:decoration-grey-100 ${
             props.flag.resolved ? 'line-through opacity-50 dark:opacity-75' : 'hover:underline'
         }`}
     >
