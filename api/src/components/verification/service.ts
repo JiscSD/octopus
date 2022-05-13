@@ -37,3 +37,15 @@ export const find = async (orcid: string) => {
 export const deleteVerification = async (orcid: string) => {
     await client.prisma.verification.delete({ where: { orcid } });
 };
+
+export const incrementAttempts = async (orcid: string) => {
+    const verification = await client.prisma.verification.update({
+        where: { orcid },
+        data: {
+            attempts: {
+                increment: 1
+            }
+        }
+    });
+    return verification;
+};

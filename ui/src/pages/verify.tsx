@@ -11,6 +11,7 @@ import * as SolidIcons from '@heroicons/react/solid';
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
 import * as api from '@api';
+import { AxiosError } from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
@@ -70,13 +71,27 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             setLoading(false);
         } catch (err) {
             setLoading(false);
-            setToast({
-                visible: true,
-                dismiss: true,
-                title: 'Incorrect code',
-                icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-                message: 'Please try again.'
-            });
+            const axiosError = err as AxiosError;
+
+            // If not found, return to email entry step
+            if (axiosError.response?.status === 404) {
+                setToast({
+                    visible: true,
+                    dismiss: true,
+                    title: 'Too many failed attempts',
+                    icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                    message: 'Please enter your email address to request a new code.'
+                });
+                resetForm();
+            } else {
+                setToast({
+                    visible: true,
+                    dismiss: true,
+                    title: 'Incorrect code',
+                    icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                    message: 'Please check your email and try again.'
+                });
+            }
         }
     };
 

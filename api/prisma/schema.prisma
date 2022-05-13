@@ -37,6 +37,7 @@ model Verification {
     orcid                   String                  @unique
     code                    String
     email                   String
+    attempts                Int                     @default(0)
     createdAt               DateTime                @default(now())
     updatedAt               DateTime                @updatedAt
 }

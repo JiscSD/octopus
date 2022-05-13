@@ -3,6 +3,7 @@ import * as userService from 'user/service';
 import * as response from 'lib/response';
 import * as email from 'lib/email';
 import * as I from 'interface';
+import moment from 'moment';
 
 import cryptoRandomString from 'crypto-random-string';
 
@@ -43,9 +44,11 @@ export const confirmCode = async (
             return response.json(404, { message: 'Not found' });
         }
 
-        // TODO: Check if code has expired
-
-        // TODO: Failed attempts
+        // If code has expired, remove it from the database and return appropriate error
+        if (moment().diff(verification.createdAt, 'minutes') > Number(process.env.VALIDATION_CODE_EXPIRY)) {
+            await verificationService.deleteVerification(verification.orcid);
+            return response.json(404, { message: 'Not found' });
+        }
 
         if (verification.code === event.body?.code) {
             // Valid code received, delete verification from db
@@ -57,7 +60,15 @@ export const confirmCode = async (
             return response.json(200, { message: 'OK' });
         }
 
-        return response.json(400, { message: 'Bad request' });
+        const increment = await verificationService.incrementAttempts(verification.orcid);
+
+        // Expire code on repeated failures to enter correct value
+        if (increment.attempts >= Number(process.env.VALIDATION_CODE_ATTEMPTS)) {
+            await verificationService.deleteVerification(verification.orcid);
+            return response.json(404, { message: 'Not found' });
+        }
+
+        return response.json(422, { message: 'Incorrect code' });
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
