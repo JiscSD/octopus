@@ -450,7 +450,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     Download:
                 </span>
                 <button
-                    aria-label="Print button"
+                    aria-label="Print"
                     onClick={() => window.print()}
                     className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                 >
@@ -475,7 +475,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             {user ? (
                 <>
                     <Components.PublicationSidebarCardActionsButton
-                        label="Write review button"
+                        label="Write review"
                         onClick={() => {
                             router.push({
                                 pathname: `${Config.urls.createPublication.path}`,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import * as Next from 'next';
 import Head from 'next/head';
 import jwt from 'jsonwebtoken';
 import useSWR from 'swr';
@@ -80,7 +80,7 @@ type Props = {
     };
 };
 
-const FlagThread: NextPage<Props> = (props): JSX.Element => {
+const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const { data, isValidating, error, mutate } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(
         props.swrKey,
