@@ -282,7 +282,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Alert
                             title="This publication has active red flags"
                             severity="WARNING"
-                            className="mb-4 w-fit"
+                            className="mb-4"
                         >
                             <button
                                 aria-label="View red flags"
