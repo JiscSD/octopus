@@ -224,11 +224,11 @@ const FlagThread: NextPage<Props> = (props): JSX.Element => {
                                             href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
                                             className="text-teal-500 underline"
                                         >
-                                            <>Publication{props.publication.title}</>
+                                            <>Publication: {props.publication.title}</>
                                         </Components.Link>
                                     </h2>
 
-                                    <p className="text-grey-700">
+                                    <p className="text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                         This publication was red flagged on{' '}
                                         <span className="italic">{Helpers.formatDate(data.data.createdAt)}</span>, by{' '}
                                         <Components.Link
@@ -261,7 +261,7 @@ const FlagThread: NextPage<Props> = (props): JSX.Element => {
                                 <div className="grid grid-cols-12">
                                     <div className="col-span-12 mb-2 lg:col-span-2 lg:mb-0">
                                         <Components.Avatar user={user} className="hidden lg:flex" />
-                                        <span className="text-xs text-grey-500">
+                                        <span className="text-xs text-grey-500 transition-colors duration-500 dark:text-white-100">
                                             {user.firstName} {user.lastName}
                                         </span>
                                     </div>
