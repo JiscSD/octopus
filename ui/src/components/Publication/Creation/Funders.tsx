@@ -172,6 +172,11 @@ const Funders: React.FC = (): React.ReactElement => {
             );
             setSubmitLoading(false);
             updateFunders([...funders, response.data]);
+            setName('');
+            setCountry('');
+            setCity('');
+            setLink('');
+            setRor('');
         } catch (err) {
             setSubmitLoading(false);
             console.log(err);
