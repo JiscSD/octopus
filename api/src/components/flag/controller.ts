@@ -2,6 +2,7 @@ import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
 import * as I from 'interface';
+import * as helpers from 'lib/helpers';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
     try {
@@ -58,12 +59,12 @@ export const createFlag = async (
         );
 
         if (doesDuplicateFlagExist) {
-            return response.json(404, {
+            return response.json(400, {
                 message: 'An unresolved flag created by you, for this publication and category already exists.'
             });
         }
 
-        const flag = await publicationService.createFlag(
+        const flag = await flagService.createFlag(
             event.pathParameters.id,
             event.user.id,
             event.body.category,
@@ -81,7 +82,18 @@ export const createFlagComment = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
 ) => {
     try {
-        const flag = await publicationService.getFlag(event.pathParameters.id);
+        if (event.body.comment) {
+            const isHTMLSafe = helpers.isHTMLSafe(event.body.comment);
+
+            if (!isHTMLSafe) {
+                return response.json(404, {
+                    message:
+                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
+                });
+            }
+        }
+
+        const flag = await flagService.getFlag(event.pathParameters.id);
 
         if (!flag) {
             return response.json(404, {
@@ -102,7 +114,7 @@ export const createFlagComment = async (
             });
         }
 
-        const flagComment = await publicationService.createFlagComment(
+        const flagComment = await flagService.createFlagComment(
             event.pathParameters.id,
             event.body.comment,
             event.user.id
@@ -117,7 +129,7 @@ export const createFlagComment = async (
 
 export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>) => {
     try {
-        const flag = await publicationService.getFlag(event.pathParameters.id);
+        const flag = await flagService.getFlag(event.pathParameters.id);
 
         if (!flag) {
             return response.json(404, {
@@ -137,7 +149,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
             });
         }
 
-        const resolveFlag = await publicationService.resolveFlag(event.pathParameters.id);
+        const resolveFlag = await flagService.resolveFlag(event.pathParameters.id);
 
         return response.json(200, resolveFlag);
     } catch (err) {

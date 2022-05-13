@@ -187,13 +187,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     //      This need to rely on some state which can revalidated, so when a flag is created it is instantly shown,
     //      not after refresh.
     const activeFlags = React.useMemo(
-        () => props.publication.publicationFlags.filter((i) => !i.resolved),
+        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
         [props.publication]
     );
 
     // TODO Same as above.
     const inactiveFlags = React.useMemo(
-        () => publication.publicationFlags.filter((i) => !!i.resolved),
+        () => publication.publicationFlags.filter((flag) => !!flag.resolved),
         [props.publication]
     );
 
@@ -278,7 +278,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Alert>
                     )}
-                    {!!publication.publicationFlags.filter((i) => !i.resolved).length && (
+                    {!!publication.publicationFlags.filter((flag) => !flag.resolved).length && (
                         <Components.Alert
                             title="This publication has active red flags"
                             severity="WARNING"

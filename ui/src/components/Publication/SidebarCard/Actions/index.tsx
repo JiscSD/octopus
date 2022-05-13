@@ -258,8 +258,6 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     user?.token
                 );
 
-                // /publications/publication-user-1-hypothesis-1-live/flag?apiKey=000000004
-
                 // Close the model
                 setShowRedFlagModel(false);
 
@@ -272,7 +270,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     message: 'Your red flag has now been saved.'
                 });
             } else {
-                setError('You must provide a reason for your red flag.');
+                setError('You must provide a comment for this red flag.');
             }
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
@@ -284,7 +282,12 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     // Adds a small delay so the error just instantly jump off the screen
     React.useEffect(() => {
         if (!showRatingsModel) setTimeout(() => setError(undefined), 500);
-        if (!showRedFlagModel) setTimeout(() => setError(undefined), 500);
+        if (!showRedFlagModel) {
+            setTimeout(() => {
+                setError(undefined);
+                setRedFlagComment('');
+            }, 500);
+        }
     }, [showRatingsModel, showRedFlagModel]);
 
     return (

@@ -1,4 +1,5 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
 
 export const get = async (id: string) => {
     const flags = await client.prisma.publicationFlags.findFirst({
@@ -9,7 +10,6 @@ export const get = async (id: string) => {
                     orcid: true,
                     firstName: true,
                     lastName: true,
-                    email: true,
                     createdAt: true,
                     updatedAt: true
                 }
@@ -22,7 +22,6 @@ export const get = async (id: string) => {
                             orcid: true,
                             firstName: true,
                             lastName: true,
-                            email: true,
                             createdAt: true,
                             updatedAt: true
                         }
@@ -47,7 +46,6 @@ export const getByPublicationID = async (id: string) => {
                     orcid: true,
                     firstName: true,
                     lastName: true,
-                    email: true,
                     createdAt: true,
                     updatedAt: true
                 }
@@ -60,7 +58,6 @@ export const getByPublicationID = async (id: string) => {
                             orcid: true,
                             firstName: true,
                             lastName: true,
-                            email: true,
                             createdAt: true,
                             updatedAt: true
                         }
@@ -89,7 +86,6 @@ export const getByUserID = async (id: string) => {
                     orcid: true,
                     firstName: true,
                     lastName: true,
-                    email: true,
                     createdAt: true,
                     updatedAt: true
                 }
@@ -102,7 +98,6 @@ export const getByUserID = async (id: string) => {
                             orcid: true,
                             firstName: true,
                             lastName: true,
-                            email: true,
                             createdAt: true,
                             updatedAt: true
                         }
@@ -118,4 +113,77 @@ export const getByUserID = async (id: string) => {
     });
 
     return flags;
+};
+
+export const createFlag = async (
+    publication: string,
+    user: string,
+    category: I.PublicationFlagCategoryEnum,
+    comment: string
+) => {
+    const flag = await client.prisma.publicationFlags.create({
+        data: {
+            category,
+            user: {
+                connect: {
+                    id: user
+                }
+            },
+            flagComments: {
+                create: {
+                    comment,
+                    createdBy: user
+                }
+            },
+            publication: {
+                connect: {
+                    id: publication
+                }
+            }
+        }
+    });
+
+    return flag;
+};
+
+export const getFlag = async (id: string) => {
+    const flag = await client.prisma.publicationFlags.findFirst({
+        where: {
+            id
+        },
+        include: {
+            publication: {
+                include: {
+                    user: true
+                }
+            }
+        }
+    });
+
+    return flag;
+};
+
+export const createFlagComment = async (id: string, comment: string, user: string) => {
+    const flagComment = await client.prisma.flagComments.create({
+        data: {
+            flagId: id,
+            comment,
+            createdBy: user
+        }
+    });
+
+    return flagComment;
+};
+
+export const resolveFlag = async (id: string) => {
+    const resolveFlag = await client.prisma.publicationFlags.update({
+        where: {
+            id
+        },
+        data: {
+            resolved: true
+        }
+    });
+
+    return resolveFlag;
 };

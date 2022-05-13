@@ -315,7 +315,7 @@ export interface FlagComment {
     comment: string;
     createdBy: string;
     createdAt: string;
-    user: CoreUser;
+    user: Omit<CoreUser, 'email'>;
 }
 export interface Flag {
     id: string;
@@ -323,7 +323,7 @@ export interface Flag {
     publicationId: string;
     resolved: boolean;
     createdAt: string;
-    user: CoreUser;
+    user: Omit<CoreUser, 'email'>;
 }
 
 export interface FlagWithComments extends Flag {
