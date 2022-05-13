@@ -16,7 +16,11 @@ type Props = {
     ror: string;
 };
 
-const TableRow: React.FC<Props> = (props): React.ReactElement => {
+type TableProps = {
+    item: Interfaces.Funder;
+};
+
+const TableRow: React.FC<TableProps> = (props): React.ReactElement => {
     const publicationId = Stores.usePublicationCreationStore((state) => state.id);
     const funders = Stores.usePublicationCreationStore((state) => state.funders);
     const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
