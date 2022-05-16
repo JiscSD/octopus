@@ -197,6 +197,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [props.publication]
     );
 
+    // TODO Same as above.
+    const uniqueRedFlagCategoryList = React.useMemo(
+        () => Array.from(new Set(props.publication.publicationFlags.map((flag) => flag.category))),
+        [props.publication.publicationFlags]
+    );
+
     return (
         <>
             <Head>
@@ -278,19 +284,27 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Alert>
                     )}
-                    {!!publication.publicationFlags.filter((flag) => !flag.resolved).length && (
+                    {!!uniqueRedFlagCategoryList.length && (
                         <Components.Alert
-                            title="This publication has active red flags"
-                            severity="WARNING"
+                            title="This publication has active red flags for:"
+                            severity="RED_FLAG"
                             className="mb-4"
                         >
+                            <ul className="mt-3 mb-4">
+                                {uniqueRedFlagCategoryList.map((category) => (
+                                    <li key={category} className="text-sm text-white-100">
+                                        - {Config.values.octopusInformation.redFlagReasons[category].nicename}
+                                    </li>
+                                ))}
+                            </ul>
+
                             <button
                                 aria-label="View red flags"
                                 title="View red flags"
                                 onClick={() =>
                                     document.getElementById('red-flags')?.scrollIntoView({ behavior: 'smooth' })
                                 }
-                                className="mt-2 block rounded border-transparent text-sm font-medium text-grey-800 underline outline-0 transition-colors duration-500 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                                className="mt-2 block rounded border-transparent text-sm font-medium text-white-100 underline outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
                             >
                                 View flags
                             </button>
@@ -507,7 +521,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 {!!inactiveFlags.length && (
                                     <div>
                                         <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
-                                            Resovled
+                                            Resolved
                                         </h2>
                                         <div className="space-y-4">
                                             {inactiveFlags.map((flag) => (

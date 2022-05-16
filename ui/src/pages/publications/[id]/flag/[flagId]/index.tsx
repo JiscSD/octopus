@@ -199,9 +199,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                 cancelButtonText="Cancel"
                             >
                                 <p className="mt-4 mb-8 text-xs text-grey-700">
-                                    Once you resolve this flag, you will no longer be able to comment on this thread.
-                                    <br className="hidden xl:block" />
-                                    The flag will be marked as resolved on this publication.
+                                    The flag will be marked as resolved across the site, and you will no longer be able
+                                    to comment on this thread. Users can still view the flag and its comment history
+                                    from the publication page.
                                 </p>
                             </Components.Modal>
                         )}
@@ -239,6 +239,10 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                 {data.data.user.firstName} {data.data.user.lastName}
                                             </>
                                         </Components.Link>
+                                    </p>
+
+                                    <p className="text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                                        All comments on this thread are public.
                                     </p>
                                 </div>
                             </div>
