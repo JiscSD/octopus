@@ -156,7 +156,7 @@ const Funders: React.FC = (): React.ReactElement => {
 
     React.useEffect(() => {
         if (method === 'manual') {
-            setRor(null);
+            setRor('');
         }
     }, [method]);
 
