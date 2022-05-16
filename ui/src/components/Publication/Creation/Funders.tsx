@@ -124,7 +124,7 @@ const Funders: React.FC = (): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
 
     const [method, setMethod] = React.useState<'ror' | 'manual'>('ror');
-    const [ror, setRor] = React.useState('' || null);
+    const [ror, setRor] = React.useState<string>('');
     const [name, setName] = React.useState('');
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
@@ -163,7 +163,7 @@ const Funders: React.FC = (): React.ReactElement => {
     const onSubmitHandler = async () => {
         setSubmitLoading(true);
         try {
-            const response = await api.post(
+            const response = await api.post<Interfaces.Funder>(
                 `${Config.endpoints.publications}/${publicationId}/funders`,
                 {
                     name,
@@ -174,8 +174,9 @@ const Funders: React.FC = (): React.ReactElement => {
                 },
                 user?.token
             );
+            const createdFunder = response.data;
             setSubmitLoading(false);
-            updateFunders([...funders, response.data]);
+            updateFunders([...funders, createdFunder]);
             setName('');
             setCountry('');
             setCity('');
