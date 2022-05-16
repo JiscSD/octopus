@@ -57,6 +57,9 @@
             "funder/*": [
                 "src/components/funder/*"
             ],
+            "flag/*": [
+                "src/components/flag/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],

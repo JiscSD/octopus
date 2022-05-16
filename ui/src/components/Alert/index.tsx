@@ -44,13 +44,10 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 classesCopy.background = 'bg-yellow-200 dark:bg-yellow-500';
                 break;
             case 'ERROR':
-                classesCopy.title = 'text-white-50 dark:text-white-50';
-                classesCopy.details = 'text-white-100 dark:text-grey-50';
+                classesCopy.title = 'text-white-50';
+                classesCopy.details = 'text-white-100';
                 classesCopy.icon = (
-                    <OutlineIcons.XCircleIcon
-                        className={`h-5 w-5 text-white-50 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
-                        aria-hidden="true"
-                    />
+                    <OutlineIcons.XCircleIcon className={`h-5 w-5 text-white-50 ${classes.icon}`} aria-hidden="true" />
                 );
                 classesCopy.background = 'bg-red-500';
                 break;
@@ -64,6 +61,14 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                     />
                 );
                 classesCopy.background = 'bg-green-300 dark:bg-green-500';
+                break;
+            case 'RED_FLAG':
+                classesCopy.title = 'text-white-50';
+                classesCopy.details = 'text-white-100';
+                classesCopy.icon = (
+                    <OutlineIcons.FlagIcon className={`h-5 w-5 text-white-100 ${classes.icon}`} aria-hidden="true" />
+                );
+                classesCopy.background = 'bg-red-500';
                 break;
             default:
                 // Info
@@ -90,13 +95,13 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.35 }}
                     exit={{ opacity: 0 }}
-                    className={`rounded-md p-4 pr-8 transition-colors duration-500 ${classes.background} ${
+                    className={`rounded-md p-4 pr-8 transition-colors duration-500 print:hidden ${classes.background} ${
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="grid grid-cols-20">
-                        <div className="col-span-1 row-span-2 mr-4">{classes.icon}</div>
-                        <div className="col-span-19">
+                    <div className="grid grid-cols-21">
+                        <div className="col-span-2 row-span-2 mr-4 ml-1 mt-1 lg:col-span-1">{classes.icon}</div>
+                        <div className="col-span-19 lg:col-span-20">
                             {!!props.title && (
                                 <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                     {props.title}

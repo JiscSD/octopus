@@ -98,11 +98,11 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
                     {draftPublications.length ? (
                         <div className="rouned-md relative space-y-4 lg:w-2/3">
-                            {draftPublications.map((publication: Interfaces.Publication, index) => (
+                            {draftPublications.map((publication: Interfaces.Publication) => (
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
-                                    className="flex"
+                                    className="mb-5 flex "
                                 >
                                     <Components.PublicationSimpleResult publication={publication} />
                                 </Components.Link>
@@ -123,11 +123,11 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
                     {livePublications.length ? (
                         <div className="rouned-md relative lg:w-2/3">
-                            {livePublications.map((publication: Interfaces.Publication, index) => (
+                            {livePublications.map((publication: Interfaces.Publication) => (
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}`}
-                                    className="flex"
+                                    className="mb-5 flex "
                                 >
                                     <Components.PublicationSimpleResult publication={publication} />
                                 </Components.Link>

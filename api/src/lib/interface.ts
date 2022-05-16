@@ -464,3 +464,15 @@ export interface CreateFunderRequestBody {
     country: string;
     link: string;
 }
+
+export interface GetFlagByID {
+    id: string;
+}
+
+export interface GetFlagsByUserID {
+    id: string;
+}
+
+export interface GetFlagsByPublicationID {
+    id: string;
+}

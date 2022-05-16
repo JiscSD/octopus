@@ -1,15 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
+import jwt from 'jsonwebtoken';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import * as Stores from '@stores';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -31,6 +32,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
+    let bookmark: boolean = false;
     let error: string | null = null;
 
     const cookies = context.req.cookies;
@@ -44,27 +46,57 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
+    try {
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/bookmark`, token);
+        bookmark = response.data;
+    } catch (err) {
+        console.log(err);
+    }
+
     if (!publication || error) {
         return {
             notFound: true
         };
     }
 
+    let isBookmarkVisible = false;
+
+    if (token) {
+        //check if user is author / co author. if so the bookmark icon won't display
+        const currentUser = jwt.decode(token) as any;
+
+        if (currentUser.id) {
+            const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
+            const isOwner = currentUser.id === publication.createdBy;
+
+            if (!isCoAuthor && !isOwner) {
+                isBookmarkVisible = true;
+            }
+        }
+    }
+
     return {
         props: {
-            publication
+            publication,
+            bookmark,
+            isBookmarkVisible
         }
     };
 };
 
 type Props = {
     publication: Interfaces.Publication;
+    bookmark: boolean;
+    isBookmarkVisible: boolean;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
+    // TODO: This i causing a bug when switching between publications.
+    // We either only use props publication, or inform swr when mutation occur.
     const [publication, setPublication] = React.useState(props.publication);
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
+    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
     const linkedPublicationsTo = publication.linkedTo;
     const linkedPublicationsFrom = publication.linkedFrom.filter(
@@ -81,10 +113,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
     const showEthicalStatement = props.publication.type === 'DATA';
+    const showRedFlags = !!props.publication.publicationFlags.length;
 
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
+    if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
         { title: 'Publication chain', href: 'publication-chain' },
@@ -129,6 +163,46 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [publication.id, user?.token]
     );
 
+    const onBookmarkHandler = async () => {
+        if (isBookmarked) {
+            //delete the bookmark
+            try {
+                await api.destroy(`publications/${publication.id}/bookmark`, user?.token);
+                setIsBookmarked(false);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            //create the bookmark
+            try {
+                await api.post(`publications/${publication.id}/bookmark`, {}, user?.token);
+                setIsBookmarked(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
+    // TODO This is not reactive as it replies on props, so switching page is fine, but when mutations occur, then no.
+    //      This need to rely on some state which can revalidated, so when a flag is created it is instantly shown,
+    //      not after refresh.
+    const activeFlags = React.useMemo(
+        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
+        [props.publication]
+    );
+
+    // TODO Same as above.
+    const inactiveFlags = React.useMemo(
+        () => publication.publicationFlags.filter((flag) => !!flag.resolved),
+        [props.publication]
+    );
+
+    // TODO Same as above.
+    const uniqueRedFlagCategoryList = React.useMemo(
+        () => Array.from(new Set(props.publication.publicationFlags.map((flag) => flag.category))),
+        [props.publication.publicationFlags]
+    );
+
     return (
         <>
             <Head>
@@ -153,7 +227,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 positiveButtonText="Yes, this is ready to publish"
                 cancelButtonText="No, changes are needed"
                 title="Do you approve this publication?"
-            ></Components.Modal>
+            />
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
                     {publication.currentStatus === 'DRAFT' && (
@@ -210,10 +284,54 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Alert>
                     )}
-                    <header className="">
-                        <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:w-4/5 xl:text-3xl xl:leading-normal">
-                            {publication.title}
-                        </h1>
+                    {!!uniqueRedFlagCategoryList.length && (
+                        <Components.Alert
+                            title="This publication has active red flags for:"
+                            severity="RED_FLAG"
+                            className="mb-4"
+                        >
+                            <ul className="mt-3 mb-4">
+                                {uniqueRedFlagCategoryList.map((category) => (
+                                    <li key={category} className="text-sm text-white-100">
+                                        - {Config.values.octopusInformation.redFlagReasons[category].nicename}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button
+                                aria-label="View red flags"
+                                title="View red flags"
+                                onClick={() =>
+                                    document.getElementById('red-flags')?.scrollIntoView({ behavior: 'smooth' })
+                                }
+                                className="mt-2 block rounded border-transparent text-sm font-medium text-white-100 underline outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                            >
+                                View flags
+                            </button>
+                        </Components.Alert>
+                    )}
+                    <header>
+                        <div className="grid w-full grid-cols-8">
+                            <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
+                                {publication.title}
+                            </h1>
+                            {props.isBookmarkVisible && (
+                                <div className="col-span-1 grid justify-items-end">
+                                    <button
+                                        className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
+                                        onClick={onBookmarkHandler}
+                                        aria-label="toggle-bookmark"
+                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                    >
+                                        <OutlineIcons.BookmarkIcon
+                                            className={`h-8 w-8 ${
+                                                isBookmarked ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
+                                            } text-blue-700 transition duration-150 dark:text-blue-50`}
+                                        />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                         <p className="mb-8">
                             <Components.Link
@@ -224,18 +342,16 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     {publication.user.firstName[0]}. {publication.user.lastName}
                                 </>
                             </Components.Link>
-
                             {publication.coAuthors.map(
                                 (coAuthor) =>
                                     coAuthor.user && (
                                         <>
-                                            <span className="text-white-50">, </span>
                                             <Components.Link
                                                 href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
                                                 className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                             >
                                                 <>
-                                                    {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
+                                                    , {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
                                                 </>
                                             </Components.Link>
                                         </>
@@ -379,6 +495,46 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Red flags */}
+                    {showRedFlags && (
+                        <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
+                            <div className="mt-6 space-y-8">
+                                {!!activeFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Active
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {activeFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {!!inactiveFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Resolved
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {inactiveFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </Components.PublicationContentSection>
                     )}
 

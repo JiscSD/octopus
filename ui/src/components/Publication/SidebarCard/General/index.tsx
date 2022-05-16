@@ -1,4 +1,5 @@
 import React from 'react';
+import * as SolidIcons from '@heroicons/react/solid';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
@@ -14,6 +15,12 @@ const General: React.FC<Props> = (props): React.ReactElement => {
     const peerReviewCount = props.publication.linkedFrom.filter(
         (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
     ).length;
+
+    const activeRedFlagCount = props.publication.publicationFlags.filter((flag) => !flag.resolved).length;
+
+    const uniqueRedFlagCategoryList = Array.from(
+        new Set(props.publication.publicationFlags.map((flag) => flag.category))
+    );
 
     return (
         <>
@@ -89,6 +96,19 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                             ? 'Write a review'
                             : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
                     </Components.Link>
+                </div>
+            )}
+            {!!activeRedFlagCount && (
+                <div className="flex">
+                    <span className="mr-2 flex items-center text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        Red flags:{' '}
+                        <div className="mx-1 inline-flex">
+                            {uniqueRedFlagCategoryList.map((category) => (
+                                <SolidIcons.FlagIcon key={category} className="h-4 w-4 text-red-500" />
+                            ))}
+                        </div>
+                        ({activeRedFlagCount})
+                    </span>
                 </div>
             )}
         </>

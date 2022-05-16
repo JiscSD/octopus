@@ -5,8 +5,6 @@ import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 
 const CoAuthor: React.FC = (): React.ReactElement => {

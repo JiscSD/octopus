@@ -11,12 +11,12 @@ switch (process.env.NEXT_PUBLIC_ENV) {
         break;
     case 'prod':
         host = 'https://octopus.ac';
-        mediaBucket = `https://${bucketName}.eu-west-1.amazonaws.com/`;
+        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = '';
         break;
     default:
         host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
-        mediaBucket = `https://${bucketName}.eu-west-1.amazonaws.com/`;
+        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
 }
 
@@ -105,6 +105,21 @@ const urls = {
         description: '',
         keywords: [],
         canonical: `${base.host}/account`
+    },
+    myBookmarks: {
+        path: '/my-bookmarks',
+        title: `${base.title}`,
+        description: '',
+        keywords: [],
+        canonical: `${base.host}/my-bookmarks`
+    },
+
+    // RedFlags
+    viewFlagThread: {
+        path: '/publications', // append `/{publication_id}/flag/{flag_id}`
+        title: `${base.title}`,
+        description: '',
+        canonical: `${base.host}/publications` // append `/{publication_id}/flag/{flag_id}`
     },
 
     // Static Pages
