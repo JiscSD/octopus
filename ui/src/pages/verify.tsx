@@ -28,6 +28,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
     const [showCode, setShowCode] = React.useState(false);
     const [code, setCode] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState('');
 
     const submitEmail = () => {
         setLoading(true);
@@ -36,6 +37,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
 
     const requestCode = async () => {
         try {
+            setError('');
             setCode('');
 
             await api.get(`${Config.endpoints.verification}/${user?.orcid}?email=${emailAddress}`, user?.token);
@@ -64,6 +66,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
 
     const verifyCode = async () => {
         try {
+            setError('');
             setLoading(true);
 
             await api.post(`${Config.endpoints.verification}/${user?.orcid}`, { code }, user?.token);
@@ -75,27 +78,16 @@ const Validate: Types.NextPage = (): React.ReactElement => {
 
             // If not found, return to email entry step
             if (axiosError.response?.status === 404) {
-                setToast({
-                    visible: true,
-                    dismiss: true,
-                    title: 'Too many failed attempts',
-                    icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-                    message: 'Please enter your email address to request a new code.'
-                });
                 resetForm();
+                setError('Too many failed attempts. Please enter your email address to request a new code.');
             } else {
-                setToast({
-                    visible: true,
-                    dismiss: true,
-                    title: 'Incorrect code',
-                    icon: <OutlineIcons.KeyIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-                    message: 'Please check your email and try again.'
-                });
+                setError('Incorrect code. Please check your email and try again.');
             }
         }
     };
 
     const resetForm = () => {
+        setError('');
         setShowCode(false);
         setCode('');
     };
@@ -110,11 +102,12 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             </Head>
 
             <Layouts.Standard>
-                <section className="mx-auto mb-10 grid grid-cols-1 gap-4 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12">
+                <section className="mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12 lg:px-0">
                     <Components.PageTitle
                         text={user?.email ? 'Update your email address' : 'Complete your registration'}
                     />
                     <form className="flex-column gap-4 space-y-4">
+                        {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 <SolidIcons.BadgeCheckIcon className="h-5 w-5 text-green-400" />
@@ -216,7 +209,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                     <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 )}
                             </span>
-                            <div className="mt-4 text-xs font-medium tracking-wider text-grey-500 transition-colors duration-500 dark:text-grey-300">
+                            <div className="mt-4 text-xs font-medium leading-relaxed tracking-wider text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                 <div className="mb-2 text-lg text-grey-700 dark:text-grey-100">
                                     Not received your code?
                                 </div>
@@ -228,21 +221,21 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                     .
                                 </p>
                                 <p>
-                                    Please check your spam folder. Alternatively, you can
+                                    Please check your spam folder. Alternatively, you can{' '}
                                     <Components.Button
                                         title="request a new code"
                                         onClick={requestCode}
                                         textSize="xs"
                                         padding="py-0"
-                                        className="px-1"
-                                    />
-                                    or
+                                        className="p-0"
+                                    />{' '}
+                                    or{' '}
                                     <Components.Button
                                         title="return to update your email address"
                                         onClick={resetForm}
                                         textSize="xs"
                                         padding="py-0"
-                                        className="px-1"
+                                        className="p-0"
                                     />
                                     .
                                 </p>
