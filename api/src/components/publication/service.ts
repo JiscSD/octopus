@@ -92,6 +92,16 @@ export const get = async (id: string) => {
                     updatedAt: true
                 }
             },
+            funders: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
