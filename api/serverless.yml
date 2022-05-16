@@ -297,7 +297,6 @@ functions:
                   cors: true
     createFunder:
         handler: src/components/funder/routes.create
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/funders
@@ -305,7 +304,6 @@ functions:
                   cors: true
     deleteFunder:
         handler: src/components/funder/routes.destroy
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
