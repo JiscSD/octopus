@@ -1,16 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import jwt from 'jsonwebtoken';
+
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import * as Stores from '@stores';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -91,6 +91,8 @@ type Props = {
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
+    // TODO: This i causing a bug when switching between publications.
+    // We either only use props publication, or inform swr when mutation occur.
     const [publication, setPublication] = React.useState(props.publication);
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
@@ -111,10 +113,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showProblems = problems.length && props.publication.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews.length && props.publication.type !== 'PEER_REVIEW';
     const showEthicalStatement = props.publication.type === 'DATA';
+    const showRedFlags = !!props.publication.publicationFlags.length;
 
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
+    if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
         { title: 'Publication chain', href: 'publication-chain' },
@@ -179,6 +183,26 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    // TODO This is not reactive as it replies on props, so switching page is fine, but when mutations occur, then no.
+    //      This need to rely on some state which can revalidated, so when a flag is created it is instantly shown,
+    //      not after refresh.
+    const activeFlags = React.useMemo(
+        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
+        [props.publication]
+    );
+
+    // TODO Same as above.
+    const inactiveFlags = React.useMemo(
+        () => publication.publicationFlags.filter((flag) => !!flag.resolved),
+        [props.publication]
+    );
+
+    // TODO Same as above.
+    const uniqueRedFlagCategoryList = React.useMemo(
+        () => Array.from(new Set(props.publication.publicationFlags.map((flag) => flag.category))),
+        [props.publication.publicationFlags]
+    );
+
     return (
         <>
             <Head>
@@ -203,7 +227,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 positiveButtonText="Yes, this is ready to publish"
                 cancelButtonText="No, changes are needed"
                 title="Do you approve this publication?"
-            ></Components.Modal>
+            />
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
                     {publication.currentStatus === 'DRAFT' && (
@@ -258,6 +282,32 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     )}
                                 </>
                             )}
+                        </Components.Alert>
+                    )}
+                    {!!uniqueRedFlagCategoryList.length && (
+                        <Components.Alert
+                            title="This publication has active red flags for:"
+                            severity="RED_FLAG"
+                            className="mb-4"
+                        >
+                            <ul className="mt-3 mb-4">
+                                {uniqueRedFlagCategoryList.map((category) => (
+                                    <li key={category} className="text-sm text-white-100">
+                                        - {Config.values.octopusInformation.redFlagReasons[category].nicename}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button
+                                aria-label="View red flags"
+                                title="View red flags"
+                                onClick={() =>
+                                    document.getElementById('red-flags')?.scrollIntoView({ behavior: 'smooth' })
+                                }
+                                className="mt-2 block rounded border-transparent text-sm font-medium text-white-100 underline outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                            >
+                                View flags
+                            </button>
                         </Components.Alert>
                     )}
                     <header>
@@ -445,6 +495,46 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Red flags */}
+                    {showRedFlags && (
+                        <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
+                            <div className="mt-6 space-y-8">
+                                {!!activeFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Active
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {activeFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {!!inactiveFlags.length && (
+                                    <div>
+                                        <h2 className="mb-1 font-montserrat font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 ">
+                                            Resolved
+                                        </h2>
+                                        <div className="space-y-4">
+                                            {inactiveFlags.map((flag) => (
+                                                <Components.FlagPreview
+                                                    key={flag.id}
+                                                    publicationId={props.publication.id}
+                                                    flag={flag}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </Components.PublicationContentSection>
                     )}
 

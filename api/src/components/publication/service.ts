@@ -62,22 +62,34 @@ export const get = async (id: string) => {
                 }
             },
             publicationFlags: {
-                where: {
-                    resolved: false
-                },
                 select: {
-                    category: true,
-                    createdBy: true,
                     id: true,
+                    category: true,
+                    resolved: true,
+                    createdBy: true,
                     createdAt: true,
-                    flagComments: true
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
                 }
             },
             user: {
                 select: {
                     id: true,
+                    orcid: true,
                     firstName: true,
-                    lastName: true
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
                 }
             },
             coAuthors: {
@@ -343,66 +355,6 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
     return updatedPublication;
 };
 
-export const createFlag = async (
-    publication: string,
-    user: string,
-    category: I.PublicationFlagCategoryEnum,
-    comment: string
-) => {
-    const flag = await client.prisma.publicationFlags.create({
-        data: {
-            category,
-            user: {
-                connect: {
-                    id: user
-                }
-            },
-            flagComments: {
-                create: {
-                    comment,
-                    createdBy: user
-                }
-            },
-            publication: {
-                connect: {
-                    id: publication
-                }
-            }
-        }
-    });
-
-    return flag;
-};
-
-export const getFlag = async (id: string) => {
-    const flag = await client.prisma.publicationFlags.findFirst({
-        where: {
-            id
-        },
-        include: {
-            publication: {
-                include: {
-                    user: true
-                }
-            }
-        }
-    });
-
-    return flag;
-};
-
-export const createFlagComment = async (id: string, comment: string, user: string) => {
-    const flagComment = await client.prisma.flagComments.create({
-        data: {
-            flagId: id,
-            comment,
-            createdBy: user
-        }
-    });
-
-    return flagComment;
-};
-
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
         if (!publication.conflictOfInterestText?.length) return false;
@@ -448,17 +400,4 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         isReady = true;
 
     return isReady;
-};
-
-export const resolveFlag = async (id: string) => {
-    const resolveFlag = await client.prisma.publicationFlags.update({
-        where: {
-            id
-        },
-        data: {
-            resolved: true
-        }
-    });
-
-    return resolveFlag;
 };

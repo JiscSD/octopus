@@ -32,8 +32,8 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     const childStyles = React.useMemo(() => {
         return `
-            ${props.iconPosition === 'LEFT' ? 'ml-4' : ''}
-            ${props.iconPosition === 'RIGHT' ? 'mr-4' : ''}
+            ${props.iconPosition === 'LEFT' ? 'ml-3' : ''}
+            ${props.iconPosition === 'RIGHT' ? 'mr-3' : ''}
             py-2
             font-montserrat
             text-sm
