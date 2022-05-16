@@ -184,7 +184,6 @@ const Funders: React.FC = (): React.ReactElement => {
             setRor('');
         } catch (err) {
             setSubmitLoading(false);
-            console.log(err);
         }
     };
 
