@@ -12,19 +12,31 @@ import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
 import * as api from '@api';
 import { AxiosError } from 'axios';
+import Router from 'next/router';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.guardPrivateRoute(context);
+    let state: string | string[] | null = '/';
+
+    if (context.query.state) {
+        state = context.query.state;
+    }
 
     return {
-        props: {}
+        props: {
+            state
+        }
     };
 };
 
-const Validate: Types.NextPage = (): React.ReactElement => {
+type Props = {
+    state: string;
+};
+
+const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+    const setUser = Stores.useAuthStore((state) => state.setUser);
     const setToast = Stores.useToastStore((state) => state.setToast);
-    const [emailAddress, setEmailAddress] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [showCode, setShowCode] = React.useState(false);
     const [code, setCode] = React.useState('');
     const [loading, setLoading] = React.useState(false);
@@ -40,7 +52,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             setError('');
             setCode('');
 
-            await api.get(`${Config.endpoints.verification}/${user?.orcid}?email=${emailAddress}`, user?.token);
+            await api.get(`${Config.endpoints.verification}/${user?.orcid}?email=${email}`, user?.token);
 
             setShowCode(true);
             setLoading(false);
@@ -69,9 +81,24 @@ const Validate: Types.NextPage = (): React.ReactElement => {
             setError('');
             setLoading(true);
 
-            await api.post(`${Config.endpoints.verification}/${user?.orcid}`, { code }, user?.token);
+            // verify the supplied code, and if successful,
+            const getToken = await api.post<{ token: string }>(
+                `${Config.endpoints.verification}/${user?.orcid}`,
+                { code },
+                user?.token
+            );
 
-            setLoading(false);
+            // If success, decode the JWT, set the updated user, and redirect to state
+            if (getToken.status == 200) {
+                const decodedJWT = Helpers.setAndReturnJWT(getToken.data.token) as Types.UserType;
+
+                if (decodedJWT) {
+                    setUser(decodedJWT);
+                }
+                setTimeout(() => Router.push(props.state), 300);
+            }
+
+            throw new Error();
         } catch (err) {
             setLoading(false);
             const axiosError = err as AxiosError;
@@ -152,8 +179,8 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                     id="email"
                                     type="email"
                                     className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
-                                    value={emailAddress}
-                                    onChange={(e) => setEmailAddress(e.target.value)}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     disabled={loading}
                                 />
                                 <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
@@ -163,7 +190,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                             <span className="flex items-center gap-2">
                                 <Components.Button
                                     onClick={submitEmail}
-                                    disabled={!Boolean(emailAddress) || loading}
+                                    disabled={!Boolean(email) || loading}
                                     title="Send code"
                                     className="justify-self-end px-0"
                                 />
@@ -215,10 +242,7 @@ const Validate: Types.NextPage = (): React.ReactElement => {
                                 </div>
                                 <p>
                                     We have sent an email to{' '}
-                                    <span className="font-semibold text-grey-900 dark:text-grey-50">
-                                        {emailAddress}
-                                    </span>
-                                    .
+                                    <span className="font-semibold text-grey-900 dark:text-grey-50">{email}</span>.
                                 </p>
                                 <p>
                                     Please check your spam folder. Alternatively, you can{' '}

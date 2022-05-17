@@ -1,4 +1,5 @@
 import * as verificationService from 'verification/service';
+import * as authorizationService from 'authorization/service';
 import * as userService from 'user/service';
 import * as response from 'lib/response';
 import * as email from 'lib/email';
@@ -55,9 +56,12 @@ export const confirmCode = async (
             await verificationService.deleteVerification(verification.orcid);
 
             // Update the user email
-            await userService.updateEmail(verification.orcid, verification.email);
+            const user = await userService.updateEmail(verification.orcid, verification.email);
 
-            return response.json(200, { message: 'OK' });
+            // New token with updated user data
+            const token = authorizationService.createJWT(user);
+
+            return response.json(200, { token });
         }
 
         const increment = await verificationService.incrementAttempts(verification.orcid);
