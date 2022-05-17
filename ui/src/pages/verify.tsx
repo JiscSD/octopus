@@ -16,20 +16,27 @@ import Router from 'next/router';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let state: string | string[] | null = '/';
+    let newUser: boolean | null = false;
 
     if (context.query.state) {
         state = context.query.state;
     }
 
+    if (context.query.newUser) {
+        newUser = Boolean(context.query.newUser == 'true');
+    }
+
     return {
         props: {
-            state
+            state,
+            newUser
         }
     };
 };
 
 type Props = {
     state: string;
+    newUser: boolean;
 };
 
 const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -41,6 +48,7 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
     const [code, setCode] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
+    const [success, setSuccess] = React.useState(false);
 
     const submitEmail = () => {
         setLoading(true);
@@ -95,10 +103,11 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
                 if (decodedJWT) {
                     setUser(decodedJWT);
                 }
-                setTimeout(() => Router.push(props.state), 300);
+                setSuccess(true);
+                setTimeout(() => Router.push(decodeURIComponent(props.state)), 1000);
+            } else {
+                throw new Error();
             }
-
-            throw new Error();
         } catch (err) {
             setLoading(false);
             const axiosError = err as AxiosError;
@@ -125,13 +134,13 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
                 <meta name="description" content={Config.urls.terms.description} />
                 <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.terms.canonical} />
-                <title>{user?.email ? 'Update your email address' : 'Complete your registration'}</title>
+                <title>{props.newUser ? 'Complete your registration' : 'Update your email address'}</title>
             </Head>
 
             <Layouts.Standard>
                 <section className="mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12 lg:px-0">
                     <Components.PageTitle
-                        text={user?.email ? 'Update your email address' : 'Complete your registration'}
+                        text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
                     <form className="flex-column gap-4 space-y-4">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
@@ -173,7 +182,7 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
                             <label htmlFor="email" className="flex flex-col gap-1">
                                 <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                     <SolidIcons.QuestionMarkCircleIcon className="h-5 w-5 text-teal-700 dark:text-teal-400" />
-                                    Your email address
+                                    Your{!props.newUser && ' new'} email address
                                 </span>
                                 <input
                                     id="email"
@@ -184,7 +193,7 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
                                     disabled={loading}
                                 />
                                 <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
-                                    Please confirm your email address.
+                                    Please confirm your{!props.newUser && ' new'} email address.
                                 </span>
                             </label>
                             <span className="flex items-center gap-2">
@@ -232,9 +241,28 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
                                     title="Verify code"
                                     className="justify-self-end px-0"
                                 />
-                                {loading && (
+                                <HeadlessUI.Transition
+                                    show={loading && !success}
+                                    enter="fade duration-500"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="fade duration-50"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
                                     <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                )}
+                                </HeadlessUI.Transition>
+                                <HeadlessUI.Transition
+                                    show={success}
+                                    enter="delay-100 fade duration-500"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="fade duration-60"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
+                                </HeadlessUI.Transition>
                             </span>
                             <div className="mt-4 text-xs font-medium leading-relaxed tracking-wider text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                 <div className="mb-2 text-lg text-grey-700 dark:text-grey-100">

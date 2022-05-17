@@ -178,7 +178,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
             Location: `${Config.urls.verify.path}?state=${Buffer.from(
                 context.req.url || Config.urls.home.path,
                 'utf-8'
-            )}`
+            )}&newUser=true`
         });
         context.res.end();
     }

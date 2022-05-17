@@ -93,6 +93,7 @@ export interface CoreUser {
     firstName: string;
     lastName: string;
     orcid: string;
+    email?: string;
 }
 
 export interface OrcidDateRecord {
