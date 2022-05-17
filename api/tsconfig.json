@@ -54,6 +54,9 @@
             "coauthor/*": [
                 "src/components/coauthor/*"
             ],
+            "funder/*": [
+                "src/components/funder/*"
+            ],
             "flag/*": [
                 "src/components/flag/*"
             ],

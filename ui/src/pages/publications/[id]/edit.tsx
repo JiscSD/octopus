@@ -45,6 +45,12 @@ const steps: Interfaces.PublicationBuildingStep[] = [
         icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
     },
     {
+        title: 'Funders',
+        subTitle: 'Funders',
+        component: <Components.PublicationCreationFunders />,
+        icon: <OutlineIcons.CurrencyPoundIcon className="h-5 w-5 text-teal-400" />
+    },
+    {
         title: 'Declarations',
         subTitle: 'Declarations & statements',
         component: <Components.PublicationCreationDelclarationsAndStatements />,
@@ -125,7 +131,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 arr = steps;
                 break;
             default:
-                arr = [steps[0], steps[1], steps[2], steps[3], steps[4], steps[6]];
+                arr = [steps[0], steps[1], steps[2], steps[3], steps[4], steps[5], steps[6], steps[7]];
         }
         return arr;
     }, [props.draftedPublication.type]);
@@ -192,6 +198,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
         store.updateLinkTo(props.draftedPublication.linkedTo);
         store.updateCoAuthors(props.draftedPublication.coAuthors);
+        store.updateFunders(props.draftedPublication.funders);
     }, []);
 
     React.useEffect(() => {

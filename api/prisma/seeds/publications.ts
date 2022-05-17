@@ -46,6 +46,15 @@ const publicationSeeds = [
                 id: 'test-user-1'
             }
         },
+        funders: {
+            create: {
+                id: 'publication-problem-live-funder',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
         coAuthors: {
             create: {
                 id: 'testCoAuthorLive',
@@ -129,6 +138,15 @@ const publicationSeeds = [
         user: {
             connect: {
                 id: 'test-user-1'
+            }
+        },
+        funders: {
+            create: {
+                id: 'publication-problem-draft-funder',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
             }
         },
         coAuthors: {
