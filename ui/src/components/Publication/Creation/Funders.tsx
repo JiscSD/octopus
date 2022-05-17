@@ -124,7 +124,7 @@ const Funders: React.FC = (): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
 
     const [method, setMethod] = React.useState<'ror' | 'manual'>('ror');
-    const [ror, setRor] = React.useState<string>('');
+    const [ror, setRor] = React.useState('');
     const [name, setName] = React.useState('');
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
@@ -184,7 +184,6 @@ const Funders: React.FC = (): React.ReactElement => {
             setRor('');
         } catch (err) {
             setSubmitLoading(false);
-            console.log(err);
         }
     };
 
