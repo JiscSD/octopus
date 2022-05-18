@@ -2,6 +2,7 @@ import supertest from 'supertest';
 
 import * as client from 'lib/client';
 import * as seeds from 'prisma/seeds';
+import axios from 'axios';
 
 jest.setTimeout(60000);
 
@@ -66,4 +67,14 @@ export const clearDB = async (): Promise<void> => {
             index: 'publications'
         });
     }
+};
+
+export const getEmails = async (query: string): Promise<any> => {
+    const emails = await axios.get('http://0.0.0.0:8025/api/v2/search', {
+        params: {
+            kind: 'to',
+            query
+        }
+    });
+    return emails?.data;
 };
