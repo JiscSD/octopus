@@ -15,6 +15,8 @@ import { AxiosError } from 'axios';
 import Router from 'next/router';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    Helpers.guardPrivateRoute(context);
+
     let state: string | string[] | null = '/';
     let newUser: boolean | null = false;
 
