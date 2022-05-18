@@ -13,9 +13,12 @@ export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>) => {
     }
 };
 
-export const get = async (event: I.APIRequest<undefined, undefined, I.GetUserParameters>) => {
+export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>) => {
     try {
-        const user = await userService.get(event.pathParameters.id);
+        // Authenticated account owners can retrieve private fields (such as email)
+        const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
+
+        const user = await userService.get(event.pathParameters.id, isAccountOwner);
 
         if (!user) {
             return response.json(404, { message: 'User not found ' });
@@ -32,10 +35,13 @@ export const getPublications = async (
     event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
 ) => {
     try {
+        // Authenticated account owners can retrieve private fields (such as email)
+        const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
+
         const statuses: Array<I.ValidStatuses> =
             event.pathParameters.id === event.user?.id ? ['DRAFT', 'LIVE'] : ['LIVE'];
 
-        const userPublications = await userService.getPublications(event.pathParameters.id, statuses);
+        const userPublications = await userService.getPublications(event.pathParameters.id, statuses, isAccountOwner);
 
         if (!userPublications) {
             return response.json(404, { message: 'User not found' });

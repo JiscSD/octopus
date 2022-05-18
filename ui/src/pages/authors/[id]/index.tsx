@@ -64,17 +64,6 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                             <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                         </Components.Link>
                     </h3>
-                    <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        Email: {props.user.email} (
-                        <Components.Link
-                            href={`/verify/?state=${encodeURIComponent(
-                                `${Config.urls.viewUser.path}/${props.user.id}`
-                            )}`}
-                        >
-                            <span className="font-semibold text-teal-500">Update</span>
-                        </Components.Link>
-                        )
-                    </h3>
                 </header>
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">

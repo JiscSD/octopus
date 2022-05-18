@@ -81,6 +81,15 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                             </Components.Link>
                         </h2>
+                        {props.user.email && (
+                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
+                                Email: {props.user.email} (
+                                <Components.Link href={`${Config.urls.verify.path}/?state=/account`}>
+                                    <span className="font-semibold text-teal-500">Update</span>
+                                </Components.Link>
+                                )
+                            </h2>
+                        )}
                         <Components.Link
                             href={`${Config.urls.viewUser.path}/${props.user.id}`}
                             className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"

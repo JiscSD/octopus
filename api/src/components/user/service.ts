@@ -124,7 +124,7 @@ export const getByApiKey = async (apiKey: string) => {
     return user;
 };
 
-export const get = async (id: string) => {
+export const get = async (id: string, isAccountOwner = false) => {
     const user = await client.prisma.user.findFirst({
         where: {
             id
@@ -134,7 +134,7 @@ export const get = async (id: string) => {
             firstName: true,
             lastName: true,
             orcid: true,
-            email: true,
+            email: isAccountOwner ? true : false,
             role: true,
             createdAt: true,
             updatedAt: true,
@@ -168,7 +168,7 @@ export const get = async (id: string) => {
     return user;
 };
 
-export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>) => {
+export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>, isAccountOwner = false) => {
     const userPublications = await client.prisma.user.findFirst({
         where: {
             id
@@ -178,6 +178,7 @@ export const getPublications = async (id: string, statuses: Array<I.ValidStatuse
             firstName: true,
             lastName: true,
             orcid: true,
+            email: isAccountOwner ? true : false,
             createdAt: true,
             updatedAt: true,
             Publication: {
