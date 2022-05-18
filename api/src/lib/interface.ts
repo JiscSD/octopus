@@ -178,7 +178,7 @@ export interface RequestVerificationCodeParameters {
     email: string;
 }
 
-export interface ConfirmVerificationCodeParameters {
+export interface ConfirmVerificationCodeBody {
     code: string;
 }
 

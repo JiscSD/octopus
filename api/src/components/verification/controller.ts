@@ -36,7 +36,7 @@ export const requestCode = async (
 };
 
 export const confirmCode = async (
-    event: I.AuthenticatedAPIRequest<I.ConfirmVerificationCodeParameters, undefined, I.GetUserParameters>
+    event: I.AuthenticatedAPIRequest<I.ConfirmVerificationCodeBody, undefined, I.GetUserParameters>
 ) => {
     try {
         const verification = await verificationService.find(event.pathParameters.id);
