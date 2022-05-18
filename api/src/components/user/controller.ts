@@ -38,8 +38,7 @@ export const getPublications = async (
         // Authenticated account owners can retrieve private fields (such as email)
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
 
-        const statuses: Array<I.ValidStatuses> =
-            event.pathParameters.id === event.user?.id ? ['DRAFT', 'LIVE'] : ['LIVE'];
+        const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
 
         const userPublications = await userService.getPublications(event.pathParameters.id, statuses, isAccountOwner);
 
