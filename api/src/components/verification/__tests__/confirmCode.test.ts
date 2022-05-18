@@ -19,7 +19,7 @@ describe('Confirm a verification code', () => {
         expect(confirm.status).toEqual(422);
     });
 
-    test('User receives not found after three incorrect code attempts', async () => {
+    test('User receives not found on three incorrect code attempts', async () => {
         const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
 
         await testUtils.agent.get('/verification/4321').query({ apiKey: 123456789, email });
