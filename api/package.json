@@ -15,13 +15,8 @@
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
     },
-    "nodemonConfig": {
-        "ignore": [
-            "__tests__/*"
-        ]
-    },
     "scripts": {
-        "start:local": "nodemon --ignore ./__tests__ --exec \"sls offline --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus \"",
+        "start:local": "nodemon --config nodemon.json",
         "seed:local": "STAGE=local npx prisma migrate reset --force",
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "format:check": "npx prettier --check src/",

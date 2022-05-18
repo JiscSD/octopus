@@ -16,16 +16,18 @@ export type GlobalsStoreType = {
 };
 
 export type UserType = {
-    createdAt: string;
-    email: string | null;
-    exp: number;
-    firstName: string;
-    iat: number;
     id: string;
+    firstName: string;
     lastName: string;
-    locked: boolean;
-    orcid: string;
+    email: string | null;
     role: string;
+    createdAt: string;
+    updatedAt: string;
+    orcid: string;
+
+    exp: number;
+    iat: number;
+    locked: boolean;
     token: string;
 };
 
@@ -72,6 +74,8 @@ export type PublicationCreationStoreType = {
     reset: () => void;
     coAuthors: Interfaces.CoAuthor[];
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
+    funders: Interfaces.Funder[];
+    updateFunders: (funders: Interfaces.Funder[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
@@ -94,7 +98,7 @@ export type PublicationType =
     | 'INTERPRETATION'
     | 'PEER_REVIEW';
 
-export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
 export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
 
@@ -127,6 +131,14 @@ export type Ratings =
     | 'REVIEW_ORIGINAL';
 
 export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';
+
+export type RedFlagTypes =
+    | 'PLAGIARISM'
+    | 'ETHICAL_ISSUES'
+    | 'MISREPRESENTATION'
+    | 'UNDECLARED_IMAGE_MANIPULATION'
+    | 'COPYRIGHT'
+    | 'INAPPROPRIATE';
 
 export type Languages =
     | 'ab'

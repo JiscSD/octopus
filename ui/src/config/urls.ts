@@ -113,6 +113,21 @@ const urls = {
         keywords: [],
         canonical: `${base.host}/verify`
     },
+    myBookmarks: {
+        path: '/my-bookmarks',
+        title: `${base.title}`,
+        description: '',
+        keywords: [],
+        canonical: `${base.host}/my-bookmarks`
+    },
+
+    // RedFlags
+    viewFlagThread: {
+        path: '/publications', // append `/{publication_id}/flag/{flag_id}`
+        title: `${base.title}`,
+        description: '',
+        canonical: `${base.host}/publications` // append `/{publication_id}/flag/{flag_id}`
+    },
 
     // Static Pages
     home: {

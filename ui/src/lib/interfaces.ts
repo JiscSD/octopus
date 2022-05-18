@@ -74,6 +74,8 @@ export interface Publication extends CorePublication {
     conflictOfInterestText: string | null;
     ratings: Rating;
     coAuthors: CoAuthor[];
+    funders: Funder[];
+    publicationFlags: Flag[];
 }
 
 export interface CoAuthor {
@@ -86,14 +88,6 @@ export interface CoAuthor {
         lastName: string;
         orcid: string;
     };
-}
-
-export interface CoreUser {
-    id: string;
-    firstName: string;
-    lastName: string;
-    orcid: string;
-    email?: string;
 }
 
 export interface OrcidDateRecord {
@@ -123,6 +117,16 @@ export interface EducationRecord extends OrcidHistoryRecord {}
 
 export interface WorksRecord extends OrcidWorksRecord {}
 
+export interface CoreUser {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string | null;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    orcid: string;
+}
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
@@ -182,6 +186,38 @@ export interface LicenceTypeShape {
     link: string;
 }
 
+export interface BookmarkedPublicationsData {
+    id: string;
+    publicationId: string;
+    userId: string;
+    publication: BookmarkedPublication;
+}
+
+export interface BookmarkedPublication {
+    id: string;
+    title: string;
+    publicationId: string;
+    createdAt: string;
+    currentStatus: string;
+    url_slug: string;
+    description: string;
+    type: Types.PublicationType;
+    publishedDate: string;
+    coAuthors: Array<{
+        user: {
+            firstName: string;
+            lastName: string;
+            id: string;
+        };
+    }>;
+    doi: string;
+    updatedAt: string;
+    user: {
+        firstName: string;
+        lastName: string;
+    };
+}
+
 export interface Rating {
     aggregate: RatingEntry[];
     overall: {
@@ -237,6 +273,12 @@ export interface OctopusInformation {
         code: Types.Languages;
         name: string;
     }[];
+    redFlagReasons: {
+        [key in Types.RedFlagTypes]: {
+            value: Types.RedFlagTypes;
+            nicename: string;
+        };
+    };
 }
 
 export interface ToastState {
@@ -266,4 +308,34 @@ export interface APIRatingShape {
 export interface ImagePreview {
     name: string;
     base64: string;
+}
+
+export interface Funder {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror?: string;
+    id: string;
+}
+
+export interface FlagComment {
+    id: string;
+    flagId: string;
+    comment: string;
+    createdBy: string;
+    createdAt: string;
+    user: Omit<CoreUser, 'email'>;
+}
+export interface Flag {
+    id: string;
+    category: Types.RedFlagTypes;
+    publicationId: string;
+    resolved: boolean;
+    createdAt: string;
+    user: Omit<CoreUser, 'email'>;
+}
+
+export interface FlagWithComments extends Flag {
+    flagComments: FlagComment[];
 }

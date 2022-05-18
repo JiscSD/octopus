@@ -465,3 +465,32 @@ export interface EmailSendOptions {
     html: string;
     text: string;
 }
+
+export interface CreateFunderPathParams {
+    id: string;
+}
+
+export interface DeleteFunderPathParams {
+    id: string;
+    funder: string;
+}
+
+export interface CreateFunderRequestBody {
+    name: string;
+    ror?: string;
+    city: string;
+    country: string;
+    link: string;
+}
+
+export interface GetFlagByID {
+    id: string;
+}
+
+export interface GetFlagsByUserID {
+    id: string;
+}
+
+export interface GetFlagsByPublicationID {
+    id: string;
+}
