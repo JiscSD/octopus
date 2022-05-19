@@ -232,8 +232,8 @@ const Funders: React.FC = (): React.ReactElement => {
                         <input
                             disabled={method === 'manual'}
                             name="ror"
-                            className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 pl-10 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'manual' ? 'bg-grey-50 dark:bg-grey-800' : 'bg-white-50'
+                            className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 pl-10 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
+                                method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
                             placeholder="01rv9gx86 or https://ror.org/01rv9gx86"
                             value={ror}
@@ -261,7 +261,7 @@ const Funders: React.FC = (): React.ReactElement => {
                             placeholder="Name"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-800' : 'bg-white-50'
+                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -272,7 +272,7 @@ const Funders: React.FC = (): React.ReactElement => {
                             placeholder="City"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-800' : 'bg-white-50'
+                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
@@ -283,7 +283,7 @@ const Funders: React.FC = (): React.ReactElement => {
                             placeholder="Country"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-800' : 'bg-white-50'
+                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
@@ -294,7 +294,7 @@ const Funders: React.FC = (): React.ReactElement => {
                             placeholder="Link"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-800' : 'bg-white-50'
+                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
                             value={link}
                             onChange={(e) => setLink(e.target.value)}

@@ -9,9 +9,6 @@ type Props = {
 
 const LatestPublications: React.FC<Props> = (props): React.ReactElement => (
     <>
-        {/* <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-            Latest publications
-        </h2> */}
         <Components.PageSubTitle text="Latest publications" />
         <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
             See the latest publications that have been uploaded to Octopus

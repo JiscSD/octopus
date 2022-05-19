@@ -19,7 +19,7 @@ const AppDocument = () => (
             <meta property="og:title" content="Octopus" />
             <meta
                 property="og:description"
-                content="A new way to publish your scientific work that's fast, free and fair."
+                content="Octopus is a new way to register research. It is the place to publish the version of record, enabling peer review and quality assessment and allowing the academic community to build upon the latest work."
             />
             <meta property="og:image" content="/meta/og-image.jpg" />
 
@@ -29,7 +29,7 @@ const AppDocument = () => (
             <meta name="twitter:title" content="Octopus" />
             <meta
                 name="twitter:description"
-                content="A new way to publish your scientific work that's fast, free and fair."
+                content="Octopus is a new way to register research. It is the place to publish the version of record, enabling peer review and quality assessment and allowing the academic community to build upon the latest work."
             />
             <meta name="twitter:image" content="/meta/og-image.jpg"></meta>
         </NextDocument.Head>

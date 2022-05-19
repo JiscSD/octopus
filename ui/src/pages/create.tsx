@@ -97,12 +97,33 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     {error ? <Components.Alert severity="ERROR" title={error} className="mt-2" /> : null}
 
                     <div className="mb-10">
-                        <Components.PageSubTitle text="Create a publication" className="!mb-4" />
+                        <Components.PageSubTitle text="Record a piece of research" className="!mb-4" />
+                        <SupportText>
+                            Octopus is designed for officially recording your research contributions to the primary
+                            research record. It is different from writing an article for a journal (which you can do
+                            once you have recorded the primary work in Octopus). It is more like a &apos;patent
+                            office&apos;, where you can establish priority for new ideas and work, and where your work
+                            can be assessed on its quality and integrity. Every piece of work recorded is adding to the
+                            sum of knowledge, as long as it is positioned in the right place so that others can find it
+                            and build on it.
+                        </SupportText>
+                        <SupportText>
+                            Octopus is designed to help you demonstrate the quality of your work, and to place it so
+                            that others can build around it.
+                        </SupportText>
                         <SupportText>
                             There are no rules on style and layout of publications. You should, however, continue to be
-                            guided by any relevant reporting guidelines for your field, such as the EQUATOR guidelines
-                            in health research. You will also be given the opportunity to link to additional resources
-                            deposited on specialist platforms (such as data or code repositories).
+                            guided by any relevant reporting guidelines for your field, such as the{' '}
+                            <Components.Link
+                                href="https://www.equator-network.org"
+                                ariaLabel="Read more about the EQUATOR guidlines"
+                                title="Read more about the EQUATOR guidlines"
+                                className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                            >
+                                EQUATOR
+                            </Components.Link>{' '}
+                            guidelines in health research. You will also be given the opportunity to link to additional
+                            resources deposited on specialist platforms (such as data or code repositories).
                         </SupportText>
                     </div>
 
@@ -161,7 +182,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             )}
                         </select>
                         <SupportText>
-                            {Config.values.octopusInformation.publications[publicationType].content}
+                            Definition: {Config.values.octopusInformation.publications[publicationType].content}
                         </SupportText>
                     </div>
 

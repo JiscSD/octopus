@@ -13,18 +13,18 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         // publications that are live cannot have links created.
         if (!fromPublication || fromPublication?.currentStatus === 'LIVE') {
             return response.json(404, {
-                message: `Publication with id ${event.body.to} is either LIVE or does not eixst.`
+                message: `Publication with id ${event.body.to} is either LIVE or does not exist.`
             });
         }
 
         // the authenticated user is not the owner of the publication
         if (fromPublication.user.id !== event.user.id) {
-            return response.json(404, { message: 'You do not have permission to create publication links' });
+            return response.json(401, { message: 'You do not have permission to create publication links' });
         }
 
         // peer reviews can only linkTo one thing
         if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
-            return response.json(404, { message: 'Peer reviews can only have 1 link.' });
+            return response.json(403, { message: 'Peer reviews can only have 1 link.' });
         }
 
         // since we are not passing in a user, this should only return a publication if it is LIVE
@@ -33,7 +33,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         // toPublication does not exist in a LIVE state
         if (!toPublication || toPublication.currentStatus !== 'LIVE') {
             return response.json(404, {
-                message: `Publication with id ${event.body.to} is either not LIVE or does not eixst.`
+                message: `Publication with id ${event.body.to} is either not LIVE or does not exist.`
             });
         }
 

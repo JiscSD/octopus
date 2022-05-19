@@ -11,9 +11,10 @@ const Standard: React.FC<Props> = (props): React.ReactElement => (
     <>
         <Components.JumpToContent />
         <Components.SurveyWidget />
-        <Components.Header fixed={props.fixedHeader} />
+        <Components.Header />
+        <Components.Banner />
         <main>{props.children}</main>
-        <Components.Footer />
+        <Components.Footer waves={true} />
     </>
 );
 

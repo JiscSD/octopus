@@ -7,6 +7,7 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 interface Errors {
     latest: null | string;
@@ -28,7 +29,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             // 'publishedDate',
             // 'asc'
         );
-        latest = latestResponse.data as Interfaces.Publication[];
+        latest = latestResponse.data.reverse() as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         errors.latest = message;
@@ -63,19 +64,31 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
             <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                 <aside className="relative col-span-2 hidden lg:block">
                     <div className="sticky top-16">
-                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                            Publication type
-                        </h2>
-                        <Components.Link
+                        {/* view all publication & authors buttons */}
+                        <Components.Button
+                            link
                             href={`${
                                 Config.urls.search.path
                             }?for=publications&type=${Config.values.publicationTypes.join()}`}
-                            className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                        >
-                            <span className="font-medium text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
-                                All
-                            </span>
-                        </Components.Link>
+                            title="View all publications"
+                            iconPosition="RIGHT"
+                            icon={
+                                <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            }
+                        />
+                        <Components.Button
+                            link
+                            href={`${Config.urls.search.path}?for=users`}
+                            title="View all authors"
+                            iconPosition="RIGHT"
+                            icon={
+                                <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            }
+                            className="mb-6"
+                        />
+                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Publication type
+                        </h2>
                         {Config.values.publicationTypes.map((type) => (
                             <Components.Link
                                 key={type}

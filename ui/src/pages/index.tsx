@@ -56,11 +56,13 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="container mx-auto px-8 py-8 lg:py-24">
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                         <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl ">
-                            A new way to publish your scientific work that&apos;s fast, free and fair.
+                            Free, fast and fair: the global primary research record where researchers record their work
+                            in full detail
                         </h1>
                         <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
-                            Designed to replace journals and papers as the place to establish priority and record your
-                            work in full detail.
+                            Octopus is a new way to register research. It is the place to publish the version of record,
+                            enabling peer review and quality assessment and allowing the academic community to build
+                            upon the latest work.
                         </p>
 
                         <div className="mx-auto flex w-fit space-x-6">
@@ -97,47 +99,46 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
                         <Components.ActionCard
+                            title="FAQs"
+                            content="Review our FAQs to find out more about how the platform works."
+                            icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.faq.path}
+                            linkText="See FAQ's"
+                        />
+                        <Components.ActionCard
                             title="Publish your work"
-                            content="Publishing in Octopus is free and simple, with eight publications types aligned with the scientific process."
+                            content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
                             icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.createPublication.path}
                             linkText="Publish your work"
                         />
                         <Components.ActionCard
-                            title="Search publications"
-                            content="Anyone can read any publication on Octopus. Search by keyword, title or author to discover more."
+                            title="Read publications"
+                            content="Anyone can read anything in Octopus – it's designed to make primary research openly available to all."
                             icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.search.path}
-                            linkText="Search publications"
+                            linkText="Read publications"
                         />
                         <Components.ActionCard
                             title="Browse publications"
-                            content="View recent publications and  and browse by publication type."
+                            content="Every publication in Octopus is linked to another, forming branching chains of research. You can navigate these chains from every publication page to browse areas of research and discover something new."
                             icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.browsePublications.path}
                             linkText="Browse publications"
                         />
                         <Components.ActionCard
                             title="Create an account"
-                            content="Octopus accounts are created via ORCID login."
+                            content="Before you can publish research work, you need to create an account via ORCiD. ORCiD is a system of unique, persistent digital identifiers developed specifically for researchers."
                             icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.orcidLogin.path}
                             linkText="Create an account"
                         />
                         <Components.ActionCard
-                            title="Learn more account Octopus"
-                            content="Read more about what makes Octopus different, as well as our priorities and plans."
+                            title="Learn more about Octopus"
+                            content="Octopus is designed to incentivise best practice in research, utilise the opportunities of open access, and to improve the research culture."
                             icon={<OutlineIcons.BookOpenIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.about.path}
                             linkText="Learn more"
-                        />
-
-                        <Components.ActionCard
-                            title="Need help?"
-                            content="Review our FAQs to find out more about how the platform works."
-                            icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.faq.path}
-                            linkText="See FAQ's"
                         />
                     </div>
                 </section>

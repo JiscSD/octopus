@@ -71,8 +71,8 @@ const StepTwo: React.FC = (): React.ReactElement => {
                     },
                     user.token
                 );
-            } catch (err) {
-                setMutateError('There was a problem creating this link.');
+            } catch (err: any) {
+                setMutateError(err.response.data.message);
             }
             fetchAndSetLinkTos(user.token);
         }
@@ -139,17 +139,19 @@ const StepTwo: React.FC = (): React.ReactElement => {
                             placeholder="Search for publications"
                             onChange={(event) => setSearch(event.target.value)}
                         />
-                        <button
-                            className="ml-px rounded-full outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
-                            onClick={createLink}
+                        <Components.Button
+                            title="Add link"
                             disabled={isValidating || createMutateLoading || !selectedPublication}
-                        >
-                            {createMutateLoading ? (
-                                <OutlineIcons.RefreshIcon className="h-8 w-8 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                            ) : (
-                                <OutlineIcons.PlusCircleIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                            )}
-                        </button>
+                            onClick={createLink}
+                            iconPosition="RIGHT"
+                            icon={
+                                createMutateLoading ? (
+                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                ) : (
+                                    <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                )
+                            }
+                        />
                     </div>
                     <HeadlessUI.Transition
                         as={React.Fragment}

@@ -16,7 +16,7 @@ type Props = {
 const Button: React.FC<Props> = (props): React.ReactElement | null => {
     const parentStyles = React.useMemo(() => {
         return `
-            p-2
+            pb-2
             group
             inline-flex
             items-center

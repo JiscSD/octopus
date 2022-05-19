@@ -124,6 +124,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { title: 'Publication chain', href: 'publication-chain' },
         { title: 'Main text', href: 'main-text' },
         ...list,
+        { title: 'Funders', href: 'funders' },
         { title: 'Conflict of interest', href: 'coi' }
     ];
 
@@ -537,6 +538,33 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </div>
                         </Components.PublicationContentSection>
                     )}
+                    {/* Publication funders section */}
+                    <Components.PublicationContentSection id="funders" title="Funders" hasBreak>
+                        {publication.funders.length ? (
+                            <>
+                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    This {Helpers.formatPublicationType(publication.type)} has the following funder
+                                    {publication.funders.length > 1 && 's'}:
+                                </p>
+                                <ul>
+                                    {publication.funders.map((funder) => {
+                                        return (
+                                            <li key={funder.id} className="ml-7 mt-1 list-disc">
+                                                <a href={funder.link} className=" text-teal-600 hover:underline">
+                                                    {funder.name}
+                                                </a>{' '}
+                                                - {funder.country}, {funder.city}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </>
+                        ) : (
+                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                This {Helpers.formatPublicationType(publication.type)} has no funders.
+                            </p>
+                        )}
+                    </Components.PublicationContentSection>
 
                     {/** Conflict of interest */}
                     <Components.PublicationContentSection id="coi" title="Conflict of interest">
