@@ -553,7 +553,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 <a href={funder.link} className=" text-teal-600 hover:underline">
                                                     {funder.name}
                                                 </a>{' '}
-                                                - {funder.country}, {funder.city}
+                                                - {funder.city}, {funder.country}
                                             </li>
                                         );
                                     })}

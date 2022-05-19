@@ -331,17 +331,27 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                             iconPosition="LEFT"
                         />
-
-                        <NavigationButton
-                            text="Next"
-                            disabled={props.currentStep >= props.steps.length - 1}
-                            onClick={() => {
-                                props.setStep((prevState: number) => prevState + 1);
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                            }}
-                            icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                            iconPosition="RIGHT"
-                        />
+                        {props.steps.length - 1 === props.currentStep ? (
+                            <NavigationButton
+                                text="Publish"
+                                onClick={() => setPublishModalVisibility(true)}
+                                disabled={!isReadyToPreview}
+                                className=""
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                        ) : (
+                            <NavigationButton
+                                text="Next"
+                                disabled={props.currentStep >= props.steps.length - 1}
+                                onClick={() => {
+                                    props.setStep((prevState: number) => prevState + 1);
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                        )}
                     </div>
                 </section>
             </main>
