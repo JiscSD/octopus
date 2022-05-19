@@ -132,8 +132,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     return (
         <>
             <Head>
-                <meta name="description" content={Config.urls.terms.description} />
-                <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
+                <meta name="robots" content="noindex, nofollow" />
                 <link rel="canonical" href={Config.urls.terms.canonical} />
                 <title>{props.newUser ? 'Complete your registration' : 'Update your email address'}</title>
             </Head>
