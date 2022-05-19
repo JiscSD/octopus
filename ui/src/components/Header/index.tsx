@@ -55,7 +55,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                         <div className="container mx-auto flex items-center gap-2 px-8 py-4 font-montserrat font-semibold">
                             <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 stroke-grey-900" />
                             <Components.Link
-                                href={Config.urls.verify.path}
+                                href={`${Config.urls.verify.path}?newUser=true`}
                                 className="underline decoration-2 underline-offset-4"
                             >
                                 Please confirm your email address to publish content
