@@ -41,7 +41,7 @@ type Props = {
     newUser: boolean;
 };
 
-const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
+const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const setUser = Stores.useAuthStore((state) => state.setUser);
     const setToast = Stores.useToastStore((state) => state.setToast);
@@ -140,7 +140,7 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
 
             <Layouts.Standard>
-                <section className="mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:w-8/12 lg:px-0">
+                <section className="container mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50">
                     <Components.PageTitle
                         text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
@@ -302,4 +302,4 @@ const Validate: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Validate;
+export default Verify;
