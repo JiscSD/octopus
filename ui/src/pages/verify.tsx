@@ -1,18 +1,17 @@
-import Head from 'next/head';
-
-import * as React from 'react';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as HeadlessUI from '@headlessui/react';
 import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as HeadlessUI from '@headlessui/react';
+import * as Helpers from '@helpers';
+import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/solid';
+import * as Layouts from '@layouts';
+import * as Stores from '@stores';
+import * as Types from '@types';
 import { AxiosError } from 'axios';
+import Head from 'next/head';
 import Router from 'next/router';
+import * as React from 'react';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     Helpers.guardPrivateRoute(context);
