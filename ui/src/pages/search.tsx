@@ -1,18 +1,17 @@
-import React from 'react';
-import Head from 'next/head';
-import useSWR from 'swr';
-import moment from 'moment';
-import * as Framer from 'framer-motion';
-import * as Router from 'next/router';
-import * as SolidIcons from '@heroicons/react/solid';
-
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as SolidIcons from '@heroicons/react/solid';
+import * as Interfaces from '@interfaces';
+import * as Layouts from '@layouts';
+import * as Types from '@types';
+import * as Framer from 'framer-motion';
+import moment from 'moment';
+import Head from 'next/head';
+import * as Router from 'next/router';
+import React from 'react';
+import useSWR from 'swr';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
@@ -370,7 +369,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             <input
                                                 name="date-from"
                                                 id="date-from"
-                                                type="text"
+                                                type="date"
                                                 placeholder="Date from..."
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
@@ -385,7 +384,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             <input
                                                 name="date-to"
                                                 id="date-to"
-                                                type="text"
+                                                type="date"
                                                 placeholder="Date to..."
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
