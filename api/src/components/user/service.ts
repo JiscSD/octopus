@@ -36,6 +36,28 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
     return user;
 };
 
+export const updateEmail = async (orcid: string, email: string) => {
+    const user = await client.prisma.user.update({
+        select: {
+            email: true,
+            id: true,
+            createdAt: true,
+            firstName: true,
+            lastName: true,
+            locked: true,
+            orcid: true,
+            role: true
+        },
+        data: {
+            email
+        },
+        where: {
+            orcid
+        }
+    });
+    return user;
+};
+
 export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 
@@ -102,7 +124,7 @@ export const getByApiKey = async (apiKey: string) => {
     return user;
 };
 
-export const get = async (id: string) => {
+export const get = async (id: string, isAccountOwner = false) => {
     const user = await client.prisma.user.findFirst({
         where: {
             id
@@ -112,7 +134,7 @@ export const get = async (id: string) => {
             firstName: true,
             lastName: true,
             orcid: true,
-            email: true,
+            email: isAccountOwner ? true : false,
             role: true,
             createdAt: true,
             updatedAt: true,
@@ -146,7 +168,7 @@ export const get = async (id: string) => {
     return user;
 };
 
-export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>) => {
+export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>, isAccountOwner = false) => {
     const userPublications = await client.prisma.user.findFirst({
         where: {
             id
@@ -156,6 +178,7 @@ export const getPublications = async (id: string, statuses: Array<I.ValidStatuse
             firstName: true,
             lastName: true,
             orcid: true,
+            email: isAccountOwner ? true : false,
             createdAt: true,
             updatedAt: true,
             Publication: {

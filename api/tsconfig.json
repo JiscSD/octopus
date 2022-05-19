@@ -3,9 +3,7 @@
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "lib": [
-            "esnext"
-        ],
+        "lib": ["esnext"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noUnusedLocals": true,
@@ -16,81 +14,31 @@
         "strictNullChecks": true,
         "resolveJsonModule": true,
         "baseUrl": "./",
-        "types": [
-            "node",
-            "jest"
-        ],
-        "typeRoots": [
-            "./node_modules/@types"
-        ],
+        "types": ["node", "jest"],
+        "typeRoots": ["./node_modules/@types"],
         "paths": {
-            "prisma/*": [
-                "prisma/*"
-            ],
-            "components/*": [
-                "src/components/*"
-            ],
-            "publication/*": [
-                "src/components/publication/*"
-            ],
-            "user/*": [
-                "src/components/user/*"
-            ],
-            "bookmark/*": [
-                "src/components/bookmark/*"
-            ],
-            "link/*": [
-                "src/components/link/*"
-            ],
-            "authorization/*": [
-                "src/components/authorization/*"
-            ],
-            "image/*": [
-                "src/components/image/*"
-            ],
-            "rating/*": [
-                "src/components/rating/*"
-            ],
-            "coauthor/*": [
-                "src/components/coauthor/*"
-            ],
-            "funder/*": [
-                "src/components/funder/*"
-            ],
-            "flag/*": [
-                "src/components/flag/*"
-            ],
-            "lib/*": [
-                "src/lib/*"
-            ],
-            "middleware": [
-                "src/middleware"
-            ],
-            "interface": [
-                "src/lib/interface"
-            ],
-            "enum": [
-                "src/lib/enum"
-            ],
-            "config": [
-                "src/config"
-            ],
-            "utilities": [
-                "src/utilities"
-            ],
-            "email": [
-                "src/lib/email"
-            ]
+            "prisma/*": ["prisma/*"],
+            "components/*": ["src/components/*"],
+            "publication/*": ["src/components/publication/*"],
+            "user/*": ["src/components/user/*"],
+            "bookmark/*": ["src/components/bookmark/*"],
+            "link/*": ["src/components/link/*"],
+            "authorization/*": ["src/components/authorization/*"],
+            "verification/*": ["src/components/verification/*"],
+            "image/*": ["src/components/image/*"],
+            "rating/*": ["src/components/rating/*"],
+            "coauthor/*": ["src/components/coauthor/*"],
+            "funder/*": ["src/components/funder/*"],
+            "flag/*": ["src/components/flag/*"],
+            "lib/*": ["src/lib/*"],
+            "middleware": ["src/middleware"],
+            "interface": ["src/lib/interface"],
+            "enum": ["src/lib/enum"],
+            "config": ["src/config"],
+            "utilities": ["src/utilities"],
+            "email": ["src/lib/email"]
         }
     },
-    "include": [
-        "./**/*.ts"
-    ],
-    "exclude": [
-        "node_modules/**/*",
-        ".serverless/**/*",
-        ".webpack/**/*",
-        "_warmup/**/*",
-        ".vscode/**/*"
-    ]
+    "include": ["./**/*.ts"],
+    "exclude": ["node_modules/**/*", ".serverless/**/*", ".webpack/**/*", "_warmup/**/*", ".vscode/**/*"]
 }

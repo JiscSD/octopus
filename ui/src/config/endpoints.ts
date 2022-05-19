@@ -6,6 +6,7 @@ const endpoints = {
     ratings: `${api.baseURL}/ratings`,
     links: `${api.baseURL}/links`,
     authorization: `${api.baseURL}/authorization`,
+    verification: `${api.baseURL}/verification`,
     flag: `${api.baseURL}/flag`,
     bookmarks: `${api.baseURL}/bookmarks`
 };

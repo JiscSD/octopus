@@ -295,6 +295,23 @@ functions:
                   path: ${self:custom.versions.v1}/bookmarks
                   method: get
                   cors: true
+    # Verification
+    requestVerification:
+        handler: src/components/verification/routes.requestCode
+        warmup: true
+        events:
+            - http:
+                    path: ${self:custom.versions.v1}/verification/{id}
+                    method: get
+                    cors: true
+    confirmVerification:
+        handler: src/components/verification/routes.confirmCode
+        warmup: true
+        events:
+            - http:
+                    path: ${self:custom.versions.v1}/verification/{id}
+                    method: post
+                    cors: true
     createFunder:
         handler: src/components/funder/routes.create
         events:

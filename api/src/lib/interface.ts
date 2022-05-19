@@ -165,6 +165,24 @@ export interface GetUserParameters {
 }
 
 /**
+ * Verification
+ */
+
+export interface UpdateVerificationInformation {
+    orcid: string;
+    email: string;
+    code: string;
+}
+
+export interface RequestVerificationCodeParameters {
+    email: string;
+}
+
+export interface ConfirmVerificationCodeBody {
+    code: string;
+}
+
+/**
  * @description Flags
  */
 

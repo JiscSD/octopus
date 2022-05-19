@@ -42,6 +42,7 @@
         "aws-sdk": "^2.1114.0",
         "axios": "^0.26.0",
         "cheerio": "^1.0.0-rc.10",
+        "crypto-random-string": "^3.3.1",
         "file-type": "^16.5.3",
         "html-to-text": "^8.1.0",
         "jsonwebtoken": "^8.5.1",

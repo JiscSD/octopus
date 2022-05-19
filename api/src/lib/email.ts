@@ -129,6 +129,10 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             border-radius: 3px; 
             text-decoration: none;
         }
+        .code {
+            font-size: 32px;
+            letter-spacing: 5px;
+        }
     </style>
     <body>
         <div class="wrapper">
@@ -216,5 +220,27 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
         text,
         to: options.coAuthor,
         subject: 'Added as co-author'
+    });
+};
+
+type VerificationCode = {
+    to: string;
+    code: string;
+};
+
+export const verificationCode = async (options: VerificationCode) => {
+    const html = `
+    <p>Please enter the following code to verify your email address:</p>
+    <br>
+    <p class="code">${options.code}</p>
+    `;
+
+    const text = `Please enter the following code to verify your email address: ${options.code}`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Verify your email', html),
+        text,
+        to: options.to,
+        subject: 'Verify your email'
     });
 };

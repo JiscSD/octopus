@@ -106,6 +106,13 @@ const urls = {
         keywords: [],
         canonical: `${base.host}/account`
     },
+    verify: {
+        path: '/verify',
+        title: `${base.title}`,
+        description: '',
+        keywords: [],
+        canonical: `${base.host}/verify`
+    },
     myBookmarks: {
         path: '/my-bookmarks',
         title: `${base.title}`,
