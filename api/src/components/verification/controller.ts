@@ -1,12 +1,11 @@
-import * as verificationService from 'verification/service';
 import * as authorizationService from 'authorization/service';
-import * as userService from 'user/service';
-import * as response from 'lib/response';
-import * as email from 'lib/email';
-import * as I from 'interface';
-import moment from 'moment';
-
 import cryptoRandomString from 'crypto-random-string';
+import * as I from 'interface';
+import * as email from 'lib/email';
+import * as response from 'lib/response';
+import * as luxon from 'luxon';
+import * as userService from 'user/service';
+import * as verificationService from 'verification/service';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
@@ -46,7 +45,10 @@ export const confirmCode = async (
         }
 
         // If code has expired, remove it from the database and return appropriate error
-        if (moment().diff(verification.createdAt, 'minutes') > Number(process.env.VALIDATION_CODE_EXPIRY)) {
+        if (
+            Math.abs(luxon.DateTime.fromJSDate(verification.createdAt).diffNow('minutes').minutes) >
+            Number(process.env.VALIDATION_CODE_EXPIRY)
+        ) {
             await verificationService.deleteVerification(verification.orcid);
             return response.json(404, { message: 'Not found' });
         }
