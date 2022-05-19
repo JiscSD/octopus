@@ -173,7 +173,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
     // Only allow users with a verified email to access guarded routes
     const decoded = JWT.decode(token) as Types.UserType;
 
-    if (!decoded.email && !context.req.url?.startsWith(`${Config.urls.verify.path}?state=`)) {
+    if (!decoded.email && !context.req.url?.startsWith(`${Config.urls.verify.path}`)) {
         context.res.writeHead(302, {
             Location: `${Config.urls.verify.path}?state=${Buffer.from(
                 context.req.url || Config.urls.home.path,
