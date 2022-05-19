@@ -102,6 +102,9 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 const decodedJWT = Helpers.setAndReturnJWT(getToken.data.token) as Types.UserType;
 
                 if (decodedJWT) {
+                    // Set user to null first to avoid state change visual bug
+                    setUser(null);
+                    // Set user to new decoded value
                     setUser(decodedJWT);
                 }
                 setSuccess(true);
