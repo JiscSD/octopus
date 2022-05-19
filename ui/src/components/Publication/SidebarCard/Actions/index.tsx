@@ -472,7 +472,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 </button>
             </div>
 
-            {user ? (
+            {user && user.email ? (
                 <>
                     <Components.PublicationSidebarCardActionsButton
                         label="Write review"
@@ -494,6 +494,15 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         label="Flag this publication"
                         onClick={() => setShowRedFlagModel(true)}
                     />
+                </>
+            ) : user && !user.email ? (
+                <>
+                    <Components.Link
+                        href={`${Config.urls.verify.path}?state=${Config.urls.viewPublication.path}/${props.publication.id}`}
+                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                    >
+                        Verify your email for more actions
+                    </Components.Link>
                 </>
             ) : (
                 <>
