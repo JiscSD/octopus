@@ -65,27 +65,29 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
                 <aside className="relative col-span-2 hidden lg:block">
                     <div className="sticky top-16">
                         {/* view all publication & authors buttons */}
-                        <Components.Button
-                            link
-                            href={`${
-                                Config.urls.search.path
-                            }?for=publications&type=${Config.values.publicationTypes.join()}`}
-                            title="View all publications"
-                            iconPosition="RIGHT"
-                            icon={
-                                <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                            }
-                        />
-                        <Components.Button
-                            link
-                            href={`${Config.urls.search.path}?for=users`}
-                            title="View all authors"
-                            iconPosition="RIGHT"
-                            icon={
-                                <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                            }
-                            className="mb-6"
-                        />
+                        <div className="grid-row-2 grid">
+                            <Components.Button
+                                link
+                                href={`${
+                                    Config.urls.search.path
+                                }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                                title="View all publications"
+                                iconPosition="RIGHT"
+                                icon={
+                                    <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                }
+                            />
+                            <Components.Button
+                                link
+                                href={`${Config.urls.search.path}?for=users`}
+                                title="View all authors"
+                                iconPosition="RIGHT"
+                                icon={
+                                    <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                }
+                                className="mb-6"
+                            />
+                        </div>
                         <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Publication type
                         </h2>
