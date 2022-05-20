@@ -16,10 +16,14 @@ const General: React.FC<Props> = (props): React.ReactElement => {
         (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
     ).length;
 
-    const activeRedFlagCount = props.publication.publicationFlags.filter((flag) => !flag.resolved).length;
+    const activeFlags = React.useMemo(
+        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
+        [props.publication]
+    );
 
-    const uniqueRedFlagCategoryList = Array.from(
-        new Set(props.publication.publicationFlags.map((flag) => flag.category))
+    const uniqueRedFlagCategoryList = React.useMemo(
+        () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
+        [activeFlags]
     );
 
     return (
@@ -98,7 +102,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     </Components.Link>
                 </div>
             )}
-            {!!activeRedFlagCount && (
+            {!!activeFlags && (
                 <div className="flex">
                     <span className="mr-2 flex items-center text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                         Red flags:{' '}
@@ -107,7 +111,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                                 <SolidIcons.FlagIcon key={category} className="h-4 w-4 text-red-500" />
                             ))}
                         </div>
-                        ({activeRedFlagCount})
+                        ({activeFlags.length})
                     </span>
                 </div>
             )}

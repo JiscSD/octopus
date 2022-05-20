@@ -100,13 +100,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
             // If success, decode the JWT, set the updated user, and redirect to state
             if (getToken.status == 200) {
                 const decodedJWT = Helpers.setAndReturnJWT(getToken.data.token) as Types.UserType;
-
-                if (decodedJWT) {
-                    // Set user to null first to avoid state change visual bug
-                    setUser(null);
-                    // Set user to new decoded value
-                    setUser(decodedJWT);
-                }
+                if (decodedJWT && user) setUser({ ...decodedJWT, token: user?.token });
                 setSuccess(true);
                 setTimeout(() => Router.push(decodeURIComponent(props.state)), 1000);
             } else {

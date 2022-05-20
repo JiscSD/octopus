@@ -89,6 +89,8 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
         }
     );
 
+    console.log(data);
+
     const user = Stores.useAuthStore((state) => state.user);
     const setToast = Stores.useToastStore((state) => state.setToast);
 
