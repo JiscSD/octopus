@@ -491,7 +491,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         onClick={() => setShowRatingsModel(true)}
                     />
                     <Components.PublicationSidebarCardActionsButton
-                        label="Flag this publication"
+                        label="Flag a concern with this publication"
                         onClick={() => setShowRedFlagModel(true)}
                     />
                 </>

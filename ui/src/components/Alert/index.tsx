@@ -99,9 +99,9 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="grid grid-cols-21">
-                        <div className="col-span-2 row-span-2 mr-4 ml-1 mt-1 lg:col-span-1">{classes.icon}</div>
-                        <div className="col-span-19 lg:col-span-20">
+                    <div className="flex items-start">
+                        <div className="mr-3 ml-1">{classes.icon}</div>
+                        <div className="">
                             {!!props.title && (
                                 <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
                                     {props.title}

@@ -23,8 +23,8 @@ const Nav: React.FC = (): React.ReactElement => {
 
     React.useEffect(() => {
         if (user) {
-            setItems((prevState) => [
-                ...prevState,
+            setItems([
+                ...defaultValues,
                 {
                     label: `${user?.firstName} ${user?.lastName}`,
                     value: `${Config.urls.viewUser.path}/${user.id}`,

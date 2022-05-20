@@ -199,8 +199,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // TODO Same as above.
     const uniqueRedFlagCategoryList = React.useMemo(
-        () => Array.from(new Set(props.publication.publicationFlags.map((flag) => flag.category))),
-        [props.publication.publicationFlags]
+        () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
+        [activeFlags]
     );
 
     return (
