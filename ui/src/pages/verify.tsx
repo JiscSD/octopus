@@ -145,6 +145,20 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                     <Components.PageTitle
                         text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
+                    <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                        A verified email is required for essential service notifications. We’ll use it as described in
+                        our privacy notice (at{' '}
+                        <Components.Link
+                            href={Config.urls.privacy.canonical}
+                            className="rounded border-transparent underline decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
+                            openNew={true}
+                        >
+                            {Config.urls.privacy.canonical}
+                        </Components.Link>
+                        ) only to provide the Octopus service. We’ll store your email address until we are told that you
+                        no longer wish to hold an account. You can update your email address at any time from your user
+                        account page.
+                    </p>
                     <form className="flex-column gap-4 space-y-4">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
