@@ -47,6 +47,33 @@ export const initialDevSeed = async (): Promise<void> => {
         }
     }
 
+    for (let problem of SeedData.problems) {
+        await client.prisma.publication.create({
+            // @ts-ignore
+            data: problem
+        });
+
+        if (problem.currentStatus === 'LIVE') {
+            await client.search.create({
+                index: 'publications',
+                id: problem.id,
+                body: {
+                    id: problem.id,
+                    type: problem.type,
+                    title: problem.title,
+                    licence: problem.licence,
+                    description: problem.description,
+                    keywords: problem.keywords,
+                    content: problem.content,
+                    language: 'en',
+                    currentStatus: problem.currentStatus,
+                    publishedDate: problem.publishedDate,
+                    cleanContent: htmlToText.convert(problem.content)
+                }
+            });
+        }
+    }
+
     // create S3 bucket locally for image uploads
     if (process.env.STAGE === 'local') {
         const s3 = new AWS.S3({
