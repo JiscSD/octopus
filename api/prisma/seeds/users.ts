@@ -8,6 +8,14 @@ const userSeeds = [
         apiKey: '123456789'
     },
     {
+        id: 'octopus',
+        orcid: 'XXXX-XXXX-XXXX-XXXX',
+        firstName: 'Science',
+        lastName: 'Octopus',
+        locked: false,
+        apiKey: 'kjahskjhuhaushkjhaskjhjkahsd'
+    },
+    {
         id: 'test-user-2',
         orcid: '4321',
         firstName: 'Test',
