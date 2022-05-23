@@ -8,6 +8,7 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Types from '@types';
 import * as api from '@api';
 
 type NavigationButtonProps = {
@@ -34,7 +35,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
 );
 
 type BuildPublicationProps = {
-    steps: Interfaces.PublicationBuildingStep[];
+    steps: Interfaces.CreationStep[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
@@ -57,22 +58,27 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const saveCurrent = async (message?: string) => {
         store.setError(null);
 
-        await api.patch(
-            `${Config.endpoints.publications}/${props.publication.id}`,
-            {
-                title: store.title,
-                content: store.content,
-                description: store.description,
-                keywords: Helpers.formatKeywords(store.keywords),
-                licence: store.licence,
-                language: store.language,
-                conflictOfInterestStatus: store.conflictOfInterestStatus,
-                conflictOfInterestText: store.conflictOfInterestText,
-                ethicalStatement: store.ethicalStatement,
-                ethicalStatementFreeText: store.ethicalStatement !== null ? store.ethicalStatementFreeText : null
-            },
-            props.token
-        );
+        const body: Interfaces.PublicationUpdateRequestBody = {
+            title: store.title,
+            content: store.content,
+            description: store.description,
+            keywords: Helpers.formatKeywords(store.keywords),
+            licence: store.licence,
+            language: store.language,
+            conflictOfInterestStatus: store.conflictOfInterestStatus,
+            conflictOfInterestText: store.conflictOfInterestText
+        };
+
+        if (store.type === 'DATA') {
+            body.ethicalStatement = store.ethicalStatement;
+            body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
+        }
+
+        if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
+            body.selfDeclaration = store.selfDeclaration;
+        }
+
+        await api.patch(`${Config.endpoints.publications}/${props.publication.id}`, body, props.token);
 
         if (message) {
             setToast({

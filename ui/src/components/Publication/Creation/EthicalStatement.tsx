@@ -3,7 +3,7 @@ import React from 'react';
 import * as Components from '@components';
 import * as Stores from '@stores';
 
-const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
+const EthicalStatement: React.FC = (): React.ReactElement => {
     const ethicalStatement = Stores.usePublicationCreationStore((state) => state.ethicalStatement);
     const updateEthicalStatement = Stores.usePublicationCreationStore((state) => state.updateEthicalStatement);
     const ethicalStatementFreeText = Stores.usePublicationCreationStore((state) => state.ethicalStatementFreeText);
@@ -69,4 +69,4 @@ const DelclarationsAndStatements: React.FC = (): React.ReactElement => {
     );
 };
 
-export default DelclarationsAndStatements;
+export default EthicalStatement;

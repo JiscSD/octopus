@@ -72,6 +72,7 @@ export interface Publication extends CorePublication {
     linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
+    selfDeclaration: boolean;
     ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
@@ -170,13 +171,6 @@ export interface DocumentationEntryQueryParams {
     optional: boolean;
     enums?: Array<string>;
     description: string;
-}
-
-export interface PublicationBuildingStep {
-    title: string;
-    subTitle: string;
-    component: React.ReactElement;
-    icon: React.ReactElement;
 }
 
 export interface LicenceTypeShape {
@@ -338,4 +332,25 @@ export interface Flag {
 
 export interface FlagWithComments extends Flag {
     flagComments: FlagComment[];
+}
+
+export interface PublicationUpdateRequestBody extends JSON {
+    title: string;
+    content: string;
+    description: string;
+    keywords: string[];
+    licence: Types.LicenceType;
+    language: Types.Languages;
+    conflictOfInterestStatus: boolean;
+    conflictOfInterestText: string;
+    ethicalStatement?: boolean | null;
+    ethicalStatementFreeText?: string | null;
+    selfDeclaration?: boolean;
+}
+
+export interface CreationStep {
+    title: string;
+    subTitle: string;
+    component: React.ReactElement;
+    icon: React.ReactElement;
 }

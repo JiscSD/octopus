@@ -42,6 +42,9 @@ const updatePublicationSchema: I.Schema = {
         ethicalStatementFreeText: {
             type: 'string',
             maxLength: 255
+        },
+        selfDeclaration: {
+            type: 'boolean'
         }
     },
     additionalProperties: false
