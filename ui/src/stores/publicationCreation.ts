@@ -26,7 +26,8 @@ let store: any = (set: (params: any) => void) => ({
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
-                ethicalStatementFreeText: null
+                ethicalStatementFreeText: null,
+                selfDeclaration: false
             };
         }),
 
@@ -83,7 +84,11 @@ let store: any = (set: (params: any) => void) => ({
 
     // Funders
     funders: [],
-    updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders }))
+    updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
+
+    // Self declaration
+    selfDeclaration: false,
+    updateSelfDeclaration: (selfDeclaration: boolean) => set(() => ({ selfDeclaration }))
 });
 
 if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);

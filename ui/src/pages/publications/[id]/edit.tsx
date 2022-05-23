@@ -13,56 +13,62 @@ import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 
-const steps: Interfaces.PublicationBuildingStep[] = [
-    {
+const steps: Types.CreationSteps = {
+    KEY_INFORMATION: {
         title: 'Key information',
         subTitle: 'Key information',
         component: <Components.PublicationCreationStepOne />,
         icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
-    {
+    LINKED_PUBLICATIONS: {
         title: 'Linked publications',
         subTitle: 'Linked publications',
         component: <Components.PublicationCreationStepTwo />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
     },
-    {
+    MAIN_TEXT: {
         title: 'Main text',
         subTitle: 'Main text',
         component: <Components.PublicationCreationStepFour />,
         icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
-    {
+    CONFLICT_OF_INTEREST: {
         title: 'Conflict of interest',
         subTitle: 'Conflict of interest',
         component: <Components.PublicationCreationStepThree />,
         icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
-    {
+    CO_AUTHORS: {
         title: 'Co-authors',
         subTitle: 'Co-authors',
         component: <Components.PublicationCreationCoAuthor />,
         icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
     },
-    {
+    FUNDERS: {
         title: 'Funders',
         subTitle: 'Funders',
         component: <Components.PublicationCreationFunders />,
         icon: <OutlineIcons.CurrencyPoundIcon className="h-5 w-5 text-teal-400" />
     },
-    {
-        title: 'Declarations',
-        subTitle: 'Declarations & statements',
-        component: <Components.PublicationCreationDelclarationsAndStatements />,
+    ETHICAL_STATEMENT: {
+        title: 'Ethical statement',
+        subTitle: 'Ethical statement',
+        component: <Components.PublicationCreationEthicalStatement />,
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
-    {
+    SELF_DECLARATION: {
+        title: 'Self-declaration',
+        subTitle: 'Self-declaration',
+        component: <Components.PublicationCreationSelfDeclaration />,
+        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+    },
+    REVIEW: {
         title: 'Review & publish',
         subTitle: 'Review your publications content',
         component: <Components.PublicationCreationStepFive />,
         icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
     }
-];
+};
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.guardPrivateRoute(context);
@@ -125,13 +131,54 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
-        let arr = [];
+        let arr: Types.CreationStep[] = [];
         switch (props.draftedPublication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
-                arr = steps;
+                arr = [
+                    steps.KEY_INFORMATION,
+                    steps.LINKED_PUBLICATIONS,
+                    steps.MAIN_TEXT,
+                    steps.CONFLICT_OF_INTEREST,
+                    steps.CO_AUTHORS,
+                    steps.FUNDERS,
+                    steps.ETHICAL_STATEMENT,
+                    steps.REVIEW
+                ];
+                break;
+            case Config.values.octopusInformation.publications.PROTOCOL.id:
+                arr = [
+                    steps.KEY_INFORMATION,
+                    steps.LINKED_PUBLICATIONS,
+                    steps.MAIN_TEXT,
+                    steps.CONFLICT_OF_INTEREST,
+                    steps.CO_AUTHORS,
+                    steps.FUNDERS,
+                    steps.SELF_DECLARATION,
+                    steps.REVIEW
+                ];
+                break;
+            case Config.values.octopusInformation.publications.HYPOTHESIS.id:
+                arr = [
+                    steps.KEY_INFORMATION,
+                    steps.LINKED_PUBLICATIONS,
+                    steps.MAIN_TEXT,
+                    steps.CONFLICT_OF_INTEREST,
+                    steps.CO_AUTHORS,
+                    steps.FUNDERS,
+                    steps.SELF_DECLARATION,
+                    steps.REVIEW
+                ];
                 break;
             default:
-                arr = [steps[0], steps[1], steps[2], steps[3], steps[4], steps[5], steps[6], steps[7]];
+                arr = [
+                    steps.KEY_INFORMATION,
+                    steps.LINKED_PUBLICATIONS,
+                    steps.MAIN_TEXT,
+                    steps.CONFLICT_OF_INTEREST,
+                    steps.CO_AUTHORS,
+                    steps.FUNDERS,
+                    steps.REVIEW
+                ];
         }
         return arr;
     }, [props.draftedPublication.type]);
@@ -139,7 +186,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     // Choose which step to land the page on
     let defaultStep = React.useMemo(() => {
         let defaultStep = props.step ? parseInt(props.step) : 0;
-        defaultStep = defaultStep <= steps.length - 1 && defaultStep >= 0 ? defaultStep : 0;
+        defaultStep = defaultStep <= stepsToUse.length - 1 && defaultStep >= 0 ? defaultStep : 0;
         return defaultStep;
     }, [props.step]);
 
@@ -194,6 +241,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
         if (props.draftedPublication.ethicalStatementFreeText) {
             store.updateEthicalStatementFreeText(props.draftedPublication.ethicalStatementFreeText);
+        }
+
+        if (props.draftedPublication.selfDeclaration) {
+            store.updateSelfDeclaration(props.draftedPublication.selfDeclaration);
         }
 
         store.updateLinkTo(props.draftedPublication.linkedTo);

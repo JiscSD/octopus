@@ -76,6 +76,8 @@ export type PublicationCreationStoreType = {
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
     funders: Interfaces.Funder[];
     updateFunders: (funders: Interfaces.Funder[]) => void;
+    selfDeclaration: boolean;
+    updateSelfDeclaration: (selfDeclaration: boolean) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
@@ -325,3 +327,25 @@ export type Languages =
     | 'yo'
     | 'za'
     | 'zu';
+
+export type PublicationCreationSteps =
+    | 'KEY_INFORMATION'
+    | 'LINKED_PUBLICATIONS'
+    | 'MAIN_TEXT'
+    | 'CONFLICT_OF_INTEREST'
+    | 'CO_AUTHORS'
+    | 'FUNDERS'
+    | 'ETHICAL_STATEMENT'
+    | 'SELF_DECLARATION'
+    | 'REVIEW';
+
+export type CreationStep = {
+    title: string;
+    subTitle: string;
+    component: React.ReactElement;
+    icon: React.ReactElement;
+};
+
+export type CreationSteps = {
+    [key in PublicationCreationSteps]: CreationStep;
+};

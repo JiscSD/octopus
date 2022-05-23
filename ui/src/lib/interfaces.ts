@@ -72,6 +72,7 @@ export interface Publication extends CorePublication {
     linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
+    selfDeclaration: boolean;
     ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
@@ -170,13 +171,6 @@ export interface DocumentationEntryQueryParams {
     optional: boolean;
     enums?: Array<string>;
     description: string;
-}
-
-export interface PublicationBuildingStep {
-    title: string;
-    subTitle: string;
-    component: React.ReactElement;
-    icon: React.ReactElement;
 }
 
 export interface LicenceTypeShape {
