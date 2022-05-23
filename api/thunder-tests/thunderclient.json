@@ -70,7 +70,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2022-05-10T10:32:08.794Z",
-    "modified": "2022-05-10T10:33:54.136Z",
+    "modified": "2022-05-23T09:36:41.768Z",
     "headers": [],
     "params": [
       {
@@ -81,7 +81,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"title\": \"test\",\n    \"type\": \"PROBLEM\",\n    \"language\": \"a\"\n}",
+      "raw": "{\n    \"title\": \"test\",\n    \"type\": \"PROTOCOL\",\n    \"language\": \"en\",\n    \"selfDeclaration\": true\n}",
       "form": []
     },
     "tests": []
@@ -91,22 +91,25 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
     "name": "Update Publication",
-    "url": "{{host}}/{{version}}/publications/publication-user-1-analysis-2-draft?apiKey=000000001",
+    "url": "{{host}}/{{version}}/publications/cl3ijauy60003sf6qr28bckao?apiKey=000000010",
     "method": "PATCH",
     "sortNum": 40000,
     "created": "2022-05-10T10:32:08.795Z",
-    "modified": "2022-05-10T10:32:08.795Z",
+    "modified": "2022-05-23T09:37:14.824Z",
     "headers": [],
     "params": [
       {
         "name": "apiKey",
-        "value": "000000001"
+        "value": "000000010",
+        "isPath": false
       }
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"language\": \"cu\"\n}"
-    }
+      "raw": "{\n    \"language\": \"cu\",\n     \"selfDeclaration\": true\n}",
+      "form": []
+    },
+    "tests": []
   },
   {
     "_id": "06b6e945-6453-4a9b-b222-58d4ac81037f",

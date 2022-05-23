@@ -194,4 +194,17 @@ describe('Update publication', () => {
 
         expect(createPublicationRequest.status).toEqual(422);
     });
+
+    test('Publication failed to update if is not protocol or hypotheses and supplys a self declaration', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .patch('/publications/publication-interpretation-draft')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                selfDeclaration: true
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+    });
 });

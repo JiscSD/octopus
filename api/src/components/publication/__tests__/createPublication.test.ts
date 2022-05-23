@@ -210,4 +210,53 @@ describe('Create publication', () => {
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.language).toEqual('en');
     });
+
+    test('Publication can not be created if supplying a self declaration and if not a protocol or hypotheses', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication with self declaration and is not a protocol or hypotheses',
+                selfDeclaration: true
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+    });
+
+    test('Publication can be created if not supplying a self declration and is of type protocol', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROTOCOL',
+                title: 'Publication with self declaration and is protocol',
+                selfDeclaration: true
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.type).toEqual('PROTOCOL');
+        expect(createPublicationRequest.body.selfDeclaration).toEqual(true);
+    });
+
+    test('Publication can be created if not supplying a self declration and is of type hypotheses', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'HYPOTHESIS',
+                title: 'Publication with self declaration and is hypotheses',
+                selfDeclaration: true
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.type).toEqual('HYPOTHESIS');
+        expect(createPublicationRequest.body.selfDeclaration).toEqual(true);
+    });
 });

@@ -113,6 +113,15 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>
 ): Promise<I.JSONResponse> => {
     try {
+        if (
+            event.body.selfDeclaration !== undefined &&
+            event.body.type !== 'PROTOCOL' &&
+            event.body.type !== 'HYPOTHESIS'
+        ) {
+            return response.json(400, {
+                message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
+            });
+        }
         const publication = await publicationService.create(event.body, event.user);
 
         return response.json(201, publication);
@@ -160,6 +169,16 @@ export const update = async (
             if (isIdInUse) {
                 return response.json(404, { message: 'ID is already in use.' });
             }
+        }
+
+        if (
+            event.body.selfDeclaration !== undefined &&
+            publication.type !== 'PROTOCOL' &&
+            publication.type !== 'HYPOTHESIS'
+        ) {
+            return response.json(400, {
+                message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
+            });
         }
 
         const updatedPublication = await publicationService.update(event.pathParameters.id, event.body);
