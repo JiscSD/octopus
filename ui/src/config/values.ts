@@ -276,7 +276,8 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         PEER_REVIEW: {
             id: 'PEER_REVIEW',
             heading: 'Review',
-            content: '',
+            content:
+                'A considered, detailed peer review of one of the above kinds of publication. Octopus reviews are open and post-publication.',
             ratings: {
                 REVIEW_CLEAR: {
                     id: 'REVIEW_CLEAR',

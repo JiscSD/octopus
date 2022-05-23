@@ -23,7 +23,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`flex items-center space-x-2 rounded-sm py-1 text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
+        className={`font-lg flex items-center space-x-2 rounded-sm py-1 text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
             props.className ? props.className : ''
         }`}
     >
@@ -80,7 +80,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 dismiss: true,
                 title: message,
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-                message: 'lorem'
+                message: null
             });
         }
     };
@@ -145,7 +145,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 dismiss: true,
                 title: 'Draft successfully removed',
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
-                message: 'lorem'
+                message: null
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
@@ -224,6 +224,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
+            <Components.Banner />
             <main className="grid min-h-screen grid-cols-12">
                 <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-teal-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
                     <ul className="sticky top-0 space-y-2">
@@ -251,12 +252,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         </span>
                     </div>
                 </aside>
-                <section className="col-span-12 border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16">
+                <section className="col-span-12 place-content-end border-t border-grey-100 p-8 transition-colors duration-500 dark:border-grey-400 lg:col-span-10 lg:py-12 lg:px-16 ">
                     <div className="mb-12 flex flex-col items-end lg:flex-row lg:justify-between">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
                             {Helpers.formatPublicationType(store.type)}
                         </span>
-                        <div className="flex space-x-8">
+                        <div className="flex space-x-8 ">
                             <NavigationButton
                                 text="Previous"
                                 disabled={props.currentStep <= 0}
@@ -318,8 +319,43 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     </div>
                     {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
                     <div className="mb-12">{props.children}</div>
+                    {/* bottom next and back nav buttons */}
+                    <div className="flex justify-end space-x-8 ">
+                        <NavigationButton
+                            text="Previous"
+                            disabled={props.currentStep <= 0}
+                            onClick={() => {
+                                props.setStep((prevState: number) => prevState - 1);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                            iconPosition="LEFT"
+                        />
+                        {props.steps.length - 1 === props.currentStep ? (
+                            <NavigationButton
+                                text="Publish"
+                                onClick={() => setPublishModalVisibility(true)}
+                                disabled={!isReadyToPreview}
+                                className=""
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                        ) : (
+                            <NavigationButton
+                                text="Next"
+                                disabled={props.currentStep >= props.steps.length - 1}
+                                onClick={() => {
+                                    props.setStep((prevState: number) => prevState + 1);
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                iconPosition="RIGHT"
+                            />
+                        )}
+                    </div>
                 </section>
             </main>
+            <Components.Footer waves={false} />
         </>
     );
 };

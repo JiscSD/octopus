@@ -17,7 +17,7 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
 
     return (
         <div
-            className={`relative ${props.position === 'LEFT' ? 'lg:ml-4 lg:pl-12' : 'lg:mr-4 lg:pr-12'} ${
+            className={`relative mx-20 ${props.position === 'LEFT' ? 'lg:ml-4 lg:pl-12' : 'lg:mr-4 lg:pr-12'} ${
                 props.className ?? ''
             }`}
         >
@@ -55,7 +55,7 @@ const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => {
 };
 
 const VisualPublicationFlow: React.FC = (): React.ReactElement => (
-    <section className="relative grid gap-y-12 lg:grid-cols-2 lg:gap-y-16">
+    <section className="relative mt-20 grid gap-y-12 lg:grid-cols-2 lg:gap-y-16">
         <span className="absolute top-0 -left-3 z-10 h-full w-1 -translate-x-1/2 rounded bg-teal-500 lg:left-1/2" />
         <GridItem
             className="row-start-1 row-end-1 !pt-0 lg:col-start-1 lg:col-end-2"
@@ -95,7 +95,7 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         <GridItem
             className="row-start-6 row-end-6 lg:col-start-2 lg:col-end-2"
             title="Interpretation"
-            content="A discussion around an existing published Analysis."
+            content="A discussion around an existing published Analysis or several Analyses."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
