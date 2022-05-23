@@ -333,3 +333,17 @@ export interface Flag {
 export interface FlagWithComments extends Flag {
     flagComments: FlagComment[];
 }
+
+export interface PublicationUpdateRequestBody extends JSON {
+    title: string;
+    content: string;
+    description: string;
+    keywords: string[];
+    licence: Types.LicenceType;
+    language: Types.Languages;
+    conflictOfInterestStatus: boolean;
+    conflictOfInterestText: string;
+    ethicalStatement?: boolean | null;
+    ethicalStatementFreeText?: string | null;
+    selfDeclaration?: boolean;
+}
