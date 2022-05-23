@@ -347,3 +347,10 @@ export interface PublicationUpdateRequestBody extends JSON {
     ethicalStatementFreeText?: string | null;
     selfDeclaration?: boolean;
 }
+
+export interface CreationStep {
+    title: string;
+    subTitle: string;
+    component: React.ReactElement;
+    icon: React.ReactElement;
+}

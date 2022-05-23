@@ -35,7 +35,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
 );
 
 type BuildPublicationProps = {
-    steps: Types.CreationStep[];
+    steps: Interfaces.CreationStep[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;

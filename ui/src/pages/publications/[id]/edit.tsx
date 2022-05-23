@@ -131,7 +131,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
-        let arr: Types.CreationStep[] = [];
+        let arr: Interfaces.CreationStep[] = [];
         switch (props.draftedPublication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
                 arr = [

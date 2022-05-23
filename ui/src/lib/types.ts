@@ -339,13 +339,6 @@ export type PublicationCreationSteps =
     | 'SELF_DECLARATION'
     | 'REVIEW';
 
-export type CreationStep = {
-    title: string;
-    subTitle: string;
-    component: React.ReactElement;
-    icon: React.ReactElement;
-};
-
 export type CreationSteps = {
-    [key in PublicationCreationSteps]: CreationStep;
+    [key in PublicationCreationSteps]: Interfaces.CreationStep;
 };
