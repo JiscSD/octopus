@@ -118,6 +118,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
+    if (props.publication.selfDeclaration) list.push({ title: 'Self-declaration', href: 'self-declaration' });
     if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
@@ -496,6 +497,18 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Self declaration */}
+                    {props.publication.selfDeclaration && (
+                        <Components.PublicationContentSection id="self-declaration" title="Self declaration" hasBreak>
+                            <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                {props.publication.type === 'PROTOCOL' &&
+                                    'Data has not yet been collected according to this method/protocol.'}
+                                {props.publication.type === 'HYPOTHESIS' &&
+                                    'Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)'}
+                            </p>
                         </Components.PublicationContentSection>
                     )}
 
