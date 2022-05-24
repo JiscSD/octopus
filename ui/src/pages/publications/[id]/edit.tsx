@@ -50,10 +50,10 @@ const steps: Types.CreationSteps = {
         component: <Components.PublicationCreationFunders />,
         icon: <OutlineIcons.CurrencyPoundIcon className="h-5 w-5 text-teal-400" />
     },
-    ETHICAL_STATEMENT: {
-        title: 'Ethical statement',
-        subTitle: 'Ethical statement',
-        component: <Components.PublicationCreationEthicalStatement />,
+    DATA_STATEMENT: {
+        title: 'Data statements',
+        subTitle: 'Data statements',
+        component: <Components.PublicationCreationDataStatements />,
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
     SELF_DECLARATION: {
@@ -141,7 +141,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.CONFLICT_OF_INTEREST,
                     steps.CO_AUTHORS,
                     steps.FUNDERS,
-                    steps.ETHICAL_STATEMENT,
+                    steps.DATA_STATEMENT,
                     steps.REVIEW
                 ];
                 break;
@@ -245,6 +245,18 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
         if (props.draftedPublication.selfDeclaration) {
             store.updateSelfDeclaration(props.draftedPublication.selfDeclaration);
+        }
+
+        if (props.draftedPublication.dataAccessStatement) {
+            store.updateDataAccessStatement(props.draftedPublication.dataAccessStatement);
+        }
+
+        if (props.draftedPublication.dataPermissionsStatement) {
+            store.updateDataPermissionsStatemnt(props.draftedPublication.dataPermissionsStatement);
+        }
+
+        if (props.draftedPublication.dataPermissionsStatementProvidedBy) {
+            store.updateDataPermissionsStatementProvidedBy(props.draftedPublication.dataPermissionsStatementProvidedBy);
         }
 
         store.updateLinkTo(props.draftedPublication.linkedTo);

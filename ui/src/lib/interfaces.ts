@@ -72,6 +72,9 @@ export interface Publication extends CorePublication {
     linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string | null;
+    dataAccessStatement: string | null;
+    dataPermissionsStatement: string | null;
+    dataPermissionsStatementProvidedBy: string | null;
     selfDeclaration: boolean;
     ratings: Rating;
     coAuthors: CoAuthor[];
@@ -345,6 +348,9 @@ export interface PublicationUpdateRequestBody extends JSON {
     conflictOfInterestText: string;
     ethicalStatement?: boolean | null;
     ethicalStatementFreeText?: string | null;
+    dataAccessStatement?: string | null;
+    dataPermissionsStatement?: string | null;
+    dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
 }
 

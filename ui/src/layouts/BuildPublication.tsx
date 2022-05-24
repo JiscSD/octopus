@@ -8,7 +8,6 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 
 type NavigationButtonProps = {
@@ -72,6 +71,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (store.type === 'DATA') {
             body.ethicalStatement = store.ethicalStatement;
             body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
+            if (store.dataAccessStatement?.length) body.dataAccessStatement = store.dataAccessStatement;
+            if (store.dataPermissionsStatement?.length) body.dataPermissionsStatement = store.dataPermissionsStatement;
+            if (store.dataPermissionsStatementProvidedBy?.length)
+                body.dataPermissionsStatementProvidedBy = store.dataPermissionsStatementProvidedBy;
         }
 
         if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
@@ -101,16 +104,32 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const publish = async () => {
         // Hard check on COI
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            setPublishModalVisibility(false);
             props.setStep(3);
             store.setError('You must provide a conflict of interest reason.');
             return;
         }
 
-        // Hard check on ETH Statement
-        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
-            props.setStep(4);
-            store.setError('You must select an ethical statement option.');
-            return;
+        // Hard check on data statements
+        if (store.type === Config.values.octopusInformation.publications.DATA.id) {
+            if (store.ethicalStatement === null) {
+                setPublishModalVisibility(false);
+                props.setStep(6);
+                store.setError('You must select an ethical statement option.');
+                return;
+            }
+            if (store.dataPermissionsStatement === null) {
+                setPublishModalVisibility(false);
+                props.setStep(6);
+                store.setError('You must provide a data permissions statement.');
+                return;
+            }
+            if (store.updateDataPermissionsStatementProvidedBy === null) {
+                setPublishModalVisibility(false);
+                props.setStep(6);
+                store.setError('You must provide a data permission statement provided by.');
+                return;
+            }
         }
 
         try {
@@ -170,8 +189,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             return setIsReadyToPreview(false);
         }
-        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
-            return setIsReadyToPreview(false);
+        if (store.type === Config.values.octopusInformation.publications.DATA.id) {
+            if (store.ethicalStatement === null) return setIsReadyToPreview(false);
+            if (store.dataPermissionsStatement === null) return setIsReadyToPreview(false);
+            if (store.dataPermissionsStatementProvidedBy === null) return setIsReadyToPreview(false);
         }
 
         setIsReadyToPreview(true);
@@ -183,7 +204,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.conflictOfInterestText,
         store.linkTo,
         store.type,
-        store.ethicalStatement
+        store.ethicalStatement,
+        store.dataPermissionsStatement,
+        store.dataPermissionsStatementProvidedBy
     ]);
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature

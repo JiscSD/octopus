@@ -71,6 +71,12 @@ export type PublicationCreationStoreType = {
     ethicalStatementFreeText: string | null;
     updateEthicalStatement: (ethicalStatement: boolean) => void;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    dataAccessStatement: string | null;
+    updateDataAccessStatement: (dataAccessStatement: string) => void;
+    dataPermissionsStatement: string | null;
+    updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
+    dataPermissionsStatementProvidedBy: string | null;
+    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string) => void;
     reset: () => void;
     coAuthors: Interfaces.CoAuthor[];
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
@@ -92,11 +98,11 @@ export type OrderDirectionSearchOption = 'asc' | 'desc';
 
 export type PublicationType =
     | 'PROBLEM'
-    | 'PROTOCOL'
+    | 'PROTOCOL' // method
     | 'ANALYSIS'
     | 'REAL_WORLD_APPLICATION'
     | 'HYPOTHESIS'
-    | 'DATA'
+    | 'DATA' // results
     | 'INTERPRETATION'
     | 'PEER_REVIEW';
 
@@ -335,7 +341,7 @@ export type PublicationCreationSteps =
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
     | 'FUNDERS'
-    | 'ETHICAL_STATEMENT'
+    | 'DATA_STATEMENT'
     | 'SELF_DECLARATION'
     | 'REVIEW';
 

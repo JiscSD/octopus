@@ -27,6 +27,8 @@ let store: any = (set: (params: any) => void) => ({
                 linkTo: [],
                 ethicalStatement: null,
                 ethicalStatementFreeText: null,
+                dataAccessStatement: null,
+                dataPermissionsStatement: null,
                 selfDeclaration: false
             };
         }),
@@ -77,6 +79,16 @@ let store: any = (set: (params: any) => void) => ({
     ethicalStatementFreeText: null,
     updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
+
+    dataAccessStatement: null,
+    updateDataAccessStatement: (dataAccessStatement: string) => set(() => ({ dataAccessStatement })),
+
+    dataPermissionsStatement: null,
+    updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => set(() => ({ dataPermissionsStatement })),
+
+    dataPermissionsStatementProvidedBy: null,
+    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string) =>
+        set(() => ({ dataPermissionsStatementProvidedBy })),
 
     // Co-authors
     coAuthors: [],

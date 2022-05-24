@@ -45,7 +45,7 @@ export { default as PublicationCarousel } from './Publication/Carousel';
 export { default as PublicationContentSection } from './Publication/ContentSection';
 export { default as PublicationCreationCoAuthor } from './Publication/Creation/CoAuthor';
 export { default as PublicationCreationCoAuthorEntry } from './Publication/Creation/CoAuthorEntry';
-export { default as PublicationCreationEthicalStatement } from './Publication/Creation/EthicalStatement';
+export { default as PublicationCreationDataStatements } from './Publication/Creation/DataStatements';
 export { default as PublicationCreationFunders } from './Publication/Creation/Funders';
 export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
 export { default as PublicationCreationSelfDeclaration } from './Publication/Creation/SelfDeclaration';
