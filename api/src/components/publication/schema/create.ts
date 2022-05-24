@@ -57,6 +57,10 @@ const createPublicationSchema: I.Schema = {
             type: 'string',
             maxLength: 255
         },
+        dataPermissionsStatementProvidedBy: {
+            type: 'string',
+            maxLength: 255
+        },
         dataAccessStatement: {
             type: 'string',
             maxLength: 255

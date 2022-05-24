@@ -78,6 +78,7 @@ export interface CreatePublicationRequestBody {
     ethicalStatement?: boolean;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
+    dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
 }
@@ -118,6 +119,7 @@ export interface UpdatePublicationRequestBody {
     ethicalStatement?: boolean;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
+    dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
 }
