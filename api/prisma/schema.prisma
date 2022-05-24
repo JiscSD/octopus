@@ -61,6 +61,8 @@ model Publication {
     conflictOfInterestText   String?
     ethicalStatement         Boolean?
     ethicalStatementFreeText String?
+    dataPermissionsStatement String?
+    dataAccessStatement      String?
     selfDeclaration          Boolean?               @default(false)
     description              String?
     keywords                 String[]

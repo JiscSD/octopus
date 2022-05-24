@@ -53,6 +53,14 @@ const createPublicationSchema: I.Schema = {
             type: 'string',
             maxLength: 255
         },
+        dataPermissionsStatement: {
+            type: 'string',
+            maxLength: 255
+        },
+        dataAccessStatement: {
+            type: 'string',
+            maxLength: 255
+        },
         selfDeclaration: {
             type: 'boolean'
         }

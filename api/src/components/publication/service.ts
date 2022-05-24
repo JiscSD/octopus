@@ -285,6 +285,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             language: e.language,
             ethicalStatement: e.ethicalStatement,
             ethicalStatementFreeText: e.ethicalStatementFreeText,
+            dataPermissionsStatement: e.dataPermissionsStatement,
+            dataAccessStatement: e.dataAccessStatement,
             selfDeclaration: e.selfDeclaration,
             user: {
                 connect: {
@@ -396,6 +398,8 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const conflictOfInterest = validateConflictOfInterest(publication);
     const hasPublishDate = Boolean(publication.publishedDate);
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+    const isDataAndHasPermissionsStatement =
+        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
 
     const isAttemptToLive = status === 'LIVE';
 
@@ -406,6 +410,7 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         conflictOfInterest &&
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
+        isDataAndHasPermissionsStatement &&
         isAttemptToLive
     )
         isReady = true;
