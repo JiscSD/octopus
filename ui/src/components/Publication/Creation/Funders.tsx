@@ -47,7 +47,9 @@ const TableRow: React.FC<TableProps> = (props): React.ReactElement => {
                     {props.item.name}
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                    <a href={props.item.link}>{props.item.link}</a>
+                    <Components.Link href={props.item.link} openNew>
+                        {props.item.link}
+                    </Components.Link>
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.city}, {props.item.country}
@@ -237,11 +239,11 @@ const Funders: React.FC = (): React.ReactElement => {
                             type="radio"
                             defaultChecked={method === 'ror'}
                             onChange={(e) => setMethod('ror')}
-                            className="border-gray-300 h-4 w-4 text-teal-600 focus:ring-teal-600"
+                            className="border-gray-300 mb-1 h-4 w-4 text-teal-600 focus:ring-teal-600"
                         />
                         <label
                             htmlFor="ror"
-                            className="text-gray-700 ml-3 block text-sm font-medium dark:text-white-100"
+                            className="text-gray-700 mb-1 ml-3 block text-sm font-medium dark:text-white-100"
                         >
                             Enter funder ROR ID
                         </label>
