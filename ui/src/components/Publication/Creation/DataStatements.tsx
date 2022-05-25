@@ -190,22 +190,23 @@ const DataStatements: React.FC = (): React.ReactElement => {
                         <span className="ml-2 text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Other
                         </span>
-                        <textarea
-                            name="dataAccessStatementfreeText"
-                            id="dataAccessStatementfreeText"
-                            rows={3}
-                            className="w-full rounded-md border border-grey-100 bg-white-50 text-sm text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
-                            required
-                            value={dataAccessStatementOther ?? ''}
-                            placeholder="Please provide your own data access statement."
-                            onChange={(e) => {
-                                setDataAccessStatementOther(e.target.value);
-                                updateDataAccessStatement(e.target.value);
-                            }}
-                            onFocus={() => updateDataAccessStatement(dataAccessStatementOther)}
-                        />
                     </label>
                 </fieldset>
+
+                <textarea
+                    name="dataAccessStatementfreeText"
+                    id="dataAccessStatementfreeText"
+                    rows={3}
+                    className="mb-2 ml-5 block w-full rounded-md border border-grey-100 bg-white-50 text-sm text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
+                    required
+                    value={dataAccessStatementOther ?? ''}
+                    placeholder="Please provide your own data access statement."
+                    onChange={(e) => {
+                        setDataAccessStatementOther(e.target.value);
+                        updateDataAccessStatement(e.target.value);
+                    }}
+                    onFocus={() => updateDataAccessStatement(dataAccessStatementOther)}
+                />
 
                 <Components.Button
                     title="Clear selection"
