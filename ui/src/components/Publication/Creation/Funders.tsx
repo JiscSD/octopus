@@ -218,6 +218,15 @@ const Funders: React.FC = (): React.ReactElement => {
                     . This ensures that consistent, accurate organisational data is displayed and enables more efficient
                     discovery and tracking of research outputs across institutions and funding bodies.
                 </span>
+                <Components.Button
+                    title="Search for your organisation's ROR"
+                    link
+                    href="https://ror.org/"
+                    iconPosition="RIGHT"
+                    icon={
+                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                    }
+                />
             </div>
             <div className="flex items-center ">
                 <fieldset className="w-full">

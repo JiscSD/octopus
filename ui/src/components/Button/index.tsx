@@ -54,7 +54,13 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     if (props.link && props.href) {
         return (
-            <Components.Link href={props.href} title={props.title} ariaLabel={props.title} className={parentStyles}>
+            <Components.Link
+                href={props.href}
+                title={props.title}
+                ariaLabel={props.title}
+                className={parentStyles}
+                openNew
+            >
                 <>
                     {props.iconPosition === 'LEFT' && props.icon}
                     <span className={childStyles}>{props.title}</span>

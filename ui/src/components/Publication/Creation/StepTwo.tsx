@@ -94,7 +94,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
-                <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" />
+                <Components.PublicationCreationStepTitle text="What publications do you want to link to?" />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     All publications in Octopus are linked to each other to form research chains, branching down from
                     research Problems to Real world implementations.
