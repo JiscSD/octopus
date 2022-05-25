@@ -576,7 +576,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         );
                                     })}
                                 </ul>
-                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {publication.fundersStatement}
                                 </p>
                             </>
