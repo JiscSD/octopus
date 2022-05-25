@@ -36,7 +36,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Language" />
+                <Components.PublicationCreationStepTitle text="Language" required />
                 <select
                     name="language"
                     id="language"

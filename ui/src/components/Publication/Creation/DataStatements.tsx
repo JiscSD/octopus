@@ -102,7 +102,11 @@ const DataStatements: React.FC = (): React.ReactElement => {
                 <Components.PublicationCreationStepTitle text="Data permissions statement" required />
                 <fieldset className="my-8 space-y-3">
                     {dataPermissionsOptions.map((option) => (
-                        <label key={option} htmlFor="true" className="flex items-center space-x-2 hover:cursor-pointer">
+                        <label
+                            key={option}
+                            htmlFor={option}
+                            className="flex items-center space-x-2 hover:cursor-pointer"
+                        >
                             <input
                                 type="radio"
                                 name={option}
@@ -120,7 +124,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                 </fieldset>
 
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Permission for the data collection and sharing was given by:
+                    Permission for the data collection and sharing was given by <Components.RequiredIndicator />
                 </span>
                 <textarea
                     name="dataPermissionsStatementProvidedBy"
@@ -189,7 +193,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                             name="dataAccessStatementfreeText"
                             id="dataAccessStatementfreeText"
                             rows={3}
-                            className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
+                            className="w-full rounded-md border border-grey-100 bg-white-50 text-sm text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
                             required
                             value={dataAccessStatementOther ?? ''}
                             placeholder="Please provide your own data access statement."

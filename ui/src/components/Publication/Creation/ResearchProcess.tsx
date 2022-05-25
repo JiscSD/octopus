@@ -10,7 +10,7 @@ const ResearchProcess: React.FC = () => {
 
     return (
         <>
-            <Components.PublicationCreationStepTitle text="Research process" />
+            <Components.PublicationCreationStepTitle text="Self declaration" />
             <fieldset className="my-8 space-y-4">
                 <label htmlFor="self-declaration" className="flex items-center space-x-2 hover:cursor-pointer">
                     <input
