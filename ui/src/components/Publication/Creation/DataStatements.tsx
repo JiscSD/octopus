@@ -1,4 +1,5 @@
 import React from 'react';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -206,9 +207,16 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     </label>
                 </fieldset>
 
-                {/* <span className="mb-3 block text-base leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Other
-                </span> */}
+                <Components.Button
+                    title="Clear selection"
+                    disabled={!dataAccessStatement}
+                    icon={<OutlineIcons.XIcon className="h-4 w-4" />}
+                    iconPosition="LEFT"
+                    onClick={() => {
+                        setDataAccessStatementOther('');
+                        updateDataAccessStatement(null);
+                    }}
+                />
             </div>
         </div>
     );

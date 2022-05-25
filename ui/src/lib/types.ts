@@ -72,7 +72,7 @@ export type PublicationCreationStoreType = {
     updateEthicalStatement: (ethicalStatement: boolean) => void;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
     dataAccessStatement: string | null;
-    updateDataAccessStatement: (dataAccessStatement: string) => void;
+    updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
     updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
     dataPermissionsStatementProvidedBy: string | null;
