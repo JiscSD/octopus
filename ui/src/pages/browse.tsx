@@ -65,7 +65,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
                 <aside className="relative col-span-2 hidden lg:block">
                     <div className="sticky top-16">
                         {/* view all publication & authors buttons */}
-                        <div className="grid-row-2 grid">
+                        <div className="grid-row-2 mb-6 grid">
                             <Components.Button
                                 link
                                 href={`${
@@ -76,6 +76,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
                                 icon={
                                     <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
+                                className="w-fit"
                             />
                             <Components.Button
                                 link
@@ -85,7 +86,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
                                 icon={
                                     <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
-                                className="mb-6"
+                                className="w-fit"
                             />
                         </div>
                         <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
