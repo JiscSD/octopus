@@ -6,7 +6,7 @@ import * as Assets from '@assets';
 import * as Config from '@config';
 import * as Types from '@types';
 
-const StepFour: React.FC = (): React.ReactElement | null => {
+const MainText: React.FC = (): React.ReactElement | null => {
     const description = Stores.usePublicationCreationStore((state) => state.description);
     const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
     const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
@@ -25,7 +25,7 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
-                <Components.PublicationCreationStepTitle text="Main text" />
+                <Components.PublicationCreationStepTitle text="Main text" required />
                 {!loading ? (
                     <Components.TextEditor defaultContent={content} contentChangeHandler={updateContent} />
                 ) : (
@@ -85,4 +85,4 @@ const StepFour: React.FC = (): React.ReactElement | null => {
     );
 };
 
-export default StepFour;
+export default MainText;

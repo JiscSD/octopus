@@ -51,7 +51,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
-    const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
+    const [isReadyToPreview, setIsReadyToPreview] = React.useState(true);
 
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = async (message?: string) => {
@@ -102,47 +102,22 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
      *              correct step if a field is missing.
      */
     const publish = async () => {
-        // Hard check on COI
-        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
-            setPublishModalVisibility(false);
-            props.setStep(3);
-            store.setError('You must provide a conflict of interest reason.');
-            return;
-        }
-
-        // Hard check on data statements
-        if (store.type === Config.values.octopusInformation.publications.DATA.id) {
-            if (store.ethicalStatement === null) {
-                setPublishModalVisibility(false);
-                props.setStep(6);
-                store.setError('You must select an ethical statement option.');
-                return;
+        const check = checkRequired();
+        if (check.ready) {
+            store.setError(null);
+            try {
+                await saveCurrent();
+                await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
+                router.push({
+                    pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                });
+            } catch (err) {
+                const { message } = err as Interfaces.JSONResponseError;
+                store.setError(message);
             }
-            if (store.dataPermissionsStatement === null) {
-                setPublishModalVisibility(false);
-                props.setStep(6);
-                store.setError('You must provide a data permissions statement.');
-                return;
-            }
-            if (store.updateDataPermissionsStatementProvidedBy === null) {
-                setPublishModalVisibility(false);
-                props.setStep(6);
-                store.setError('You must provide a data permission statement provided by.');
-                return;
-            }
+        } else {
+            store.setError(check.message);
         }
-
-        try {
-            await saveCurrent();
-            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
-            router.push({
-                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
-            });
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
-        }
-
         setPublishModalVisibility(false);
     };
 
@@ -180,22 +155,35 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setDeleteModalVisibility(false);
     };
 
-    // Monitor the stores state, and conditionally enable the publish button
-    React.useEffect(() => {
-        if (!store.title) return setIsReadyToPreview(false);
-        if (!store.content) return setIsReadyToPreview(false);
-        if (!store.licence) return setIsReadyToPreview(false);
-        if (!store.linkTo.length) return setIsReadyToPreview(false);
+    const checkRequired = (): { ready: boolean; message: string } => {
+        let ready = { ready: true, message: '' };
+        if (!store.title) ready = { ready: false, message: 'You must provide a title' };
+        if (!store.content) ready = { ready: false, message: 'You must provide main text' };
+        if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
+        if (!store.linkTo.length)
+            ready = { ready: false, message: 'You must link this publication to at least one other' };
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
-            return setIsReadyToPreview(false);
+            ready = {
+                ready: false,
+                message: 'You have selected there is a conflict of interest, please provide a reason.'
+            };
         }
         if (store.type === Config.values.octopusInformation.publications.DATA.id) {
-            if (store.ethicalStatement === null) return setIsReadyToPreview(false);
-            if (store.dataPermissionsStatement === null) return setIsReadyToPreview(false);
-            if (store.dataPermissionsStatementProvidedBy === null) return setIsReadyToPreview(false);
+            if (store.ethicalStatement === null)
+                ready = { ready: false, message: 'You must select an ethical statement option' };
+            if (store.dataPermissionsStatement === null)
+                ready = { ready: false, message: 'You must select a data permissions option' };
+            if (store.dataPermissionsStatementProvidedBy === null || !store.dataPermissionsStatementProvidedBy.length)
+                ready = { ready: false, message: 'You must provide a provided by for the data permission' };
         }
 
-        setIsReadyToPreview(true);
+        return ready;
+    };
+
+    // Monitor the stores state, and conditionally enable the publish button
+    React.useEffect(() => {
+        const check = checkRequired();
+        setIsReadyToPreview(check.ready);
     }, [
         store.title,
         store.content,
@@ -214,6 +202,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     React.useEffect(() => {
         return () => store.reset();
     }, []);
+
+    React.useEffect(() => console.log(store), [store]);
 
     return (
         <>

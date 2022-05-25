@@ -45,7 +45,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
         <div className="space-y-12 2xl:space-y-16">
             {/* Ethical statement */}
             <div>
-                <Components.PublicationCreationStepTitle text="Ethical statement (required)" />
+                <Components.PublicationCreationStepTitle text="Ethical statement" required />
                 <fieldset className="my-8 space-y-3">
                     <label htmlFor="true" className="flex items-center space-x-2 hover:cursor-pointer">
                         <input
@@ -99,7 +99,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
 
             {/* Data permissions statement */}
             <div>
-                <Components.PublicationCreationStepTitle text="Data permissions statement (required)" />
+                <Components.PublicationCreationStepTitle text="Data permissions statement" required />
                 <fieldset className="my-8 space-y-3">
                     {dataPermissionsOptions.map((option) => (
                         <label key={option} htmlFor="true" className="flex items-center space-x-2 hover:cursor-pointer">
@@ -135,7 +135,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
 
             {/* Data access statement */}
             <div>
-                <Components.PublicationCreationStepTitle text="Data access statement (optional)" />
+                <Components.PublicationCreationStepTitle text="Data access statement" />
                 <span className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     If relevant, please provide a data access statement which describes where the results and data
                     associated with your publication can be found, and how they can be accessed.{' '}
@@ -168,24 +168,43 @@ const DataStatements: React.FC = (): React.ReactElement => {
                             </span>
                         </label>
                     ))}
+
+                    <label htmlFor="other" className="flex items-start space-x-2 hover:cursor-pointer">
+                        <input
+                            type="radio"
+                            name="other"
+                            id="other"
+                            checked={dataAccessStatementOther === dataAccessStatement}
+                            onChange={() => {
+                                setDataAccessStatementOther('');
+                                updateDataAccessStatement('');
+                            }}
+                            className="hover:cursor-pointer"
+                            aria-label="other"
+                        />
+                        <span className="ml-2 text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Other
+                        </span>
+                        <textarea
+                            name="dataAccessStatementfreeText"
+                            id="dataAccessStatementfreeText"
+                            rows={3}
+                            className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
+                            required
+                            value={dataAccessStatementOther ?? ''}
+                            placeholder="Please provide your own data access statement."
+                            onChange={(e) => {
+                                setDataAccessStatementOther(e.target.value);
+                                updateDataAccessStatement(e.target.value);
+                            }}
+                            onFocus={() => updateDataAccessStatement(dataAccessStatementOther)}
+                        />
+                    </label>
                 </fieldset>
 
-                <span className="mb-3 block text-base leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                {/* <span className="mb-3 block text-base leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Other
-                </span>
-                <textarea
-                    name="dataAccessStatementfreeText"
-                    id="dataAccessStatementfreeText"
-                    rows={3}
-                    className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
-                    required
-                    value={dataAccessStatementOther ?? ''}
-                    placeholder="Please provide your own data access statement."
-                    onChange={(e) => {
-                        setDataAccessStatementOther(e.target.value);
-                        updateDataAccessStatement(e.target.value);
-                    }}
-                />
+                </span> */}
             </div>
         </div>
     );

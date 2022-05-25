@@ -3,14 +3,14 @@ import React from 'react';
 import * as Components from '@components';
 import * as Stores from '@stores';
 
-const SelfDeclaration: React.FC = () => {
+const ResearchProcess: React.FC = () => {
     const type = Stores.usePublicationCreationStore((state) => state.type);
     const selfDeclaration = Stores.usePublicationCreationStore((state) => state.selfDeclaration);
     const updateSelfDeclaration = Stores.usePublicationCreationStore((state) => state.updateSelfDeclaration);
 
     return (
         <>
-            <Components.PublicationCreationStepTitle text="Self declaration" />
+            <Components.PublicationCreationStepTitle text="Research process" />
             <fieldset className="my-8 space-y-4">
                 <label htmlFor="self-declaration" className="flex items-center space-x-2 hover:cursor-pointer">
                     <input
@@ -39,4 +39,4 @@ const SelfDeclaration: React.FC = () => {
     );
 };
 
-export default SelfDeclaration;
+export default ResearchProcess;

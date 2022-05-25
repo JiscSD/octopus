@@ -17,25 +17,25 @@ const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
         title: 'Key information',
         subTitle: 'Key information',
-        component: <Components.PublicationCreationStepOne />,
+        component: <Components.PublicationCreationKeyInformation />,
         icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
     LINKED_PUBLICATIONS: {
         title: 'Linked publications',
         subTitle: 'Linked publications',
-        component: <Components.PublicationCreationStepTwo />,
+        component: <Components.PublicationCreationLinkedPublications />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
     },
     MAIN_TEXT: {
         title: 'Main text',
         subTitle: 'Main text',
-        component: <Components.PublicationCreationStepFour />,
+        component: <Components.PublicationCreationMainText />,
         icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
     },
     CONFLICT_OF_INTEREST: {
         title: 'Conflict of interest',
         subTitle: 'Conflict of interest',
-        component: <Components.PublicationCreationStepThree />,
+        component: <Components.PublicationCreationConflictOfInterest />,
         icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
     },
     CO_AUTHORS: {
@@ -56,16 +56,16 @@ const steps: Types.CreationSteps = {
         component: <Components.PublicationCreationDataStatements />,
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
-    SELF_DECLARATION: {
-        title: 'Self-declaration',
-        subTitle: 'Self-declaration',
-        component: <Components.PublicationCreationSelfDeclaration />,
+    RESEARCH_PROCESS: {
+        title: 'Research process',
+        subTitle: 'Research process',
+        component: <Components.PublicationCreationResearchProcess />,
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
     },
     REVIEW: {
         title: 'Review & publish',
         subTitle: 'Review your publications content',
-        component: <Components.PublicationCreationStepFive />,
+        component: <Components.PublicationCreationReview />,
         icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
     }
 };
@@ -153,7 +153,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.CONFLICT_OF_INTEREST,
                     steps.CO_AUTHORS,
                     steps.FUNDERS,
-                    steps.SELF_DECLARATION,
+                    steps.RESEARCH_PROCESS,
                     steps.REVIEW
                 ];
                 break;
@@ -165,7 +165,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.CONFLICT_OF_INTEREST,
                     steps.CO_AUTHORS,
                     steps.FUNDERS,
-                    steps.SELF_DECLARATION,
+                    steps.RESEARCH_PROCESS,
                     steps.REVIEW
                 ];
                 break;

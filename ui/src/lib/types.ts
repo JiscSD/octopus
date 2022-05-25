@@ -342,7 +342,7 @@ export type PublicationCreationSteps =
     | 'CO_AUTHORS'
     | 'FUNDERS'
     | 'DATA_STATEMENT'
-    | 'SELF_DECLARATION'
+    | 'RESEARCH_PROCESS'
     | 'REVIEW';
 
 export type CreationSteps = {
