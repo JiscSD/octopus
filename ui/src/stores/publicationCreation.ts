@@ -18,6 +18,7 @@ let store: any = (set: (params: any) => void) => ({
                 type: Config.values.octopusInformation.publications.PROBLEM.id,
                 content: '',
                 description: '',
+                funderStatement: '',
                 funders: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
@@ -83,6 +84,8 @@ let store: any = (set: (params: any) => void) => ({
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors })),
 
     // Funders
+    funderStatement: '',
+    updateFunderStatement: (funderStatement: string) => set(() => ({ funderStatement })),
     funders: [],
     updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
 

@@ -66,7 +66,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             licence: store.licence,
             language: store.language,
             conflictOfInterestStatus: store.conflictOfInterestStatus,
-            conflictOfInterestText: store.conflictOfInterestText
+            conflictOfInterestText: store.conflictOfInterestText,
+            fundersStatement: store.funderStatement
         };
 
         if (store.type === 'DATA') {
@@ -77,6 +78,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
             body.selfDeclaration = store.selfDeclaration;
         }
+        console.log(body);
 
         await api.patch(`${Config.endpoints.publications}/${props.publication.id}`, body, props.token);
 
