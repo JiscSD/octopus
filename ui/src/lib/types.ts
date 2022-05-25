@@ -74,7 +74,7 @@ export type PublicationCreationStoreType = {
     reset: () => void;
     coAuthors: Interfaces.CoAuthor[];
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
-    funderStatement: string | number | readonly string[] | undefined;
+    funderStatement: string | null;
     updateFunderStatement: (funderStatement: string | null) => void;
     funders: Interfaces.Funder[];
     updateFunders: (funders: Interfaces.Funder[]) => void;

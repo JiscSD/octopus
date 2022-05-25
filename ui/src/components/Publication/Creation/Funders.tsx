@@ -401,7 +401,7 @@ const Funders: React.FC = (): React.ReactElement => {
                                     className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
                             `}
                                     placeholder="Enter any details"
-                                    value={funderStatement}
+                                    value={funderStatement ?? ''}
                                     onChange={(e) => updateFunderStatement(e.target.value)}
                                 />
                             </div>
