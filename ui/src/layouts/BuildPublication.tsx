@@ -243,7 +243,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
-            <Components.Banner />
             <main className="grid min-h-screen grid-cols-12">
                 <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-teal-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
                     <ul className="sticky top-0 space-y-2">

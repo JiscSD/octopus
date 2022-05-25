@@ -18,6 +18,10 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
+            <Components.Banner
+                text="This is test release - we're still working on the site. Please don't use it for recording your real
+        work... yet!"
+            />
             <header
                 className={`text-grey-800 transition-colors duration-500  print:hidden  ${
                     props.fixed && 'lg:fixed lg:top-0 lg:left-0 lg:z-20 lg:w-full'
