@@ -57,6 +57,9 @@ const updatePublicationSchema: I.Schema = {
         },
         selfDeclaration: {
             type: 'boolean'
+        },
+        fundersStatement: {
+            type: 'string'
         }
     },
     additionalProperties: false

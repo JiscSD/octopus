@@ -284,3 +284,11 @@ export const formatKeywords = (keywordsAsString: string): string[] => {
     }
     return formattedKeywords;
 };
+
+export const checkLinkIsValid = (text: string) => {
+    const lowerCaseText = text.toLowerCase();
+    const urlR = new RegExp(
+        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+    );
+    return urlR.test(lowerCaseText);
+};

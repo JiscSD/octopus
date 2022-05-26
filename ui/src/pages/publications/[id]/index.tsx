@@ -589,11 +589,16 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
                     {/* Publication funders section */}
                     <Components.PublicationContentSection id="funders" title="Funders" hasBreak>
-                        {publication.funders.length ? (
+                        {!publication.funders.length ? (
+                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                No sources of funding have been specified for this{' '}
+                                {Helpers.formatPublicationType(publication.type)}.
+                            </p>
+                        ) : (
                             <>
                                 <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    This {Helpers.formatPublicationType(publication.type)} has the following funder
-                                    {publication.funders.length > 1 && 's'}:
+                                    This {Helpers.formatPublicationType(publication.type)} has the following sources of
+                                    funding:
                                 </p>
                                 <ul>
                                     {publication.funders.map((funder) => {
@@ -607,11 +612,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         );
                                     })}
                                 </ul>
+                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {publication.fundersStatement}
+                                </p>
                             </>
-                        ) : (
-                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                This {Helpers.formatPublicationType(publication.type)} has no funders.
-                            </p>
                         )}
                     </Components.PublicationContentSection>
 

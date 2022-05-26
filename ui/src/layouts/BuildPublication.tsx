@@ -65,7 +65,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             licence: store.licence,
             language: store.language,
             conflictOfInterestStatus: store.conflictOfInterestStatus,
-            conflictOfInterestText: store.conflictOfInterestText
+            conflictOfInterestText: store.conflictOfInterestText,
+            fundersStatement: store.funderStatement
         };
 
         if (store.type === 'DATA') {

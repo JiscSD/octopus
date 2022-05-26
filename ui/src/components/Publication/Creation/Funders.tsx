@@ -9,6 +9,7 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 
 type Props = {
     loading: boolean;
@@ -47,7 +48,9 @@ const TableRow: React.FC<TableProps> = (props): React.ReactElement => {
                     {props.item.name}
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                    <a href={props.item.link}>{props.item.link}</a>
+                    <Components.Link href={props.item.link} openNew>
+                        {props.item.link}
+                    </Components.Link>
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.city}, {props.item.country}
@@ -120,6 +123,9 @@ const Funders: React.FC = (): React.ReactElement => {
     const funders = Stores.usePublicationCreationStore((state) => state.funders);
     const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
 
+    const funderStatement = Stores.usePublicationCreationStore((state) => state.funderStatement);
+    const updateFunderStatement = Stores.usePublicationCreationStore((state) => state.updateFunderStatement);
+
     const publicationId = Stores.usePublicationCreationStore((state) => state.id);
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -129,6 +135,7 @@ const Funders: React.FC = (): React.ReactElement => {
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
     const [link, setLink] = React.useState('');
+    const [isLinkValid, setIsLinkValid] = React.useState(false);
     const [submitLoading, setSubmitLoading] = React.useState(false);
 
     const [rorLoading, setRorLoading] = React.useState(false);
@@ -206,21 +213,30 @@ const Funders: React.FC = (): React.ReactElement => {
                     . This ensures that consistent, accurate organisational data is displayed and enables more efficient
                     discovery and tracking of research outputs across institutions and funding bodies.
                 </span>
+                <Components.Button
+                    title="Search for your organisation's ROR"
+                    link
+                    href="https://ror.org/"
+                    iconPosition="RIGHT"
+                    icon={
+                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                    }
+                />
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center ">
                 <fieldset className="w-full">
-                    <div className="mb-2 flex items-center">
+                    <div className="flex items-center">
                         <input
                             id="ror"
                             name="funder-method"
                             type="radio"
                             defaultChecked={method === 'ror'}
                             onChange={(e) => setMethod('ror')}
-                            className="border-gray-300 h-4 w-4 text-teal-600 focus:ring-teal-600"
+                            className="border-gray-300 mb-1 h-4 w-4 text-teal-600 focus:ring-teal-600"
                         />
                         <label
                             htmlFor="ror"
-                            className="text-gray-700 ml-3 block text-sm font-medium dark:text-white-100"
+                            className="text-gray-700 mb-1 ml-3 block text-sm font-medium dark:text-white-100"
                         >
                             Enter funder ROR ID
                         </label>
@@ -289,22 +305,33 @@ const Funders: React.FC = (): React.ReactElement => {
                             onChange={(e) => setCountry(e.target.value)}
                         />
                     </div>
-                    <div className="mb-4">
+                    <div>
                         <input
                             placeholder="Link"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
                                 method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
+                            type="url"
                             value={link}
-                            onChange={(e) => setLink(e.target.value)}
+                            onChange={(e) => {
+                                setIsLinkValid(Helpers.checkLinkIsValid(e.target.value));
+                                setLink(e.target.value);
+                            }}
                         />
+                        {!isLinkValid && link ? (
+                            <Components.Alert
+                                severity="ERROR"
+                                title="Please enter a valid URL."
+                                className="mt-3 w-1/2"
+                            />
+                        ) : null}
                     </div>
                 </fieldset>
             </div>
             <Components.Button
                 title="Add funder"
-                disabled={name == '' || link == '' || city == '' || link == ''}
+                disabled={name == '' || link == '' || city == '' || link == '' || isLinkValid == false}
                 onClick={onSubmitHandler}
                 iconPosition="RIGHT"
                 icon={
@@ -319,8 +346,8 @@ const Funders: React.FC = (): React.ReactElement => {
                 <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                         {funders.length ? (
-                            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
-                                <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
+                            <div className="mb-6 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
+                                <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                         <tr>
                                             <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
@@ -351,9 +378,27 @@ const Funders: React.FC = (): React.ReactElement => {
                             <Components.Alert
                                 severity="INFO"
                                 title="This publication does not have any funders."
-                                className="w-fit"
+                                className="w-1/2"
                             />
                         )}
+                        {funders.length ? (
+                            <div className="mb-2 flex flex-col">
+                                <label
+                                    htmlFor="ror"
+                                    className="text-gray-700 mt-6 block text-sm font-medium dark:text-white-100"
+                                >
+                                    If needed, provide further information on this publication’s funding arrangements
+                                </label>
+                                <textarea
+                                    name="free-text"
+                                    className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
+                            `}
+                                    placeholder="Enter any details"
+                                    value={funderStatement ?? ''}
+                                    onChange={(e) => updateFunderStatement(e.target.value)}
+                                />
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </Framer.motion.div>

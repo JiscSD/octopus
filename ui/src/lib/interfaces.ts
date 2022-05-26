@@ -79,6 +79,7 @@ export interface Publication extends CorePublication {
     ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
+    fundersStatement: string | null;
     publicationFlags: Flag[];
 }
 
@@ -343,6 +344,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     description: string;
     keywords: string[];
     licence: Types.LicenceType;
+    fundersStatement?: string | null;
     language: Types.Languages;
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string;

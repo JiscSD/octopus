@@ -289,6 +289,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             dataPermissionsStatementProvidedBy: e.dataPermissionsStatementProvidedBy,
             dataAccessStatement: e.dataAccessStatement,
             selfDeclaration: e.selfDeclaration,
+            fundersStatement: e.fundersStatement,
             user: {
                 connect: {
                     id: user.id
