@@ -79,6 +79,7 @@ export interface CreatePublicationRequestBody {
     ethicalStatement?: boolean;
     ethicalStatementFreeText?: string;
     selfDeclaration?: boolean;
+    affiliationStatement?: string;
 }
 
 export interface OpenSearchPublication {

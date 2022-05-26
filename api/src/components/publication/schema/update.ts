@@ -48,6 +48,9 @@ const updatePublicationSchema: I.Schema = {
         },
         fundersStatement: {
             type: 'string'
+        },
+        affiliationStatement: {
+            type: 'string'
         }
     },
     additionalProperties: false

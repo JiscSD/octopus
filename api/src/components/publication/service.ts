@@ -287,6 +287,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             ethicalStatementFreeText: e.ethicalStatementFreeText,
             selfDeclaration: e.selfDeclaration,
             fundersStatement: e.fundersStatement,
+            affiliationsStatement: e.affiliationStatement,
             user: {
                 connect: {
                     id: user.id
