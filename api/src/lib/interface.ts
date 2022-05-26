@@ -75,6 +75,7 @@ export interface CreatePublicationRequestBody {
     keywords?: string[];
     content?: string;
     language?: Languages;
+    fundersStatement: string;
     ethicalStatement?: boolean;
     ethicalStatementFreeText?: string;
     selfDeclaration?: boolean;

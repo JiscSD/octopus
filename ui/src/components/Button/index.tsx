@@ -18,7 +18,6 @@ type Props = {
 const Button: React.FC<Props> = (props): React.ReactElement | null => {
     const parentStyles = React.useMemo(() => {
         return `
-            pb-2
             group
             inline-flex
             items-center
@@ -55,7 +54,13 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     if (props.link && props.href) {
         return (
-            <Components.Link href={props.href} title={props.title} ariaLabel={props.title} className={parentStyles}>
+            <Components.Link
+                href={props.href}
+                title={props.title}
+                ariaLabel={props.title}
+                className={parentStyles}
+                openNew
+            >
                 <>
                     {props.iconPosition === 'LEFT' && props.icon}
                     <span className={childStyles}>{props.title}</span>

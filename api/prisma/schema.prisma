@@ -81,6 +81,7 @@ model Publication {
     publicationStatus        PublicationStatus[]
     PublicationBookmarks     PublicationBookmarks[]
     funders                  Funders[]
+    fundersStatement         String?
 }
 
 model Funders {
