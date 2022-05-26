@@ -1,11 +1,12 @@
-import * as Assets from '@assets';
-import * as Components from '@components';
-import * as Config from '@config';
+import React from 'react';
+import * as NextRouter from 'next/router';
 import * as OutlineIcons from '@heroicons/react/outline';
+
+import * as Components from '@components';
+import * as Assets from '@assets';
+import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as NextRouter from 'next/router';
-import React from 'react';
 
 type Props = {
     fixed?: boolean;
@@ -22,6 +23,21 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                 text="This is test release - we're still working on the site. Please don't use it for recording your real
         work... yet!"
             />
+            {/* Confirm email banner */}
+            {user && !user?.email && router.pathname !== Config.urls.verify.path && (
+                <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
+                    <div className="container mx-auto flex items-center gap-2 px-8 py-3">
+                        <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
+                        <Components.Link
+                            href={`${Config.urls.verify.path}?newUser=true`}
+                            className="w-fit underline decoration-2 underline-offset-4"
+                        >
+                            Please confirm your email address to publish content
+                        </Components.Link>
+                    </div>
+                </div>
+            )}
+
             <header
                 className={`text-grey-800 transition-colors duration-500  print:hidden  ${
                     props.fixed && 'lg:fixed lg:top-0 lg:left-0 lg:z-20 lg:w-full'
@@ -51,20 +67,6 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                         </div>
                     </div>
                 </div>
-                {/* Confirm email banner */}
-                {user && !user?.email && router.pathname !== Config.urls.verify.path && (
-                    <div className="my-4 bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
-                        <div className="container mx-auto flex items-center gap-2 px-8 py-4 font-montserrat font-semibold">
-                            <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 stroke-grey-900" />
-                            <Components.Link
-                                href={`${Config.urls.verify.path}?newUser=true`}
-                                className="underline decoration-2 underline-offset-4"
-                            >
-                                Please confirm your email address to publish content
-                            </Components.Link>
-                        </div>
-                    </div>
-                )}
             </header>
         </>
     );
