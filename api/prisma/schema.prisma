@@ -82,9 +82,23 @@ model Publication {
     PublicationBookmarks     PublicationBookmarks[]
     funders                  Funders[]
     fundersStatement         String?
+    affiliations             Affiliations[]
 }
 
 model Funders {
+    id            String  @id @default(cuid())
+    name          String
+    country       String
+    city          String
+    link          String
+    ror           String?
+    publicationId String
+
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    createdAt   DateTime    @default(now())
+}
+
+model Affiliations {
     id            String  @id @default(cuid())
     name          String
     country       String

@@ -86,6 +86,12 @@ const StepOne: React.FC = (): React.ReactElement => {
                             .
                         </span>
                     </div>
+                    <div className="mt-12">
+                        <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
+                        <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                            Please enter the details for any organisations you are affiliated with.
+                        </span>
+                    </div>
                 </Framer.motion.div>
             </div>
         </div>

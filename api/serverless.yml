@@ -301,17 +301,17 @@ functions:
         warmup: true
         events:
             - http:
-                    path: ${self:custom.versions.v1}/verification/{id}
-                    method: get
-                    cors: true
+                  path: ${self:custom.versions.v1}/verification/{id}
+                  method: get
+                  cors: true
     confirmVerification:
         handler: src/components/verification/routes.confirmCode
         warmup: true
         events:
             - http:
-                    path: ${self:custom.versions.v1}/verification/{id}
-                    method: post
-                    cors: true
+                  path: ${self:custom.versions.v1}/verification/{id}
+                  method: post
+                  cors: true
     createFunder:
         handler: src/components/funder/routes.create
         events:
@@ -324,5 +324,19 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
+                  method: delete
+                  cors: true
+    createAffiliation:
+        handler: src/components/affiliation/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation
+                  method: post
+                  cors: true
+    deleteAffiliation:
+        handler: src/components/affiliation/routes.destroy
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
                   method: delete
                   cors: true
