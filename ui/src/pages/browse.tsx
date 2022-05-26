@@ -1,4 +1,6 @@
+import React from 'react';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -7,7 +9,6 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import * as OutlineIcons from '@heroicons/react/outline';
 
 interface Errors {
     latest: null | string;
@@ -20,15 +21,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     let latest: unknown = [];
     try {
-        const latestResponse = await api.search(
-            'publications',
-            null,
-            Config.values.publicationTypes.join(),
-            5,
-            0
-            // 'publishedDate',
-            // 'asc'
-        );
+        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 5, 0);
         latest = latestResponse.data.reverse() as Interfaces.Publication[];
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
