@@ -87,6 +87,7 @@ CREATE TABLE "Publication" (
     "createdBy" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "fundersStatement" TEXT,
 
     CONSTRAINT "Publication_pkey" PRIMARY KEY ("id")
 );
