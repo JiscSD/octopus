@@ -9,6 +9,7 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 
 type Props = {
     loading: boolean;
@@ -193,14 +194,6 @@ const Funders: React.FC = (): React.ReactElement => {
         }
     };
 
-    const checkLinkIsValid = (text: string) => {
-        const lowerCaseText = text.toLowerCase();
-        const urlR = new RegExp(
-            /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
-        );
-        setIsLinkValid(urlR.test(lowerCaseText));
-    };
-
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
@@ -322,7 +315,7 @@ const Funders: React.FC = (): React.ReactElement => {
                             type="url"
                             value={link}
                             onChange={(e) => {
-                                checkLinkIsValid(e.target.value);
+                                setIsLinkValid(Helpers.checkLinkIsValid(e.target.value));
                                 setLink(e.target.value);
                             }}
                         />
