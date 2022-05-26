@@ -152,6 +152,7 @@ const Funders: React.FC = (): React.ReactElement => {
                 setName(rorResponse.data.name);
                 setCity(rorResponse.data.addresses[0].city);
                 setLink(rorResponse.data.links[0]);
+                setIsLinkValid(true);
                 setCountry(rorResponse.data.country.country_name);
             } catch (err) {
                 setRorError(true);
