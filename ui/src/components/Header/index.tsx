@@ -14,7 +14,7 @@ type Props = {
 };
 
 const Header: React.FC<Props> = (props): React.ReactElement => {
-    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+    const user = Stores.useAuthStore((state) => state.user);
     const router = NextRouter.useRouter();
 
     return (
