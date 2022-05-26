@@ -1,7 +1,6 @@
 service: octopus-api
 
 plugins:
-    - serverless-middleware
     - serverless-domain-manager
     - serverless-webpack
     - serverless-offline
@@ -301,17 +300,17 @@ functions:
         warmup: true
         events:
             - http:
-                    path: ${self:custom.versions.v1}/verification/{id}
-                    method: get
-                    cors: true
+                  path: ${self:custom.versions.v1}/verification/{id}
+                  method: get
+                  cors: true
     confirmVerification:
         handler: src/components/verification/routes.confirmCode
         warmup: true
         events:
             - http:
-                    path: ${self:custom.versions.v1}/verification/{id}
-                    method: post
-                    cors: true
+                  path: ${self:custom.versions.v1}/verification/{id}
+                  method: post
+                  cors: true
     createFunder:
         handler: src/components/funder/routes.create
         events:
