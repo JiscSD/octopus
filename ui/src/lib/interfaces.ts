@@ -77,6 +77,8 @@ export interface Publication extends CorePublication {
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
+    affiliations: Affiliations[];
+    affiliationsStatement: string | null;
     publicationFlags: Flag[];
 }
 
@@ -314,6 +316,15 @@ export interface Funder {
     id: string;
 }
 
+export interface Affiliations {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror?: string;
+    id: string;
+}
+
 export interface FlagComment {
     id: string;
     flagId: string;
@@ -348,6 +359,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     ethicalStatement?: boolean | null;
     ethicalStatementFreeText?: string | null;
     selfDeclaration?: boolean;
+    affiliationStatement?: string | null;
 }
 
 export interface CreationStep {

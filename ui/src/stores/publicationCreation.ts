@@ -89,6 +89,12 @@ let store: any = (set: (params: any) => void) => ({
     funders: [],
     updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
 
+    // Affiliations
+    affiliations: [],
+    updateAffiliations: (affiliations: Interfaces.Affiliations[]) => set(() => ({ affiliations })),
+    affiliationsStatement: '',
+    updateAffiliationsStatement: (affiliationsStatement: string) => set(() => ({ affiliationsStatement })),
+
     // Self declaration
     selfDeclaration: false,
     updateSelfDeclaration: (selfDeclaration: boolean) => set(() => ({ selfDeclaration }))
