@@ -192,7 +192,9 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
-                `${Config.endpoints.publications}/${publicationId}/${props.type}`,
+                `${Config.endpoints.publications}/${publicationId}/${
+                    props.type === 'funders' ? 'funders' : 'affiliation'
+                }`,
                 {
                     name,
                     country,
@@ -234,7 +236,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             htmlFor="ror"
                             className="text-gray-700 mb-1 ml-3 block text-sm font-medium dark:text-white-100"
                         >
-                            Enter funder ROR ID
+                            Enter ROR ID
                         </label>
                     </div>
                     <div className="relative mb-6">
@@ -265,7 +267,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             htmlFor="manual"
                             className="text-gray-700 ml-3 block text-sm font-medium dark:text-white-100"
                         >
-                            Enter funder details manually
+                            Enter the organisation&apos;s details manually
                         </label>
                     </div>
                     <div className="mb-4">
@@ -373,7 +375,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         ) : (
                             <Components.Alert
                                 severity="INFO"
-                                title="This publication does not have any funders."
+                                title={`This publication does not have any ${props.type}.`}
                                 className="w-1/2"
                             />
                         )}
