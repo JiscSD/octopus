@@ -26,6 +26,7 @@ model User {
     coAuthors            CoAuthors[]
     Publication          Publication[]
     PublicationFlags     PublicationFlags[]
+    PublicationRatings   PublicationRatings[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
@@ -51,40 +52,47 @@ model Images {
 }
 
 model Publication {
-    id                                 String                 @id @default(cuid())
-    url_slug                           String                 @unique @default(cuid())
-    type                               PublicationType
-    title                              String?
-    licence                            LicenceType            @default(CC_BY)
-    conflictOfInterestStatus           Boolean?
-    conflictOfInterestText             String?
-    ethicalStatement                   String?
-    ethicalStatementFreeText           String?
-    dataPermissionsStatement           String?
-    dataPermissionsStatementProvidedBy String?
-    dataAccessStatement                String?
-    selfDeclaration                    Boolean?               @default(false)
-    description                        String?
-    keywords                           String[]
-    content                            String?
-    doi                                String
-    language                           Languages              @default(en)
-    publishedDate                      DateTime?
-    currentStatus                      PublicationStatusEnum  @default(DRAFT)
-    createdBy                          String
-    createdAt                          DateTime               @default(now())
-    updatedAt                          DateTime               @updatedAt
-    user                               User                   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    coAuthors                          CoAuthors[]
-    linkedTo                           Links[]                @relation("from")
-    linkedFrom                         Links[]                @relation("to")
-    publicationFlags                   PublicationFlags[]
-    publicationStatus                  PublicationStatus[]
-    PublicationBookmarks               PublicationBookmarks[]
-    funders                            Funders[]
-    fundersStatement                   String?
+    id                       String                 @id @default(cuid())
+    url_slug                 String                 @unique @default(cuid())
+    type                     PublicationType
+    title                    String?
+    licence                  LicenceType            @default(CC_BY)
+    conflictOfInterestStatus Boolean?               @default(false)
+    conflictOfInterestText   String?
+    ethicalStatement         Boolean?
+    ethicalStatementFreeText String?
+    selfDeclaration          Boolean?               @default(false)
+    description              String?
+    keywords                 String[]
+    content                  String?
+    doi                      String?
+    language                 Languages              @default(en)
+    publishedDate            DateTime?
+    currentStatus            PublicationStatusEnum  @default(DRAFT)
+    createdBy                String
+    createdAt                DateTime               @default(now())
+    updatedAt                DateTime               @updatedAt
+    user                     User                   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    coAuthors                CoAuthors[]
+    linkedTo                 Links[]                @relation("from")
+    linkedFrom               Links[]                @relation("to")
+    publicationFlags         PublicationFlags[]
+    publicationRatings       PublicationRatings[]
+    publicationStatus        PublicationStatus[]
+    PublicationBookmarks     PublicationBookmarks[]
+    References               References[]
+    funders                  Funders[]
+    fundersStatement         String?
     affiliations                       Affiliations[]
     affiliationStatement               String?
+}
+
+model References {
+    id            String                @id @default(cuid())
+    publicationId String
+    type          ReferenceType
+    text          String
+    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
@@ -166,6 +174,18 @@ model FlagComments {
     createdAt DateTime         @default(now())
     user      User             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
+}
+
+model PublicationRatings {
+    id            String      @id @default(cuid())
+    publicationId String
+    userId        String
+    rating        Int
+    category      String
+    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationId, userId, category])
 }
 
 model PublicationBookmarks {
@@ -409,4 +429,9 @@ enum Languages {
     yo
     za
     zu
+}
+
+enum ReferenceType {
+    DOI
+    URL
 }
