@@ -84,7 +84,7 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 month: work['work-summary'][0]['publication-date']?.month?.value || null,
                 year: work['work-summary'][0]['publication-date']?.year?.value || null
             },
-            url: work['work-summary'][0].url.value || null
+            url: work['work-summary'][0]?.url?.value || null
         }));
 
         const user = await userService.upsertUser(orcidRequest.data.orcid, {
