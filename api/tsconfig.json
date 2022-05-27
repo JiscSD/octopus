@@ -23,6 +23,7 @@
             "user/*": ["src/components/user/*"],
             "bookmark/*": ["src/components/bookmark/*"],
             "link/*": ["src/components/link/*"],
+            "reference/*": ["src/components/reference/*"],
             "authorization/*": ["src/components/authorization/*"],
             "verification/*": ["src/components/verification/*"],
             "image/*": ["src/components/image/*"],

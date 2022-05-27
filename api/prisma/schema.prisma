@@ -80,8 +80,17 @@ model Publication {
     publicationRatings       PublicationRatings[]
     publicationStatus        PublicationStatus[]
     PublicationBookmarks     PublicationBookmarks[]
+    References               References[]
     funders                  Funders[]
     fundersStatement         String?
+}
+
+model References {
+    id            String                @id @default(cuid())
+    publicationId String
+    type          ReferenceType
+    text          String
+    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
@@ -408,4 +417,9 @@ enum Languages {
     yo
     za
     zu
+}
+
+enum ReferenceType {
+    DOI
+    URL
 }

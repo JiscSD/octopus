@@ -1,23 +1,21 @@
-import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role, Languages } from '@prisma/client';
-export {
-    PublicationType,
-    LicenceType,
-    PublicationStatusEnum,
-    PublicationFlagCategoryEnum,
-    Role,
-    ImageExtension,
-    Languages
-} from '@prisma/client';
-
+import { Languages, LicenceType, Prisma, PublicationFlagCategoryEnum, PublicationType, Role } from '@prisma/client';
 import {
-    APIGatewayProxyEventV2,
+    APIGatewayProxyEventPathParameters,
     APIGatewayProxyEventQueryStringParameters,
-    APIGatewayProxyEventPathParameters
+    APIGatewayProxyEventV2
 } from 'aws-lambda';
-
-export { APIGatewayProxyEventV2, APIGatewayProxyResultV2, APIGatewayProxyHandlerV2 } from 'aws-lambda';
+export {
+    ImageExtension,
+    Languages,
+    LicenceType,
+    PublicationFlagCategoryEnum,
+    PublicationStatusEnum,
+    PublicationType,
+    Role
+} from '@prisma/client';
+export { JSONSchemaType, Schema } from 'ajv';
+export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 export { HandlerLambda } from 'middy';
-export { Schema, JSONSchemaType } from 'ajv';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -432,6 +430,23 @@ export type Ratings =
 export interface CreateRatingRequestBody {
     type: Ratings;
     value: number;
+}
+
+/**
+ * @description References
+ */
+
+export type ReferenceType = 'URL' | 'DOI';
+
+export interface Reference {
+    referenceId?: string;
+    publicationId: string;
+    type: ReferenceType;
+    text: string;
+}
+
+export interface ReferencePath {
+    referenceId: string;
 }
 
 export interface OctopusInformation {
