@@ -76,7 +76,7 @@ export type PublicationCreationStoreType = {
     dataPermissionsStatement: string | null;
     updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
     dataPermissionsStatementProvidedBy: string | null;
-    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string) => void;
+    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string | null) => void;
     reset: () => void;
     coAuthors: Interfaces.CoAuthor[];
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;

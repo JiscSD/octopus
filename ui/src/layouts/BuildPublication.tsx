@@ -73,9 +73,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             body.ethicalStatement = store.ethicalStatement;
             body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
             if (store.dataAccessStatement?.length) body.dataAccessStatement = store.dataAccessStatement;
-            if (store.dataPermissionsStatement?.length) body.dataPermissionsStatement = store.dataPermissionsStatement;
-            if (store.dataPermissionsStatementProvidedBy?.length)
+            if (store.dataPermissionsStatement?.length) {
+                body.dataPermissionsStatement = store.dataPermissionsStatement;
                 body.dataPermissionsStatementProvidedBy = store.dataPermissionsStatementProvidedBy;
+            }
         }
 
         if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
@@ -174,8 +175,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 ready = { ready: false, message: 'You must select an ethical statement option' };
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
-            if (store.dataPermissionsStatementProvidedBy === null || !store.dataPermissionsStatementProvidedBy.length)
-                ready = { ready: false, message: 'You must provide a provided by for the data permission' };
         }
 
         return ready;
@@ -194,8 +193,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.linkTo,
         store.type,
         store.ethicalStatement,
-        store.dataPermissionsStatement,
-        store.dataPermissionsStatementProvidedBy
+        store.dataPermissionsStatement
     ]);
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature

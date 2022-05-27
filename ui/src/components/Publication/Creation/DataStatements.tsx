@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
@@ -13,7 +14,7 @@ const dataAccessOptions: string[] = [
 ];
 const dataPermissionsOptions: string[] = [
     'The results and data in this publication involved access to owned or copyrighted materials',
-    'The results and data in this publication does not involve materials access to owned or copyrighted materials (except those in the private ownership of the authors) '
+    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors)'
 ];
 
 const DataStatements: React.FC = (): React.ReactElement => {
@@ -113,29 +114,38 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 name={option}
                                 id={option}
                                 checked={option === dataPermissionsStatement}
-                                onChange={() => updateDataPermissionsStatement(option)}
+                                onChange={() => {
+                                    updateDataPermissionsStatement(option);
+                                    if (option === dataPermissionsOptions[1]) {
+                                        updateDataPermissionsStatementProvidedBy(null);
+                                    }
+                                }}
                                 className="hover:cursor-pointer"
                                 aria-label={option}
                             />
                             <span className="ml-2 text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                {option}
+                                {parse(option)}
                             </span>
                         </label>
                     ))}
                 </fieldset>
 
-                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Permission for the data collection and sharing was given by <Components.RequiredIndicator />
-                </span>
-                <textarea
-                    name="dataPermissionsStatementProvidedBy"
-                    id="dataPermissionsStatementProvidedBy"
-                    rows={2}
-                    className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
-                    required
-                    value={dataPermissionsStatementProvidedBy ?? ''}
-                    onChange={(e) => updateDataPermissionsStatementProvidedBy(e.target.value)}
-                />
+                {dataPermissionsStatement === dataPermissionsOptions[0] && (
+                    <>
+                        <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                            Permission for the data collection and sharing was given by <Components.RequiredIndicator />
+                        </span>
+                        <textarea
+                            name="dataPermissionsStatementProvidedBy"
+                            id="dataPermissionsStatementProvidedBy"
+                            rows={2}
+                            className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
+                            required
+                            value={dataPermissionsStatementProvidedBy ?? ' '}
+                            onChange={(e) => updateDataPermissionsStatementProvidedBy(e.target.value)}
+                        />
+                    </>
+                )}
             </div>
 
             {/* Data access statement */}

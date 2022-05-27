@@ -50,20 +50,17 @@ const createPublicationSchema: I.Schema = {
             type: 'boolean'
         },
         ethicalStatementFreeText: {
-            type: 'string',
-            maxLength: 255
+            type: 'string'
         },
         dataPermissionsStatement: {
-            type: 'string',
-            maxLength: 255
+            type: 'string'
         },
         dataPermissionsStatementProvidedBy: {
             type: 'string',
-            maxLength: 255
+            nullable: true
         },
         dataAccessStatement: {
-            type: 'string',
-            maxLength: 255
+            type: 'string'
         },
         selfDeclaration: {
             type: 'boolean'

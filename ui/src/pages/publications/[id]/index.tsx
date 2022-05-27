@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
 import jwt from 'jsonwebtoken';
@@ -118,7 +119,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
-    if (props.publication.dataAccessStatement && props.publication.dataPermissionsStatementProvidedBy)
+    if (props.publication.dataPermissionsStatement)
         list.push({ title: 'Data permissions statement', href: 'data-permissions-statement' });
     if (props.publication.dataAccessStatement)
         list.push({ title: 'Data access statement', href: 'data-access-statement' });
@@ -506,7 +507,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
 
                     {/* Data permissions statement */}
-                    {!!props.publication.dataAccessStatement && props.publication.dataPermissionsStatementProvidedBy && (
+                    {!!props.publication.dataPermissionsStatement && (
                         <Components.PublicationContentSection
                             id="data-permissions-statement"
                             title="Data permissions statement"
@@ -514,11 +515,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         >
                             <>
                                 <p className="mb-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {props.publication.dataPermissionsStatement}
+                                    {parse(props.publication.dataPermissionsStatement)}
                                 </p>
-                                <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                    Provided by: {props.publication.dataPermissionsStatementProvidedBy}
-                                </p>
+                                {props.publication.dataPermissionsStatementProvidedBy?.length && (
+                                    <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                        {props.publication.dataPermissionsStatementProvidedBy}
+                                    </p>
+                                )}
                             </>
                         </Components.PublicationContentSection>
                     )}

@@ -402,8 +402,6 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const isDataAndHasPermissionsStatementProvidedBy =
-        publication.type === 'DATA' ? publication.dataPermissionsStatementProvidedBy !== null : true;
 
     const isAttemptToLive = status === 'LIVE';
 
@@ -415,7 +413,6 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        isDataAndHasPermissionsStatementProvidedBy &&
         isAttemptToLive
     )
         isReady = true;
