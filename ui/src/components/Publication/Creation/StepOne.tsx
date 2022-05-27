@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -40,7 +41,7 @@ const StepOne: React.FC = (): React.ReactElement => {
                     You retain the copyright to your work, and can choose what licence you would like to assign it.
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Contact the Octopus team if you would like to use a license that isn’t listed.
+                    Contact the Octopus team if you would like to use a license that isn&apos;t listed.
                 </span>
                 <div className="items-center lg:flex">
                     <select
@@ -87,10 +88,22 @@ const StepOne: React.FC = (): React.ReactElement => {
                         </span>
                     </div>
                     <div className="mt-12">
-                        <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
-                        <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            Please enter the details for any organisations you are affiliated with.
-                        </span>
+                        <div className="mb-10">
+                            <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
+                            <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                Please enter the details for any organisations you are affiliated with.
+                            </span>
+                            <Components.Button
+                                title="Search for your organisation's ROR"
+                                link
+                                href="https://ror.org/"
+                                iconPosition="RIGHT"
+                                icon={
+                                    <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                }
+                            />
+                        </div>
+                        <Components.RORForm type="affiliations" />
                     </div>
                 </Framer.motion.div>
             </div>

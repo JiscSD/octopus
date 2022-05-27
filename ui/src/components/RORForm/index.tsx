@@ -41,7 +41,12 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
     const onDeleteRowHandler = async (id: string) => {
         setIsLoading(true);
         try {
-            await api.destroy(`${Config.endpoints.publications}/${publicationId}/${props.type}/${id}`, user?.token);
+            await api.destroy(
+                `${Config.endpoints.publications}/${publicationId}/${
+                    props.type === 'funders' ? 'funders' : 'affiliation'
+                }/${id}`,
+                user?.token
+            );
             props.type == 'funders'
                 ? updateFunders(funders.filter((funder) => funder.id !== id))
                 : updateAffiliations(affiliations.filter((affiliations) => affiliations.id !== id));
