@@ -126,7 +126,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { title: 'Main text', href: 'main-text' },
         ...list,
         { title: 'Funders', href: 'funders' },
-        { title: 'Conflict of interest', href: 'coi' }
+        { title: 'Conflict of interest', href: 'coi' },
+        { title: 'Affiliated organisations', href: 'affiliations' }
     ];
 
     const currentCoAuthor = React.useMemo(
@@ -578,6 +579,38 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </ul>
                                 <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {publication.fundersStatement}
+                                </p>
+                            </>
+                        )}
+                    </Components.PublicationContentSection>
+
+                    {/* Affiliated Organisations section */}
+                    <Components.PublicationContentSection id="affiliations" title="Affiliated Organisations" hasBreak>
+                        {!publication.affiliations.length ? (
+                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                No affiliated organisations have been specified for this{' '}
+                                {Helpers.formatPublicationType(publication.type)}.
+                            </p>
+                        ) : (
+                            <>
+                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    This {Helpers.formatPublicationType(publication.type)} has the following affiliated
+                                    organisations:
+                                </p>
+                                <ul>
+                                    {publication.affiliations.map((affiliation) => {
+                                        return (
+                                            <li key={affiliation.id} className="ml-7 mt-1 list-disc">
+                                                <a href={affiliation.link} className=" text-teal-600 hover:underline">
+                                                    {affiliation.name}
+                                                </a>{' '}
+                                                - {affiliation.city}, {affiliation.country}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {publication.affiliationsStatement}
                                 </p>
                             </>
                         )}
