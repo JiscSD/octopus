@@ -334,3 +334,28 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
                   method: delete
                   cors: true
+    # References
+    createReference:
+        handler: src/components/reference/routes.create
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/reference
+                  method: post
+                  cors: true
+    updateReference:
+        handler: src/components/reference/routes.update
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/reference/{referenceId}
+                  method: put
+                  cors: true
+    deleteReference:
+        handler: src/components/reference/routes.remove
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/reference/{referenceId}
+                  method: delete
+                  cors: true
