@@ -61,7 +61,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
 
     if (data) {
         return (
-            <section className="relative mb-8 grid grid-cols-7 gap-4 border border-red-500">
+            <section className="relative mb-8 grid grid-cols-7 gap-4 border border-red-500 print:hidden">
                 {Config.values.publicationTypes.map((type) => {
                     return (
                         type !== 'PEER_REVIEW' && (
