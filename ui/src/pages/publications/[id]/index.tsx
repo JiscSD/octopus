@@ -235,8 +235,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 cancelButtonText="No, changes are needed"
                 title="Do you approve this publication?"
             />
+
             <Layouts.Publication fixedHeader={false}>
                 <section className="col-span-9">
+                    <Components.PublicationVisulization id={props.publication.id} />
+
                     {publication.currentStatus === 'DRAFT' && (
                         <Components.Alert
                             className="mb-4"
