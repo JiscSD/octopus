@@ -202,8 +202,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         return () => store.reset();
     }, []);
 
-    React.useEffect(() => console.log(store), [store]);
-
     return (
         <>
             <Components.Modal
