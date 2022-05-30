@@ -135,11 +135,11 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
             </Head>
 
             <Layouts.Standard>
-                <section className="container mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50">
+                <section className="container mx-auto mb-10 grid grid-cols-1 gap-4 px-8 text-grey-900 transition-colors duration-500 dark:text-white-50 lg:pt-16">
                     <Components.PageTitle
                         text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
-                    <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                    <p className="mb-6 block text-grey-700 transition-colors duration-500 dark:text-grey-50 lg:w-3/4">
                         A verified email is required for essential service notifications. We’ll use it as described in
                         our privacy notice (at{' '}
                         <Components.Link
@@ -153,7 +153,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         no longer wish to hold an account. You can update your email address at any time from your user
                         account page.
                     </p>
-                    <form className="flex-column gap-4 space-y-4">
+                    <form className="flex-column gap-4 space-y-6">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
@@ -190,7 +190,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <label htmlFor="email" className="flex flex-col gap-1">
+                            <label htmlFor="email" className="mb-4 flex flex-col gap-1">
                                 <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                     <SolidIcons.QuestionMarkCircleIcon className="h-5 w-5 text-teal-700 dark:text-teal-400" />
                                     Your{!props.newUser && ' new'} email address
@@ -245,7 +245,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     disabled={loading}
                                 />
                             </label>
-                            <span className="flex items-center gap-2">
+                            <span className="mt-4 flex items-center gap-2">
                                 <Components.Button
                                     onClick={verifyCode}
                                     disabled={!!!code.length || loading}
@@ -275,7 +275,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
                                 </HeadlessUI.Transition>
                             </span>
-                            <div className="mt-4 text-xs font-medium leading-relaxed tracking-wider text-grey-500 transition-colors duration-500 dark:text-grey-300">
+                            <div className="mt-4 text-xs font-medium leading-relaxed text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                 <div className="mb-2 text-lg text-grey-700 dark:text-grey-100">
                                     Not received your code?
                                 </div>

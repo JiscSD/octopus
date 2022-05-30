@@ -39,6 +39,19 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Verification" (
+    "id" TEXT NOT NULL,
+    "orcid" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "attempts" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Verification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Images" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -60,6 +73,10 @@ CREATE TABLE "Publication" (
     "conflictOfInterestText" TEXT,
     "ethicalStatement" BOOLEAN,
     "ethicalStatementFreeText" TEXT,
+    "dataPermissionsStatement" TEXT,
+    "dataPermissionsStatementProvidedBy" TEXT,
+    "dataAccessStatement" TEXT,
+    "selfDeclaration" BOOLEAN DEFAULT false,
     "description" TEXT,
     "keywords" TEXT[],
     "content" TEXT,
@@ -70,8 +87,23 @@ CREATE TABLE "Publication" (
     "createdBy" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "fundersStatement" TEXT,
 
     CONSTRAINT "Publication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Funders" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "ror" TEXT,
+    "publicationId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Funders_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -147,6 +179,7 @@ CREATE TABLE "PublicationBookmarks" (
     "id" TEXT NOT NULL,
     "publicationId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "PublicationBookmarks_pkey" PRIMARY KEY ("id")
 );
@@ -156,6 +189,9 @@ CREATE UNIQUE INDEX "User_orcid_key" ON "User"("orcid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_apiKey_key" ON "User"("apiKey");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Verification_orcid_key" ON "Verification"("orcid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Publication_url_slug_key" ON "Publication"("url_slug");
@@ -177,6 +213,9 @@ ALTER TABLE "Images" ADD CONSTRAINT "Images_user_fkey" FOREIGN KEY ("user") REFE
 
 -- AddForeignKey
 ALTER TABLE "Publication" ADD CONSTRAINT "Publication_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Funders" ADD CONSTRAINT "Funders_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Links" ADD CONSTRAINT "Links_publicationFrom_fkey" FOREIGN KEY ("publicationFrom") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;

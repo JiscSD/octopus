@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
 import jwt from 'jsonwebtoken';
@@ -118,6 +119,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
+    if (props.publication.dataPermissionsStatement)
+        list.push({ title: 'Data permissions statement', href: 'data-permissions-statement' });
+    if (props.publication.dataAccessStatement)
+        list.push({ title: 'Data access statement', href: 'data-access-statement' });
     if (props.publication.selfDeclaration) list.push({ title: 'Self-declaration', href: 'self-declaration' });
     if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
@@ -372,6 +377,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </header>
 
+                    {/* Publication chain */}
                     <Components.PublicationContentSection id="publication-chain" title="Publication chain" hasBreak>
                         <>
                             <p className="mb-8 block text-grey-800 transition-colors duration-500 dark:text-white-50">
@@ -497,6 +503,39 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Data permissions statement */}
+                    {!!props.publication.dataPermissionsStatement && (
+                        <Components.PublicationContentSection
+                            id="data-permissions-statement"
+                            title="Data permissions statement"
+                            hasBreak
+                        >
+                            <>
+                                <p className="mb-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    {parse(props.publication.dataPermissionsStatement)}
+                                </p>
+                                {props.publication.dataPermissionsStatementProvidedBy?.length && (
+                                    <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                        {props.publication.dataPermissionsStatementProvidedBy}
+                                    </p>
+                                )}
+                            </>
+                        </Components.PublicationContentSection>
+                    )}
+
+                    {/* Data access statement */}
+                    {!!props.publication.dataAccessStatement && (
+                        <Components.PublicationContentSection
+                            id="data-access-statement"
+                            title="Data access statement"
+                            hasBreak
+                        >
+                            <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                {props.publication.dataAccessStatement}
+                            </p>
                         </Components.PublicationContentSection>
                     )}
 

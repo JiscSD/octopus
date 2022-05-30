@@ -40,8 +40,17 @@ const updatePublicationSchema: I.Schema = {
             type: 'boolean'
         },
         ethicalStatementFreeText: {
+            type: 'string'
+        },
+        dataPermissionsStatement: {
+            type: 'string'
+        },
+        dataPermissionsStatementProvidedBy: {
             type: 'string',
-            maxLength: 255
+            nullable: true
+        },
+        dataAccessStatement: {
+            type: 'string'
         },
         selfDeclaration: {
             type: 'boolean'

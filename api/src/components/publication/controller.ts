@@ -122,6 +122,19 @@ export const create = async (
                 message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
             });
         }
+
+        if (event.body.dataAccessStatement !== undefined && event.body.type !== 'DATA') {
+            return response.json(400, {
+                message: 'You can not supply a data access statement on and non data publication.'
+            });
+        }
+
+        if (event.body.dataPermissionsStatement !== undefined && event.body.type !== 'DATA') {
+            return response.json(400, {
+                message: 'You can not supply a data permissions statement on and non data publication.'
+            });
+        }
+
         const publication = await publicationService.create(event.body, event.user);
 
         return response.json(201, publication);
@@ -178,6 +191,18 @@ export const update = async (
         ) {
             return response.json(400, {
                 message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
+            });
+        }
+
+        if (event.body.dataAccessStatement !== undefined && publication.type !== 'DATA') {
+            return response.json(400, {
+                message: 'You can not supply a data access statement on and non data publication.'
+            });
+        }
+
+        if (event.body.dataPermissionsStatement !== undefined && publication.type !== 'DATA') {
+            return response.json(400, {
+                message: 'You can not supply a data permissions statement on and non data publication.'
             });
         }
 

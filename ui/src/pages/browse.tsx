@@ -1,4 +1,7 @@
+import React from 'react';
+import useSWR from 'swr';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -7,29 +10,24 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-import * as OutlineIcons from '@heroicons/react/outline';
 
 interface Errors {
     latest: null | string;
 }
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    const swrKey = `/publications?search&type=${Config.values.publicationTypes.join()}&limit=5&offset=0`;
+
     const errors: Errors = {
         latest: null
     };
 
     let latest: unknown = [];
+    let metadata: unknown = {};
     try {
-        const latestResponse = await api.search(
-            'publications',
-            null,
-            Config.values.publicationTypes.join(),
-            5,
-            0
-            // 'publishedDate',
-            // 'asc'
-        );
+        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 5, 0);
         latest = latestResponse.data.reverse() as Interfaces.Publication[];
+        metadata = latestResponse.metadata;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         errors.latest = message;
@@ -37,81 +35,97 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            latest,
-            errors
+            errors,
+            swrKey,
+            fallback: {
+                [swrKey]: {
+                    data: {
+                        data: latest,
+                        metadata
+                    }
+                }
+            }
         }
     };
 };
 
 type Props = {
-    latest: Interfaces.Publication[];
     errors: Errors;
+    swrKey: string;
 };
 
-const Browse: Types.NextPage<Props> = (props): React.ReactElement => (
-    <>
-        <Head>
-            <meta name="description" content={Config.urls.browsePublications.description} />
-            <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
-            <link rel="canonical" href={Config.urls.browsePublications.canonical} />
-            <title>{Config.urls.browsePublications.title}</title>
-        </Head>
+const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
+    const {
+        data: { data },
+        error
+    } = useSWR(props.swrKey);
 
-        <Layouts.Standard>
-            <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16">
-                <Components.PageTitle text="Browse all publications" />
-            </section>
-            <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                <aside className="relative col-span-2 hidden lg:block">
-                    <div className="sticky top-16">
-                        {/* view all publication & authors buttons */}
-                        <div className="grid-row-2 grid">
-                            <Components.Button
-                                link
-                                href={`${
-                                    Config.urls.search.path
-                                }?for=publications&type=${Config.values.publicationTypes.join()}`}
-                                title="View all publications"
-                                iconPosition="RIGHT"
-                                icon={
-                                    <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                            />
-                            <Components.Button
-                                link
-                                href={`${Config.urls.search.path}?for=users`}
-                                title="View all authors"
-                                iconPosition="RIGHT"
-                                icon={
-                                    <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                                className="mb-6"
-                            />
+    return (
+        <>
+            <Head>
+                <meta name="description" content={Config.urls.browsePublications.description} />
+                <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.browsePublications.canonical} />
+                <title>{Config.urls.browsePublications.title}</title>
+            </Head>
+
+            <Layouts.Standard>
+                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16">
+                    <Components.PageTitle text="Browse all publications" />
+                </section>
+                <section id="content" className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                    <aside className="relative col-span-2 hidden lg:block">
+                        <div className="sticky top-16">
+                            {/* view all publication & authors buttons */}
+                            <div className="grid-row-2 mb-6 grid">
+                                <Components.Button
+                                    link
+                                    href={`${
+                                        Config.urls.search.path
+                                    }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                                    title="View all publications"
+                                    iconPosition="RIGHT"
+                                    icon={
+                                        <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    }
+                                    className="w-fit"
+                                />
+                                <Components.Button
+                                    link
+                                    href={`${Config.urls.search.path}?for=users`}
+                                    title="View all authors"
+                                    iconPosition="RIGHT"
+                                    icon={
+                                        <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    }
+                                    className="w-fit"
+                                />
+                            </div>
+                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                Publication type
+                            </h2>
+                            {Config.values.publicationTypes.map((type) => (
+                                <Components.Link
+                                    key={type}
+                                    href={`${Config.urls.search.path}?for=publications&type=${type}`}
+                                    className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                                >
+                                    <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
+                                        {Helpers.formatPublicationType(type)}
+                                    </span>
+                                </Components.Link>
+                            ))}
                         </div>
-                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                            Publication type
-                        </h2>
-                        {Config.values.publicationTypes.map((type) => (
-                            <Components.Link
-                                key={type}
-                                href={`${Config.urls.search.path}?for=publications&type=${type}`}
-                                className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                            >
-                                <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
-                                    {Helpers.formatPublicationType(type)}
-                                </span>
-                            </Components.Link>
-                        ))}
-                    </div>
-                </aside>
-                <article className="lg:col-span-6">
-                    <div className="mb-16">
-                        <Components.LatestPublications publications={props.latest} />
-                    </div>
-                </article>
-            </section>
-        </Layouts.Standard>
-    </>
-);
+                    </aside>
+                    <article className="lg:col-span-6">
+                        <div className="mb-16">
+                            {!error && data && <Components.LatestPublications publications={data.data} />}
+                        </div>
+                    </article>
+                </section>
+            </Layouts.Standard>
+        </>
+    );
+};
 
 export default Browse;
