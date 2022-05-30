@@ -24,6 +24,28 @@ export const getAllByIds = async (ids: Array<string>) => {
     return publications;
 };
 
+export const getLinksForPublication = async (id: string) => {
+    const publicationWithLinkInformation = await client.prisma.publication.findFirst({
+        where: {
+            id
+        },
+        include: {
+            linkedFrom: {
+                include: {
+                    publicationFromRef: true
+                }
+            },
+            linkedTo: {
+                include: {
+                    publicationToRef: true
+                }
+            }
+        }
+    });
+
+    return publicationWithLinkInformation;
+};
+
 export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
     const updatedPublication = await client.prisma.publication.update({
         where: {

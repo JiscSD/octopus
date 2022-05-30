@@ -267,3 +267,15 @@ export const updateStatus = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getLinksForPublication = async (
+    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const data = await publicationService.getLinksForPublication(event.pathParameters.id);
+
+        return response.json(200, data);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
