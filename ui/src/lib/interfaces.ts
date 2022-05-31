@@ -33,14 +33,18 @@ export interface PublicationRef {
         lastName: string;
         orcid: string;
     };
+    linkedTo: LinkTo[];
+    linkedFrom: LinkFrom[];
 }
 
 export interface LinkTo {
+    linkedTo: any;
     id: string;
     publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
+    linkedFrom: any;
     id: string;
     publicationFromRef: PublicationRef;
 }

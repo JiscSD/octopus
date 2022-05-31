@@ -23,6 +23,17 @@ export const getAllByIds = async (ids: Array<string>) => {
     return publications;
 };
 
+// todo
+interface BoxEntry {
+    id: string;
+    title: string;
+    firstName: string;
+    lastName: string;
+    pointer?: string;
+    direction?: 'right' | 'left' | 'auto';
+    type: I.PublicationType;
+}
+
 export const getLinksForPublication = async (id: string) => {
     const publicationWithLinkInformation = await client.prisma.publication.findFirst({
         where: {

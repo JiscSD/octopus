@@ -2,23 +2,40 @@ import React from 'react';
 import useSWR from 'swr';
 import * as Axios from 'axios';
 import Xarrow from 'react-xarrows';
+import * as Framer from 'framer-motion';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
+import * as Types from '@types';
 
+interface BoxEntry {
+    id: string;
+    title: string;
+    firstName: string;
+    lastName: string;
+    pointer?: string;
+    direction?: 'right' | 'left' | 'auto';
+    type: Types.PublicationType;
+}
+
+// replace with above
 type BoxProps = {
     publication: Interfaces.PublicationRef | Interfaces.Publication;
     pointer?: string;
     type?: 'TO' | 'FROM';
 };
 
-const ShadowBox: React.FC = (): React.ReactElement => {
-    return <>lol</>;
-};
-
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
+    // {
+    //     title: '',
+    //     other: '',
+    //     to: ''
+    //     from: '',
+    //     type: ''
+    // }
+
     const start = React.useMemo(() => {
         if (props.type === 'TO') return 'left';
         if (props.type === 'FROM') return 'right';
@@ -33,47 +50,48 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
     }, [props.type]);
 
     return (
-        <Components.Link
-            id={props.publication.id}
-            href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
-            className={`
+        <Framer.motion.div id={props.publication.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Components.Link
+                href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                className={`
             ${!props.type ? 'sticky top-0 border-teal-600' : 'border-transparent hover:border-teal-600'}
             block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
             `}
-        >
-            <>
-                <div className="space-y-1">
-                    <span
-                        className="block h-16 text-sm leading-snug"
-                        title={props.publication.title}
-                        aria-label={props.publication.title}
-                    >
-                        {Helpers.truncateString(props.publication.title, 50)}
-                    </span>
+            >
+                <>
+                    <div className="space-y-1">
+                        <span
+                            className="block h-16 text-sm leading-snug"
+                            title={props.publication.title}
+                            aria-label={props.publication.title}
+                        >
+                            {Helpers.truncateString(props.publication.title, 50)}
+                        </span>
 
-                    <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                        {props.publication.user?.firstName[0]} {props.publication.user?.lastName}
-                    </span>
+                        <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                            {props.publication.user?.firstName[0]} {props.publication.user?.lastName}
+                        </span>
 
-                    <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                        {Helpers.formatDate(props.publication.publishedDate)}
-                    </time>
-                </div>
+                        <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                            {Helpers.formatDate(props.publication.publishedDate)}
+                        </time>
+                    </div>
 
-                {props.pointer && (
-                    <Xarrow
-                        path="grid"
-                        strokeWidth={2}
-                        color={'#296d8a'}
-                        showHead={false}
-                        start={props.pointer}
-                        end={props.publication.id}
-                        startAnchor={start}
-                        endAnchor={end}
-                    />
-                )}
-            </>
-        </Components.Link>
+                    {props.pointer && (
+                        <Xarrow
+                            path="grid"
+                            strokeWidth={2}
+                            color={'#296d8a'}
+                            showHead={false}
+                            start={props.pointer}
+                            end={props.publication.id}
+                            startAnchor={start}
+                            endAnchor={end}
+                        />
+                    )}
+                </>
+            </Components.Link>
+        </Framer.motion.div>
     );
 };
 
@@ -95,6 +113,8 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
             }
         }
     );
+
+    // BoxEntry[]
 
     return (
         <section className="scrollbar-vert mb-8 grid h-72 grid-cols-7 gap-x-8 gap-y-2 overflow-y-auto pb-[5px]">
