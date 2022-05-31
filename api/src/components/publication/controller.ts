@@ -274,8 +274,11 @@ export const getLinksForPublication = async (
     try {
         const data = await publicationService.getLinksForPublication(event.pathParameters.id);
 
+        console.log(data);
+
         return response.json(200, data);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

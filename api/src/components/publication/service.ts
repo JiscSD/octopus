@@ -32,12 +32,42 @@ export const getLinksForPublication = async (id: string) => {
         include: {
             linkedFrom: {
                 include: {
-                    publicationFromRef: true
+                    publicationFromRef: {
+                        include: {
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    id: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
                 }
             },
             linkedTo: {
                 include: {
-                    publicationToRef: true
+                    publicationToRef: {
+                        include: {
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    id: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    id: true,
+                    orcid: true
                 }
             }
         }

@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 
 type Props = {
+    id?: string;
     href: string;
     title?: string;
     className?: string;
@@ -17,6 +18,7 @@ type Props = {
 const CustomLink: React.FC<Props> = (props): React.ReactElement => (
     <Link href={props.href} scroll={props.scroll}>
         <a
+            id={props.id}
             className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
                 props.className ? props.className : ''
             }`}

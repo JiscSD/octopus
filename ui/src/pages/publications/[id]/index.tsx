@@ -236,10 +236,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 title="Do you approve this publication?"
             />
 
-            <Layouts.Publication fixedHeader={false}>
+            <Layouts.Publication fixedHeader={false} publicationId={props.publication.id}>
                 <section className="col-span-9">
-                    <Components.PublicationVisulization id={props.publication.id} />
-
                     {publication.currentStatus === 'DRAFT' && (
                         <Components.Alert
                             className="mb-4"
@@ -343,7 +341,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <p className="mb-8">
+                        <p className="lg:mb-8">
                             <Components.Link
                                 href={`${Config.urls.viewUser.path}/${publication.user.id}`}
                                 className="2 text-normal w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
@@ -374,10 +372,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <Components.PublicationVisualChain highlighted={publication.type} />
                             </div>
                         )}
-
-                        <div className="block xl:hidden">
-                            <SidebarCard publication={props.publication} sectionList={sectionList} />
-                        </div>
                     </header>
 
                     {/* Publication chain */}
@@ -636,7 +630,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </p>
                     </Components.PublicationContentSection>
                 </section>
-
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
                         <SidebarCard publication={props.publication} sectionList={sectionList} />
