@@ -236,7 +236,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 title="Do you approve this publication?"
             />
 
-            <Layouts.Publication fixedHeader={false} publicationId={props.publication.id}>
+            <Layouts.Publication
+                fixedHeader={false}
+                publicationId={props.publication.type !== 'PEER_REVIEW' ? props.publication.id : undefined}
+            >
                 <section className="col-span-9">
                     {publication.currentStatus === 'DRAFT' && (
                         <Components.Alert
