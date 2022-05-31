@@ -1,6 +1,5 @@
-import * as client from 'lib/client';
-
 import * as I from 'interface';
+import * as client from 'lib/client';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -41,6 +40,38 @@ export const getLinksForPublication = async (id: string) => {
                                     id: true,
                                     orcid: true
                                 }
+                            },
+                            linkedFrom: {
+                                include: {
+                                    publicationFromRef: {
+                                        include: {
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    id: true,
+                                                    orcid: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            linkedTo: {
+                                include: {
+                                    publicationFromRef: {
+                                        include: {
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    id: true,
+                                                    orcid: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -56,6 +87,38 @@ export const getLinksForPublication = async (id: string) => {
                                     lastName: true,
                                     id: true,
                                     orcid: true
+                                }
+                            },
+                            linkedFrom: {
+                                include: {
+                                    publicationFromRef: {
+                                        include: {
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    id: true,
+                                                    orcid: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            linkedTo: {
+                                include: {
+                                    publicationFromRef: {
+                                        include: {
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    id: true,
+                                                    orcid: true
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
