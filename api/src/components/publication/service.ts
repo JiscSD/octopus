@@ -24,63 +24,57 @@ export const getAllByIds = async (ids: Array<string>) => {
 };
 
 // todo
-interface BoxEntry {
-    id: string;
-    title: string;
-    firstName: string;
-    lastName: string;
-    pointer?: string;
-    direction?: 'right' | 'left' | 'auto';
-    type: I.PublicationType;
-}
+// interface BoxEntry {
+//     id: string;
+//     title: string;
+//     firstName: string;
+//     lastName: string;
+//     pointer?: string;
+//     direction?: 'right' | 'left' | 'auto';
+//     type: I.PublicationType;
+// }
 
 export const getLinksForPublication = async (id: string) => {
+    const pubObject = {
+        id: true,
+        title: true,
+        type: true,
+        publishedDate: true,
+        user: {
+            select: {
+                firstName: true,
+                lastName: true,
+                id: true,
+                orcid: true
+            }
+        }
+    };
+
     const publicationWithLinkInformation = await client.prisma.publication.findFirst({
         where: {
-            id
+            id,
+            currentStatus: {
+                equals: 'LIVE'
+            }
         },
-        include: {
+        select: {
+            ...pubObject,
             linkedFrom: {
-                include: {
+                select: {
                     publicationFromRef: {
-                        include: {
-                            user: {
-                                select: {
-                                    firstName: true,
-                                    lastName: true,
-                                    id: true,
-                                    orcid: true
-                                }
-                            },
+                        select: {
+                            ...pubObject,
                             linkedFrom: {
-                                include: {
+                                select: {
                                     publicationFromRef: {
-                                        include: {
-                                            user: {
-                                                select: {
-                                                    firstName: true,
-                                                    lastName: true,
-                                                    id: true,
-                                                    orcid: true
-                                                }
-                                            }
-                                        }
+                                        select: pubObject
                                     }
                                 }
                             },
                             linkedTo: {
-                                include: {
+                                select: {
                                     publicationFromRef: {
-                                        include: {
-                                            user: {
-                                                select: {
-                                                    firstName: true,
-                                                    lastName: true,
-                                                    id: true,
-                                                    orcid: true
-                                                }
-                                            }
-                                        }
+                                        select: pubObject
                                     }
                                 }
                             }
@@ -89,59 +83,26 @@ export const getLinksForPublication = async (id: string) => {
                 }
             },
             linkedTo: {
-                include: {
+                select: {
                     publicationToRef: {
-                        include: {
-                            user: {
-                                select: {
-                                    firstName: true,
-                                    lastName: true,
-                                    id: true,
-                                    orcid: true
-                                }
-                            },
+                        select: {
+                            ...pubObject,
                             linkedFrom: {
                                 include: {
                                     publicationFromRef: {
-                                        include: {
-                                            user: {
-                                                select: {
-                                                    firstName: true,
-                                                    lastName: true,
-                                                    id: true,
-                                                    orcid: true
-                                                }
-                                            }
-                                        }
+                                        select: pubObject
                                     }
                                 }
                             },
                             linkedTo: {
                                 include: {
                                     publicationFromRef: {
-                                        include: {
-                                            user: {
-                                                select: {
-                                                    firstName: true,
-                                                    lastName: true,
-                                                    id: true,
-                                                    orcid: true
-                                                }
-                                            }
-                                        }
+                                        select: pubObject
                                     }
                                 }
                             }
                         }
                     }
-                }
-            },
-            user: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                    id: true,
-                    orcid: true
                 }
             }
         }
