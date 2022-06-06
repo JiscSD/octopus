@@ -49,7 +49,7 @@ const updatePublicationSchema: I.Schema = {
         fundersStatement: {
             type: 'string'
         },
-        affiliationStatement: {
+        affiliationsStatement: {
             type: 'string'
         }
     },
