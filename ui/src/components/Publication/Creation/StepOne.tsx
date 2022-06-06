@@ -91,7 +91,8 @@ const StepOne: React.FC = (): React.ReactElement => {
                         <div className="mb-10">
                             <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
                             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                Please enter the details for any organisations you are affiliated with.
+                                Please enter the details for any organisations this publication is associated with.
+                                Please note that funding sources are added later in the publication form.
                             </span>
                             <Components.Button
                                 title="Search for your organisation's ROR"
