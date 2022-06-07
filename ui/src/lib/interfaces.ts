@@ -1,7 +1,6 @@
-import React from 'react';
-import * as Axios from 'axios';
-
 import * as Types from '@types';
+import * as Axios from 'axios';
+import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -85,6 +84,21 @@ export interface Publication extends CorePublication {
     funders: Funder[];
     fundersStatement: string | null;
     publicationFlags: Flag[];
+}
+
+export interface PublicationWithLinks {
+    rootPublication: Publication;
+    linkedPublications: {
+        publicationFrom: string;
+        publicationTo: string;
+        publicationFromType: Types.PublicationType;
+        publicationToType: Types.PublicationType;
+        publicationToTitle: string;
+        publicationToPublishedDate: string;
+        publicationToCurrentStatus: Types.PublicationStatuses;
+        publicationToFirstName: string;
+        publicationToLastName: string;
+    }[];
 }
 
 export interface CoAuthor {

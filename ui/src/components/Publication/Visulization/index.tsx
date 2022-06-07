@@ -1,6 +1,7 @@
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 import * as Axios from 'axios';
 import * as Framer from 'framer-motion';
@@ -17,30 +18,6 @@ interface BoxEntry {
     publishedDate: string;
     direction?: 'right' | 'left' | 'auto';
     type: Types.PublicationType;
-}
-
-interface LinkedPublication {
-    id: string;
-    title: string;
-    type: Types.PublicationType;
-    publishedDate: string;
-    user: {
-        id: string;
-        orcid: string;
-        firstName: string;
-        lastName: string;
-    };
-    linkedTo?: [
-        {
-            publicationToRef: LinkedPublication;
-        }
-    ];
-    linkedFrom?: [
-        {
-            publicationFromRef: LinkedPublication;
-        }
-    ];
-    parent?: string;
 }
 
 // replace with above
@@ -71,7 +48,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         </span>
 
                         <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                            {props.publication.firstName[0]} {props.publication.lastName}
+                            {props.publication.firstName} {props.publication.lastName}
                         </span>
 
                         <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
@@ -100,7 +77,7 @@ type VisulizationProps = {
 };
 
 const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement => {
-    const { data, error } = useSWR<Axios.AxiosResponse<LinkedPublication[]>>(
+    const { data, error } = useSWR<Axios.AxiosResponse<Interfaces.PublicationWithLinks>>(
         `${Config.endpoints.publications}/${props.id}/links`,
         null,
         {
@@ -111,22 +88,32 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
         }
     );
 
-    const getBoxes = (publication: LinkedPublication[], type: string) => {
+    const getBoxes = (publication: Interfaces.PublicationWithLinks, type: string) => {
         let boxes: BoxEntry[] = [];
 
-        // Loop and add all from/to boxes
+        // Push the root element first
+        boxes.push({
+            id: publication.rootPublication.id,
+            title: publication.rootPublication.title,
+            firstName: publication.rootPublication.user.firstName,
+            lastName: publication.rootPublication.user.lastName,
+            publishedDate: publication.rootPublication.publishedDate,
+            direction: 'auto',
+            type: publication.rootPublication.type
+        });
 
-        for (const linked of publication) {
-            if (linked.type === type) {
+        // Loop and add all from/to boxes
+        for (const linked of publication.linkedPublications) {
+            if (linked.publicationToType === type) {
                 boxes.push({
-                    id: linked.id,
-                    title: linked.title,
-                    firstName: linked.user.firstName,
-                    lastName: linked.user.lastName,
-                    publishedDate: linked.publishedDate,
-                    direction: 'left',
-                    pointer: linked.parent,
-                    type: linked.type
+                    id: linked.publicationTo,
+                    title: linked.publicationToTitle,
+                    firstName: linked.publicationToFirstName,
+                    lastName: linked.publicationToLastName,
+                    publishedDate: linked.publicationToPublishedDate,
+                    direction: 'auto',
+                    pointer: linked.publicationFrom,
+                    type: linked.publicationToType
                 });
             }
         }
@@ -150,7 +137,6 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                 {data && !error && (
                                     <>
                                         {getBoxes(data.data, type).map((publication) => {
-                                            console.log(publication);
                                             return (
                                                 type === publication.type && (
                                                     <Box
