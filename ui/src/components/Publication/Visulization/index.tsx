@@ -1,14 +1,12 @@
-import React from 'react';
-import useSWR from 'swr';
-import * as Axios from 'axios';
-import Xarrow from 'react-xarrows';
-import * as Framer from 'framer-motion';
-
-import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Config from '@config';
+import * as Helpers from '@helpers';
 import * as Types from '@types';
+import * as Axios from 'axios';
+import * as Framer from 'framer-motion';
+import React from 'react';
+import Xarrow from 'react-xarrows';
+import useSWR from 'swr';
 
 interface BoxEntry {
     id: string;
@@ -16,39 +14,43 @@ interface BoxEntry {
     firstName: string;
     lastName: string;
     pointer?: string;
+    publishedDate: string;
     direction?: 'right' | 'left' | 'auto';
     type: Types.PublicationType;
 }
 
+interface LinkedPublication {
+    id: string;
+    title: string;
+    type: Types.PublicationType;
+    publishedDate: string;
+    user: {
+        id: string;
+        orcid: string;
+        firstName: string;
+        lastName: string;
+    };
+    linkedTo?: [
+        {
+            publicationToRef: LinkedPublication;
+        }
+    ];
+    linkedFrom?: [
+        {
+            publicationFromRef: LinkedPublication;
+        }
+    ];
+    parent?: string;
+}
+
 // replace with above
 type BoxProps = {
-    publication: Interfaces.PublicationRef | Interfaces.Publication;
+    publication: BoxEntry;
     pointer?: string;
-    type?: 'TO' | 'FROM';
+    type: string;
 };
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
-    // {
-    //     title: '',
-    //     other: '',
-    //     to: ''
-    //     from: '',
-    //     type: ''
-    // }
-
-    const start = React.useMemo(() => {
-        if (props.type === 'TO') return 'left';
-        if (props.type === 'FROM') return 'right';
-
-        return 'auto';
-    }, [props.type]);
-
-    const end = React.useMemo(() => {
-        if (props.type === 'TO') return 'right';
-        if (props.type === 'FROM') return 'left';
-        return 'auto';
-    }, [props.type]);
-
     return (
         <Framer.motion.div id={props.publication.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Components.Link
@@ -69,7 +71,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         </span>
 
                         <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                            {props.publication.user?.firstName[0]} {props.publication.user?.lastName}
+                            {props.publication.firstName[0]} {props.publication.lastName}
                         </span>
 
                         <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
@@ -83,10 +85,8 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             strokeWidth={2}
                             color={'#296d8a'}
                             showHead={false}
-                            start={props.pointer}
-                            end={props.publication.id}
-                            startAnchor={start}
-                            endAnchor={end}
+                            start={props.publication.id}
+                            end={props.pointer}
                         />
                     )}
                 </>
@@ -100,10 +100,7 @@ type VisulizationProps = {
 };
 
 const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement => {
-    // const fromIds: string[] = [];
-    // const toIds = [];
-
-    const { data, error } = useSWR<Axios.AxiosResponse<Interfaces.Publication>>(
+    const { data, error } = useSWR<Axios.AxiosResponse<LinkedPublication[]>>(
         `${Config.endpoints.publications}/${props.id}/links`,
         null,
         {
@@ -114,7 +111,28 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
         }
     );
 
-    // BoxEntry[]
+    const getBoxes = (publication: LinkedPublication[], type: string) => {
+        let boxes: BoxEntry[] = [];
+
+        // Loop and add all from/to boxes
+
+        for (const linked of publication) {
+            if (linked.type === type) {
+                boxes.push({
+                    id: linked.id,
+                    title: linked.title,
+                    firstName: linked.user.firstName,
+                    lastName: linked.user.lastName,
+                    publishedDate: linked.publishedDate,
+                    direction: 'left',
+                    pointer: linked.parent,
+                    type: linked.type
+                });
+            }
+        }
+
+        return boxes;
+    };
 
     return (
         <section className="scrollbar-vert mb-8 grid h-72 grid-cols-7 gap-x-8 gap-y-2 overflow-y-auto pb-[5px]">
@@ -131,34 +149,15 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                 {/** data && !error === success */}
                                 {data && !error && (
                                     <>
-                                        {type === data.data.type && <Box publication={data.data} />}
-
-                                        {/** back links */}
-                                        {data.data.linkedTo.map((publication) => {
+                                        {getBoxes(data.data, type).map((publication) => {
+                                            console.log(publication);
                                             return (
-                                                type === publication.publicationToRef.type &&
-                                                data.data.type !== publication.publicationToRef.type && (
+                                                type === publication.type && (
                                                     <Box
-                                                        key={publication.publicationToRef.id}
-                                                        pointer={props.id}
-                                                        publication={publication.publicationToRef}
-                                                        type="TO"
-                                                    />
-                                                )
-                                            );
-                                        })}
-
-                                        {/** forward links */}
-                                        {data.data.linkedFrom.map((publication) => {
-                                            return (
-                                                type === publication.publicationFromRef.type &&
-                                                data.data.type !== publication.publicationFromRef.type &&
-                                                publication.publicationFromRef.type !== 'PROBLEM' && (
-                                                    <Box
-                                                        key={publication.publicationFromRef.id}
-                                                        pointer={props.id}
-                                                        publication={publication.publicationFromRef}
-                                                        type="FROM"
+                                                        key={publication.id}
+                                                        pointer={publication.pointer}
+                                                        publication={publication}
+                                                        type={publication.type}
                                                     />
                                                 )
                                             );

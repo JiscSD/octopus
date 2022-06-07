@@ -23,92 +23,74 @@ export const getAllByIds = async (ids: Array<string>) => {
     return publications;
 };
 
-// todo
-// interface BoxEntry {
-//     id: string;
-//     title: string;
-//     firstName: string;
-//     lastName: string;
-//     pointer?: string;
-//     direction?: 'right' | 'left' | 'auto';
-//     type: I.PublicationType;
-// }
+const pubObject = {
+    id: true,
+    title: true,
+    type: true,
+    publishedDate: true,
+    user: {
+        select: {
+            firstName: true,
+            lastName: true,
+            id: true,
+            orcid: true
+        }
+    }
+};
 
 export const getLinksForPublication = async (id: string) => {
-    const pubObject = {
-        id: true,
-        title: true,
-        type: true,
-        publishedDate: true,
-        user: {
+    const links: I.LinkedPublication[] = [];
+
+    const getLinks = async (id: string, parent?: string) => {
+        const publication: I.LinkedPublication | null = await client.prisma.publication.findFirst({
+            where: {
+                id,
+                currentStatus: {
+                    equals: 'LIVE'
+                }
+            },
             select: {
-                firstName: true,
-                lastName: true,
-                id: true,
-                orcid: true
+                ...pubObject,
+                linkedFrom: {
+                    select: {
+                        publicationFromRef: {
+                            select: pubObject
+                        }
+                    },
+                    take: 3
+                },
+                linkedTo: {
+                    select: {
+                        publicationFromRef: {
+                            select: pubObject
+                        }
+                    },
+                    take: 3
+                }
+            }
+        });
+
+        if (publication) {
+            links.push({ parent, ...publication });
+
+            if (publication.linkedFrom?.length) {
+                for (const linked of publication.linkedFrom) {
+                    await getLinks(linked.publicationFromRef.id, id);
+                }
+            }
+            if (publication.linkedTo?.length) {
+                for (const linked of publication.linkedTo) {
+                    if (publication.id !== linked.publicationFromRef.id) {
+                        await getLinks(linked.publicationFromRef.id, id);
+                    }
+                }
             }
         }
     };
 
-    const publicationWithLinkInformation = await client.prisma.publication.findFirst({
-        where: {
-            id,
-            currentStatus: {
-                equals: 'LIVE'
-            }
-        },
-        select: {
-            ...pubObject,
-            linkedFrom: {
-                select: {
-                    publicationFromRef: {
-                        select: {
-                            ...pubObject,
-                            linkedFrom: {
-                                select: {
-                                    publicationFromRef: {
-                                        select: pubObject
-                                    }
-                                }
-                            },
-                            linkedTo: {
-                                select: {
-                                    publicationFromRef: {
-                                        select: pubObject
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            linkedTo: {
-                select: {
-                    publicationToRef: {
-                        select: {
-                            ...pubObject,
-                            linkedFrom: {
-                                include: {
-                                    publicationFromRef: {
-                                        select: pubObject
-                                    }
-                                }
-                            },
-                            linkedTo: {
-                                include: {
-                                    publicationFromRef: {
-                                        select: pubObject
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
+    await getLinks(id, undefined);
 
-    return publicationWithLinkInformation;
+    return links;
 };
 
 export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
