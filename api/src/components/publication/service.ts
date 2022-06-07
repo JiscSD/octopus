@@ -86,11 +86,11 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "User" AS pto_user
               ON "pto"."createdBy" = "pto_user"."id"
-    )
-    SELECT *
-      FROM to_left
-     WHERE pto_type != pfrom_type
-       AND pto_currentStatus = 'LIVE';
+        )
+        SELECT *
+          FROM to_left
+         WHERE pto_type != pfrom_type
+           AND pto_currentStatus = 'LIVE';
     `;
 
     return result;
