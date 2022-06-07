@@ -39,58 +39,61 @@ const pubObject = {
 };
 
 export const getLinksForPublication = async (id: string) => {
-    const links: I.LinkedPublication[] = [];
+    const result = await client.prisma.$queryRaw`
+        WITH RECURSIVE to_left AS (
+            SELECT "Links"."publicationFrom",
+                   "Links"."publicationTo",
+                   "pfrom".type pfrom_type,
+                   "pto".type pto_type,
+                   "pto".title pto_title,
+                   "pto"."publishedDate" pto_publishedDate,
+                   "pto"."currentStatus" pto_currentStatus,
+                   "pto_user"."firstName" pto_firstName,
+                   "pto_user"."lastName" pto_lastName
 
-    const getLinks = async (id: string, parent?: string) => {
-        const publication: I.LinkedPublication | null = await client.prisma.publication.findFirst({
-            where: {
-                id,
-                currentStatus: {
-                    equals: 'LIVE'
-                }
-            },
-            select: {
-                ...pubObject,
-                linkedFrom: {
-                    select: {
-                        publicationFromRef: {
-                            select: pubObject
-                        }
-                    },
-                    take: 3
-                },
-                linkedTo: {
-                    select: {
-                        publicationFromRef: {
-                            select: pubObject
-                        }
-                    },
-                    take: 3
-                }
-            }
-        });
+              FROM "Links"
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "Links"."publicationFrom"
 
-        if (publication) {
-            links.push({ parent, ...publication });
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "Links"."publicationTo"
 
-            if (publication.linkedFrom?.length) {
-                for (const linked of publication.linkedFrom) {
-                    await getLinks(linked.publicationFromRef.id, id);
-                }
-            }
-            if (publication.linkedTo?.length) {
-                for (const linked of publication.linkedTo) {
-                    if (publication.id !== linked.publicationFromRef.id) {
-                        await getLinks(linked.publicationFromRef.id, id);
-                    }
-                }
-            }
-        }
-    };
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
 
-    await getLinks(id, undefined);
+            WHERE "Links"."publicationFrom" = ${id}
 
-    return links;
+            UNION ALL
+
+            SELECT l."publicationFrom",
+                   l."publicationTo",
+                   "pfrom".type pfrom_type,
+                   "pto".type pto_type,
+                   "pto".title pto_title,
+                   "pto"."publishedDate" pto_publishedDate,
+                   "pto"."currentStatus" pto_currentStatusm,
+                   "pto_user"."firstName" pto_firstName,
+                   "pto_user"."lastName" pto_lastName
+              FROM "Links" l
+              JOIN to_left
+              ON to_left."publicationTo" = l."publicationFrom"
+
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "l"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "l"."publicationTo"
+
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
+    )
+    SELECT *
+      FROM to_left
+     WHERE pto_type != pfrom_type
+       AND pto_currentStatus = 'LIVE';
+    `;
+
+    return result;
 };
 
 export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
