@@ -22,6 +22,7 @@ interface BoxEntry {
 
 // replace with above
 type BoxProps = {
+    current: boolean;
     publication: BoxEntry;
     pointer?: string;
     type: string;
@@ -33,7 +34,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
             <Components.Link
                 href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
                 className={`
-            ${!props.type ? 'sticky top-0 border-teal-600' : 'border-transparent hover:border-teal-600'}
+            ${props.current ? 'sticky top-0 border-teal-600' : 'border-transparent hover:border-teal-600'}
             block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
             `}
             >
@@ -61,7 +62,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             path="grid"
                             strokeWidth={2}
                             color={'#296d8a'}
-                            showHead={false}
+                            showHead={true}
                             start={props.publication.id}
                             end={props.pointer}
                         />
@@ -148,8 +149,6 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                 {Helpers.formatPublicationType(type)}
                             </span>
 
-                            {console.log(type)}
-
                             <div className="space-y-4">
                                 {/** data && !error === success */}
                                 {data && !error && (
@@ -157,15 +156,13 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                         {getBoxes(data.data, type).map((publication) => {
                                             return (
                                                 type === publication.type && (
-                                                    <>
-                                                        {console.log(publication)}
-                                                        <Box
-                                                            key={publication.id}
-                                                            pointer={publication.pointer}
-                                                            publication={publication}
-                                                            type={publication.type}
-                                                        />
-                                                    </>
+                                                    <Box
+                                                        current={data.data.rootPublication.id == publication.id}
+                                                        key={publication.id}
+                                                        pointer={publication.pointer}
+                                                        publication={publication}
+                                                        type={publication.type}
+                                                    />
                                                 )
                                             );
                                         })}
