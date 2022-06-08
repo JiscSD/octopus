@@ -35,7 +35,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                 href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
                 className={`
             ${props.current ? 'sticky top-0 border-teal-600' : 'border-transparent hover:border-teal-600'}
-            block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
+            z-10 block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
             `}
             >
                 <>
@@ -62,7 +62,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             path="grid"
                             strokeWidth={2}
                             color={'#296d8a'}
-                            showHead={true}
+                            showHead={false}
                             start={props.publication.id}
                             end={props.pointer}
                         />
@@ -112,7 +112,6 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     firstName: linked.publicationToFirstName,
                     lastName: linked.publicationToLastName,
                     publishedDate: linked.publicationToPublishedDate,
-                    direction: 'auto',
                     pointer: linked.publicationFrom,
                     type: linked.publicationToType
                 });
@@ -128,7 +127,6 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     firstName: linked.publicationFromFirstName,
                     lastName: linked.publicationFromLastName,
                     publishedDate: linked.publicationFromPublishedDate,
-                    direction: 'auto',
                     pointer: linked.publicationTo,
                     type: linked.publicationFromType
                 });
