@@ -88,7 +88,7 @@ export interface Publication extends CorePublication {
 
 export interface PublicationWithLinks {
     rootPublication: Publication;
-    linkedPublications: {
+    linkedToPublications: {
         publicationFrom: string;
         publicationTo: string;
         publicationFromType: Types.PublicationType;
@@ -98,6 +98,17 @@ export interface PublicationWithLinks {
         publicationToCurrentStatus: Types.PublicationStatuses;
         publicationToFirstName: string;
         publicationToLastName: string;
+    }[];
+    linkedFromPublications: {
+        publicationFrom: string;
+        publicationTo: string;
+        publicationFromType: Types.PublicationType;
+        publicationToType: Types.PublicationType;
+        publicationFromTitle: string;
+        publicationFromPublishedDate: string;
+        publicationFromCurrentStatus: Types.PublicationStatuses;
+        publicationFromFirstName: string;
+        publicationFromLastName: string;
     }[];
 }
 

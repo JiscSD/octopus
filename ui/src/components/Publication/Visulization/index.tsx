@@ -102,8 +102,8 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
             type: publication.rootPublication.type
         });
 
-        // Loop and add all from/to boxes
-        for (const linked of publication.linkedPublications) {
+        // Loop all linked to publications
+        for (const linked of publication.linkedToPublications) {
             if (linked.publicationToType === type) {
                 boxes.push({
                     id: linked.publicationTo,
@@ -114,6 +114,22 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     direction: 'auto',
                     pointer: linked.publicationFrom,
                     type: linked.publicationToType
+                });
+            }
+        }
+
+        // Loop all linked from publications
+        for (const linked of publication.linkedFromPublications) {
+            if (linked.publicationFromType === type) {
+                boxes.push({
+                    id: linked.publicationFrom,
+                    title: linked.publicationFromTitle,
+                    firstName: linked.publicationFromFirstName,
+                    lastName: linked.publicationFromLastName,
+                    publishedDate: linked.publicationFromPublishedDate,
+                    direction: 'auto',
+                    pointer: linked.publicationTo,
+                    type: linked.publicationFromType
                 });
             }
         }
@@ -132,6 +148,8 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                 {Helpers.formatPublicationType(type)}
                             </span>
 
+                            {console.log(type)}
+
                             <div className="space-y-4">
                                 {/** data && !error === success */}
                                 {data && !error && (
@@ -139,12 +157,15 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                         {getBoxes(data.data, type).map((publication) => {
                                             return (
                                                 type === publication.type && (
-                                                    <Box
-                                                        key={publication.id}
-                                                        pointer={publication.pointer}
-                                                        publication={publication}
-                                                        type={publication.type}
-                                                    />
+                                                    <>
+                                                        {console.log(publication)}
+                                                        <Box
+                                                            key={publication.id}
+                                                            pointer={publication.pointer}
+                                                            publication={publication}
+                                                            type={publication.type}
+                                                        />
+                                                    </>
                                                 )
                                             );
                                         })}
