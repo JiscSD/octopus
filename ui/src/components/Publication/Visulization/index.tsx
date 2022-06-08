@@ -48,7 +48,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         </span>
 
                         <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                            {props.publication.firstName} {props.publication.lastName}
+                            {props.publication.firstName[0]} {props.publication.lastName}
                         </span>
 
                         <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
@@ -104,7 +104,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
 
         // Loop all linked to publications
         for (const linked of publication.linkedToPublications) {
-            if (linked.publicationToType === type) {
+            if (!boxes.find((box) => box.id === linked.publicationTo) && linked.publicationToType === type) {
                 boxes.push({
                     id: linked.publicationTo,
                     title: linked.publicationToTitle,
@@ -120,7 +120,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
 
         // Loop all linked from publications
         for (const linked of publication.linkedFromPublications) {
-            if (linked.publicationFromType === type) {
+            if (!boxes.find((box) => box.id === linked.publicationFrom) && linked.publicationFromType === type) {
                 boxes.push({
                     id: linked.publicationFrom,
                     title: linked.publicationFromTitle,
