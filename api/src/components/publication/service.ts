@@ -473,6 +473,7 @@ export const getLinksForPublication = async (id: string) => {
         SELECT *
           FROM to_left
          WHERE "publicationToType" != "publicationFromType"
+           AND "publicationToType" != ${rootPublication?.type}
            AND "publicationToCurrentStatus" = 'LIVE';
     `;
 
@@ -527,6 +528,7 @@ export const getLinksForPublication = async (id: string) => {
         SELECT *
           FROM to_right
          WHERE "publicationToType" != "publicationFromType"
+           AND "publicationFromType" != ${rootPublication?.type}
            AND "publicationFromCurrentStatus" = 'LIVE';
     `;
 
