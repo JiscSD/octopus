@@ -30,12 +30,18 @@ type BoxProps = {
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
     return (
-        <Framer.motion.div id={props.publication.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <Framer.motion.div
+            id={props.publication.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="relative"
+        >
+            {/* <span className="absolute -top-1 z-10 h-3 w-full border-t-4 border-teal-50 dark:border-grey-800"></span> */}
             <Components.Link
                 href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
                 className={`
             ${props.current ? 'sticky top-0 border-teal-600' : 'border-transparent hover:border-teal-600'}
-            z-10 block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
+             relative z-20 block overflow-hidden rounded-md border-2 bg-white-50 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:bg-grey-900 dark:text-white-100
             `}
             >
                 <>
@@ -56,19 +62,23 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             {Helpers.formatDate(props.publication.publishedDate)}
                         </time>
                     </div>
-
-                    {props.pointer && (
-                        <Xarrow
-                            path="grid"
-                            strokeWidth={2}
-                            color={'#296d8a'}
-                            showHead={false}
-                            start={props.publication.id}
-                            end={props.pointer}
-                        />
-                    )}
                 </>
             </Components.Link>
+            {props.pointer && (
+                <>
+                    <span className="absolute -top-1 z-10 h-3 w-full border-t-4 border-teal-50 transition-colors duration-500 dark:border-grey-800"></span>
+                    <Xarrow
+                        path="grid"
+                        strokeWidth={2}
+                        color={'#296d8a'}
+                        showHead={false}
+                        start={props.publication.id}
+                        end={props.pointer}
+                        zIndex={5}
+                    />
+                    <span className="absolute -bottom-3 z-10 h-3 w-full border-t-4 border-teal-50 transition-colors duration-500 dark:border-grey-800"></span>
+                </>
+            )}
         </Framer.motion.div>
     );
 };
@@ -143,7 +153,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     // We're not including peer reviews in the 'chain'
                     type !== 'PEER_REVIEW' && (
                         <div key={type} className="relative">
-                            <span className="sticky top-0 z-20 mb-4 block rounded bg-grey-50 p-2 pl-3 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-900 dark:text-grey-200 dark:text-white-50">
+                            <span className="sticky top-0 z-30 mb-4 block rounded bg-grey-50 p-2 pl-3 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-900 dark:text-white-50">
                                 {Helpers.formatPublicationType(type)}
                             </span>
 
