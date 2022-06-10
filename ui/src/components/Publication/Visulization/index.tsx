@@ -47,18 +47,19 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                 <>
                     <div className="space-y-1">
                         <span
-                            className="block h-16 text-sm leading-snug"
+                            className="block h-24 text-xs leading-snug xl:h-16 2xl:text-sm"
                             title={props.publication.title}
+                            role="complementary"
                             aria-label={props.publication.title}
                         >
-                            {Helpers.truncateString(props.publication.title, 50)}
+                            {Helpers.truncateString(props.publication.title, 45)}
                         </span>
 
-                        <span className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                        <span className="block text-xxs text-grey-600 transition-colors duration-500 dark:text-grey-200 md:text-xs">
                             {props.publication.firstName[0]} {props.publication.lastName}
                         </span>
 
-                        <time className="block text-xs text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                        <time className="block h-8 text-xxs text-grey-600 transition-colors duration-500 dark:text-grey-200 md:text-xs xl:h-auto">
                             {Helpers.formatDate(props.publication.publishedDate)}
                         </time>
                     </div>
@@ -153,7 +154,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     // We're not including peer reviews in the 'chain'
                     type !== 'PEER_REVIEW' && (
                         <div key={type} className="relative">
-                            <span className="sticky top-0 z-30 mb-4 block rounded bg-grey-50 p-2 pl-3 font-montserrat text-sm font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-900 dark:text-white-50">
+                            <span className="sticky top-0 z-30 mb-4 block h-12 rounded bg-grey-50 p-2 pl-3 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-900 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
                                 {Helpers.formatPublicationType(type)}
                             </span>
 
