@@ -560,6 +560,37 @@ const publicationSeeds = [
             }
         }
     },
+    {
+        id: 'publication-hypothesis-live-problem-live',
+        title: 'Publication HYPOTHESIS-LIVE',
+        type: 'HYPOTHESIS',
+        licence: 'CC_BY',
+        content: 'Publication HYPOTHESIS-LIVE',
+        currentStatus: 'LIVE',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'LIVE',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        linkedFrom: {
+            create: {
+                publicationFrom: 'publication-data-live'
+            }
+        }
+    },
 
     // publications with and without conflicts of interest
     {
