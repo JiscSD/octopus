@@ -23,8 +23,6 @@ describe('Get links from a supplied publication', () => {
             '/publications/publication-hypothesis-live-problem-live/links'
         );
 
-        console.log(getPublication);
-
         expect(getPublication.statusCode).toEqual(200);
         expect(getPublication.body.linkedFromPublications.length).toBeGreaterThan(0);
         expect(getPublication.body.linkedToPublications.length).toBeGreaterThan(0);
