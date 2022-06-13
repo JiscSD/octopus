@@ -168,7 +168,7 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     // We're not including peer reviews in the 'chain'
                     type !== 'PEER_REVIEW' && (
                         <div key={type} className="relative">
-                            <span className="sticky top-0 z-30 mb-4 block h-12 bg-teal-50 p-2 pl-3 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-800 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
+                            <span className="sticky top-0 z-30 block h-12 bg-teal-50 p-2 pl-3 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-800 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
                                 {Helpers.formatPublicationType(type)}
                             </span>
 
