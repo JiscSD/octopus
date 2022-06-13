@@ -137,20 +137,6 @@ export interface PublicationFilters {
     dateTo?: string;
 }
 
-export interface Linked {
-    publicationFromRef: LinkedPublication;
-}
-
-export interface LinkedPublication {
-    id: string;
-    title: string | null;
-    type: PublicationType;
-    user: Partial<User>;
-    parent?: string;
-    linkedFrom?: Linked[] | [];
-    linkedTo?: Linked[] | [];
-}
-
 /**
  * @description Links
  */
