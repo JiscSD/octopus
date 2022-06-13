@@ -23,6 +23,25 @@ const MainText: React.FC = (): React.ReactElement | null => {
         setLoading(false);
     }, [content]);
 
+    const parseReference = (text: string) => {
+        // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
+        const pattern =
+            /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))/g;
+
+        const matches = text.matchAll(pattern);
+
+        // Iterate through matches
+        for (const match of matches) {
+            if (match?.groups?.DOI) {
+                console.log('DOI found', match.groups.TEXT);
+                console.log(match?.groups?.DOI);
+            } else if (match?.groups?.URI) {
+                console.log('URI found', match.groups.TEXT);
+                console.log(match?.groups?.URI);
+            }
+        }
+    };
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
