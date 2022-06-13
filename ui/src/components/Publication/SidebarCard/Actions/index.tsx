@@ -473,28 +473,32 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             </div>
 
             {user && user.email ? (
-                <>
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Write review"
-                        onClick={() => {
-                            router.push({
-                                pathname: `${Config.urls.createPublication.path}`,
-                                query: {
-                                    for: props.publication.id,
-                                    type: 'PEER_REVIEW'
-                                }
-                            });
-                        }}
-                    />
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Rate this publication"
-                        onClick={() => setShowRatingsModel(true)}
-                    />
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Flag a concern with this publication"
-                        onClick={() => setShowRedFlagModel(true)}
-                    />
-                </>
+                props.publication.user.id !== user.id && (
+                    <>
+                        {props.publication.type !== 'PEER_REVIEW' && (
+                            <Components.PublicationSidebarCardActionsButton
+                                label="Write review"
+                                onClick={() => {
+                                    router.push({
+                                        pathname: `${Config.urls.createPublication.path}`,
+                                        query: {
+                                            for: props.publication.id,
+                                            type: 'PEER_REVIEW'
+                                        }
+                                    });
+                                }}
+                            />
+                        )}
+                        <Components.PublicationSidebarCardActionsButton
+                            label="Rate this publication"
+                            onClick={() => setShowRatingsModel(true)}
+                        />
+                        <Components.PublicationSidebarCardActionsButton
+                            label="Flag a concern with this publication"
+                            onClick={() => setShowRedFlagModel(true)}
+                        />
+                    </>
+                )
             ) : user && !user.email ? (
                 <>
                     <Components.Link

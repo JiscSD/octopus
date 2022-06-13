@@ -3,6 +3,7 @@ import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
+import * as Config from '@config';
 
 const CompletedIcon = () => (
     <OutlineIcons.BadgeCheckIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-teal-500 transition-colors duration-500 dark:bg-grey-800" />
@@ -14,19 +15,19 @@ const IncompleteIcon = () => (
 /**
  * @description Content review
  */
-const StepFive: React.FC = (): React.ReactElement => {
-    const setError = Stores.usePublicationCreationStore((state) => state.setError);
+const Review: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
+    const type = Stores.usePublicationCreationStore((state) => state.type);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
     const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
     const licence = Stores.usePublicationCreationStore((state) => state.licence);
     const content = Stores.usePublicationCreationStore((state) => state.content);
     const linkedTo = Stores.usePublicationCreationStore((state) => state.linkTo);
-
-    React.useEffect(() => {
-        if (!linkedTo.length) setError('No publications have been linked!');
-        return () => setError(null);
-    }, [linkedTo.length, setError]);
+    const ethicalStatement = Stores.usePublicationCreationStore((state) => state.ethicalStatement);
+    const dataPermissionsStatement = Stores.usePublicationCreationStore((state) => state.dataPermissionsStatement);
+    const dataPermissionsStatementProvidedBy = Stores.usePublicationCreationStore(
+        (state) => state.dataPermissionsStatementProvidedBy
+    );
 
     return (
         <>
@@ -77,9 +78,34 @@ const StepFive: React.FC = (): React.ReactElement => {
                     </span>
                     {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
                 </div>
+
+                {type === Config.values.octopusInformation.publications.DATA.id && (
+                    <>
+                        <div className="relative">
+                            <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                Ethical statement
+                            </span>
+                            {ethicalStatement ? <CompletedIcon /> : <IncompleteIcon />}
+                        </div>
+
+                        <div className="relative">
+                            <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                Data permissions statement
+                            </span>
+                            {dataPermissionsStatement?.length ? <CompletedIcon /> : <IncompleteIcon />}
+                        </div>
+
+                        <div className="relative">
+                            <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                Data permissions statement provided by
+                            </span>
+                            {dataPermissionsStatementProvidedBy?.length ? <CompletedIcon /> : <IncompleteIcon />}
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );
 };
 
-export default StepFive;
+export default Review;
