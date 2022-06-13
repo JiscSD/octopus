@@ -1,9 +1,9 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Stores from '@stores';
 import * as Assets from '@assets';
+import * as Components from '@components';
 import * as Config from '@config';
+import * as Stores from '@stores';
 import * as Types from '@types';
 
 const MainText: React.FC = (): React.ReactElement | null => {
@@ -21,6 +21,25 @@ const MainText: React.FC = (): React.ReactElement | null => {
     React.useEffect(() => {
         setLoading(false);
     }, [content]);
+
+    const parseReference = (text: string) => {
+        // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
+        const pattern =
+            /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))/g;
+
+        const matches = text.matchAll(pattern);
+
+        // Iterate through matches
+        for (const match of matches) {
+            if (match?.groups?.DOI) {
+                console.log('DOI found', match.groups.TEXT);
+                console.log(match?.groups?.DOI);
+            } else if (match?.groups?.URI) {
+                console.log('URI found', match.groups.TEXT);
+                console.log(match?.groups?.URI);
+            }
+        }
+    };
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -50,6 +69,24 @@ const MainText: React.FC = (): React.ReactElement | null => {
                         </option>
                     ))}
                 </select>
+            </div>
+
+            <div>
+                <Components.PublicationCreationStepTitle text="References &amp; additional materials" />
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                    Include your reference list for this publication. References should be line-separated and include a
+                    DOI or other URL. Once you have added your references, you can create reference links in the main
+                    text editor.
+                </span>
+                <div className="flex items-center space-x-4">
+                    <textarea
+                        required
+                        rows={5}
+                        value={description}
+                        onChange={(e) => parseReference(e.target.value)}
+                        className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                    ></textarea>
+                </div>
             </div>
 
             <div>
