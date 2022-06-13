@@ -205,6 +205,13 @@ const urls = {
         keywords: ['open source', 'accessibility', 'publishing platform'],
         canonical: `${base.host}/accessibility`
     },
+    authorGuide: {
+        path: '/author-guide',
+        title: 'Octopus Author Guide',
+        description: 'Step-by-step guide on how to create a new publication on Octopus.',
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/author-guide`
+    },
     404: {
         title: `404 Not Found - ${base.title}`
     },
