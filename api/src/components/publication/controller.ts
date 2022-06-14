@@ -135,7 +135,9 @@ export const create = async (
             });
         }
 
-        const publication = await publicationService.create(event.body, event.user);
+        const doi = await helpers.createEmptyDOI();
+
+        const publication = await publicationService.create(event.body, event.user, doi);
 
         return response.json(201, publication);
     } catch (err) {
@@ -260,6 +262,9 @@ export const updateStatus = async (
             publishedDate: updatedPublication.publishedDate,
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
+
+        // TODO: update DOI
+        await helpers.updateDOI('x', publication);
 
         return response.json(200, updatedPublication);
     } catch (err) {

@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import axios from 'axios';
 
 import * as I from 'interface';
 
@@ -18,6 +19,28 @@ export const isHTMLSafe = (content: string) => {
 
     return !error;
 };
+
+export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
+    const payload = {
+        data: {
+            type: 'dois',
+            attributes: {
+                prefix: process.env.DOI_PREFIX
+            }
+        }
+    };
+
+    const doi = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+
+    return doi.data;
+};
+
+export const updateDOI = async (doi: string, publication) => {};
 
 export const OctopusInformation: I.OctopusInformation = {
     publications: {

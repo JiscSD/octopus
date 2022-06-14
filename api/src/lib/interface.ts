@@ -503,3 +503,15 @@ export interface GetFlagsByUserID {
 export interface GetFlagsByPublicationID {
     id: string;
 }
+
+export interface DOIResponse {
+    data: {
+        id: string;
+        type: 'dois';
+        attributes: {
+            doi: string;
+            prefix: string;
+            suffix: string;
+        };
+    };
+}

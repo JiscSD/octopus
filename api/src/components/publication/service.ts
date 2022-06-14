@@ -273,9 +273,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
     return publications;
 };
 
-export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
+export const create = async (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) => {
     const publication = await client.prisma.publication.create({
         data: {
+            id: doiResponse.data.attributes.suffix,
+            doi: doiResponse.data.attributes.doi,
             title: e.title,
             type: e.type,
             licence: e.licence,

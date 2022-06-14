@@ -1,0 +1,86 @@
+{
+    "data": {
+        "id": "10.5438/0012",
+        "type": "dois",
+        "attributes": {
+            "event": "publish",
+
+            "doi": "10.5438/0012",
+
+            "creators": [
+                {
+                    "nameType": "Personal",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "orcid link",
+                            "nameIdentifierScheme": "orcid",
+                            "schemeUri": "orcid.org"
+                        }
+                    ],
+                    "name": "Nathan Sainsbury"
+                }
+            ],
+
+            "contributors": [
+                {
+                    "contributorType": "Other",
+                    "nameType": "Organizational",
+                    "name": "Name of org",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "ror or link",
+                            "nameIdentifierScheme": "ror or other",
+                            "schemeUri": "ror link or url"
+                        }
+                    ]
+                }
+            ],
+
+            "titles": [
+                {
+                    "title": "DataCite Metadata Schema Documentation for the Publication and Citation of Research Data v4.0"
+                }
+            ],
+
+            "fundingReferences": [
+                {
+                    "funderName": "a",
+                    "funderReference": "ror or funder url",
+                    "funderIdentifierType": "Ror or other"
+                }
+            ],
+
+            "publisher": "Octopus",
+            "publicationYear": 2016,
+
+            "types": {
+                "resourceTypeGeneral": "Other",
+                "resourceType": "problem"
+            },
+
+            "url": "https://schema.datacite.org/meta/kernel-4.0/index.html",
+
+            "language": "EN",
+
+            "relatedIdentifiers": [
+                // special edge case for if review
+                {
+                    "relatedIdentifier": "doi-of-octopus-publication-being-reviewed",
+                    "relatedIdentifierType": "doi",
+                    "relationType": "Reviews"
+                },
+
+                // list of everything to the right
+                {
+                    "relatedIdentifier": "doi-of-octopus-publication-being-linked",
+                    "relatedIdentifierType": "doi",
+                    "relationType": "Continues"
+                },
+
+
+            ],
+
+            "schemaVersion": "http://datacite.org/schema/kernel-4"
+        }
+    }
+}

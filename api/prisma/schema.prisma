@@ -68,7 +68,7 @@ model Publication {
     description                        String?
     keywords                           String[]
     content                            String?
-    doi                                String?
+    doi                                String
     language                           Languages              @default(en)
     publishedDate                      DateTime?
     currentStatus                      PublicationStatusEnum  @default(DRAFT)
