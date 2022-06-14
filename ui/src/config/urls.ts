@@ -212,6 +212,13 @@ const urls = {
         keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
         canonical: `${base.host}/author-guide`
     },
+    userTerms: {
+        path: '/user-terms',
+        title: 'Octopus User Terms',
+        description: "Octopus's user terms and conditions.",
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/user-terms`
+    },
     404: {
         title: `404 Not Found - ${base.title}`
     },
