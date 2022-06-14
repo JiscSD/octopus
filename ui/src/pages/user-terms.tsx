@@ -386,9 +386,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 limited to) logos and trading names (including but not limited to the Jisc trade mark),
                                 certain text, photographic and video images, sound recordings and the design, layout and
                                 appearance of and graphics contained within the Service (
-                                <span classNaff me="font-bold">
-                                    Jisc Materials
-                                </span>
+                                <span className="font-bold">Jisc Materials</span>
                                 ). Jisc Materials are protected by applicable intellectual property and other laws. You
                                 agree that you will not use Jisc Materials for any purpose whatsoever, except for the
                                 use of the Service or Service as permitted under these Terms.
