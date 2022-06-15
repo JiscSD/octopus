@@ -113,6 +113,15 @@ export interface PublicationWithLinks {
     }[];
 }
 
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
+}
+
 export interface CoAuthor {
     id: string;
     linkedUser: null | string;

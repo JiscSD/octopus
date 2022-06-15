@@ -7,7 +7,7 @@ CREATE TABLE "References" (
     "publicationId" TEXT NOT NULL,
     "type" "ReferenceType" NOT NULL,
     "text" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
+    "location" TEXT,
 
     CONSTRAINT "References_pkey" PRIMARY KEY ("id")
 );

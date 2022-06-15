@@ -91,6 +91,8 @@ export type PublicationCreationStoreType = {
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
     selfDeclaration: boolean;
     updateSelfDeclaration: (selfDeclaration: boolean) => void;
+    references: Interfaces.Reference[];
+    updateReferences: (references: Interfaces.Reference[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
