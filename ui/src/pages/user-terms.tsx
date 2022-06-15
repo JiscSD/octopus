@@ -139,9 +139,9 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <li className="mb-6">
                                     <span className="font-bold">Changes to the Service:</span> We may update and change
                                     our Service from time to time, for example, to reflect changes to our products or
-                                    our users’ needs. We will try to give you reasonable notice of any major changes.
-                                    Jisc does not guarantee that the Service website, or any content on it (including
-                                    any guidance and resources), will be free from errors or omissions.
+                                    our users&apos; needs. We will try to give you reasonable notice of any major
+                                    changes. Jisc does not guarantee that the Service website, or any content on it
+                                    (including any guidance and resources), will be free from errors or omissions.
                                 </li>
                                 <li className="mb-6">
                                     <span className="font-bold">We may suspend or withdraw the Service: </span> We do
@@ -178,7 +178,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         created an Octopus user account affiliated with an ORCID ID by following the
                                         steps set out in Section 3. A Registered User can search, browse, and view
                                         content published to the site, but can also publish their own research as well
-                                        as review, rate, create links between, and red flag others’ publications.
+                                        as review, rate, create links between, and red flag others&apos; publications.
                                         Registered Users can use all of the resources on the Service website in
                                         accordance with these Terms.
                                     </li>
@@ -250,8 +250,8 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <>
                                 Registered Users can create publications on the Service website, submit ratings on other
-                                user’s publications, place red flags against content or add links between other’s
-                                content (<span className="font-bold">User Content</span>).
+                                user&apos;s publications, place red flags against content or add links between
+                                other&apos;s content (<span className="font-bold">User Content</span>).
                                 <br />
                                 <br />
                                 When you create a publication on the Service website as a Registered User, you will be
@@ -481,22 +481,24 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 Sterling (<span className="font-bold">£500</span>).
                                 <br />
                                 <br />
-                                Nothing in these Terms excludes or limits Jisc's liability for death or personal injury
-                                arising from our negligence, or our fraud or fraudulent misrepresentation, or any other
-                                liability that cannot be excluded or limited by law.
+                                Nothing in these Terms excludes or limits Jisc&apos;s liability for death or personal
+                                injury arising from our negligence, or our fraud or fraudulent misrepresentation, or any
+                                other liability that cannot be excluded or limited by law.
                                 <br />
                                 <br />
                                 By using the Service or Service website, each User agrees that, if Jisc suffer any
-                                losses, damages or expenses as a result of that User's use of the Service or Service
-                                website, that User will reimburse Jisc for any such losses that are incurred as a result
-                                of that User's breach of (or failure to comply with) these Terms or any User Content
-                                licensing arrangements.
+                                losses, damages or expenses as a result of that User&apos;s use of the Service or
+                                Service website, that User will reimburse Jisc for any such losses that are incurred as
+                                a result of that User&apos;s breach of (or failure to comply with) these Terms or any
+                                User Content licensing arrangements.
                             </>
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 12: LIABILITY" className="mt-8" />
                         <StandardText>
                             <>
-                                <span className="font-bold">The Service’s accessibility statement is set out at </span>
+                                <span className="font-bold">
+                                    The Service&apos;s accessibility statement is set out at{' '}
+                                </span>
                                 <Components.Link
                                     href="https://int.octopus.ac/accessibility"
                                     openNew={true}
@@ -550,11 +552,12 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         obligations. Any waiver would need to be given by Jisc in writing.
                                     </li>
                                     <li className="mb-6">
-                                        <span className="font-bold">Matters outside of Jisc's control: </span>Jisc will
-                                        not be liable or responsible for any failure to perform, or delay in performance
-                                        of, any of its obligations under these Terms if that is caused by events outside
-                                        Jisc's reasonable control, including any act, event, non-happening, omission or
-                                        accident beyond our reasonable control. Some examples of such an event are:
+                                        <span className="font-bold">Matters outside of Jisc&apos;s control: </span>Jisc
+                                        will not be liable or responsible for any failure to perform, or delay in
+                                        performance of, any of its obligations under these Terms if that is caused by
+                                        events outside Jisc&apos;s reasonable control, including any act, event,
+                                        non-happening, omission or accident beyond our reasonable control. Some examples
+                                        of such an event are:
                                     </li>
                                 </ul>
                                 <ul className="ml-16 list-disc">
@@ -577,32 +580,32 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <li className="mb-6">
                                         The acts, decrees, legislation, regulations or restrictions of any government.
                                     </li>
-                                    Jisc's performance under these Terms will be suspended for the period that such
+                                    Jisc&apos;s performance under these Terms will be suspended for the period that such
                                     events set out above continues, and Jisc will have an extension of time to carry out
                                     their obligations under any contract for the duration of that period. Where
                                     possible, Jisc will use reasonable efforts to bring such event detailed above to a
                                     close or to find a solution.
                                 </ul>
+                                <ul className="ml-8 list-disc">
+                                    <li className="mb-6 mt-6">
+                                        <span className="font-bold">Notices to you: </span> These Terms and the Privacy
+                                        Policy are drawn up in the English language. All written communications between
+                                        you and us relating to these Terms and the Privacy Policy will be given in
+                                        English. We will send any notices relating to any of the matters set out in
+                                        these Terms to the email address you use to access the Service or the Service.
+                                    </li>
+                                    <li className="mb-6">
+                                        <span className="font-bold">Governing law: </span> These Terms and any dispute
+                                        in relation to the materials available from the Service will be governed by laws
+                                        of England and Wales.
+                                    </li>
+                                    <li className="mb-6">
+                                        <span className="font-bold">Jurisdiction: </span> The English courts have
+                                        exclusive jurisdiction to settle any disputes which may arise out of or in
+                                        connection with these Terms or use of the Service and/or Service website
+                                    </li>
+                                </ul>
                             </>
-                            <ul className="ml-8 list-disc">
-                                <li className="mb-6 mt-6">
-                                    <span className="font-bold">Notices to you: </span> These Terms and the Privacy
-                                    Policy are drawn up in the English language. All written communications between you
-                                    and us relating to these Terms and the Privacy Policy will be given in English. We
-                                    will send any notices relating to any of the matters set out in these Terms to the
-                                    email address you use to access the Service or the Service.
-                                </li>
-                                <li className="mb-6">
-                                    <span className="font-bold">Governing law: </span> These Terms and any dispute in
-                                    relation to the materials available from the Service will be governed by laws of
-                                    England and Wales.
-                                </li>
-                                <li className="mb-6">
-                                    <span className="font-bold">Jurisdiction: </span> The English courts have exclusive
-                                    jurisdiction to settle any disputes which may arise out of or in connection with
-                                    these Terms or use of the Service and/or Service website
-                                </li>
-                            </ul>
                         </StandardText>
                         <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS: SCHEDULE 1 - DATA PROCESSING
@@ -880,8 +883,8 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <div className="col-span-2">4.1.5</div>
                                     <div className="col-span-10 mb-6 ">
                                         notify you promptly, and in any event within forty-eight (48) hours, upon
-                                        becoming aware of any actual or suspected, threatened or ‘near miss’ Personal
-                                        Data Breach, and:
+                                        becoming aware of any actual or suspected, threatened or &apos;near miss&apos;
+                                        Personal Data Breach, and:
                                     </div>
                                     <div className="col-span-3"></div>
                                     <div className="col-span-9 mb-6 ">
@@ -923,9 +926,9 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     </div>
                                     <div className="col-span-3"></div>
                                     <div className="col-span-9 mb-6 ">
-                                        (b) to Jisc's employees, officers, representatives and advisers who need to know
-                                        such information for the purposes of Jisc performing its obligations under these
-                                        Terms and in this respect Jisc shall ensure that its employees, officers,
+                                        (b) to Jisc&apos;s employees, officers, representatives and advisers who need to
+                                        know such information for the purposes of Jisc performing its obligations under
+                                        these Terms and in this respect Jisc shall ensure that its employees, officers,
                                         representatives and advisers to whom it discloses the Personal Data are made
                                         aware of their obligations with regard to the use and security of Personal Data
                                         under these Terms; and
@@ -948,9 +951,10 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <div className="col-span-9 mb-6 ">
                                         (a) you shall only be permitted to exercise your rights under this Clause 4.1.9
                                         no more frequently than once in any 12 month period (other than where an audit
-                                        is being undertaken in connection with an actual or 'near miss' Personal Data
-                                        Breach, in which case, an additional audit may be undertaken within thirty (30)
-                                        days of us having notified you of actual or 'near miss' Personal Data Breach);
+                                        is being undertaken in connection with an actual or &apos;near miss&apos;
+                                        Personal Data Breach, in which case, an additional audit may be undertaken
+                                        within thirty (30) days of us having notified you of actual or &apos;near
+                                        miss&apos; Personal Data Breach);
                                     </div>
                                     <div className="col-span-3"></div>
                                     <div className="col-span-9 mb-6 ">
@@ -963,9 +967,9 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     </div>
                                     <div className="col-span-3"></div>
                                     <div className="col-span-9 mb-6 ">
-                                        (d) you shall comply with Jisc's health and safety, security, conduct and other
-                                        rules, procedures and requirements in relation to Jisc's property and systems
-                                        which have been notified by Jisc to you in advance; and
+                                        (d) you shall comply with Jisc&apos;s health and safety, security, conduct and
+                                        other rules, procedures and requirements in relation to Jisc&apos;s property and
+                                        systems which have been notified by Jisc to you in advance; and
                                     </div>
                                     <div className="col-span-3"></div>
                                     <div className="col-span-9 mb-6 ">
@@ -1015,8 +1019,8 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <span className="font-bold">The subject matter and duration of the Processing</span>
                                 <br />
                                 The Octopus platform provides a primary research record for recording and appraising
-                                research ‘as it happens’. It breaks down the publication of scientific research into
-                                eight elements.
+                                research &apos;as it happens&apos;. It breaks down the publication of scientific
+                                research into eight elements.
                                 <br />
                                 <br />
                                 The eight elements are:
