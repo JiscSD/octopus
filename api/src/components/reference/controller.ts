@@ -2,10 +2,10 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as referenceService from 'reference/service';
 
-export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, undefined>) => {
+export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.CreateReferencePath>) => {
     try {
         // TODO: Check ownership
-        const reference = await referenceService.create(event.body.publicationId, event.body.type, event.body.text);
+        const reference = await referenceService.create({ publicationId: event.pathParameters.id, ...event.body });
 
         return response.json(200, reference);
     } catch (err) {
@@ -14,15 +14,11 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
     }
 };
 
-export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.ReferencePath>) => {
+export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.UpdateReferencePath>) => {
     try {
         // TODO: Check ownership
 
-        const reference = await referenceService.update(
-            event.pathParameters.referenceId,
-            event.body.type,
-            event.body.text
-        );
+        const reference = await referenceService.update(event.pathParameters.referenceId, event.body);
 
         return response.json(200, reference);
     } catch (err) {
@@ -31,7 +27,7 @@ export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
     }
 };
 
-export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ReferencePath>) => {
+export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateReferencePath>) => {
     try {
         // TODO: Check ownership
 
