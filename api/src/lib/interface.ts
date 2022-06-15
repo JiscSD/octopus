@@ -456,10 +456,6 @@ export interface Reference {
     location?: string;
 }
 
-export interface CreateReferenceBody extends Reference {
-    publicationId: string;
-}
-
 export interface CreateReferencePath {
     id: string;
 }

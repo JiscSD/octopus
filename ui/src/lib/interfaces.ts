@@ -87,6 +87,15 @@ export interface Publication extends CorePublication {
     publicationFlags: Flag[];
 }
 
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
+}
+
 export interface PublicationWithLinks {
     rootPublication: Publication;
     linkedToPublications: {
