@@ -1,5 +1,5 @@
-import React from 'react';
 import * as Axios from 'axios';
+import React from 'react';
 
 import * as Types from '@types';
 
@@ -81,6 +81,15 @@ export interface Publication extends CorePublication {
     funders: Funder[];
     fundersStatement: string | null;
     publicationFlags: Flag[];
+}
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
 }
 
 export interface CoAuthor {

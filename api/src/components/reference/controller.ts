@@ -2,6 +2,17 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as referenceService from 'reference/service';
 
+export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePath>) => {
+    try {
+        // TODO: Check ownership
+        const references = await referenceService.getAllByPublication(event.pathParameters.id);
+
+        return response.json(200, references);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.CreateReferencePath>) => {
     try {
         // TODO: Check ownership
@@ -9,7 +20,6 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
 
         return response.json(200, reference);
     } catch (err) {
-        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -22,7 +32,6 @@ export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
 
         return response.json(200, reference);
     } catch (err) {
-        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -35,7 +44,6 @@ export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefin
 
         return response.json(200, reference);
     } catch (err) {
-        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

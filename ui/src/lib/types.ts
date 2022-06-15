@@ -1,7 +1,7 @@
 import * as Interfaces from '@interfaces';
 
+export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -86,6 +86,8 @@ export type PublicationCreationStoreType = {
     updateFunders: (funders: Interfaces.Funder[]) => void;
     selfDeclaration: boolean;
     updateSelfDeclaration: (selfDeclaration: boolean) => void;
+    references: Interfaces.Reference[];
+    updateReferences: (references: Interfaces.Reference[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

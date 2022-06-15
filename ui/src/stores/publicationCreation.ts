@@ -1,8 +1,8 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 let store: any = (set: (params: any) => void) => ({
@@ -49,6 +49,10 @@ let store: any = (set: (params: any) => void) => ({
     // Content
     content: '',
     updateContent: (content: string) => set(() => ({ content })),
+
+    // References
+    references: [],
+    updateReferences: (references: Interfaces.Reference[]) => set(() => ({ references })),
 
     // Description
     description: '',
