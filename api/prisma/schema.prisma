@@ -92,7 +92,8 @@ model References {
     publicationId String
     type          ReferenceType
     text          String
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    location      String
+    publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
@@ -434,4 +435,5 @@ enum Languages {
 enum ReferenceType {
     DOI
     URL
+    TEXT
 }

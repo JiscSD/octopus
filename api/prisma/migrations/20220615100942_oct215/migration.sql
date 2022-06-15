@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "ReferenceType" AS ENUM ('DOI', 'URL');
+CREATE TYPE "ReferenceType" AS ENUM ('DOI', 'URL', 'TEXT');
 
 -- CreateTable
 CREATE TABLE "References" (
@@ -7,6 +7,7 @@ CREATE TABLE "References" (
     "publicationId" TEXT NOT NULL,
     "type" "ReferenceType" NOT NULL,
     "text" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
 
     CONSTRAINT "References_pkey" PRIMARY KEY ("id")
 );
