@@ -5,9 +5,12 @@ const update: I.Schema = {
     properties: {
         type: {
             type: 'string',
-            enum: <I.ReferenceType[]>['DOI', 'URL']
+            enum: <I.ReferenceType[]>['DOI', 'URL', 'TEXT']
         },
         text: {
+            type: 'string'
+        },
+        location: {
             type: 'string'
         }
     },

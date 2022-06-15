@@ -1,7 +1,7 @@
 import * as I from 'interface';
 import * as client from 'lib/client';
 
-export const getAllByPublication = async (publicationId: string): Promise<Array<I.Reference>> => {
+export const getAllByPublication = async (publicationId: string) => {
     const references = await client.prisma.references.findMany({
         where: {
             publicationId
@@ -10,23 +10,14 @@ export const getAllByPublication = async (publicationId: string): Promise<Array<
     return references;
 };
 
-export const create = async (publicationId: string, type: I.ReferenceType, text: string): Promise<I.Reference> => {
-    const created = await client.prisma.references.create({
-        data: {
-            publicationId,
-            type,
-            text
-        }
-    });
+export const create = async (data) => {
+    const created = await client.prisma.references.create({ data });
     return created;
 };
 
-export const update = async (id: string, type: I.ReferenceType, text: string): Promise<I.Reference> => {
+export const update = async (id: string, data: I.Reference) => {
     const updated = await client.prisma.references.update({
-        data: {
-            type,
-            text
-        },
+        data,
         where: {
             id
         }
@@ -34,7 +25,7 @@ export const update = async (id: string, type: I.ReferenceType, text: string): P
     return updated;
 };
 
-export const remove = async (id: string): Promise<I.Reference> => {
+export const remove = async (id: string) => {
     const deleted = await client.prisma.references.delete({
         where: {
             id

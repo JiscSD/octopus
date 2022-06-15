@@ -442,16 +442,25 @@ export interface CreateRatingRequestBody {
  * @description References
  */
 
-export type ReferenceType = 'URL' | 'DOI';
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
-    referenceId?: string;
-    publicationId: string;
+    referenceId: string;
     type: ReferenceType;
     text: string;
+    location?: string;
 }
 
-export interface ReferencePath {
+export interface CreateReferenceBody extends Reference {
+    publicationId: string;
+}
+
+export interface CreateReferencePath {
+    id: string;
+}
+
+export interface UpdateReferencePath {
+    id: string;
     referenceId: string;
 }
 
