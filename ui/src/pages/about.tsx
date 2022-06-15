@@ -75,7 +75,7 @@ const About: NextPage = (): React.ReactElement => (
                     <div className="mx-auto mb-20 mt-5 flex w-fit space-x-6">
                         <Components.Link
                             href={Config.urls.faq.path}
-                            className=" flex w-52 items-center justify-between rounded-lg bg-teal-400 p-5 text-center text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                            className=" flex w-52 items-center justify-between rounded-lg bg-teal-400 p-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
                         >
                             <span className="text-center font-montserrat text-sm leading-none tracking-wide">
                                 How to use Octopus
