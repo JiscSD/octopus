@@ -26,14 +26,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
+        fetchAndSetReferences();
         setLoading(false);
     }, [content]);
 
     const addReferencesRef = React.useRef(null);
 
-    const fetchAndSetReferences = async (token?: string) => {
+    const fetchAndSetReferences = async () => {
         try {
-            const response = await api.get(`/publications/${publicationId}/reference`, token);
+            const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
             updateReferences(response.data);
         } catch (err) {}
     };
@@ -82,19 +83,17 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
                     matchArray.push(createdReference.data);
                 }
-                fetchAndSetReferences(user?.token);
+                fetchAndSetReferences();
                 referenceField.current.value = '';
             }
             // No references found
-        } catch (err) {
-            console.log(err);
-        }
+        } catch (err) {}
     }, [publicationId, user]);
 
     const destroyReference = React.useCallback(
         async (id: string) => {
             await api.destroy(`/publications/${publicationId}/reference/${id}`, user?.token);
-            fetchAndSetReferences(user?.token);
+            fetchAndSetReferences();
         },
         [publicationId, user]
     );
@@ -152,9 +151,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />
-                    {references.length > 0 && (
+                    {references && references.length > 0 && (
                         <div className="w-full overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
-                            <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
+                            <table className="min-w-full table-fixed divide-y divide-grey-100 dark:divide-teal-300">
                                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                     <tr>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">

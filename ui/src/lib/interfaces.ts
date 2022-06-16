@@ -81,6 +81,7 @@ export interface Publication extends CorePublication {
     funders: Funder[];
     fundersStatement: string | null;
     publicationFlags: Flag[];
+    references: Reference[];
 }
 
 export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
