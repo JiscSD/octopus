@@ -85,6 +85,7 @@ export interface Publication extends CorePublication {
     affiliations: Affiliations[];
     affiliationStatement: string | null;
     publicationFlags: Flag[];
+    references: Reference[];
 }
 
 export interface PublicationWithLinks {

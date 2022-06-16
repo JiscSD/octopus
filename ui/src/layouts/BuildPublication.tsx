@@ -3,10 +3,10 @@ import * as Router from 'next/router';
 import * as ReactIconsFA from 'react-icons/fa';
 import * as OutlineIcons from '@heroicons/react/outline';
 
-import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as api from '@api';
