@@ -116,14 +116,12 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
         }
     };
 
-    const doiRes = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+    const doiRes = await axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT as string}/${doi}`, payload, {
         auth: {
             username: process.env.DATACITE_USER as string,
             password: process.env.DATACITE_PASSWORD as string
         }
     });
-
-    console.log(doiRes);
 
     return doiRes.data;
 };

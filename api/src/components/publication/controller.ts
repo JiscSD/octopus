@@ -263,8 +263,10 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
 
-        // TODO: update DOI
-        await helpers.updateDOI('x', publication);
+        // Publication is live, so update the DOI
+        const res = await helpers.updateDOI(publication.doi, publication);
+        console.log(res);
+        // TODO:  Do we want to do anything with this response?
 
         return response.json(200, updatedPublication);
     } catch (err) {
