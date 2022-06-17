@@ -29,16 +29,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
     React.useEffect(() => {
         fetchAndSetReferences();
         setLoading(false);
-    }, [content]);
+    }, [content, user, publicationId]);
 
     const addReferencesRef = React.useRef(null);
 
-    const fetchAndSetReferences = async () => {
+    const fetchAndSetReferences = React.useCallback(async () => {
         try {
             const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
             updateReferences(response.data);
         } catch (err) {}
-    };
+    }, [user, publicationId]);
 
     const addReferences = React.useCallback(async () => {
         try {
@@ -104,7 +104,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
             <div>
                 <Components.PublicationCreationStepTitle text="Main text" required />
                 {!loading ? (
-                    <Components.TextEditor defaultContent={content} contentChangeHandler={updateContent} />
+                    <Components.TextEditor
+                        defaultContent={content}
+                        contentChangeHandler={updateContent}
+                        references={references}
+                    />
                 ) : (
                     <div className="mt-16 flex animate-bounce justify-center">
                         <Assets.Logo width={60} height={60} className="fill-teal-500" />
