@@ -9,6 +9,7 @@ const publicationSeeds = [
                 id: 'test-user-1'
             }
         },
+        doi: '10.82259/cty5-2g01',
         publicationStatus: {
             create: {
                 status: 'DRAFT'
@@ -25,6 +26,7 @@ const publicationSeeds = [
                 id: 'test-user-2'
             }
         },
+        doi: '10.82259/cty5-2g02',
         publicationStatus: {
             create: {
                 status: 'DRAFT'
@@ -41,6 +43,7 @@ const publicationSeeds = [
         content: 'Publication PROBLEM-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g03',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -135,6 +138,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROBLEM-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g04',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -183,6 +187,7 @@ const publicationSeeds = [
         content: 'Publication HYPOTHESIS-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g05',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -245,6 +250,7 @@ const publicationSeeds = [
         type: 'HYPOTHESIS',
         content: 'Publication HYPOTHESIS-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g06',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -269,6 +275,7 @@ const publicationSeeds = [
         content: 'Publication PROTOCOL-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g07',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -293,6 +300,7 @@ const publicationSeeds = [
         type: 'PROTOCOL',
         content: 'Publication PROTOCOL-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g08',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -325,6 +333,7 @@ const publicationSeeds = [
         content: 'Publication DATA-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g09',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -349,6 +358,7 @@ const publicationSeeds = [
         type: 'DATA',
         content: 'Publication DATA-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g10',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -373,6 +383,7 @@ const publicationSeeds = [
         content: 'Publication ANALYSIS-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g11',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -397,6 +408,7 @@ const publicationSeeds = [
         type: 'ANALYSIS',
         content: 'Publication ANALYSIS-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g12',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -421,6 +433,7 @@ const publicationSeeds = [
         content: 'Publication INTERPRETATION-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g13',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -445,6 +458,7 @@ const publicationSeeds = [
         type: 'INTERPRETATION',
         content: 'Publication INTERPRETATION-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g14',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -469,6 +483,7 @@ const publicationSeeds = [
         content: 'Publication REAL_WORLD_APPLICATION-LIVE',
         currentStatus: 'LIVE',
         publishedDate: '2022-01-22T15:51:42.523Z',
+        doi: '10.82259/cty5-2g15',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -493,6 +508,7 @@ const publicationSeeds = [
         type: 'REAL_WORLD_APPLICATION',
         content: 'Publication REAL_WORLD_APPLICATION-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g16',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -516,6 +532,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-DRAFT',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g17',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -541,6 +558,7 @@ const publicationSeeds = [
         type: 'HYPOTHESIS',
         licence: 'CC_BY',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g18',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -569,6 +587,7 @@ const publicationSeeds = [
         type: 'PROBLEM',
         licence: 'CC_BY',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g19',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -596,6 +615,7 @@ const publicationSeeds = [
         type: 'PROBLEM',
         licence: 'CC_BY',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g20',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -624,6 +644,7 @@ const publicationSeeds = [
         type: 'PROBLEM',
         licence: 'CC_BY',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g21',
         user: {
             connect: {
                 id: 'test-user-1'
@@ -652,6 +673,7 @@ const publicationSeeds = [
         type: 'PROBLEM',
         licence: 'CC_BY',
         currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g22',
         user: {
             connect: {
                 id: 'test-user-1'

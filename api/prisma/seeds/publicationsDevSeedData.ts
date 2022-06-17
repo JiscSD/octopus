@@ -39,6 +39,7 @@ const newPublicationSeeds = [
     // Problem Live and Draft
     {
         id: 'publication-user-1-problem-1-live',
+        doi: '10.82259/publication-user-1-problem-1-live',
         title: 'What is the connection between human needs and sustainable development?',
         type: PublicationTypes.problem,
         licence: 'CC_BY',
@@ -72,6 +73,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-problem-2-draft',
+        doi: '10.82259/publication-user-1-problem-2-draft',
         title: 'What is the connection between human needs and sustainable development?',
         type: PublicationTypes.problem,
         currentStatus: PublicationStatus.draft,
@@ -104,6 +106,7 @@ const newPublicationSeeds = [
     // Hypothesis Live and Draft
     {
         id: 'publication-user-1-hypothesis-1-live',
+        doi: '10.82259/publication-user-1-hypothesis-1-live',
         title: 'Hypothesis of Improving the quality of life for sustainable development',
         type: PublicationTypes.hypothesis,
         licence: 'CC_BY',
@@ -142,6 +145,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-hypothesis-2-draft',
+        doi: '10.82259/publication-user-1-hypothesis-2-draft',
         title: 'Draft Hypothesis of Improving the quality of life for sustainable development',
         type: PublicationTypes.hypothesis,
         conflictOfInterestStatus: true,
@@ -179,6 +183,7 @@ const newPublicationSeeds = [
     // Protocol Live and Draft
     {
         id: 'publication-user-1-protocol-1-live',
+        doi: '10.82259/publication-user-1-protocol-1-live',
         title: 'Protocol of Improving the quality of life for sustainable development',
         type: PublicationTypes.protocol,
         licence: 'CC_BY',
@@ -216,6 +221,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-protocol-2-draft',
+        doi: '10.82259/publication-user-1-protocol-2-draft',
         title: 'Draft Protocol of Improving the quality of life for sustainable development',
         type: PublicationTypes.protocol,
         currentStatus: PublicationStatus.draft,
@@ -237,6 +243,7 @@ const newPublicationSeeds = [
     // Data Live and Draft
     {
         id: 'publication-user-1-data-1-live',
+        doi: '10.82259/publication-user-1-data-1-live',
         title: 'Data attached to Improving the quality of life for sustainable development',
         type: PublicationTypes.data,
         licence: 'CC_BY_SA',
@@ -271,6 +278,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-data-2-draft',
+        doi: '10.82259/publication-user-1-data-2-draft',
         title: 'Draft Data attached to Improving the quality of life for sustainable development',
         type: PublicationTypes.data,
         currentStatus: PublicationStatus.draft,
@@ -292,6 +300,7 @@ const newPublicationSeeds = [
     // Analysis Live and Draft
     {
         id: 'publication-user-1-analysis-1-live',
+        doi: '10.82259/publication-user-1-analysis-1-live',
         title: 'Analysis of Improving the quality of life for sustainable development',
         type: PublicationTypes.analysis,
         licence: 'CC_BY_ND',
@@ -326,6 +335,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-analysis-2-draft',
+        doi: '10.82259/publication-user-1-analysis-2-draft',
         title: 'Draft Analysis of Improving the quality of life for sustainable development',
         type: PublicationTypes.analysis,
         currentStatus: PublicationStatus.draft,
@@ -347,6 +357,7 @@ const newPublicationSeeds = [
     // Interpretation Live and Draft
     {
         id: 'publication-user-1-interpretation-1-live',
+        doi: '10.82259/publication-user-1-interpretation-1-live',
         title: 'Interpretation of Improving the quality of life for sustainable development',
         type: PublicationTypes.interpretation,
         licence: 'CC_BY',
@@ -384,6 +395,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-interpretation-2-draft',
+        doi: '10.82259/publication-user-1-interpretation-2-draft',
         title: 'Draft Interpretation of Improving the quality of life for sustainable development',
         type: PublicationTypes.interpretation,
         currentStatus: PublicationStatus.draft,
@@ -405,6 +417,7 @@ const newPublicationSeeds = [
     // Real World Application Live and Draft
     {
         id: 'publication-user-1-real-world-application-1-live',
+        doi: '10.82259/publication-user-1-real-world-application-1-live',
         title: 'Conclusion of Improving the quality of life for sustainable development',
         type: PublicationTypes.realWorldApplication,
         licence: 'CC_BY',
@@ -440,6 +453,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-1-real-world-application-2-draft',
+        doi: '10.82259/publication-user-1-real-world-application-2-draft',
         title: 'Draft Conclusion of Improving the quality of life for sustainable development',
         type: PublicationTypes.realWorldApplication,
         currentStatus: PublicationStatus.draft,
@@ -463,6 +477,7 @@ const newPublicationSeeds = [
     // Problem Live and Draft
     {
         id: 'publication-user-2-problem-1-live',
+        doi: '10.82259/publication-user-2-problem-1-live',
         title: 'What is the R0 of the COVID-19 virus?',
         type: PublicationTypes.problem,
         licence: 'CC_BY',
@@ -497,6 +512,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-problem-2-draft',
+        doi: '10.82259/publication-user-2-problem-2-draft',
         title: 'How can we model the epidemiology of COVID-19?',
         type: PublicationTypes.problem,
         currentStatus: PublicationStatus.draft,
@@ -518,6 +534,7 @@ const newPublicationSeeds = [
     // Hypothesis Live and Draft
     {
         id: 'publication-user-2-hypothesis-1-live',
+        doi: '10.82259/publication-user-2-hypothesis-1-live',
         title: 'Conducting a meta-analysis of studies of the R0 will help improve estimates',
         type: PublicationTypes.hypothesis,
         licence: 'CC_BY',
@@ -550,6 +567,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-hypothesis-2-draft',
+        doi: '10.82259/publication-user-2-hypothesis-2-draft',
         title: 'Are patients with hypertension and diabetes mellitus at increased risk for COVID-19 infection?',
         type: PublicationTypes.hypothesis,
         currentStatus: PublicationStatus.draft,
@@ -576,6 +594,7 @@ const newPublicationSeeds = [
     // Protocol Live and Draft
     {
         id: 'publication-user-2-protocol-1-live',
+        doi: '10.82259/publication-user-2-protocol-1-live',
         title: 'Method for meta-analysis of studies of R0 for COVID-19',
         type: PublicationTypes.protocol,
         licence: 'CC_BY_NC_SA',
@@ -610,6 +629,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-protocol-2-draft',
+        doi: '10.82259/publication-user-2-protocol-2-draft',
         title: 'Relations are contingent upon the level of community access to these places',
         type: PublicationTypes.protocol,
         currentStatus: PublicationStatus.draft,
@@ -636,6 +656,7 @@ const newPublicationSeeds = [
     // Data Live and Draft
     {
         id: 'publication-user-2-data-1-live',
+        doi: '10.82259/publication-user-2-data-1-live',
         title: 'Results of a meta-analysis of R0 for COVID-19',
         type: PublicationTypes.data,
         licence: 'CC_BY',
@@ -668,6 +689,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-data-2-draft',
+        doi: '10.82259/publication-user-2-data-2-draft',
         title: 'Results of systematic review of COVID-19 cases',
         content: 'Results of review - *add in* Table 5-10 and Appendices.',
         type: PublicationTypes.data,
@@ -695,6 +717,7 @@ const newPublicationSeeds = [
     // Analysis Live and Draft
     {
         id: 'publication-user-2-analysis-1-live',
+        doi: '10.82259/publication-user-2-analysis-1-live',
         title: 'Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.analysis,
         licence: 'CC_BY',
@@ -729,6 +752,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-analysis-2-draft',
+        doi: '10.82259/publication-user-2-analysis-2-draft',
         title: 'Meta-analysis of COVID-19 cases',
         type: PublicationTypes.analysis,
         currentStatus: PublicationStatus.draft,
@@ -755,6 +779,7 @@ const newPublicationSeeds = [
     // Interpretation Live and Draft
     {
         id: 'publication-user-2-interpretation-1-live',
+        doi: '10.82259/publication-user-2-interpretation-1-live',
         title: 'Interpretation of the results from pathology of a patient who died of COVID-19 in Wuhan',
         type: PublicationTypes.interpretation,
         licence: 'CC_BY',
@@ -787,6 +812,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-interpretation-2-draft',
+        doi: '10.82259/publication-user-2-interpretation-2-draft',
         title: 'Could treatment for COPD be protective against COVID-19 symptoms?',
         type: PublicationTypes.interpretation,
         currentStatus: PublicationStatus.draft,
@@ -813,6 +839,7 @@ const newPublicationSeeds = [
     // Real World Application Live and Draft
     {
         id: 'publication-user-2-real-world-application-1-live',
+        doi: '10.82259/publication-user-2-real-world-application-1-live',
         title: 'Conclusions from the data on the use of asthma/COPD treatments in COVID-19',
         type: PublicationTypes.realWorldApplication,
         licence: 'CC_BY',
@@ -845,6 +872,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-2-real-world-application-2-draft',
+        doi: '10.82259/publication-user-2-real-world-application-2-draft',
         title: 'Corticosteroid treatment may help prevent ARDS development in COVID-19 patients',
         type: PublicationTypes.realWorldApplication,
         currentStatus: PublicationStatus.draft,
@@ -873,6 +901,7 @@ const newPublicationSeeds = [
     // Protocol Live
     {
         id: 'publication-user-4-protocol-1-live',
+        doi: '10.82259/publication-user-4-protocol-1-live',
         title: 'Protocol for Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.protocol,
         licence: 'CC_BY',
@@ -912,6 +941,7 @@ const newPublicationSeeds = [
     // Data Live
     {
         id: 'publication-user-4-data-1-live',
+        doi: '10.82259/publication-user-4-data-1-live',
         title: 'Data attached to Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.data,
         licence: 'CC_BY',
@@ -948,6 +978,7 @@ const newPublicationSeeds = [
     // Real World Application Live
     {
         id: 'publication-user-4-real-world-application-1-live',
+        doi: '10.82259/publication-user-4-real-world-application-1-live',
         title: 'Conclusion to Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.realWorldApplication,
         licence: 'CC_BY_NC',
@@ -983,6 +1014,7 @@ const newPublicationSeeds = [
     // Data Live
     {
         id: 'publication-user-5-data-1-live',
+        doi: '10.82259/publication-user-5-data-1-live',
         title: 'Data of Complicated Table',
         type: PublicationTypes.data,
         licence: 'CC_BY',
@@ -1026,6 +1058,7 @@ const newPublicationSeeds = [
     // Analysis Live
     {
         id: 'publication-user-5-analysis-1-live',
+        doi: '10.82259/publication-user-5-analysis-1-live',
         title: 'Analysis for Expert elicitation on the relative importance of possible SARS-CoV-2 transmission routes and the effectiveness of mitigations',
         type: PublicationTypes.analysis,
         licence: 'CC_BY',
@@ -1074,6 +1107,7 @@ const newPublicationSeeds = [
     // Hypothesis (live)
     {
         id: 'publication-user-6-hypothesis-1-live',
+        doi: '10.82259/publication-user-6-hypothesis-1-live',
         title: 'Live Hypothesis of Visible winds: The production of new visibilities of wind energy in West Germany, 1973–1991',
         type: PublicationTypes.hypothesis,
         licence: 'CC_BY',
@@ -1110,6 +1144,7 @@ const newPublicationSeeds = [
     // Hypothesis (ready to go live)
     {
         id: 'publication-user-6-hypothesis-2-draft',
+        doi: '10.82259/publication-user-6-hypothesis-2-draft',
         title: 'Visible winds: The production of new visibilities of wind energy in West Germany, 1973–1991',
         type: PublicationTypes.hypothesis,
         licence: 'CC_BY',
@@ -1142,6 +1177,7 @@ const newPublicationSeeds = [
     // Problem (New Problem to link onto other Publication types)
     {
         id: 'publication-user-7-problem-1-live',
+        doi: '10.82259/publication-user-7-problem-1-live',
         title: 'New problem branched off of other published publications',
         type: PublicationTypes.problem,
         licence: 'CC_BY',
@@ -1198,6 +1234,7 @@ const newPublicationSeeds = [
     // Peer Review (live)
     {
         id: 'publication-user-7-peer-review-1-live',
+        doi: '10.82259/publication-user-7-peer-review-1-live',
         title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1232,6 +1269,7 @@ const newPublicationSeeds = [
     // Peer Review (draft but ready to go live)
     {
         id: 'publication-user-7-peer-review-2-draft',
+        doi: '10.82259/publication-user-7-peer-review-2-draft',
         title: 'Draft Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1261,6 +1299,7 @@ const newPublicationSeeds = [
     // Peer Review (live)
     {
         id: 'publication-user-7-peer-review-3-live',
+        doi: '10.82259/publication-user-7-peer-review-3-live',
         title: 'Peer Review of Analysis for Expert elicitation on the relative importance of possible SARS-CoV-2 transmission routes and the effectiveness of mitigations',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1299,6 +1338,7 @@ const newPublicationSeeds = [
     // Peer Reviews Live and One Draft
     {
         id: 'publication-user-3-peer-review-1-live',
+        doi: '10.82259/publication-user-3-peer-review-1-live',
         title: 'Peer Review of Conclusions from the data on the use of asthma/COPD treatments in COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1331,6 +1371,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-2-live',
+        doi: '10.82259/publication-user-3-peer-review-2-live',
         title: 'Peer Review of Hypothesis of Improving the quality of life for sustainable development',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1363,6 +1404,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-3-live',
+        doi: '10.82259/publication-user-3-peer-review-3-live',
         title: 'Peer Review of Data attached to Improving the quality of life for sustainable development',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1394,6 +1436,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-4-live',
+        doi: '10.82259/publication-user-3-peer-review-4-live',
         title: 'Peer Review of Interpretation of Improving the quality of life for sustainable development',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1426,6 +1469,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-5-live',
+        doi: '10.82259/publication-user-3-peer-review-5-live',
         title: 'Peer Review of Conducting a meta-analysis of studies of the R0 will help improve estimates',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1458,6 +1502,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-6-live',
+        doi: '10.82259/publication-user-3-peer-review-6-live',
         title: 'Peer Review of Method for meta-analysis of studies of R0 for COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1490,6 +1535,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-7-live',
+        doi: '10.82259/publication-user-3-peer-review-7-live',
         title: 'Peer Review of Analysis of the data from a retrospective cohort study of 191 inpatients in Wuhan with COVID-19',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1522,6 +1568,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-8-live',
+        doi: '10.82259/publication-user-3-peer-review-8-live',
         title: 'Peer Review of Protocol for Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1553,6 +1600,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-9-live',
+        doi: '10.82259/publication-user-3-peer-review-9-live',
         title: 'Peer Review of Conclusion to Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY',
@@ -1584,6 +1632,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-10-draft',
+        doi: '10.82259/publication-user-3-peer-review-10-draft',
         title: 'Review of Interpretation of the results from pathology of a patient who died of COVID-19 in Wuhan',
         type: PublicationTypes.peerReview,
         currentStatus: PublicationStatus.draft,
@@ -1608,6 +1657,7 @@ const newPublicationSeeds = [
     },
     {
         id: 'publication-user-3-peer-review-11-live',
+        doi: '10.82259/publication-user-3-peer-review-11-live',
         title: 'Review of Problem: What is the connection between human needs and sustainable development?',
         type: PublicationTypes.peerReview,
         licence: 'CC_BY_NC',

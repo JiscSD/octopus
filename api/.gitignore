@@ -11,3 +11,4 @@ jspm_packages
 .vscode
 .DS_Store
 coverage
+Octopus.postman_collection.json

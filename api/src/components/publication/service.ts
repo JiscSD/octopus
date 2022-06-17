@@ -134,6 +134,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,
@@ -163,6 +164,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,

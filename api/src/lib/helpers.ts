@@ -25,7 +25,7 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
         data: {
             type: 'dois',
             attributes: {
-                prefix: process.env.DOI_PREFIX
+                prefix: process.env.DOI_PREFIX // 10.82259/xydggf.546547
             }
         }
     };
@@ -40,7 +40,93 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
     return doi.data;
 };
 
-export const updateDOI = async (doi: string, publication) => {};
+export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata) => {
+    // Get creator
+    const creator = {
+        name: `${publication?.user.firstName} ${publication?.user.lastName}`,
+        nameType: 'Personal',
+        nameIdentifiers: [
+            {
+                nameIdentifier: publication?.user.orcid,
+                nameIdentifierScheme: 'orcid',
+                schemeUri: 'orcid.org'
+            }
+        ]
+    };
+
+    // Get co-authors
+    const coAuthors = publication?.coAuthors.map((coAuthor) => ({
+        name: `${coAuthor.user?.firstName || 'N/A'} ${coAuthor.user?.lastName || 'N/A'}`, // TODO revisit this, what to show if no first or last name?
+        nameType: 'Personal',
+        nameIdentifiers: [
+            {
+                nameIdentifier: coAuthor.user?.orcid,
+                nameIdentifierScheme: 'orcid',
+                schemeUri: 'orcid.org'
+            }
+        ]
+    }));
+
+    const payload = {
+        data: {
+            types: 'doi',
+            attributes: {
+                event: 'publish',
+                url: `https://int.octopus.ac/publications/${doi}`,
+                doi: doi,
+                identifiers: [
+                    {
+                        identifier: `https://doi.org/${doi}`,
+                        identifierType: 'DOI'
+                    }
+                ],
+                creators: coAuthors ? [...coAuthors, creator] : [creator],
+                titles: [
+                    {
+                        title: publication?.title,
+                        lang: 'en'
+                    }
+                ],
+                publisher: 'Octopus',
+                publicationYear: publication?.createdAt.getFullYear(),
+                language: 'en',
+                types: {
+                    resourceTypeGeneral: 'Other',
+                    resourceType: publication?.type
+                },
+                relatedIdentifiers: publication?.linkedFrom.map((relatedIdentifier) =>
+                    relatedIdentifier.publicationFromRef.type === 'PEER_REVIEW'
+                        ? {
+                              relatedIdentifier: relatedIdentifier.publicationFromRef.doi,
+                              relatedIdentifierType: 'DOI',
+                              relationType: 'Reviews'
+                          }
+                        : {
+                              relatedIdentifier: relatedIdentifier.publicationFromRef.doi,
+                              relatedIdentifierType: 'DOI',
+                              relationType: 'Continues'
+                          }
+                ),
+                fundingReferences: publication?.funders.map((funder) => ({
+                    funderName: funder.name,
+                    funderReference: funder.ror || funder.link,
+                    funderIdentifierType: funder.ror ? 'ROR' : 'Other'
+                }))
+            }
+        }
+    };
+
+    const doiRes = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+
+    console.log(doiRes);
+
+    return doiRes.data;
+};
 
 export const OctopusInformation: I.OctopusInformation = {
     publications: {

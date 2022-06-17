@@ -1,86 +1,102 @@
 {
     "data": {
-        "id": "10.5438/0012",
-        "type": "dois",
+        "types": "doi",
         "attributes": {
-            "event": "publish",
-
-            "doi": "10.5438/0012",
-
+            "event": "publish", // ONCE PUBLISHED, A DOI CANNOT BE DELETED!
+            "url": "https://int.octopus.ac/publications/10.82259/ehpy-0763",
+            "doi": "10.82259/ehpy-0763",
+            "identifiers": [
+                {
+                    "identifier": "https://doi.org/10.82259/ehpy-0763",
+                    "identifierType": "DOI"
+                }
+            ],
             "creators": [
                 {
+                    "name": "Victoria Allen",
                     "nameType": "Personal",
                     "nameIdentifiers": [
                         {
-                            "nameIdentifier": "orcid link",
-                            "nameIdentifierScheme": "orcid",
+                            "nameIdentifier": "0001",
+                            "nameIdentifierScheme": "ORCID",
                             "schemeUri": "orcid.org"
                         }
-                    ],
-                    "name": "Nathan Sainsbury"
-                }
-            ],
-
-            "contributors": [
+                    ]
+                },
                 {
-                    "contributorType": "Other",
-                    "nameType": "Organizational",
-                    "name": "Name of org",
+                    "name": "co-author one",
+                    "nameType": "Personal",
                     "nameIdentifiers": [
                         {
-                            "nameIdentifier": "ror or link",
-                            "nameIdentifierScheme": "ror or other",
-                            "schemeUri": "ror link or url"
+                            "nameIdentifier": "0001",
+                            "nameIdentifierScheme": "ORCID",
+                            "schemeUri": "orcid.org"
                         }
                     ]
                 }
             ],
-
             "titles": [
                 {
-                    "title": "DataCite Metadata Schema Documentation for the Publication and Citation of Research Data v4.0"
+                    "title": "What is the connection between human needs and sustainable development?",
+                    "lang": "en"
                 }
             ],
-
-            "fundingReferences": [
-                {
-                    "funderName": "a",
-                    "funderReference": "ror or funder url",
-                    "funderIdentifierType": "Ror or other"
-                }
-            ],
-
             "publisher": "Octopus",
-            "publicationYear": 2016,
-
+            "publicationYear": 2020,
+            "contributors": [
+                {
+                    "contributorType": "Other",
+                    "nameType": "Organizational",
+                    "name": "University of Manchester",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "https://ror.org/027m9bs27",
+                            "nameIdentifierScheme": "ROR"
+                        }
+                    ]
+                }
+            ],
+            "language": "en",
             "types": {
                 "resourceTypeGeneral": "Other",
-                "resourceType": "problem"
+                "resourceType": "Problem"
             },
-
-            "url": "https://schema.datacite.org/meta/kernel-4.0/index.html",
-
-            "language": "EN",
-
             "relatedIdentifiers": [
-                // special edge case for if review
+                // Reviews
                 {
-                    "relatedIdentifier": "doi-of-octopus-publication-being-reviewed",
-                    "relatedIdentifierType": "doi",
+                    "relatedIdentifier": "10.82259/publication-user-3-peer-review-2-live",
+                    "relatedIdentifierType": "DOI",
                     "relationType": "Reviews"
                 },
-
-                // list of everything to the right
+                // List of everything to the right in the publication chain
                 {
-                    "relatedIdentifier": "doi-of-octopus-publication-being-linked",
-                    "relatedIdentifierType": "doi",
+                    "relatedIdentifier": "10.82259/publication-user-1-hypothesis-1-live",
+                    "relatedIdentifierType": "DOI",
                     "relationType": "Continues"
                 },
-
-
+                {
+                    "relatedIdentifier": "10.82259/publication-user-2-problem-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                },
+                {
+                    "relatedIdentifier": "10.82259/publication-user-6-hypothesis-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                },
+                {
+                    "relatedIdentifier": "10.82259/publication-user-7-problem-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                }
             ],
-
-            "schemaVersion": "http://datacite.org/schema/kernel-4"
+            "fundingReferences": [
+                {
+                    "funderName": "University of Manchester",
+                    "funderIdentifier": "https://ror.org/027m9bs27",
+                    "funderIdentifierType": "ROR"
+                }
+            ]
         }
     }
 }

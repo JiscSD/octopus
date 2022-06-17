@@ -1,6 +1,7 @@
 const problems = [
     {
         id: 'why',
+        doi: '10.82259/why',
         title: 'What makes everything we can detect in the universe around us the way that it is, and why?',
         type: 'PROBLEM',
         content: 'What makes everything we can detect in the universe around us the way that it is, and why?',
@@ -14,6 +15,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0000es6i7dy46y67',
+        doi: '10.82259/cl3fz14dr0000es6i7dy46y67',
         title: '"How do living organisms function, survive, reproduce and evolve?"',
         type: 'PROBLEM',
         content: '<p>"How do living organisms function, survive, reproduce and evolve?"</p>',
@@ -36,6 +38,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0001es6i5ji51rq4',
+        doi: '10.82259/cl3fz14dr0001es6i5ji51rq4',
         title: 'How has life on earth evolved?',
         type: 'PROBLEM',
         content: '<p>How has life on earth evolved?</p>',
@@ -58,6 +61,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0002es6i6r7t2mpv',
+        doi: '10.82259/cl3fz14dr0002es6i6r7t2mpv',
         title: 'How do we improve catalysts for chemical reactions?',
         type: 'PROBLEM',
         content: '<p>How do we improve catalysts for chemical reactions?</p>',
@@ -80,6 +84,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0003es6idqm4au2v',
+        doi: '10.82259/cl3fz14dr0003es6idqm4au2v',
         title: 'How can we produce more efficient and less polluting sources of energy?',
         type: 'PROBLEM',
         content: '<p>How can we produce more efficient and less polluting sources of energy?</p>',
@@ -102,6 +107,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0004es6i6dmo0fpq',
+        doi: '10.82259/cl3fz14dr0004es6i6dmo0fpq',
         title: 'How can we better manage energy storage?',
         type: 'PROBLEM',
         content: '<p>How can we better manage energy storage?</p>',
@@ -124,6 +130,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0005es6ibev2gv3n',
+        doi: '10.82259/cl3fz14dr0005es6ibev2gv3n',
         title: 'How can we improve the function and relience of construction materials?',
         type: 'PROBLEM',
         content: '<p>How can we improve the function and relience of construction materials?</p>',
@@ -146,6 +153,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0006es6i27b5fiic',
+        doi: '10.82259/cl3fz14dr0006es6i27b5fiic',
         title: 'How can we minimise threats to human health and wellbeing?',
         type: 'PROBLEM',
         content: '<p>How can we minimise threats to human health and wellbeing?</p>',
@@ -168,6 +176,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0007es6i9juifoql',
+        doi: '10.82259/cl3fz14dr0007es6i9juifoql',
         title: 'How do we improve the availability of fresh and safe drinking water?',
         type: 'PROBLEM',
         content: '<p>How do we improve the availability of fresh and safe drinking water?</p>',
@@ -190,6 +199,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0008es6i4uvfdis7',
+        doi: '10.82259/cl3fz14dr0008es6i4uvfdis7',
         title: 'How can we improve education?',
         type: 'PROBLEM',
         content: '<p>How can we improve education?</p>',
@@ -212,6 +222,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr0009es6i04880p8w',
+        doi: '10.82259/cl3fz14dr0009es6i04880p8w',
         title: 'How can we improve food supplies?',
         type: 'PROBLEM',
         content: '<p>How can we improve food supplies?</p>',
@@ -234,6 +245,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000aes6iedmfcc1o',
+        doi: '10.82259/cl3fz14dr000aes6iedmfcc1o',
         title: 'How can we better understand and mitigate the effects that environmental pollutants have on human health and wellbeing?',
         type: 'PROBLEM',
         content:
@@ -258,6 +270,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000bes6i5ki2anrc',
+        doi: '10.82259/cl3fz14dr000bes6i5ki2anrc',
         title: '"How can we better understand, prevent and reverse damage and threats to ecosystems and species?"',
         type: 'PROBLEM',
         content:
@@ -282,6 +295,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ces6ih5lg82y5',
+        doi: '10.82259/cl3fz14dr000ces6ih5lg82y5',
         title: '"How can we diagnose, prevent and treat human diseases?"',
         type: 'PROBLEM',
         content: '<p>"How can we diagnose, prevent and treat human diseases?"</p>',
@@ -304,6 +318,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000des6i95zc9iri',
+        doi: '10.82259/cl3fz14dr000des6i95zc9iri',
         title: 'Non Communicable Diseases (NCDs) are the major causes of mortality and morbidity globally.',
         type: 'PROBLEM',
         content: '<p>Non Communicable Diseases (NCDs) are the major causes of mortality and morbidity globally.</p>',
@@ -326,6 +341,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ees6i06eh7253',
+        doi: '10.82259/cl3fz14dr000ees6i06eh7253',
         title: 'How can we better understand and treat injuries?',
         type: 'PROBLEM',
         content: '<p>How can we better understand and treat injuries?</p>',
@@ -348,6 +364,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000fes6i6aowacj6',
+        doi: '10.82259/cl3fz14dr000fes6i6aowacj6',
         title: '"How can we improve the quality of life, and reduce the burden of disease, in older people?"',
         type: 'PROBLEM',
         content: '<p>"How can we improve the quality of life, and reduce the burden of disease, in older people?"</p>',
@@ -370,6 +387,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ges6i0s8m2838',
+        doi: '10.82259/cl3fz14dr000ges6i0s8m2838',
         title: 'How can we improve surgical and non-pharmaceutical medical techniques and practices?',
         type: 'PROBLEM',
         content: '<p>How can we improve surgical and non-pharmaceutical medical techniques and practices?</p>',
@@ -392,6 +410,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000hes6iaq8w4d09',
+        doi: '10.82259/cl3fz14dr000hes6iaq8w4d09',
         title: 'How can we improve pharmacological treatments and practices?',
         type: 'PROBLEM',
         content: '<p>How can we improve pharmacological treatments and practices?</p>',
@@ -414,6 +433,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ies6i8x4h404v',
+        doi: '10.82259/cl3fz14dr000ies6i8x4h404v',
         title: '"How can we better understand and hence diagnose, prevent and treat cancers: malignant growths or tumours resulting from an uncontrolled division of cells?"',
         type: 'PROBLEM',
         content:
@@ -442,6 +462,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000jes6i0rb14e0p',
+        doi: '10.82259/cl3fz14dr000jes6i0rb14e0p',
         title: '"How can we better understand, predict, treat and prevent infectious diseases and infections?"',
         type: 'PROBLEM',
         content:
@@ -465,6 +486,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000kes6i5r7u71qh',
+        doi: '10.82259/cl3fz14dr000kes6i5r7u71qh',
         title: '"How can we better understand, prevent and treat metabolic disorders?"',
         type: 'PROBLEM',
         content: '<p>"How can we better understand, prevent and treat metabolic disorders?"</p>',
@@ -487,6 +509,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000les6i1ftkgvjo',
+        doi: '10.82259/cl3fz14dr000les6i1ftkgvjo',
         title: '"How can we better recognise, prevent and improve behaviour that threatens harm to a person and others around them?"',
         type: 'PROBLEM',
         content:
@@ -511,6 +534,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000mes6icrlg58mi',
+        doi: '10.82259/cl3fz14dr000mes6icrlg58mi',
         title: 'How can we improve equalities in access to healthcare and treatments?',
         type: 'PROBLEM',
         content: '<p>How can we improve equalities in access to healthcare and treatments?</p>',
@@ -533,6 +557,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000nes6i7rnb9g08',
+        doi: '10.82259/cl3fz14dr000nes6i7rnb9g08',
         title: 'Mental health conditions are of rising concern due to their increased contribution to the global burden of disease.',
         type: 'PROBLEM',
         content:
@@ -557,6 +582,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000oes6i04zzar3n',
+        doi: '10.82259/cl3fz14dr000oes6i04zzar3n',
         title: 'Neurological diseases are one of the main contemporary challenges in advanced societies.',
         type: 'PROBLEM',
         content: '<p>Neurological diseases are one of the main contemporary challenges in advanced societies.</p>',
@@ -579,6 +605,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000pes6i3bq388zh',
+        doi: '10.82259/cl3fz14dr000pes6i3bq388zh',
         title: '"Severe acute respiratory syndrome coronavirus 2 or SARS-CoV-2, a novel coronavirus, is probably the most dramatic health and human crisis in living memory."',
         type: 'PROBLEM',
         content:
@@ -603,6 +630,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000qes6ifcvnca43',
+        doi: '10.82259/cl3fz14dr000qes6ifcvnca43',
         title: 'Obesity is a growing epidemic leading to worldwide public health concerns.',
         type: 'PROBLEM',
         content: '<p>Obesity is a growing epidemic leading to worldwide public health concerns.</p>',
@@ -625,6 +653,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000res6igk5j7qaf',
+        doi: '10.82259/cl3fz14dr000res6igk5j7qaf',
         title: 'Adverse drug reactions (ADRs) are an important cause of morbidity and mortality across the world and contribute to a significant economic burden on healthcare resources and community.',
         type: 'PROBLEM',
         content:
@@ -649,6 +678,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ses6ihwrk6umk',
+        doi: '10.82259/cl3fz14dr000ses6ihwrk6umk',
         title: 'Breast cancer is the second most cause of cancer related death among women all over the world.',
         type: 'PROBLEM',
         content:
@@ -672,6 +702,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000tes6ie58oa5nl',
+        doi: '10.82259/cl3fz14dr000tes6ie58oa5nl',
         title: 'Alzheimer’s disease (AD) is a progressive neurodegenerative disease that has emerged as the most prevalent form of late-life dementia in humans.',
         type: 'PROBLEM',
         content:
@@ -696,6 +727,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ues6if1wafsb9',
+        doi: '10.82259/cl3fz14dr000ues6if1wafsb9',
         title: '"Breast cancer is a clinically heterogeneous disease, and it is generally accepted that the different clinical courses of patients with histologically similar tumors are due to molecular differences among cancers."',
         type: 'PROBLEM',
         content:
@@ -720,6 +752,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000ves6i60x1a9rq',
+        doi: '10.82259/cl3fz14dr000ves6i60x1a9rq',
         title: '"The incidence of hepatocellular carcinoma (HCC) is increasing worldwide, largely due to hepatitis B virus (HBV), hepatitis C virus and liver cirrhosis."',
         type: 'PROBLEM',
         content:
@@ -744,6 +777,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000wes6i3mlj9tzu',
+        doi: '10.82259/cl3fz14dr000wes6i3mlj9tzu',
         title: 'Diabetes is a common disease worldwide with a multitude of complications and high mortality.',
         type: 'PROBLEM',
         content: '<p>Diabetes is a common disease worldwide with a multitude of complications and high mortality.</p>',
@@ -766,6 +800,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000xes6ie7ii1bl5',
+        doi: '10.82259/cl3fz14dr000xes6ie7ii1bl5',
         title: 'Glioblastoma (GB) represents the most common and aggressive form of malignant primary brain tumour associated with high rates of morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -790,6 +825,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dr000yes6i9vlw17lw',
+        doi: '10.82259/cl3fz14dr000yes6i9vlw17lw',
         title: 'Cardiovascular diseases (CVDs) are the main cause of morbidity and mortality in developed countries.',
         type: 'PROBLEM',
         content:
@@ -814,6 +850,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds000zes6ifj37escn',
+        doi: '10.82259/cl3fz14ds000zes6ifj37escn',
         title: 'Tuberculosis (TB) continues to be an important public health problem worldwide.',
         type: 'PROBLEM',
         content: '<p>Tuberculosis (TB) continues to be an important public health problem worldwide.</p>',
@@ -836,6 +873,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0010es6ibfw29ycg',
+        doi: '10.82259/cl3fz14ds0010es6ibfw29ycg',
         title: 'Colorectal cancer (CRC) is the third most commonly diagnosed malignancy and the second leading cause of cancer-related deaths worldwide.',
         type: 'PROBLEM',
         content:
@@ -860,6 +898,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0011es6ihmxq0976',
+        doi: '10.82259/cl3fz14ds0011es6ihmxq0976',
         title: 'Parkinson’s disease (PD) is one of the common disorders in the central nervous system.',
         type: 'PROBLEM',
         content: '<p>Parkinson’s disease (PD) is one of the common disorders in the central nervous system.</p>',
@@ -882,6 +921,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0012es6i48li8b2v',
+        doi: '10.82259/cl3fz14ds0012es6i48li8b2v',
         title: 'The rise and spread of antimicrobial drug resistance present one of the most pressing health issues of our days.',
         type: 'PROBLEM',
         content:
@@ -906,6 +946,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0013es6igsi6budb',
+        doi: '10.82259/cl3fz14ds0013es6igsi6budb',
         title: 'Non-small cell lung cancer (NSCLC) accounts for approximately 85% of lung cancer cases and remains the leading cause of cancer-related death.',
         type: 'PROBLEM',
         content:
@@ -930,6 +971,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0014es6i6b4kh82v',
+        doi: '10.82259/cl3fz14ds0014es6i6b4kh82v',
         title: '"Pancreatic adenocarcinoma is one of the deadliest malignancies worldwide, mainly due to frequent diagnosis at an advanced stage and its strong chemoresistance."',
         type: 'PROBLEM',
         content:
@@ -954,6 +996,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0015es6i6zpb2byb',
+        doi: '10.82259/cl3fz14ds0015es6i6zpb2byb',
         title: '"In the last decades, prostate cancer (PC) has become one of the most common cancer in Europe and in the United States."',
         type: 'PROBLEM',
         content:
@@ -978,6 +1021,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0016es6i5n41b81n',
+        doi: '10.82259/cl3fz14ds0016es6i5n41b81n',
         title: 'Nonalcoholic fatty liver disease (NAFLD) is represented by a spectrum of liver pathologies ranging from simple steatosis to nonalcoholic steatohepatitis (NASH).',
         type: 'PROBLEM',
         content:
@@ -1002,6 +1046,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0017es6ih8tehm28',
+        doi: '10.82259/cl3fz14ds0017es6ih8tehm28',
         title: 'Stroke is one of the major causes of morbidity and mortality throughout the world.',
         type: 'PROBLEM',
         content: '<p>Stroke is one of the major causes of morbidity and mortality throughout the world.</p>',
@@ -1024,6 +1069,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0018es6i5t3d227y',
+        doi: '10.82259/cl3fz14ds0018es6i5t3d227y',
         title: 'Human Papillomavirus Viruses (HPVs) are associated with the majority of human cervical and anal cancers and 10-30% of head and neck squamous carcinomas.',
         type: 'PROBLEM',
         content:
@@ -1048,6 +1094,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0019es6idy7p8vo1',
+        doi: '10.82259/cl3fz14ds0019es6idy7p8vo1',
         title: 'Multiple sclerosis (MS) is a T cell-mediated organ-specific inflammatory disease leading to central nervous system (CNS) demyelination.',
         type: 'PROBLEM',
         content:
@@ -1072,6 +1119,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001aes6i24c1bpkt',
+        doi: '10.82259/cl3fz14ds001aes6i24c1bpkt',
         title: '"Inflammatory bowel diseases (IBD), including Crohn\'s disease (CD) and ulcerative colitis (UC), are chronic, relapsing and destructive inflammatory disorders of the gastrointestinal tract which can lead to organ damage and impair quality of life."',
         type: 'PROBLEM',
         content:
@@ -1096,6 +1144,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001bes6i7jx76q3n',
+        doi: '10.82259/cl3fz14ds001bes6i7jx76q3n',
         title: 'Chronic obstructive pulmonary disease (COPD) represents a huge epidemiological burden and is associated with a high incidence of morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -1120,6 +1169,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ces6ib721hff9',
+        doi: '10.82259/cl3fz14ds001ces6ib721hff9',
         title: 'Osteoarthritis (OA) is designated the 11th highest contributor of 291 diseases of global disability and the most common cause of chronic disability in elderly people.',
         type: 'PROBLEM',
         content:
@@ -1144,6 +1194,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001des6iceri3onz',
+        doi: '10.82259/cl3fz14ds001des6iceri3onz',
         title: '"Chronic kidney disease (CKD) represents a growing public health problem associated with loss of kidney function and cardiovascular disease (CVD), the main leading cause of morbidity and mortality in CKD."',
         type: 'PROBLEM',
         content:
@@ -1168,6 +1219,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ees6i7n7igotk',
+        doi: '10.82259/cl3fz14ds001ees6i7n7igotk',
         title: 'Rheumatoid arthritis (RA) is a common chronic inflammatory disease affecting many tissues and resulting in substantial morbidity and increased mortality.',
         type: 'PROBLEM',
         content:
@@ -1192,6 +1244,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001fes6i2uqv0zhu',
+        doi: '10.82259/cl3fz14ds001fes6i2uqv0zhu',
         title: '"Heart failure (HF) is among the most common causes of hospitalization, and its incidence will likely increase in an aging population of “survivors” "',
         type: 'PROBLEM',
         content:
@@ -1216,6 +1269,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ges6i71z4h2g0',
+        doi: '10.82259/cl3fz14ds001ges6i71z4h2g0',
         title: '"Psoriasis is a common chronic inflammatory skin disease with a complex pathogenesis consisting of a genetic component, immune dysfunction, and environmental factors."',
         type: 'PROBLEM',
         content:
@@ -1240,6 +1294,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001hes6i3ghjensw',
+        doi: '10.82259/cl3fz14ds001hes6i3ghjensw',
         title: '"Acute myeloid leukemia (AML) is a heterogeneous disease with variable presentation, molecular phenotype, and cytogenetic abnormalities and has seen very little improvement in patient survival over the last few decades."',
         type: 'PROBLEM',
         content:
@@ -1264,6 +1319,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ies6i5ac949l1',
+        doi: '10.82259/cl3fz14ds001ies6i5ac949l1',
         title: '"Malaria is the world’s most prevalent mosquito-borne disease caused by Plasmodium parasites, and responsible for over half a million deaths per year."',
         type: 'PROBLEM',
         content:
@@ -1288,6 +1344,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001jes6ihw7v8rda',
+        doi: '10.82259/cl3fz14ds001jes6ihw7v8rda',
         title: '"Multiple myeloma (MM) is a plasma-cell malignancy characterized by marked epidemiological, biological, and clinical heterogeneity."',
         type: 'PROBLEM',
         content:
@@ -1312,6 +1369,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001kes6ici9d0qir',
+        doi: '10.82259/cl3fz14ds001kes6ici9d0qir',
         title: 'Dengue is one of the most important mosquito-borne infections accounting for severe morbidity and mortality worldwide.',
         type: 'PROBLEM',
         content:
@@ -1336,6 +1394,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001les6icjnh4qz0',
+        doi: '10.82259/cl3fz14ds001les6icjnh4qz0',
         title: 'Sepsis is a leading cause of intensive care unit (ICU) admissions worldwide and a major cause of morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -1360,6 +1419,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001mes6i73yd31uq',
+        doi: '10.82259/cl3fz14ds001mes6i73yd31uq',
         title: '"Asthma is a complex disease, involving many different allergic, inflammatory, and environmental components."',
         type: 'PROBLEM',
         content:
@@ -1384,6 +1444,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001nes6i75vh29ql',
+        doi: '10.82259/cl3fz14ds001nes6i75vh29ql',
         title: '"Polycystic ovary syndrome (PCOS) is one of the most common reproductive endocrine disorders among women of reproductive age, with a variety of complications and consequences mostly due to hyperandrogenism and insulin resistance (IR)."',
         type: 'PROBLEM',
         content:
@@ -1408,6 +1469,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001oes6iez6jb4p6',
+        doi: '10.82259/cl3fz14ds001oes6iez6jb4p6',
         title: '"Autism spectrum disorders (ASDs) are common yet complex neurodevelopmental disorders, characterized by social, communication and behavioral deficits."',
         type: 'PROBLEM',
         content:
@@ -1432,6 +1494,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001pes6i16lubpez',
+        doi: '10.82259/cl3fz14ds001pes6i16lubpez',
         title: 'Systemic lupus erythematosus (SLE) is a chronic systemic autoimmune disease.',
         type: 'PROBLEM',
         content: '<p>Systemic lupus erythematosus (SLE) is a chronic systemic autoimmune disease.</p>',
@@ -1454,6 +1517,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001qes6ie47zbf7t',
+        doi: '10.82259/cl3fz14ds001qes6ie47zbf7t',
         title: '"Infection with the human immunodeficiency virus (HIV), the causative agent of acquired immune deficiency syndrome (AIDS), is a major global health problem."',
         type: 'PROBLEM',
         content:
@@ -1478,6 +1542,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001res6i8k3hb42v',
+        doi: '10.82259/cl3fz14ds001res6i8k3hb42v',
         title: 'Neurological dysfunctions are the most impactful and persistent consequences of traumatic brain injury (TBI).',
         type: 'PROBLEM',
         content:
@@ -1502,6 +1567,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ses6i46hb5ryt',
+        doi: '10.82259/cl3fz14ds001ses6i46hb5ryt',
         title: '"Obstructive sleep apnea syndrome (OSAS) is described as repetitive obstructions of the upper airways during sleep, causing concomitant episodes of systemic hypoxia and associated cardiovascular and metabolic pathologies."',
         type: 'PROBLEM',
         content:
@@ -1526,6 +1592,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001tes6i17dzd6g4',
+        doi: '10.82259/cl3fz14ds001tes6i17dzd6g4',
         title: 'Triple_negative breast cancer (TNBC) is a highly heterogeneous disease.',
         type: 'PROBLEM',
         content: '<p>Triple_negative breast cancer (TNBC) is a highly heterogeneous disease.</p>',
@@ -1548,6 +1615,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ues6i1aczfuw8',
+        doi: '10.82259/cl3fz14ds001ues6i1aczfuw8',
         title: 'Leishmania infection causes considerable human morbidity and may develop into a deadly visceral form in endemic regions.',
         type: 'PROBLEM',
         content:
@@ -1572,6 +1640,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001ves6ihglfestl',
+        doi: '10.82259/cl3fz14ds001ves6ihglfestl',
         title: 'Major depressive disorder (MDD) is a leading cause of disability and a significant cause of mortality worldwide.',
         type: 'PROBLEM',
         content:
@@ -1596,6 +1665,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001wes6i3azs8knp',
+        doi: '10.82259/cl3fz14ds001wes6i3azs8knp',
         title: '"Osteoporosis has long been recognized as a major cause of morbidity and mortality in the elderly, especially in women."',
         type: 'PROBLEM',
         content:
@@ -1620,6 +1690,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001xes6ihpkm087u',
+        doi: '10.82259/cl3fz14ds001xes6ihpkm087u',
         title: '"Preeclampsia (PE), a hypertensive disease of pregnancy, is a leading cause of fetal and maternal morbidity/mortality."',
         type: 'PROBLEM',
         content:
@@ -1644,6 +1715,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001yes6i4w0g95cb',
+        doi: '10.82259/cl3fz14ds001yes6i4w0g95cb',
         title: 'Melanoma is a cutaneous cancer with an increasing worldwide prevalence and high mortality due to unresectable or metastatic stages.',
         type: 'PROBLEM',
         content:
@@ -1668,6 +1740,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds001zes6iey2wfmo7',
+        doi: '10.82259/cl3fz14ds001zes6iey2wfmo7',
         title: '"recent decades, fungal infections have incredibly increased with Candida genus as the major cause of morbidity and mortality in hospitalized and immunocompromised patients."',
         type: 'PROBLEM',
         content:
@@ -1692,6 +1765,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0020es6ib6v5ce2d',
+        doi: '10.82259/cl3fz14ds0020es6ib6v5ce2d',
         title: 'Heavy metal contamination resulting from anthropogenic activities is one of the major environmental problems in the modern world.',
         type: 'PROBLEM',
         content:
@@ -1716,6 +1790,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0021es6i31twefry',
+        doi: '10.82259/cl3fz14ds0021es6i31twefry',
         title: 'Gastric adenocarcinoma is an important and common malignant disease.',
         type: 'PROBLEM',
         content: '<p>Gastric adenocarcinoma is an important and common malignant disease.</p>',
@@ -1738,6 +1813,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0022es6i6eobcmt8',
+        doi: '10.82259/cl3fz14ds0022es6i6eobcmt8',
         title: '"Human cytomegalovirus (CMV), a ubiquitous human pathogen, is a leading cause of congenital infections and represents a serious health risk for the immunosuppressed patient."',
         type: 'PROBLEM',
         content:
@@ -1762,6 +1838,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0023es6i2iwmaiqy',
+        doi: '10.82259/cl3fz14ds0023es6i2iwmaiqy',
         title: '"Renal cell carcinoma (RCC) represents 2% to 3% of human cancers and is aggressive, with metastatic capability."',
         type: 'PROBLEM',
         content:
@@ -1786,6 +1863,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0024es6ie3ou8yxu',
+        doi: '10.82259/cl3fz14ds0024es6ie3ou8yxu',
         title: 'Osteosarcoma is one of the most common primary malignancies in bones and is characterized by high metastatic rates.',
         type: 'PROBLEM',
         content:
@@ -1810,6 +1888,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0025es6iexis1awo',
+        doi: '10.82259/cl3fz14ds0025es6iexis1awo',
         title: 'Methicillin-resistant Staphylococcus aureus (MRSA) is a major cause of nosocomial and community-acquired infection worldwide.',
         type: 'PROBLEM',
         content:
@@ -1834,6 +1913,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0026es6i9uwuh0yk',
+        doi: '10.82259/cl3fz14ds0026es6i9uwuh0yk',
         title: 'Amyotrophic lateral sclerosis (ALS) is a devastating motor neuron degenerative disease whose etiology and pathogenesis remain poorly understood.',
         type: 'PROBLEM',
         content:
@@ -1858,6 +1938,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0027es6i7rozfxpv',
+        doi: '10.82259/cl3fz14ds0027es6i7rozfxpv',
         title: '"Retinal degeneration caused blindness, such as age-related macular degeneration (AMD), diabetic retinopathy (DR), retinitis pigmentosa (RP) and retinal detachment, is a major problem in clinical ophthalmology."',
         type: 'PROBLEM',
         content:
@@ -1882,6 +1963,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0028es6i60pk54vk',
+        doi: '10.82259/cl3fz14ds0028es6i60pk54vk',
         title: 'Epilepsy is a severe brain disorder affecting numerous patients.',
         type: 'PROBLEM',
         content: '<p>Epilepsy is a severe brain disorder affecting numerous patients.</p>',
@@ -1904,6 +1986,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds0029es6i4n0c12ac',
+        doi: '10.82259/cl3fz14ds0029es6i4n0c12ac',
         title: '"Among the various types of interstitial lung diseases, idiopathic pulmonary fibrosis (IPF) is the most common disorder and has a poor prognosis and a limited response to pharmacological treatment."',
         type: 'PROBLEM',
         content:
@@ -1928,6 +2011,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002aes6ihvmc24so',
+        doi: '10.82259/cl3fz14ds002aes6ihvmc24so',
         title: 'Attention deficit and hyperactivity disorder (ADHD) has a high prevalence and is frequently associated with comorbid illnesses.',
         type: 'PROBLEM',
         content:
@@ -1952,6 +2036,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002bes6i8asd9alv',
+        doi: '10.82259/cl3fz14ds002bes6i8asd9alv',
         title: 'Drug resistance remains a major obstacle to successful cancer treatment.',
         type: 'PROBLEM',
         content: '<p>Drug resistance remains a major obstacle to successful cancer treatment.</p>',
@@ -1974,6 +2059,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002ces6iebamdxoy',
+        doi: '10.82259/cl3fz14ds002ces6iebamdxoy',
         title: 'The human pathogen Helicobacter pylori colonises approximately half of the global population and infectioncan lead to a range of gastric diseases.',
         type: 'PROBLEM',
         content:
@@ -1998,6 +2084,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002des6i7r5aeja4',
+        doi: '10.82259/cl3fz14ds002des6i7r5aeja4',
         title: '"The incidence of thyroid cancer (TC), a rare malignancy, has strongly risen in recent decades."',
         type: 'PROBLEM',
         content:
@@ -2021,6 +2108,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002ees6i35901rdk',
+        doi: '10.82259/cl3fz14ds002ees6i35901rdk',
         title: 'Periodontal disease is multifaceted in nature.',
         type: 'PROBLEM',
         content: '<p>Periodontal disease is multifaceted in nature.</p>',
@@ -2043,6 +2131,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002fes6i8zmh6lwl',
+        doi: '10.82259/cl3fz14ds002fes6i8zmh6lwl',
         title: '"Tobacco smoking poses a great global health burden to > 1 billion smokers and those subject to passive smoking, and is well known to be a causal factor in at least 12 types of cancer."',
         type: 'PROBLEM',
         content:
@@ -2067,6 +2156,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002ges6iaddhgbmm',
+        doi: '10.82259/cl3fz14ds002ges6iaddhgbmm',
         title: '"The metabolic syndrome is a constellation of risk factors including dyslipidemia, dysglycemia, hypertension, a pro_inflammatory state, and a prothrombotic state."',
         type: 'PROBLEM',
         content:
@@ -2091,6 +2181,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002hes6ib6a169fm',
+        doi: '10.82259/cl3fz14ds002hes6ib6a169fm',
         title: '"Sickle Cell disease (SCD) is a chronic, inherited hemoglobin disorder associated with lifelong severe and life-threatening complications in neonates, pediatrics, and transitioning young adults (1)."',
         type: 'PROBLEM',
         content:
@@ -2115,6 +2206,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002ies6ifhwygjto',
+        doi: '10.82259/cl3fz14ds002ies6ifhwygjto',
         title: 'Graft versus host disease (GVHD) is a severe complication after allogenic hematopoietic cell transplantation (HSCT).',
         type: 'PROBLEM',
         content:
@@ -2139,6 +2231,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002jes6i74qwgmus',
+        doi: '10.82259/cl3fz14ds002jes6i74qwgmus',
         title: '"Arsenic is a Group I human carcinogen, and chronic arsenic exposure through drinking water is a major threat to human population."',
         type: 'PROBLEM',
         content:
@@ -2163,6 +2256,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002kes6i32ardw43',
+        doi: '10.82259/cl3fz14ds002kes6i32ardw43',
         title: 'Pulmonary arterial hypertension is a progressive and debilitating disorder with an associated high morbidity and mortality rate.',
         type: 'PROBLEM',
         content:
@@ -2187,6 +2281,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002les6ifxp19zpi',
+        doi: '10.82259/cl3fz14ds002les6ifxp19zpi',
         title: 'Prion diseases are fatal neurodegenerative disorders associated with the conversion of cellular prion protein (PrPC) into its aberrant infectious form (PrPSc).',
         type: 'PROBLEM',
         content:
@@ -2211,6 +2306,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002mes6iazz4cy1w',
+        doi: '10.82259/cl3fz14ds002mes6iazz4cy1w',
         title: 'Bladder cancer (BC) is among the most common malignancies in the world and a relevant cause of cancer mortality.',
         type: 'PROBLEM',
         content:
@@ -2235,6 +2331,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002nes6ia60ccvko',
+        doi: '10.82259/cl3fz14ds002nes6ia60ccvko',
         title: 'Chronic myeloid leukemia (CML) is a myeloproliferative disorder with clonal proliferation of all myeloid cell lines.',
         type: 'PROBLEM',
         content:
@@ -2259,6 +2356,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002oes6i6x1q3zfp',
+        doi: '10.82259/cl3fz14ds002oes6i6x1q3zfp',
         title: '"Atrial fibrillation (AF) is the most common arrhythmia encountered in clinical practice, with a prevalence that increases alongside the ageing population worldwide."',
         type: 'PROBLEM',
         content:
@@ -2283,6 +2381,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002pes6ihpxk4qh3',
+        doi: '10.82259/cl3fz14ds002pes6ihpxk4qh3',
         title: "Huntington's disease (HD) is a fatal neurodegenerative disorder that is caused by a CAG repeat expansion encoding a polyglutamine tract in the huntingtin (htt) gene.",
         type: 'PROBLEM',
         content:
@@ -2307,6 +2406,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002qes6ibs9j0r82',
+        doi: '10.82259/cl3fz14ds002qes6ibs9j0r82',
         title: 'Duchenne muscular dystrophy (DMD) is a fatal muscle wasting disorder caused by mutations in the dystrophin gene.',
         type: 'PROBLEM',
         content:
@@ -2331,6 +2431,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ds002res6i94dz2034',
+        doi: '10.82259/cl3fz14ds002res6i94dz2034',
         title: '"Spinal cord injury (SCI) is a condition that puts the patient’s life at risk in the acute phase and, during the chronic stage, results in permanent deficits in motor, sensory and autonomic functions."',
         type: 'PROBLEM',
         content:
@@ -2355,6 +2456,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002ses6ie5mvgmiv',
+        doi: '10.82259/cl3fz14dt002ses6ie5mvgmiv',
         title: 'Respiratory syncytial virus (RSV) causes significant burden of disease during infancy and childhood.',
         type: 'PROBLEM',
         content:
@@ -2379,6 +2481,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002tes6ie2h28qdm',
+        doi: '10.82259/cl3fz14dt002tes6ie2h28qdm',
         title: '"Systemic sclerosis (SSc) is a connective tissue disease with a poor prognosis and disease-related pulmonary fibrosis, pulmonary arterial hypertension (PAH) and cardiac involvement accounted for most deaths (1)."',
         type: 'PROBLEM',
         content:
@@ -2403,6 +2506,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002ues6ifgcbaees',
+        doi: '10.82259/cl3fz14dt002ues6ifgcbaees',
         title: '"Zika virus (ZIKV), a member of the Flaviviridae family, was brought into the spotlight due to its widespread and increased pathogenicity, including Guillain-Barré syndrome and microcephaly."',
         type: 'PROBLEM',
         content:
@@ -2427,6 +2531,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002ves6ibrzb57o7',
+        doi: '10.82259/cl3fz14dt002ves6ibrzb57o7',
         title: 'Endometriosis is a common gynecological disease.',
         type: 'PROBLEM',
         content: '<p>Endometriosis is a common gynecological disease.</p>',
@@ -2449,6 +2554,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002wes6i13xs3c0s',
+        doi: '10.82259/cl3fz14dt002wes6i13xs3c0s',
         title: '"Schizophrenia is a chronic and devastating brain disorder with ongoing cognitive, behavioral, and emotional deteriorated functions."',
         type: 'PROBLEM',
         content:
@@ -2473,6 +2579,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002xes6i2r7i275a',
+        doi: '10.82259/cl3fz14dt002xes6i2r7i275a',
         title: '"Air pollution has emerged as a significant health, environmental, economic, and social problem all over the world."',
         type: 'PROBLEM',
         content:
@@ -2497,6 +2604,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002yes6i6gmabvd2',
+        doi: '10.82259/cl3fz14dt002yes6i6gmabvd2',
         title: 'Plastic and microplastic pollution is an environmental and societal concern.',
         type: 'PROBLEM',
         content: '<p>Plastic and microplastic pollution is an environmental and societal concern.</p>',
@@ -2519,6 +2627,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt002zes6ieqmy7i7z',
+        doi: '10.82259/cl3fz14dt002zes6ieqmy7i7z',
         title: 'Opioid abuse has become a major public health crisis that affects millions of individuals across the globe.',
         type: 'PROBLEM',
         content:
@@ -2543,6 +2652,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0030es6ic4f3g0ov',
+        doi: '10.82259/cl3fz14dt0030es6ic4f3g0ov',
         title: 'Low back pain (LBP) has become a major public health problem worldwide although the burden and underlying causes differ across locations and demographic groups.',
         type: 'PROBLEM',
         content:
@@ -2567,6 +2677,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0031es6igbfqf8rq',
+        doi: '10.82259/cl3fz14dt0031es6igbfqf8rq',
         title: '"Chagas’ disease, which is caused by the protozoan Trypanosoma cruzi affects approximately 18 million people in Latin America and still remains as a public health problem."',
         type: 'PROBLEM',
         content:
@@ -2591,6 +2702,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0032es6i8vafal85',
+        doi: '10.82259/cl3fz14dt0032es6i8vafal85',
         title: '"Pseudomonas aeruginosa is an important bacterial pathogen, particularly as a cause of infections in hospitalised patients, immunocompromised hosts and patients with cystic fibrosis."',
         type: 'PROBLEM',
         content:
@@ -2615,6 +2727,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0033es6icmptbznj',
+        doi: '10.82259/cl3fz14dt0033es6icmptbznj',
         title: '"Type 1 Diabetes Mellitus results from an autoimmune destruction of the pancreatic beta cells, which produce insulin."',
         type: 'PROBLEM',
         content:
@@ -2639,6 +2752,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0034es6iff8ne2nd',
+        doi: '10.82259/cl3fz14dt0034es6iff8ne2nd',
         title: 'Epstein_Barr virus (EBV) is a human tumor virus and is etiologically linked to various malignancies.',
         type: 'PROBLEM',
         content:
@@ -2663,6 +2777,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0035es6ia63a18x4',
+        doi: '10.82259/cl3fz14dt0035es6ia63a18x4',
         title: 'Neurofibromatosis type 1 (NF1) is an inherited disorder in which affected individuals develop both benign and malignant tumours at an increased frequency.',
         type: 'PROBLEM',
         content:
@@ -2687,6 +2802,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0036es6ia6t8f6xi',
+        doi: '10.82259/cl3fz14dt0036es6ia6t8f6xi',
         title: 'Atopic dermatitis (AD) is a chronic inflammatory skin disease characterized by infiltration of activated T cells.',
         type: 'PROBLEM',
         content:
@@ -2711,6 +2827,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0037es6i1k725cyn',
+        doi: '10.82259/cl3fz14dt0037es6i1k725cyn',
         title: 'Clostridioides difficile infection (CDI) is a leading cause of hospital-associated antibiotic-related diarrhea and deaths worldwide.',
         type: 'PROBLEM',
         content:
@@ -2735,6 +2852,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0038es6ig2bpbtvs',
+        doi: '10.82259/cl3fz14dt0038es6ig2bpbtvs',
         title: '"Suicide is a global public health burden, causing around 800,000 deaths annually along with many more attempts (World Health Organization 2019)."',
         type: 'PROBLEM',
         content:
@@ -2759,6 +2877,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0039es6i2rm9bp10',
+        doi: '10.82259/cl3fz14dt0039es6i2rm9bp10',
         title: '"Human T_cell lymphotropic virus type 1 (HTLV_1) is the etiologic agent of adult T_cell leukemia/lymphoma (ATLL), HTLV_1_associated myelopathy/tropical spastic paraparesis (HAM/TSP), infective dermatitis associated with HTLV_1 (IDH), and various other clinical conditions."',
         type: 'PROBLEM',
         content:
@@ -2783,6 +2902,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003aes6ia7suh9o0',
+        doi: '10.82259/cl3fz14dt003aes6ia7suh9o0',
         title: 'Sjögren’s syndrome (SS) is a chronic autoimmune disease with complex and diverse clinical manifestations.',
         type: 'PROBLEM',
         content:
@@ -2807,6 +2927,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003bes6ibwc74nvp',
+        doi: '10.82259/cl3fz14dt003bes6ibwc74nvp',
         title: 'Oesophageal squamous cell carcinoma (ESCC) is one of the most malignant cancers worldwide.',
         type: 'PROBLEM',
         content: '<p>Oesophageal squamous cell carcinoma (ESCC) is one of the most malignant cancers worldwide.</p>',
@@ -2829,6 +2950,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ces6i6ru69bfj',
+        doi: '10.82259/cl3fz14dt003ces6i6ru69bfj',
         title: 'Viral hepatitis is a major public health problem occurring endemically in all parts of the world.',
         type: 'PROBLEM',
         content:
@@ -2853,6 +2975,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003des6if2cu5ywc',
+        doi: '10.82259/cl3fz14dt003des6if2cu5ywc',
         title: 'Cystic fibrosis (CF) is a multi-system disease resulting from mutations in the CFTR gene.',
         type: 'PROBLEM',
         content: '<p>Cystic fibrosis (CF) is a multi-system disease resulting from mutations in the CFTR gene.</p>',
@@ -2875,6 +2998,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ees6ifgj5cn48',
+        doi: '10.82259/cl3fz14dt003ees6ifgj5cn48',
         title: 'Alcohol dependence and abuse are major public health problems throughout the world.',
         type: 'PROBLEM',
         content: '<p>Alcohol dependence and abuse are major public health problems throughout the world.</p>',
@@ -2897,6 +3021,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003fes6ig8wu1h27',
+        doi: '10.82259/cl3fz14dt003fes6ig8wu1h27',
         title: '"Irritable bowel syndrome (IBS) remains an incompletely understood, common syndrome with significant unmet medical needs."',
         type: 'PROBLEM',
         content:
@@ -2921,6 +3046,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ges6i9ykh8v9d',
+        doi: '10.82259/cl3fz14dt003ges6i9ykh8v9d',
         title: 'Gastrointestinal stromal tumors (GIST) are the most common mesenchymal tumors of the digestive tract.',
         type: 'PROBLEM',
         content:
@@ -2945,6 +3071,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003hes6i0x14fdpg',
+        doi: '10.82259/cl3fz14dt003hes6i0x14fdpg',
         title: '"Acute pancreatitis is a common gastrointestinal disease leading to hospital admission, and its incidence continues to rise."',
         type: 'PROBLEM',
         content:
@@ -2969,6 +3096,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ies6i0ftcaa97',
+        doi: '10.82259/cl3fz14dt003ies6i0ftcaa97',
         title: '"Acute respiratory distress syndrome (ARDS) causes a heterogeneous lung injury and remains a serious medical problem, with one of the only treatments being supportive care in the form of mechanical ventilation."',
         type: 'PROBLEM',
         content:
@@ -2993,6 +3121,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003jes6i3cwghfiw',
+        doi: '10.82259/cl3fz14dt003jes6i3cwghfiw',
         title: 'Sudden cardiac death (SCD) is a major public health issue accounting for 15–20% of all-cause deaths.',
         type: 'PROBLEM',
         content:
@@ -3017,6 +3146,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003kes6i8jlbf61o',
+        doi: '10.82259/cl3fz14dt003kes6i8jlbf61o',
         title: '"Epithelial ovarian cancer (EOC) is one of the major increasing lethal malignancies of the gynecological tract, mostly due to delayed diagnosis and chemoresistance, as well as its very heterogeneous genetic makeup."',
         type: 'PROBLEM',
         content:
@@ -3041,6 +3171,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003les6i1x0d7u8f',
+        doi: '10.82259/cl3fz14dt003les6i1x0d7u8f',
         title: '"Falls are serious and relatively common, and can result in significant morbidity and mortality for older adults."',
         type: 'PROBLEM',
         content:
@@ -3065,6 +3196,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003mes6i89pz4lt6',
+        doi: '10.82259/cl3fz14dt003mes6i89pz4lt6',
         title: 'Basal cell carcinomas (BCCs) are the most common form of skin cancers with high and increasing incidence rates.',
         type: 'PROBLEM',
         content:
@@ -3089,6 +3221,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003nes6ic4tndz3m',
+        doi: '10.82259/cl3fz14dt003nes6ic4tndz3m',
         title: 'Celiac disease (CD) is an immune-mediated disorder induced by the ingestion of gluten in genetically susceptible individuals.',
         type: 'PROBLEM',
         content:
@@ -3113,6 +3246,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003oes6i2kvabyr8',
+        doi: '10.82259/cl3fz14dt003oes6i2kvabyr8',
         title: 'Sarcoidosis has been a disease of puzzling occurrence and clinical course.',
         type: 'PROBLEM',
         content: '<p>Sarcoidosis has been a disease of puzzling occurrence and clinical course.</p>',
@@ -3135,6 +3269,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003pes6icnk0fis3',
+        doi: '10.82259/cl3fz14dt003pes6icnk0fis3',
         title: '"Excessive and unsafe usage of pesticides lead to adverse effect on human beings, plants, animals and aquatic life."',
         type: 'PROBLEM',
         content:
@@ -3159,6 +3294,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003qes6if3p53o0w',
+        doi: '10.82259/cl3fz14dt003qes6if3p53o0w',
         title: '"Migraine is a diseases characterized with severe headaches, with neurological and systemic findings."',
         type: 'PROBLEM',
         content:
@@ -3183,6 +3319,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003res6ihrmcglss',
+        doi: '10.82259/cl3fz14dt003res6ihrmcglss',
         title: 'Postnatal depression is an important complication of child-bearing and can have long-term  adverse consequences for both mother and child.',
         type: 'PROBLEM',
         content:
@@ -3207,6 +3344,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ses6id9wnhae7',
+        doi: '10.82259/cl3fz14dt003ses6id9wnhae7',
         title: 'Climate change is the major growing concern where greenhouse gas emissions have a major role.',
         type: 'PROBLEM',
         content: '<p>Climate change is the major growing concern where greenhouse gas emissions have a major role.</p>',
@@ -3229,6 +3367,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003tes6i1nmpbub9',
+        doi: '10.82259/cl3fz14dt003tes6i1nmpbub9',
         title: 'Foot ulcers are a common complication of diabetes and are associated with an increase in lower limb amputation and death.',
         type: 'PROBLEM',
         content:
@@ -3253,6 +3392,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ues6i8apl9zcg',
+        doi: '10.82259/cl3fz14dt003ues6i8apl9zcg',
         title: '"Malignant pleural mesothelioma (MPM) is an uncommon, almost universally fatal, asbestos_induced malignancy."',
         type: 'PROBLEM',
         content:
@@ -3277,6 +3417,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003ves6i4byb4i0q',
+        doi: '10.82259/cl3fz14dt003ves6i4byb4i0q',
         title: '"Chronic pain is common, often widespread and has a substantial impact on health and quality of life."',
         type: 'PROBLEM',
         content:
@@ -3301,6 +3442,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003wes6i6zvvgamq',
+        doi: '10.82259/cl3fz14dt003wes6i6zvvgamq',
         title: 'Intimate partner violence (IPV) is a global health problem impacting millions of women each year.',
         type: 'PROBLEM',
         content:
@@ -3325,6 +3467,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003xes6i1its86s5',
+        doi: '10.82259/cl3fz14dt003xes6i1its86s5',
         title: '"Invasive species represent one of the most important threats to biodiversity worldwide, with consequences for ecosystem functioning and the delivery of important ecological services to society."',
         type: 'PROBLEM',
         content:
@@ -3349,6 +3492,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003yes6igr0yexvr',
+        doi: '10.82259/cl3fz14dt003yes6igr0yexvr',
         title: '"Posttraumatic stress disorder (PTSD) is a highly prevalent, debilitating mental health condition."',
         type: 'PROBLEM',
         content:
@@ -3373,6 +3517,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt003zes6i4c6q25e9',
+        doi: '10.82259/cl3fz14dt003zes6i4c6q25e9',
         title: 'Community-acquired pneumonia (CAP) is a significant clinical and public health problem.',
         type: 'PROBLEM',
         content: '<p>Community-acquired pneumonia (CAP) is a significant clinical and public health problem.</p>',
@@ -3395,6 +3540,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0040es6if2839jn7',
+        doi: '10.82259/cl3fz14dt0040es6if2839jn7',
         title: 'Atherosclerosis is a disease of the arterial wall that is modulated by the inflammatory balance.',
         type: 'PROBLEM',
         content:
@@ -3418,6 +3564,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0041es6i1gvb930e',
+        doi: '10.82259/cl3fz14dt0041es6i1gvb930e',
         title: '"Gestational diabetes mellitus (GDM) is associated with pregnancy complications and fetal complications, as well as long-term health consequences for pregnant people and their offspring."',
         type: 'PROBLEM',
         content:
@@ -3442,6 +3589,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0042es6i5jjlejpx',
+        doi: '10.82259/cl3fz14dt0042es6i5jjlejpx',
         title: 'Neuroendocrine tumors (NET) are a very heterogeneous group of neoplasms; in recent years we have seen an increase in their incidence (3.',
         type: 'PROBLEM',
         content:
@@ -3466,6 +3614,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0043es6i2mgc0rlg',
+        doi: '10.82259/cl3fz14dt0043es6i2mgc0rlg',
         title: '"Pulmonary embolism (PE) and deep vein thrombosis (DVT), the two clinical manifestations of venous thromboembolism (VTE), constitute a major global burden of cardiovascular disease."',
         type: 'PROBLEM',
         content:
@@ -3490,6 +3639,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0044es6ihsmncilf',
+        doi: '10.82259/cl3fz14dt0044es6ihsmncilf',
         title: 'Oxidative stress (when free radical generation exceeds antioxidant defense) occurs in many human diseases and makes significant contributions to their pathogenesis.',
         type: 'PROBLEM',
         content:
@@ -3514,6 +3664,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0045es6i9ujd00mc',
+        doi: '10.82259/cl3fz14dt0045es6i9ujd00mc',
         title: 'Schistosomiasis is an important parasitic disease that causes major host morbidity and mortality in endemic areas.',
         type: 'PROBLEM',
         content:
@@ -3538,6 +3689,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0046es6i1odbetja',
+        doi: '10.82259/cl3fz14dt0046es6i1odbetja',
         title: 'Familial hypercholesterolemia (FH) is among the most common single-gene diseases and is due to mutations of the low-density lipoprotein (LDL) receptor gene.',
         type: 'PROBLEM',
         content:
@@ -3562,6 +3714,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0047es6ier2y5t04',
+        doi: '10.82259/cl3fz14dt0047es6ier2y5t04',
         title: 'Infants born too early are of public health concern since complications associated with preterm birth (PTB) are the leading cause of children’s mortality and a major cause of morbidity and disability.',
         type: 'PROBLEM',
         content:
@@ -3586,6 +3739,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0048es6i4ezr0hsk',
+        doi: '10.82259/cl3fz14dt0048es6i4ezr0hsk',
         title: '"Cancer patients are particularly vulnerable to depression and anxiety, with fatigue as the most prevalent symptom of those undergoing treatment."',
         type: 'PROBLEM',
         content:
@@ -3614,6 +3768,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt0049es6i03za75il',
+        doi: '10.82259/cl3fz14dt0049es6i03za75il',
         title: 'The dissemination of tumor cells (metastasis) from the primary tumor is the principal cause of death in cancer patients.',
         type: 'PROBLEM',
         content:
@@ -3638,6 +3793,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004aes6i95dg38m0',
+        doi: '10.82259/cl3fz14dt004aes6i95dg38m0',
         title: 'Cadmium (Cd) is one of the most toxic heavy metals and inhibits physiological processes of plants.',
         type: 'PROBLEM',
         content:
@@ -3662,6 +3818,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004bes6i6nw1hkci',
+        doi: '10.82259/cl3fz14dt004bes6i6nw1hkci',
         title: '"Head and neck cancer is particular due to its infiltrative nature and lymphatic extension, with multidisciplinary treatment."',
         type: 'PROBLEM',
         content:
@@ -3686,6 +3843,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004ces6i5d94ezur',
+        doi: '10.82259/cl3fz14dt004ces6i5d94ezur',
         title: 'Cholangiocarcinoma is a devastating cancer of biliary origin with limited treatment options.',
         type: 'PROBLEM',
         content: '<p>Cholangiocarcinoma is a devastating cancer of biliary origin with limited treatment options.</p>',
@@ -3708,6 +3866,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004des6ian2vbdr7',
+        doi: '10.82259/cl3fz14dt004des6ian2vbdr7',
         title: 'Urinary tract infections (UTIs) are among the most commonly encountered bacterial infections.',
         type: 'PROBLEM',
         content: '<p>Urinary tract infections (UTIs) are among the most commonly encountered bacterial infections.</p>',
@@ -3730,6 +3889,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004ees6i5fol9e9x',
+        doi: '10.82259/cl3fz14dt004ees6i5fol9e9x',
         title: 'Salmonella Enteritidis is a major cause of foodborne gastroenteritis and is thus a persistent threat to global public health.',
         type: 'PROBLEM',
         content:
@@ -3754,6 +3914,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004fes6i2awx46io',
+        doi: '10.82259/cl3fz14dt004fes6i2awx46io',
         title: '"Malnutrition remains to be a major public health problem in developing countries, particularly among children under-5_years of age children who are more vulnerable to both macro and micro-nutrient deficiencies."',
         type: 'PROBLEM',
         content:
@@ -3778,6 +3939,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004ges6i4kid72hw',
+        doi: '10.82259/cl3fz14dt004ges6i4kid72hw',
         title: 'Autosomal dominant polycystic kidney disease (ADPKD) is characterized by innumerous fluid-filled cysts and progressive deterioration of renal function.',
         type: 'PROBLEM',
         content:
@@ -3802,6 +3964,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004hes6i832l6n68',
+        doi: '10.82259/cl3fz14dt004hes6i832l6n68',
         title: 'Medulloblastoma is the most common malignant brain tumor in childhood and adolescence.',
         type: 'PROBLEM',
         content: '<p>Medulloblastoma is the most common malignant brain tumor in childhood and adolescence.</p>',
@@ -3824,6 +3987,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004ies6i2rxueanp',
+        doi: '10.82259/cl3fz14dt004ies6i2rxueanp',
         title: '"Lead (Pb) is a ubiquitous poisonous metal, affecting the health of vast populations worldwide."',
         type: 'PROBLEM',
         content:
@@ -3847,6 +4011,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004jes6icrri5ryw',
+        doi: '10.82259/cl3fz14dt004jes6icrri5ryw',
         title: '"Cancer stem cells (CSCs) are a small population of undifferentiated cancer cells within tumors, which contribute to tumorigenicity and relapse."',
         type: 'PROBLEM',
         content:
@@ -3871,6 +4036,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004kes6i9gyc4kiu',
+        doi: '10.82259/cl3fz14dt004kes6i9gyc4kiu',
         title: 'Diffuse large B cell lymphoma (DLBCL) and follicular lymphoma (FL) constitute 70% of all non-Hodgkin lymphomas (NHL).',
         type: 'PROBLEM',
         content:
@@ -3895,6 +4061,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004les6ibbkq5dpx',
+        doi: '10.82259/cl3fz14dt004les6ibbkq5dpx',
         title: 'Glaucoma is a complex condition of the eye and the second leading cause of blindness around the globe.',
         type: 'PROBLEM',
         content:
@@ -3919,6 +4086,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004mes6iam2k2m70',
+        doi: '10.82259/cl3fz14dt004mes6iam2k2m70',
         title: 'Mitochondrial diseases are characterized by considerable clinical and genetic heterogeneity.',
         type: 'PROBLEM',
         content: '<p>Mitochondrial diseases are characterized by considerable clinical and genetic heterogeneity.</p>',
@@ -3941,6 +4109,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004nes6i10km0qb7',
+        doi: '10.82259/cl3fz14dt004nes6i10km0qb7',
         title: '"Congenital heart defects (CHD) are the leading cause of infant mortality among birth defects, and later morbidities and premature mortality remain problematic."',
         type: 'PROBLEM',
         content:
@@ -3965,6 +4134,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004oes6i6w54f68s',
+        doi: '10.82259/cl3fz14dt004oes6i6w54f68s',
         title: '"Acinetobacter baumannii has emerged as a significant hospital pathogen, quickly becoming resistant to commonly prescribed antimicrobials."',
         type: 'PROBLEM',
         content:
@@ -3989,6 +4159,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004pes6ib3org4lc',
+        doi: '10.82259/cl3fz14dt004pes6ib3org4lc',
         title: '"Bipolar disorder is a common, chronic, and complex mental illness."',
         type: 'PROBLEM',
         content: '<p>"Bipolar disorder is a common, chronic, and complex mental illness."</p>',
@@ -4011,6 +4182,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004qes6i9evv6nmf',
+        doi: '10.82259/cl3fz14dt004qes6i9evv6nmf',
         title: 'Bisphenol A (BPA) and p_nonylphenol (NP) are representative endocrine disruptors (EDs) that may have adverse effects on human health.',
         type: 'PROBLEM',
         content:
@@ -4035,6 +4207,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dt004res6iefujgkde',
+        doi: '10.82259/cl3fz14dt004res6iefujgkde',
         title: '"Cystic echinococcosis (CE) or hydatidosis, caused by the larval stage of Echinococcus granulosus (EG)-complex, is a neglected parasitic disease of public health importance."',
         type: 'PROBLEM',
         content:
@@ -4059,6 +4232,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004ses6ieqpc5tiu',
+        doi: '10.82259/cl3fz14du004ses6ieqpc5tiu',
         title: '"Behçet\'s disease (BD) is still considered as a mysterious multisystemic disorder characterized by recurrent involvement of muco-cutaneous, ocular, intestinal, vascular and/or nervous system organs."',
         type: 'PROBLEM',
         content:
@@ -4083,6 +4257,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004tes6i04vi2huw',
+        doi: '10.82259/cl3fz14du004tes6i04vi2huw',
         title: 'Acute renal failure (ARF) secondary to ischemic injury remains a common and potentially devastating problem.',
         type: 'PROBLEM',
         content:
@@ -4107,6 +4282,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004ues6icva83nma',
+        doi: '10.82259/cl3fz14du004ues6icva83nma',
         title: 'Iron deficiency anemia (IDA) is a major public health problem especially in underdeveloped and developing countries.',
         type: 'PROBLEM',
         content:
@@ -4131,6 +4307,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004ves6i38g0017w',
+        doi: '10.82259/cl3fz14du004ves6i38g0017w',
         title: 'Listeria monocytogenes has been recognized as a human pathogen for decades and is known to be an important foodborne pathogen.',
         type: 'PROBLEM',
         content:
@@ -4155,6 +4332,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004wes6ig4s5al2r',
+        doi: '10.82259/cl3fz14du004wes6ig4s5al2r',
         title: 'Human rotaviruses (HRV) are a common cause of acute nonbacterial gastroenteritis in pediatric patients.',
         type: 'PROBLEM',
         content:
@@ -4179,6 +4357,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004xes6i59vgbc8m',
+        doi: '10.82259/cl3fz14du004xes6i59vgbc8m',
         title: 'Infection with herpes simplex virus (HSV) types 1 and 2 is ubiquitous in the human population.',
         type: 'PROBLEM',
         content:
@@ -4202,6 +4381,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004yes6i35q4dard',
+        doi: '10.82259/cl3fz14du004yes6i35q4dard',
         title: '"Dental caries remains the single most common chronic childhood disease; without intervention, the prevalence and severity of caries increase into adulthood."',
         type: 'PROBLEM',
         content:
@@ -4226,6 +4406,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du004zes6i31dhdqhm',
+        doi: '10.82259/cl3fz14du004zes6i31dhdqhm',
         title: 'Malignant schwannomas are uncommon sarcomas that arise from the sheath of Schwann surrounding peripheral nerve fibers.',
         type: 'PROBLEM',
         content:
@@ -4250,6 +4431,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0050es6ifcwe8kjt',
+        doi: '10.82259/cl3fz14du0050es6ifcwe8kjt',
         title: '"Nasopharyngeal carcinoma (NPC) is a globally rare cancer, with a unique geographic distribution."',
         type: 'PROBLEM',
         content:
@@ -4274,6 +4456,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0051es6i70hv6deh',
+        doi: '10.82259/cl3fz14du0051es6i70hv6deh',
         title: '"Delirium, a condition marked by changes in clinical and mental status, has increasingly been understood as prevalent and dangerous, particularly among elderly or frail patients."',
         type: 'PROBLEM',
         content:
@@ -4298,6 +4481,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0052es6i3a1a5p5z',
+        doi: '10.82259/cl3fz14du0052es6i3a1a5p5z',
         title: '"Norovirus, a leading cause of acute gastroenteritis in humans, is a highly diverse virus."',
         type: 'PROBLEM',
         content: '<p>"Norovirus, a leading cause of acute gastroenteritis in humans, is a highly diverse virus."</p>',
@@ -4320,6 +4504,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0053es6id8i1c7ug',
+        doi: '10.82259/cl3fz14du0053es6id8i1c7ug',
         title: 'Fusarium graminearum is a devastating pathogenic fungus causing fusarium head blight (FHB) of wheat.',
         type: 'PROBLEM',
         content:
@@ -4344,6 +4529,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0054es6i7x6o4fs3',
+        doi: '10.82259/cl3fz14du0054es6i7x6o4fs3',
         title: '"Embryonic exposure to ethanol leads to a condition of physical, behavioral, and cognitive deficiencies named fetal alcohol spectrum disorders (FASD)."',
         type: 'PROBLEM',
         content:
@@ -4368,6 +4554,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0055es6igds39ryv',
+        doi: '10.82259/cl3fz14du0055es6igds39ryv',
         title: 'Peripheral artery disease (PAD) is a manifestation of systemic atherosclerosis and conveys a significant health burden globally.',
         type: 'PROBLEM',
         content:
@@ -4392,6 +4579,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0056es6i7tekegg8',
+        doi: '10.82259/cl3fz14du0056es6i7tekegg8',
         title: 'Trauma is the leading cause of death in the United States among individuals between the ages of 1 and 44 years.',
         type: 'PROBLEM',
         content:
@@ -4416,6 +4604,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0057es6i2u9natle',
+        doi: '10.82259/cl3fz14du0057es6i2u9natle',
         title: 'Polycyclic aromatic hydrocarbons (PAHs) and oxygenated-PAHs are globally worrisome air pollutants because of their highly direct-acting mutagenicity and carcinogenicity.',
         type: 'PROBLEM',
         content:
@@ -4440,6 +4629,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0058es6i58iz3wer',
+        doi: '10.82259/cl3fz14du0058es6i58iz3wer',
         title: 'Healthcare associated infections are a major problem contributing to morbidity and mortality worldwide.',
         type: 'PROBLEM',
         content:
@@ -4464,6 +4654,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0059es6i2ojbem58',
+        doi: '10.82259/cl3fz14du0059es6i2ojbem58',
         title: 'The treatment of myelodysplastic syndromes (MDS) remains a challenge to the clinician despite recent advances.',
         type: 'PROBLEM',
         content:
@@ -4488,6 +4679,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005aes6idfqa17sj',
+        doi: '10.82259/cl3fz14du005aes6idfqa17sj',
         title: 'Uterus leiomyoma is the most common benign tumor that takes one of the leading places in the structure of gynecological pathology.',
         type: 'PROBLEM',
         content:
@@ -4512,6 +4704,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005bes6ihlwyhmni',
+        doi: '10.82259/cl3fz14du005bes6ihlwyhmni',
         title: 'Kawasaki disease (KD) is an acute systemic vasculitis of unknown cause that mainly affects infants and children and can result in coronary artery complications if left untreated.',
         type: 'PROBLEM',
         content:
@@ -4536,6 +4729,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ces6i34uc41je',
+        doi: '10.82259/cl3fz14du005ces6i34uc41je',
         title: '"Sleep disorders have reached epidemic proportions worldwide, affecting the youth as well as the elderly, crossing the entire lifespan in both developed and developing countries."',
         type: 'PROBLEM',
         content:
@@ -4560,6 +4754,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005des6i8f7dfupa',
+        doi: '10.82259/cl3fz14du005des6i8f7dfupa',
         title: 'Leprosy is a chronic infectious disease that requires better understanding since it continues to be a significant health problem in many parts of the world.',
         type: 'PROBLEM',
         content:
@@ -4584,6 +4779,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ees6ibt2f59r4',
+        doi: '10.82259/cl3fz14du005ees6ibt2f59r4',
         title: '"Fragile X syndrome (FXS) is a genetic pathology due to an excessive length of a repetitive sequence of trinucleotides (CGG) in a specific gene (FMR1), matched to FMR1 protein, which is primarily responsible for the regular brain developing and functioning."',
         type: 'PROBLEM',
         content:
@@ -4608,6 +4804,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005fes6ier6h4qlr',
+        doi: '10.82259/cl3fz14du005fes6ier6h4qlr',
         title: 'Mercury is a common environmental contaminant and it is also harmful to human health.',
         type: 'PROBLEM',
         content: '<p>Mercury is a common environmental contaminant and it is also harmful to human health.</p>',
@@ -4630,6 +4827,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ges6ihqjhbc2c',
+        doi: '10.82259/cl3fz14du005ges6ihqjhbc2c',
         title: '"Obsessive compulsive disorder (OCD) is a complex and heterogeneous condition, withwide variations in symptom presentation, associated clinical characteristics, and responseto treatment (Keeley et al."',
         type: 'PROBLEM',
         content:
@@ -4654,6 +4852,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005hes6i5bve9j2e',
+        doi: '10.82259/cl3fz14du005hes6i5bve9j2e',
         title: 'Hemophagocytic lymphohistiocytosis (HLH) is a rare syndrome of excessive immune activation associated with high mortality.',
         type: 'PROBLEM',
         content:
@@ -4678,6 +4877,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ies6i71ln8sqe',
+        doi: '10.82259/cl3fz14du005ies6i71ln8sqe',
         title: 'Chlamydia trachomatis is an important genital pathogen and the most common bacterial cause of sexually transmitted infections.',
         type: 'PROBLEM',
         content:
@@ -4702,6 +4902,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005jes6i68w13vpd',
+        doi: '10.82259/cl3fz14du005jes6i68w13vpd',
         title: 'Meningioma is a common primary tumor of central nervous system.',
         type: 'PROBLEM',
         content: '<p>Meningioma is a common primary tumor of central nervous system.</p>',
@@ -4724,6 +4925,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005kes6ia380039j',
+        doi: '10.82259/cl3fz14du005kes6ia380039j',
         title: 'Myasthenia Gravis (MG) is an autoimmune disease of the neuromuscular junction which results in generalised weakness.',
         type: 'PROBLEM',
         content:
@@ -4748,6 +4950,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005les6ifbgn2yxw',
+        doi: '10.82259/cl3fz14du005les6ifbgn2yxw',
         title: 'Infertility is a major reproductive and social problem with a worldwide prevalence of 10-15%.',
         type: 'PROBLEM',
         content: '<p>Infertility is a major reproductive and social problem with a worldwide prevalence of 10-15%.</p>',
@@ -4770,6 +4973,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005mes6iecy97rda',
+        doi: '10.82259/cl3fz14du005mes6iecy97rda',
         title: '"KSHV is a tumorigenic _-herpesvirus that has been identified as the etiologic agent of Kaposi’s sarcoma (KS), a multifocal highly vascularized neoplasm that is the most common malignancy associated with acquired immunodeficiency syndrome (AIDS)."',
         type: 'PROBLEM',
         content:
@@ -4794,6 +4998,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005nes6i30mw75yp',
+        doi: '10.82259/cl3fz14du005nes6i30mw75yp',
         title: 'Cachexia is a major cause of mortality in cancer patients and is characterized by a continuous skeletal muscle loss.',
         type: 'PROBLEM',
         content:
@@ -4818,6 +5023,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005oes6idi6eg1jx',
+        doi: '10.82259/cl3fz14du005oes6idi6eg1jx',
         title: '"In neurodegenerative diseases, a wide range of amyloid proteins or peptides such as amyloid-beta and _-synuclein fail to keep native functional conformations, followed by misfolding and self-assembling into a diverse array of aggregates."',
         type: 'PROBLEM',
         content:
@@ -4842,6 +5048,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005pes6if6h96ie5',
+        doi: '10.82259/cl3fz14du005pes6if6h96ie5',
         title: 'Group B Streptococcus (GBS or S. agalactiae) is a major cause of severe disease in neonates.',
         type: 'PROBLEM',
         content: '<p>Group B Streptococcus (GBS or S. agalactiae) is a major cause of severe disease in neonates.</p>',
@@ -4864,6 +5071,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005qes6ifc8jb6xm',
+        doi: '10.82259/cl3fz14du005qes6ifc8jb6xm',
         title: 'Gastroesophageal reflux disease (GERD) is an increasingly prevalent disease in today’s society.',
         type: 'PROBLEM',
         content:
@@ -4887,6 +5095,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005res6icw0k1yeu',
+        doi: '10.82259/cl3fz14du005res6icw0k1yeu',
         title: '"Hereditary nonpolyposis colorectal cancer (HNPCC), also known as Lynch syndrome, is an autosomal dominant cancer caused by a germline mutation of mismatch repair (MMR) genes."',
         type: 'PROBLEM',
         content:
@@ -4911,6 +5120,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ses6i3n0jd5cq',
+        doi: '10.82259/cl3fz14du005ses6i3n0jd5cq',
         title: '"Pediatric soft tissue sarcomas (STSs), of which rhabdomyosarcoma is the most common, constitute approximately 5-6% of all cancers in children."',
         type: 'PROBLEM',
         content:
@@ -4935,6 +5145,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005tes6iaqsj4p4z',
+        doi: '10.82259/cl3fz14du005tes6iaqsj4p4z',
         title: 'Cyanobacterial harmful algal blooms (CyanoHABs) and the release of cyanotoxins have posed adverse impacts to aquatic system and human health.',
         type: 'PROBLEM',
         content:
@@ -4959,6 +5170,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ues6ignovcml7',
+        doi: '10.82259/cl3fz14du005ues6ignovcml7',
         title: '"Ultraviolet (UV) radiation leads to the formation of free radicals, which may cause immunological modulations, skin aging or skin cancer."',
         type: 'PROBLEM',
         content:
@@ -4983,6 +5195,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005ves6i46vtc4em',
+        doi: '10.82259/cl3fz14du005ves6i46vtc4em',
         title: '"The phenomenon of the increasing number of ageing people in the world is arguably the most significant economic, health and social challenge that we face today."',
         type: 'PROBLEM',
         content:
@@ -5007,6 +5220,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005wes6i4fuj1xts',
+        doi: '10.82259/cl3fz14du005wes6i4fuj1xts',
         title: '"Aneurysmal subarachnoid hemorrhage (SAH) affects 30,000 patients per year, causing neurologic morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -5031,6 +5245,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005xes6i13debe0g',
+        doi: '10.82259/cl3fz14du005xes6i13debe0g',
         title: 'Hemophilia A (HA) is an X-linked bleeding disorder caused by the absence or reduced activity of coagulation factor VIII.',
         type: 'PROBLEM',
         content:
@@ -5055,6 +5270,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005yes6i8vpfdftz',
+        doi: '10.82259/cl3fz14du005yes6i8vpfdftz',
         title: 'IgG4-related disease is an emerging pathological condition characterized by one or several fibrosing and inflammatory organ involvements.',
         type: 'PROBLEM',
         content:
@@ -5079,6 +5295,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du005zes6i00zwfqmh',
+        doi: '10.82259/cl3fz14du005zes6i00zwfqmh',
         title: "Langerhans' cell histiocytosis (LCH) is a rare disease with variable clinical appearance.",
         type: 'PROBLEM',
         content: "<p>Langerhans' cell histiocytosis (LCH) is a rare disease with variable clinical appearance.</p>",
@@ -5101,6 +5318,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0060es6i51z01ppw',
+        doi: '10.82259/cl3fz14du0060es6i51z01ppw',
         title: '"Hypertrophic (HCM) and dilated (DCM) cardiomyopathies are important causes of heart failure, arrhythmia, and sudden cardiac death."',
         type: 'PROBLEM',
         content:
@@ -5125,6 +5343,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0061es6i97zb3k1k',
+        doi: '10.82259/cl3fz14du0061es6i97zb3k1k',
         title: 'The beta-thalassaemias are very important genetic disorders of haemoglobin synthesis and are amongst the commonest monogenic disorders.',
         type: 'PROBLEM',
         content:
@@ -5149,6 +5368,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0062es6i9yzn98vf',
+        doi: '10.82259/cl3fz14du0062es6i9yzn98vf',
         title: '"Antiphospholipid antibodies (aPL) play the central pathogenic role in antiphospholipid syndrome (APS) characterized by arterial and venous thrombosis, recurrent fetal loss and persistent circulating aPL."',
         type: 'PROBLEM',
         content:
@@ -5173,6 +5393,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0063es6iho7x8u3a',
+        doi: '10.82259/cl3fz14du0063es6iho7x8u3a',
         title: '"Erectile dysfunction (ED) is a major health problem that affects a significant proportion of the general population, and its prevalence is even higher in patients with CV risk factors and/or disease."',
         type: 'PROBLEM',
         content:
@@ -5197,6 +5418,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0064es6i84ds1tb5',
+        doi: '10.82259/cl3fz14du0064es6i84ds1tb5',
         title: 'Otitis media (OM) is one of the most common infectious diseases affecting children globally and the most common reason for antibiotic prescription and paediatric surgery.',
         type: 'PROBLEM',
         content:
@@ -5221,6 +5443,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0065es6i46kr6yfg',
+        doi: '10.82259/cl3fz14du0065es6i46kr6yfg',
         title: '"Disease due to pulmonary Aspergillus infection remains a significant unmet need, particularly in immunocompromised patients, patients in critical care and those with underlying chronic lung diseases."',
         type: 'PROBLEM',
         content:
@@ -5245,6 +5468,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0066es6i3ami9s62',
+        doi: '10.82259/cl3fz14du0066es6i3ami9s62',
         title: 'Idiopathic Thrombocytopenic Purpura (ITP) is a common hematological disorder.',
         type: 'PROBLEM',
         content: '<p>Idiopathic Thrombocytopenic Purpura (ITP) is a common hematological disorder.</p>',
@@ -5267,6 +5491,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0067es6ib6m9hbjq',
+        doi: '10.82259/cl3fz14du0067es6ib6m9hbjq',
         title: 'Spinal muscular atrophy (SMA) is a severe neurodegenerative autosomal recessive disorder.',
         type: 'PROBLEM',
         content: '<p>Spinal muscular atrophy (SMA) is a severe neurodegenerative autosomal recessive disorder.</p>',
@@ -5289,6 +5514,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0068es6if2f3czt7',
+        doi: '10.82259/cl3fz14du0068es6if2f3czt7',
         title: '"Carbapenem-resistant Enterobacteriaceae, particularly Klebsiella pneumoniae, are rapidly emerging as significant health care-associated pathogens."',
         type: 'PROBLEM',
         content:
@@ -5313,6 +5539,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du0069es6i2hji7ycw',
+        doi: '10.82259/cl3fz14du0069es6i2hji7ycw',
         title: 'Mucopolysaccharidosis type-I (MPS-1) is an autosomal recessive lysosomal storage disorder caused by mutations in the _-L-iduronidase (IDUA) gene (OMIM 252800).',
         type: 'PROBLEM',
         content:
@@ -5337,6 +5564,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006aes6igjcf1vb0',
+        doi: '10.82259/cl3fz14du006aes6igjcf1vb0',
         title: 'Oral malignancy comprises about five per cent of all forms of cancer.',
         type: 'PROBLEM',
         content: '<p>Oral malignancy comprises about five per cent of all forms of cancer.</p>',
@@ -5359,6 +5587,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006bes6i5duget6e',
+        doi: '10.82259/cl3fz14du006bes6i5duget6e',
         title: '"Primary biliary cirrhosis (PBC) and primary sclerosing cholangitis (PSC) are chronic autoimmune-mediated diseases of the biliary tree, resulting in a loss of bile ducts."',
         type: 'PROBLEM',
         content:
@@ -5383,6 +5612,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006ces6i7smk3zje',
+        doi: '10.82259/cl3fz14du006ces6i7smk3zje',
         title: 'Primary hyperparathyroidism has become a relatively common endocrine disorder.',
         type: 'PROBLEM',
         content: '<p>Primary hyperparathyroidism has become a relatively common endocrine disorder.</p>',
@@ -5405,6 +5635,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006des6i3u1i7tw4',
+        doi: '10.82259/cl3fz14du006des6i3u1i7tw4',
         title: 'Bullying is a complex phenomenon that is reported to be pervasive in many countries around the world ',
         type: 'PROBLEM',
         content:
@@ -5429,6 +5660,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006ees6icvzy5x9g',
+        doi: '10.82259/cl3fz14du006ees6icvzy5x9g',
         title: '"Fabry disease is a rare, progressive, X-linked inherited storage disorder due to absent or deficient of lysosomal alfa galactosidase A activity."',
         type: 'PROBLEM',
         content:
@@ -5453,6 +5685,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006fes6ibd1z4qtc',
+        doi: '10.82259/cl3fz14du006fes6ibd1z4qtc',
         title: '"The textile industry is responsible for the disposal of a large volume of effluents containing synthetic dyes, which are considered to be highly toxic compounds for both human health and the environment."',
         type: 'PROBLEM',
         content:
@@ -5477,6 +5710,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006ges6i7wqb3qda',
+        doi: '10.82259/cl3fz14du006ges6i7wqb3qda',
         title: 'microRNAs (miRNAs) control a multitude of pathways in human cancers.',
         type: 'PROBLEM',
         content: '<p>microRNAs (miRNAs) control a multitude of pathways in human cancers.</p>',
@@ -5499,6 +5733,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006hes6i3v1wgvun',
+        doi: '10.82259/cl3fz14du006hes6i3v1wgvun',
         title: '"Postoperative infections, particularly surgical site infections (SSIs), cause significant morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -5523,6 +5758,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006ies6idnr2fjj9',
+        doi: '10.82259/cl3fz14du006ies6idnr2fjj9',
         title: 'Food allergy is a serious human health problem with increasing prevalence world-wide.',
         type: 'PROBLEM',
         content: '<p>Food allergy is a serious human health problem with increasing prevalence world-wide.</p>',
@@ -5545,6 +5781,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006jes6i1tuq2es0',
+        doi: '10.82259/cl3fz14du006jes6i1tuq2es0',
         title: 'Habitat loss and degradation due to human-induced landscape alterations are considered to be a major threat to biodiversity.',
         type: 'PROBLEM',
         content:
@@ -5569,6 +5806,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006kes6ih14z4bzo',
+        doi: '10.82259/cl3fz14du006kes6ih14z4bzo',
         title: 'Resistance to androgen-deprivation therapies and progression to so-called castrate-resistant prostate cancer (CRPC) remain challenges in prostate cancer (PCa) management and treatment.',
         type: 'PROBLEM',
         content:
@@ -5593,6 +5831,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006les6i6s5a2zge',
+        doi: '10.82259/cl3fz14du006les6i6s5a2zge',
         title: 'Cancer-related pain (CRP) and its treatments are common and the scariest problems that patients with cancer fear and negatively affect their quality of life.',
         type: 'PROBLEM',
         content:
@@ -5617,6 +5856,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006mes6i78xsf7i4',
+        doi: '10.82259/cl3fz14du006mes6i78xsf7i4',
         title: 'A significant proportion of patients with pediatric acute lymphoblastic leukemia (ALL) still suffers from relapse and therapy-related toxicities.',
         type: 'PROBLEM',
         content:
@@ -5641,6 +5881,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006nes6i646z7hf6',
+        doi: '10.82259/cl3fz14du006nes6i646z7hf6',
         title: 'Autoimmune diseases represent a complex heterogeneous group of disorders that occur as a results of immune homeostasis dysregulation and loss of self-tolerance.',
         type: 'PROBLEM',
         content:
@@ -5665,6 +5906,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006oes6ihy66455f',
+        doi: '10.82259/cl3fz14du006oes6ihy66455f',
         title: '"Neonatal encephalopathy due to hypoxia-ischemia (HI) leads to severe, life-long morbidities in thousands of neonates born in the USA and worldwide each year."',
         type: 'PROBLEM',
         content:
@@ -5689,6 +5931,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006pes6idhg681q7',
+        doi: '10.82259/cl3fz14du006pes6idhg681q7',
         title: 'Juvenile idiopathic arthritis (JIA) is the most common chronic rheumatic disease in children and an important cause of short-term and long-term disability.',
         type: 'PROBLEM',
         content:
@@ -5713,6 +5956,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006qes6ic7lz1q10',
+        doi: '10.82259/cl3fz14du006qes6ic7lz1q10',
         title: 'p53 is a bona fide tumor suppressor gene whose loss of function marks the most common genetic alteration in human malignancy.',
         type: 'PROBLEM',
         content:
@@ -5737,6 +5981,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006res6i0gwah13p',
+        doi: '10.82259/cl3fz14du006res6i0gwah13p',
         title: 'Radiotherapy is a prominent tool in oncology but it can be held responsible for important biological damages as ionizing radiations also induce degradation of healthy tissues.',
         type: 'PROBLEM',
         content:
@@ -5761,6 +6006,7 @@ const problems = [
     },
     {
         id: 'cl3fz14du006ses6id67b91ku',
+        doi: '10.82259/cl3fz14du006ses6id67b91ku',
         title: "Acne vulgaris is a chronic inflammatory disease of the pilosebaceous units that affects 85% of the world's population aged 11–30 years.",
         type: 'PROBLEM',
         content:
@@ -5785,6 +6031,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006tes6i2zv1am6s',
+        doi: '10.82259/cl3fz14dv006tes6i2zv1am6s',
         title: 'Mucormycoses are emerging and potentially lethal infections.',
         type: 'PROBLEM',
         content: '<p>Mucormycoses are emerging and potentially lethal infections.</p>',
@@ -5807,6 +6054,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006ues6i12uu7szv',
+        doi: '10.82259/cl3fz14dv006ues6i12uu7szv',
         title: 'Brain metastases are clinically devastating.',
         type: 'PROBLEM',
         content: '<p>Brain metastases are clinically devastating.</p>',
@@ -5829,6 +6077,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006ves6i7mznc6fz',
+        doi: '10.82259/cl3fz14dv006ves6i7mznc6fz',
         title: '"Merkel cell carcinoma (MCC) is a rare but aggressive neuroendocrine cutaneous malignancy, with a predilection for sun-exposed sites in elderly patients."',
         type: 'PROBLEM',
         content:
@@ -5853,6 +6102,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006wes6i74emchve',
+        doi: '10.82259/cl3fz14dv006wes6i74emchve',
         title: 'Anxiety disorders are amongst the most common and disabling of psychiatric illnesses and have severe health and socio-economic implications.',
         type: 'PROBLEM',
         content:
@@ -5877,6 +6127,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006xes6i07tvhqvj',
+        doi: '10.82259/cl3fz14dv006xes6i07tvhqvj',
         title: 'Spontaneous intracerebral hemorrhages (ICH) account for 10–30% of all strokes and are a result of acute bleeding into the brain due to ruptures of small penetrating arteries.',
         type: 'PROBLEM',
         content:
@@ -5901,6 +6152,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006yes6iaf3w7o48',
+        doi: '10.82259/cl3fz14dv006yes6iaf3w7o48',
         title: 'Aortic dissection is a life-threatening condition which requires immediate surgical intervention.',
         type: 'PROBLEM',
         content:
@@ -5925,6 +6177,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv006zes6i9g9i0t4w',
+        doi: '10.82259/cl3fz14dv006zes6i9g9i0t4w',
         title: 'Vitamin D has garnered a great deal of attention in recent years due to a global prevalence of vitamin D deficiency associated with an increased risk of a variety of human diseases.',
         type: 'PROBLEM',
         content:
@@ -5949,6 +6202,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0070es6i48viab37',
+        doi: '10.82259/cl3fz14dv0070es6i48viab37',
         title: '"large amount of chromium (Cr) has entered the natural environment from the wastewater and waste residues, and the hexavalent (Cr(VI)) is highly poisonous, threatening the ecological environment and human health directly."',
         type: 'PROBLEM',
         content:
@@ -5973,6 +6227,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0071es6i451w2iqz',
+        doi: '10.82259/cl3fz14dv0071es6i451w2iqz',
         title: 'Fibromyalgia (FM) is a frequent cause of chronic widespread pain (CWP).',
         type: 'PROBLEM',
         content: '<p>Fibromyalgia (FM) is a frequent cause of chronic widespread pain (CWP).</p>',
@@ -5995,6 +6250,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0072es6i0z4l2g00',
+        doi: '10.82259/cl3fz14dv0072es6i0z4l2g00',
         title: 'Frontotemporal dementia (FTD) is a common cause of dementia that encompasses 3 clinical subtypes: a behavioral/dysexecutive (frontal) variant and 2 variants with prominent language impairments.',
         type: 'PROBLEM',
         content:
@@ -6019,6 +6275,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0073es6i9rf5azv5',
+        doi: '10.82259/cl3fz14dv0073es6i9rf5azv5',
         title: 'Primary central nervous system lymphomas (PCNSLs) have recently received considerable clinical attention due to their increasing incidence.',
         type: 'PROBLEM',
         content:
@@ -6043,6 +6300,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0074es6ifyt04i0g',
+        doi: '10.82259/cl3fz14dv0074es6ifyt04i0g',
         title: 'Hepatitis E virus (HEV) infection has been reported to be more prevalent in the developed countries than previously thought.',
         type: 'PROBLEM',
         content:
@@ -6067,6 +6325,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0075es6i1tji9fg9',
+        doi: '10.82259/cl3fz14dv0075es6i1tji9fg9',
         title: 'Bronchopulmonary dysplasia (BPD) is the most usual reason for preterm infants to require chronic mechanical ventilation.',
         type: 'PROBLEM',
         content:
@@ -6091,6 +6350,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0076es6i58rkgtmp',
+        doi: '10.82259/cl3fz14dv0076es6i58rkgtmp',
         title: 'Tuberous Sclerosis Complex (TSC) is a multisystem genetic disorder characterized by hamartomatous neurological lesions that exhibit abnormal cell proliferation and differentiation.',
         type: 'PROBLEM',
         content:
@@ -6115,6 +6375,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0077es6iee2pe0hx',
+        doi: '10.82259/cl3fz14dv0077es6iee2pe0hx',
         title: 'Acute appendicitis is one of the main pathological conditions requiring emergency surgical intervention.',
         type: 'PROBLEM',
         content:
@@ -6139,6 +6400,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0078es6i790a3ooh',
+        doi: '10.82259/cl3fz14dv0078es6i790a3ooh',
         title: '"Testicular germ cell tumors are the most common malignancy in young males, and the frequency of these tumors has risen dramatically over the last century."',
         type: 'PROBLEM',
         content:
@@ -6163,6 +6425,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv0079es6i85wtdk4h',
+        doi: '10.82259/cl3fz14dv0079es6i85wtdk4h',
         title: 'Burnout is an occupational syndrome frequently encountered within the healthcare profession.',
         type: 'PROBLEM',
         content: '<p>Burnout is an occupational syndrome frequently encountered within the healthcare profession.</p>',
@@ -6185,6 +6448,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dv007aes6ig2a3coyc',
+        doi: '10.82259/cl3fz14dv007aes6ig2a3coyc',
         title: 'Aflatoxins produced by Aspergillus flavus are potent carcinogens that contaminate agricultural crops.',
         type: 'PROBLEM',
         content:
@@ -6209,6 +6473,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007bes6ickyh3ttm',
+        doi: '10.82259/cl3fz14dw007bes6ickyh3ttm',
         title: 'Urinary incontinence is a common condition that negatively impacts quality of life of millions women.',
         type: 'PROBLEM',
         content:
@@ -6233,6 +6498,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ces6ig9z5dkcg',
+        doi: '10.82259/cl3fz14dw007ces6ig9z5dkcg',
         title: '"West Nile Virus (WNV) is a globally important mosquito borne virus, with significant implications for human and animal health."',
         type: 'PROBLEM',
         content:
@@ -6257,6 +6523,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007des6i9unah8yc',
+        doi: '10.82259/cl3fz14dw007des6i9unah8yc',
         title: 'Benign Prostatic Hyperplasia (BPH) is a common disease observed in 90 percent of men over 60.',
         type: 'PROBLEM',
         content: '<p>Benign Prostatic Hyperplasia (BPH) is a common disease observed in 90 percent of men over 60.</p>',
@@ -6279,6 +6546,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ees6iari24lah',
+        doi: '10.82259/cl3fz14dw007ees6iari24lah',
         title: 'Pemphigus is a group of chronic autoimmune vesico-bullous disorders in which the epidermis and the basement membrane zone are the focus of attack resulting in cutaneous and mucosal blister formation.',
         type: 'PROBLEM',
         content:
@@ -6303,6 +6571,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007fes6i16dgfmer',
+        doi: '10.82259/cl3fz14dw007fes6i16dgfmer',
         title: 'Prosthetic joint infection remains one of the most devastating complications of arthroplasty.',
         type: 'PROBLEM',
         content: '<p>Prosthetic joint infection remains one of the most devastating complications of arthroplasty.</p>',
@@ -6325,6 +6594,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ges6ib8nq9j0r',
+        doi: '10.82259/cl3fz14dw007ges6ib8nq9j0r',
         title: 'Abdominal aortic aneurysms (AAA) are a significant cause of worldwide mortality and morbidity.',
         type: 'PROBLEM',
         content:
@@ -6348,6 +6618,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007hes6i2hemgzyl',
+        doi: '10.82259/cl3fz14dw007hes6i2hemgzyl',
         title: 'Guillain Barré syndrome (GBS) is an acute immunedmediated polyneuropathy often after an antecedent infection.',
         type: 'PROBLEM',
         content:
@@ -6372,6 +6643,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ies6ibrpqe9cu',
+        doi: '10.82259/cl3fz14dw007ies6ibrpqe9cu',
         title: 'Lyme borreliosis (LB) is a multi-system disease caused by the tick — trasmitted spirochete Borrelia burgdorferi (Bb).',
         type: 'PROBLEM',
         content:
@@ -6396,6 +6668,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007jes6igufc4qk3',
+        doi: '10.82259/cl3fz14dw007jes6igufc4qk3',
         title: 'Adenoid cystic carcinoma (ACC) is an unusual tumor of salivary glands.',
         type: 'PROBLEM',
         content: '<p>Adenoid cystic carcinoma (ACC) is an unusual tumor of salivary glands.</p>',
@@ -6418,6 +6691,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007kes6i6t8hhk68',
+        doi: '10.82259/cl3fz14dw007kes6i6t8hhk68',
         title: 'Takotsubo cardiomyopathy (TC) is a syndrome characterized by transient local systolic dysfunction of the left ventricle with no evidence of coronary artery disease or acute plaque rupture.',
         type: 'PROBLEM',
         content:
@@ -6442,6 +6716,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007les6i358z3f1a',
+        doi: '10.82259/cl3fz14dw007les6i358z3f1a',
         title: 'Ameloblastoma is a benign and local aggressive odontogenic tumor.',
         type: 'PROBLEM',
         content: '<p>Ameloblastoma is a benign and local aggressive odontogenic tumor.</p>',
@@ -6464,6 +6739,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007mes6i90plch8x',
+        doi: '10.82259/cl3fz14dw007mes6i90plch8x',
         title: 'The spinocerebellar ataxias (SCAs) are a clinically and genetically heterogeneous group of neurodegenerative diseases.',
         type: 'PROBLEM',
         content:
@@ -6488,6 +6764,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007nes6ie2zs3dj6',
+        doi: '10.82259/cl3fz14dw007nes6ie2zs3dj6',
         title: 'Acetaminophen (APAP) overdose is the most frequent cause of drug-induced acute liver failure.',
         type: 'PROBLEM',
         content: '<p>Acetaminophen (APAP) overdose is the most frequent cause of drug-induced acute liver failure.</p>',
@@ -6510,6 +6787,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007oes6i2tu6dcj8',
+        doi: '10.82259/cl3fz14dw007oes6i2tu6dcj8',
         title: "Wilson's disease (WD) is an autosomal recessively inherited copper storage disorder due to mutations in ATP7B gene that causes hepatic and neurologic symptoms.",
         type: 'PROBLEM',
         content:
@@ -6534,6 +6812,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007pes6i09fm1v1u',
+        doi: '10.82259/cl3fz14dw007pes6i09fm1v1u',
         title: 'Hemangioma is a common vascular tumor of childhood.',
         type: 'PROBLEM',
         content: '<p>Hemangioma is a common vascular tumor of childhood.</p>',
@@ -6556,6 +6835,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007qes6i6ab1d7v0',
+        doi: '10.82259/cl3fz14dw007qes6i6ab1d7v0',
         title: '"Infective endocarditis (IE) although uncommon, is characterized by high short-term morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -6580,6 +6860,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007res6i3anbdc1c',
+        doi: '10.82259/cl3fz14dw007res6i3anbdc1c',
         title: 'Methamphetamine is a powerful psychostimulant that causes significant neurological impairments with long-lasting effects and has provoked serious international concerns about public health.',
         type: 'PROBLEM',
         content:
@@ -6604,6 +6885,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ses6i2uwn27q5',
+        doi: '10.82259/cl3fz14dw007ses6i2uwn27q5',
         title: 'Hyperphosphorylated tau has long been proposed as the key molecule disrupting normal neuronal microtubule dynamics and leading to neurofibrillary degeneration in Alzheimer disease.',
         type: 'PROBLEM',
         content:
@@ -6628,6 +6910,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007tes6i5qeo0xi0',
+        doi: '10.82259/cl3fz14dw007tes6i5qeo0xi0',
         title: '"Autoimmune thyroid diseases (AITD), including Graves’ disease (GD) and Hashimoto\'s thyroiditis (HT) are complex diseases that arise due to interplay between environmental and genetic factors."',
         type: 'PROBLEM',
         content:
@@ -6652,6 +6935,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ues6i45zkd9z4',
+        doi: '10.82259/cl3fz14dw007ues6i45zkd9z4',
         title: 'Giant cell tumor (GCT) is a relatively common skeletal tumor.',
         type: 'PROBLEM',
         content: '<p>Giant cell tumor (GCT) is a relatively common skeletal tumor.</p>',
@@ -6674,6 +6958,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007ves6ifht424jq',
+        doi: '10.82259/cl3fz14dw007ves6ifht424jq',
         title: '" Bacterial meningitis is one of the most serious infections seen in infants and children, which is associated with acute complications and chronic morbidity."',
         type: 'PROBLEM',
         content:
@@ -6698,6 +6983,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007wes6i4fm056lg',
+        doi: '10.82259/cl3fz14dw007wes6i4fm056lg',
         title: 'Anorexia Nervosa (AN) is a serious psychiatric illness with both psychological and medical sequelae that usually onsets during adolescence.',
         type: 'PROBLEM',
         content:
@@ -6722,6 +7008,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007xes6ibfjk5g3z',
+        doi: '10.82259/cl3fz14dw007xes6ibfjk5g3z',
         title: '"Insulin resistance, when combined with decreased _-cell mass and relative insufficient insulin secretion, leads to type 2 diabetes."',
         type: 'PROBLEM',
         content:
@@ -6746,6 +7033,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007yes6iblwd279j',
+        doi: '10.82259/cl3fz14dw007yes6iblwd279j',
         title: '"Cerebral palsy (CP) is a major neurodevelopmental disorder, presently estimated to affect approximately 1 in 500 children."',
         type: 'PROBLEM',
         content:
@@ -6770,6 +7058,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw007zes6ib1mj7aq4',
+        doi: '10.82259/cl3fz14dw007zes6ib1mj7aq4',
         title: '"Hidradenitis suppurativa (HS) is a chronic inflammatory skin disease presenting with painful nodules, abscesses, sinus tracts, and scarring primarily affecting apocrine gland-rich intertriginous areas."',
         type: 'PROBLEM',
         content:
@@ -6794,6 +7083,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0080es6ifquhgo9o',
+        doi: '10.82259/cl3fz14dw0080es6ifquhgo9o',
         title: 'Many countries and regions around the world have experienced severe water shortages and water contamination problems because of population increase and ever-growing water demands combined with climate change and imbalanced rainfall distributions.',
         type: 'PROBLEM',
         content:
@@ -6818,6 +7108,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0081es6ibwv99j1b',
+        doi: '10.82259/cl3fz14dw0081es6ibwv99j1b',
         title: 'Cancer treatment is one of the major challenges facing the modern biomedical profession.',
         type: 'PROBLEM',
         content: '<p>Cancer treatment is one of the major challenges facing the modern biomedical profession.</p>',
@@ -6840,6 +7131,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0082es6i8zydayig',
+        doi: '10.82259/cl3fz14dw0082es6i8zydayig',
         title: 'Soil erosion has been recognized as a major agricultural problem of the world.',
         type: 'PROBLEM',
         content: '<p>Soil erosion has been recognized as a major agricultural problem of the world.</p>',
@@ -6862,6 +7154,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0083es6i2boa6m57',
+        doi: '10.82259/cl3fz14dw0083es6i2boa6m57',
         title: '"Paragangliomas are very uncommon, highly vascularised neuroendocrine tumours that originate in the extraadrenal chromaffin cells."',
         type: 'PROBLEM',
         content:
@@ -6886,6 +7179,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0084es6i102r9mwh',
+        doi: '10.82259/cl3fz14dw0084es6i102r9mwh',
         title: '"Fanconi anemia (FA) is characterized by congenital abnormalities, bone marrow failure, chromosome fragility, and cancer susceptibility."',
         type: 'PROBLEM',
         content:
@@ -6910,6 +7204,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0085es6ibq3h45s7',
+        doi: '10.82259/cl3fz14dw0085es6ibq3h45s7',
         title: '"Post-Transplant Lymphoproliferative Disorder (PTLD), an EBV-driven lymphoproliferative disorder (LPD), represents a life-threatening challenge for patients (pts) following solid organ transplant (SOT) or hematopoietic cell transplant (HCT)."',
         type: 'PROBLEM',
         content:
@@ -6934,6 +7229,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0086es6ih430bwxs',
+        doi: '10.82259/cl3fz14dw0086es6ih430bwxs',
         title: '"Peripheral neuropathy is a frequent complication of diabetes mellitus and a common symptom of neuropathic pain, the mechanism of which is complex and involves both peripheral and central components of the sensory system."',
         type: 'PROBLEM',
         content:
@@ -6958,6 +7254,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0087es6i81854gim',
+        doi: '10.82259/cl3fz14dw0087es6i81854gim',
         title: 'Hepatic encephalopathy (HE) is a major complication for acute and chronic liver failure.',
         type: 'PROBLEM',
         content: '<p>Hepatic encephalopathy (HE) is a major complication for acute and chronic liver failure.</p>',
@@ -6980,6 +7277,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0088es6i4zsf184x',
+        doi: '10.82259/cl3fz14dw0088es6i4zsf184x',
         title: 'Varicella-zoster virus (VZV) is a medically important human alphaherpesvirus that causes varicella and zoster.',
         type: 'PROBLEM',
         content:
@@ -7004,6 +7302,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw0089es6i3xx916yy',
+        doi: '10.82259/cl3fz14dw0089es6i3xx916yy',
         title: 'Ebola viruses are highly lethal human pathogens that have received considerable attention in recent years due to an increasing re-emergence in Central Africa and a potential for use as a biological weapon.',
         type: 'PROBLEM',
         content:
@@ -7028,6 +7327,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008aes6ihcp47y88',
+        doi: '10.82259/cl3fz14dw008aes6ihcp47y88',
         title: 'CD8-positive primary cutaneous T cell lymphomas (CTCL) are rare disorders and mainly include primary cutaneous CD8-positive aggressive epidermotropic cytotoxic T-cell lymphoma (AECTL) and CD8+ variant mycosis fungoides (MF).',
         type: 'PROBLEM',
         content:
@@ -7052,6 +7352,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008bes6i0ex01lui',
+        doi: '10.82259/cl3fz14dw008bes6i0ex01lui',
         title: '"Human immunodeficiency virus (HIV_1) infection often results in central nervous system (CNS) dysfunction, yet the mechanism(s) of action for HIV_1 in the CNS are not fully understood."',
         type: 'PROBLEM',
         content:
@@ -7076,6 +7377,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008ces6i1w9q458r',
+        doi: '10.82259/cl3fz14dw008ces6i1w9q458r',
         title: 'Post partum hemorrhage is a major cause of maternal morbidity and mortality.',
         type: 'PROBLEM',
         content: '<p>Post partum hemorrhage is a major cause of maternal morbidity and mortality.</p>',
@@ -7098,6 +7400,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008des6i6nmr35um',
+        doi: '10.82259/cl3fz14dw008des6i6nmr35um',
         title: 'Chronic rhinosinusitis (CRS) is a heterogeneous disease defined by epithelial inflammation.',
         type: 'PROBLEM',
         content: '<p>Chronic rhinosinusitis (CRS) is a heterogeneous disease defined by epithelial inflammation.</p>',
@@ -7120,6 +7423,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008ees6i0xf96zdt',
+        doi: '10.82259/cl3fz14dw008ees6i0xf96zdt',
         title: 'Ewing sarcoma (ES) is a malignant bone or soft-tissue cancer that mainly arises in children and young adults.',
         type: 'PROBLEM',
         content:
@@ -7144,6 +7448,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dw008fes6i19wcezon',
+        doi: '10.82259/cl3fz14dw008fes6i19wcezon',
         title: 'Amplification and overexpression of human epidermal growth factor receptor 2 (HER2) in breast cancer is associated with an adverse prognosis.',
         type: 'PROBLEM',
         content:
@@ -7168,6 +7473,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008ges6ibzol98kk',
+        doi: '10.82259/cl3fz14dx008ges6ibzol98kk',
         title: 'Hearing loss is one of the most prevalent chronic conditions affecting the health of the aged.',
         type: 'PROBLEM',
         content:
@@ -7191,6 +7497,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008hes6i7f5ohdxs',
+        doi: '10.82259/cl3fz14dx008hes6i7f5ohdxs',
         title: "Cushing's disease is a rare condition of chronic hypercortisolism caused by an adrenocorticotropic hormone-secreting pituitary adenoma and associated with debilitating complications and excess mortality.",
         type: 'PROBLEM',
         content:
@@ -7215,6 +7522,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008ies6i2oajccmi',
+        doi: '10.82259/cl3fz14dx008ies6i2oajccmi',
         title: '"Hereditary epidermolysis bullosa (EB) is a mechanobullous skin fragility disorder characterized by defective epithelial adhesion, leading to mechanical stress_induced skin blistering."',
         type: 'PROBLEM',
         content:
@@ -7239,6 +7547,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008jes6i6eeogz1g',
+        doi: '10.82259/cl3fz14dx008jes6i6eeogz1g',
         title: '"Tourette syndrome (TS) is a rare, chronic neuropsychiatric disorder of unknown etiology that is characterized by waxing and waning multiform motor and phonic tics and a broad range of behavioral symptoms (Shapiro et al."',
         type: 'PROBLEM',
         content:
@@ -7267,6 +7576,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008kes6i16on132b',
+        doi: '10.82259/cl3fz14dx008kes6i16on132b',
         title: '"Mantle cell lymphoma (MCL) is characterized by marked differences in outcome, emphasizing the need for strong prognostic biomarkers."',
         type: 'PROBLEM',
         content:
@@ -7291,6 +7601,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008les6iefbh4wdo',
+        doi: '10.82259/cl3fz14dx008les6iefbh4wdo',
         title: 'Child sexual abuse is a social and public health concern locally and worldwide because it is associated with numerous and serious short-and long-term devastating consequences.',
         type: 'PROBLEM',
         content:
@@ -7315,6 +7626,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008mes6ihaeqgis1',
+        doi: '10.82259/cl3fz14dx008mes6ihaeqgis1',
         title: 'Burn injuries are one of the most devastating injuries encountered in medicine.',
         type: 'PROBLEM',
         content: '<p>Burn injuries are one of the most devastating injuries encountered in medicine.</p>',
@@ -7337,6 +7649,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008nes6i2fdgctm9',
+        doi: '10.82259/cl3fz14dx008nes6i2fdgctm9',
         title: '"Nontuberculous mycobacteria (NTM) are pathogens that cause chronic respiratory disease, even in immunocompetent patients."',
         type: 'PROBLEM',
         content:
@@ -7361,6 +7674,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008oes6icumxd4xt',
+        doi: '10.82259/cl3fz14dx008oes6icumxd4xt',
         title: '"Progressive multifocal leukoencephalopathy (PML) is a severely debilitating and often fatal demyelinating disease of the central nervous system (CNS) in immunosuppressed individuals caused by JC polyomavirus (JCV), a ubiquitous human pathogen."',
         type: 'PROBLEM',
         content:
@@ -7385,6 +7699,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008pes6ifie9b400',
+        doi: '10.82259/cl3fz14dx008pes6ifie9b400',
         title: 'Familial Mediterranean fever (FMF) is the most common autoinflammatory disease in the world.',
         type: 'PROBLEM',
         content: '<p>Familial Mediterranean fever (FMF) is the most common autoinflammatory disease in the world.</p>',
@@ -7407,6 +7722,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008qes6i0un80g64',
+        doi: '10.82259/cl3fz14dx008qes6i0un80g64',
         title: 'Ankylosing Spondylitis (AS) is one of the most common chronic autoimmune and autoinflammatory diseases and it can be defined both by its debilitating phenotype and its major social impact.',
         type: 'PROBLEM',
         content:
@@ -7431,6 +7747,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008res6i3mfladql',
+        doi: '10.82259/cl3fz14dx008res6i3mfladql',
         title: '"von Willebrand disease (VWD) is an inherited, genetically and clinically heterogeneous hemorrhagic disorder."',
         type: 'PROBLEM',
         content:
@@ -7455,6 +7772,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008ses6i9w071ys3',
+        doi: '10.82259/cl3fz14dx008ses6i9w071ys3',
         title: '"Most primary breast cancers express estrogen receptor _ and can be treated via endocrine therapy using anti-estrogens such as tamoxifen; however, acquired endocrine resistance is a critical issue."',
         type: 'PROBLEM',
         content:
@@ -7479,6 +7797,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008tes6if8rhhfqh',
+        doi: '10.82259/cl3fz14dx008tes6if8rhhfqh',
         title: 'Vitiligo is a common depigmenting disorder ensuing the loss of epidermal melanocytes.',
         type: 'PROBLEM',
         content: '<p>Vitiligo is a common depigmenting disorder ensuing the loss of epidermal melanocytes.</p>',
@@ -7501,6 +7820,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008ues6igt5hbwb3',
+        doi: '10.82259/cl3fz14dx008ues6igt5hbwb3',
         title: '"Charcot_Marie_Tooth disease (CMT) is a clinically and genetically heterogeneous inherited neuropathy, with Type 1A being the most common."',
         type: 'PROBLEM',
         content:
@@ -7525,6 +7845,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008ves6ih5hd6h1n',
+        doi: '10.82259/cl3fz14dx008ves6ih5hd6h1n',
         title: 'Solid wastes constitute an important and emerging problem.',
         type: 'PROBLEM',
         content: '<p>Solid wastes constitute an important and emerging problem.</p>',
@@ -7547,6 +7868,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008wes6i1u982ycs',
+        doi: '10.82259/cl3fz14dx008wes6i1u982ycs',
         title: '"Worldwide, organ shortage is a major limiting factor to transplantations."',
         type: 'PROBLEM',
         content: '<p>"Worldwide, organ shortage is a major limiting factor to transplantations."</p>',
@@ -7569,6 +7891,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008xes6i0w4i30xe',
+        doi: '10.82259/cl3fz14dx008xes6i0w4i30xe',
         title: '"Sexually transmitted infections (STIs) and reproductive tract infections (RTIs) are a major public health problem worldwide, affecting the quality of life and causing serious morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -7593,6 +7916,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008yes6i5nkshfk5',
+        doi: '10.82259/cl3fz14dx008yes6i5nkshfk5',
         title: 'Rett syndrome (RTT) is an X-linked neurodevelopmental disorder caused mainly by mutations in the MECP2 gene.',
         type: 'PROBLEM',
         content:
@@ -7617,6 +7941,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx008zes6ih6u20ho2',
+        doi: '10.82259/cl3fz14dx008zes6ih6u20ho2',
         title: 'Congenital long QT syndrome (LQTS) is characterized by QT prolongation with predisposition to life-threatening arrhythmia.',
         type: 'PROBLEM',
         content:
@@ -7641,6 +7966,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0090es6i0pev1l0t',
+        doi: '10.82259/cl3fz14dx0090es6i0pev1l0t',
         title: 'Rabies is a viral zoonosis that causes disease in the central nervous system (CNS) of mammals and it is considered a serious problem of public health.',
         type: 'PROBLEM',
         content:
@@ -7665,6 +7991,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0091es6i4zxt2rze',
+        doi: '10.82259/cl3fz14dx0091es6i4zxt2rze',
         title: '"The oil industry is plagued with regular incidences of spills into the environment, causing environmental damage to flora and fauna, especially in marine environments where spills easily travel long distances from their sources."',
         type: 'PROBLEM',
         content:
@@ -7689,6 +8016,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0092es6ieeco0ldg',
+        doi: '10.82259/cl3fz14dx0092es6ieeco0ldg',
         title: 'Pollution of water resources by phosphorus (P) is a critical issue in regions with agricultural and urban development.',
         type: 'PROBLEM',
         content:
@@ -7713,6 +8041,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0093es6i38uy5jnq',
+        doi: '10.82259/cl3fz14dx0093es6i38uy5jnq',
         title: '"IgA nephropathy is the most common glomerular disease worldwide, yet there is no international consensus for its pathological or clinical classification."',
         type: 'PROBLEM',
         content:
@@ -7737,6 +8066,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0094es6i48vfdja6',
+        doi: '10.82259/cl3fz14dx0094es6i48vfdja6',
         title: '"Carpal tunnel syndrome (CTS), in its idiopathic form, is an extremely frequent entrapment neuropathy in the clinical practice."',
         type: 'PROBLEM',
         content:
@@ -7761,6 +8091,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0095es6i3l2324o6',
+        doi: '10.82259/cl3fz14dx0095es6i3l2324o6',
         title: 'Today global climate change and its impact on crop production is a major issue.',
         type: 'PROBLEM',
         content: '<p>Today global climate change and its impact on crop production is a major issue.</p>',
@@ -7783,6 +8114,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0096es6i292x4ik0',
+        doi: '10.82259/cl3fz14dx0096es6i292x4ik0',
         title: '"Temporomandibular joint (TMJ) disorders, known as TMDs, are significant public health problems and may result in pain and disability."',
         type: 'PROBLEM',
         content:
@@ -7807,6 +8139,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0097es6i5jl4haim',
+        doi: '10.82259/cl3fz14dx0097es6i5jl4haim',
         title: 'Congenital adrenal hyperplasia (CAH) is an autosomal recessive disease predominantly caused by 21-hydroxylase deficiency.',
         type: 'PROBLEM',
         content:
@@ -7831,6 +8164,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0098es6ihg4tbknp',
+        doi: '10.82259/cl3fz14dx0098es6ihg4tbknp',
         title: 'Gaucher disease (GD) is an autosomal recessively inherited lysosomal storage disorder caused by an inborn glucocerebrosidase (GBA) deficiency.',
         type: 'PROBLEM',
         content:
@@ -7855,6 +8189,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx0099es6i0basbd11',
+        doi: '10.82259/cl3fz14dx0099es6i0basbd11',
         title: '"Allergic rhinitis (AR) is an inflammatory, immunoglobulin E (IgE)-mediated disease characterized by the typical symptoms of sneezing, rhinorrhea, nasal itching, and congestion."',
         type: 'PROBLEM',
         content:
@@ -7879,6 +8214,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009aes6iaxi99lia',
+        doi: '10.82259/cl3fz14dx009aes6iaxi99lia',
         title: 'Women carrying a pathogenic mutation in either BRCA1 or BRCA2 have a major risk of developing breast and/or ovarian cancer.',
         type: 'PROBLEM',
         content:
@@ -7903,6 +8239,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009bes6i6cw40h07',
+        doi: '10.82259/cl3fz14dx009bes6i6cw40h07',
         title: '"Solitary fibrous tumor (SFT) is a mesenchymal neoplasm that was originally described to be localized in the pleura, but thereafter, this has been reported in several anatomic sites."',
         type: 'PROBLEM',
         content:
@@ -7927,6 +8264,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ces6id2ct7ulo',
+        doi: '10.82259/cl3fz14dx009ces6id2ct7ulo',
         title: '"Lipomas are among the most common benign tumors of mesenchymal origin, having been described in virtually every area of the body."',
         type: 'PROBLEM',
         content:
@@ -7951,6 +8289,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009des6i1ow96fs4',
+        doi: '10.82259/cl3fz14dx009des6i1ow96fs4',
         title: '"Coral reefs are currently under threat as a consequence of local and global stressors, in particular, mass coral bleaching induced by climate warming."',
         type: 'PROBLEM',
         content:
@@ -7975,6 +8314,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ees6i47in4ew3',
+        doi: '10.82259/cl3fz14dx009ees6i47in4ew3',
         title: '"Long non_coding RNAs (lncRNAs) are aberrantly expressed in many disease conditions, including cancer."',
         type: 'PROBLEM',
         content:
@@ -7999,6 +8339,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009fes6i7xnd88by',
+        doi: '10.82259/cl3fz14dx009fes6i7xnd88by',
         title: 'Thrombotic complications of heparin_induced thrombocytopenia (HIT) can be devastating if not recognized and treated promptly.',
         type: 'PROBLEM',
         content:
@@ -8023,6 +8364,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ges6i07hj1pya',
+        doi: '10.82259/cl3fz14dx009ges6i07hj1pya',
         title: 'The surgical management of patients with congenital diaphragmatic hernia (CDH) is challenging and ever changing.',
         type: 'PROBLEM',
         content:
@@ -8047,6 +8389,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009hes6iavl48rab',
+        doi: '10.82259/cl3fz14dx009hes6iavl48rab',
         title: '"Mycotoxins are widespread natural toxins with diverse toxicological impacts, produced in crops like cereals in the field and/or post-harvest."',
         type: 'PROBLEM',
         content:
@@ -8071,6 +8414,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ies6ic53p10vb',
+        doi: '10.82259/cl3fz14dx009ies6ic53p10vb',
         title: 'Activating FLT3 internal tandem duplication mutations (FLT3-ITDs) occur in approximately 30% of acute myeloid leukemia (AML) patients.',
         type: 'PROBLEM',
         content:
@@ -8095,6 +8439,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009jes6iajwr8mhu',
+        doi: '10.82259/cl3fz14dx009jes6iajwr8mhu',
         title: '"Perfluorinated compounds (PFCs), a group of persistent organic pollutants, have been widely detected in environmental media and posed great threats to human health."',
         type: 'PROBLEM',
         content:
@@ -8119,6 +8464,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009kes6i1lofgyah',
+        doi: '10.82259/cl3fz14dx009kes6i1lofgyah',
         title: 'Acquired resistance to EGF receptor (EGFR) tyrosine kinase inhibitor (TKI) is a critical problem in the treatment of lung cancer.',
         type: 'PROBLEM',
         content:
@@ -8143,6 +8489,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009les6icdcscvne',
+        doi: '10.82259/cl3fz14dx009les6icdcscvne',
         title: 'Patients with familial adenomatous polyposis have an excess risk for adenomas and cancers of the upper and lower gastrointestinal tract.',
         type: 'PROBLEM',
         content:
@@ -8167,6 +8514,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009mes6i1dzqf2ly',
+        doi: '10.82259/cl3fz14dx009mes6i1dzqf2ly',
         title: 'Eosinophilic esophagitis (EoE) is a chronic immune/antigen-mediated clinicopathologic condition that has become an increasingly important cause of upper gastrointestinal morbidity in adults and children over the past 2 decades.',
         type: 'PROBLEM',
         content:
@@ -8191,6 +8539,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009nes6ig1zj20gh',
+        doi: '10.82259/cl3fz14dx009nes6ig1zj20gh',
         title: '"Cryptococcus neoformans is a widely disseminated fungus shown to be responsible for infections in individuals with impaired cell mediated immunity, such as patients with human immunodeficiency virus (HIV)."',
         type: 'PROBLEM',
         content:
@@ -8215,6 +8564,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009oes6idbw56hlx',
+        doi: '10.82259/cl3fz14dx009oes6idbw56hlx',
         title: '"Hereditary hemochromatosis (HH) is a common genetic disease in the United States, but little is known about the diagnosis from the patient\'s perspective."',
         type: 'PROBLEM',
         content:
@@ -8239,6 +8589,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009pes6igojo64jh',
+        doi: '10.82259/cl3fz14dx009pes6igojo64jh',
         title: 'The rapid depletion of natural resources and the environmental concerns associated with the use of fossil fuels as the main source of global energy is leading to an increased interest in alternative and renewable energy sources.',
         type: 'PROBLEM',
         content:
@@ -8263,6 +8614,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009qes6iak3oasqz',
+        doi: '10.82259/cl3fz14dx009qes6iak3oasqz',
         title: 'Neuroblastoma (NB) is an embryonal malignancy derived from the abnormal differentiation of the sympathetic nervous system.',
         type: 'PROBLEM',
         content:
@@ -8287,6 +8639,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009res6i1kuye168',
+        doi: '10.82259/cl3fz14dx009res6i1kuye168',
         title: 'Musculoskeletal disorders (MSDs) are the most common health issues around the globe and a major cause of disability among workers.',
         type: 'PROBLEM',
         content:
@@ -8311,6 +8664,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ses6i3jm18e8h',
+        doi: '10.82259/cl3fz14dx009ses6i3jm18e8h',
         title: '"Cancer has long been considered a genetic disease, characterized by a sequential accumulation of genetic alterations."',
         type: 'PROBLEM',
         content:
@@ -8335,6 +8689,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009tes6i4okz0lo2',
+        doi: '10.82259/cl3fz14dx009tes6i4okz0lo2',
         title: '"Family caregivers of people with dementia face many problems as,  stress, depression, anxiety and high level of burdens related to caregiving ."',
         type: 'PROBLEM',
         content:
@@ -8359,6 +8714,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ues6icv2s35le',
+        doi: '10.82259/cl3fz14dx009ues6icv2s35le',
         title: 'Cleft lip and palate is a commonly observed congenital maxillofacial defect.',
         type: 'PROBLEM',
         content: '<p>Cleft lip and palate is a commonly observed congenital maxillofacial defect.</p>',
@@ -8381,6 +8737,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009ves6iew2307d2',
+        doi: '10.82259/cl3fz14dx009ves6iew2307d2',
         title: '"Although much attention has been paid to the exploration of highly active electrocatalysts, especially catalysts for hydrogen evolution reaction (HER), oxygen evolution reaction (OER) and oxygen reduction reaction (ORR), the development of multifunctional catalysts remains a challenge."',
         type: 'PROBLEM',
         content:
@@ -8405,6 +8762,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009wes6ibma5datj',
+        doi: '10.82259/cl3fz14dx009wes6ibma5datj',
         title: 'Coxiella burnetii is an intracellular bacterium that causes acute and chronic Q fever.',
         type: 'PROBLEM',
         content: '<p>Coxiella burnetii is an intracellular bacterium that causes acute and chronic Q fever.</p>',
@@ -8427,6 +8785,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009xes6ie24v3lrq',
+        doi: '10.82259/cl3fz14dx009xes6ie24v3lrq',
         title: 'Alopecia areata (AA) is a disease of wide spectrum with varying extent and distribution of hair loss in each patient.',
         type: 'PROBLEM',
         content:
@@ -8451,6 +8810,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009yes6ihxtk1xrp',
+        doi: '10.82259/cl3fz14dx009yes6ihxtk1xrp',
         title: 'Chikungunya is a viral disease caused by arthropod-borne Chikungunya virus (CHIKV) and transmitted by Aedes mosquitoes.',
         type: 'PROBLEM',
         content:
@@ -8475,6 +8835,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx009zes6ifdbg8736',
+        doi: '10.82259/cl3fz14dx009zes6ifdbg8736',
         title: 'The presence of endocrine disrupting compounds (EDCs) in water and wastewater poses potential risks on aquatic environment and human health.',
         type: 'PROBLEM',
         content:
@@ -8499,6 +8860,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a0es6i1nb0321a',
+        doi: '10.82259/cl3fz14dx00a0es6i1nb0321a',
         title: 'Synovial cell sarcoma is an extremely rare tumor of mesenchymal origin.',
         type: 'PROBLEM',
         content: '<p>Synovial cell sarcoma is an extremely rare tumor of mesenchymal origin.</p>',
@@ -8521,6 +8883,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a1es6i8k380zij',
+        doi: '10.82259/cl3fz14dx00a1es6i8k380zij',
         title: '"Globally, maternal morbidity and mortality remain a major public health challenge."',
         type: 'PROBLEM',
         content: '<p>"Globally, maternal morbidity and mortality remain a major public health challenge."</p>',
@@ -8543,6 +8906,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a2es6i8b3l1hs9',
+        doi: '10.82259/cl3fz14dx00a2es6i8b3l1hs9',
         title: '"The overactivation of microglia is known to trigger inflammatory reactions in the central nervous system, which ultimately induce neuroinflammatory disorders including Alzheimer’s disease."',
         type: 'PROBLEM',
         content:
@@ -8567,6 +8931,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a3es6icowe2m78',
+        doi: '10.82259/cl3fz14dx00a3es6icowe2m78',
         title: 'Moyamoya disease is an idiopathic vascular disorder of the intracranial arteries.',
         type: 'PROBLEM',
         content: '<p>Moyamoya disease is an idiopathic vascular disorder of the intracranial arteries.</p>',
@@ -8589,6 +8954,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a4es6iayic8cdu',
+        doi: '10.82259/cl3fz14dx00a4es6iayic8cdu',
         title: 'Ehlers–Danlos syndrome (EDS) type IV is a collagen vascular disease with an autosomal dominant inheritance caused by COL3A1 mutation.',
         type: 'PROBLEM',
         content:
@@ -8613,6 +8979,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a5es6ihdp167r2',
+        doi: '10.82259/cl3fz14dx00a5es6ihdp167r2',
         title: '"Ticks are primary vectors for many well-known disease-causing agents that affect human and animal populations globally such as tick-borne encephalitis, Crimean-Congo hemorrhagic fever and African swine fever."',
         type: 'PROBLEM',
         content:
@@ -8637,6 +9004,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a6es6igdqkh5q7',
+        doi: '10.82259/cl3fz14dx00a6es6igdqkh5q7',
         title: '"Primary cardiac tumors are rare, and atrial myxomas represent about half of the benigntumors encountered."',
         type: 'PROBLEM',
         content:
@@ -8661,6 +9029,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a7es6ia3jz7hfw',
+        doi: '10.82259/cl3fz14dx00a7es6ia3jz7hfw',
         title: '"Biofilms, surface-bound communities of microbes, are economically and medically important due to their pathogenic and obstructive properties."',
         type: 'PROBLEM',
         content:
@@ -8685,6 +9054,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a8es6i6mo7cf8c',
+        doi: '10.82259/cl3fz14dx00a8es6i6mo7cf8c',
         title: 'Chronic Rejection (CR) is the leading cause of renal allograft dysfunction.',
         type: 'PROBLEM',
         content: '<p>Chronic Rejection (CR) is the leading cause of renal allograft dysfunction.</p>',
@@ -8707,6 +9077,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00a9es6i1o0ueomr',
+        doi: '10.82259/cl3fz14dx00a9es6i1o0ueomr',
         title: '"Diarrhea is the second leading cause of under-five mortality and globally accounts for 526,000 child deaths every year."',
         type: 'PROBLEM',
         content:
@@ -8731,6 +9102,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00aaes6i2up7g80l',
+        doi: '10.82259/cl3fz14dx00aaes6i2up7g80l',
         title: 'Vibrio cholerae is an important bacterial pathogen that causes global cholera epidemic.',
         type: 'PROBLEM',
         content: '<p>Vibrio cholerae is an important bacterial pathogen that causes global cholera epidemic.</p>',
@@ -8753,6 +9125,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00abes6i8w03apwn',
+        doi: '10.82259/cl3fz14dx00abes6i8w03apwn',
         title: 'Japanese encephalitis (JE) is one of the most important viral encephalitides in Asia.',
         type: 'PROBLEM',
         content: '<p>Japanese encephalitis (JE) is one of the most important viral encephalitides in Asia.</p>',
@@ -8775,6 +9148,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00aces6i2y0tefwr',
+        doi: '10.82259/cl3fz14dx00aces6i2y0tefwr',
         title: '"Viruses are the most abundant and diverse pathogens challenging the host immune system, and as such are a severe threat to human health."',
         type: 'PROBLEM',
         content:
@@ -8799,6 +9173,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00ades6i87rm4foo',
+        doi: '10.82259/cl3fz14dx00ades6i87rm4foo',
         title: '"Multiple negative factors, including the poor electronic conductivity of sulfur, dissolution and shuttling of lithium polysulfides (Li2Sn), and sluggish decomposition of solid Li2S, seriously hinder practical applications of lithium-sulfur (Li-S) batteries."',
         type: 'PROBLEM',
         content:
@@ -8823,6 +9198,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00aees6i0fd89phr',
+        doi: '10.82259/cl3fz14dx00aees6i0fd89phr',
         title: 'Brugada syndrome (BrS) was first described as a primary electrical disorder predisposing to the risk of sudden cardiac death and characterized by right precordial lead ST elevation.',
         type: 'PROBLEM',
         content:
@@ -8847,6 +9223,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00afes6i369wevjn',
+        doi: '10.82259/cl3fz14dx00afes6i369wevjn',
         title: 'Benign paroxysmal positional vertigo is the most common peripheral vestibular disorder.',
         type: 'PROBLEM',
         content: '<p>Benign paroxysmal positional vertigo is the most common peripheral vestibular disorder.</p>',
@@ -8869,6 +9246,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00ages6i1v5vggx1',
+        doi: '10.82259/cl3fz14dx00ages6i1v5vggx1',
         title: 'Retinoblastoma (RB) is a childhood retinal malignancy.',
         type: 'PROBLEM',
         content: '<p>Retinoblastoma (RB) is a childhood retinal malignancy.</p>',
@@ -8891,6 +9269,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00ahes6i30y4fqn4',
+        doi: '10.82259/cl3fz14dx00ahes6i30y4fqn4',
         title: 'Necrotizing enterocolitis (NEC) is a devastating intestinal disease resulting in major neonatal morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -8915,6 +9294,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dx00aies6i8345ah1u',
+        doi: '10.82259/cl3fz14dx00aies6i8345ah1u',
         title: 'Venous thromboembolism is a common complication in patients with malignant disease.',
         type: 'PROBLEM',
         content: '<p>Venous thromboembolism is a common complication in patients with malignant disease.</p>',
@@ -8937,6 +9317,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ajes6igv6ialm0',
+        doi: '10.82259/cl3fz14dy00ajes6igv6ialm0',
         title: '"Extranodal natural killer (NK)/T_cell lymphoma, nasal type (ENKTLN), is characterized by higher prevalence in East Asians and South Americans, association with Epstein–Barr virus infection, aggressive nature in most cases, and resistance to conventional treatment strategies such as chemotherapy and radiotherapy."',
         type: 'PROBLEM',
         content:
@@ -8961,6 +9342,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00akes6i0yyd120a',
+        doi: '10.82259/cl3fz14dy00akes6i0yyd120a',
         title: 'Contrast-induced nephropathy (CIN) is the third most common cause of hospital-acquired kidney injury and is related to increased long-term morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -8985,6 +9367,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ales6ibx5ve35b',
+        doi: '10.82259/cl3fz14dy00ales6ibx5ve35b',
         title: '"Measles, which until recently had been a rare disease in the United States, is re-emerging in our communities due to a combination of increased global mobility and decreased vaccinations across the country."',
         type: 'PROBLEM',
         content:
@@ -9009,6 +9392,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ames6i1aoj4owv',
+        doi: '10.82259/cl3fz14dy00ames6i1aoj4owv',
         title: 'Mitral regurgitation (MR) is the second most prevalent valvular heart disease in developed countries.',
         type: 'PROBLEM',
         content:
@@ -9033,6 +9417,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00anes6i1xer2pmg',
+        doi: '10.82259/cl3fz14dy00anes6i1xer2pmg',
         title: '"Wildland fires are globally widespread, constituting the primary forest disturbance in many ecosystems."',
         type: 'PROBLEM',
         content:
@@ -9057,6 +9442,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00aoes6ih7f86cad',
+        doi: '10.82259/cl3fz14dy00aoes6ih7f86cad',
         title: 'Stress is one of the important risks that negatively affect both the working life and health of individuals.',
         type: 'PROBLEM',
         content:
@@ -9081,6 +9467,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00apes6i9qio79vs',
+        doi: '10.82259/cl3fz14dy00apes6i9qio79vs',
         title: 'Targeted drug delivery is one of the key challenges in cancer nanomedicine.',
         type: 'PROBLEM',
         content: '<p>Targeted drug delivery is one of the key challenges in cancer nanomedicine.</p>',
@@ -9103,6 +9490,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00aqes6i6w3i2xl1',
+        doi: '10.82259/cl3fz14dy00aqes6i6w3i2xl1',
         title: '"Frailty is a common clinical syndrome in older adults that carries an increased risk for poor health outcomes including falls, incident disability, hospitalisation and mortality."',
         type: 'PROBLEM',
         content:
@@ -9127,6 +9515,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ares6i2gi6cidn',
+        doi: '10.82259/cl3fz14dy00ares6i2gi6cidn',
         title: '"Myeloproliferative neoplasms (MPN) are a group of clonal hematopoietic stem cell disorders with a variable clinical course: essential thrombocytosis (ET) and polycythemia vera (PV) are associated with excess clotting and bleeding but an overall normal or near-normal life expectancy, while myelofibrosis has a variable but generally poor prognosis."',
         type: 'PROBLEM',
         content:
@@ -9151,6 +9540,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ases6i0bz6buae',
+        doi: '10.82259/cl3fz14dy00ases6i0bz6buae',
         title: 'Immune-mediated necrotising myopathy (IMNM) and inclusion body myositis (IBM) belong to a spectrum of conditions called the idiopathic inflammatory myopathies.',
         type: 'PROBLEM',
         content:
@@ -9175,6 +9565,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ates6i3q2733gg',
+        doi: '10.82259/cl3fz14dy00ates6i3q2733gg',
         title: '"2,3,7,8_Tetrachlorodibenzo_p_dioxin (TCDD) and polychlorinated biphenyls (PCBs) are persistent organic pollutants which coexist in environment, and human are co_exposed to these chemicals."',
         type: 'PROBLEM',
         content:
@@ -9199,6 +9590,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00aues6idr5ga38r',
+        doi: '10.82259/cl3fz14dy00aues6idr5ga38r',
         title: '"Takayasu\'s arteritis (TA) is a rare disease that can be overlooked during the first visit to a GP, rheumatologist, or any other medical specialist due to a variety of its symptoms."',
         type: 'PROBLEM',
         content:
@@ -9223,6 +9615,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00aves6i7d0i1i7g',
+        doi: '10.82259/cl3fz14dy00aves6i7d0i1i7g',
         title: 'Landslides represent a frequent and threatening natural disaster.',
         type: 'PROBLEM',
         content: '<p>Landslides represent a frequent and threatening natural disaster.</p>',
@@ -9245,6 +9638,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00awes6ia8824ahd',
+        doi: '10.82259/cl3fz14dy00awes6ia8824ahd',
         title: 'Niemann_Pick type C disease is a rare autosomal recessive lysosomal disorder that leads to the accumulation of lipids in cellular organelles.',
         type: 'PROBLEM',
         content:
@@ -9269,6 +9663,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00axes6ihijh3r90',
+        doi: '10.82259/cl3fz14dy00axes6ihijh3r90',
         title: '"Ataxia-telangiectasia (A-T) is an autosomal recessive disorder involving cerebellar degeneration, immunodeficiency, chromosomal instability, radiosensitivity and cancer predisposition."',
         type: 'PROBLEM',
         content:
@@ -9293,6 +9688,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ayes6ia6u54tw0',
+        doi: '10.82259/cl3fz14dy00ayes6ia6u54tw0',
         title: 'Neurocysticercosis is the most common parasitic infection of the central nervous system caused by larvae of Taenia solium.',
         type: 'PROBLEM',
         content:
@@ -9317,6 +9713,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00azes6ig1b53azr',
+        doi: '10.82259/cl3fz14dy00azes6ig1b53azr',
         title: '"Prader-Willi syndrome (PWS) is a genetically determined disorder in which the absence of expression of one or more maternally imprinted gene(s) in the chromosomal region 15q11-13 results in a characteristic facial appearance, learning disabilities (mental retardation), and severe overeating behaviour owing to an abnormal satiety response to food intake, together with a range of other behaviours."',
         type: 'PROBLEM',
         content:
@@ -9341,6 +9738,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b0es6i9namcw0s',
+        doi: '10.82259/cl3fz14dy00b0es6i9namcw0s',
         title: '"Multiple endocrine neoplasia type 2A (MEN2A) is a rare syndrome caused almost by germline RET mutation, and characterized by medullary thyroid carcinoma (MTC), in combination or not with pheochromocytoma (PHEO), hyperparathyroidism (HPTH), cutaneous lichen amyloidosis (CLA), and Hirschsprung\'s disease (HD)."',
         type: 'PROBLEM',
         content:
@@ -9365,6 +9763,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b1es6ie66r7je7',
+        doi: '10.82259/cl3fz14dy00b1es6ie66r7je7',
         title: 'Presence of blood brain barrier is one of the major hurdle in drug delivery to brain for the treatment of neurological diseases.',
         type: 'PROBLEM',
         content:
@@ -9389,6 +9788,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b2es6i8w6xgclb',
+        doi: '10.82259/cl3fz14dy00b2es6i8w6xgclb',
         title: '"Cases of pertussis, or whooping cough, have increased in recent years despite widespread vaccination and adequate antibiotic treatments."',
         type: 'PROBLEM',
         content:
@@ -9413,6 +9813,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b3es6i6ow1bbwk',
+        doi: '10.82259/cl3fz14dy00b3es6i6ow1bbwk',
         title: "Castleman's disease is a rare lymphoproliferative disorder of unknown aetiology.",
         type: 'PROBLEM',
         content: "<p>Castleman's disease is a rare lymphoproliferative disorder of unknown aetiology.</p>",
@@ -9435,6 +9836,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b4es6i3ezggxwv',
+        doi: '10.82259/cl3fz14dy00b4es6i3ezggxwv',
         title: '"Diffuse nitrogen pollution in groundand surface waters is of concern, especially in regions with intense agricultural activities."',
         type: 'PROBLEM',
         content:
@@ -9459,6 +9861,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b5es6ibpwj8wb5',
+        doi: '10.82259/cl3fz14dy00b5es6ibpwj8wb5',
         title: '"Hereditary hemorrhagic telangiectasia (HHT), also known as Rendu-Osler-Weber disease, is a rare autosomal dominant vascular disorder involving arteriovenous malformation (AVM) due to angiodysplasia."',
         type: 'PROBLEM',
         content:
@@ -9483,6 +9886,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b6es6i5z3h1pgc',
+        doi: '10.82259/cl3fz14dy00b6es6i5z3h1pgc',
         title: 'LRRK2 gene mutations (PARK8) are a common cause of genetic Parkinson disease (PD).',
         type: 'PROBLEM',
         content: '<p>LRRK2 gene mutations (PARK8) are a common cause of genetic Parkinson disease (PD).</p>',
@@ -9505,6 +9909,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b7es6iaf21gwku',
+        doi: '10.82259/cl3fz14dy00b7es6iaf21gwku',
         title: '"Common variable immunodeficiency disorders (CVID), the most frequent cause of symptomatic primary immunodeficiency, are defined by impaired antibody production."',
         type: 'PROBLEM',
         content:
@@ -9529,6 +9934,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b8es6ih658aqvh',
+        doi: '10.82259/cl3fz14dy00b8es6ih658aqvh',
         title: 'The continuous increase of people with chronic diseases is one of the greatest challenges for healthcare systems worldwide.',
         type: 'PROBLEM',
         content:
@@ -9553,6 +9959,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00b9es6i0bfpcd9z',
+        doi: '10.82259/cl3fz14dy00b9es6i0bfpcd9z',
         title: '"Skin wound healing, especially chronic wound healing, is a common challenging clinical problem."',
         type: 'PROBLEM',
         content:
@@ -9577,6 +9984,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00baes6i6jh936hn',
+        doi: '10.82259/cl3fz14dy00baes6i6jh936hn',
         title: 'Adrenocortical tumors are rare neoplasms with poor prognosis and with an incidence of one in one million population.',
         type: 'PROBLEM',
         content:
@@ -9601,6 +10009,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bbes6i01mghugf',
+        doi: '10.82259/cl3fz14dy00bbes6i01mghugf',
         title: '"The worldwide spread of COVID-19 pandemic poses new challenges to higher education, in general, and to pedagogical education in particular."',
         type: 'PROBLEM',
         content:
@@ -9625,6 +10034,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bces6i4eio36bz',
+        doi: '10.82259/cl3fz14dy00bces6i4eio36bz',
         title: 'Turner syndrome is a chromosomal condition that affects development in females.',
         type: 'PROBLEM',
         content: '<p>Turner syndrome is a chromosomal condition that affects development in females.</p>',
@@ -9647,6 +10057,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bdes6iegz455vc',
+        doi: '10.82259/cl3fz14dy00bdes6iegz455vc',
         title: 'Osteogenesis imperfecta (OI) is a genetic disorder of connective tissue characterized by bone fragility and alteration in synthesis and posttranslational modification of type I collagen.',
         type: 'PROBLEM',
         content:
@@ -9671,6 +10082,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bees6i0wd21e92',
+        doi: '10.82259/cl3fz14dy00bees6i0wd21e92',
         title: 'Cardiovascular event and infection are the first and second leading causes of death in the peritoneal dialysis (PD) populations ',
         type: 'PROBLEM',
         content:
@@ -9695,6 +10107,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bfes6iadjtd8l4',
+        doi: '10.82259/cl3fz14dy00bfes6iadjtd8l4',
         title: 'Mutations in KRAS are among the most frequent RAS alterations in human cancers and the prevalent driver event in lung adenocarcinoma (LUAD).',
         type: 'PROBLEM',
         content:
@@ -9719,6 +10132,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bges6if25g9xu3',
+        doi: '10.82259/cl3fz14dy00bges6if25g9xu3',
         title: 'Barrett’s oesophagus is an acquired condition that predisposes patients to the development of oesophageal adenocarcinoma through intermediate stages of dysplasia.',
         type: 'PROBLEM',
         content:
@@ -9743,6 +10157,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bhes6ie6at1bn0',
+        doi: '10.82259/cl3fz14dy00bhes6ie6at1bn0',
         title: 'Intervertebral disc (IVD) disorders associated with pain and disability are extremely prevalent and current treatment options do not result in restoration of tissue integrity or function.',
         type: 'PROBLEM',
         content:
@@ -9767,6 +10182,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bies6ic7zwdp19',
+        doi: '10.82259/cl3fz14dy00bies6ic7zwdp19',
         title: '"Since the early 1980s, adolescents in the United States have experienced high rates of unintended pregnancies and sexually transmitted diseases (STDs), including HIV infection."',
         type: 'PROBLEM',
         content:
@@ -9791,6 +10207,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bjes6idmlw9rfn',
+        doi: '10.82259/cl3fz14dy00bjes6idmlw9rfn',
         title: 'Neuronal ceroid lipofuscinoses (NCLs; CLN) are mainly autosomal recessive neurodegenerative disorders characterized by the accumulation of autofluorescent lipopigments in neuronal and other cells.',
         type: 'PROBLEM',
         content:
@@ -9815,6 +10232,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bkes6i7jlw935p',
+        doi: '10.82259/cl3fz14dy00bkes6i7jlw935p',
         title: '"Down Syndrome (DS), trisomy 21, is characterized by synaptic abnormalities and cognitive deficits throughout the lifespan and with development of Alzheimer\'s disease (AD) neuropathology and progressive cognitive decline in adults."',
         type: 'PROBLEM',
         content:
@@ -9839,6 +10257,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bles6ibl070yy6',
+        doi: '10.82259/cl3fz14dy00bles6ibl070yy6',
         title: 'Tissue ischemia/reperfusion (IR) injury underlies several leading causes of death such as heart-attack and stroke.',
         type: 'PROBLEM',
         content:
@@ -9863,6 +10282,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bmes6i1ff4c9vn',
+        doi: '10.82259/cl3fz14dy00bmes6i1ff4c9vn',
         title: 'Angiosarcoma is a rare and aggressive vascular malignancy with a poor prognosis.',
         type: 'PROBLEM',
         content: '<p>Angiosarcoma is a rare and aggressive vascular malignancy with a poor prognosis.</p>',
@@ -9885,6 +10305,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bnes6i5rkf4ykt',
+        doi: '10.82259/cl3fz14dy00bnes6i5rkf4ykt',
         title: 'Ventilator associated pneumonia (VAP) is the leading nosocomial infection in intensive care.',
         type: 'PROBLEM',
         content: '<p>Ventilator associated pneumonia (VAP) is the leading nosocomial infection in intensive care.</p>',
@@ -9907,6 +10328,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00boes6ie9fkdc96',
+        doi: '10.82259/cl3fz14dy00boes6ie9fkdc96',
         title: 'Ozone (O3) is a key air pollutant that is produced from precursor emissions and has adverse impacts on human health and ecosystems.',
         type: 'PROBLEM',
         content:
@@ -9935,6 +10357,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bpes6i48nf4awk',
+        doi: '10.82259/cl3fz14dy00bpes6i48nf4awk',
         title: 'Alcoholic hepatitis (AH) is a severe inflammatory liver disease that develops in some heavy drinkers.',
         type: 'PROBLEM',
         content:
@@ -9959,6 +10382,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bqes6i9wuq5u48',
+        doi: '10.82259/cl3fz14dy00bqes6i9wuq5u48',
         title: '"Bleeding associated with portal hypertension, is a major cause of morbidity and mortality in patients with cirrhosis."',
         type: 'PROBLEM',
         content:
@@ -9983,6 +10407,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bres6i3n6o9nvz',
+        doi: '10.82259/cl3fz14dy00bres6i3n6o9nvz',
         title: '"The hemolytic uremic syndrome (HUS) is related to a thrombotic microangiopathy in the kidney, leading to hypertension and acute renal failure."',
         type: 'PROBLEM',
         content:
@@ -10007,6 +10432,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bses6i9c2y9ucq',
+        doi: '10.82259/cl3fz14dy00bses6i9c2y9ucq',
         title: '"Enterovirus 71 (EV71) and Coxsackievirus A16 (CA16) are the main etiological agents of Hand, Foot and Mouth Disease (HFMD), a common disease among children and had caused several outbreaks in the Asia-Pacific region."',
         type: 'PROBLEM',
         content:
@@ -10031,6 +10457,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00btes6i9d3i2bnm',
+        doi: '10.82259/cl3fz14dy00btes6i9d3i2bnm',
         title: '"Liver fibrosis, the excessive accumulation of extracellular matrix (ECM) in the liver, develops as a long-term consequence of chronic liver injury, and significantly contributes to the mortal complications of chronic liver disease."',
         type: 'PROBLEM',
         content:
@@ -10055,6 +10482,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bues6iazlsargu',
+        doi: '10.82259/cl3fz14dy00bues6iazlsargu',
         title: 'The chronic fatigue syndrome comprises one of the most challenging issues in contemporary medicine.',
         type: 'PROBLEM',
         content:
@@ -10079,6 +10507,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bves6ifu4u7uup',
+        doi: '10.82259/cl3fz14dy00bves6ifu4u7uup',
         title: 'Transthyretin (TTR) cardiac amyloidosis (CA) is a progressive infiltrative cardiomyopathy with no specific therapy.',
         type: 'PROBLEM',
         content:
@@ -10103,6 +10532,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bwes6i82710kqg',
+        doi: '10.82259/cl3fz14dy00bwes6i82710kqg',
         title: '"Ever-rising energy demand, fossil fuel dependence, and climate issues have harmful consequences to the society."',
         type: 'PROBLEM',
         content:
@@ -10127,6 +10557,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bxes6ifzpt9w9p',
+        doi: '10.82259/cl3fz14dy00bxes6ifzpt9w9p',
         title: '"Lichen planus (LP) is a chronic autoimmune disease that affects the oral mucosa as well as the skin, genital mucosa and other sites."',
         type: 'PROBLEM',
         content:
@@ -10151,6 +10582,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00byes6ibozyfmaw',
+        doi: '10.82259/cl3fz14dy00byes6ibozyfmaw',
         title: 'Respiratory infection remains a leading killer of young children worldwide',
         type: 'PROBLEM',
         content: '<p>Respiratory infection remains a leading killer of young children worldwide</p>',
@@ -10173,6 +10605,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00bzes6ia74m41jt',
+        doi: '10.82259/cl3fz14dy00bzes6ia74m41jt',
         title: 'Right ventricular failure (RVF) remains a major cause of morbidity and mortality after left ventricular assist device (LVAD).',
         type: 'PROBLEM',
         content:
@@ -10197,6 +10630,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c0es6i7d4eajjp',
+        doi: '10.82259/cl3fz14dy00c0es6i7d4eajjp',
         title: 'Anaphylaxis is responsible for considerable morbidity and may in some cases prove fatal.',
         type: 'PROBLEM',
         content: '<p>Anaphylaxis is responsible for considerable morbidity and may in some cases prove fatal.</p>',
@@ -10219,6 +10653,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c1es6i4i3v0pf9',
+        doi: '10.82259/cl3fz14dy00c1es6i4i3v0pf9',
         title: 'Neurodegenerative diseases refer to the selective loss of neuronal systems in patients.',
         type: 'PROBLEM',
         content: '<p>Neurodegenerative diseases refer to the selective loss of neuronal systems in patients.</p>',
@@ -10241,6 +10676,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c2es6idsfd2d0q',
+        doi: '10.82259/cl3fz14dy00c2es6idsfd2d0q',
         title: '"Friedreich ataxia (FA) is the most common type of hereditary ataxia, caused by expansions of an unstable GAA trinucleotide repeat in the X25 gene located on chromosome 9q13 leading to insufficient levels of the protein frataxin."',
         type: 'PROBLEM',
         content:
@@ -10265,6 +10701,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c3es6i6u0ga52b',
+        doi: '10.82259/cl3fz14dy00c3es6i6u0ga52b',
         title: 'Dystonia is a disorder of movement caused by various etiologies.',
         type: 'PROBLEM',
         content: '<p>Dystonia is a disorder of movement caused by various etiologies.</p>',
@@ -10287,6 +10724,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c4es6i5ked76ud',
+        doi: '10.82259/cl3fz14dy00c4es6i5ked76ud',
         title: 'Restless legs syndrome (RLS) is a neuro-sensorimotor disorder affecting 2–4% of adults.',
         type: 'PROBLEM',
         content: '<p>Restless legs syndrome (RLS) is a neuro-sensorimotor disorder affecting 2–4% of adults.</p>',
@@ -10309,6 +10747,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c5es6i1pr4308l',
+        doi: '10.82259/cl3fz14dy00c5es6i1pr4308l',
         title: '"Burkholderia pseudomallei is the etiological agent of melioidosis, a severe infectious disease of humans and animals."',
         type: 'PROBLEM',
         content:
@@ -10333,6 +10772,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c6es6i4zax3n89',
+        doi: '10.82259/cl3fz14dy00c6es6i4zax3n89',
         title: 'Mastocytosis is a myeloid neoplasm characterized by abnormal accumulation and frequent activation of mast cells (MCs) in various organs.',
         type: 'PROBLEM',
         content:
@@ -10357,6 +10797,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c7es6igxbf23de',
+        doi: '10.82259/cl3fz14dy00c7es6igxbf23de',
         title: 'Aortic valve stenosis is a common disease.',
         type: 'PROBLEM',
         content: '<p>Aortic valve stenosis is a common disease.</p>',
@@ -10379,6 +10820,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c8es6i3a51auvp',
+        doi: '10.82259/cl3fz14dy00c8es6i3a51auvp',
         title: 'Pressure ulcers are common in clinical practice and pose a significant health problem worldwide.',
         type: 'PROBLEM',
         content:
@@ -10402,6 +10844,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00c9es6i556i4whf',
+        doi: '10.82259/cl3fz14dy00c9es6i556i4whf',
         title: '"The field of photocatalysis is an active area owing to the possible contributions to solve some challenging problems such as sustainable energy production, environmental pollution control, and even global warming."',
         type: 'PROBLEM',
         content:
@@ -10426,6 +10869,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00caes6igpkm1mj0',
+        doi: '10.82259/cl3fz14dy00caes6igpkm1mj0',
         title: 'Pharmaceuticals have recently emerged as novel pollutants of potential concern in the aquatic environment where they are commonly introduced as complex mixtures via municipal effluent.',
         type: 'PROBLEM',
         content:
@@ -10450,6 +10894,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cbes6i9bcvc429',
+        doi: '10.82259/cl3fz14dy00cbes6i9bcvc429',
         title: 'Corrosion of reinforcing steel due to the ingression of chloride ions from deicing salt and/or seawater has been a major cause of the deterioration of reinforced concrete structures.',
         type: 'PROBLEM',
         content:
@@ -10474,6 +10919,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cces6i3at1ac3w',
+        doi: '10.82259/cl3fz14dy00cces6i3at1ac3w',
         title: "Trypanosoma brucei is a unicellular eukaryote that causes the deadly human African trypanosomiasis ('sleeping sickness') in humans.",
         type: 'PROBLEM',
         content:
@@ -10498,6 +10944,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cdes6ieiw3ehk7',
+        doi: '10.82259/cl3fz14dy00cdes6ieiw3ehk7',
         title: 'Gout is a common metabolic disorder characterized by elevated uric acid leading to the formation and accumulation of uric acid crystals in synovial fluids.',
         type: 'PROBLEM',
         content:
@@ -10522,6 +10969,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cees6iabstckrx',
+        doi: '10.82259/cl3fz14dy00cees6iabstckrx',
         title: '"Ischemia-reperfusion injury is an important cause of liver damage occurring during surgical procedures including hepatic resection and liver transplantation, and represents the main underlying cause of graft dysfunction post-transplantation."',
         type: 'PROBLEM',
         content:
@@ -10550,6 +10998,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cfes6i2rmfdu7w',
+        doi: '10.82259/cl3fz14dy00cfes6i2rmfdu7w',
         title: 'Femur fracture is an acute event with a high incidence and mortality worldwide.',
         type: 'PROBLEM',
         content: '<p>Femur fracture is an acute event with a high incidence and mortality worldwide.</p>',
@@ -10572,6 +11021,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cges6i3vu430z8',
+        doi: '10.82259/cl3fz14dy00cges6i3vu430z8',
         title: '"Complex regional pain syndrome (CRPS), formerly known as reflex sympathetic dystrophy, is a chronic neuropathic pain disorder with significant autonomic features."',
         type: 'PROBLEM',
         content:
@@ -10596,6 +11046,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ches6i8m4ge67d',
+        doi: '10.82259/cl3fz14dy00ches6i8m4ge67d',
         title: 'Gestational trophoblastic disease or neoplasia covers a spectrum of benign and malignant conditions arising from pregnancies with highly abnormal development of trophoblastic tissue.',
         type: 'PROBLEM',
         content:
@@ -10620,6 +11071,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cies6i89h1ghcw',
+        doi: '10.82259/cl3fz14dy00cies6i89h1ghcw',
         title: 'Glycogen storage disease type II (GSD-II; Pompe disease; MIM 232300) is an inherited muscular dystrophy caused by deficiency in the activity of the lysosomal enzyme acid alpha-glucosidase (GAA).',
         type: 'PROBLEM',
         content:
@@ -10644,6 +11096,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cjes6i16c7659d',
+        doi: '10.82259/cl3fz14dy00cjes6i16c7659d',
         title: 'Hereditary Angioedema (HAE) is a rare autosomal dominant (AD) disease characterized by deficient (type 1) or nonfunctional (type 2) C1 inhibitor protein.',
         type: 'PROBLEM',
         content:
@@ -10668,6 +11121,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00ckes6ihtkp9km8',
+        doi: '10.82259/cl3fz14dy00ckes6ihtkp9km8',
         title: '"Necrotizing fasciitis is a rapidly spreading infection of the soft tissue, which carries significant morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -10692,6 +11146,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dy00cles6ifawz6qik',
+        doi: '10.82259/cl3fz14dy00cles6ifawz6qik',
         title: '"Intrauterine growth restriction (IUGR) is an important cause of fetal, perinatal and neonatal morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -10716,6 +11171,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cmes6i54pz5gmq',
+        doi: '10.82259/cl3fz14dz00cmes6i54pz5gmq',
         title: 'Porphyromonas gingivalis is one of the major oral pathogens implicated in the widespread inflammatory disorder periodontitis.',
         type: 'PROBLEM',
         content:
@@ -10740,6 +11196,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cnes6ie0dceelz',
+        doi: '10.82259/cl3fz14dz00cnes6ie0dceelz',
         title: 'Inflammatory myofibroblastic tumors (IMTs) are rare mesenchymal neoplasms that are composed of myofibroblastic cells accompanied by inflammatory infiltrate.',
         type: 'PROBLEM',
         content:
@@ -10764,6 +11221,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00coes6ibbribwq8',
+        doi: '10.82259/cl3fz14dz00coes6ibbribwq8',
         title: 'Venous leg ulcers are a common and recurring type of chronic or complex wound that are associated with considerable cost to patients and to healthcare providers.',
         type: 'PROBLEM',
         content:
@@ -10792,6 +11250,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cpes6i6kgk8dnj',
+        doi: '10.82259/cl3fz14dz00cpes6i6kgk8dnj',
         title: '"Road traffic injuries (RTIs) are a leading cause of morbidity, disability and mortality in low income countries."',
         type: 'PROBLEM',
         content:
@@ -10816,6 +11275,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cqes6i3h5z9swf',
+        doi: '10.82259/cl3fz14dz00cqes6i3h5z9swf',
         title: 'Hypoxia exists to some degree in most solid tumors due to inadequate oxygen delivery of the abnormal vasculature which cannot meet the demands of the rapidly proliferating cancer cells.',
         type: 'PROBLEM',
         content:
@@ -10840,6 +11300,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cres6icjhs65nu',
+        doi: '10.82259/cl3fz14dz00cres6icjhs65nu',
         title: 'Myocardial infarction (MI) is characterized by an extended subclinical phase leading to the sudden onset of life-threatening acute events (Figure).',
         type: 'PROBLEM',
         content:
@@ -10864,6 +11325,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cses6i8y393bib',
+        doi: '10.82259/cl3fz14dz00cses6i8y393bib',
         title: '"Multiple system atrophy (MSA) is an _-synucleinopathy that is clinically characterized by varying degrees of parkinsonian, autonomic, and cerebellar features."',
         type: 'PROBLEM',
         content:
@@ -10888,6 +11350,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00ctes6i11jfars5',
+        doi: '10.82259/cl3fz14dz00ctes6i11jfars5',
         title: 'Angioimmunoblastic T-cell lymphoma (AITL) accounts for 18% of peripheral T-cell lymphomas worldwide.',
         type: 'PROBLEM',
         content:
@@ -10912,6 +11375,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cues6i4rigfg5y',
+        doi: '10.82259/cl3fz14dz00cues6i4rigfg5y',
         title: '"Implant infections remain a major healthcare problem due to the prolonged hospitalisation period required to disrupt and treat bacterial biofilm formation, and the need for additional surgery to remove/replace the infected implant, which if not removed in a timely manner may lead to sepsis."',
         type: 'PROBLEM',
         content:
@@ -10936,6 +11400,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cves6i64oz2o73',
+        doi: '10.82259/cl3fz14dz00cves6i64oz2o73',
         title: '"Bronchiolitis is a clinical syndrome commonly encountered in practice, particularly among infants and young children."',
         type: 'PROBLEM',
         content:
@@ -10960,6 +11425,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cwes6i9uuba748',
+        doi: '10.82259/cl3fz14dz00cwes6i9uuba748',
         title: 'Nitrous oxide (N2O) is a powerful atmospheric greenhouse gas and cause of ozone layer depletion.',
         type: 'PROBLEM',
         content:
@@ -10983,6 +11449,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cxes6i9moa13mk',
+        doi: '10.82259/cl3fz14dz00cxes6i9moa13mk',
         title: '"DNA double-strand breaks are highly toxic DNA lesions that cause genomic instability, if not efficiently repaired."',
         type: 'PROBLEM',
         content:
@@ -11007,6 +11474,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00cyes6i3icb7gqw',
+        doi: '10.82259/cl3fz14dz00cyes6i3icb7gqw',
         title: '"Cocaine dependence is a common and serious condition, which has become nowadays a substantial public health problem."',
         type: 'PROBLEM',
         content:
@@ -11031,6 +11499,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00czes6i8tdxgqez',
+        doi: '10.82259/cl3fz14dz00czes6i8tdxgqez',
         title: 'Legionella pneumophila is the etiologic agent of a severe form of nosocomial and community-acquired pneumonia in humans.',
         type: 'PROBLEM',
         content:
@@ -11055,6 +11524,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d0es6i41pmao80',
+        doi: '10.82259/cl3fz14dz00d0es6i41pmao80',
         title: 'Liver cirrhosis is a major yet largely preventable and underappreciated cause of global health loss.',
         type: 'PROBLEM',
         content:
@@ -11079,6 +11549,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d1es6i6wmx9gvj',
+        doi: '10.82259/cl3fz14dz00d1es6i6wmx9gvj',
         title: 'Men who have sex with men (MSM) and individuals identifying as Black or Hispanic/Latino experience the largest burden of Human Immunodeficiency Virus (HIV) infection.',
         type: 'PROBLEM',
         content:
@@ -11103,6 +11574,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d2es6i2q1wfo92',
+        doi: '10.82259/cl3fz14dz00d2es6i2q1wfo92',
         title: '"Rhinovirus infections are the most common cause of viral illness in humans, and there is increasing evidence of their etiological role in severe acute respiratory tract infections (ARTIs)."',
         type: 'PROBLEM',
         content:
@@ -11127,6 +11599,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d3es6i24iiaba8',
+        doi: '10.82259/cl3fz14dz00d3es6i24iiaba8',
         title: 'Uveal melanoma (UM) is the most common malignant tumour of the eye.',
         type: 'PROBLEM',
         content: '<p>Uveal melanoma (UM) is the most common malignant tumour of the eye.</p>',
@@ -11149,6 +11622,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d4es6iaffmfwfm',
+        doi: '10.82259/cl3fz14dz00d4es6iaffmfwfm',
         title: '"Paraquat (PQ), a widely used potent herbicide, generates superoxide anions and other free radicals, leading to severe toxicity and acute lung injury."',
         type: 'PROBLEM',
         content:
@@ -11173,6 +11647,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d5es6i6xfybhzv',
+        doi: '10.82259/cl3fz14dz00d5es6i6xfybhzv',
         title: '"Nanoparticles (NPs) are being employed for various industrial purposes with increasing frequency, yet the adverse health effects associated with the prolonged exposure of humans and the environment to NPs has not been well-established."',
         type: 'PROBLEM',
         content:
@@ -11197,6 +11672,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d6es6i0ria3f7i',
+        doi: '10.82259/cl3fz14dz00d6es6i0ria3f7i',
         title: 'Phyllodes tumor of the breast is a rare fibroepithelial tumor.',
         type: 'PROBLEM',
         content: '<p>Phyllodes tumor of the breast is a rare fibroepithelial tumor.</p>',
@@ -11219,6 +11695,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d7es6i7ksu8sjv',
+        doi: '10.82259/cl3fz14dz00d7es6i7ksu8sjv',
         title: 'Mutations in SPG7 and SPAST are common causes of hereditary spastic paraplegia (HSP).',
         type: 'PROBLEM',
         content: '<p>Mutations in SPG7 and SPAST are common causes of hereditary spastic paraplegia (HSP).</p>',
@@ -11241,6 +11718,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d8es6idma8gtke',
+        doi: '10.82259/cl3fz14dz00d8es6idma8gtke',
         title: '"Parasitic helminths are a major cause of chronic human disease, affecting more than 3 billion people worldwide."',
         type: 'PROBLEM',
         content:
@@ -11265,6 +11743,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00d9es6ic0d4auj9',
+        doi: '10.82259/cl3fz14dz00d9es6ic0d4auj9',
         title: 'Fibrous dysplasia (FD) is an abnormal bony lesion of unknown aetiology with insufficient bone maturation and fibrous tissue replacement.',
         type: 'PROBLEM',
         content:
@@ -11289,6 +11768,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00daes6i1m26ghbw',
+        doi: '10.82259/cl3fz14dz00daes6i1m26ghbw',
         title: 'Pneumocystis carinii (PC) pneumonia is recognized as the leading cause of opportunistic pulmonary infections in immunocompromised hosts during the past decade.',
         type: 'PROBLEM',
         content:
@@ -11313,6 +11793,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dbes6i4m1ub67m',
+        doi: '10.82259/cl3fz14dz00dbes6i4m1ub67m',
         title: '"Cerebral small vessel disease (SVD) is an important cause of stroke, cognitive decline and vascular dementia (VaD)."',
         type: 'PROBLEM',
         content:
@@ -11337,6 +11818,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dces6ighfc7fes',
+        doi: '10.82259/cl3fz14dz00dces6ighfc7fes',
         title: 'Malignant hyperthermia (MH) is a pharmacogenetic disorder of skeletal muscle that manifests in response to anesthetic triggering agents.',
         type: 'PROBLEM',
         content:
@@ -11361,6 +11843,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00ddes6ifo6d1skd',
+        doi: '10.82259/cl3fz14dz00ddes6ifo6d1skd',
         title: '"Apolipoprotein E4 (apoE4), the most prevalent genetic risk factor for Alzheimer\'s disease (AD), is associated with neuronal and vascular impairments."',
         type: 'PROBLEM',
         content:
@@ -11385,6 +11868,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dees6i57zvaqwt',
+        doi: '10.82259/cl3fz14dz00dees6i57zvaqwt',
         title: 'Autoimmune hepatitis (AIH) is an immune-mediated disease with no curative treatment.',
         type: 'PROBLEM',
         content: '<p>Autoimmune hepatitis (AIH) is an immune-mediated disease with no curative treatment.</p>',
@@ -11407,6 +11891,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dfes6i1j7090jd',
+        doi: '10.82259/cl3fz14dz00dfes6i1j7090jd',
         title: 'Thymomas and thymic carcinomas are rare epithelial tumors arising from the thymus gland.',
         type: 'PROBLEM',
         content: '<p>Thymomas and thymic carcinomas are rare epithelial tumors arising from the thymus gland.</p>',
@@ -11429,6 +11914,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dges6i96h1eiyi',
+        doi: '10.82259/cl3fz14dz00dges6i96h1eiyi',
         title: 'Chronic carriers of hepatitis B virus (HBV) who have to be immunosuppressed are at risk for HBV reactivation and hepatitis.',
         type: 'PROBLEM',
         content:
@@ -11453,6 +11939,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dhes6i5463aor0',
+        doi: '10.82259/cl3fz14dz00dhes6i5463aor0',
         title: '"Mortality due to breast cancer is increasingly linked to early, undetected metastasis, making methods for earlier detection acutely necessary."',
         type: 'PROBLEM',
         content:
@@ -11477,6 +11964,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dies6i3qci7f3i',
+        doi: '10.82259/cl3fz14dz00dies6i3qci7f3i',
         title: 'The persistence of the latent HIV-1 reservoir is a major obstacle to curing HIV-1 infection.',
         type: 'PROBLEM',
         content: '<p>The persistence of the latent HIV-1 reservoir is a major obstacle to curing HIV-1 infection.</p>',
@@ -11499,6 +11987,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00djes6iesn6fei8',
+        doi: '10.82259/cl3fz14dz00djes6iesn6fei8',
         title: '"Inflammatory breast cancer (IBC) is the deadliest, distinct subtype of breast cancer."',
         type: 'PROBLEM',
         content: '<p>"Inflammatory breast cancer (IBC) is the deadliest, distinct subtype of breast cancer."</p>',
@@ -11521,6 +12010,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dkes6i3zji8ja7',
+        doi: '10.82259/cl3fz14dz00dkes6i3zji8ja7',
         title: 'Gonorrhoea is a sexually transmitted infection with major public health implications and Neisseria gonorrhoeae has developed resistance to all antimicrobials introduced for treatment.',
         type: 'PROBLEM',
         content:
@@ -11545,6 +12035,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dles6ib49ua96k',
+        doi: '10.82259/cl3fz14dz00dles6ib49ua96k',
         title: 'Sarcopenia is a disorder causing age-related loss of muscle mass.',
         type: 'PROBLEM',
         content: '<p>Sarcopenia is a disorder causing age-related loss of muscle mass.</p>',
@@ -11567,6 +12058,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dmes6iax8m2mda',
+        doi: '10.82259/cl3fz14dz00dmes6iax8m2mda',
         title: 'Pyoderma gangrenosum (PG) is a rare neutrophilic dermatosis that can take many clinical forms.',
         type: 'PROBLEM',
         content:
@@ -11590,6 +12082,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dnes6i4qw49q9a',
+        doi: '10.82259/cl3fz14dz00dnes6i4qw49q9a',
         title: '"Osteomyelitis is a disease which is heterogeneous in its pathophysiology, clinical presentation and management."',
         type: 'PROBLEM',
         content:
@@ -11614,6 +12107,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00does6i2zkm3qb9',
+        doi: '10.82259/cl3fz14dz00does6i2zkm3qb9',
         title: 'Chronic exposure to fluoride is a public health problem worldwide.',
         type: 'PROBLEM',
         content: '<p>Chronic exposure to fluoride is a public health problem worldwide.</p>',
@@ -11636,6 +12130,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dpes6ih7218upo',
+        doi: '10.82259/cl3fz14dz00dpes6ih7218upo',
         title: 'Adenoviruses are human pathogens increasingly used as gene therapy and vaccination vectors.',
         type: 'PROBLEM',
         content: '<p>Adenoviruses are human pathogens increasingly used as gene therapy and vaccination vectors.</p>',
@@ -11658,6 +12153,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dqes6icp87cotw',
+        doi: '10.82259/cl3fz14dz00dqes6icp87cotw',
         title: 'Individuals with serious mental illness (SMI) such as schizophrenia and bipolar disorder face a higher risk of early death due to cardiovascular disease and other preventable chronic illnesses.',
         type: 'PROBLEM',
         content:
@@ -11682,6 +12178,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dres6i3vg73x7a',
+        doi: '10.82259/cl3fz14dz00dres6i3vg73x7a',
         title: '"Hemorrhagic shock (HS) accounts for 30-40% of trauma-induced mortality, which is due to multi-organ-failure subsequent to systemic hyper-inflammation, triggered by hypoxemia and tissue ischemia."',
         type: 'PROBLEM',
         content:
@@ -11706,6 +12203,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dses6ifpcsbn4c',
+        doi: '10.82259/cl3fz14dz00dses6ifpcsbn4c',
         title: 'Cancer is a group of diseases characterized by abnormal cell growth and proliferation.',
         type: 'PROBLEM',
         content: '<p>Cancer is a group of diseases characterized by abnormal cell growth and proliferation.</p>',
@@ -11728,6 +12226,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dtes6i0az82kqv',
+        doi: '10.82259/cl3fz14dz00dtes6i0az82kqv',
         title: 'Aplastic Anemia is a rare hematological disorder caused by bone marrow failure leading to pancytopenia.',
         type: 'PROBLEM',
         content:
@@ -11752,6 +12251,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dues6i1xdcgkr7',
+        doi: '10.82259/cl3fz14dz00dues6i1xdcgkr7',
         title: 'Persons who inject drugs (PWID) are at an elevated risk for human immunodeficiency virus (HIV) and hepatitis C virus (HCV) infection.',
         type: 'PROBLEM',
         content:
@@ -11776,6 +12276,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dves6ih8lhgpea',
+        doi: '10.82259/cl3fz14dz00dves6ih8lhgpea',
         title: '"Streptococcus suis is a zoonotic pathogen with worldwide distribution, responsible for more than 700 human cases globally reported."',
         type: 'PROBLEM',
         content:
@@ -11800,6 +12301,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dwes6id9i6hmwq',
+        doi: '10.82259/cl3fz14dz00dwes6id9i6hmwq',
         title: '"Ochratoxin A (OTA) is a toxic metabolite, produced by Aspergillus spp."',
         type: 'PROBLEM',
         content: '<p>"Ochratoxin A (OTA) is a toxic metabolite, produced by Aspergillus spp."</p>',
@@ -11822,6 +12324,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dxes6i2vpw80kw',
+        doi: '10.82259/cl3fz14dz00dxes6i2vpw80kw',
         title: '"Nephrotic syndrome (NS) is the most common renal disease among children, and contributes to life-threatening complications such as thromboembolic disease."',
         type: 'PROBLEM',
         content:
@@ -11846,6 +12349,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dyes6ievly0sdr',
+        doi: '10.82259/cl3fz14dz00dyes6ievly0sdr',
         title: 'Exposure to carbon monoxide (CO) is a well-recognized cause of morbidity and mortality.',
         type: 'PROBLEM',
         content: '<p>Exposure to carbon monoxide (CO) is a well-recognized cause of morbidity and mortality.</p>',
@@ -11868,6 +12372,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00dzes6ih5zc4k2l',
+        doi: '10.82259/cl3fz14dz00dzes6ih5zc4k2l',
         title: '"As a key regulatory mechanism of gene expression, DNA methylation patterns are widely altered in many complex genetic diseases, including cancer."',
         type: 'PROBLEM',
         content:
@@ -11892,6 +12397,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e0es6i84jcgmyf',
+        doi: '10.82259/cl3fz14dz00e0es6i84jcgmyf',
         title: 'Constipation is a common problem and is frequently taken for granted by both the lay and medical populations.',
         type: 'PROBLEM',
         content:
@@ -11916,6 +12422,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e1es6ihfkh92yp',
+        doi: '10.82259/cl3fz14dz00e1es6ihfkh92yp',
         title: '"Waldenström Macroglobulinemia (WM) is a B-cell lymphoproliferative disorder characterized mainly by uncontrolled accrual of M- immunoglobulin, secreted by malignant lymphoplasmatic cells."',
         type: 'PROBLEM',
         content:
@@ -11940,6 +12447,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e2es6iaqx8ek8t',
+        doi: '10.82259/cl3fz14dz00e2es6iaqx8ek8t',
         title: 'Laryngeal carcinoma (LC) is the most commonly diagnosed malignancy and recently the incidence of this disease has increased.',
         type: 'PROBLEM',
         content:
@@ -11964,6 +12472,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e3es6id4lp5m56',
+        doi: '10.82259/cl3fz14dz00e3es6id4lp5m56',
         title: '"Scrub Typhus is a zoonotic infectious diseases caused by obligate intracellular gram negative, non-flagellate, and non-spore-forming Cocco-bacilli - the rickettsae Orientia Tsutsugumoshi."',
         type: 'PROBLEM',
         content:
@@ -11988,6 +12497,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e4es6i263cgrs6',
+        doi: '10.82259/cl3fz14dz00e4es6i263cgrs6',
         title: 'Physical inactivity has major negative health consequences throughout the lifespan and physical   exercise is an important component of a comprehensive approach to chronic disease prevention and health   promotion.',
         type: 'PROBLEM',
         content:
@@ -12012,6 +12522,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e5es6i8xsnfk0q',
+        doi: '10.82259/cl3fz14dz00e5es6i8xsnfk0q',
         title: '"Ferroptosis, a cell death modality characterized by iron-dependent lipid peroxidation, is involved in the development of multiple pathological conditions, including ischemic tissue damage, infection, neurodegeneration, and cancer."',
         type: 'PROBLEM',
         content:
@@ -12036,6 +12547,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e6es6iapq64rcw',
+        doi: '10.82259/cl3fz14dz00e6es6iapq64rcw',
         title: 'Colletotrichum truncatum is one of the most economically important fungal pathogen causing anthracnose disease in pre and post-harvest stages of many crops worldwide.',
         type: 'PROBLEM',
         content:
@@ -12060,6 +12572,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e7es6i3cv5abl3',
+        doi: '10.82259/cl3fz14dz00e7es6i3cv5abl3',
         title: '"Chemotherapy-induced peripheral neuropathy (CIPN) is one of the main dose-limiting adverse effects of a number of firstline cancer treatment regimens that include neurotoxic chemotherapeutic agents (e.g., taxanes, platinum compounds, vinca alkaloids, and proteasome inhibitors)."',
         type: 'PROBLEM',
         content:
@@ -12088,6 +12601,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e8es6i92lqadz7',
+        doi: '10.82259/cl3fz14dz00e8es6i92lqadz7',
         title: 'Cardiac allograft vasculopathy (CAV) is a major threat to long-term survival after heart transplantation (HT).',
         type: 'PROBLEM',
         content:
@@ -12112,6 +12626,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00e9es6i0gykcjna',
+        doi: '10.82259/cl3fz14dz00e9es6i0gykcjna',
         title: 'Wilms tumor is the most common renal malignancy in childhood.',
         type: 'PROBLEM',
         content: '<p>Wilms tumor is the most common renal malignancy in childhood.</p>',
@@ -12134,6 +12649,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00eaes6iadppfck3',
+        doi: '10.82259/cl3fz14dz00eaes6iadppfck3',
         title: 'Campylobacter jejuni related outbreaks and prevalence on retail poultry products pose threats to public health and cause financial burden worldwide.',
         type: 'PROBLEM',
         content:
@@ -12158,6 +12674,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00ebes6iby2jcq1j',
+        doi: '10.82259/cl3fz14dz00ebes6iby2jcq1j',
         title: '"Acute coronary syndromes (ACS) caused by atherosclerotic plaque rupture are clinically manifested as an ST-elevation myocardial infarction, non-ST-elevation myocardial infarction, or unstable angina."',
         type: 'PROBLEM',
         content:
@@ -12182,6 +12699,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00eces6ia7uqggyx',
+        doi: '10.82259/cl3fz14dz00eces6ia7uqggyx',
         title: 'Bacterial vaginosis is the leading vaginal disorder in women in reproductive age.',
         type: 'PROBLEM',
         content: '<p>Bacterial vaginosis is the leading vaginal disorder in women in reproductive age.</p>',
@@ -12204,6 +12722,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00edes6idj895n23',
+        doi: '10.82259/cl3fz14dz00edes6idj895n23',
         title: '"BK polyomavirus (BKV) infection commonly complicates kidney transplantation, contributing to morbidity and allograft failure."',
         type: 'PROBLEM',
         content:
@@ -12228,6 +12747,7 @@ const problems = [
     },
     {
         id: 'cl3fz14dz00eees6i09y88c29',
+        doi: '10.82259/cl3fz14dz00eees6i09y88c29',
         title: 'Catheter-associated urinary tract infections (CAUTI) adversely affect more than 30% of patients in critical care hospital settings.',
         type: 'PROBLEM',
         content:
@@ -12252,6 +12772,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000efes6iecsmftoy',
+        doi: '10.82259/cl3fz14e000efes6iecsmftoy',
         title: 'The pathogenic bacterial genus Xanthomonas infects a wide variety of host plants and causes devastating diseases in many crops.',
         type: 'PROBLEM',
         content:
@@ -12276,6 +12797,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eges6i5z220nj9',
+        doi: '10.82259/cl3fz14e000eges6i5z220nj9',
         title: 'Acute subdural hematoma represents an important cause of disability and mortality.',
         type: 'PROBLEM',
         content: '<p>Acute subdural hematoma represents an important cause of disability and mortality.</p>',
@@ -12298,6 +12820,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ehes6i9c4ibkot',
+        doi: '10.82259/cl3fz14e000ehes6i9c4ibkot',
         title: '"Nausea and vomiting can cause considerable distress and discomfort to patients undergoing chemotherapy, radiotherapy, or surgery."',
         type: 'PROBLEM',
         content:
@@ -12326,6 +12849,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eies6i2xzf00hq',
+        doi: '10.82259/cl3fz14e000eies6i2xzf00hq',
         title: 'Diabetic ketoacidosis (DKA) is a life-threatening complication of diabetes mellitus (DM).',
         type: 'PROBLEM',
         content: '<p>Diabetic ketoacidosis (DKA) is a life-threatening complication of diabetes mellitus (DM).</p>',
@@ -12348,6 +12872,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ejes6i7tvee54f',
+        doi: '10.82259/cl3fz14e000ejes6i7tvee54f',
         title: '"HHV-6, the first T-lymphotropic human herpesvirus, is an important novel human pathogen."',
         type: 'PROBLEM',
         content: '<p>"HHV-6, the first T-lymphotropic human herpesvirus, is an important novel human pathogen."</p>',
@@ -12370,6 +12895,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ekes6id9akge3o',
+        doi: '10.82259/cl3fz14e000ekes6id9akge3o',
         title: 'The dearth of intrinsic regenerative capacity of articular cartilage makes it a challenge to deal with the cartilage defects.',
         type: 'PROBLEM',
         content:
@@ -12394,6 +12920,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eles6igtev8ne7',
+        doi: '10.82259/cl3fz14e000eles6igtev8ne7',
         title: 'Transfusional iron overload is a potentially fatal complication of the treatment of thalassaemia.',
         type: 'PROBLEM',
         content:
@@ -12418,6 +12945,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000emes6i36afbsl7',
+        doi: '10.82259/cl3fz14e000emes6i36afbsl7',
         title: 'Type 1 diabetes mellitus is the most common chronic metabolic disorder in children.',
         type: 'PROBLEM',
         content: '<p>Type 1 diabetes mellitus is the most common chronic metabolic disorder in children.</p>',
@@ -12440,6 +12968,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000enes6i02fth71x',
+        doi: '10.82259/cl3fz14e000enes6i02fth71x',
         title: 'Chest pain is a frequent medical problem causing concern for both patients and physicians.',
         type: 'PROBLEM',
         content: '<p>Chest pain is a frequent medical problem causing concern for both patients and physicians.</p>',
@@ -12462,6 +12991,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eoes6i0cma9ubu',
+        doi: '10.82259/cl3fz14e000eoes6i0cma9ubu',
         title: 'Shigella is a major cause of dysentery worldwide.',
         type: 'PROBLEM',
         content: '<p>Shigella is a major cause of dysentery worldwide.</p>',
@@ -12484,6 +13014,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000epes6i88wvcjrg',
+        doi: '10.82259/cl3fz14e000epes6i88wvcjrg',
         title: 'Lysosomal storage diseases (LSDs) encompass a wide range of disorders characterized by inborn errors of lysosomal function.',
         type: 'PROBLEM',
         content:
@@ -12508,6 +13039,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eqes6ifef8aeyz',
+        doi: '10.82259/cl3fz14e000eqes6ifef8aeyz',
         title: 'PAROXYSMAL nocturnal hemoglobinuria is a disease with a fascinating diversity of challenges and implications.',
         type: 'PROBLEM',
         content:
@@ -12532,6 +13064,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eres6ic3mq3uzg',
+        doi: '10.82259/cl3fz14e000eres6ic3mq3uzg',
         title: 'Pneumococcal infections have increasingly high mortality rates despite the availability of vaccines and antibiotics.',
         type: 'PROBLEM',
         content:
@@ -12556,6 +13089,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eses6ifvrbdwns',
+        doi: '10.82259/cl3fz14e000eses6ifvrbdwns',
         title: '"Narcolepsy is a lifelong disease, manifesting with excessive daytime sleepiness and cataplexy, arising between childhood and young adulthood."',
         type: 'PROBLEM',
         content:
@@ -12580,6 +13114,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000etes6i305w784d',
+        doi: '10.82259/cl3fz14e000etes6i305w784d',
         title: '"Lung neuroendocrine tumors (NET) comprise typical (TC) and atypical carcinoid (AC), large cell neuroendocrine carcinoma (LCNEC) and small cell lung carcinoma (SCLC)."',
         type: 'PROBLEM',
         content:
@@ -12604,6 +13139,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eues6iawv5fgru',
+        doi: '10.82259/cl3fz14e000eues6iawv5fgru',
         title: 'Atrial septal defect (ASD) is one of the most common congenital heart diseases.',
         type: 'PROBLEM',
         content: '<p>Atrial septal defect (ASD) is one of the most common congenital heart diseases.</p>',
@@ -12626,6 +13162,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eves6i0vl95rh4',
+        doi: '10.82259/cl3fz14e000eves6i0vl95rh4',
         title: '"Giardia intestinalis (also referred to as Giardia lamblia) is an anaerobic flagellated parasitic protozoan which infects the human small intestine, leading to a spectrum of disorders, including severe diarrhoea, abdominal pain, anorexia and stunted growth in children1."',
         type: 'PROBLEM',
         content:
@@ -12650,6 +13187,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ewes6i5ji4cbs0',
+        doi: '10.82259/cl3fz14e000ewes6i5ji4cbs0',
         title: '"Pseudoxanthoma elasticum (PXE) is a heritable ectopic mineralization disorder affecting cutaneous, ocular, and cardiovascular systems, caused by mutations in the ABCC6 gene."',
         type: 'PROBLEM',
         content:
@@ -12674,6 +13212,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000exes6ieaf2fagm',
+        doi: '10.82259/cl3fz14e000exes6ieaf2fagm',
         title: '"P-glycoprotein (P-gp), an important efflux transporter, is encoded by the MDR1 class of genes and is a central element of the multidrug resistance (MDR) phenomenon in cancer cells."',
         type: 'PROBLEM',
         content:
@@ -12698,6 +13237,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000eyes6ig1ishsuq',
+        doi: '10.82259/cl3fz14e000eyes6ig1ishsuq',
         title: 'Mucoepidermoid carcinoma (MEC) is a salivary gland tumor characterized by parotid differentiation (1).',
         type: 'PROBLEM',
         content:
@@ -12722,6 +13262,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ezes6i9yesd73x',
+        doi: '10.82259/cl3fz14e000ezes6i9yesd73x',
         title: 'Acromegaly is a chronic disease with signs and symptoms due to growth hormone (GH) excess.',
         type: 'PROBLEM',
         content: '<p>Acromegaly is a chronic disease with signs and symptoms due to growth hormone (GH) excess.</p>',
@@ -12744,6 +13285,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f0es6i930y26gg',
+        doi: '10.82259/cl3fz14e000f0es6i930y26gg',
         title: '"Severe toxic side effects and drug resistance are the major limitations of doxorubicin (Dox), one of the most potent anticancer agents in clinical use."',
         type: 'PROBLEM',
         content:
@@ -12772,6 +13314,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f1es6i2o2u9g2k',
+        doi: '10.82259/cl3fz14e000f1es6i2o2u9g2k',
         title: '"Coastal marine ecosystems in many parts of the world are under unrelenting stress caused by urban development, hazardous or toxic substances, overfishing, habitat destruction, the introduction of exotic species and natural toxins."',
         type: 'PROBLEM',
         content:
@@ -12796,6 +13339,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f2es6ib0djfupu',
+        doi: '10.82259/cl3fz14e000f2es6ib0djfupu',
         title: 'The critical and growing shortage of nurses is a global concern.',
         type: 'PROBLEM',
         content: '<p>The critical and growing shortage of nurses is a global concern.</p>',
@@ -12818,6 +13362,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f3es6if9tn57mb',
+        doi: '10.82259/cl3fz14e000f3es6if9tn57mb',
         title: 'ESBL and AmpC _-lactamases are an increasing concern for public health.',
         type: 'PROBLEM',
         content: '<p>ESBL and AmpC _-lactamases are an increasing concern for public health.</p>',
@@ -12840,6 +13385,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f4es6iha2j68se',
+        doi: '10.82259/cl3fz14e000f4es6iha2j68se',
         title: '"Over the last 10 years, harnessing of the immune system to attack tumors has been one of the major breakthroughs in cancer, primarily through the use of immune checkpoint inhibitors (ICIs)."',
         type: 'PROBLEM',
         content:
@@ -12864,6 +13410,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f5es6i7s2s4647',
+        doi: '10.82259/cl3fz14e000f5es6i7s2s4647',
         title: '"Premenstrual syndrome (PMS) is a common cause of physical, psychological and social problems in women of reproductive age."',
         type: 'PROBLEM',
         content:
@@ -12888,6 +13435,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f6es6i7n1qa32j',
+        doi: '10.82259/cl3fz14e000f6es6i7n1qa32j',
         title: '"Cellular senescence suppresses cancer by arresting cell proliferation, essentially permanently, in response to oncogenic stimuli, including genotoxic stress."',
         type: 'PROBLEM',
         content:
@@ -12912,6 +13460,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f7es6iebj3f0kq',
+        doi: '10.82259/cl3fz14e000f7es6iebj3f0kq',
         title: '"Bluetongue virus (BTV) is the cause of bluetongue, an emerging, arthropod-transmitted disease of ungulates."',
         type: 'PROBLEM',
         content:
@@ -12936,6 +13485,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f8es6i2ffmedb1',
+        doi: '10.82259/cl3fz14e000f8es6i2ffmedb1',
         title: "Hodgkin's lymphoma (HL) is one of the most common cancers in adolescents and young adults (AYA).",
         type: 'PROBLEM',
         content:
@@ -12959,6 +13509,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000f9es6i8dim9uyb',
+        doi: '10.82259/cl3fz14e000f9es6i8dim9uyb',
         title: '"Primary ciliary dyskinesia (PCD), a genetically heterogeneous condition enriched in some consanguineous populations, results from recessive mutations affecting cilia biogenesis and motility."',
         type: 'PROBLEM',
         content:
@@ -12983,6 +13534,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000faes6i58wg0stb',
+        doi: '10.82259/cl3fz14e000faes6i58wg0stb',
         title: 'Acute disseminated encephalomyelitis (ADEM) is a rare demyelinating disease of the central nervous system (CNS) that classically occurs in children and adolescents.',
         type: 'PROBLEM',
         content:
@@ -13007,6 +13559,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fbes6i6eos7jo3',
+        doi: '10.82259/cl3fz14e000fbes6i6eos7jo3',
         title: 'Loneliness is of significant concern in the older adult population.',
         type: 'PROBLEM',
         content: '<p>Loneliness is of significant concern in the older adult population.</p>',
@@ -13029,6 +13582,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fces6idzfgfx15',
+        doi: '10.82259/cl3fz14e000fces6idzfgfx15',
         title: 'Ductal carcinoma in situ (DCIS) of the breast is a non-invasive lesion associated with a ten-fold increased relative risk for future invasive ductal cancer (IDC).',
         type: 'PROBLEM',
         content:
@@ -13053,6 +13607,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fdes6i7nbb7azl',
+        doi: '10.82259/cl3fz14e000fdes6i7nbb7azl',
         title: '"Foodborne illness undermines human health by causing fever, stomachache and even lethality."',
         type: 'PROBLEM',
         content: '<p>"Foodborne illness undermines human health by causing fever, stomachache and even lethality."</p>',
@@ -13075,6 +13630,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fees6ic9skbcga',
+        doi: '10.82259/cl3fz14e000fees6ic9skbcga',
         title: 'Crimean–Congo hemorrhagic fever virus (CCHFV) infrequently causes hemorrhagic fever in humans with a case fatality rate of 30%.',
         type: 'PROBLEM',
         content:
@@ -13099,6 +13655,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ffes6i5twvdvdb',
+        doi: '10.82259/cl3fz14e000ffes6i5twvdvdb',
         title: 'Medication-related osteonecrosis of the jaw (MRONJ) has been recognized as one of the most disabling comorbidities associated to the assumption of bisphosphonates (BPs) and antiresorptive drugs.',
         type: 'PROBLEM',
         content:
@@ -13123,6 +13680,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fges6i0prz37ah',
+        doi: '10.82259/cl3fz14e000fges6i0prz37ah',
         title: 'Pleomorphic adenoma (PA) is the most common benign tumor of salivary glands.',
         type: 'PROBLEM',
         content: '<p>Pleomorphic adenoma (PA) is the most common benign tumor of salivary glands.</p>',
@@ -13145,6 +13703,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fhes6iakg87e9w',
+        doi: '10.82259/cl3fz14e000fhes6iakg87e9w',
         title: '"Retinopathy of prematurity (ROP), a leading cause of pediatric blindness, predominantly affects premature and low-birth-weight infants."',
         type: 'PROBLEM',
         content:
@@ -13169,6 +13728,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fies6i0xbh3ear',
+        doi: '10.82259/cl3fz14e000fies6i0xbh3ear',
         title: 'Severe anemia in pregnancy results in relatively poor maternal and fetal outcome.',
         type: 'PROBLEM',
         content: '<p>Severe anemia in pregnancy results in relatively poor maternal and fetal outcome.</p>',
@@ -13191,6 +13751,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fjes6i4533dl3q',
+        doi: '10.82259/cl3fz14e000fjes6i4533dl3q',
         title: 'Chondrosarcoma (CS) is a malignant tumor of long and flat bone characterized by the formation of cartilage.',
         type: 'PROBLEM',
         content:
@@ -13215,6 +13776,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fkes6icjc5fdlu',
+        doi: '10.82259/cl3fz14e000fkes6icjc5fdlu',
         title: 'Social determinants are the leading causes of health disparities.',
         type: 'PROBLEM',
         content: '<p>Social determinants are the leading causes of health disparities.</p>',
@@ -13237,6 +13799,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fles6i4e053n4w',
+        doi: '10.82259/cl3fz14e000fles6i4e053n4w',
         title: 'Primary aldosteronism is characterized by inappropriate overproduction of aldosterone by adrenal lesions and leads to hypertension.',
         type: 'PROBLEM',
         content:
@@ -13261,6 +13824,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fmes6iazys5py5',
+        doi: '10.82259/cl3fz14e000fmes6iazys5py5',
         title: '"Pain after surgery is common, and its management remains a clinical challenge."',
         type: 'PROBLEM',
         content: '<p>"Pain after surgery is common, and its management remains a clinical challenge."</p>',
@@ -13283,6 +13847,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fnes6i4yee062g',
+        doi: '10.82259/cl3fz14e000fnes6i4yee062g',
         title: 'breast cancer in males is a rare disease accounting for less than 1% of all cancers in men.',
         type: 'PROBLEM',
         content: '<p>breast cancer in males is a rare disease accounting for less than 1% of all cancers in men.</p>',
@@ -13305,6 +13870,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000foes6iett8b35o',
+        doi: '10.82259/cl3fz14e000foes6iett8b35o',
         title: 'Osteochondroma is a benign cartilaginous neoplasm and the most common benign tumor of bone.',
         type: 'PROBLEM',
         content: '<p>Osteochondroma is a benign cartilaginous neoplasm and the most common benign tumor of bone.</p>',
@@ -13327,6 +13893,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fpes6i7px29upo',
+        doi: '10.82259/cl3fz14e000fpes6i7px29upo',
         title: 'Tinnitus is a condition which is often seen coexisting with hearing loss.',
         type: 'PROBLEM',
         content: '<p>Tinnitus is a condition which is often seen coexisting with hearing loss.</p>',
@@ -13349,6 +13916,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fqes6i2c46eu6f',
+        doi: '10.82259/cl3fz14e000fqes6i2c46eu6f',
         title: '"Medication non-adherence is a major healthcare barrier, especially among diseases that are largely asymptomatic such as hypertension."',
         type: 'PROBLEM',
         content:
@@ -13373,6 +13941,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fres6ib9lq3v0e',
+        doi: '10.82259/cl3fz14e000fres6ib9lq3v0e',
         title: "\"Antineutrophil cytoplasmic antibodies (ANCA) are generally believed to be strongly associ_ated with some primary systemic vasculitides (PSV), such as Wegener's granulomatosis (WG), microscopic polyangiitis (MPA), and Churg-Strauss syndrome (CSS), which have some clinical manifestations in common and are 'pauci-immune' by immunohistology.\"",
         type: 'PROBLEM',
         content:
@@ -13397,6 +13966,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fses6i2lzyhc5e',
+        doi: '10.82259/cl3fz14e000fses6i2lzyhc5e',
         title: 'Acid mine drainage is a main environmental problem linked to coal and sulfide ore mining.',
         type: 'PROBLEM',
         content: '<p>Acid mine drainage is a main environmental problem linked to coal and sulfide ore mining.</p>',
@@ -13419,6 +13989,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000ftes6i1b898va7',
+        doi: '10.82259/cl3fz14e000ftes6i1b898va7',
         title: 'Peripheral nerve injury is a serious challenge ',
         type: 'PROBLEM',
         content: '<p>Peripheral nerve injury is a serious challenge </p>',
@@ -13445,6 +14016,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fues6i9cpz5dtb',
+        doi: '10.82259/cl3fz14e000fues6i9cpz5dtb',
         title: 'Alpha-1-antitrypsin deficiency (AATD) is a rare condition with clinical mani-festations of the lung and the liver.',
         type: 'PROBLEM',
         content:
@@ -13469,6 +14041,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fves6i392o74od',
+        doi: '10.82259/cl3fz14e000fves6i392o74od',
         title: '"Congenital hydrocephalus is one of the common neurological problems in infants, characterized by excessive accumulation of cerebrospinal fluid (CSF) in the central nervous system."',
         type: 'PROBLEM',
         content:
@@ -13493,6 +14066,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fwes6i4vv540bf',
+        doi: '10.82259/cl3fz14e000fwes6i4vv540bf',
         title: '"The hepatitis C virus (HCV) contains a positive-sense RNA genome that encodes a unique polyprotein precursor, which must be processed by proteases to enable viral maturation."',
         type: 'PROBLEM',
         content:
@@ -13517,6 +14091,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fxes6ieqmj3h5u',
+        doi: '10.82259/cl3fz14e000fxes6ieqmj3h5u',
         title: '"Acrylamide, a probable human carcinogen, is ubiquitously present in the human environment, with sources including heated starchy foods, coffee and cigarette smoke."',
         type: 'PROBLEM',
         content:
@@ -13541,6 +14116,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fyes6i32yb2x43',
+        doi: '10.82259/cl3fz14e000fyes6i32yb2x43',
         title: 'Mental illness and substance use are prevalent among people living with HIV and often lead to poor health outcomes.',
         type: 'PROBLEM',
         content:
@@ -13569,6 +14145,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000fzes6i18yz7m7u',
+        doi: '10.82259/cl3fz14e000fzes6i18yz7m7u',
         title: '"Many HIV_infected patients with chronic hepatitis C virus (HCV) infection do not receive treatment for HCV infection, often because of contraindications or poor adherence to anti_HIV therapy."',
         type: 'PROBLEM',
         content:
@@ -13593,6 +14170,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g0es6i99dq752q',
+        doi: '10.82259/cl3fz14e000g0es6i99dq752q',
         title: '"Congenital Factor XIII (FXIII) deficiency is a rare, inherited, autosomal recessive coagulation disorder."',
         type: 'PROBLEM',
         content:
@@ -13617,6 +14195,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g1es6iaz9270c5',
+        doi: '10.82259/cl3fz14e000g1es6iaz9270c5',
         title: '"Dermatomyositis (DM) is an idiopathic inflammatory myopathy (IIM) characterized by inflammation of muscles with systemic and cutaneous involvement, highly associated with breast cancer."',
         type: 'PROBLEM',
         content:
@@ -13641,6 +14220,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g2es6i1hyadg8g',
+        doi: '10.82259/cl3fz14e000g2es6i1hyadg8g',
         title: '"Vulvar cancer is the fourth most common gynaecological malignancy, with an annual incidence of 2 out of 100_000 women."',
         type: 'PROBLEM',
         content:
@@ -13665,6 +14245,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g3es6i1u6af85s',
+        doi: '10.82259/cl3fz14e000g3es6i1u6af85s',
         title: '"Pulmonary alveolar proteinosis (PAP) is a syndrome of reduced GM-CSF-dependent, macrophage-mediated surfactant clearance, dysfunctional foamy alveolar macrophages, alveolar surfactant accumulation, and hypoxemic respiratory failure for which the pathogenetic mechanism is unknown."',
         type: 'PROBLEM',
         content:
@@ -13689,6 +14270,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g4es6idial3he9',
+        doi: '10.82259/cl3fz14e000g4es6idial3he9',
         title: 'Patients infected with human immunodeficiency virus (HIV) have been found to be prone to lipid abnormalities because of specific antiretroviral therapy (ART) and HIV infection itself and thus may be more susceptible to coronary artery disease.',
         type: 'PROBLEM',
         content:
@@ -13713,6 +14295,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g5es6i8jc6hx6v',
+        doi: '10.82259/cl3fz14e000g5es6i8jc6hx6v',
         title: 'Pituitary adenomas are known as representing 15 % of aH intracranial tumours.',
         type: 'PROBLEM',
         content: '<p>Pituitary adenomas are known as representing 15 % of aH intracranial tumours.</p>',
@@ -13735,6 +14318,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e000g6es6i12kc7usa',
+        doi: '10.82259/cl3fz14e000g6es6i12kc7usa',
         title: '"Perinatal asphyxia (PA) is an important cause of neonatal morbidity, mortality, and neurologic handicap in children."',
         type: 'PROBLEM',
         content:
@@ -13759,6 +14343,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100g7es6iegm41dn6',
+        doi: '10.82259/cl3fz14e100g7es6iegm41dn6',
         title: '"Microsatellite instability (MSI) phenotype, caused by a deficiency of DNA mismatch repair genes, has been detected in a subset of tumors in the gastrointestinal tract."',
         type: 'PROBLEM',
         content:
@@ -13783,6 +14368,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100g8es6ic43xgsy4',
+        doi: '10.82259/cl3fz14e100g8es6ic43xgsy4',
         title: '"Citrus Huanglongbing (HLB) is one of the most destructive citrus diseases worldwide, and is associated with the phloem-limited plant pathogenic bacteria Candidatus Liberibacter species."',
         type: 'PROBLEM',
         content:
@@ -13807,6 +14393,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100g9es6i5swg82ok',
+        doi: '10.82259/cl3fz14e100g9es6i5swg82ok',
         title: '"Botulinum toxins (BoNT) type A, B, E, F may induce a serious neuroparalytic illness in humans."',
         type: 'PROBLEM',
         content:
@@ -13830,6 +14417,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gaes6ia9qra6s2',
+        doi: '10.82259/cl3fz14e100gaes6ia9qra6s2',
         title: 'Bicuspid aortic valve (BAV) is the most common congenital heart disease.',
         type: 'PROBLEM',
         content: '<p>Bicuspid aortic valve (BAV) is the most common congenital heart disease.</p>',
@@ -13852,6 +14440,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gbes6idtz2cl6t',
+        doi: '10.82259/cl3fz14e100gbes6idtz2cl6t',
         title: 'Borderline personality disorder (BPD) is a common and severe mental illness.',
         type: 'PROBLEM',
         content: '<p>Borderline personality disorder (BPD) is a common and severe mental illness.</p>',
@@ -13874,6 +14463,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gces6idq3qd99x',
+        doi: '10.82259/cl3fz14e100gces6idq3qd99x',
         title: 'Dermatofibrosarcoma protuberans (DFSP) is a locally aggressive tumour.',
         type: 'PROBLEM',
         content: '<p>Dermatofibrosarcoma protuberans (DFSP) is a locally aggressive tumour.</p>',
@@ -13896,6 +14486,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gdes6ib8ogcefd',
+        doi: '10.82259/cl3fz14e100gdes6ib8ogcefd',
         title: 'Lymphatic filariasis is a major health problem in India with a large number of patients tending to be asymptomatic.',
         type: 'PROBLEM',
         content:
@@ -13920,6 +14511,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gees6i6ulc73n4',
+        doi: '10.82259/cl3fz14e100gees6i6ulc73n4',
         title: '"Giant Cell Arteritis (GCA) is the most common form of primary systemic vasculitis, mainly affecting adults over 50 years old."',
         type: 'PROBLEM',
         content:
@@ -13944,6 +14536,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gfes6i7yc11tbc',
+        doi: '10.82259/cl3fz14e100gfes6i7yc11tbc',
         title: 'Exposure to indoor radon is of great concern because it is an environmental hazard for developing lung cancer.',
         type: 'PROBLEM',
         content:
@@ -13968,6 +14561,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gges6igpipbjrc',
+        doi: '10.82259/cl3fz14e100gges6igpipbjrc',
         title: 'Trigeminal neuralgia (TGN) causes severe unilateral facial pain.',
         type: 'PROBLEM',
         content: '<p>Trigeminal neuralgia (TGN) causes severe unilateral facial pain.</p>',
@@ -13990,6 +14584,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100ghes6i790t5rs1',
+        doi: '10.82259/cl3fz14e100ghes6i790t5rs1',
         title: 'Trichomonas vaginalis infection is one of the sexually transmitted diseases.',
         type: 'PROBLEM',
         content: '<p>Trichomonas vaginalis infection is one of the sexually transmitted diseases.</p>',
@@ -14012,6 +14607,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gies6ib7f27btf',
+        doi: '10.82259/cl3fz14e100gies6ib7f27btf',
         title: 'Vancomycin-resistant Enterococcus faecium (VREF) has emerged as a relevant multidrug-resistant pathogen and potentially lethal etiology of health care associated infections worldwide.',
         type: 'PROBLEM',
         content:
@@ -14036,6 +14632,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gjes6idsty3y58',
+        doi: '10.82259/cl3fz14e100gjes6idsty3y58',
         title: 'Acute liver failure (ALF) remains a disease with poor patient outcome.',
         type: 'PROBLEM',
         content: '<p>Acute liver failure (ALF) remains a disease with poor patient outcome.</p>',
@@ -14058,6 +14655,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gkes6igh591zqv',
+        doi: '10.82259/cl3fz14e100gkes6igh591zqv',
         title: 'Chronic inflammation and cancer are intimately associated.',
         type: 'PROBLEM',
         content: '<p>Chronic inflammation and cancer are intimately associated.</p>',
@@ -14080,6 +14678,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gles6i2g4b5xzv',
+        doi: '10.82259/cl3fz14e100gles6i2g4b5xzv',
         title: 'Dry eye disease is an aging-related ophthalmic disease that not only affects the daily activities but also causes deterioration in the quality of life.',
         type: 'PROBLEM',
         content:
@@ -14104,6 +14703,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gmes6i7mtd7nf7',
+        doi: '10.82259/cl3fz14e100gmes6i7mtd7nf7',
         title: 'Amyloidosis is a plasma cell disorder characterized by the aggregation and deposition of insoluble amyloid fibrils derived from misfolding of monoclonal immunoglobulin light chains usually produced by a plasma cell tumor (see this term).',
         type: 'PROBLEM',
         content:
@@ -14128,6 +14728,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gnes6id4at9pxw',
+        doi: '10.82259/cl3fz14e100gnes6id4at9pxw',
         title: 'Francisella tularensis is a zoonotic intracellular pathogen and the causative agent of the debilitating febrile illness tularemia.',
         type: 'PROBLEM',
         content:
@@ -14152,6 +14753,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100goes6iduwddom4',
+        doi: '10.82259/cl3fz14e100goes6iduwddom4',
         title: 'Infections remain a significant cause of mortality in hematopoietic stem cell transplant patients.',
         type: 'PROBLEM',
         content:
@@ -14176,6 +14778,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gpes6i5t9r473f',
+        doi: '10.82259/cl3fz14e100gpes6i5t9r473f',
         title: 'Acute diverticulitis: Diverticular disease is very common in developed countries.',
         type: 'PROBLEM',
         content: '<p>Acute diverticulitis: Diverticular disease is very common in developed countries.</p>',
@@ -14198,6 +14801,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gqes6i9l55d7t2',
+        doi: '10.82259/cl3fz14e100gqes6i9l55d7t2',
         title: 'diagnosis of cervical cancer in a young woman who wishes to retain her ability to give birth is particularly distressing for both the patient and the health care team.',
         type: 'PROBLEM',
         content:
@@ -14222,6 +14826,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gres6i2qpw2hw2',
+        doi: '10.82259/cl3fz14e100gres6i2qpw2hw2',
         title: '"Gallbladder cancer (GBC) is an uncommon neoplasm in the United States, but one with high mortality rates."',
         type: 'PROBLEM',
         content:
@@ -14246,6 +14851,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gses6i2esfdvhw',
+        doi: '10.82259/cl3fz14e100gses6i2esfdvhw',
         title: 'Intraductal papillary mucinous neoplasms (IPMN) of the pancreas constitute an increasingly recognized entity of cystic pancreatic tumors which are characterized by mucin production and epithelial growth within the pancreatic ducts and show a wide spectrum of morphologic variants.',
         type: 'PROBLEM',
         content:
@@ -14270,6 +14876,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gtes6iau1097io',
+        doi: '10.82259/cl3fz14e100gtes6iau1097io',
         title: 'The shortage in energy has given rise to the development of biomass as advanced energy materials.',
         type: 'PROBLEM',
         content:
@@ -14294,6 +14901,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gues6ifd43ga7z',
+        doi: '10.82259/cl3fz14e100gues6ifd43ga7z',
         title: 'The upper gastrointestinal bleeding remains the most frequent emergency in gastroenterology.',
         type: 'PROBLEM',
         content: '<p>The upper gastrointestinal bleeding remains the most frequent emergency in gastroenterology.</p>',
@@ -14316,6 +14924,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gves6ibpllepbr',
+        doi: '10.82259/cl3fz14e100gves6ibpllepbr',
         title: 'Posterior reversible encephalopathy syndrome (PRES) is a neurotoxic state accompanied by a unique brain imaging pattern.',
         type: 'PROBLEM',
         content:
@@ -14340,6 +14949,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gwes6idp2w3lx7',
+        doi: '10.82259/cl3fz14e100gwes6idp2w3lx7',
         title: 'Cisplatin is a cancer chemotherapeutic agent whose clinical use is complicated by its dose related kidney toxicity.',
         type: 'PROBLEM',
         content:
@@ -14364,6 +14974,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gxes6idpg0ca9d',
+        doi: '10.82259/cl3fz14e100gxes6idpg0ca9d',
         title: '"Restenosis in drug-eluting stents (DESs) occurs infrequently, however, it remains a pervasive clinical problem."',
         type: 'PROBLEM',
         content:
@@ -14388,6 +14999,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gyes6i92x78w6b',
+        doi: '10.82259/cl3fz14e100gyes6i92x78w6b',
         title: 'Congenital myasthenic syndromes (CMS) are a group of heterogeneous inherited disorders caused by mutations in genes encoding proteins essential for the integrity of neuromuscular transmission.',
         type: 'PROBLEM',
         content:
@@ -14412,6 +15024,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100gzes6i9xcd9tla',
+        doi: '10.82259/cl3fz14e100gzes6i9xcd9tla',
         title: 'Lumbar spinal stenosis (LSS) is common sequelae of degenerative disorders of spine.',
         type: 'PROBLEM',
         content: '<p>Lumbar spinal stenosis (LSS) is common sequelae of degenerative disorders of spine.</p>',
@@ -14434,6 +15047,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h0es6ih1huh188',
+        doi: '10.82259/cl3fz14e100h0es6ih1huh188',
         title: 'Mucosa-associated lymphoid tissue (MALT) lymphoma is an extranodal indolent lymphoma with histopatholigic features similar to those of marginal zone B-cell lymphomas.',
         type: 'PROBLEM',
         content:
@@ -14458,6 +15072,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h1es6ihezlespm',
+        doi: '10.82259/cl3fz14e100h1es6ihezlespm',
         title: 'Malignant pleural effusions are an important burden of malignant disease.',
         type: 'PROBLEM',
         content: '<p>Malignant pleural effusions are an important burden of malignant disease.</p>',
@@ -14480,6 +15095,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h2es6i7dql3b22',
+        doi: '10.82259/cl3fz14e100h2es6i7dql3b22',
         title: 'The development of a preventive vaccine to neutralize the highly variable and antigenically diverse human immunodeficiency virus type 1 (HIV-1) has been an indomitable goal.',
         type: 'PROBLEM',
         content:
@@ -14504,6 +15120,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h3es6i5b97fhaj',
+        doi: '10.82259/cl3fz14e100h3es6i5b97fhaj',
         title: 'Drug addiction is a complex and highly debilitating disorder affecting the motivational and cognitive control systems of the brain.',
         type: 'PROBLEM',
         content:
@@ -14528,6 +15145,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h4es6i5uif13wd',
+        doi: '10.82259/cl3fz14e100h4es6i5uif13wd',
         title: '"Anastomotic leakage (AL) is one of the most serious complications of colorectal resection, causing sepsis and reducing overall survival."',
         type: 'PROBLEM',
         content:
@@ -14552,6 +15170,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h5es6id7om887u',
+        doi: '10.82259/cl3fz14e100h5es6id7om887u',
         title: 'Treatment of polluted wastewaters from industrial activities has become a source of major concern for the environment.',
         type: 'PROBLEM',
         content:
@@ -14576,6 +15195,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h6es6ifyaz9mq7',
+        doi: '10.82259/cl3fz14e100h6es6ifyaz9mq7',
         title: "Paget's bone disease is a common disorder affecting approximately 3–4% of the population over 40 and up to 10–11% of the population older than 80 years.",
         type: 'PROBLEM',
         content:
@@ -14600,6 +15220,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h7es6i5lavgynp',
+        doi: '10.82259/cl3fz14e100h7es6i5lavgynp',
         title: '"Xeroderma pigmentosum (XP) is a rare, genetic, autosomal nucleotide excision repair-deficient disease characterized by sun-sensitivity and early appearance of skin and ocular tumors."',
         type: 'PROBLEM',
         content:
@@ -14624,6 +15245,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h8es6ihnrfbmc7',
+        doi: '10.82259/cl3fz14e100h8es6ihnrfbmc7',
         title: 'Tuberculous meningitis (TBM) results from the haematogenous dissemination of Mycobacterium tuberculosis from the lung to the brain.',
         type: 'PROBLEM',
         content:
@@ -14648,6 +15270,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100h9es6ih1133uk0',
+        doi: '10.82259/cl3fz14e100h9es6ih1133uk0',
         title: '"Obesity strongly affects the prognosis of various malignancies, including breast cancer."',
         type: 'PROBLEM',
         content: '<p>"Obesity strongly affects the prognosis of various malignancies, including breast cancer."</p>',
@@ -14670,6 +15293,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100haes6iait8eg0s',
+        doi: '10.82259/cl3fz14e100haes6iait8eg0s',
         title: '"Erdheim-Chester disease is an idiopathic systemic histiocytosis hystologically different to Langerhans histiocytosis which is characterized by symmetric sclerotic bone lesions, predominantly affecting the diaphyseal and metaphyseal areas of large bones."',
         type: 'PROBLEM',
         content:
@@ -14694,6 +15318,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hbes6i1e389eqf',
+        doi: '10.82259/cl3fz14e100hbes6i1e389eqf',
         title: '"Social anxiety disorder (SAD), formally known as social phobia, is mainly characterized by fear or anxiety of being negatively judged and evaluated by others and presenting intense crying, fear, and tremors when having a conversation, meeting with strangers in social events (e.g., eating or drinking), and speaking in public."',
         type: 'PROBLEM',
         content:
@@ -14718,6 +15343,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hces6ifclw76vb',
+        doi: '10.82259/cl3fz14e100hces6ifclw76vb',
         title: 'Internet addiction (IA) is a common disorder among adolescents throughout most of the industrialized world.',
         type: 'PROBLEM',
         content:
@@ -14742,6 +15368,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hdes6i7b422oji',
+        doi: '10.82259/cl3fz14e100hdes6i7b422oji',
         title: '"Yersinia pestis, the causative agent of plague, has recently diverged from the less virulent enteropathogen Yersinia pseudotuberculosis."',
         type: 'PROBLEM',
         content:
@@ -14770,6 +15397,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hees6ihvl9b4sr',
+        doi: '10.82259/cl3fz14e100hees6ihvl9b4sr',
         title: 'Urinary stone disease is an important morbidity.',
         type: 'PROBLEM',
         content: '<p>Urinary stone disease is an important morbidity.</p>',
@@ -14792,6 +15420,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hfes6i8941ehs4',
+        doi: '10.82259/cl3fz14e100hfes6i8941ehs4',
         title: 'Rosai-Dorfman Disease (RDD) also known as Sinus Histiocytosis With Massive Lymphadenopathy (SHML) is a rare and benign non- Langerhans histiocytosis.',
         type: 'PROBLEM',
         content:
@@ -14816,6 +15445,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hges6ih0duccwm',
+        doi: '10.82259/cl3fz14e100hges6ih0duccwm',
         title: '"After lung transplantation, the major complication limiting the long-term survival of allografts is obliterative bronchiolitis (OB), characterized by chronic rejection."',
         type: 'PROBLEM',
         content:
@@ -14840,6 +15470,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hhes6ihzng6ffx',
+        doi: '10.82259/cl3fz14e100hhes6ihzng6ffx',
         title: '"Neuromyelitis optica (NMO, also eponymously known as Devic\'s disease) is an immune-mediated demyelinating disease of the central nervous system that can lead to significant disability."',
         type: 'PROBLEM',
         content:
@@ -14864,6 +15495,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hies6i9hx30gkn',
+        doi: '10.82259/cl3fz14e100hies6i9hx30gkn',
         title: 'Renal fibrosis is a common pathological feature of all kinds of chronic kidney diseases (CKDs) with uncertain mechanisms.',
         type: 'PROBLEM',
         content:
@@ -14888,6 +15520,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hjes6i9lz3cnvg',
+        doi: '10.82259/cl3fz14e100hjes6i9lz3cnvg',
         title: 'Pigmented villonodular synovitis (PVNS) is an uncommon proliferative lesion of synovial tissue.',
         type: 'PROBLEM',
         content:
@@ -14911,6 +15544,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hkes6iaqmyh2rs',
+        doi: '10.82259/cl3fz14e100hkes6iaqmyh2rs',
         title: '"The incidence of cancer rises with age, with most patients presenting when they are older than 70 years."',
         type: 'PROBLEM',
         content:
@@ -14935,6 +15569,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hles6icpa9hyjo',
+        doi: '10.82259/cl3fz14e100hles6icpa9hyjo',
         title: '"Marfan syndrome (MFS, OMIM #154700) is an autosomal dominant connective tissue disorder, clinically presenting with cardinal features of skeletal, ocular, and cardiovascular systems."',
         type: 'PROBLEM',
         content:
@@ -14959,6 +15594,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hmes6iczm281h9',
+        doi: '10.82259/cl3fz14e100hmes6iczm281h9',
         title: 'Cerebral venous and sinus thrombosis (CVST) is a rare but life-threatening disease accounting for less than 1% of all strokes and a poor outcome in around 10% of all patients.',
         type: 'PROBLEM',
         content:
@@ -14983,6 +15619,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hnes6idgrx7uea',
+        doi: '10.82259/cl3fz14e100hnes6idgrx7uea',
         title: '"Collectively, nematode parasites of domestic ruminants continue to pose the greatest disease problem in grazing livestock systems worldwide, despite the powerful and extensive chemotherapeutic arsenal available for their control."',
         type: 'PROBLEM',
         content:
@@ -15007,6 +15644,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hoes6iewj92b3c',
+        doi: '10.82259/cl3fz14e100hoes6iewj92b3c',
         title: 'Fibromatosis (desmoid tumors) is a rare benign mesenchymatous proliferative process.',
         type: 'PROBLEM',
         content: '<p>Fibromatosis (desmoid tumors) is a rare benign mesenchymatous proliferative process.</p>',
@@ -15029,6 +15667,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hpes6iemhvhdaz',
+        doi: '10.82259/cl3fz14e100hpes6iemhvhdaz',
         title: '"Intensified due to rapid urbanization and global warming-induced high temperature extremes, the urban heat island effect has become a major environmental concern for urban residents."',
         type: 'PROBLEM',
         content:
@@ -15053,6 +15692,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hqes6i4p72bare',
+        doi: '10.82259/cl3fz14e100hqes6i4p72bare',
         title: 'Renal impairment is a common phenomenon in myeloma patients.',
         type: 'PROBLEM',
         content: '<p>Renal impairment is a common phenomenon in myeloma patients.</p>',
@@ -15075,6 +15715,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hres6iddqfcn22',
+        doi: '10.82259/cl3fz14e100hres6iddqfcn22',
         title: 'Anaplastic large cell lymphomas (ALCLs) comprise a group of CD30-positive non-Hodgkin lymphomas that generally are of T-cell origin and share common morphologic and phenotypic characteristics.',
         type: 'PROBLEM',
         content:
@@ -15099,6 +15740,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hses6icnxu1uxp',
+        doi: '10.82259/cl3fz14e100hses6icnxu1uxp',
         title: 'Onychomycosis is a common fungal infection of nails which is mainly caused by dermatophyte species and less often by yeasts and non-dermatophyte molds.',
         type: 'PROBLEM',
         content:
@@ -15123,6 +15765,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100htes6i1g9u9uu0',
+        doi: '10.82259/cl3fz14e100htes6i1g9u9uu0',
         title: 'Lymphedema (LE) is a common complication in patients with cancer.',
         type: 'PROBLEM',
         content: '<p>Lymphedema (LE) is a common complication in patients with cancer.</p>',
@@ -15145,6 +15788,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hues6ib1r822ax',
+        doi: '10.82259/cl3fz14e100hues6ib1r822ax',
         title: 'Membrane fouling is one of the main obstacles to membrane distillation (MD) applications in desalination and other fields.',
         type: 'PROBLEM',
         content:
@@ -15169,6 +15813,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hves6i8dsb2z91',
+        doi: '10.82259/cl3fz14e100hves6i8dsb2z91',
         title: '"Chronic thromboembolic pulmonary hypertension (CTEPH), a rare consequence of an acute pulmonary embolism, is a disease that is underdiagnosed, and surgical pulmonary thromboendarterectomy (PTE) remains the preferred therapy."',
         type: 'PROBLEM',
         content:
@@ -15193,6 +15838,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hwes6i24hm6clt',
+        doi: '10.82259/cl3fz14e100hwes6i24hm6clt',
         title: '"Copper (Cu) is essential for many biological processes, but is toxic when present in excessive amounts."',
         type: 'PROBLEM',
         content:
@@ -15217,6 +15863,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hxes6ihrtvgf0u',
+        doi: '10.82259/cl3fz14e100hxes6ihrtvgf0u',
         title: "Burkitt lymphoma (BL) is a highly malignant non-Hodgkin's lymphoma that is closely related to the abnormal expression of genes.",
         type: 'PROBLEM',
         content:
@@ -15241,6 +15888,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hyes6i7tvxds7t',
+        doi: '10.82259/cl3fz14e100hyes6i7tvxds7t',
         title: 'One severe consequence of radiation therapy in patients with head and neck cancer is persistent salivary gland hypofunction which causes xerostomia and oral infections.',
         type: 'PROBLEM',
         content:
@@ -15265,6 +15913,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100hzes6i44cq4t4z',
+        doi: '10.82259/cl3fz14e100hzes6i44cq4t4z',
         title: '"Over just a few years, the Asian fly Drosophila suzukii has invaded several continents and has become a very serious pest of many fruit crops worldwide."',
         type: 'PROBLEM',
         content:
@@ -15289,6 +15938,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100i0es6icxh1femm',
+        doi: '10.82259/cl3fz14e100i0es6icxh1femm',
         title: '"Tumor Necrosis Factor (TNF) Related Apoptosis-Inducing Ligand (TRAIL), an immune cytokine of TNF-family, has received much attention in late 1990s as a potential cancer therapeutics due to its selective ability to induce apoptosis in cancer cells."',
         type: 'PROBLEM',
         content:
@@ -15313,6 +15963,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e100i1es6i3het3xqa',
+        doi: '10.82259/cl3fz14e100i1es6i3het3xqa',
         title: 'Transitional cell carcinomas of upper urinary tract (uttTCC) constitute 5% to 6% of all urothelial tumors.',
         type: 'PROBLEM',
         content:
@@ -15337,6 +15988,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i2es6ibiqy8gex',
+        doi: '10.82259/cl3fz14e200i2es6ibiqy8gex',
         title: 'Aspiration of foreign body (FB) into the airways is common in children and continues to be a cause for morbidity and mortality.',
         type: 'PROBLEM',
         content:
@@ -15361,6 +16013,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i3es6i501qb2h1',
+        doi: '10.82259/cl3fz14e200i3es6i501qb2h1',
         title: 'Shoulder disorders are a common musculoskeletal problem causing pain and functional loss.',
         type: 'PROBLEM',
         content: '<p>Shoulder disorders are a common musculoskeletal problem causing pain and functional loss.</p>',
@@ -15383,6 +16036,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i4es6iff7i81p1',
+        doi: '10.82259/cl3fz14e200i4es6iff7i81p1',
         title: 'Cystic lymphangioma is a rare benign malformative tumor of lymphatic vessels in various locations.',
         type: 'PROBLEM',
         content:
@@ -15407,6 +16061,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i5es6iguxaf8y0',
+        doi: '10.82259/cl3fz14e200i5es6iguxaf8y0',
         title: 'Postoperative intra_abdominal adhesions remain an unsolved problem despite significant progress in the surgical procedures themselves.',
         type: 'PROBLEM',
         content:
@@ -15431,6 +16086,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i6es6iehiycxyt',
+        doi: '10.82259/cl3fz14e200i6es6iehiycxyt',
         title: '"Mycobacterium tuberculosis (MTB), one of the major bacterial pathogens for lethal infectious diseases, is capable of surviving within the phagosomes of host alveolar macrophages; therefore, host genetic variations may alter the susceptibility to MTB."',
         type: 'PROBLEM',
         content:
@@ -15455,6 +16111,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i7es6i60x5c5e9',
+        doi: '10.82259/cl3fz14e200i7es6i60x5c5e9',
         title: 'The cause of chronic urticaria (CU) remains unidentified in many patients.',
         type: 'PROBLEM',
         content: '<p>The cause of chronic urticaria (CU) remains unidentified in many patients.</p>',
@@ -15477,6 +16134,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i8es6ic1n8b912',
+        doi: '10.82259/cl3fz14e200i8es6ic1n8b912',
         title: '"Selenium (Se) is an essential micronutrient for many organisms, but is also a toxin and environmental pollutant at elevated levels."',
         type: 'PROBLEM',
         content:
@@ -15501,6 +16159,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200i9es6igtji605t',
+        doi: '10.82259/cl3fz14e200i9es6igtji605t',
         title: 'Peritoneal carcinomatosis (PC) of gastric origin has a poor prognosis with short survival due to lack of effective therapeutic modalities.',
         type: 'PROBLEM',
         content:
@@ -15525,6 +16184,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iaes6ihacp19b7',
+        doi: '10.82259/cl3fz14e200iaes6ihacp19b7',
         title: 'Endogenous retroviruses (ERVs) and ERV-like sequences comprise 8% of the human genome.',
         type: 'PROBLEM',
         content: '<p>Endogenous retroviruses (ERVs) and ERV-like sequences comprise 8% of the human genome.</p>',
@@ -15547,6 +16207,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ibes6ia2hb3quo',
+        doi: '10.82259/cl3fz14e200ibes6ia2hb3quo',
         title: 'Therapeutic measurements to control hepatitis C reinfection afterorthotopic liver transplantation (OLT) still pose many problemsand remain unsatisfactory.',
         type: 'PROBLEM',
         content:
@@ -15571,6 +16232,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ices6i4l5c7thv',
+        doi: '10.82259/cl3fz14e200ices6i4l5c7thv',
         title: 'Congenital hypothyroidism (CH) is most frequently caused by thyroid developmental abnormalities and it has recently been seen to have a familial component.',
         type: 'PROBLEM',
         content:
@@ -15595,6 +16257,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ides6i203y37xs',
+        doi: '10.82259/cl3fz14e200ides6i203y37xs',
         title: 'The expansion of a repetitive DNA sequence in the C9orf72 gene is the major genetic cause of amyotrophic lateral sclerosis and frontotemporal dementia.',
         type: 'PROBLEM',
         content:
@@ -15619,6 +16282,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iees6i9pza2rwd',
+        doi: '10.82259/cl3fz14e200iees6i9pza2rwd',
         title: 'Acute compartment syndrome (ACS) is a limb-threatening condition often first diagnosed by emergency physicians.',
         type: 'PROBLEM',
         content:
@@ -15643,6 +16307,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ifes6idgmg4zg0',
+        doi: '10.82259/cl3fz14e200ifes6idgmg4zg0',
         title: 'Phenylketonuria (PKU) is an inborn metabolic disorder that affects phenylalanine catabolism.',
         type: 'PROBLEM',
         content: '<p>Phenylketonuria (PKU) is an inborn metabolic disorder that affects phenylalanine catabolism.</p>',
@@ -15665,6 +16330,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iges6ibum022l1',
+        doi: '10.82259/cl3fz14e200iges6ibum022l1',
         title: 'Strangulated Inguinal hernia is one of the most common surgical emergencies dealt with by surgeons worldwide.',
         type: 'PROBLEM',
         content:
@@ -15689,6 +16355,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ihes6i5l12cw8j',
+        doi: '10.82259/cl3fz14e200ihes6i5l12cw8j',
         title: '"Stigma affects patients with mental illness, their families and treatment providers."',
         type: 'PROBLEM',
         content: '<p>"Stigma affects patients with mental illness, their families and treatment providers."</p>',
@@ -15711,6 +16378,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iies6i92tghh6e',
+        doi: '10.82259/cl3fz14e200iies6i92tghh6e',
         title: '"Myeloid sarcoma (MS), also known as granulocytic sarcoma or chloroma, is a rare extramedullary tumor composed of immature myeloid cells at different stages of differentiation which can involve any site of the body."',
         type: 'PROBLEM',
         content:
@@ -15735,6 +16403,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ijes6i4op9a4v0',
+        doi: '10.82259/cl3fz14e200ijes6i4op9a4v0',
         title: '"Adult-onset Still’s disease (AOSD) is an uncommon systemic inflammatory disease characterized by a spiking fever, an evanescent skin rash, polyarthralgia, and hepatosplenomegaly."',
         type: 'PROBLEM',
         content:
@@ -15759,6 +16428,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ikes6ieqs06hiv',
+        doi: '10.82259/cl3fz14e200ikes6ieqs06hiv',
         title: 'Jaundice is a clinical condition that is often present in pediatric practice and constitutes one of the major issues within the neonatal period and it is either physiological or pathological.',
         type: 'PROBLEM',
         content:
@@ -15783,6 +16453,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iles6i70tacqvv',
+        doi: '10.82259/cl3fz14e200iles6i70tacqvv',
         title: '"Budd-Chiari syndrome (BCS) or hepatic venous outflow obstruction, is a rare and complex clinical entity, with diverse aetiology and a wide range of presentations."',
         type: 'PROBLEM',
         content:
@@ -15807,6 +16478,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200imes6i0vt07y73',
+        doi: '10.82259/cl3fz14e200imes6i0vt07y73',
         title: 'Achalasia is a rare primary motility disorder of the esophagus ',
         type: 'PROBLEM',
         content: '<p>Achalasia is a rare primary motility disorder of the esophagus </p>',
@@ -15829,6 +16501,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ines6i84m61pla',
+        doi: '10.82259/cl3fz14e200ines6i84m61pla',
         title: 'Significant hearing loss is one of the most common major abnormalities present at birth.',
         type: 'PROBLEM',
         content: '<p>Significant hearing loss is one of the most common major abnormalities present at birth.</p>',
@@ -15851,6 +16524,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ioes6i5vuwehl6',
+        doi: '10.82259/cl3fz14e200ioes6i5vuwehl6',
         title: 'Febrile neutropenia (FN) is the most frequent dose-limiting complication of myelosuppressive chemotherapy.',
         type: 'PROBLEM',
         content:
@@ -15879,6 +16553,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ipes6i7kh731zo',
+        doi: '10.82259/cl3fz14e200ipes6i7kh731zo',
         title: 'Allergic contact dermatitis (ACD) is one of the most common occupational skin diseases (OSDs).',
         type: 'PROBLEM',
         content:
@@ -15902,6 +16577,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iqes6idydr2he0',
+        doi: '10.82259/cl3fz14e200iqes6idydr2he0',
         title: 'Cognitive and motor declines are two major geriatric problems often coexisting in older adults.',
         type: 'PROBLEM',
         content:
@@ -15925,6 +16601,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ires6i8reghvj8',
+        doi: '10.82259/cl3fz14e200ires6i8reghvj8',
         title: 'Ovarian hyperstimulation syndrome (OHSS) is considered as one of the significant complications of assisted conception.',
         type: 'PROBLEM',
         content:
@@ -15949,6 +16626,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ises6ic99wbif3',
+        doi: '10.82259/cl3fz14e200ises6ic99wbif3',
         title: "Mutations in the presenilin 1 (PS1) gene are the most commonly recognized cause of familial Alzheimer's disease (FAD).",
         type: 'PROBLEM',
         content:
@@ -15973,6 +16651,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ites6i99swc4ta',
+        doi: '10.82259/cl3fz14e200ites6i99swc4ta',
         title: 'Tardive dyskinesia (TD) is a serious side-effect of long-term treatment with neuroleptics.',
         type: 'PROBLEM',
         content: '<p>Tardive dyskinesia (TD) is a serious side-effect of long-term treatment with neuroleptics.</p>',
@@ -15995,6 +16674,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iues6ibkdnfuf9',
+        doi: '10.82259/cl3fz14e200iues6ibkdnfuf9',
         title: '"Snakebite is a medical emergency causing considerable morbidity and mortality worldwide, particularly in the tropics."',
         type: 'PROBLEM',
         content:
@@ -16019,6 +16699,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ives6i8hbc6446',
+        doi: '10.82259/cl3fz14e200ives6i8hbc6446',
         title: '"Hantaviruses cause two severe diseases, haemorrhagic fever with renal syndrome in Eurasia and hantavirus pulmonary syndrome in the Americas."',
         type: 'PROBLEM',
         content:
@@ -16043,6 +16724,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iwes6ib7jn3xum',
+        doi: '10.82259/cl3fz14e200iwes6ib7jn3xum',
         title: 'Violence is an important public health problem among adolescents in the United States.',
         type: 'PROBLEM',
         content: '<p>Violence is an important public health problem among adolescents in the United States.</p>',
@@ -16065,6 +16747,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200ixes6i3sjnblc6',
+        doi: '10.82259/cl3fz14e200ixes6i3sjnblc6',
         title: 'Peripartum cardiomyopathy (PPCM) is a life-threatening heart failure occurring in the peripartum period.',
         type: 'PROBLEM',
         content:
@@ -16089,6 +16772,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200iyes6i2vmscmpz',
+        doi: '10.82259/cl3fz14e200iyes6i2vmscmpz',
         title: '"Food safety is an issue of global health concern, and contamination occurs due to pollution of the air, water, and soil where food is cultivated, as well as through the use of pesticides."',
         type: 'PROBLEM',
         content:
@@ -16113,6 +16797,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200izes6ici656muh',
+        doi: '10.82259/cl3fz14e200izes6ici656muh',
         title: '"Arrhythmogenic right ventricular dysplasia/cardiomyopathy (ARVD/C) is a rare, inherited cardiomyopathy characterized by ventricular arrhythmias, sudden cardiac death, and right ventricular dysfunction."',
         type: 'PROBLEM',
         content:
@@ -16137,6 +16822,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j0es6iamht456r',
+        doi: '10.82259/cl3fz14e200j0es6iamht456r',
         title: 'Dysmenorrhoea is the most important under diagnosed and undertreated gynaecologic disorder of all menstrual complaints.',
         type: 'PROBLEM',
         content:
@@ -16161,6 +16847,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j1es6idwp2ho0g',
+        doi: '10.82259/cl3fz14e200j1es6idwp2ho0g',
         title: 'Epithelioid hemangioendothelioma is a rare vascular malignancy often characterized by a clinically indolent course and delayed diagnosis.',
         type: 'PROBLEM',
         content:
@@ -16185,6 +16872,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j2es6i5l9f5z9f',
+        doi: '10.82259/cl3fz14e200j2es6i5l9f5z9f',
         title: '"Nonsteroidal anti-inflammatory drugs (NSAIDs), which are globally prescribed, exhibit mainly anti-inflammatory and analgesic effects but also can cause adverse effects including gastrointestinal erosions, ulceration, bleeding, and perforation."',
         type: 'PROBLEM',
         content:
@@ -16209,6 +16897,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j3es6igeyf3q3h',
+        doi: '10.82259/cl3fz14e200j3es6igeyf3q3h',
         title: 'Femoroacetabular impingement (FAI) is increasingly being recognized as a cause of hip pain in the young adult.',
         type: 'PROBLEM',
         content:
@@ -16233,6 +16922,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j4es6i17cf1obe',
+        doi: '10.82259/cl3fz14e200j4es6i17cf1obe',
         title: 'Atypical teratoid/rhabdoid tumor (AT/RT) is uncommon malignant intracranial tumor usually during the first 2 years of life with a male predominance.',
         type: 'PROBLEM',
         content:
@@ -16257,6 +16947,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j5es6i62hiagtm',
+        doi: '10.82259/cl3fz14e200j5es6i62hiagtm',
         title: '"Diabetic cardiomyopathy (DCM) is a critical complication of diabetes, the accurate pathogenesis of which remains elusive."',
         type: 'PROBLEM',
         content:
@@ -16281,6 +16972,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j6es6idbmaa0yj',
+        doi: '10.82259/cl3fz14e200j6es6idbmaa0yj',
         title: 'About 20–40% of patients with diabetes mellitus (DM) suffer from depressive disorders (DD) during the course of their illness.',
         type: 'PROBLEM',
         content:
@@ -16305,6 +16997,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j7es6i440xarhy',
+        doi: '10.82259/cl3fz14e200j7es6i440xarhy',
         title: 'Retinal ganglion cells (RGCs) have been shown to die by apoptosis after damage to their axons caused by optic nerve crush and the death can be reduced by some neurotrophic factors.',
         type: 'PROBLEM',
         content:
@@ -16329,6 +17022,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j8es6idi2k78mb',
+        doi: '10.82259/cl3fz14e200j8es6idi2k78mb',
         title: '"Congenital disorders of glycosylation (CDG), formerly called carbohydrate-deficient glycoprotein syndromes, constitute a newly identified group of multisystem disorders characterized by defective glycosylation of N-glycosylated proteins."',
         type: 'PROBLEM',
         content:
@@ -16353,6 +17047,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200j9es6i6z6a6km5',
+        doi: '10.82259/cl3fz14e200j9es6i6z6a6km5',
         title: '"Mycobacterium ulcerans infection is an emerging disease that causes indolent, necrotizing skin lesions known as Buruli ulcer (BU)."',
         type: 'PROBLEM',
         content:
@@ -16377,6 +17072,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jaes6igpeya7qi',
+        doi: '10.82259/cl3fz14e200jaes6igpeya7qi',
         title: '"About 10% of the western population suffers from a specific disability in the acquisition of reading and writing skills, known as developmental dyslexia (DD)."',
         type: 'PROBLEM',
         content:
@@ -16401,6 +17097,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jbes6igivb89vf',
+        doi: '10.82259/cl3fz14e200jbes6igivb89vf',
         title: '"Retinal vascular occlusion (RVO), including retinal arterial occlusion and retinal vein occlusion, is a common retinal vascular disease that causes visual disturbance."',
         type: 'PROBLEM',
         content:
@@ -16425,6 +17122,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jces6i592p64zx',
+        doi: '10.82259/cl3fz14e200jces6i592p64zx',
         title: 'Multisystem inflammatory syndrome in children (MIS-C) associated with coronavirus disease (COVID-19) is a rare and challenging diagnosis requiring early treatment.',
         type: 'PROBLEM',
         content:
@@ -16449,6 +17147,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jdes6i28scbhgy',
+        doi: '10.82259/cl3fz14e200jdes6i28scbhgy',
         title: '"Noise is one of the most common worldwide environmental pollutants, especially in occupational fields."',
         type: 'PROBLEM',
         content:
@@ -16473,6 +17172,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jees6i0wryd913',
+        doi: '10.82259/cl3fz14e200jees6i0wryd913',
         title: '"Paraneoplastic neurological syndromes are rare diseases affecting less than 0,01 % of the cancerous patients."',
         type: 'PROBLEM',
         content:
@@ -16501,6 +17201,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jfes6ibuva8ax2',
+        doi: '10.82259/cl3fz14e200jfes6ibuva8ax2',
         title: 'Management of massive rotator cuff tears in shoulders without glenohumeral arthritis remains problematic for surgeons.',
         type: 'PROBLEM',
         content:
@@ -16525,6 +17226,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jges6i5u3s8hl3',
+        doi: '10.82259/cl3fz14e200jges6i5u3s8hl3',
         title: '"Metaplastic breast carcinoma is a rare heterogeneous category of breast cancer, often associated with a poor prognosis."',
         type: 'PROBLEM',
         content:
@@ -16549,6 +17251,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jhes6i57n2eezm',
+        doi: '10.82259/cl3fz14e200jhes6i57n2eezm',
         title: 'Actinomycosis is a rare infectious disease caused by Actinobacteria.',
         type: 'PROBLEM',
         content: '<p>Actinomycosis is a rare infectious disease caused by Actinobacteria.</p>',
@@ -16571,6 +17274,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jies6ia19n6oz8',
+        doi: '10.82259/cl3fz14e200jies6ia19n6oz8',
         title: '"The frequency of hepatitis C virus (HCV) infection remains high in patients with CKD and plays a detrimental role in mortality in this population, and patients undergoing maintenance dialysis are still at risk of developing HCV infection and HCV disease prevalence of anti-hepatitis C virus (HCV) patients who undergo longterm dialysis are significantly greater than those with normal kidney function."',
         type: 'PROBLEM',
         content:
@@ -16595,6 +17299,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jjes6i3f7qbupu',
+        doi: '10.82259/cl3fz14e200jjes6i3f7qbupu',
         title: 'Developmental dysplasia of the hip (DDH) is a complex disorder of hip joint affecting 1‰-5‰ of newborns.',
         type: 'PROBLEM',
         content:
@@ -16619,6 +17324,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jkes6i2zeihw4u',
+        doi: '10.82259/cl3fz14e200jkes6i2zeihw4u',
         title: 'Vaccines are extremely powerful disease prevention agents and have the potential to save millions of lives.',
         type: 'PROBLEM',
         content:
@@ -16643,6 +17349,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jles6iftuc9243',
+        doi: '10.82259/cl3fz14e200jles6iftuc9243',
         title: 'Rheumatic heart disease (RHD) continues to create havoc in the developing countries even decades after its discovery.',
         type: 'PROBLEM',
         content:
@@ -16667,6 +17374,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e200jmes6idtee9590',
+        doi: '10.82259/cl3fz14e200jmes6idtee9590',
         title: '"Oral submucous fibrosis (OSF) is a prevalent premalignant condition of the oral cavity, with insidious onset."',
         type: 'PROBLEM',
         content:
@@ -16691,6 +17399,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jnes6i8vye06tl',
+        doi: '10.82259/cl3fz14e300jnes6i8vye06tl',
         title: '"Functional Dyspepsia (FD), defined as chronic symptoms originating from the gastroduodenal region in absence of readily identifiable organic disease, is one of the most common gastrointestinal disorders."',
         type: 'PROBLEM',
         content:
@@ -16715,6 +17424,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300joes6igb497upw',
+        doi: '10.82259/cl3fz14e300joes6igb497upw',
         title: '"Changes in temperature associated with climate change can alter species’ distributions, drive adaptive evolution, and, in some cases, cause extinction."',
         type: 'PROBLEM',
         content:
@@ -16739,6 +17449,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jpes6i00pp23x3',
+        doi: '10.82259/cl3fz14e300jpes6i00pp23x3',
         title: 'Patients with chronic kidney disease (CKD) often have the complication of anaemia.',
         type: 'PROBLEM',
         content: '<p>Patients with chronic kidney disease (CKD) often have the complication of anaemia.</p>',
@@ -16761,6 +17472,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jqes6i93krfxx4',
+        doi: '10.82259/cl3fz14e300jqes6i93krfxx4',
         title: '"Although imatinib mesylate (IM) has revolutionized the treatment of chronic myeloid leukemia (CML), some patients develop resistance with progression of leukemia."',
         type: 'PROBLEM',
         content:
@@ -16785,6 +17497,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jres6id3kkatmf',
+        doi: '10.82259/cl3fz14e300jres6id3kkatmf',
         title: '"Charcot neuropathic arthropathy is a debilitating, rapidly destructive degenerative joint disease that occurs in diabetic, neuropathic midfoot."',
         type: 'PROBLEM',
         content:
@@ -16809,6 +17522,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jses6ieohaf6m9',
+        doi: '10.82259/cl3fz14e300jses6ieohaf6m9',
         title: 'Tumor marker-producing germ cell tumors of the central nervous system are malignant and require radiation and/or chemotherapy.',
         type: 'PROBLEM',
         content:
@@ -16833,6 +17547,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jtes6i4mtbcn5s',
+        doi: '10.82259/cl3fz14e300jtes6i4mtbcn5s',
         title: 'Flooding is a particular hazard in urban areas worldwide due to the increased risks to life and property in these regions.',
         type: 'PROBLEM',
         content:
@@ -16857,6 +17572,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jues6ic2ee4rz8',
+        doi: '10.82259/cl3fz14e300jues6ic2ee4rz8',
         title: 'Low birth weight (LBW) continues to be the primary cause of infant morbidity and mortality.',
         type: 'PROBLEM',
         content: '<p>Low birth weight (LBW) continues to be the primary cause of infant morbidity and mortality.</p>',
@@ -16879,6 +17595,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jves6i970zdwbj',
+        doi: '10.82259/cl3fz14e300jves6i970zdwbj',
         title: '"Neural tube defects (NTDs) such as spina bifida and anencephaly are common congenital malformations in humans (1/1,000 births) that result from failure of the neural tube to close during embryogenesis."',
         type: 'PROBLEM',
         content:
@@ -16903,6 +17620,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jwes6i4vg11d2q',
+        doi: '10.82259/cl3fz14e300jwes6i4vg11d2q',
         title: 'Coastal wetlands are of great ecological and economic value but face significant degradation and losses because of human activities.',
         type: 'PROBLEM',
         content:
@@ -16927,6 +17645,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jxes6icvzt23il',
+        doi: '10.82259/cl3fz14e300jxes6icvzt23il',
         title: 'Rosacea is a common chronic inflammatory disease of the skin and is associated with a number of etiological causes and inciting factors.',
         type: 'PROBLEM',
         content:
@@ -16951,6 +17670,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jyes6i6lml1erv',
+        doi: '10.82259/cl3fz14e300jyes6i6lml1erv',
         title: 'Zoonotic diseases are leading threats to public health globally.',
         type: 'PROBLEM',
         content: '<p>Zoonotic diseases are leading threats to public health globally.</p>',
@@ -16973,6 +17693,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300jzes6i6oriad1h',
+        doi: '10.82259/cl3fz14e300jzes6i6oriad1h',
         title: '"Mutations in the VHL gene lead to von Hippel_Lindau (VHL) disease, a clinically heterogeneous cancer syndrome."',
         type: 'PROBLEM',
         content:
@@ -16997,6 +17718,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k0es6i8ogye6db',
+        doi: '10.82259/cl3fz14e300k0es6i8ogye6db',
         title: 'Lewy body dementia (LBD) is emerging as a common cause of degenerative dementia.',
         type: 'PROBLEM',
         content: '<p>Lewy body dementia (LBD) is emerging as a common cause of degenerative dementia.</p>',
@@ -17019,6 +17741,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k1es6i8v86d54v',
+        doi: '10.82259/cl3fz14e300k1es6i8v86d54v',
         title: 'Focal segmental glomerulosclerosis (FSGS) is a major cause of idiopathic steroid-resistant nephrotic syndrome (SRNS) and end-stage kidney disease (ESKD).',
         type: 'PROBLEM',
         content:
@@ -17043,6 +17766,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k2es6i32a7gkw8',
+        doi: '10.82259/cl3fz14e300k2es6i32a7gkw8',
         title: '"The cholinergic theory of Alzheimer’s disease (Coyle, Price, and DeLong, 1983) suggests that the selective loss of cholinergic neurons in Alzheimer’s disease results in a relative deficit of acetylcholine in specific regions of the brain that mediate learning and memory functions and require acetylcholine to do so."',
         type: 'PROBLEM',
         content:
@@ -17067,6 +17791,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k3es6ibrkh4rk9',
+        doi: '10.82259/cl3fz14e300k3es6ibrkh4rk9',
         title: 'An anomalous origin for the coronary artery is a rare congenital condition',
         type: 'PROBLEM',
         content: '<p>An anomalous origin for the coronary artery is a rare congenital condition</p>',
@@ -17089,6 +17814,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k4es6i52noh4di',
+        doi: '10.82259/cl3fz14e300k4es6i52noh4di',
         title: '"Sweet syndrome (SS) is a rare autoinflamamtory neutrophilic dermatosis, sometimes associated with hematologic malignancies."',
         type: 'PROBLEM',
         content:
@@ -17113,6 +17839,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k5es6i2ird6qeb',
+        doi: '10.82259/cl3fz14e300k5es6i2ird6qeb',
         title: 'Mild cognitive impairment (MCI) is a subtle memory disorder not matching criteria for dementia.',
         type: 'PROBLEM',
         content:
@@ -17136,6 +17863,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k6es6icml80ld8',
+        doi: '10.82259/cl3fz14e300k6es6icml80ld8',
         title: 'Locally recurrent rectal cancer (LRRC) after surgery or external beam radiotherapy (EBRT) is a serious challenge for which no standard treatment is defined.',
         type: 'PROBLEM',
         content:
@@ -17160,6 +17888,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k7es6i9f76cio0',
+        doi: '10.82259/cl3fz14e300k7es6i9f76cio0',
         title: 'Cardiac injury has been well recognised as a complication of blunt chest trauma.',
         type: 'PROBLEM',
         content: '<p>Cardiac injury has been well recognised as a complication of blunt chest trauma.</p>',
@@ -17182,6 +17911,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k8es6ia2qxhoi6',
+        doi: '10.82259/cl3fz14e300k8es6ia2qxhoi6',
         title: 'Idiopathic scoliosis is one of the most common disabling pathologies of children and adolescents.',
         type: 'PROBLEM',
         content:
@@ -17206,6 +17936,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300k9es6ieckzes2r',
+        doi: '10.82259/cl3fz14e300k9es6ieckzes2r',
         title: 'Many amphibian species are at risk of extinction in their natural habitats due to the presence of the fungal pathogen Batrachochytrium dendrobatidis (Bd).',
         type: 'PROBLEM',
         content:
@@ -17230,6 +17961,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kaes6ihnjzaxuj',
+        doi: '10.82259/cl3fz14e300kaes6ihnjzaxuj',
         title: 'Increased general inflammation in aging inhibits immunity and affects responses to infections Aging is associated with increased morbidity arising from a range of tissue dysfunctions.',
         type: 'PROBLEM',
         content:
@@ -17254,6 +17986,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kbes6ic10bf2ux',
+        doi: '10.82259/cl3fz14e300kbes6ic10bf2ux',
         title: '"Immunoglobulin A vasculitis (IgA-V), formerly known as Henoch–Schönlein purpura (HSP), is the most common small vessel vasculitis in children."',
         type: 'PROBLEM',
         content:
@@ -17278,6 +18011,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kces6iehn0guzf',
+        doi: '10.82259/cl3fz14e300kces6iehn0guzf',
         title: '"Osteopetrosis is a genetically determined bone disease resulting from malfunction of osteoclastic activity, leading to excessive deposition of immature bone."',
         type: 'PROBLEM',
         content:
@@ -17302,6 +18036,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kdes6ie6oo57xd',
+        doi: '10.82259/cl3fz14e300kdes6ie6oo57xd',
         title: 'Refugee and immigrant women may face a variety of pre- and post-migration stressors that make them susceptible to mental health disorders and adjustment problems.',
         type: 'PROBLEM',
         content:
@@ -17326,6 +18061,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kees6icomq9oxw',
+        doi: '10.82259/cl3fz14e300kees6icomq9oxw',
         title: '"After decades of epidemiologic and mechanistic research, anterior cruciate ligament (ACL) injuries are clearly a growing problem among active youth and adults."',
         type: 'PROBLEM',
         content:
@@ -17350,6 +18086,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kfes6i0izq0fjt',
+        doi: '10.82259/cl3fz14e300kfes6i0izq0fjt',
         title: '"Cannabis is among the most used illicit substances globally, with medical applications, increased legalization, and shifting social attitudes leading to increased use in recent years."',
         type: 'PROBLEM',
         content:
@@ -17374,6 +18111,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kges6ihe5hdosb',
+        doi: '10.82259/cl3fz14e300kges6ihe5hdosb',
         title: '"Groundwater is the most reliable resource for consumptive uses worldwide, but it is vulnerable to anthropogenic pollution in this post-industrialization era."',
         type: 'PROBLEM',
         content:
@@ -17398,6 +18136,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300khes6idwdo4u3l',
+        doi: '10.82259/cl3fz14e300khes6idwdo4u3l',
         title: '"Angiogenesis plays a dominant role in many pathophysiologic disorders, including cancer."',
         type: 'PROBLEM',
         content: '<p>"Angiogenesis plays a dominant role in many pathophysiologic disorders, including cancer."</p>',
@@ -17424,6 +18163,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kies6ihkz47n5b',
+        doi: '10.82259/cl3fz14e300kies6ihkz47n5b',
         title: 'Vascular calcification (VC) is an inducement of many cardiovascular diseases.',
         type: 'PROBLEM',
         content: '<p>Vascular calcification (VC) is an inducement of many cardiovascular diseases.</p>',
@@ -17446,6 +18186,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e300kjes6i0ni85e8p',
+        doi: '10.82259/cl3fz14e300kjes6i0ni85e8p',
         title: 'Hypophosphatasia (HPP) is a genetic disease caused by one or several mutations in ALPL gene encoding the tissue-nonspecific alkaline phosphatase affecting the mineralization process.',
         type: 'PROBLEM',
         content:
@@ -17470,6 +18211,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kkes6i6gg6c5yv',
+        doi: '10.82259/cl3fz14e400kkes6i6gg6c5yv',
         title: 'Displaced and unstable fractures of the proximal humerus are notoriously difficult to manage.',
         type: 'PROBLEM',
         content: '<p>Displaced and unstable fractures of the proximal humerus are notoriously difficult to manage.</p>',
@@ -17496,6 +18238,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kles6icx7hecy0',
+        doi: '10.82259/cl3fz14e400kles6icx7hecy0',
         title: 'Paracoccidioidomycosis (PCM) is endemic in Latin America and in countries like Brazil it carries a high mortality rate.',
         type: 'PROBLEM',
         content:
@@ -17520,6 +18263,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kmes6iafvhafoi',
+        doi: '10.82259/cl3fz14e400kmes6iafvhafoi',
         title: '"Ectodermal dysplasia (ED) syndrome comprises a large, heterogeneous group of inherited disorders that are defined by primary defects in the development of 2 or more tissues derived from the embryonic ectoderm."',
         type: 'PROBLEM',
         content:
@@ -17544,6 +18288,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400knes6i4zbe1td0',
+        doi: '10.82259/cl3fz14e400knes6i4zbe1td0',
         title: 'Poisonings cause considerable morbidity and mortality worldwide.',
         type: 'PROBLEM',
         content: '<p>Poisonings cause considerable morbidity and mortality worldwide.</p>',
@@ -17566,6 +18311,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400koes6i4iqlcrlz',
+        doi: '10.82259/cl3fz14e400koes6i4iqlcrlz',
         title: 'Chronic granulomatous disease (CGD) is an inheritable and genetically heterogeneous disease resulting from mutations in different subcomponents of the NADPH oxidase system.',
         type: 'PROBLEM',
         content:
@@ -17590,6 +18336,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kpes6i52ql2bk0',
+        doi: '10.82259/cl3fz14e400kpes6i52ql2bk0',
         title: 'Homelessness [and poverty] is rapidly escalating across North America and is associated with dire implications for public health and our health care systems.',
         type: 'PROBLEM',
         content:
@@ -17614,6 +18361,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kqes6i50n12tw5',
+        doi: '10.82259/cl3fz14e400kqes6i50n12tw5',
         title: 'Dupuytren’s contracture is a fibroproliferative disease whose etiology and pathophysiology are unclear and controversial.',
         type: 'PROBLEM',
         content:
@@ -17638,6 +18386,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kres6i37740rx7',
+        doi: '10.82259/cl3fz14e400kres6i37740rx7',
         title: 'House dust mites have been known as the most important allergen in respiratory allergic diseases.',
         type: 'PROBLEM',
         content:
@@ -17662,6 +18411,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kses6i768j0vwp',
+        doi: '10.82259/cl3fz14e400kses6i768j0vwp',
         title: '"Maturity-onset diabetes of the young (MODY) is characterized by an autosomal dominant mode of inheritance, early onset of hyperglycemia, and defects of insulin secretion."',
         type: 'PROBLEM',
         content:
@@ -17686,6 +18436,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400ktes6ih1uk89oy',
+        doi: '10.82259/cl3fz14e400ktes6ih1uk89oy',
         title: 'Congenital cataract is the most common cause of preventable childhood blindness worldwide.',
         type: 'PROBLEM',
         content: '<p>Congenital cataract is the most common cause of preventable childhood blindness worldwide.</p>',
@@ -17708,6 +18459,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kues6i2h1m5opj',
+        doi: '10.82259/cl3fz14e400kues6i2h1m5opj',
         title: 'Arthropod_borne viruses (arboviruses) are a growing threat to global health.',
         type: 'PROBLEM',
         content: '<p>Arthropod_borne viruses (arboviruses) are a growing threat to global health.</p>',
@@ -17730,6 +18482,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kves6i4qw9gtv2',
+        doi: '10.82259/cl3fz14e400kves6i4qw9gtv2',
         title: '"Femoral bone loss due to periprosthetic fracture, a challenging problem in total hip arthroplasty (THA), is increasingly encountered due to a rise in the number of revision THAs performed."',
         type: 'PROBLEM',
         content:
@@ -17754,6 +18507,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kwes6ih9ff8bhu',
+        doi: '10.82259/cl3fz14e400kwes6ih9ff8bhu',
         title: '"Microcystins (MC) are cyanotoxins occurring globally, known for causing acute hepatotoxicity in humans/animals, tumor promotion in animals and potential carcinogenicity."',
         type: 'PROBLEM',
         content:
@@ -17778,6 +18532,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kxes6i5agd0w5q',
+        doi: '10.82259/cl3fz14e400kxes6i5agd0w5q',
         title: 'Renal artery stenosis (RAS) is a cause of hypertension and ischemic nephropathy.',
         type: 'PROBLEM',
         content: '<p>Renal artery stenosis (RAS) is a cause of hypertension and ischemic nephropathy.</p>',
@@ -17800,6 +18555,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kyes6i7jwhfo0m',
+        doi: '10.82259/cl3fz14e400kyes6i7jwhfo0m',
         title: 'Intravascular lymphoma (IVL) is a rare subtype of extranodal diffuse large B-cell lymphoma.',
         type: 'PROBLEM',
         content: '<p>Intravascular lymphoma (IVL) is a rare subtype of extranodal diffuse large B-cell lymphoma.</p>',
@@ -17822,6 +18578,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400kzes6ib0r428uu',
+        doi: '10.82259/cl3fz14e400kzes6ib0r428uu',
         title: '"With the steady growth of the human population, food security becomes a prime challenge."',
         type: 'PROBLEM',
         content: '<p>"With the steady growth of the human population, food security becomes a prime challenge."</p>',
@@ -17848,6 +18605,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l0es6ie31687zu',
+        doi: '10.82259/cl3fz14e400l0es6ie31687zu',
         title: 'Hepatitis delta virus (HDV) is a defective RNA virus dependent on Hepatitis B virus (HBV) infection for its replication and expression.',
         type: 'PROBLEM',
         content:
@@ -17872,6 +18630,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l1es6i8byhfvxp',
+        doi: '10.82259/cl3fz14e400l1es6i8byhfvxp',
         title: 'Wolbachia bacteria are common insect endosymbionts transmitted maternally and capable of spreading through insect populations by cytoplasmic incompatibility (CI) when infected males cause embryo death after mating with uninfected females.',
         type: 'PROBLEM',
         content:
@@ -17896,6 +18655,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l2es6i4kqbapqi',
+        doi: '10.82259/cl3fz14e400l2es6i4kqbapqi',
         title: '"Hypoglycaemia is a common danger in patients with diabetes, particularly in Type I insulin dependent diabetes mellitus (IDDM)."',
         type: 'PROBLEM',
         content:
@@ -17920,6 +18680,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l3es6ic3aw33y7',
+        doi: '10.82259/cl3fz14e400l3es6ic3aw33y7',
         title: '"Interstitial cystitis, a chronic disease of the bladder, is characterized by urinary frequency, urgency and suprapubic pain."',
         type: 'PROBLEM',
         content:
@@ -17944,6 +18705,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l4es6i4fhh49ec',
+        doi: '10.82259/cl3fz14e400l4es6i4fhh49ec',
         title: '"Neonatal nosocomial infection (NNI) is a major complication of neonatal care, increasing mortality, morbidity and the costs of healthcare."',
         type: 'PROBLEM',
         content:
@@ -17968,6 +18730,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l5es6i7soq00wt',
+        doi: '10.82259/cl3fz14e400l5es6i7soq00wt',
         title: 'Streptococcus pneumoniae is a commensal of the human nasopharynx that can also cause severe antibiotic-resistant infections.',
         type: 'PROBLEM',
         content:
@@ -17992,6 +18755,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l6es6idqzigpla',
+        doi: '10.82259/cl3fz14e400l6es6idqzigpla',
         title: 'Pollution of phenol compounds is a serious problem for the environment.',
         type: 'PROBLEM',
         content: '<p>Pollution of phenol compounds is a serious problem for the environment.</p>',
@@ -18014,6 +18778,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l7es6i31mtcvdq',
+        doi: '10.82259/cl3fz14e400l7es6i31mtcvdq',
         title: 'Ependymoma accounts for 5–10% of all childhood CNS tumors and less than 5% of intracranial tumors in adults.',
         type: 'PROBLEM',
         content:
@@ -18038,6 +18803,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l8es6idbadameg',
+        doi: '10.82259/cl3fz14e400l8es6idbadameg',
         title: 'Development of drug resistance is considered a major cause for failure of antiretroviral therapy in human immunodeficiency virus type 1 (HIV_1)_infected patients adherent to treatment.',
         type: 'PROBLEM',
         content:
@@ -18062,6 +18828,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400l9es6ic2i3b5ny',
+        doi: '10.82259/cl3fz14e400l9es6ic2i3b5ny',
         title: '"Problem gambling is of serious public, social and clinical concern, especially so because ease of access to different types of gambling is increasing."',
         type: 'PROBLEM',
         content:
@@ -18086,6 +18853,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400laes6i7qhf9esi',
+        doi: '10.82259/cl3fz14e400laes6i7qhf9esi',
         title: '"Severe fever with thrombocytopenia syndrome (SFTS) is an emerging infectious disease that was caused by a novel bunyavirus, SFTSV."',
         type: 'PROBLEM',
         content:
@@ -18110,6 +18878,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lbes6ib87zd1cw',
+        doi: '10.82259/cl3fz14e400lbes6ib87zd1cw',
         title: '"Primary hyperhidrosis, excessive focal sweating is a common disease equally affecting men and women."',
         type: 'PROBLEM',
         content:
@@ -18134,6 +18903,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lces6i31x2gjsq',
+        doi: '10.82259/cl3fz14e400lces6i31x2gjsq',
         title: 'Spontaneous coronary artery dissection (SCAD) is a rare cause of acute coronary syndrome.',
         type: 'PROBLEM',
         content: '<p>Spontaneous coronary artery dissection (SCAD) is a rare cause of acute coronary syndrome.</p>',
@@ -18156,6 +18926,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400ldes6if6fya6ue',
+        doi: '10.82259/cl3fz14e400ldes6if6fya6ue',
         title: '"Lesbian, gay, bisexual, and transgender (LGBT) populations face a range of health disparities that all health care systems must address."',
         type: 'PROBLEM',
         content:
@@ -18180,6 +18951,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lees6i32k7d5e7',
+        doi: '10.82259/cl3fz14e400lees6i32k7d5e7',
         title: '"Exposure to formaldehyde, a known air toxic, is associated with cancer and lung disease."',
         type: 'PROBLEM',
         content: '<p>"Exposure to formaldehyde, a known air toxic, is associated with cancer and lung disease."</p>',
@@ -18206,6 +18978,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lfes6i7lep4dre',
+        doi: '10.82259/cl3fz14e400lfes6i7lep4dre',
         title: 'Sporotrichosis is a neglected fungal infection caused by Sporothrix spp.',
         type: 'PROBLEM',
         content: '<p>Sporotrichosis is a neglected fungal infection caused by Sporothrix spp.</p>',
@@ -18228,6 +19001,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lges6i3k902d4a',
+        doi: '10.82259/cl3fz14e400lges6i3k902d4a',
         title: 'Essential tremor (ET) is among the most prevalent movement disorders.',
         type: 'PROBLEM',
         content: '<p>Essential tremor (ET) is among the most prevalent movement disorders.</p>',
@@ -18250,6 +19024,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lhes6i2ud7bxod',
+        doi: '10.82259/cl3fz14e400lhes6i2ud7bxod',
         title: 'Postoperative cognitive dysfunction (POCD) is recognized as a complication in the elderly after cardiac surgery.',
         type: 'PROBLEM',
         content:
@@ -18278,6 +19053,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lies6i4l8khrxk',
+        doi: '10.82259/cl3fz14e400lies6i4l8khrxk',
         title: "Kimura's disease (KD) is a rare chronic inflammatory disease of subcutaneous tissues and occurs predominantly in head and neck region.",
         type: 'PROBLEM',
         content:
@@ -18302,6 +19078,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400ljes6i3avxd9d0',
+        doi: '10.82259/cl3fz14e400ljes6i3avxd9d0',
         title: '"Serotonin syndrome (SS) is a drug_induced, potentially fatal, clinical syndrome resulting from drugs that have serotonergic properties."',
         type: 'PROBLEM',
         content:
@@ -18326,6 +19103,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lkes6i0lk2bzp7',
+        doi: '10.82259/cl3fz14e400lkes6i0lk2bzp7',
         title: 'CONGENITAL SYPHILIS (CS) IS A sentinel public health event because of its devastating consequences and persistence throughout the United States.',
         type: 'PROBLEM',
         content:
@@ -18354,6 +19132,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lles6i1j225iko',
+        doi: '10.82259/cl3fz14e400lles6i1j225iko',
         title: '"Methylmercury (MeHg), an environmental neurotoxicant, induces site-specific toxicity in the brain."',
         type: 'PROBLEM',
         content:
@@ -18378,6 +19157,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lmes6i0ydxf3c5',
+        doi: '10.82259/cl3fz14e400lmes6i0ydxf3c5',
         title: 'Myelofibrosis (MF) is currently the myeloproliferative disorder with the most severe prognosis.',
         type: 'PROBLEM',
         content:
@@ -18401,6 +19181,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lnes6i4met69cr',
+        doi: '10.82259/cl3fz14e400lnes6i4met69cr',
         title: '"Diffuse Intrinsic Pontine Glioma (DIPG) is a rare, highly aggressive pediatric brain tumor that originates in the pons."',
         type: 'PROBLEM',
         content:
@@ -18425,6 +19206,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400loes6i0eel291x',
+        doi: '10.82259/cl3fz14e400loes6i0eel291x',
         title: 'Solid pseudopapillary neoplasm (SPN) of the pancreas is a rare neoplasm of low malignant potential that mostly affect young women.',
         type: 'PROBLEM',
         content:
@@ -18449,6 +19231,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lpes6i2si2hhla',
+        doi: '10.82259/cl3fz14e400lpes6i2si2hhla',
         title: '"Mutations in the Retinitis Pigmentosa GTPase Regulator (RPGR) cause X-linked RP (XLRP), an untreatable, inherited retinal dystrophy that leads to premature blindness."',
         type: 'PROBLEM',
         content:
@@ -18473,6 +19256,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lqes6i080v3ors',
+        doi: '10.82259/cl3fz14e400lqes6i080v3ors',
         title: '"Silicosis remains one of the most severe pulmonary fibrotic diseases worldwide, caused by chronic exposure to silica dust."',
         type: 'PROBLEM',
         content:
@@ -18497,6 +19281,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lres6iaing0rm3',
+        doi: '10.82259/cl3fz14e400lres6iaing0rm3',
         title: '"To overcome serious clinical problems caused by large bone defects, various approaches to bone regeneration have been researched, including tissue engineering, biomaterials, stem cells and drug screening."',
         type: 'PROBLEM',
         content:
@@ -18521,6 +19306,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e400lses6i0nduc6iz',
+        doi: '10.82259/cl3fz14e400lses6i0nduc6iz',
         title: 'Hairy cell leukemia (HCL) shows unique clinicopathological and biological features.',
         type: 'PROBLEM',
         content: '<p>Hairy cell leukemia (HCL) shows unique clinicopathological and biological features.</p>',
@@ -18543,6 +19329,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500ltes6ia0os2ua7',
+        doi: '10.82259/cl3fz14e500ltes6ia0os2ua7',
         title: '"Corneal disease, especially infective keratitis, is one of the major causes of visual impairment and blindness in developing countries."',
         type: 'PROBLEM',
         content:
@@ -18567,6 +19354,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lues6i6k0kg8q0',
+        doi: '10.82259/cl3fz14e500lues6i6k0kg8q0',
         title: 'Oral disease is frequently associated with viral and environmental exposures and oral hygiene.',
         type: 'PROBLEM',
         content:
@@ -18590,6 +19378,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lves6i62xc7v6q',
+        doi: '10.82259/cl3fz14e500lves6i62xc7v6q',
         title: 'Scabies is a common parasitosis of the skin caused by Sarcoptes scabiei hominis.',
         type: 'PROBLEM',
         content: '<p>Scabies is a common parasitosis of the skin caused by Sarcoptes scabiei hominis.</p>',
@@ -18612,6 +19401,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lwes6ia5r745k1',
+        doi: '10.82259/cl3fz14e500lwes6ia5r745k1',
         title: 'A substantial proportion of cancer cases present with a metastatic tumor and require further testing to determine the primary site; many of these are never fully diagnosed and remain cancer of unknown primary origin (CUP).',
         type: 'PROBLEM',
         content:
@@ -18636,6 +19426,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lxes6idn5t6qfy',
+        doi: '10.82259/cl3fz14e500lxes6idn5t6qfy',
         title: 'Localised Neuropathic Pain (LNP) is challenging to diagnose and manage in primary care.',
         type: 'PROBLEM',
         content: '<p>Localised Neuropathic Pain (LNP) is challenging to diagnose and manage in primary care.</p>',
@@ -18658,6 +19449,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lyes6i1beqhkn2',
+        doi: '10.82259/cl3fz14e500lyes6i1beqhkn2',
         title: 'Counterfeit and/or imitation medicines are becoming a major health problem not only in developing countries but also in wealthier countries.',
         type: 'PROBLEM',
         content:
@@ -18682,6 +19474,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500lzes6icqxqejkn',
+        doi: '10.82259/cl3fz14e500lzes6icqxqejkn',
         title: 'Haemodialysis vascular access dysfunction is currently a huge clinical problem.',
         type: 'PROBLEM',
         content: '<p>Haemodialysis vascular access dysfunction is currently a huge clinical problem.</p>',
@@ -18704,6 +19497,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500m0es6i3knb03ee',
+        doi: '10.82259/cl3fz14e500m0es6i3knb03ee',
         title: '"Cervical spondylotic myelopathy represents a debilitating disorder, often resulting in significant neurological impairment over time."',
         type: 'PROBLEM',
         content:
@@ -18728,6 +19522,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e500m1es6icnpv0rut',
+        doi: '10.82259/cl3fz14e500m1es6icnpv0rut',
         title: 'Vasculitis are a heterogeneous group of disorders characterized by inflammation of the blood vessels of different caliber and sometimes fibrinoid necrosis with vessel wall destruction.',
         type: 'PROBLEM',
         content:
@@ -18752,6 +19547,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m2es6i0hux89jc',
+        doi: '10.82259/cl3fz14e600m2es6i0hux89jc',
         title: '"Acute intermittent porphyria (AIP) is a metabolic disease with an autosomal dominant inheritance, with porphobilinogen (PBG) deaminase as the deficient enzyme in heme biosynthetic pathway at cytosolic subcellular locations."',
         type: 'PROBLEM',
         content:
@@ -18776,6 +19572,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m3es6ic2y4go4g',
+        doi: '10.82259/cl3fz14e600m3es6ic2y4go4g',
         title: 'variety of organic and inorganic pollutants in water environments pose threats to human health.',
         type: 'PROBLEM',
         content:
@@ -18799,6 +19596,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m4es6i85pg6v1q',
+        doi: '10.82259/cl3fz14e600m4es6i85pg6v1q',
         title: '"Gram-negative bacteria produce lipopolysaccharide (LPS), the endotoxin that causes septic shock and is a leading cause of death in critically ill patients."',
         type: 'PROBLEM',
         content:
@@ -18823,6 +19621,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m5es6ihck50kvv',
+        doi: '10.82259/cl3fz14e600m5es6ihck50kvv',
         title: 'Medium chain acyl-CoA dehydrogenase deficiency (MCADD) is a disorder of mitochondrial fatty acid oxidation and is one of the most common inborn errors of metabolism.',
         type: 'PROBLEM',
         content:
@@ -18847,6 +19646,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m6es6ie93h2gvi',
+        doi: '10.82259/cl3fz14e600m6es6ie93h2gvi',
         title: 'Placental malaria (PM) is associated with adverse pregnancy outcomes including low birth weight (LBW).',
         type: 'PROBLEM',
         content:
@@ -18871,6 +19671,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m7es6i96etd2jc',
+        doi: '10.82259/cl3fz14e600m7es6i96etd2jc',
         title: 'Overcrowding in U.S. emergency departments (ED) is a growing national problem that results in delayed or obstructed care and costs taxpayers billions of dollars each year.',
         type: 'PROBLEM',
         content:
@@ -18895,6 +19696,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m8es6ibq1s142s',
+        doi: '10.82259/cl3fz14e600m8es6ibq1s142s',
         title: 'Antibody-mediated rejection due to anti-donor HLA antibodies is a cause of chronic rejection and poor graft survival.',
         type: 'PROBLEM',
         content:
@@ -18919,6 +19721,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600m9es6id29ob5q7',
+        doi: '10.82259/cl3fz14e600m9es6id29ob5q7',
         title: 'Chronic prostatitis/chronic pelvic pain syndrome (CP/CPPS) causes substantial morbidity afflicting approximately 10% of adult males.',
         type: 'PROBLEM',
         content:
@@ -18943,6 +19746,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600maes6ie9jqci1r',
+        doi: '10.82259/cl3fz14e600maes6ie9jqci1r',
         title: '"Although cardiovascular diseases are less prevalent in premenopausal women than in men, their occurrence in women increases at the onset of menopause, and the loss of female sex hormones contributes to the striking increase in cardiovascular morbidity and mortality in postmenopausal women."',
         type: 'PROBLEM',
         content:
@@ -18967,6 +19771,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mbes6i26qv3327',
+        doi: '10.82259/cl3fz14e600mbes6i26qv3327',
         title: 'Cleidocranial dysplasia (CCD) is a rare congenital disorder characterized by skeletal and dental anomalies.',
         type: 'PROBLEM',
         content:
@@ -18991,6 +19796,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mces6igw4l8ps7',
+        doi: '10.82259/cl3fz14e600mces6igw4l8ps7',
         title: '"Violence in the workplace, including violence toward staff from patients and families as well as lateral violence, has become a serious safety issue for hospitals in the United States."',
         type: 'PROBLEM',
         content:
@@ -19015,6 +19821,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mdes6i20y73x8m',
+        doi: '10.82259/cl3fz14e600mdes6i20y73x8m',
         title: '"Non-suicidal self-injury (NSSI), the intentional destruction of one\'s own body tissue without the conscious intent to die, is a significant health concern among adolescents, however, there are few psychosocial interventions designed to treat NSSI."',
         type: 'PROBLEM',
         content:
@@ -19039,6 +19846,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mees6iah8s3vkd',
+        doi: '10.82259/cl3fz14e600mees6iah8s3vkd',
         title: 'Menopausal women experience physical and hormonal changes so that it often causes problems.',
         type: 'PROBLEM',
         content: '<p>Menopausal women experience physical and hormonal changes so that it often causes problems.</p>',
@@ -19061,6 +19869,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mfes6i1o104jwy',
+        doi: '10.82259/cl3fz14e600mfes6i1o104jwy',
         title: 'Dysphagia is a debilitating condition with widespread consequences.',
         type: 'PROBLEM',
         content: '<p>Dysphagia is a debilitating condition with widespread consequences.</p>',
@@ -19083,6 +19892,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mges6ibr7lgklj',
+        doi: '10.82259/cl3fz14e600mges6ibr7lgklj',
         title: '"Histoplasmosis is an important systemic fungal infection, particularly among immunocompromised individuals, who may develop a progressive disseminated form which is often fatal if it is untreated."',
         type: 'PROBLEM',
         content:
@@ -19107,6 +19917,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mhes6i7vis48yj',
+        doi: '10.82259/cl3fz14e600mhes6i7vis48yj',
         title: '"Often referred to as the “last frontier” in percutaneous coronary intervention (PCI), chronic total occlusion (CTO) is amongst the most challenging and technically demanding lesions treated by the interventionist."',
         type: 'PROBLEM',
         content:
@@ -19131,6 +19942,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mies6ih55r86jd',
+        doi: '10.82259/cl3fz14e600mies6ih55r86jd',
         title: 'Isolated left ventricular noncompaction (LVNC) is a rare cardiomyopathy characterized by excessive and prominent trabeculations associated with deep recesses that communicate with the ventricular cavity.',
         type: 'PROBLEM',
         content:
@@ -19155,6 +19967,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mjes6i04nhcx53',
+        doi: '10.82259/cl3fz14e600mjes6i04nhcx53',
         title: 'Peptic ulcer is a serious disease with a high incidence of occurrence in our community.',
         type: 'PROBLEM',
         content: '<p>Peptic ulcer is a serious disease with a high incidence of occurrence in our community.</p>',
@@ -19177,6 +19990,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mkes6ibzsm6r7f',
+        doi: '10.82259/cl3fz14e600mkes6ibzsm6r7f',
         title: '"Klinefelter\'s syndrome, the most common sex disorder associated with chromosomal aberrations, is characterized by a plethora of clinical features."',
         type: 'PROBLEM',
         content:
@@ -19201,6 +20015,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mles6i7olo7fge',
+        doi: '10.82259/cl3fz14e600mles6i7olo7fge',
         title: '"Individuals with type 2 diabetes mellitus (T2DM) are at increased risk of developing cardiovascular disease (CVD), possibly associated with elevated plasma free fatty acid concentrations."',
         type: 'PROBLEM',
         content:
@@ -19225,6 +20040,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mmes6i4d2rb28u',
+        doi: '10.82259/cl3fz14e600mmes6i4d2rb28u',
         title: '"Chordoma is a rare, slow-growing malignant bone tumor originating from the remains of the notochord and predominantly affecting the axial skeleton (especially the sacrum and occipital region)."',
         type: 'PROBLEM',
         content:
@@ -19249,6 +20065,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mnes6idnpt9jo5',
+        doi: '10.82259/cl3fz14e600mnes6idnpt9jo5',
         title: '"Tongue squamous cell carcinoma (TSCC) is a major subtype of head and neck squamous cell carcinoma (HNSCC), which is an intractable cancer with a poor prognosis."',
         type: 'PROBLEM',
         content:
@@ -19273,6 +20090,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600moes6i7ajy782g',
+        doi: '10.82259/cl3fz14e600moes6i7ajy782g',
         title: '"Fly ash, generated during the combustion of coal for energy production, is an industrial by-product which is recognized as an environmental pollutant."',
         type: 'PROBLEM',
         content:
@@ -19297,6 +20115,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mpes6i049s56z4',
+        doi: '10.82259/cl3fz14e600mpes6i049s56z4',
         title: '"Infections caused by dermatophytes, Trichophyton rubrum in particular, are among the most common diseases in humans."',
         type: 'PROBLEM',
         content:
@@ -19321,6 +20140,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mqes6id4hr9tcd',
+        doi: '10.82259/cl3fz14e600mqes6id4hr9tcd',
         title: '"Klippel-Trenaunay syndrome is a rare congenital malformation characterized by a large angiomatous nevus, hypertrophy of soft tissue and/or overgrowth of bone, and venous varicosities."',
         type: 'PROBLEM',
         content:
@@ -19345,6 +20165,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mres6i71bl0lnf',
+        doi: '10.82259/cl3fz14e600mres6i71bl0lnf',
         title: 'Hyponatremia is the most common and by far underestimated electrolyte disorder in clinical practice.',
         type: 'PROBLEM',
         content:
@@ -19369,6 +20190,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mses6ia3f89mti',
+        doi: '10.82259/cl3fz14e600mses6ia3f89mti',
         title: 'Corrosion is a crucial worldwide problem that strongly affects metals.',
         type: 'PROBLEM',
         content: '<p>Corrosion is a crucial worldwide problem that strongly affects metals.</p>',
@@ -19391,6 +20213,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e600mtes6ig2g4ehpg',
+        doi: '10.82259/cl3fz14e600mtes6ig2g4ehpg',
         title: 'Uveitis is an inflammation of the uvea which may result in blindness.',
         type: 'PROBLEM',
         content: '<p>Uveitis is an inflammation of the uvea which may result in blindness.</p>',
@@ -19413,6 +20236,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e700mues6idwrpak49',
+        doi: '10.82259/cl3fz14e700mues6idwrpak49',
         title: '"Many people worldwide live with a disability, i.e. limitations in functioning."',
         type: 'PROBLEM',
         content: '<p>"Many people worldwide live with a disability, i.e. limitations in functioning."</p>',
@@ -19435,6 +20259,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900mves6ibv1qdyhw',
+        doi: '10.82259/cl3fz14e900mves6ibv1qdyhw',
         title: 'The flavivirus genus has several organisms responsible for generating various diseases in humans.',
         type: 'PROBLEM',
         content:
@@ -19459,6 +20284,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900mwes6i3509hdvb',
+        doi: '10.82259/cl3fz14e900mwes6i3509hdvb',
         title: 'Ventricular septal rupture is a rare complication of acute myocardial infarction and has a high mortality.',
         type: 'PROBLEM',
         content:
@@ -19483,6 +20309,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900mxes6i53g904ja',
+        doi: '10.82259/cl3fz14e900mxes6i53g904ja',
         title: 'Survivors of childhood and adolescent cancer are at risk for long-term effects of disease and treatment.',
         type: 'PROBLEM',
         content:
@@ -19507,6 +20334,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900myes6i1lbddd3d',
+        doi: '10.82259/cl3fz14e900myes6i1lbddd3d',
         title: 'Giant intracranial aneurysms pose significant technical problems for the neurosurgical team.',
         type: 'PROBLEM',
         content: '<p>Giant intracranial aneurysms pose significant technical problems for the neurosurgical team.</p>',
@@ -19529,6 +20357,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900mzes6i9imj9ejx',
+        doi: '10.82259/cl3fz14e900mzes6i9imj9ejx',
         title: '"Rickettsial diseases, such as Rocky Mountain spotted fever, pose a public health threat because of humans\' interrelationship with common arthropod species, such as ticks, mites, fleas, and lice."',
         type: 'PROBLEM',
         content:
@@ -19553,6 +20382,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n0es6i01m02o59',
+        doi: '10.82259/cl3fz14e900n0es6i01m02o59',
         title: '"Accidents, the majority of which can be prevented, are a significant cause of morbidity and mortality in children."',
         type: 'PROBLEM',
         content:
@@ -19577,6 +20407,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n1es6i65i32n9r',
+        doi: '10.82259/cl3fz14e900n1es6i65i32n9r',
         title: '"Paratuberculosis, or Johne\'s disease, is a chronic, granulomatous, gastrointestinal tract disease of cattle and other ruminants caused by the bacterium Mycobacterium avium, subspecies paratuberculosis (MAP)."',
         type: 'PROBLEM',
         content:
@@ -19601,6 +20432,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n2es6iboote2w0',
+        doi: '10.82259/cl3fz14e900n2es6iboote2w0',
         title: '"Cerebral arteriovenous malformations (AVMs) are a common congenital vascular anomaly, which often present in both children and adults."',
         type: 'PROBLEM',
         content:
@@ -19625,6 +20457,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n3es6i6age250d',
+        doi: '10.82259/cl3fz14e900n3es6i6age250d',
         title: '"Hepatic hemangiomas (HH) and focal nodular hyperplasia (FNH) are, by far singly and combined together, the most frequently occurring benign liver lesions."',
         type: 'PROBLEM',
         content:
@@ -19649,6 +20482,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n4es6idy7j3o0p',
+        doi: '10.82259/cl3fz14e900n4es6idy7j3o0p',
         title: 'The Peutz–Jeghers Syndrome (PJS) is an autosomal dominant polyposis disorder with increased risk of multiple cancers.',
         type: 'PROBLEM',
         content:
@@ -19673,6 +20507,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n5es6i5cnp0262',
+        doi: '10.82259/cl3fz14e900n5es6i5cnp0262',
         title: '"Exposure to excessive manganese (Mn) causes manganism, a progressive neurodegenerative disorder similar to idiopathic Parkinson’s disease (IPD)."',
         type: 'PROBLEM',
         content:
@@ -19697,6 +20532,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n6es6i2sfndl1a',
+        doi: '10.82259/cl3fz14e900n6es6i2sfndl1a',
         title: '"Diamond-Blackfan anemia is a congenital hypoproliferative anemia known to be associated with diverse physical anomalies affecting the thumb, craniofacial bones, urogenital system, and heart; prematurity; and fetal demise."',
         type: 'PROBLEM',
         content:
@@ -19721,6 +20557,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n7es6i57d47dwh',
+        doi: '10.82259/cl3fz14e900n7es6i57d47dwh',
         title: 'Elder abuse is a pervasive public health issue.',
         type: 'PROBLEM',
         content: '<p>Elder abuse is a pervasive public health issue.</p>',
@@ -19747,6 +20584,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n8es6id3fyenau',
+        doi: '10.82259/cl3fz14e900n8es6id3fyenau',
         title: '"Polyarteritis nodosa (PAN) is a vasculitis, which often involves small and medium sized visceral arteries."',
         type: 'PROBLEM',
         content:
@@ -19771,6 +20609,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900n9es6ig5a22x5y',
+        doi: '10.82259/cl3fz14e900n9es6ig5a22x5y',
         title: 'Craniopharyngiomas are benign intracranial tumors located in the sellar and suprasellar region.',
         type: 'PROBLEM',
         content:
@@ -19794,6 +20633,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900naes6igjsm5qop',
+        doi: '10.82259/cl3fz14e900naes6igjsm5qop',
         title: '"Parents have been vulnerable to psychological distress during the COVID-19 pandemic due to the disruptions in social support including restricted connections to support networks and loss of access to healthcare, schools and day care centers, and community services."',
         type: 'PROBLEM',
         content:
@@ -19818,6 +20658,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nbes6idbl47leo',
+        doi: '10.82259/cl3fz14e900nbes6idbl47leo',
         title: '"With the increasing overall survival of cancer patients due to recent discoveries in oncology, the incidence of side effects is also rising, and along with secondary malignancies, cardiotoxicity is one of the most concerning side effects, affecting the quality of life of cancer survivors."',
         type: 'PROBLEM',
         content:
@@ -19842,6 +20683,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nces6i31861mxy',
+        doi: '10.82259/cl3fz14e900nces6i31861mxy',
         title: 'Krabbe disease (KD) is an autosomal recessive disorder caused by mutations in the galactocerebrosidase (GALC) gene resulting in neuro-inflammation and defective myelination in the central and peripheral nervous systems.',
         type: 'PROBLEM',
         content:
@@ -19866,6 +20708,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900ndes6i8diufnba',
+        doi: '10.82259/cl3fz14e900ndes6i8diufnba',
         title: 'Exposure to environmental chemicals with estrogenic activity during the early stage of pregnancy can seriously affect embryonic development and the maintenance of pregnancy.',
         type: 'PROBLEM',
         content:
@@ -19890,6 +20733,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nees6i2h6xfy3h',
+        doi: '10.82259/cl3fz14e900nees6i2h6xfy3h',
         title: 'Pelvic fracture (PF) is the second-most prevalent cause of mortality after brain trauma among multiple trauma patients.',
         type: 'PROBLEM',
         content:
@@ -19914,6 +20758,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nfes6ifhtf72t6',
+        doi: '10.82259/cl3fz14e900nfes6ifhtf72t6',
         title: '"Wiskott-Aldrich syndrome (WAS) is a fully penetrant X-linked recessive disorder characterized by thrombocytopenia with small platelets, eczema, and defects of both T-cell and B-cell immunity."',
         type: 'PROBLEM',
         content:
@@ -19938,6 +20783,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nges6ieztd3j2x',
+        doi: '10.82259/cl3fz14e900nges6ieztd3j2x',
         title: 'Malnutrition is a major cause of hospitalization for residents of long-term care facilities (LTC).',
         type: 'PROBLEM',
         content:
@@ -19962,6 +20808,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nhes6ia82d8u4f',
+        doi: '10.82259/cl3fz14e900nhes6ia82d8u4f',
         title: 'Uterine carcinosarcoma (UCS) accounts for approximately 15% of uterine cancer-associated deaths in the United States.',
         type: 'PROBLEM',
         content:
@@ -19986,6 +20833,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nies6ia5ezcb78',
+        doi: '10.82259/cl3fz14e900nies6ia5ezcb78',
         title: '"Myopia is an important cause of visual disability throughout the world, and in its higher forms, it is also an important cause of blindness."',
         type: 'PROBLEM',
         content:
@@ -20010,6 +20858,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900njes6i2iid7jdv',
+        doi: '10.82259/cl3fz14e900njes6i2iid7jdv',
         title: 'Adipose tissue inflammation plays a role in atherosclerosis and type 2 diabetes (T2DM).',
         type: 'PROBLEM',
         content: '<p>Adipose tissue inflammation plays a role in atherosclerosis and type 2 diabetes (T2DM).</p>',
@@ -20032,6 +20881,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nkes6i3kjg9sdb',
+        doi: '10.82259/cl3fz14e900nkes6i3kjg9sdb',
         title: 'Anti-N-Mmethyl-D-aspartate receptor encephalitis is an autoimmune disease of the central nervous system with prominent neurologic and psychiatric features.',
         type: 'PROBLEM',
         content:
@@ -20056,6 +20906,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nles6i6zn18zt7',
+        doi: '10.82259/cl3fz14e900nles6i6zn18zt7',
         title: '"Tendon disorders are a significant cause of pain and morbidity amongst athletes, workers and the general public."',
         type: 'PROBLEM',
         content:
@@ -20080,6 +20931,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nmes6i5240a8yc',
+        doi: '10.82259/cl3fz14e900nmes6i5240a8yc',
         title: 'Drowning is one of the leading causes of death in children.',
         type: 'PROBLEM',
         content: '<p>Drowning is one of the leading causes of death in children.</p>',
@@ -20102,6 +20954,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nnes6i3eswhbe2',
+        doi: '10.82259/cl3fz14e900nnes6i3eswhbe2',
         title: 'Thyroid disorders are among the common endocrine problems in pregnant women.',
         type: 'PROBLEM',
         content: '<p>Thyroid disorders are among the common endocrine problems in pregnant women.</p>',
@@ -20124,6 +20977,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900noes6ibr54covw',
+        doi: '10.82259/cl3fz14e900noes6ibr54covw',
         title: '"Pregnancy-associated breast cancer, although most commonly defined as breast cancer diagnosed during pregnancy or_≤1 year following delivery, knows a variety of definitions, likely related to the diversity of reported clinicopathological features and prognosis."',
         type: 'PROBLEM',
         content:
@@ -20148,6 +21002,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900npes6igxvj02ea',
+        doi: '10.82259/cl3fz14e900npes6igxvj02ea',
         title: 'Pelvic inflammatory disease (PID) is characterized by infection and inflammation of the upper genital tract in women and can cause significant reproductive health sequelae for women.',
         type: 'PROBLEM',
         content:
@@ -20172,6 +21027,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nqes6ifl27802g',
+        doi: '10.82259/cl3fz14e900nqes6ifl27802g',
         title: 'Hepatorenal syndrome (HRS) is a serious complication of liver cirrhosis with poor survival in the absence of liver transplantation (LT).',
         type: 'PROBLEM',
         content:
@@ -20196,6 +21052,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nres6ica8s3voo',
+        doi: '10.82259/cl3fz14e900nres6ica8s3voo',
         title: 'Congenital anomalies of the kidney and urinary tract are part of a family of diseases with different anatomical origins.',
         type: 'PROBLEM',
         content:
@@ -20220,6 +21077,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nses6i8kiqbmxd',
+        doi: '10.82259/cl3fz14e900nses6i8kiqbmxd',
         title: 'Coronavirus is an enveloped virus with positive-sense single-stranded RNA.',
         type: 'PROBLEM',
         content: '<p>Coronavirus is an enveloped virus with positive-sense single-stranded RNA.</p>',
@@ -20242,6 +21100,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900ntes6i87nier0a',
+        doi: '10.82259/cl3fz14e900ntes6i87nier0a',
         title: 'Hutchinson–Gilford progeria syndrome (HGPS) is a rare genetic disease with widespread phenotypic features resembling premature aging.',
         type: 'PROBLEM',
         content:
@@ -20266,6 +21125,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nues6i8idq1g0g',
+        doi: '10.82259/cl3fz14e900nues6i8idq1g0g',
         title: '"Neurological manifestations are a significant complication of coronavirus disease (COVID-19), but underlying mechanisms aren\'t well understood."',
         type: 'PROBLEM',
         content:
@@ -20290,6 +21150,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nves6ie3u6bnug',
+        doi: '10.82259/cl3fz14e900nves6ie3u6bnug',
         title: 'Cerebral autosomal dominant arteriopathy with subcortical infarcts and leukoencephalopathy (CADASIL) is a hereditary condition with onset in mid-adulthood and is associated with mutations in the Notch-3 gene.',
         type: 'PROBLEM',
         content:
@@ -20314,6 +21175,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nwes6icukn4at2',
+        doi: '10.82259/cl3fz14e900nwes6icukn4at2',
         title: 'Body dysmorphic disorder (BDD) is characterized by a recurrent preoccupation with a potential defect or flaw of one’s physical appearance that are often tended to be neutralized by an excessive checking or by taking big effort to hide or “fix” the suspected deficit.',
         type: 'PROBLEM',
         content:
@@ -20338,6 +21200,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nxes6igiar8lrw',
+        doi: '10.82259/cl3fz14e900nxes6igiar8lrw',
         title: '"Primary hyperoxaluria Type 1 is a rare autosomal recessive inborn error of glyoxylate metabolism, caused by a deficiency of the liver-specific enzyme alanine:glyoxylate aminotransferase."',
         type: 'PROBLEM',
         content:
@@ -20362,6 +21225,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nyes6icst7h4xa',
+        doi: '10.82259/cl3fz14e900nyes6icst7h4xa',
         title: 'Persistent hyperglycemia in diabetes causes endothelial cell dysfunction.',
         type: 'PROBLEM',
         content: '<p>Persistent hyperglycemia in diabetes causes endothelial cell dysfunction.</p>',
@@ -20384,6 +21248,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900nzes6igqyv5d3d',
+        doi: '10.82259/cl3fz14e900nzes6igqyv5d3d',
         title: 'Cassava mosaic disease (CMD) caused by cassava begomoviruses is the major constraint to cassava production in Africa.',
         type: 'PROBLEM',
         content:
@@ -20408,6 +21273,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900o0es6i76x999vt',
+        doi: '10.82259/cl3fz14e900o0es6i76x999vt',
         title: 'Glomus tumor is a rare mesenchymal neoplasm originating from the modified smooth muscle cells of the glomus body.',
         type: 'PROBLEM',
         content:
@@ -20432,6 +21298,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900o1es6i2df472s1',
+        doi: '10.82259/cl3fz14e900o1es6i2df472s1',
         title: 'Inherited cardiomyopathies are a frequent cause of heart failure.',
         type: 'PROBLEM',
         content: '<p>Inherited cardiomyopathies are a frequent cause of heart failure.</p>',
@@ -20454,6 +21321,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900o2es6ib6flalb0',
+        doi: '10.82259/cl3fz14e900o2es6ib6flalb0',
         title: '"Although relatively rare in Western countries, penile cancer is associated with high morbidity and mortality."',
         type: 'PROBLEM',
         content:
@@ -20478,6 +21346,7 @@ const problems = [
     },
     {
         id: 'cl3fz14e900o3es6i8o1f627a',
+        doi: '10.82259/cl3fz14e900o3es6i8o1f627a',
         title: '"Iodine deficiency is a major public-health problem throughout the world, especially for pregnant women, and it is considered the most common cause of preventable intellectual impairment."',
         type: 'PROBLEM',
         content:
@@ -20502,6 +21371,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o4es6idfd4bjbt',
+        doi: '10.82259/cl3fz14ea00o4es6idfd4bjbt',
         title: '"Lichen sclerosus (LS) is a chronic relapsing, inflammatory skin disorder usually involving the anogenital region of both sexes lacking a resolutive therapy."',
         type: 'PROBLEM',
         content:
@@ -20526,6 +21396,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o5es6igxbuab19',
+        doi: '10.82259/cl3fz14ea00o5es6igxbuab19',
         title: '"Breast cancer frequently metastasizes to bone, in which tumor cells receive signals from the bone marrow microenvironment."',
         type: 'PROBLEM',
         content:
@@ -20550,6 +21421,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o6es6i2zw44kfb',
+        doi: '10.82259/cl3fz14ea00o6es6i2zw44kfb',
         title: '"Thrombotic microangiopathies (TMAs) represent a heterogeneous group of diseases characterized by a microangiopathic hemolytic anemia, peripheral thrombocytopenia, and organ failure of variable severity."',
         type: 'PROBLEM',
         content:
@@ -20574,6 +21446,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o7es6i8en50tbj',
+        doi: '10.82259/cl3fz14ea00o7es6i8en50tbj',
         title: 'Mature cystic teratomas form approximately 20% of all ovarian tumours.',
         type: 'PROBLEM',
         content: '<p>Mature cystic teratomas form approximately 20% of all ovarian tumours.</p>',
@@ -20596,6 +21469,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o8es6i7e6scd5p',
+        doi: '10.82259/cl3fz14ea00o8es6i7e6scd5p',
         title: 'Tumor necrosis factor-alpha (TNF-alpha) is a potent immunomediator and proinflammatory cytokine that has been implicated in the pathogenesis of a large number of human diseases.',
         type: 'PROBLEM',
         content:
@@ -20620,6 +21494,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00o9es6ic50x7br3',
+        doi: '10.82259/cl3fz14ea00o9es6ic50x7br3',
         title: 'The tumors of the pineal region represent a significant challenge in terms of patient selection and surgical approach.',
         type: 'PROBLEM',
         content:
@@ -20644,6 +21519,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oaes6i38rhd8gd',
+        doi: '10.82259/cl3fz14ea00oaes6i38rhd8gd',
         title: '"Malaria is a major public health problem and an important cause of maternal and infant morbidity in sub-Saharan Africa, including Ethiopia."',
         type: 'PROBLEM',
         content:
@@ -20668,6 +21544,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00obes6i3u9fg1d6',
+        doi: '10.82259/cl3fz14ea00obes6i3u9fg1d6',
         title: '"Thrombosis in the context of Cardiovascular disease (CVD) affects mainly the blood vessels supplying the heart, brain and peripheries and it is the leading cause of death worldwide."',
         type: 'PROBLEM',
         content:
@@ -20692,6 +21569,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oces6icieg17h7',
+        doi: '10.82259/cl3fz14ea00oces6icieg17h7',
         title: 'Misregulation of the canonical Wnt/_-catenin pathway and aberrant activation of Wnt signaling target genes are common in colorectal cancer (CRC) and contribute to cancer progression.',
         type: 'PROBLEM',
         content:
@@ -20716,6 +21594,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00odes6ic41y4si5',
+        doi: '10.82259/cl3fz14ea00odes6ic41y4si5',
         title: 'Nocardia is a genus of pathogens that most commonly afflict immunocompromised hosts but may be an emerging infection among persons with bronchiectasis.',
         type: 'PROBLEM',
         content:
@@ -20740,6 +21619,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oees6i1kfq09ny',
+        doi: '10.82259/cl3fz14ea00oees6i1kfq09ny',
         title: 'Tracheoesophageal fistula (TEF) is a rare but life-threatening complication after esophagectomy.',
         type: 'PROBLEM',
         content:
@@ -20763,6 +21643,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ofes6i2qz38c6g',
+        doi: '10.82259/cl3fz14ea00ofes6i2qz38c6g',
         title: '"Kikuchi-Fujimoto disease (KFD), also known as histiocytic necrotizing lymphadenitis, is a benign, self-limiting disorder with unknown etiology."',
         type: 'PROBLEM',
         content:
@@ -20787,6 +21668,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oges6iarut67kc',
+        doi: '10.82259/cl3fz14ea00oges6iarut67kc',
         title: '"Hybrid organic–inorganic halide perovskites have emerged as a disruptive technology in a number of fields, and recently, there has been increased interest in developing nanostructured perovskite materials, due to their extremely high photoluminescence quantum yields, optical absorption, and tolerance for defects."',
         type: 'PROBLEM',
         content:
@@ -20811,6 +21693,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ohes6if29udbi0',
+        doi: '10.82259/cl3fz14ea00ohes6if29udbi0',
         title: '"Disasters cause significant loss of life, injuries and sufferings, destruction of properties, and displacement of people."',
         type: 'PROBLEM',
         content:
@@ -20835,6 +21718,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oies6i3f9v94zr',
+        doi: '10.82259/cl3fz14ea00oies6i3f9v94zr',
         title: 'Intestinal ischaemia_reperfusion (I/R) injury can result in acute lung injury due to ischaemia and hypoxia.',
         type: 'PROBLEM',
         content:
@@ -20859,6 +21743,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ojes6i70d9d5pi',
+        doi: '10.82259/cl3fz14ea00ojes6i70d9d5pi',
         title: 'Colonic volvulus (CV) is an uncommon disease which may present clinically as an intestinal obstruction or occlusion.',
         type: 'PROBLEM',
         content:
@@ -20883,6 +21768,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00okes6ialb48l2j',
+        doi: '10.82259/cl3fz14ea00okes6ialb48l2j',
         title: '"Salivary ductal carcinomas (SDCs) are extremely rare and aggressive malignancies, accounting for approximately 6% of all salivary gland malignancies."',
         type: 'PROBLEM',
         content:
@@ -20907,6 +21793,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oles6i3cjs46qu',
+        doi: '10.82259/cl3fz14ea00oles6i3cjs46qu',
         title: 'Cardiogenic shock is one of the leading causes of death following acute myocardial infarction affecting 10% of patients with large myocardial infarcts with a subsequent mortality rate of 50%.',
         type: 'PROBLEM',
         content:
@@ -20931,6 +21818,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00omes6ig2hb8cnz',
+        doi: '10.82259/cl3fz14ea00omes6ig2hb8cnz',
         title: 'Granular cell tumors (GCTs) are uncommon neoplasm.',
         type: 'PROBLEM',
         content: '<p>Granular cell tumors (GCTs) are uncommon neoplasm.</p>',
@@ -20953,6 +21841,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ones6i3h515mxu',
+        doi: '10.82259/cl3fz14ea00ones6i3h515mxu',
         title: 'Streptococcus pyogenes (group A streptococcus) colonizes skin and throat tissues resulting in a range of benign and serious human diseases.',
         type: 'PROBLEM',
         content:
@@ -20977,6 +21866,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ooes6i4fpz6fur',
+        doi: '10.82259/cl3fz14ea00ooes6i4fpz6fur',
         title: 'Entamoeba histolytica is a protozoan intestinal parasite that causes amoebic colitis and amoebic liver abscess.',
         type: 'PROBLEM',
         content:
@@ -21001,6 +21891,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00opes6ibbz1fmtm',
+        doi: '10.82259/cl3fz14ea00opes6ibbz1fmtm',
         title: '"Maternal human immunodeficiency virus (HIV) infection has been shown to leave profound and lasting impacts on the HIV-exposed uninfected (HEU) infant, including increased mortality and morbidity, immunological changes, and developmental delays compared to their HIV-unexposed (HU) counterparts."',
         type: 'PROBLEM',
         content:
@@ -21025,6 +21916,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oqes6iecqjhnq6',
+        doi: '10.82259/cl3fz14ea00oqes6iecqjhnq6',
         title: '"Large granular lymphocyte (LGL) leukemia is a spectrum of rare clonal lymphoproliferative disorders, all of which involve expansion of large granular lymphocytes."',
         type: 'PROBLEM',
         content:
@@ -21049,6 +21941,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ores6ibfoa236f',
+        doi: '10.82259/cl3fz14ea00ores6ibfoa236f',
         title: 'Pituitary apoplexy occurring after surgery is a rare but life-threatening acute clinical condition that follows extensive hemorrhagenous necrosis within a pituitary adenoma.',
         type: 'PROBLEM',
         content:
@@ -21073,6 +21966,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oses6i83nd2pjw',
+        doi: '10.82259/cl3fz14ea00oses6i83nd2pjw',
         title: '"""Ecstasy"" (3,4-methylenedioxymethamphetamine or MDMA) is a widely abused recreational drug, reported to produce neurotoxic effects, both in laboratory animals and in humans."',
         type: 'PROBLEM',
         content:
@@ -21097,6 +21991,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00otes6iduy2a6f1',
+        doi: '10.82259/cl3fz14ea00otes6iduy2a6f1',
         title: 'Traumatic dental injuries are a major cause of morbidity among children.',
         type: 'PROBLEM',
         content: '<p>Traumatic dental injuries are a major cause of morbidity among children.</p>',
@@ -21119,6 +22014,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oues6ibatl993e',
+        doi: '10.82259/cl3fz14ea00oues6ibatl993e',
         title: 'Benzo[a]pyrene (BaP) is a potentially genotoxic and cytotoxic environmental pollutant.',
         type: 'PROBLEM',
         content: '<p>Benzo[a]pyrene (BaP) is a potentially genotoxic and cytotoxic environmental pollutant.</p>',
@@ -21141,6 +22037,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oves6ibsf9hkr7',
+        doi: '10.82259/cl3fz14ea00oves6ibsf9hkr7',
         title: 'Hyperinsulinism is the most common cause of hypoglycemia in early infancy.',
         type: 'PROBLEM',
         content: '<p>Hyperinsulinism is the most common cause of hypoglycemia in early infancy.</p>',
@@ -21163,6 +22060,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00owes6ihrz2dfbt',
+        doi: '10.82259/cl3fz14ea00owes6ihrz2dfbt',
         title: 'Pyogenic liver abscess (PLA) is an uncommon but potentially life_threatening condition.',
         type: 'PROBLEM',
         content: '<p>Pyogenic liver abscess (PLA) is an uncommon but potentially life_threatening condition.</p>',
@@ -21185,6 +22083,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oxes6iaob93mci',
+        doi: '10.82259/cl3fz14ea00oxes6iaob93mci',
         title: '"Signet ring cell (SRC) carcinoma of the stomach is characterized by its poor prognosis and potential to infiltrate the wall of stomach, although survival studies comparing carcinomas with and without SRC features have yielded inconsistent results."',
         type: 'PROBLEM',
         content:
@@ -21209,6 +22108,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00oyes6iea4phzbq',
+        doi: '10.82259/cl3fz14ea00oyes6iea4phzbq',
         title: 'Myeloid-derived suppressor cells (MDSC) and tumor-associated macrophages (TAM) contribute to cancer-related inflammation and tumor progression.',
         type: 'PROBLEM',
         content:
@@ -21233,6 +22133,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ozes6i2s35a4el',
+        doi: '10.82259/cl3fz14ea00ozes6i2s35a4el',
         title: 'Lithium metal batteries have been considerably limited by the problems of uncontrolled dendritic lithium formation and the highly reactive nature of lithium with electrolytes.',
         type: 'PROBLEM',
         content:
@@ -21257,6 +22158,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p0es6i9zt3fv8y',
+        doi: '10.82259/cl3fz14ea00p0es6i9zt3fv8y',
         title: 'Tracheal stenosis is an uncommon but serious complication of prolonged intubation and tracheostomy patients.',
         type: 'PROBLEM',
         content:
@@ -21281,6 +22183,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p1es6icdow336h',
+        doi: '10.82259/cl3fz14ea00p1es6icdow336h',
         title: '"Autoimmune pancreatitis (AIP) is a type of chronic pancreatitis featured by swelling of pancreas, narrowing of pancreatic duct, elevation of serum IgG4, and/or presence of several autoantibodies [1–3]."',
         type: 'PROBLEM',
         content:
@@ -21305,6 +22208,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p2es6ibl011ejo',
+        doi: '10.82259/cl3fz14ea00p2es6ibl011ejo',
         title: '"The COVID-19 pandemic has impacted individuals across the world, and in particular, dramatically affected the experience of pregnancy and childbirth for many expectant mothers."',
         type: 'PROBLEM',
         content:
@@ -21329,6 +22233,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p3es6ig75k6eel',
+        doi: '10.82259/cl3fz14ea00p3es6ig75k6eel',
         title: 'Forest and woodland vulnerability to tree mortality in response to future drought and warmer temperatures is emerging as a potentially critical impact of global change (1).',
         type: 'PROBLEM',
         content:
@@ -21353,6 +22258,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p4es6ifhc7ggf4',
+        doi: '10.82259/cl3fz14ea00p4es6ifhc7ggf4',
         title: 'Sulfur dioxide (SO(2)) emission from coal-burning power plants and refinery operations has been implicated as a cause of acid rain and other air pollution related problems.',
         type: 'PROBLEM',
         content:
@@ -21381,6 +22287,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p5es6i2rgwhkeg',
+        doi: '10.82259/cl3fz14ea00p5es6i2rgwhkeg',
         title: 'Syncope is a commonly encountered and challenging problem in medical practice.',
         type: 'PROBLEM',
         content: '<p>Syncope is a commonly encountered and challenging problem in medical practice.</p>',
@@ -21407,6 +22314,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p6es6i5m6ncg6r',
+        doi: '10.82259/cl3fz14ea00p6es6i5m6ncg6r',
         title: 'Psychiatric disorders in adolescents comprise an important social problem relevant to almost all healthcare professionals.',
         type: 'PROBLEM',
         content:
@@ -21431,6 +22339,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p7es6igvrda8fw',
+        doi: '10.82259/cl3fz14ea00p7es6igvrda8fw',
         title: 'Uncontrolled bleeding is the first leading cause of preventable death in the battlefield and the 2nd cause of mortality in civil accidents.',
         type: 'PROBLEM',
         content:
@@ -21455,6 +22364,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p8es6icr7chwmo',
+        doi: '10.82259/cl3fz14ea00p8es6icr7chwmo',
         title: '"Coccidiosis, an intestinal infection caused by intracellular protozoan parasites belonging to several different species of Eimeria, seriously impairs the growth and feed utilization of livestock and poultry."',
         type: 'PROBLEM',
         content:
@@ -21479,6 +22389,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00p9es6igbkd0415',
+        doi: '10.82259/cl3fz14ea00p9es6igbkd0415',
         title: 'Improvement of the bioavailability of poorly soluble medicinal substances is currently one of the major challenges for pharmaceutical industry.',
         type: 'PROBLEM',
         content:
@@ -21503,6 +22414,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00paes6ib7za78ah',
+        doi: '10.82259/cl3fz14ea00paes6ib7za78ah',
         title: 'Canine mammary gland tumors (CMGTs) are the most frequent types of cancer in bitches and proposed as a model of human breast cancer.',
         type: 'PROBLEM',
         content:
@@ -21527,6 +22439,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pbes6iao7d0ocg',
+        doi: '10.82259/cl3fz14ea00pbes6iao7d0ocg',
         title: 'Hypospadias is congenital penis abnormalities in children who are commonly encountered.',
         type: 'PROBLEM',
         content: '<p>Hypospadias is congenital penis abnormalities in children who are commonly encountered.</p>',
@@ -21549,6 +22462,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pces6ib7a5227q',
+        doi: '10.82259/cl3fz14ea00pces6ib7a5227q',
         title: 'ST-segment elevation myocardial infarction (STEMI) poses unique challenges to cardiologists because short- and long-term therapeutic plans occur rapidly and often with limited information.',
         type: 'PROBLEM',
         content:
@@ -21573,6 +22487,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pdes6i27ysgecn',
+        doi: '10.82259/cl3fz14ea00pdes6i27ysgecn',
         title: 'central issue in nitric oxide (NO) research is to understand how NO can act in some settings as a servoregulator and in others as a cytotoxin.',
         type: 'PROBLEM',
         content:
@@ -21597,6 +22512,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pees6iga5r07zz',
+        doi: '10.82259/cl3fz14ea00pees6iga5r07zz',
         title: 'Idiopathic hypereosinophilic syndrome (HES) is a rare multisystem condition characterized by dysregulated overproduction of eosinophils.',
         type: 'PROBLEM',
         content:
@@ -21621,6 +22537,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pfes6iaau6br3f',
+        doi: '10.82259/cl3fz14ea00pfes6iaau6br3f',
         title: 'Eosinophilic granuloma (EG) represents a local form of Langerhans cell histiocytosis that occurs mostly in children.',
         type: 'PROBLEM',
         content:
@@ -21645,6 +22562,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pges6iez441wg1',
+        doi: '10.82259/cl3fz14ea00pges6iez441wg1',
         title: 'The degree of left ventricular (LV) impairment is an important determinant of long term outcome in patients with coronary artery disease (CAD).',
         type: 'PROBLEM',
         content:
@@ -21669,6 +22587,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00phes6i86847dwz',
+        doi: '10.82259/cl3fz14ea00phes6i86847dwz',
         title: 'Acute viral myocarditis is an uncommon inflammatory disease of the myocardium.',
         type: 'PROBLEM',
         content: '<p>Acute viral myocarditis is an uncommon inflammatory disease of the myocardium.</p>',
@@ -21691,6 +22610,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pies6id597e9ib',
+        doi: '10.82259/cl3fz14ea00pies6id597e9ib',
         title: '"Progressive supranuclear palsy (PSP) is a heterogeneous progressive neurodegenerative disease characterized by onset after 50 years old, Parkinson\'s syndrome, early development of postural instability, absence or transient reaction to levodopa drugs, neuropsychological disorders, dysphagia and dysarthria and eye movement disorders."',
         type: 'PROBLEM',
         content:
@@ -21715,6 +22635,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pjes6if4cw7j2u',
+        doi: '10.82259/cl3fz14ea00pjes6if4cw7j2u',
         title: 'Noonan syndrome (NS) is a heterogeneous genetic disease that affects many parts of the body.',
         type: 'PROBLEM',
         content: '<p>Noonan syndrome (NS) is a heterogeneous genetic disease that affects many parts of the body.</p>',
@@ -21737,6 +22658,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pkes6if09g8xl5',
+        doi: '10.82259/cl3fz14ea00pkes6if09g8xl5',
         title: '"Hirschsprung disease (HSCR; megacolon, congenital aganglionosis) is a congenital disorder characterized by the absence of ganglion cells along variable segments of the gut."',
         type: 'PROBLEM',
         content:
@@ -21761,6 +22683,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ples6iajas8lbe',
+        doi: '10.82259/cl3fz14ea00ples6iajas8lbe',
         title: 'Hypertension is a major cause of morbidity and mortality in African and other black populations.',
         type: 'PROBLEM',
         content:
@@ -21784,6 +22707,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pmes6idffj169e',
+        doi: '10.82259/cl3fz14ea00pmes6idffj169e',
         title: 'Dyskeratosis congenita (DC) is an inherited bone marrow failure syndrome and the prototypic telomere biology disorder (TBD).',
         type: 'PROBLEM',
         content:
@@ -21808,6 +22732,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pnes6i2uke65fn',
+        doi: '10.82259/cl3fz14ea00pnes6i2uke65fn',
         title: 'One of the disturbing problems of pediatric practice is that of the child with persistent or recurring respiratory tract infections.',
         type: 'PROBLEM',
         content:
@@ -21832,6 +22757,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00poes6ic9lpdmid',
+        doi: '10.82259/cl3fz14ea00poes6ic9lpdmid',
         title: '"HELLP syndrome is a specific complication of pregnancy characterized by hemolysis, elevated liver enzymes and low platelet count."',
         type: 'PROBLEM',
         content:
@@ -21856,6 +22782,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00ppes6ieh6p4i0s',
+        doi: '10.82259/cl3fz14ea00ppes6ieh6p4i0s',
         title: '"Freezing of gait (FoG), a paroxysmal gait disturbance commonly experienced by patients with Parkinson’s disease (PD), is characterized by sudden episodes of inability to generate effective forward stepping."',
         type: 'PROBLEM',
         content:
@@ -21880,6 +22807,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pqes6i10dc1h5m',
+        doi: '10.82259/cl3fz14ea00pqes6i10dc1h5m',
         title: '"Postoperative respiratory complications have multiple etiologies, are commonly occurring, and are potentially life-threatening complications of anesthesia."',
         type: 'PROBLEM',
         content:
@@ -21904,6 +22832,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pres6idtj9e8z9',
+        doi: '10.82259/cl3fz14ea00pres6idtj9e8z9',
         title: 'Myofascial pain syndrome (MPS) is a frequently encountered cause of chronic pain for patients in both primary and specialty clinics.',
         type: 'PROBLEM',
         content:
@@ -21928,6 +22857,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ea00pses6idrxxezm3',
+        doi: '10.82259/cl3fz14ea00pses6idrxxezm3',
         title: 'The coronavirus pandemic has disproportionally impacted racial and ethnic minority communities in the United States.',
         type: 'PROBLEM',
         content:
@@ -21952,6 +22882,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00ptes6i8fpz1ec7',
+        doi: '10.82259/cl3fz14eb00ptes6i8fpz1ec7',
         title: 'Hailey-Hailey disease (HHD) or familial benign chronic pemphigus is a dermatosis with an autosomal dominant inheritance characterized by full penetrance and variable expressivity: from individual resembling eczema lesions to extensive lesions of the skin.',
         type: 'PROBLEM',
         content:
@@ -21976,6 +22907,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pues6ig9tb3iva',
+        doi: '10.82259/cl3fz14eb00pues6ig9tb3iva',
         title: '"Although there is an observed decline in the number of new psychoactive substances entering the drug market, this phenomenon is still a significant public health problem."',
         type: 'PROBLEM',
         content:
@@ -22000,6 +22932,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pves6i4goehof3',
+        doi: '10.82259/cl3fz14eb00pves6i4goehof3',
         title: 'Chromosomal instability is the major form of genomic instability in cancer cells.',
         type: 'PROBLEM',
         content: '<p>Chromosomal instability is the major form of genomic instability in cancer cells.</p>',
@@ -22022,6 +22955,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pwes6ifilsdjqh',
+        doi: '10.82259/cl3fz14eb00pwes6ifilsdjqh',
         title: 'Epithelial–mesenchymal transition (EMT) contributes to the progression and metastasis of cancer cells and is associated with a more invasive phenotype of cancer.',
         type: 'PROBLEM',
         content:
@@ -22046,6 +22980,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pxes6i2sr40vsu',
+        doi: '10.82259/cl3fz14eb00pxes6i2sr40vsu',
         title: 'Plasmablastic lymphoma is a unique AIDS-related lymphoma.',
         type: 'PROBLEM',
         content: '<p>Plasmablastic lymphoma is a unique AIDS-related lymphoma.</p>',
@@ -22068,6 +23003,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pyes6ifmyneu5g',
+        doi: '10.82259/cl3fz14eb00pyes6ifmyneu5g',
         title: 'Neonatal respiratory distress syndrome (RDS) is a very important dangerous disease in neonates and is accompanied by neonatal complications and death.',
         type: 'PROBLEM',
         content:
@@ -22092,6 +23028,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00pzes6ifz9payhe',
+        doi: '10.82259/cl3fz14eb00pzes6ifz9payhe',
         title: 'Axial neck pain is a common issue leading to patient discomfort and substantial cost to the health-care system and the society.',
         type: 'PROBLEM',
         content:
@@ -22116,6 +23053,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q0es6i6lujax5i',
+        doi: '10.82259/cl3fz14eb00q0es6i6lujax5i',
         title: 'Ectopic pregnancies are a serious gynaecological emergency that can be fatal.',
         type: 'PROBLEM',
         content: '<p>Ectopic pregnancies are a serious gynaecological emergency that can be fatal.</p>',
@@ -22138,6 +23076,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q1es6i8l4996i5',
+        doi: '10.82259/cl3fz14eb00q1es6i8l4996i5',
         title: '"Cowden syndrome (CS) is an autosomal dominant disorder associated with the development of hamartomas and benign tumors in a variety of tissues, including the skin, thyroid, breast, endometrium, and brain."',
         type: 'PROBLEM',
         content:
@@ -22162,6 +23101,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q2es6if0oae1x6',
+        doi: '10.82259/cl3fz14eb00q2es6if0oae1x6',
         title: '"The wide use of municipal sanitary landfills has drawn attention to the leaching effluent generated, this may be problematic to the site\'s environment, whether by infiltration or other contaminating modes."',
         type: 'PROBLEM',
         content:
@@ -22186,6 +23126,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q3es6ia7ljc32q',
+        doi: '10.82259/cl3fz14eb00q3es6ia7ljc32q',
         title: 'Infantile myofibroma is the most common fibrous tumor in infancy.',
         type: 'PROBLEM',
         content: '<p>Infantile myofibroma is the most common fibrous tumor in infancy.</p>',
@@ -22208,6 +23149,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q4es6i0enshzvb',
+        doi: '10.82259/cl3fz14eb00q4es6i0enshzvb',
         title: '"recent years, concerns have increased about the adverse effects on health and the environment of polybrominated diphenyl ethers (PBDEs), especially BDE-209, the most widely PBDE used globally."',
         type: 'PROBLEM',
         content:
@@ -22232,6 +23174,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q5es6ig3sc5fje',
+        doi: '10.82259/cl3fz14eb00q5es6ig3sc5fje',
         title: '"Autoimmune polyendocrine syndrome type 1 (APS1) is an autosomal recessive disorder, which is caused by mutations in a single gene, called autoimmune regulator (AIRE)1,2 ."',
         type: 'PROBLEM',
         content:
@@ -22256,6 +23199,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q6es6i14lu4p0s',
+        doi: '10.82259/cl3fz14eb00q6es6i14lu4p0s',
         title: 'Fetal and neonatal alloimmune thrombocytopenia (FNAIT) is one of the major causes of thrombocytopenia in healthy newborns.',
         type: 'PROBLEM',
         content:
@@ -22280,6 +23224,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q7es6i0v7q13p0',
+        doi: '10.82259/cl3fz14eb00q7es6i0v7q13p0',
         title: 'Calciphylaxis (calcific uremic arteriolopathy) is a poorly understood and highly morbid syndrome of both vascular calcification and skin necrosis.',
         type: 'PROBLEM',
         content:
@@ -22304,6 +23249,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q8es6i9u1hes4j',
+        doi: '10.82259/cl3fz14eb00q8es6i9u1hes4j',
         title: 'Combustion of traditional biomass fuels and coal has been found to be associated with exposure to particulates and volatile organic compounds (VOCs) and cause a series of adverse health effects.',
         type: 'PROBLEM',
         content:
@@ -22328,6 +23274,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00q9es6ialfh8rfz',
+        doi: '10.82259/cl3fz14eb00q9es6ialfh8rfz',
         title: '"Zinc (Zn) is an essential nutrient and its deˆciency causes growth retardation, immunodeˆciency, and neuronal degeneration."',
         type: 'PROBLEM',
         content:
@@ -22352,6 +23299,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qaes6i7alic24j',
+        doi: '10.82259/cl3fz14eb00qaes6i7alic24j',
         title: '"Premature ovarian failure (POF) is common, affecting approximately 1% of women."',
         type: 'PROBLEM',
         content: '<p>"Premature ovarian failure (POF) is common, affecting approximately 1% of women."</p>',
@@ -22374,6 +23322,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qbes6iepnr5fpa',
+        doi: '10.82259/cl3fz14eb00qbes6iepnr5fpa',
         title: 'Primitive neuroectodermal tumors of the central nervous system (CNS-PNETs) are highly malignant neoplasms posing diagnostic challenge due to a lack of defining molecular markers.',
         type: 'PROBLEM',
         content:
@@ -22398,6 +23347,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qces6i7753c7mw',
+        doi: '10.82259/cl3fz14eb00qces6i7753c7mw',
         title: '"_-site amyloid precursor protein (APP) cleaving enzyme 1 (BACE1) initiates the production of _-amyloid (A_), the major constituent of amyloid plaques in Alzheimer’s disease (AD)."',
         type: 'PROBLEM',
         content:
@@ -22422,6 +23372,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qdes6i3186d7my',
+        doi: '10.82259/cl3fz14eb00qdes6i3186d7my',
         title: '"Joubert syndrome (JS) is a rare, recessively inherited neurodevelopmental disorder characterized by a distinctive mid_hindbrain malformation."',
         type: 'PROBLEM',
         content:
@@ -22446,6 +23397,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qees6ic05cfrnf',
+        doi: '10.82259/cl3fz14eb00qees6ic05cfrnf',
         title: '"Hepatitis B virus (HBV) subgenotypes Ba, C1 (Cs), and C2 (Ce) are the most prevalent HBV variants in China."',
         type: 'PROBLEM',
         content:
@@ -22470,6 +23422,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qfes6idodndq61',
+        doi: '10.82259/cl3fz14eb00qfes6idodndq61',
         title: 'Skin cancer constitutes the most frequently reported post-transplant malignancy in solid organ transplant recipients (OTR) worldwide.',
         type: 'PROBLEM',
         content:
@@ -22494,6 +23447,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qges6iff7h2muu',
+        doi: '10.82259/cl3fz14eb00qges6iff7h2muu',
         title: 'Developing p-type photocathodes for direct hydrogen generation is an attractive challenge in photoelectrochemical (PEC) water splitting.',
         type: 'PROBLEM',
         content:
@@ -22518,6 +23472,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qhes6i6256dhm4',
+        doi: '10.82259/cl3fz14eb00qhes6i6256dhm4',
         title: 'Pelvic floor disorders including stress urinary incontinence and pelvic organ prolapse represent a challenge for gynecologists or urogynecologists.',
         type: 'PROBLEM',
         content:
@@ -22542,6 +23497,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qies6ibd1k4b51',
+        doi: '10.82259/cl3fz14eb00qies6ibd1k4b51',
         title: 'Fascioliasis is a zoonotic infection caused by Fasciola hepatica.',
         type: 'PROBLEM',
         content: '<p>Fascioliasis is a zoonotic infection caused by Fasciola hepatica.</p>',
@@ -22564,6 +23520,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qjes6igh38f1zh',
+        doi: '10.82259/cl3fz14eb00qjes6igh38f1zh',
         title: 'Vascular leiomyoma is a benign tumor of smooth muscle that originates in blood vessels and occurs mainly on the limbs.',
         type: 'PROBLEM',
         content:
@@ -22588,6 +23545,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qkes6i7p8sbp6q',
+        doi: '10.82259/cl3fz14eb00qkes6i7p8sbp6q',
         title: 'Chronic pruritus is a major and distressing symptom of many cutaneous and systemic diseases and can significantly impair the patient’s quality of life.',
         type: 'PROBLEM',
         content:
@@ -22612,6 +23570,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qles6i3if7cfgb',
+        doi: '10.82259/cl3fz14eb00qles6i3if7cfgb',
         title: 'Deoxynivalenol (DON) is a common mycotoxin that contaminates cereals and their by-products.',
         type: 'PROBLEM',
         content: '<p>Deoxynivalenol (DON) is a common mycotoxin that contaminates cereals and their by-products.</p>',
@@ -22634,6 +23593,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qmes6i6lws5sg3',
+        doi: '10.82259/cl3fz14eb00qmes6i6lws5sg3',
         title: '"Metastatic colorectal cancer (MCRC) patients treated with cetuximab invariably develop resistance, which is driven by the emergence of mutations in the extracellular domain (ECD) of EGFR in a subset of tumors."',
         type: 'PROBLEM',
         content:
@@ -22658,6 +23618,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qnes6igrn69hny',
+        doi: '10.82259/cl3fz14eb00qnes6igrn69hny',
         title: '"Williams syndrome (WS), also referred to as Williams_Beuren syndrome (WBS), is a relatively rare genetic disorder affecting _1/10,000 persons."',
         type: 'PROBLEM',
         content:
@@ -22682,6 +23643,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qoes6i0ylw4vru',
+        doi: '10.82259/cl3fz14eb00qoes6i0ylw4vru',
         title: 'Conventional agriculture strongly alters soil quality due to industrial practices that often have negative effects on soil life.',
         type: 'PROBLEM',
         content:
@@ -22706,6 +23668,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qpes6i6n82ciym',
+        doi: '10.82259/cl3fz14eb00qpes6i6n82ciym',
         title: '"The incidence of noncommunicable diseases (NCDs) has increased over the last few decades, and one of the major contributors to this is lifestyle, especially diet."',
         type: 'PROBLEM',
         content:
@@ -22730,6 +23693,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qqes6i37g2btgz',
+        doi: '10.82259/cl3fz14eb00qqes6i37g2btgz',
         title: 'Disseminated intravascular coagulation (DIC) is a secondary phenomenon in many pathophysiologic states.',
         type: 'PROBLEM',
         content:
@@ -22754,6 +23718,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qres6ibxtg5rwb',
+        doi: '10.82259/cl3fz14eb00qres6ibxtg5rwb',
         title: '"Alcohol consumption among college students has become an increasing problem that requires attention from college administrators, staff, and researchers."',
         type: 'PROBLEM',
         content:
@@ -22778,6 +23743,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qses6ifitrgejk',
+        doi: '10.82259/cl3fz14eb00qses6ifitrgejk',
         title: 'Viral nervous necrosis (VNN) virus produces great mortalities in fish having susceptible and reservoir species between the most important marine aquaculture species.',
         type: 'PROBLEM',
         content:
@@ -22802,6 +23768,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qtes6i1u26c04g',
+        doi: '10.82259/cl3fz14eb00qtes6i1u26c04g',
         title: '"Infection with human parvovirus B19 causes fifth disease, acute and chronic red cell aplasia, fetal hydrops, arthropathy, and other disorders."',
         type: 'PROBLEM',
         content:
@@ -22826,6 +23793,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00ques6i95ctfizf',
+        doi: '10.82259/cl3fz14eb00ques6i95ctfizf',
         title: '"Along with the ever growing awareness among the scientific community and the general public that concussion is a serious health care issue at all levels of sport, with potentially devastating long term health effects, the number of concussion surveillance clinical monitoring programs has significantly increased internationally over the past 10–15 years."',
         type: 'PROBLEM',
         content:
@@ -22850,6 +23818,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qves6ih19902do',
+        doi: '10.82259/cl3fz14eb00qves6ih19902do',
         title: 'Pilocytic astrocytomas are tumors of the central nervous system mostly during the first two decades of life.',
         type: 'PROBLEM',
         content:
@@ -22874,6 +23843,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qwes6ihd9i0zr6',
+        doi: '10.82259/cl3fz14eb00qwes6ihd9i0zr6',
         title: 'Secondary bacterial coinfections are ranked as a leading cause of hospitalization and morbidity associated with influenza.',
         type: 'PROBLEM',
         content:
@@ -22898,6 +23868,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qxes6i5yia1c2m',
+        doi: '10.82259/cl3fz14eb00qxes6i5yia1c2m',
         title: '"The presence of large amounts of reactive oxygen species (ROS) leads to oxidative stress that can damage cell membranes, lead to DNA breakage and cause inactivation of free radical scavenger enzymes, eventually resulting in skin damage."',
         type: 'PROBLEM',
         content:
@@ -22922,6 +23893,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qyes6i96902co5',
+        doi: '10.82259/cl3fz14eb00qyes6i96902co5',
         title: 'Classic galactosemia (OMIM #230400) is an autosomal recessive disorder caused by homozygous or compound heterozygous pathogenic variants in the galactose-1-phosphate uridylyltransferase gene ( GALT ; 606999) on chromosome 9p13.',
         type: 'PROBLEM',
         content:
@@ -22946,6 +23918,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00qzes6i5zgc83i3',
+        doi: '10.82259/cl3fz14eb00qzes6i5zgc83i3',
         title: '"Molluscum contagiosum (MC) is a common, benign, viral infection of the skin and mucous membranes that generally affects children."',
         type: 'PROBLEM',
         content:
@@ -22970,6 +23943,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r0es6i8qlugmd2',
+        doi: '10.82259/cl3fz14eb00r0es6i8qlugmd2',
         title: 'The matrix metalloproteinases (MMPs) have been associated with tumor cell invasion and metastasis of human cancers by mediating the degradation of extracellular matrix components.',
         type: 'PROBLEM',
         content:
@@ -22994,6 +23968,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r1es6i6pmu3jr0',
+        doi: '10.82259/cl3fz14eb00r1es6i6pmu3jr0',
         title: 'Extracranial carotid artery stenosis is a leading cause of ischemic stroke.',
         type: 'PROBLEM',
         content: '<p>Extracranial carotid artery stenosis is a leading cause of ischemic stroke.</p>',
@@ -23016,6 +23991,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r2es6i0mx53he6',
+        doi: '10.82259/cl3fz14eb00r2es6i0mx53he6',
         title: 'Trichinellosis is a serious foodborne zoonotic disease.',
         type: 'PROBLEM',
         content: '<p>Trichinellosis is a serious foodborne zoonotic disease.</p>',
@@ -23038,6 +24014,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r3es6icy0fbrkt',
+        doi: '10.82259/cl3fz14eb00r3es6icy0fbrkt',
         title: 'The spread of plasmid-mediated colistin resistance has posed a serious threat to public health owing to its effects on the emergence of pandrug-resistant bacteria.',
         type: 'PROBLEM',
         content:
@@ -23062,6 +24039,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r4es6i83z8f8gl',
+        doi: '10.82259/cl3fz14eb00r4es6i83z8f8gl',
         title: "Leber's hereditary optic neuropathy (LHON)-plus is a maternally inherited genetic disorder of young males and characterized by severe progressive vision loss with other neurological and systemic symptoms.",
         type: 'PROBLEM',
         content:
@@ -23086,6 +24064,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r5es6i9t04f0y8',
+        doi: '10.82259/cl3fz14eb00r5es6i9t04f0y8',
         title: 'Neuroleptic malignant syndrome (NMS) is a rare potentially fatal adverse reaction to neuroleptics.',
         type: 'PROBLEM',
         content:
@@ -23110,6 +24089,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r6es6i3edu9crh',
+        doi: '10.82259/cl3fz14eb00r6es6i3edu9crh',
         title: 'Angiomyolipoma is a distinctive benign neoplasm of the renal origin.',
         type: 'PROBLEM',
         content: '<p>Angiomyolipoma is a distinctive benign neoplasm of the renal origin.</p>',
@@ -23132,6 +24112,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r7es6i2w1re726',
+        doi: '10.82259/cl3fz14eb00r7es6i2w1re726',
         title: '"Severe acute respiratory syndrome-associated coronavirus (SARS-CoV) mediates attachment, receptor engagement and entry via its spike glycoprotein (S)."',
         type: 'PROBLEM',
         content:
@@ -23156,6 +24137,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r8es6ibu81hf8f',
+        doi: '10.82259/cl3fz14eb00r8es6ibu81hf8f',
         title: 'Severe abdominal pain is a common complaint encountered by primary care and emergency room physicians.',
         type: 'PROBLEM',
         content:
@@ -23180,6 +24162,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00r9es6ih12g24e6',
+        doi: '10.82259/cl3fz14eb00r9es6ih12g24e6',
         title: 'Excessive application of chemical fertilizers can lead to serious environmental problems.',
         type: 'PROBLEM',
         content: '<p>Excessive application of chemical fertilizers can lead to serious environmental problems.</p>',
@@ -23202,6 +24185,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00raes6idflh3zss',
+        doi: '10.82259/cl3fz14eb00raes6idflh3zss',
         title: 'Efficient and safe delivery of siRNA in vivo is the biggest roadblock to clinical translation of RNA interference (RNAi)-based therapeutics.',
         type: 'PROBLEM',
         content:
@@ -23226,6 +24210,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00rbes6i58p9hxej',
+        doi: '10.82259/cl3fz14eb00rbes6i58p9hxej',
         title: 'Relapsing polychondritis (RP) is a rare condition defined by recurrent inflammation of cartilaginous tissue and systemic manifestations.',
         type: 'PROBLEM',
         content:
@@ -23250,6 +24235,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00rces6i067b7noc',
+        doi: '10.82259/cl3fz14eb00rces6i067b7noc',
         title: '"Biliary atresia (BA) is a progressive fibro-obliterative cholangiopathy affecting the extra- and intrahepatic biliary tree to various degrees and resulting in obstructive bile flow, cholestasis and icterus in neonates."',
         type: 'PROBLEM',
         content:
@@ -23274,6 +24260,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00rdes6ic7hsbb4p',
+        doi: '10.82259/cl3fz14eb00rdes6ic7hsbb4p',
         title: '"Ocular trauma is a major cause of vision loss, particularly among younger patient populations."',
         type: 'PROBLEM',
         content:
@@ -23297,6 +24284,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00rees6ia0qv58l4',
+        doi: '10.82259/cl3fz14eb00rees6ia0qv58l4',
         title: 'Marburg virus (Marburg marburgvirus; MARV) causes sporadic outbreaks of Marburg hemorrhagic fever (MHF) in Africa.',
         type: 'PROBLEM',
         content:
@@ -23321,6 +24309,7 @@ const problems = [
     },
     {
         id: 'cl3fz14eb00rfes6i9ax04581',
+        doi: '10.82259/cl3fz14eb00rfes6i9ax04581',
         title: '"In patients with acquired immunodeficiency syndrome (AIDS), mycobacterial diseases are leading opportunistic infections."',
         type: 'PROBLEM',
         content:
@@ -23345,6 +24334,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rges6i7dzz07mt',
+        doi: '10.82259/cl3fz14ec00rges6i7dzz07mt',
         title: 'Exercise-induced laryngeal obstructions (EILOs) cause exercise-related respiratory symptoms (ERRS) and are important differential diagnoses to exercise-induced asthma.',
         type: 'PROBLEM',
         content:
@@ -23369,6 +24359,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rhes6i0rqa3uxq',
+        doi: '10.82259/cl3fz14ec00rhes6i0rqa3uxq',
         title: 'Gorham_Stout syndrome is a rare disease characterized by progressive osteolysis leading to disappearance of the bone.',
         type: 'PROBLEM',
         content:
@@ -23393,6 +24384,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00ries6ibuhm81ez',
+        doi: '10.82259/cl3fz14ec00ries6ibuhm81ez',
         title: 'Industrialization and urbanization reflects in the energy demand consequences of that the world is constantly facing challenges toward the hazardous emissions from various industries and transportation systems.',
         type: 'PROBLEM',
         content:
@@ -23417,6 +24409,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rjes6ihh35h29o',
+        doi: '10.82259/cl3fz14ec00rjes6ihh35h29o',
         title: 'Vulvovaginal candidiasis (VVC) is one of the most frequent infections affecting women worldwide.',
         type: 'PROBLEM',
         content:
@@ -23440,6 +24433,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rkes6i8gsi1o5h',
+        doi: '10.82259/cl3fz14ec00rkes6i8gsi1o5h',
         title: 'Children with Down syndrome (DS) have a 500-fold increased risk of Acute Megakaryoblastic Leukemia (DS-AMKL).',
         type: 'PROBLEM',
         content:
@@ -23464,6 +24458,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rles6ihiinfnin',
+        doi: '10.82259/cl3fz14ec00rles6ihiinfnin',
         title: 'Environmental contamination by radionuclides particularly uranium is a serious problem at many contaminated sites worldwide.',
         type: 'PROBLEM',
         content:
@@ -23488,6 +24483,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rmes6ib3ce3u9j',
+        doi: '10.82259/cl3fz14ec00rmes6ib3ce3u9j',
         title: '"Granulomatosis with polyangiitis (GPA), previously known as Wegener\'s granulomatosis (WG), is a systemic disorder that involves both granulomatosis and polyangiitis."',
         type: 'PROBLEM',
         content:
@@ -23512,6 +24508,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rnes6i8uu379vz',
+        doi: '10.82259/cl3fz14ec00rnes6i8uu379vz',
         title: 'Metabolic alterations that are critical for cancer cell growth and metastasis are one of the key hallmarks of cancer.',
         type: 'PROBLEM',
         content:
@@ -23536,6 +24533,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00roes6i51nke72r',
+        doi: '10.82259/cl3fz14ec00roes6i51nke72r',
         title: 'HIV infection and AIDS are having a major and growing impact on women’s lives.',
         type: 'PROBLEM',
         content: '<p>HIV infection and AIDS are having a major and growing impact on women’s lives.</p>',
@@ -23558,6 +24556,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rpes6iagqpdwqf',
+        doi: '10.82259/cl3fz14ec00rpes6iagqpdwqf',
         title: 'Tinea infections are very common skin disorders caused by dermatophytes that have the unique ability to invade tissue containing keratin.',
         type: 'PROBLEM',
         content:
@@ -23582,6 +24581,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rqes6ia8250w36',
+        doi: '10.82259/cl3fz14ec00rqes6ia8250w36',
         title: '"Glucose-6 Phosphate Dehydrogenase (G6PD) Deficiency is one of the commonest inherited enzyme abnormalities in humans, caused by many mutations that reduce the stability of the enzyme and its level as red cells progress in age."',
         type: 'PROBLEM',
         content:
@@ -23606,6 +24606,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rres6idm7s10r3',
+        doi: '10.82259/cl3fz14ec00rres6idm7s10r3',
         title: 'The immune reconstitution inflammatory syndrome (IRIS) in HIV-infected patients initiating antiretroviral therapy (ART) results from restored immunity to specific infectious or non-infectious antigens.',
         type: 'PROBLEM',
         content:
@@ -23630,6 +24631,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rses6i0lx13jhl',
+        doi: '10.82259/cl3fz14ec00rses6i0lx13jhl',
         title: 'The co-occurrence of psychiatric conditions and substance abuse presents significant challenges for behavioral healthcare providers.',
         type: 'PROBLEM',
         content:
@@ -23654,6 +24656,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rtes6i03uxdsx9',
+        doi: '10.82259/cl3fz14ec00rtes6i03uxdsx9',
         title: 'Brachial plexus injuries represent devastating injuries with a poor prognosis.',
         type: 'PROBLEM',
         content: '<p>Brachial plexus injuries represent devastating injuries with a poor prognosis.</p>',
@@ -23676,6 +24679,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rues6i42dcfcgo',
+        doi: '10.82259/cl3fz14ec00rues6i42dcfcgo',
         title: 'The development of cisplatin resistance in human cancers is controlled by multiple genes and leads to therapeutic failure.',
         type: 'PROBLEM',
         content:
@@ -23700,6 +24704,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rves6i0ssq3aas',
+        doi: '10.82259/cl3fz14ec00rves6i0ssq3aas',
         title: 'Patent ductus arteriosus (PDA) is a common type of congenital cardiovascular lesion.',
         type: 'PROBLEM',
         content: '<p>Patent ductus arteriosus (PDA) is a common type of congenital cardiovascular lesion.</p>',
@@ -23722,6 +24727,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rwes6ic5ztbx42',
+        doi: '10.82259/cl3fz14ec00rwes6ic5ztbx42',
         title: '"Stroke and stroke-like episodes are frequent complications in mitochondriopathy, particularly in MELAS syndrome (mitochondrial myopathy, encephalopathy, lactic acidosis and stroke like episodes) which is a disorder of the mitochondrial oxidative metabolism in diverse cell types."',
         type: 'PROBLEM',
         content:
@@ -23746,6 +24752,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rxes6ig72sc6ru',
+        doi: '10.82259/cl3fz14ec00rxes6ig72sc6ru',
         title: 'Portal vein tumor thrombus (PVTT) in hepatocellular carcinoma (HCC) is a common entity.',
         type: 'PROBLEM',
         content: '<p>Portal vein tumor thrombus (PVTT) in hepatocellular carcinoma (HCC) is a common entity.</p>',
@@ -23768,6 +24775,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00ryes6i21fs2hlc',
+        doi: '10.82259/cl3fz14ec00ryes6i21fs2hlc',
         title: 'Anemia is a common condition in patients with gastrointestinal cancer.',
         type: 'PROBLEM',
         content: '<p>Anemia is a common condition in patients with gastrointestinal cancer.</p>',
@@ -23790,6 +24798,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00rzes6i2ufhhurh',
+        doi: '10.82259/cl3fz14ec00rzes6i2ufhhurh',
         title: 'Campylobacter species are a well-recognized but rare cause of bloodstream infection.',
         type: 'PROBLEM',
         content: '<p>Campylobacter species are a well-recognized but rare cause of bloodstream infection.</p>',
@@ -23812,6 +24821,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s0es6i192p9jr8',
+        doi: '10.82259/cl3fz14ec00s0es6i192p9jr8',
         title: '"Unregulated cell growth, a major hallmark of cancer, is coupled with telomere shortening."',
         type: 'PROBLEM',
         content: '<p>"Unregulated cell growth, a major hallmark of cancer, is coupled with telomere shortening."</p>',
@@ -23834,6 +24844,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s1es6ifyvc08cg',
+        doi: '10.82259/cl3fz14ec00s1es6ifyvc08cg',
         title: 'The severe dependence of oxygen reduction reaction (ORR) in fuel cells on platinum (Pt)-based catalysts greatly limits the process of their commercialization.',
         type: 'PROBLEM',
         content:
@@ -23858,6 +24869,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s2es6i3rs29twt',
+        doi: '10.82259/cl3fz14ec00s2es6i3rs29twt',
         title: '"Leukocyte adhesion deficiency (LAD) is a genetic disease characterized clinically by severe bacterial infections, and biochemically by a deficiency in the surface expression of the CD11/CD18 leukocyte integrins."',
         type: 'PROBLEM',
         content:
@@ -23882,6 +24894,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s3es6i6pwjhfhg',
+        doi: '10.82259/cl3fz14ec00s3es6i6pwjhfhg',
         title: '"Although rubber has been used in thousands of products for over a century, only recently has allergy to latex been recognized as a significant medical problem."',
         type: 'PROBLEM',
         content:
@@ -23906,6 +24919,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s4es6i464rgt1j',
+        doi: '10.82259/cl3fz14ec00s4es6i464rgt1j',
         title: 'Food waste management has been a global challenge with significant economic and environmental impacts.',
         type: 'PROBLEM',
         content:
@@ -23934,6 +24948,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s5es6i1d5z4sa6',
+        doi: '10.82259/cl3fz14ec00s5es6i1d5z4sa6',
         title: '"Endoplasmic reticulum (ER) stress is involved in a wide range of pathological circumstances including neurodegenerative disorders, diabetes mellitus, ischemic injury, cancers, atherosclerosis, inflammation, infection, toxicity of chemicals and metals, and psychotic diseases."',
         type: 'PROBLEM',
         content:
@@ -23958,6 +24973,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s6es6ibrbcaty9',
+        doi: '10.82259/cl3fz14ec00s6es6ibrbcaty9',
         title: 'The serious side effects and complications related to the lifelong use of immunosuppressors in organ transplantation have fueled research into their possible minimization.',
         type: 'PROBLEM',
         content:
@@ -23982,6 +24998,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s7es6i5apyfddp',
+        doi: '10.82259/cl3fz14ec00s7es6i5apyfddp',
         title: '"Cerebral cavernous malformation is a vascular disease of the brain causing headaches, seizures, and cerebral hemorrhage."',
         type: 'PROBLEM',
         content:
@@ -24006,6 +25023,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s8es6i3eh3063z',
+        doi: '10.82259/cl3fz14ec00s8es6i3eh3063z',
         title: '"Activation of the phosphatidylinositol 3-kinase (PI3K)/AKT pathway is a common phenomenon in cancer due to multiple mechanisms, including mutation of PI3KCA, loss or mutation of PTEN, or over-expression of receptor tyrosine kinases."',
         type: 'PROBLEM',
         content:
@@ -24030,6 +25048,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00s9es6ihd7u3i0z',
+        doi: '10.82259/cl3fz14ec00s9es6ihd7u3i0z',
         title: '"Cornelia de Lange syndrome (CdLS) is described as a congenital disease characterized by delayed growth, mental-motor retardation, typical face appearance, thick eyebrows meeting at the midline, micrognathia, thin lips, micromelia, dental problems, and malformations in the systems such as cardiac, gastrointestinal, genitourinary, and musculoskeletal systems."',
         type: 'PROBLEM',
         content:
@@ -24054,6 +25073,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00saes6if4og2tc9',
+        doi: '10.82259/cl3fz14ec00saes6if4og2tc9',
         title: 'Medicinal plants have been used as traditional treatments for numerous human diseases for thousands of years and in many parts of the world.',
         type: 'PROBLEM',
         content:
@@ -24078,6 +25098,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sbes6iguq1eroz',
+        doi: '10.82259/cl3fz14ec00sbes6iguq1eroz',
         title: 'Diesel exhaust (DE) is a major air pollutant in urban areas.',
         type: 'PROBLEM',
         content: '<p>Diesel exhaust (DE) is a major air pollutant in urban areas.</p>',
@@ -24100,6 +25121,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sces6i5vogb6jb',
+        doi: '10.82259/cl3fz14ec00sces6i5vogb6jb',
         title: 'Cerebrovascular disease in persons between 15 and 45 years of age is on the rise and represents a diagnostic challenge.',
         type: 'PROBLEM',
         content:
@@ -24124,6 +25146,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sdes6i5t8u0at9',
+        doi: '10.82259/cl3fz14ec00sdes6i5t8u0at9',
         title: '"Severe forms of growth hormone insensitivity (GHI) are characterized by extreme short stature, dysmorphism, and metabolic anomalies."',
         type: 'PROBLEM',
         content:
@@ -24148,6 +25171,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sees6i6g8kdg2d',
+        doi: '10.82259/cl3fz14ec00sees6i6g8kdg2d',
         title: '"Medication errors involving patients receiving the wrong medicines, the wrong dosages or failure to take medicines according to the prescribed schedule are a substantial threat to patient safety."',
         type: 'PROBLEM',
         content:
@@ -24172,6 +25196,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sfes6i7xergecm',
+        doi: '10.82259/cl3fz14ec00sfes6i7xergecm',
         title: '"Cancer patients are regularly affected by malnutrition which often leads to a worsened quality of life and activity in daily living, more side effects and complications during anticancer treatment and shorter survival times."',
         type: 'PROBLEM',
         content:
@@ -24196,6 +25221,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sges6i3qt3dls9',
+        doi: '10.82259/cl3fz14ec00sges6i3qt3dls9',
         title: '"MPTP (1-methyl-4-phenyl-1,2,3,6-tetrahydropyridine) causes a Parkinson\'s disease-like syndrome."',
         type: 'PROBLEM',
         content:
@@ -24220,6 +25246,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00shes6i3j367duk',
+        doi: '10.82259/cl3fz14ec00shes6i3j367duk',
         title: 'Patients with critical limb ischemia usually have severe atherosclerotic disease and are at a high risk of limb loss as well as major adverse cardiovascular events.',
         type: 'PROBLEM',
         content:
@@ -24244,6 +25271,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sies6ihtpcaoo3',
+        doi: '10.82259/cl3fz14ec00sies6ihtpcaoo3',
         title: 'Vascular graft infection is a feared complication with high mortality and morbidity rates.',
         type: 'PROBLEM',
         content: '<p>Vascular graft infection is a feared complication with high mortality and morbidity rates.</p>',
@@ -24266,6 +25294,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sjes6icyye4zjo',
+        doi: '10.82259/cl3fz14ec00sjes6icyye4zjo',
         title: '"Lymphoepithelioma_like carcinoma (LELC), best known to occur in the nasopharynx, can arise in a variety of sites, such as the salivary gland, thymus, lung, stomach, skin and uroepithelium."',
         type: 'PROBLEM',
         content:
@@ -24290,6 +25319,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00skes6i19idenvl',
+        doi: '10.82259/cl3fz14ec00skes6i19idenvl',
         title: 'Traumatic brain edema is one of the most common problems encountered in neurosurgical practice and it leads to morbidity and mortality via increased intracranial pressure.',
         type: 'PROBLEM',
         content:
@@ -24314,6 +25344,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sles6icigk70r2',
+        doi: '10.82259/cl3fz14ec00sles6icigk70r2',
         title: 'Stunting is a global health problem.',
         type: 'PROBLEM',
         content: '<p>Stunting is a global health problem.</p>',
@@ -24336,6 +25367,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00smes6i24319xwn',
+        doi: '10.82259/cl3fz14ec00smes6i24319xwn',
         title: '"Increasing cases related to the pathogenicity of Enterovirus D68 (EV-D68) have made it a growing worldwide public health concern, especially due to increased severe respiratory illness and acute flaccid myelitis (AFM) in children."',
         type: 'PROBLEM',
         content:
@@ -24360,6 +25392,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00snes6i89toeusl',
+        doi: '10.82259/cl3fz14ec00snes6i89toeusl',
         title: 'Mycoplasma genitalium is an emerging cause of sexually transmitted infections (STIs) and has been implicated in non-gonococcal urethritis in men and cervicitis in woman.',
         type: 'PROBLEM',
         content:
@@ -24384,6 +25417,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00soes6ie4tkhmvj',
+        doi: '10.82259/cl3fz14ec00soes6ie4tkhmvj',
         title: 'It is generally acknowledged that the vast majority of serious mental disorders have significant genetic contributions that manifest complex inheritance patterns.',
         type: 'PROBLEM',
         content:
@@ -24408,6 +25442,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00spes6i818e2wcp',
+        doi: '10.82259/cl3fz14ec00spes6i818e2wcp',
         title: 'Cyclooxygenase-2 (COX-2) is selectively overexpressed in colorectal tumours.',
         type: 'PROBLEM',
         content: '<p>Cyclooxygenase-2 (COX-2) is selectively overexpressed in colorectal tumours.</p>',
@@ -24430,6 +25465,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sqes6i6mn33ofn',
+        doi: '10.82259/cl3fz14ec00sqes6i6mn33ofn',
         title: 'Adherence is increasingly recognized as an important determinant of successful HIV treatment (also called antiretroviral therapy [ART]).',
         type: 'PROBLEM',
         content:
@@ -24454,6 +25490,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sres6i5r1k89wc',
+        doi: '10.82259/cl3fz14ec00sres6i5r1k89wc',
         title: '"Sudden infant death syndrome (SIDS) remains the leading cause of postneonatal death in the United States, accounting for more than 2000 infant deaths each year."',
         type: 'PROBLEM',
         content:
@@ -24478,6 +25515,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sses6i84m55uau',
+        doi: '10.82259/cl3fz14ec00sses6i84m55uau',
         title: '"Given the severe implications of climate change and ocean acidification (OA) for marine ecosystems, there is an urgent need to quantify ecosystem function in present_day conditions to determine the impacts of future changes in environmental conditions."',
         type: 'PROBLEM',
         content:
@@ -24502,6 +25540,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00stes6iednb8nla',
+        doi: '10.82259/cl3fz14ec00stes6iednb8nla',
         title: 'Moisture damage is a major factor in the deterioration of asphalt pavements.',
         type: 'PROBLEM',
         content: '<p>Moisture damage is a major factor in the deterioration of asphalt pavements.</p>',
@@ -24524,6 +25563,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sues6i6j7zeu4z',
+        doi: '10.82259/cl3fz14ec00sues6i6j7zeu4z',
         title: 'Lassa fever (LF) causes annual outbreaks in endemic regions with high mortality of symptomatic patients.',
         type: 'PROBLEM',
         content:
@@ -24548,6 +25588,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sves6ih7jj3omj',
+        doi: '10.82259/cl3fz14ec00sves6ih7jj3omj',
         title: '"Protein aggregation is a pathologic hallmark of familial amyotrophic lateral sclerosis caused by mutations in the Cu, Zn superoxide dismutase gene."',
         type: 'PROBLEM',
         content:
@@ -24572,6 +25613,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00swes6i2tx52hkm',
+        doi: '10.82259/cl3fz14ec00swes6i2tx52hkm',
         title: 'Primary nocturnal enuresis is the most frequent urinary system complaint among pediatric patients.',
         type: 'PROBLEM',
         content:
@@ -24596,6 +25638,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00sxes6i7i1wh0ss',
+        doi: '10.82259/cl3fz14ec00sxes6i7i1wh0ss',
         title: 'Cardiac fibrosis is a pathological remodeling response to myocardial infarction (MI) and impairs cardiac contractility.',
         type: 'PROBLEM',
         content:
@@ -24620,6 +25663,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00syes6i23ls6jsy',
+        doi: '10.82259/cl3fz14ec00syes6i23ls6jsy',
         title: '"The words ""palliative care"" can be threatening for many patients, particularly for those who do not understand what they mean."',
         type: 'PROBLEM',
         content:
@@ -24644,6 +25688,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00szes6ieqme4zt1',
+        doi: '10.82259/cl3fz14ec00szes6ieqme4zt1',
         title: 'Intrahepatic cholestasis of pregnancy (ICP) is the most frequent pregnancy-specific liver disease.',
         type: 'PROBLEM',
         content:
@@ -24668,6 +25713,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t0es6igty1bygu',
+        doi: '10.82259/cl3fz14ec00t0es6igty1bygu',
         title: '"Drought is a major cause of yield loss in rain-fed rice (Oryza sativa L.), grown on over 40 million ha in Asia."',
         type: 'PROBLEM',
         content:
@@ -24692,6 +25738,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t1es6i6c0ufij7',
+        doi: '10.82259/cl3fz14ec00t1es6i6c0ufij7',
         title: '"Juvenile myoclonic epilepsy is the most common idiopathic generalized epilepsy, characterized by frequent myoclonic jerks, generalized tonic-clonic seizures and, less commonly, absences."',
         type: 'PROBLEM',
         content:
@@ -24716,6 +25763,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t2es6ibt8i9lqd',
+        doi: '10.82259/cl3fz14ec00t2es6ibt8i9lqd',
         title: 'Chronic venous insufficiency (CVI) is an underestimated public health problem involving the lower limbs.',
         type: 'PROBLEM',
         content:
@@ -24740,6 +25788,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t3es6ibfqvayb7',
+        doi: '10.82259/cl3fz14ec00t3es6ibfqvayb7',
         title: '" Vitamin B12 deficiency has been associated with certain serious disorders such as megaloblastic anemia as well as cardiovascular, neurological, and psychological disorders."',
         type: 'PROBLEM',
         content:
@@ -24764,6 +25813,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t4es6i7a9pcw3s',
+        doi: '10.82259/cl3fz14ec00t4es6i7a9pcw3s',
         title: 'The emergence and prevalence of metallo-_-lactamases (M_Ls)-mediated bacterial resistance has seriously threatened the global health today.',
         type: 'PROBLEM',
         content:
@@ -24788,6 +25838,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ec00t5es6i1uv56woy',
+        doi: '10.82259/cl3fz14ec00t5es6i1uv56woy',
         title: '"The health status of Australia\'s indigenous people remains the worst of any subgroup within the population, and there is little evidence of any significant improvement over the past two decades, a situation unprecedented on a world scale."',
         type: 'PROBLEM',
         content:
@@ -24812,6 +25863,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00t6es6i0juh3lpi',
+        doi: '10.82259/cl3fz14ed00t6es6i0juh3lpi',
         title: '"Melasma, as a pigmentation disorder, induces significant stress to the patients and its recurrent nature remains a challenge in clinical practice."',
         type: 'PROBLEM',
         content:
@@ -24836,6 +25888,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00t7es6iblqmhub1',
+        doi: '10.82259/cl3fz14ed00t7es6iblqmhub1',
         title: '"Despite extensive research on the relationship between depression and coronary artery disease (CAD) after an acute coronary syndrome (ACS), causal interpretations are still difficult."',
         type: 'PROBLEM',
         content:
@@ -24860,6 +25913,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00t8es6i607p9aip',
+        doi: '10.82259/cl3fz14ed00t8es6i607p9aip',
         title: '"Autophagy, the process of “selfeating” within cells, has been controversial in cancer since it was first linked to the disease in 1999."',
         type: 'PROBLEM',
         content:
@@ -24884,6 +25938,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00t9es6i0m6s0wxz',
+        doi: '10.82259/cl3fz14ed00t9es6i0m6s0wxz',
         title: '"Mutations in GJB2, encoding connexin 26 (CX26), are causally related to autosomal recessive form of non-syndromic hearing loss (NSHL) at the DFNB1 locus and autosomal dominant NSHL at the DFNA3 locus."',
         type: 'PROBLEM',
         content:
@@ -24908,6 +25963,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00taes6icv3chfgy',
+        doi: '10.82259/cl3fz14ed00taes6icv3chfgy',
         title: 'Infections of the respiratory tract are perhaps the most common human ailments.',
         type: 'PROBLEM',
         content: '<p>Infections of the respiratory tract are perhaps the most common human ailments.</p>',
@@ -24930,6 +25986,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00tbes6i1rcu6d8s',
+        doi: '10.82259/cl3fz14ed00tbes6i1rcu6d8s',
         title: 'Vector-borne diseases (VBDs) are globally widespread arthropod-transmitted diseases with a significant impact on animal and human health.',
         type: 'PROBLEM',
         content:
@@ -24954,6 +26011,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00tces6icse7few0',
+        doi: '10.82259/cl3fz14ed00tces6icse7few0',
         title: '"The Burkholderia cepacia complex (Bcc) is a group of 17 closely related species of the _-proteobacteria subdivision that emerged in the 1980s as important human pathogens, especially to patients suffering from cystic fibrosis."',
         type: 'PROBLEM',
         content:
@@ -24978,6 +26036,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00tdes6icehz5z1u',
+        doi: '10.82259/cl3fz14ed00tdes6icehz5z1u',
         title: '"T-cell acute lymphoblastic leukemia (T-ALL) is an aggressive malignancy largely caused by aberrant activation of the TAL1/SCL, LMO1/2, and NOTCH1 oncogenes."',
         type: 'PROBLEM',
         content:
@@ -25002,6 +26061,7 @@ const problems = [
     },
     {
         id: 'cl3fz14ed00tees6iewhvhpk2',
+        doi: '10.82259/cl3fz14ed00tees6iewhvhpk2',
         title: 'Long-term graft survival is an ongoing challenge in the field of islet transplantation.',
         type: 'PROBLEM',
         content: '<p>Long-term graft survival is an ongoing challenge in the field of islet transplantation.</p>',

@@ -1,4 +1,6 @@
 import { Prisma, PublicationType, LicenceType, PublicationFlagCategoryEnum, Role, Languages } from '@prisma/client';
+import * as publicationService from 'publication/service';
+
 export {
     PublicationType,
     LicenceType,
@@ -138,6 +140,8 @@ export interface PublicationFilters {
     dateFrom?: string;
     dateTo?: string;
 }
+
+export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
 
 /**
  * @description Links
