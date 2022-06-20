@@ -56,11 +56,14 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
 
     // Get co-authors
     const coAuthors = publication?.coAuthors.map((coAuthor) => ({
-        name: `${coAuthor.user?.firstName || 'N/A'} ${coAuthor.user?.lastName || 'N/A'}`, // TODO revisit this, what to show if no first or last name?
+        name:
+            coAuthor.user?.firstName && coAuthor.user?.firstName
+                ? `${coAuthor.user?.firstName} ${coAuthor.user?.lastName}`
+                : `${coAuthor.email}`,
         nameType: 'Personal',
         nameIdentifiers: [
             {
-                nameIdentifier: coAuthor.user?.orcid,
+                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'Orcid ID not provided',
                 nameIdentifierScheme: 'orcid',
                 schemeUri: 'orcid.org'
             }

@@ -606,7 +606,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <ul>
                                     {publication.funders.map((funder) => {
                                         return (
-                                            <li key={funder.id} className="ml-7 mt-1 list-disc">
+                                            <li
+                                                key={funder.id}
+                                                className="ml-7 mt-1 block list-disc leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                                            >
                                                 <a href={funder.link} className=" text-teal-600 hover:underline">
                                                     {funder.name}
                                                 </a>{' '}
