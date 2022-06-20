@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
+import * as helpers from 'lib/helpers';
 
 let from;
 let mailConfig;
@@ -253,5 +254,41 @@ export const verificationCode = async (options: VerificationCode) => {
         text,
         to: options.to,
         subject: 'Verify your Octopus account'
+    });
+};
+
+type NewRedFlagAuthorNotification = {
+    to: string;
+    publicationName: string;
+    type: I.FlagCategory;
+    submitter: string;
+    flagReason: string;
+};
+
+export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNotification) => {
+    const html = `
+    <p>A potential concern has been flagged with your publication, [publication name]. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
+    <br>
+    <p>Red flag details:</p>
+    <br>
+    <p><strong>Type:</strong> ${helpers.formatFlagType(options.type)}</p>
+    <br>
+    <p><strong>Submitter:</strong> ${options.submitter}</p>
+    <br>
+    <p><strong>Reason for flag:</strong> ${options.flagReason}</p>
+    <br>
+    <br>
+    <p>The red flag feature is designed to encourage an open dialogue between the author(s) and their peers. Both parties can add comments, and view responses, via the publication page. Note that all comments are public. The submitter can also resolve a red flag following discussion.</p>
+    <br>
+    <p>We hope that the majority of red flags can be resolved, in some cases with a new version of the publication released. If you are unable to reach a resolution with the creator of the red flag, please escalate to the Octopus team via <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
+    `;
+
+    const text = 'Your publication has been red flagged.';
+
+    await send({
+        html: standardHTMLEmailTemplate('Your publication has been red flagged', html),
+        text,
+        to: options.to,
+        subject: 'Your publication has been red flagged'
     });
 };

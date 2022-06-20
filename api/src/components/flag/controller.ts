@@ -71,6 +71,8 @@ export const createFlag = async (
             event.body.comment
         );
 
+        // TODO send email
+
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
