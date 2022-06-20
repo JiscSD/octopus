@@ -76,7 +76,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.Link>
                             <button
                                 aria-label="Open search"
-                                className="flex w-52 items-center justify-between rounded-lg bg-teal-400 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
+                                className="flex w-52 items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
                                 onClick={(e) => toggleCmdPalette()}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />

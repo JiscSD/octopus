@@ -81,24 +81,24 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             margin: auto;
         }
         .header {
-            background-color: #ffffff;
+            background-color: #296d8a;
             padding: 32px;
         }
         .header img {
             width: 40px;
+            margin-right: 12px;
             display: inline-block;
         }
         .header h3 {
-            height: 20px;
             vertical-align: text-bottom;
             display: inline-block;
-            padding-bottom: 12px;
-            padding-left: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
         }
         .content {
             background-color: #ffffff;
             padding: 32px 32px 128px;
-            text-align: center;
         }
         .footer {
             padding: 64px 0 32px;
@@ -108,18 +108,19 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
         }
         .footer-logo {
             display: inline-block;
-            width: 20%;
+            width: 17.5%;
         }
         .footer-logo img {
-            width: 95px;
+            width: 45px;
+            margin-right: 10px;
         }
         .footer-content {
             display: inline-block;
-            width: 50%;
+            width: 55%;
         }
         .footer-links {
             display: inline-block;
-            width: 28%;
+            width: 25%;
         }
         .button {
             display: inline-block;
@@ -132,12 +133,13 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
         .code {
             font-size: 32px;
             letter-spacing: 5px;
+            text-align: center;
         }
     </style>
     <body>
         <div class="wrapper">
             <div class="header">
-                <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
+                <img src="https://science-octopus.org/public/octopus.svg">
                 <h3>Octopus</h3>
             </div>
             <div class="content">
@@ -146,25 +148,19 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             <div class="footer">
                 <div class="footer-logo">
                     <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
+                    <img src="https://science-octopus.org/public/octopus.svg">
                 </div>
                 <div class="footer-content">
-                    <h3>Octopus</h3>
-                    <p>Vision statement. We’re a membership</p>
-                    <p>organisation, providing digital solutions for</p>
-                    <p>UK education and research.</p>
-                    <br>
-                    <p>
-                        <a href="https://www.jisc.ac.uk" target="_blank" rel="noreferrer noopener">Jisc.ac.uk</a>
-                    </p>
+                    <p style='margin-bottom: 8px;'>Octopus: the fast, free and fair way to share your research.</p>
+                    <p>This service is delivered by Jisc in collaboration</p>
+                    <p>with Octopus Publishing CIC.</p>
                 </div>
                 <div class="footer-links">
-                    <h3>Contact</h3>
                     <p>
                         <a href="mailto:help@jisc.ac.uk" target="_blank" rel="noreferrer noopener">help@jisc.ac.uk</a>
                     </p>
                     <p>0300 300 2212</p>
-                    <p>07:00 - 12 midnight</p>
-                    <p>(Mon - Fri)</p>
+                    <p>Support hours: Mon - Fri 09:00 – 17:00 (UK time)</p>
                 </div>
             </div>
         </div>
@@ -200,18 +196,18 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     const html = `
     <p>${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus:</p>
     <br>
-    <p><strong><i>${options.publicationTitle}</i></strong></p>
+    <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
     <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the link below:</p> 
     <br>
-    <p><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am a co-author</a></p>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am a co-author</a></p>
     <br>
     <p>If you are <strong>not</strong> an author of this publication, please click the link below:</p>
     <br>
-    <p><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not the co-author</a></p>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not the co-author</a></p>
     </br>
     <p>An Octopus user has provided this email address so that you can receive this message. We’ll use your contact details for this author validation process only, as described in our 
-    privacy policy. If you select that you are not involved with the publication named above, your data will be deleted immediately. If you are involved, your data will not be retained 
+    <a href="${baseURL}/privacy">privacy policy</a>. If you select that you are not involved with the publication named above, your data will be deleted immediately. If you are involved, your data will not be retained 
     after the publication date.</p>
     `;
 
@@ -233,7 +229,7 @@ type VerificationCode = {
 
 export const verificationCode = async (options: VerificationCode) => {
     const html = `
-    <p>Hi ${options.name}</p>
+    <p>Hi ${options.name},</p>
     <br>
     <p>Welcome to Octopus!</p>
     <br>
@@ -241,13 +237,13 @@ export const verificationCode = async (options: VerificationCode) => {
     <br>
     <p class="code">${options.code}</p>
     <br>
-    <p>Your account was created using your ORCID identifier. Information from your ORCID account, including name, affiliation, 
+    <p>Your account was created using your <a href="https://orcid.org/">ORCID identifier</a>. Information from your ORCID account, including name, affiliation, 
     and existing works, will be displayed on your Octopus profile page. If any information on your profile appears incorrect 
     or out of date, please update your ORCID account.</p>
     <br>
-    <p>This email address will be used to deliver the Octopus service, as described in our privacy policy. You can update your 
+    <p>This email address will be used to deliver the Octopus service, as described in our <a href="${baseURL}/privacy">privacy policy</a>. You can update your 
     email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
-    us at</p><a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.
+    us at <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
     `;
 
     const text = `Please enter the following code to verify your email address: ${options.code}`;
