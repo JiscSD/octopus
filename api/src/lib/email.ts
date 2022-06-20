@@ -198,28 +198,30 @@ type NotifyCoAuthor = {
 
 export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     const html = `
-    <p>You have been add as a co-author for the following publication:</p>
+    <p>${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus:</p>
     <br>
     <p><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
-    <p>by <strong>${options.userFirstName} ${options.userLastName}</strong>.</p>
-    <br>
-    <p>To <strong>confirm</strong> you are the co-author, click the link below.</p> 
+    <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the link below:</p> 
     <br>
     <p><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am a co-author</a></p>
     <br>
-    <p>If you are <strong>not</strong> the co-author, please click the link below:</p>
+    <p>If you are <strong>not</strong> an author of this publication, please click the link below:</p>
     <br>
     <p><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not the co-author</a></p>
+    </br>
+    <p>An Octopus user has provided this email address so that you can receive this message. We’ll use your contact details for this author validation process only, as described in our 
+    privacy policy. If you select that you are not involved with the publication named above, your data will be deleted immediately. If you are involved, your data will not be retained 
+    after the publication date.</p>
     `;
 
     const text = `You have been added as a co-author to the following publication: ${options.publicationTitle}. You were added by ${options.userFirstName} ${options.userLastName}. To approve that you are the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false.`;
 
     await send({
-        html: standardHTMLEmailTemplate('Added as co-author', html),
+        html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),
         text,
         to: options.coAuthor,
-        subject: 'Added as co-author'
+        subject: 'You’ve been added as a co-author on Octopus'
     });
 };
 
