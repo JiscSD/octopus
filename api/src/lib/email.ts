@@ -226,21 +226,34 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
 type VerificationCode = {
     to: string;
     code: string;
+    name: string;
 };
 
 export const verificationCode = async (options: VerificationCode) => {
     const html = `
-    <p>Please enter the following code to verify your email address:</p>
+    <p>Hi ${options.name}</p>
+    <br>
+    <p>Welcome to Octopus!</p>
+    <br>
+    <p>To start publishing your research and reviewing the work of others, please verify your email address below.</p>
     <br>
     <p class="code">${options.code}</p>
+    <br>
+    <p>Your account was created using your ORCID identifier. Information from your ORCID account, including name, affiliation, 
+    and existing works, will be displayed on your Octopus profile page. If any information on your profile appears incorrect 
+    or out of date, please update your ORCID account.</p>
+    <br>
+    <p>This email address will be used to deliver the Octopus service, as described in our privacy policy. You can update your 
+    email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
+    us at</p><a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.
     `;
 
     const text = `Please enter the following code to verify your email address: ${options.code}`;
 
     await send({
-        html: standardHTMLEmailTemplate('Verify your email', html),
+        html: standardHTMLEmailTemplate('Verify your Octopus account', html),
         text,
         to: options.to,
-        subject: 'Verify your email'
+        subject: 'Verify your Octopus account'
     });
 };
