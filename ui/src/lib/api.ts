@@ -6,15 +6,15 @@ import * as Types from '@types';
 
 export let baseURL: string;
 
-switch (process.env.NEXT_PUBLIC_ENV) {
+switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     case 'local':
         baseURL = 'http://localhost:4003/local/v1';
         break;
-    case 'int':
-        baseURL = 'https://int.api.octopus.ac/v1';
+    case 'main':
+        baseURL = 'https://api.octopus.ac/v1';
         break;
     default:
-        baseURL = 'https://api.octopus.ac/v1';
+        baseURL = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.api.octopus.ac/v1`;
         break;
 }
 

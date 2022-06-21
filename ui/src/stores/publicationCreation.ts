@@ -106,7 +106,7 @@ let store: any = (set: (params: any) => void) => ({
     updateSelfDeclaration: (selfDeclaration: boolean) => set(() => ({ selfDeclaration }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = devtools(store);
 
 const usePublicationCreationStore = create<Types.PublicationCreationStoreType>(store);
 
