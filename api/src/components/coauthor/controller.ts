@@ -44,8 +44,7 @@ export const create = async (
 
         await email.notifyCoAuthor({
             coAuthor: event.body.email,
-            userFirstName: event.user.firstName,
-            userLastName: event.user.lastName || '',
+            userName: `${event.user.firstName} ${event.user.lastName || ''}`,
             code: coAuthor.code,
             publicationId: event.pathParameters.id,
             publicationTitle: publication.title || 'No title yet'

@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
-import * as helpers from 'lib/helpers';
 
 let from;
 let mailConfig;
@@ -185,8 +184,7 @@ export const send = async (options: I.EmailSendOptions) => {
 /* Templates */
 
 type NotifyCoAuthor = {
-    userFirstName: string;
-    userLastName: string;
+    userName: string;
     coAuthor: string;
     publicationId: string;
     publicationTitle: string;
@@ -195,7 +193,7 @@ type NotifyCoAuthor = {
 
 export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     const html = `
-    <p>${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus:</p>
+    <p>${options.userName} has added you as an author of the following publication on Octopus:</p>
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
@@ -225,12 +223,12 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
 type VerificationCode = {
     to: string;
     code: string;
-    name: string;
+    userName: string;
 };
 
 export const verificationCode = async (options: VerificationCode) => {
     const html = `
-    <p>Hi ${options.name},</p>
+    <p>Hi ${options.userName},</p>
     <br>
     <p>Welcome to Octopus!</p>
     <br>
@@ -259,19 +257,19 @@ export const verificationCode = async (options: VerificationCode) => {
 
 type NewRedFlagAuthorNotification = {
     to: string;
-    publicationName: string;
-    type: I.FlagCategory;
-    submitter: string;
+    publicationName: string | null;
+    type: string;
+    submitter: string | null;
     flagReason: string;
 };
 
 export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNotification) => {
     const html = `
-    <p>A potential concern has been flagged with your publication, [publication name]. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
+    <p>A potential concern has been flagged with your publication, <strong><i>${options.publicationName}</i></strong>. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
     <br>
     <p>Red flag details:</p>
     <br>
-    <p><strong>Type:</strong> ${helpers.formatFlagType(options.type)}</p>
+    <p><strong>Type:</strong> ${options.type}</p>
     <br>
     <p><strong>Submitter:</strong> ${options.submitter}</p>
     <br>
@@ -283,7 +281,7 @@ export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNoti
     <p>We hope that the majority of red flags can be resolved, in some cases with a new version of the publication released. If you are unable to reach a resolution with the creator of the red flag, please escalate to the Octopus team via <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
     `;
 
-    const text = 'Your publication has been red flagged.';
+    const text = `Your publication '${options.publicationName}' has been red flagged by ${options.submitter}. Flag type: ${options.type}. Flag message: ${options.flagReason}.`;
 
     await send({
         html: standardHTMLEmailTemplate('Your publication has been red flagged', html),
@@ -292,3 +290,127 @@ export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNoti
         subject: 'Your publication has been red flagged'
     });
 };
+
+type NewRedFlagCreatorNotification = {
+    to: string;
+    publicationName: string | null;
+    publicationId: string;
+    flagId: string | null;
+};
+
+export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNotification) => {
+    const html = `
+    <p>Thank you for flagging a potential concern with <strong><i>${options.publicationName}</i></strong>. The submitting author has been notified, and has the option to respond to your message.</p>
+    <br>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/publications/${options.publicationId}/flag/${options.flagId}'>View red flag</a></p>
+    <br>
+    <p>The red flag feature is designed to encourage an open dialogue between the author(s) and their peers. Both parties can add comments, and view responses, via the publication page. Note that all 
+    comments are public.</p>
+    <br>
+    <p>If you are happy to resolve a red flag following discussion with the author, you can do so on the publication page. We hope that the majority of red flags can be resolved, in some cases with a 
+    new version of the publication released. If you are unable to reach a resolution with the author, please escalate to the Octopus team via <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
+    `;
+
+    const text = `You have successfully red flagged this publication. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Red flag created', html),
+        text,
+        to: options.to,
+        subject: 'Red flag created'
+    });
+};
+
+type UpdateRedFlagNotification = {
+    to: string;
+    publicationName: string;
+    type: string;
+    submitter: string;
+    publicationId: string;
+    flagId: string;
+};
+
+export const updateRedFlagNotification = async (options: UpdateRedFlagNotification) => {
+    const html = `
+    <p>A new comment has been received against the following red flag.</p>
+    <br>
+    <p><strong>Publication:</strong> ${options.publicationName}</p>
+    <br>
+    <p><strong>Type:</strong> ${options.type}</p>
+    <br>
+    <p><strong>Submitter:</strong> ${options.submitter}</p>
+    <br>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/publications/${options.publicationId}/flag/${options.flagId}'>View red flag</a></p>
+    <br>
+    <p>The red flag feature is designed to encourage an open dialogue between the author(s) and their peers. Both parties can add comments, and view responses, 
+    via the publication page. Note that all comments are public.</p>
+    <br>
+    <p>We hope that the majority of red flags can be resolved, in some cases with a new version of the publication released. If you are unable to reach a 
+    resolution, please escalate to the Octopus team via <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
+    `;
+
+    const text = `A new comment has been added against the red flag submitted by ${options.submitter}. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Red flag updated', html),
+        text,
+        to: options.to,
+        subject: 'Red flag updated'
+    });
+};
+
+type ResolveRedFlagAuthorNotification = {
+    to: string;
+    publicationName: string;
+    type: string;
+    publicationId: string;
+    flagId: string;
+};
+
+export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAuthorNotification) => {
+    const html = `
+    <p>A red flag for <strong>${options.type}</strong> has been resolved for <strong><i>${options.publicationName}</i></strong>. The red flag 
+    warning banner is no longer prominently displayed on the publication page.</p>
+    <br>
+    <p>For the sake of transparency, the history of the red flag and its full comment thread are retained on the platform and can 
+    be viewed via the publication page. However, it is made clear where a flag is resolved rather than active.</p>
+    <br>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/publications/${options.publicationId}/flag/${options.flagId}'>View red flag</a></p>
+    `;
+
+    const text = `A red flag has been resolved for '${options.publicationName}'. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Red flag resolved', html),
+        text,
+        to: options.to,
+        subject: 'Red flag resolved'
+    });
+};
+
+type ResolveRedFlagCreatorNotification = {
+    to: string;
+    publicationName: string;
+    publicationId: string;
+    flagId: string;
+};
+
+export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagCreatorNotification) => {
+    const html = `
+    <p>Thank you for resolving the red flag you created for <strong><i>${options.publicationName}</i></strong>. The submitting 
+    author has been notified, and the warning banner is no longer prominently displayed on the publication page.</p>
+    <br>
+    <p>For the sake of transparency, the history of the red flag and its full comment thread are retained on the platform and can 
+    be viewed via the publication page. However, it is made clear where a flag is resolved rather than active.</p>
+    <br>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/publications/${options.publicationId}/flag/${options.flagId}'>View red flag</a></p>
+    `;
+
+    const text = `Thank you for resolving the red flag you created for '${options.publicationName}'. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Red flag resolved', html),
+        text,
+        to: options.to,
+        subject: 'Red flag resolved'
+    });

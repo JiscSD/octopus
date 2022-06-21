@@ -3,6 +3,7 @@ import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
+import * as email from 'lib/email';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
     try {
@@ -71,7 +72,23 @@ export const createFlag = async (
             event.body.comment
         );
 
-        // TODO send email
+        // send email to the author
+        await email.newRedFlagAuthorNotification({
+            to: publication.user.email || '',
+            publicationName: publication.title,
+            type: helpers.formatFlagType(event.body.category),
+            submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
+            flagReason: event.body.comment
+        });
+
+        // event.user.email is currently empty
+        // send email to the creator
+        await email.newRedFlagCreatorNotification({
+            to: event.user.email || '',
+            publicationName: publication.title,
+            publicationId: publication.id,
+            flagId: flag.id
+        });
 
         return response.json(200, flag);
     } catch (err) {
@@ -122,6 +139,19 @@ export const createFlagComment = async (
             event.user.id
         );
 
+        const publication = await publicationService.get(flag.publicationId);
+
+        //TODO: clarify whether email is a mandatory field
+        // send email to both the author and creator
+        await email.updateRedFlagNotification({
+            to: `${publication?.user.email}, ${event.user.email || ''}`,
+            publicationName: publication?.title || '',
+            type: flag.category,
+            submitter: `${event.user.firstName} ${event.user.lastName}`,
+            publicationId: publication?.id || '',
+            flagId: flag.id
+        });
+
         return response.json(200, flagComment);
     } catch (err) {
         console.log(err);
@@ -152,6 +182,25 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         }
 
         const resolveFlag = await flagService.resolveFlag(event.pathParameters.id);
+
+        const publication = await publicationService.get(flag.publicationId);
+
+        // send email to the author
+        await email.resolveRedFlagAuthorNotification({
+            to: publication?.user.email || '',
+            publicationName: publication?.title || '',
+            type: flag.category,
+            publicationId: publication?.id || '',
+            flagId: flag.id
+        });
+
+        // send email to the creator
+        await email.resolveRedFlagCreatorNotification({
+            to: publication?.user.email || '',
+            publicationName: publication?.title || '',
+            publicationId: publication?.id || '',
+            flagId: flag.id
+        });
 
         return response.json(200, resolveFlag);
     } catch (err) {
