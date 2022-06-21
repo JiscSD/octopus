@@ -43,7 +43,7 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-    console.log(process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF);
+    console.log({ commit_ref: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
