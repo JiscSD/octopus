@@ -4,6 +4,7 @@ const userSeeds = [
         orcid: '1234',
         firstName: 'Test',
         lastName: 'User 1',
+        email: 'test-user-1@jisc.ac.uk',
         locked: false,
         apiKey: '123456789'
     },
@@ -12,6 +13,7 @@ const userSeeds = [
         orcid: 'XXXX-XXXX-XXXX-XXXX',
         firstName: 'Science',
         lastName: 'Octopus',
+        email: 'octopus@jisc.ac.uk',
         locked: false,
         apiKey: 'kjahskjhuhaushkjhaskjhjkahsd'
     },
@@ -20,6 +22,7 @@ const userSeeds = [
         orcid: '4321',
         firstName: 'Test',
         lastName: 'User 2',
+        email: 'test-user-2@jisc.ac.uk',
         locked: false,
         apiKey: '987654321'
     },
@@ -28,6 +31,7 @@ const userSeeds = [
         orcid: '12345',
         firstName: 'Test',
         lastName: 'User 3',
+        email: 'test-user-3@jisc.ac.uk',
         locked: false,
         apiKey: '1234'
     },
@@ -36,6 +40,7 @@ const userSeeds = [
         orcid: '123456789',
         firstName: 'Test',
         lastName: 'User 4',
+        email: 'test-user-4@jisc.ac.uk',
         locked: false,
         apiKey: '4321',
         role: 'SUPER_USER'

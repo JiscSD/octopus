@@ -72,7 +72,7 @@ export const createFlag = async (
             event.body.comment
         );
 
-        // send email to the author
+        // send email to the author aka the creator of the flagged publication
         await email.newRedFlagAuthorNotification({
             to: publication.user.email || '',
             publicationName: publication.title,
@@ -82,7 +82,7 @@ export const createFlag = async (
         });
 
         // event.user.email is currently empty
-        // send email to the creator
+        // send email to the creator of the flag
         await email.newRedFlagCreatorNotification({
             to: event.user.email || '',
             publicationName: publication.title,
@@ -142,7 +142,7 @@ export const createFlagComment = async (
         const publication = await publicationService.get(flag.publicationId);
 
         //TODO: clarify whether email is a mandatory field
-        // send email to both the author and creator
+        // send email to the author aka the creator of the flagged publication and to the creator of the flag
         await email.updateRedFlagNotification({
             to: `${publication?.user.email}, ${event.user.email || ''}`,
             publicationName: publication?.title || '',
@@ -185,7 +185,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
 
         const publication = await publicationService.get(flag.publicationId);
 
-        // send email to the author
+        // send email to the author aka the creator of the flagged publication
         await email.resolveRedFlagAuthorNotification({
             to: publication?.user.email || '',
             publicationName: publication?.title || '',
@@ -194,7 +194,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
             flagId: flag.id
         });
 
-        // send email to the creator
+        // send email to the creator of the flag
         await email.resolveRedFlagCreatorNotification({
             to: publication?.user.email || '',
             publicationName: publication?.title || '',
