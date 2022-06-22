@@ -147,8 +147,12 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             </div>
             <div class="footer">
                 <div class="footer-logo">
-                    <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
-                    <img src="https://science-octopus.org/public/octopus.svg">
+                    <a href="https://www.jisc.ac.uk/">
+                        <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
+                    </a>
+                    <a href=${baseURL}">
+                        <img src="https://science-octopus.org/public/octopus.svg">
+                    </a>
                 </div>
                 <div class="footer-content">
                     <p style='margin-bottom: 8px;'>Octopus: the fast, free and fair way to share your research.</p>
@@ -186,8 +190,8 @@ export const send = async (options: I.EmailSendOptions) => {
 type NotifyCoAuthor = {
     userName: string;
     coAuthor: string;
-    publicationId: string;
-    publicationTitle: string;
+    publicationId: string | null;
+    publicationTitle: string | null;
     code: string;
 };
 
@@ -199,11 +203,11 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     <br>
     <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the link below:</p> 
     <br>
-    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am a co-author</a></p>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am an author</a></p>
     <br>
     <p>If you are <strong>not</strong> an author of this publication, please click the link below:</p>
     <br>
-    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not the co-author</a></p>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not an author</a></p>
     </br>
     <p>An Octopus user has provided this email address so that you can receive this message. We’ll use your contact details for this author validation process only, as described in our 
     <a href="${baseURL}/privacy">privacy policy</a>. If you select that you are not involved with the publication named above, your data will be deleted immediately. If you are involved, your data will not be retained 
@@ -236,9 +240,10 @@ export const verificationCode = async (options: VerificationCode) => {
     <br>
     <p class="code">${options.code}</p>
     <br>
-    <p>Your account was created using your <a href="https://orcid.org/">ORCID identifier</a>. Information from your ORCID account, including name, affiliation, 
-    and existing works, will be displayed on your Octopus profile page. If any information on your profile appears incorrect 
-    or out of date, please update your ORCID account.</p>
+    <p>Your account was created using your <a href="https://orcid.org/">ORCID identifier</a>. By creating an account, you have given
+    permission for us to use your ORCID credentials to log you into the Octopus platform, and to display information from your ORCID 
+    account, including name, affiliation, and existing works, on your Octopus profile page. If any information on your profile appears 
+    incorrect or out of date, please update it in ORCID.</p>
     <br>
     <p>This email address will be used to deliver the Octopus service, as described in our <a href="${baseURL}/privacy">privacy policy</a>. You can update your 
     email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
@@ -258,8 +263,10 @@ export const verificationCode = async (options: VerificationCode) => {
 type NewRedFlagAuthorNotification = {
     to: string;
     publicationName: string | null;
+    publicationId: string | null;
+    flagId: string;
     type: string;
-    submitter: string | null;
+    submitter: string;
     flagReason: string;
 };
 
@@ -275,6 +282,7 @@ export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNoti
     <br>
     <p><strong>Reason for flag:</strong> ${options.flagReason}</p>
     <br>
+    <p style="text-align: center;"><a class="button" href='${baseURL}/publications/${options.publicationId}/flag/${options.flagId}'>Respond to red flag</a></p>
     <br>
     <p>The red flag feature is designed to encourage an open dialogue between the author(s) and their peers. Both parties can add comments, and view responses, via the publication page. Note that all comments are public. The submitter can also resolve a red flag following discussion.</p>
     <br>
@@ -295,7 +303,7 @@ type NewRedFlagCreatorNotification = {
     to: string;
     publicationName: string | null;
     publicationId: string;
-    flagId: string | null;
+    flagId: string;
 };
 
 export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNotification) => {
@@ -324,10 +332,10 @@ export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNo
 type UpdateRedFlagNotification = {
     to: string;
     publicationName: string;
-    type: string;
-    submitter: string;
     publicationId: string;
     flagId: string;
+    type: string;
+    submitter: string;
 };
 
 export const updateRedFlagNotification = async (options: UpdateRedFlagNotification) => {
@@ -362,9 +370,9 @@ export const updateRedFlagNotification = async (options: UpdateRedFlagNotificati
 type ResolveRedFlagAuthorNotification = {
     to: string;
     publicationName: string;
-    type: string;
     publicationId: string;
     flagId: string;
+    type: string;
 };
 
 export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAuthorNotification) => {
@@ -414,3 +422,4 @@ export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagC
         to: options.to,
         subject: 'Red flag resolved'
     });
+};

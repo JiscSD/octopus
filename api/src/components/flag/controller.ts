@@ -1,6 +1,7 @@
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
+import * as userService from 'user/service';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as email from 'lib/email';
@@ -76,6 +77,8 @@ export const createFlag = async (
         await email.newRedFlagAuthorNotification({
             to: publication.user.email || '',
             publicationName: publication.title,
+            publicationId: publication.id,
+            flagId: flag.id,
             type: helpers.formatFlagType(event.body.category),
             submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
             flagReason: event.body.comment
@@ -83,7 +86,7 @@ export const createFlag = async (
 
         // send email to the creator of the flag
         await email.newRedFlagCreatorNotification({
-            to: event.user.email || '',
+            to: event.user.email,
             publicationName: publication.title,
             publicationId: publication.id,
             flagId: flag.id
@@ -140,15 +143,19 @@ export const createFlagComment = async (
 
         const publication = await publicationService.get(flag.publicationId);
 
+        const flagCreator = await userService.get(flag.createdBy, true);
+
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         await email.updateRedFlagNotification({
-            to: `${publication?.user.email}, ${event.user.email || ''}`,
+            to: `${publication?.user.email}, ${flagCreator?.email}`,
             publicationName: publication?.title || '',
-            type: helpers.formatFlagType(flag.category),
-            submitter: `${event.user.firstName} ${event.user.lastName}`,
             publicationId: publication?.id || '',
-            flagId: flag.id
+            flagId: flag.id,
+            type: helpers.formatFlagType(flag.category),
+            submitter: `${event.user.firstName} ${event.user.lastName || ''}`
         });
+
+        console.log(flagCreator?.email);
 
         return response.json(200, flagComment);
     } catch (err) {
@@ -187,9 +194,9 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         await email.resolveRedFlagAuthorNotification({
             to: publication?.user.email || '',
             publicationName: publication?.title || '',
-            type: flag.category,
             publicationId: publication?.id || '',
-            flagId: flag.id
+            flagId: flag.id,
+            type: helpers.formatFlagType(flag.category)
         });
 
         // send email to the creator of the flag
