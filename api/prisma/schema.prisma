@@ -86,7 +86,7 @@ model Publication {
     funders                            Funders[]
     fundersStatement                   String?
     affiliations                       Affiliations[]
-    affiliationsStatement              String?
+    affiliationStatement               String?
 }
 
 model Funders {

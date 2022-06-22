@@ -81,7 +81,7 @@ export interface Publication extends CorePublication {
     funders: Funder[];
     fundersStatement: string | null;
     affiliations: Affiliations[];
-    affiliationsStatement: string | null;
+    affiliationStatement: string | null;
     publicationFlags: Flag[];
 }
 

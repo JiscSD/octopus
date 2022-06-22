@@ -300,7 +300,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             dataAccessStatement: e.dataAccessStatement,
             selfDeclaration: e.selfDeclaration,
             fundersStatement: e.fundersStatement,
-            affiliationsStatement: e.affiliationStatement,
+            affiliationStatement: e.affiliationStatement,
             user: {
                 connect: {
                     id: user.id
