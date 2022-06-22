@@ -634,19 +634,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {/* Affiliated Organisations section */}
                     <Components.PublicationContentSection id="affiliations" title="Affiliated Organisations" hasBreak>
-                        {!publication.affiliations.length ? (
+                        {!publicationData.affiliations.length ? (
                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                 No affiliated organisations have been specified for this{' '}
-                                {Helpers.formatPublicationType(publication.type)}.
+                                {Helpers.formatPublicationType(publicationData.type)}.
                             </p>
                         ) : (
                             <>
                                 <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    This {Helpers.formatPublicationType(publication.type)} has the following affiliated
-                                    organisations:
+                                    This {Helpers.formatPublicationType(publicationData.type)} has the following
+                                    affiliated organisations:
                                 </p>
                                 <ul>
-                                    {publication.affiliations.map((affiliation) => {
+                                    {publicationData.affiliations.map((affiliation) => {
                                         return (
                                             <li key={affiliation.id} className="ml-7 mt-1 list-disc">
                                                 <a href={affiliation.link} className=" text-teal-600 hover:underline">
@@ -658,7 +658,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     })}
                                 </ul>
                                 <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {publication.affiliationsStatement}
+                                    {publicationData.affiliationsStatement}
                                 </p>
                             </>
                         )}
