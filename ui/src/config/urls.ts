@@ -1,21 +1,21 @@
 let host: string;
 let mediaBucket: string;
-const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_ENV}`;
+const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}`;
 let orcidAppiID: string;
 
-switch (process.env.NEXT_PUBLIC_ENV) {
+switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     case 'local':
         host = 'https://localhost:3001';
         mediaBucket = `http://localhost:4566/${bucketName}`;
         orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
         break;
-    case 'prod':
+    case 'main':
         host = 'https://octopus.ac';
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = '';
         break;
     default:
-        host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
+        host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
 }

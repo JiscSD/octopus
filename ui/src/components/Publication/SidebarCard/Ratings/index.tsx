@@ -41,19 +41,16 @@ const Rating: React.FC<RatingProps> = (props): React.ReactElement => {
 type RatingsProps = {
     id: string;
     type: Types.PublicationType;
+    ratings: Interfaces.Publication['ratings'];
 };
 
 const Ratings: React.FC<RatingsProps> = (props): React.ReactElement => {
-    const { data } = useSWR(`${Config.endpoints.publications}/${props.id}`, null, {
-        fallback: {}
-    });
-
     return (
         <>
             <Components.SectioBreak name="Ratings" />
             <div className="space-y-3">
                 {Object.values(Config.values.octopusInformation.publications[props.type].ratings).map((rating) => (
-                    <Rating key={rating.id} label={rating.value} ratingType={rating.id} ratings={data?.data.ratings} />
+                    <Rating key={rating.id} label={rating.value} ratingType={rating.id} ratings={props.ratings} />
                 ))}
             </div>
         </>
