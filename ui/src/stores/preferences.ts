@@ -11,7 +11,7 @@ let store: any = (set: any): Types.PreferencesStoreTypes => ({
     toggleFeedback: () => set((state: Types.PreferencesStoreTypes) => ({ feedback: !state.feedback }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = zustandMiddleware.devtools(store);
 
 store = zustandMiddleware.persist(store, { name: Config.keys.localStorage.darkMode });
 

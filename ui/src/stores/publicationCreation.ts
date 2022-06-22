@@ -28,6 +28,8 @@ let store: any = (set: (params: any) => void) => ({
                 linkTo: [],
                 ethicalStatement: null,
                 ethicalStatementFreeText: null,
+                dataAccessStatement: null,
+                dataPermissionsStatement: null,
                 selfDeclaration: false
             };
         }),
@@ -79,6 +81,16 @@ let store: any = (set: (params: any) => void) => ({
     updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
 
+    dataAccessStatement: null,
+    updateDataAccessStatement: (dataAccessStatement: string) => set(() => ({ dataAccessStatement })),
+
+    dataPermissionsStatement: null,
+    updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => set(() => ({ dataPermissionsStatement })),
+
+    dataPermissionsStatementProvidedBy: null,
+    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string) =>
+        set(() => ({ dataPermissionsStatementProvidedBy })),
+
     // Co-authors
     coAuthors: [],
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => set(() => ({ coAuthors })),
@@ -100,7 +112,7 @@ let store: any = (set: (params: any) => void) => ({
     updateSelfDeclaration: (selfDeclaration: boolean) => set(() => ({ selfDeclaration }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = devtools(store);
 
 const usePublicationCreationStore = create<Types.PublicationCreationStoreType>(store);
 

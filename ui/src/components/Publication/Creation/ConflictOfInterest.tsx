@@ -8,7 +8,7 @@ import * as Types from '@types';
 /**
  * @description Edit Licence, COI & soon to be description & keywords
  */
-const StepThree: React.FC = (): React.ReactElement => {
+const ConflictOfInterest: React.FC = (): React.ReactElement => {
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
     );
@@ -26,7 +26,10 @@ const StepThree: React.FC = (): React.ReactElement => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <div className="mb-6">
-                    <Components.PublicationCreationStepTitle text="Does this publication have any conflicts of interest?" />
+                    <Components.PublicationCreationStepTitle
+                        text="Does this publication have any conflicts of interest?"
+                        required
+                    />
                 </div>
 
                 <fieldset className="mb-2 space-x-6">
@@ -80,4 +83,4 @@ const StepThree: React.FC = (): React.ReactElement => {
     );
 };
 
-export default StepThree;
+export default ConflictOfInterest;

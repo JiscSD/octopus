@@ -269,6 +269,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                     message: 'Your red flag has now been saved.'
                 });
+
+                // Mutate original publication
+                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
             } else {
                 setError('You must provide a comment for this red flag.');
             }
@@ -473,28 +476,32 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             </div>
 
             {user && user.email ? (
-                <>
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Write review"
-                        onClick={() => {
-                            router.push({
-                                pathname: `${Config.urls.createPublication.path}`,
-                                query: {
-                                    for: props.publication.id,
-                                    type: 'PEER_REVIEW'
-                                }
-                            });
-                        }}
-                    />
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Rate this publication"
-                        onClick={() => setShowRatingsModel(true)}
-                    />
-                    <Components.PublicationSidebarCardActionsButton
-                        label="Flag a concern with this publication"
-                        onClick={() => setShowRedFlagModel(true)}
-                    />
-                </>
+                props.publication.user.id !== user.id && (
+                    <>
+                        {props.publication.type !== 'PEER_REVIEW' && (
+                            <Components.PublicationSidebarCardActionsButton
+                                label="Write review"
+                                onClick={() => {
+                                    router.push({
+                                        pathname: `${Config.urls.createPublication.path}`,
+                                        query: {
+                                            for: props.publication.id,
+                                            type: 'PEER_REVIEW'
+                                        }
+                                    });
+                                }}
+                            />
+                        )}
+                        <Components.PublicationSidebarCardActionsButton
+                            label="Rate this publication"
+                            onClick={() => setShowRatingsModel(true)}
+                        />
+                        <Components.PublicationSidebarCardActionsButton
+                            label="Flag a concern with this publication"
+                            onClick={() => setShowRedFlagModel(true)}
+                        />
+                    </>
+                )
             ) : user && !user.email ? (
                 <>
                     <Components.Link

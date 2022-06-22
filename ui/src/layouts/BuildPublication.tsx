@@ -8,7 +8,6 @@ import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 
 type NavigationButtonProps = {
@@ -52,7 +51,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
-    const [isReadyToPreview, setIsReadyToPreview] = React.useState(false);
+    const [isReadyToPreview, setIsReadyToPreview] = React.useState(true);
 
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = async (message?: string) => {
@@ -74,6 +73,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (store.type === 'DATA') {
             body.ethicalStatement = store.ethicalStatement;
             body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
+            if (store.dataAccessStatement?.length) body.dataAccessStatement = store.dataAccessStatement;
+            if (store.dataPermissionsStatement?.length) {
+                body.dataPermissionsStatement = store.dataPermissionsStatement;
+                body.dataPermissionsStatementProvidedBy = store.dataPermissionsStatementProvidedBy;
+            }
         }
 
         if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
@@ -101,31 +105,22 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
      *              correct step if a field is missing.
      */
     const publish = async () => {
-        // Hard check on COI
-        if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
-            props.setStep(3);
-            store.setError('You must provide a conflict of interest reason.');
-            return;
+        const check = checkRequired();
+        if (check.ready) {
+            store.setError(null);
+            try {
+                await saveCurrent();
+                await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
+                router.push({
+                    pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                });
+            } catch (err) {
+                const { message } = err as Interfaces.JSONResponseError;
+                store.setError(message);
+            }
+        } else {
+            store.setError(check.message);
         }
-
-        // Hard check on ETH Statement
-        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
-            props.setStep(4);
-            store.setError('You must select an ethical statement option.');
-            return;
-        }
-
-        try {
-            await saveCurrent();
-            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
-            router.push({
-                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
-            });
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
-        }
-
         setPublishModalVisibility(false);
     };
 
@@ -163,20 +158,33 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setDeleteModalVisibility(false);
     };
 
-    // Monitor the stores state, and conditionally enable the publish button
-    React.useEffect(() => {
-        if (!store.title) return setIsReadyToPreview(false);
-        if (!store.content) return setIsReadyToPreview(false);
-        if (!store.licence) return setIsReadyToPreview(false);
-        if (!store.linkTo.length) return setIsReadyToPreview(false);
+    const checkRequired = (): { ready: boolean; message: string } => {
+        let ready = { ready: true, message: '' };
+        if (!store.title) ready = { ready: false, message: 'You must provide a title' };
+        if (!store.content) ready = { ready: false, message: 'You must provide main text' };
+        if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
+        if (!store.linkTo.length)
+            ready = { ready: false, message: 'You must link this publication to at least one other' };
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
-            return setIsReadyToPreview(false);
+            ready = {
+                ready: false,
+                message: 'You have selected there is a conflict of interest, please provide a reason.'
+            };
         }
-        if (store.type === Config.values.octopusInformation.publications.DATA.id && store.ethicalStatement === null) {
-            return setIsReadyToPreview(false);
+        if (store.type === Config.values.octopusInformation.publications.DATA.id) {
+            if (store.ethicalStatement === null)
+                ready = { ready: false, message: 'You must select an ethical statement option' };
+            if (store.dataPermissionsStatement === null)
+                ready = { ready: false, message: 'You must select a data permissions option' };
         }
 
-        setIsReadyToPreview(true);
+        return ready;
+    };
+
+    // Monitor the stores state, and conditionally enable the publish button
+    React.useEffect(() => {
+        const check = checkRequired();
+        setIsReadyToPreview(check.ready);
     }, [
         store.title,
         store.content,
@@ -185,7 +193,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.conflictOfInterestText,
         store.linkTo,
         store.type,
-        store.ethicalStatement
+        store.ethicalStatement,
+        store.dataPermissionsStatement
     ]);
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature
@@ -232,7 +241,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
-            <Components.Banner />
             <main className="grid min-h-screen grid-cols-12">
                 <aside className="dark: relative col-span-2 hidden h-full border-r border-t border-transparent bg-teal-700 pt-9 transition-colors duration-500 dark:border-grey-400 lg:block">
                     <ul className="sticky top-0 space-y-2">

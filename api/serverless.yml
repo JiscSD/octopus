@@ -1,7 +1,6 @@
 service: octopus-api
 
 plugins:
-    - serverless-middleware
     - serverless-domain-manager
     - serverless-webpack
     - serverless-offline

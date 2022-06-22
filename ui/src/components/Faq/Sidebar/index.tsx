@@ -11,7 +11,7 @@ type Props = {
 };
 
 const FaqSidebar: React.FC<Props> = (props): JSX.Element => (
-    <div className="sticky top-16">
+    <div className="sticky top-16 space-y-2">
         {props.jumpToList.map((jumpTo: JumpTo) => (
             <a
                 key={jumpTo.href}

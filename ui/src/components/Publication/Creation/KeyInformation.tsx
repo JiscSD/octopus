@@ -10,7 +10,7 @@ import * as Types from '@types';
 /**
  * @description Edit title
  */
-const StepOne: React.FC = (): React.ReactElement => {
+const KeyInformation: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
     const licence: Types.LicenceType = Stores.usePublicationCreationStore(
@@ -23,7 +23,7 @@ const StepOne: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
-                <Components.PublicationCreationStepTitle text="Title" />
+                <Components.PublicationCreationStepTitle text="Title" required />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Titles should be concise, specific, and informative to help others find your work.
                 </span>
@@ -36,7 +36,7 @@ const StepOne: React.FC = (): React.ReactElement => {
                 />
             </div>
             <div>
-                <Components.PublicationCreationStepTitle text="Creative commons licence" />
+                <Components.PublicationCreationStepTitle text="Creative commons licence" required />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     You retain the copyright to your work, and can choose what licence you would like to assign it.
                 </span>
@@ -112,4 +112,4 @@ const StepOne: React.FC = (): React.ReactElement => {
     );
 };
 
-export default StepOne;
+export default KeyInformation;

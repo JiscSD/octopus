@@ -30,7 +30,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                             </span>
                         ) : (
                             <span
-                                title={`${props.coAuthor.email} is yet to give approbal for this publication to be published.`}
+                                title={`${props.coAuthor.email} is yet to give approval for this publication to be published.`}
                             >
                                 <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
                             </span>

@@ -70,7 +70,7 @@
     "method": "POST",
     "sortNum": 30000,
     "created": "2022-05-10T10:32:08.794Z",
-    "modified": "2022-05-23T09:36:41.768Z",
+    "modified": "2022-05-24T14:00:07.226Z",
     "headers": [],
     "params": [
       {
@@ -81,7 +81,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"title\": \"test\",\n    \"type\": \"PROTOCOL\",\n    \"language\": \"en\",\n    \"selfDeclaration\": true\n}",
+      "raw": "{\n    \"title\": \"test\",\n    \"type\": \"PROBLEM\",\n    \"language\": \"en\"\n}",
       "form": []
     },
     "tests": []
@@ -91,11 +91,11 @@
     "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
     "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
     "name": "Update Publication",
-    "url": "{{host}}/{{version}}/publications/cl3ijauy60003sf6qr28bckao?apiKey=000000010",
+    "url": "{{host}}/{{version}}/publications/cl3k85hg10003rq6qg7g0ocx0?apiKey=000000010",
     "method": "PATCH",
     "sortNum": 40000,
     "created": "2022-05-10T10:32:08.795Z",
-    "modified": "2022-05-23T09:37:14.824Z",
+    "modified": "2022-05-24T14:00:22.596Z",
     "headers": [],
     "params": [
       {
@@ -106,7 +106,7 @@
     ],
     "body": {
       "type": "json",
-      "raw": "{\n    \"language\": \"cu\",\n     \"selfDeclaration\": true\n}",
+      "raw": "{\n    \"language\": \"cu\",\n     \"dataPermissionsStatement\": \"test\"\n}",
       "form": []
     },
     "tests": []

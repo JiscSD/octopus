@@ -1,17 +1,18 @@
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as Interfaces from '@interfaces';
-import * as Layouts from '@layouts';
-import * as Types from '@types';
-import * as Framer from 'framer-motion';
+import React from 'react';
+import useSWR from 'swr';
 import moment from 'moment';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import React from 'react';
-import useSWR from 'swr';
+import * as Framer from 'framer-motion';
+import * as SolidIcons from '@heroicons/react/solid';
+
+import * as Interfaces from '@interfaces';
+import * as Components from '@components';
+import * as Helpers from '@helpers';
+import * as Layouts from '@layouts';
+import * as Config from '@config';
+import * as Types from '@types';
+import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params

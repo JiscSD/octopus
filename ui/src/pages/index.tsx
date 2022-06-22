@@ -43,7 +43,7 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-
+    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
@@ -90,21 +90,8 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </div>
                 </section>
-                {/** Mockup flow not ready */}
-                {/* <section className="container mx-auto py-16 px-8 2xl:py-28">
-                    <Components.MockupFlow />
-                </section> */}
                 <section className="container mx-auto px-8 py-16 2xl:py-28 ">
-                    {/* <Components.PageSubTitle text="Get started with Octopus" className="text-center" /> */}
-
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
-                        <Components.ActionCard
-                            title="FAQs"
-                            content="Review our FAQs to find out more about how the platform works."
-                            icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.faq.path}
-                            linkText="See FAQ's"
-                        />
                         <Components.ActionCard
                             title="Publish your work"
                             content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
@@ -114,7 +101,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                         <Components.ActionCard
                             title="Read publications"
-                            content="Anyone can read anything in Octopus – it's designed to make primary research openly available to all."
+                            content="Anyone can read anything in Octopus &#8211; it's designed to make primary research openly available to all."
                             icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.search.path}
                             linkText="Read publications"
@@ -140,23 +127,15 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             link={Config.urls.about.path}
                             linkText="Learn more"
                         />
+                        <Components.ActionCard
+                            title="FAQs"
+                            content="Review our FAQs to find out more about how the platform works."
+                            icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
+                            link={Config.urls.faq.path}
+                            linkText="See FAQ's"
+                        />
                     </div>
                 </section>
-                {/* <section className="container mx-auto border-t border-grey-100 px-8 py-16 dark:border-grey-600 2xl:py-28">
-                    <div className="grid grid-cols-3 gap-x-32">
-                        <div className="space-y-4">
-                            <Components.PageSubTitle text="Lorem ipsum" />
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-100">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae adipisci harum eius
-                                autem, laudantium iste labore libero voluptatem nisi praesentium. Sint, fuga possimus
-                                animi accusantium recusandae excepturi deleniti! Perspiciatis, nesciunt!
-                            </p>
-                        </div>
-                        <div className="col-span-2">
-                            <Components.LatestPublications publications={props.latest} />
-                        </div>
-                    </div>
-                </section> */}
             </Layouts.Standard>
         </>
     );

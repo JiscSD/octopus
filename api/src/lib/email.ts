@@ -30,8 +30,8 @@ switch (process.env.STAGE) {
         mailConfig = {
             SES: { ses, aws }
         };
-        from = `no-reply@${process.env.stage}.octopus.ac`;
-        baseURL = `https://${process.env.stage}.octopus.ac`;
+        from = `no-reply@${process.env.STAGE}.octopus.ac`;
+        baseURL = `https://${process.env.STAGE}.octopus.ac`;
         break;
 }
 

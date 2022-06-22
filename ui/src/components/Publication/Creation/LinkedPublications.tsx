@@ -14,7 +14,7 @@ import * as api from '@api';
 /**
  * @description Edit links
  */
-const StepTwo: React.FC = (): React.ReactElement => {
+const LinkedPublications: React.FC = (): React.ReactElement => {
     const SWRConfig = useSWRConfig();
     const user = Stores.useAuthStore((state) => state.user);
     const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
@@ -94,7 +94,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
-                <Components.PublicationCreationStepTitle text="What publications do you want to link to?" />
+                <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" required />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     All publications in Octopus are linked to each other to form research chains, branching down from
                     research Problems to Real world implementations.
@@ -127,7 +127,7 @@ const StepTwo: React.FC = (): React.ReactElement => {
             </div>
 
             <div className="relative">
-                <Components.PublicationCreationStepTitle text="Add links" />
+                <Components.PublicationCreationStepTitle text="Add links" required />
                 <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
                     <div className="flex items-center space-x-4">
                         <HeadlessUI.Combobox.Input
@@ -239,4 +239,4 @@ const StepTwo: React.FC = (): React.ReactElement => {
     );
 };
 
-export default StepTwo;
+export default LinkedPublications;
