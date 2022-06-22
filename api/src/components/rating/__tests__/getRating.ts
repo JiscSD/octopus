@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Get aggregate publication ratings', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Get all aggregate ratings for a publication', async () => {

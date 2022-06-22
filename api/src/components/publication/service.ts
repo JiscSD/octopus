@@ -395,6 +395,10 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
+client.prisma.publication.create({
+    data: {}
+});
+
 export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
     if (!publication) {
         return false;

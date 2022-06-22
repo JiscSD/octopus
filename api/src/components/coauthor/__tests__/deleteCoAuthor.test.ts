@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Delete co-author', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Delete a co-author', async () => {

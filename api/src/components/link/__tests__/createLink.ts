@@ -5,7 +5,7 @@ import * as linkService from 'link/service';
 describe('Create links', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can create link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE)', async () => {

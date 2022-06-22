@@ -104,7 +104,6 @@ model Links {
     id                 String      @id @default(cuid())
     publicationFrom    String
     publicationTo      String
-    active             Boolean?    @default(true)
     createdAt          DateTime    @default(now())
     updatedAt          DateTime    @updatedAt
     publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)

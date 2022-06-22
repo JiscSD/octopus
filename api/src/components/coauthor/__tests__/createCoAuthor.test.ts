@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('create coauthor', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Create a co-author', async () => {

@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Create links', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test.todo('User can delete a link where they own the fromPublication and it is DRAFT');

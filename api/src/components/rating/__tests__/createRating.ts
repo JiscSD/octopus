@@ -13,7 +13,7 @@ import * as client from 'lib/client';
 describe('Create publication ratings', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can leave a review on another users publication', async () => {

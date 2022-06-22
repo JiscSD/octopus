@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Resolve a flag', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('The flagger can resolve the flag', async () => {

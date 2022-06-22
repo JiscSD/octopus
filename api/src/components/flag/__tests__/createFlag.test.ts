@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Create flags on publications', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can create a valid flag on LIVE publication they did not create', async () => {

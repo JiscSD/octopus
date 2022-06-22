@@ -2,7 +2,7 @@ import * as testUtils from 'lib/testUtils';
 
 beforeEach(async () => {
     await testUtils.clearDB();
-    await testUtils.initialSeed();
+    await testUtils.testSeed();
 });
 
 describe('Update publication', () => {
@@ -195,7 +195,7 @@ describe('Update publication', () => {
         expect(createPublicationRequest.status).toEqual(422);
     });
 
-    test('Publication failed to update if is not protocol or hypotheses and supplys a self declaration', async () => {
+    test('Publication failed to update if is not protocol or hypotheses and supplies a self declaration', async () => {
         const createPublicationRequest = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({

@@ -75,8 +75,11 @@ const newPublicationSeeds = [
         id: 'publication-user-1-problem-2-draft',
         doi: '10.82259/publication-user-1-problem-2-draft',
         title: 'What is the connection between human needs and sustainable development?',
+        content: 'Content goes here',
+        licence: 'CC_BY',
         type: PublicationTypes.problem,
         currentStatus: PublicationStatus.draft,
+        conflictOfInterestStatus: false,
         description:
             'Description for the problem of What is the connection between human needs and sustainable development?',
         keywords: ['science', 'technology'],
@@ -85,11 +88,24 @@ const newPublicationSeeds = [
                 id: users.user1
             }
         },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-user-1-problem-1-live'
+            }
+        },
         coAuthors: {
             create: [
                 {
-                    id: 'testCoAuthor',
-                    email: 'testemail@test.com'
+                    email: 'example_1@jisc.ac.uk',
+                    code: 'random_bad_code_not_needed',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-26-co-author-1'
+                },
+                {
+                    email: 'example_2@jisc.ac.uk',
+                    code: 'random_bad_code_not_needed',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-27-co-author-2'
                 }
             ]
         },
@@ -158,12 +174,20 @@ const newPublicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'testCoAuthorTrue',
-                email: 'testemail@test.com',
-                code: 'testcode',
-                confirmedCoAuthor: true
-            }
+            create: [
+                {
+                    email: 'example_1@jisc.ac.uk',
+                    code: 'random_bad_code_not_needed',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-26-co-author-1'
+                },
+                {
+                    email: 'example_2@jisc.ac.uk',
+                    code: 'random_bad_code_not_needed',
+                    confirmedCoAuthor: false,
+                    linkedUser: 'test-user-27-co-author-2'
+                }
+            ]
         },
         publicationStatus: {
             create: [

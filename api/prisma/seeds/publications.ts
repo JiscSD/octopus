@@ -138,12 +138,19 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROBLEM-DRAFT',
         currentStatus: 'DRAFT',
+        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g04',
         user: {
             connect: {
-                id: 'test-user-1'
+                id: 'test-user-5'
             }
         },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        keywords: ['science', 'technology'],
         funders: {
             create: {
                 id: 'publication-problem-draft-funder',
@@ -158,13 +165,16 @@ const publicationSeeds = [
                 {
                     id: 'testCoAuthor',
                     email: 'testemail@test.com',
-                    code: 'test'
+                    code: 'test',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5'
                 },
                 {
                     id: 'testCoAuthor2',
                     email: 'testemai2l@test.com',
                     code: 'test2',
-                    linkedUser: 'test-user-3'
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6'
                 }
             ]
         },
@@ -248,13 +258,39 @@ const publicationSeeds = [
         id: 'publication-hypothesis-draft',
         title: 'Publication HYPOTHESIS-DRAFT',
         type: 'HYPOTHESIS',
+        licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-DRAFT',
         currentStatus: 'DRAFT',
+        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g06',
         user: {
             connect: {
-                id: 'test-user-1'
+                id: 'test-user-5'
             }
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        keywords: ['science', 'technology'],
+        coAuthors: {
+            create: [
+                {
+                    id: 'testCoAuthorHypothesis',
+                    email: 'testemail@test.com',
+                    code: 'test',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5'
+                },
+                {
+                    id: 'testCoAuthorHypothesis2',
+                    email: 'testemai2l@test.com',
+                    code: 'test2',
+                    confirmedCoAuthor: false,
+                    linkedUser: 'test-user-6'
+                }
+            ]
         },
         publicationStatus: {
             create: [
@@ -303,7 +339,7 @@ const publicationSeeds = [
         doi: '10.82259/cty5-2g08',
         user: {
             connect: {
-                id: 'test-user-1'
+                id: 'test-user-5'
             }
         },
         coAuthors: {

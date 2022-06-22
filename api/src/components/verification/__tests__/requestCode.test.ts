@@ -4,7 +4,7 @@ import cryptoRandomString from 'crypto-random-string';
 describe('Request a verification code', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can request a code and receives an email to their address', async () => {
