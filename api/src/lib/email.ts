@@ -147,10 +147,10 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             </div>
             <div class="footer">
                 <div class="footer-logo">
-                    <a href="https://www.jisc.ac.uk/">
+                    <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
                         <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
                     </a>
-                    <a href=${baseURL}">
+                    <a href=${baseURL}" style='text-decoration: none;'>
                         <img src="https://science-octopus.org/public/octopus.svg">
                     </a>
                 </div>
@@ -201,11 +201,11 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
-    <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the link below:</p> 
+    <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the button below:</p> 
     <br>
     <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am an author</a></p>
     <br>
-    <p>If you are <strong>not</strong> an author of this publication, please click the link below:</p>
+    <p>If you are <strong>not</strong> an author of this publication, please click the button below:</p>
     <br>
     <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not an author</a></p>
     </br>
@@ -359,7 +359,7 @@ export const updateRedFlagNotification = async (options: UpdateRedFlagNotificati
 
     const text = `A new comment has been added against the red flag submitted by ${options.submitter}. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
-    await send({
+    return send({
         html: standardHTMLEmailTemplate('Red flag updated', html),
         text,
         to: options.to,

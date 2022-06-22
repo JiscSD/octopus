@@ -1,3 +1,4 @@
+import nodemailer from 'nodemailer';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
@@ -146,16 +147,35 @@ export const createFlagComment = async (
         const flagCreator = await userService.get(flag.createdBy, true);
 
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
-        await email.updateRedFlagNotification({
-            to: `${publication?.user.email}, ${flagCreator?.email}`,
-            publicationName: publication?.title || '',
-            publicationId: publication?.id || '',
-            flagId: flag.id,
-            type: helpers.formatFlagType(flag.category),
-            submitter: `${event.user.firstName} ${event.user.lastName || ''}`
-        });
+        const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+        if (publication?.user.email) {
+            emailPromises.push(
+                email.updateRedFlagNotification({
+                    to: publication.user.email,
+                    publicationName: publication?.title || '',
+                    publicationId: publication?.id || '',
+                    flagId: flag.id,
+                    type: helpers.formatFlagType(flag.category),
+                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                })
+            );
+        }
 
-        console.log(flagCreator?.email);
+        if (flagCreator?.email) {
+            emailPromises.push(
+                email.updateRedFlagNotification({
+                    to: flagCreator.email,
+                    publicationName: publication?.title || '',
+                    publicationId: publication?.id || '',
+                    flagId: flag.id,
+                    type: helpers.formatFlagType(flag.category),
+                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                })
+            );
+        }
+
+        // Send off notifications
+        await Promise.all(emailPromises);
 
         return response.json(200, flagComment);
     } catch (err) {
