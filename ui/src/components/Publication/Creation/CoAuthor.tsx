@@ -108,6 +108,14 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     </div>
                 </div>
             </Framer.motion.div>
+
+            {!coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor) && (
+                <Components.Alert
+                    severity="INFO"
+                    title="All co-authors must be verified before making a publication live."
+                    className="w-fit"
+                />
+            )}
         </div>
     );
 };

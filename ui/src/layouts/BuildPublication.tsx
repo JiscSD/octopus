@@ -176,6 +176,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
         }
+        if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+            ready = { ready: false, message: 'All co-authors must be verified.' };
+        }
 
         return ready;
     };
@@ -193,7 +196,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.linkTo,
         store.type,
         store.ethicalStatement,
-        store.dataPermissionsStatement
+        store.dataPermissionsStatement,
+        store.coAuthors
     ]);
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature

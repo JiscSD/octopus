@@ -97,15 +97,15 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                     resourceTypeGeneral: 'Other',
                     resourceType: publication?.type
                 },
-                relatedIdentifiers: publication?.linkedFrom.map((relatedIdentifier) =>
-                    relatedIdentifier.publicationFromRef.type === 'PEER_REVIEW'
+                relatedIdentifiers: publication?.linkedTo.map((relatedIdentifier) =>
+                    relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
                         ? {
-                              relatedIdentifier: relatedIdentifier.publicationFromRef.doi,
+                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
                               relatedIdentifierType: 'DOI',
                               relationType: 'Reviews'
                           }
                         : {
-                              relatedIdentifier: relatedIdentifier.publicationFromRef.doi,
+                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
                               relatedIdentifierType: 'DOI',
                               relationType: 'Continues'
                           }

@@ -395,10 +395,14 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
+export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+    if (!publication) {
+        return false;
+    }
+
     let isReady = false;
 
-    // @ts-ignore This needs looking at, type mismatch between infered type from get method to what Prisma has
+    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
@@ -406,6 +410,7 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
     const isAttemptToLive = status === 'LIVE';
 
@@ -417,9 +422,11 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
+        coAuthorsAreVerified &&
         isAttemptToLive
-    )
+    ) {
         isReady = true;
+    }
 
     return isReady;
 };

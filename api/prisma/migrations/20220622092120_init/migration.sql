@@ -80,7 +80,7 @@ CREATE TABLE "Publication" (
     "description" TEXT,
     "keywords" TEXT[],
     "content" TEXT,
-    "doi" TEXT,
+    "doi" TEXT NOT NULL,
     "language" "Languages" NOT NULL DEFAULT E'en',
     "publishedDate" TIMESTAMP(3),
     "currentStatus" "PublicationStatusEnum" NOT NULL DEFAULT E'DRAFT',
