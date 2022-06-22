@@ -33,18 +33,11 @@ const faqContents = [
         title: 'How do I record my work to Octopus?',
         href: 'how_octopus',
         id: 'how_octopus',
-        heading: 'Why record your research on Octopus?',
+        heading: 'How do I record my work to Octopus?',
         content:
             "<p className='mb-2'>Any logged-in user can publish immediately to Octopus. See <a href='faq#how_account_octopus' className='underline'>how to create an Octopus account</a>.<p className='mb-2'>There are 8 types of publication on Octopus, each aligned with a stage of the scientific process. You can publish each stage as you conduct your research, or at the end of your project. Other users can also link their works to yours – for instance, each stage of a collaborative project might be published by a different member of the team to reflect the work they were most closely involved with, or another researcher might be inspired to respond to your work.</p><p className='mb-2'>All Octopus publications are hierarchically linked in a collaborative chain, which means your publication needs to be linked to at least one other work on Octopus. The start of any chain is a scientific Problem, from which can be linked a hypothesis/rationale, and from that a method/protocol, and so on. Most publications can only be linked to the type preceding it in the chain. However problems and reviews can be linked from any of the other publication types.</p>"
     },
-    {
-        title: 'How do I record my work to Octopus?',
-        href: 'how_octopus',
-        id: 'how_octopus',
-        heading: 'Why record your research on Octopus?',
-        content:
-            "<p className='mb-2'>Any logged-in user can publish immediately to Octopus. See <a href='faq#how_account_octopus' className='underline'>how to create an Octopus account.</a><p className='mb-2'>There are 8 types of publication on Octopus, each aligned with a stage of the scientific process. You can publish each stage as you conduct your research, or at the end of your project. Other users can also link their works to yours – for instance, each stage of a collaborative project might be published by a different member of the team to reflect the work they were most closely involved with, or another researcher might be inspired to respond to your work.</p><p className='mb-2'>All Octopus publications are hierarchically linked in a collaborative chain, which means your publication needs to be linked to at least one other work on Octopus. The start of any chain is a scientific Problem, from which can be linked a hypothesis/rationale, and from that a method/protocol, and so on. Most publications can only be linked to the type preceding it in the chain. However problems and reviews can be linked from any of the other publication types.</p>"
-    },
+
     {
         title: 'Which publication type should I use?',
         href: 'pub_type_octopus',

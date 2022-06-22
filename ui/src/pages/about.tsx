@@ -72,21 +72,27 @@ const About: NextPage = (): React.ReactElement => (
                             accessibility of all primary research, in full.
                         </h2>
                     </div>
-                    <div className="mx-auto mb-20 mt-5 flex w-fit space-x-6">
+                    <div className="mx-auto mb-20 mt-5 flex w-fit space-x-6 ">
                         <Components.Link
                             href={Config.urls.faq.path}
-                            className=" flex w-52 items-center justify-between rounded-lg bg-teal-400 p-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                            className=" flex items-center justify-between rounded-lg bg-teal-400 px-8 py-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
                         >
-                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">
-                                How to use Octopus
-                            </span>
+                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">FAQs</span>
                         </Components.Link>
                         <Components.Link
-                            href={Config.urls.about.path}
+                            href={Config.urls.authorGuide.path}
                             className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
                         >
                             <span className="text-center font-montserrat text-sm leading-none tracking-wide">
-                                Octopus in depth
+                                Author Guide
+                            </span>
+                        </Components.Link>
+                        <Components.Link
+                            href={Config.urls.octopusAims.path}
+                            className="  flex items-center justify-between rounded-lg bg-teal-400 px-6 py-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                        >
+                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">
+                                Our aims in detail
                             </span>
                         </Components.Link>
                     </div>

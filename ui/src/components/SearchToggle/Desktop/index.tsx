@@ -17,9 +17,6 @@ const Desktop: React.FC = (): React.ReactElement => {
             }
         >
             Search
-            <span className="ml-2 text-sm text-teal-300 transition-colors duration-500 dark:text-grey-500">
-                {Helpers.setOSKey()}
-            </span>
         </button>
     );
 };

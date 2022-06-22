@@ -80,11 +80,8 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                                 onClick={(e) => toggleCmdPalette()}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
+                                <span className="mx-auto font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
                                     Quick search...
-                                </span>
-                                <span className="font-montserrat text-xs text-white-50 transition-colors duration-500 dark:text-grey-50">
-                                    {Helpers.setOSKey()}
                                 </span>
                             </button>
                         </div>

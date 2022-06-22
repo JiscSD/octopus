@@ -19,10 +19,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
-            <Components.Banner
-                text="This is test release - we're still working on the site. Please don't use it for recording your real
-        work... yet!"
-            />
+            <Components.Banner text="This is test release - the live site is available following our launch event on 29th June. Please don't use it for recording your real work... yet!" />
             {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
