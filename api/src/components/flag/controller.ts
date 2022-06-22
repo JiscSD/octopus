@@ -81,7 +81,6 @@ export const createFlag = async (
             flagReason: event.body.comment
         });
 
-        // event.user.email is currently empty
         // send email to the creator of the flag
         await email.newRedFlagCreatorNotification({
             to: event.user.email || '',
@@ -141,12 +140,11 @@ export const createFlagComment = async (
 
         const publication = await publicationService.get(flag.publicationId);
 
-        //TODO: clarify whether email is a mandatory field
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         await email.updateRedFlagNotification({
             to: `${publication?.user.email}, ${event.user.email || ''}`,
             publicationName: publication?.title || '',
-            type: flag.category,
+            type: helpers.formatFlagType(flag.category),
             submitter: `${event.user.firstName} ${event.user.lastName}`,
             publicationId: publication?.id || '',
             flagId: flag.id
