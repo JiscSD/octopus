@@ -25,11 +25,11 @@ type SidebarCardProps = {
 const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
     <div className="w-full space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 dark:bg-grey-900">
         <Components.PublicationSidebarCardGeneral publication={props.publication} />
-        <Components.PublicationSidebarCardRatings
+        {/* <Components.PublicationSidebarCardRatings
             id={props.publication.id}
             type={props.publication.type}
             ratings={props.publication.ratings}
-        />
+        /> */}
         <Components.PublicationSidebarCardActions publication={props.publication} />
         <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
     </div>
@@ -107,7 +107,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         `${Config.endpoints.publications}/${props.publicationId}`,
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
-    // const { mutate } = useSWRConfig();
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
@@ -242,7 +241,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
             <Layouts.Publication
                 fixedHeader={false}
-                publicationId={props.publication.type !== 'PEER_REVIEW' ? props.publication.id : undefined}
+                publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
             >
                 <section className="col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
