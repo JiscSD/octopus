@@ -80,6 +80,7 @@ export interface CreatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    affiliationStatement?: string;
 }
 
 export interface OpenSearchPublication {
@@ -500,4 +501,23 @@ export interface GetFlagsByUserID {
 
 export interface GetFlagsByPublicationID {
     id: string;
+}
+
+//affiliations
+
+export interface CreateAffiliationPathParams {
+    id: string;
+}
+
+export interface DeleteAffiliationPathParams {
+    id: string;
+    affiliation: string;
+}
+
+export interface CreateAffiliationRequestBody {
+    name: string;
+    ror?: string;
+    city: string;
+    country: string;
+    link: string;
 }

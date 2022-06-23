@@ -205,6 +205,41 @@ const urls = {
         keywords: ['open source', 'accessibility', 'publishing platform'],
         canonical: `${base.host}/accessibility`
     },
+    authorGuide: {
+        path: '/author-guide',
+        title: 'Octopus Author Guide',
+        description: 'Step-by-step guide on how to create a new publication on Octopus.',
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/author-guide`
+    },
+    userTerms: {
+        path: '/user-terms',
+        title: 'Octopus User Terms',
+        description: "Octopus's user terms and conditions.",
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/user-terms`
+    },
+    getInvolved: {
+        path: '/get-involved',
+        title: 'Get involved with Octopus',
+        description: 'Find out how to participate directly in the Octopus project, and view our development roadmap.',
+        keywords: ['User community', 'platform development', 'user participation', 'Octopus publishing'],
+        canonical: `${base.host}/get-involved`
+    },
+    octopusAims: {
+        path: '/octopus-aims',
+        title: 'Octopus: aims and priorities',
+        description:
+            'Learn more about the aims and priorities of the Octopus platform, which is designed to positively disrupt research culture.',
+        keywords: [
+            'Octopus publishing',
+            'research culture',
+            'research assessment',
+            'open access publishing',
+            'open science'
+        ],
+        canonical: `${base.host}/octopus-aims`
+    },
     404: {
         title: `404 Not Found - ${base.title}`
     },

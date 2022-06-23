@@ -101,6 +101,16 @@ export const get = async (id: string) => {
                     ror: true
                 }
             },
+            affiliations: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
@@ -289,6 +299,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             dataAccessStatement: e.dataAccessStatement,
             selfDeclaration: e.selfDeclaration,
             fundersStatement: e.fundersStatement,
+            affiliationStatement: e.affiliationStatement,
             user: {
                 connect: {
                     id: user.id
