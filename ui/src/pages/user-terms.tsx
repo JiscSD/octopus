@@ -77,7 +77,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             </>
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 1: GENERAL" className="mt-8" />
-                        <StandardText>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     <span className="font-bold">About the service:</span> To see more information on the
@@ -158,33 +158,34 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     protection software.
                                 </li>
                             </ul>
-                        </StandardText>
+                        </div>
                         <Components.PageSubTitle text="SECTION 2: USERS" className="mt-8" />
                         <StandardText>
                             <>
                                 Access to the Service is made available free of charge. Any individual who accesses the
                                 Service is a Service user (<span className="font-bold">a User</span>). There are two
                                 types of Users:
-                                <ul className="ml-8 mt-6 list-disc">
-                                    <li className="mb-6">
-                                        An <span className="font-bold">Ordinary User </span> is a user anywhere in the
-                                        world who accesses the Service via an internet device (and who has not logged
-                                        into the Service as a Registered User). An Ordinary Users can search, browse,
-                                        and view content published to the Service website, and use a limited set of
-                                        resources and tools, in accordance with these Terms.
-                                    </li>
-                                    <li className="mb-6">
-                                        A <span className="font-bold">Registered User </span> is an individual who has
-                                        created an Octopus user account affiliated with an ORCID ID by following the
-                                        steps set out in Section 3. A Registered User can search, browse, and view
-                                        content published to the site, but can also publish their own research as well
-                                        as review, rate, create links between, and red flag others&apos; publications.
-                                        Registered Users can use all of the resources on the Service website in
-                                        accordance with these Terms.
-                                    </li>
-                                </ul>
                             </>
                         </StandardText>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                            <ul className="ml-8 mt-6 list-disc">
+                                <li className="mb-6">
+                                    An <span className="font-bold">Ordinary User </span> is a user anywhere in the world
+                                    who accesses the Service via an internet device (and who has not logged into the
+                                    Service as a Registered User). An Ordinary Users can search, browse, and view
+                                    content published to the Service website, and use a limited set of resources and
+                                    tools, in accordance with these Terms.
+                                </li>
+                                <li className="mb-6">
+                                    A <span className="font-bold">Registered User </span> is an individual who has
+                                    created an Octopus user account affiliated with an ORCID ID by following the steps
+                                    set out in Section 3. A Registered User can search, browse, and view content
+                                    published to the site, but can also publish their own research as well as review,
+                                    rate, create links between, and red flag others&apos; publications. Registered Users
+                                    can use all of the resources on the Service website in accordance with these Terms.
+                                </li>
+                            </ul>
+                        </div>
                         <Components.PageSubTitle text="SECTION 3: BECOMING A REGISTERED USER" className="mt-8" />
                         <StandardText>
                             <>
@@ -288,93 +289,92 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 7: CONDITIONS OF USE OF THE SERVICE" className="mt-8" />
                         <StandardText>
-                            <>
-                                <span className="font-bold">All Users shall:</span>
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">only access and use the Service on these Terms</li>
-                                </ul>
-                                <span className="font-bold">Users shall not:</span>
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">
-                                        copy and content on the Service Website, other than in accordance with these
-                                        Terms or the licence terms applicable to any User Content;
-                                    </li>
-                                    <li className="mb-6">
-                                        do anything which may cause (whether on purpose or not) the introduction or
-                                        spread of a virus, Trojan horse, logic bombs spyware or any other programs
-                                        designed to affect the operation of any computer software or hardware;
-                                    </li>
-                                    <li className="mb-6">
-                                        attempt to gain unauthorised access to the Service website, the server on which
-                                        the Service website is stored or any server or computer or database connected to
-                                        the Service website;
-                                    </li>
-                                    <li className="mb-6">
-                                        attack the Service website via a denial-of-service attack or a distributed
-                                        denial-of service attack;
-                                    </li>
-                                    <li className="mb-6">act dishonestly or unprofessionally</li>
-                                    <li className="mb-6">create a false identity on the Service website</li>
-                                    <li className="mb-6">
-                                        misrepresent your current or previous positions, professional qualifications
-                                        employment for, affiliation with any organisation or other accreditations;
-                                    </li>
-                                    <li className="mb-6">use (or attempt to use) any other Users log-in details;</li>
-                                    <li className="mb-6">link to the Service website:</li>
-                                </ul>
-                                <ul className="ml-16 list-disc">
-                                    <li className="mb-6">
-                                        in a way that damages Jisc&apos;s reputation or takes advantage of it;
-                                    </li>
-                                    <li className="mb-6">
-                                        in a way that suggests any form of association, approval or endorsement on
-                                        Jisc&aposs;s part where none exists;
-                                    </li>
-                                    <li className="mb-6">
-                                        where Jisc has withdrawn permission to link to the Service website;
-                                    </li>
-                                </ul>
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">
-                                        sell, rent, lease, redistribute, broadcast, publicly display, transmit,
-                                        communicate, modify, sub-license or transfer or assign any part of the Service
-                                        website, or your rights to use the Service website (under these Terms) to any
-                                        third party
-                                    </li>
-                                    <li className="mb-6">infringe the rights of Jisc or of any other User; or</li>
-                                    <li className="mb-6">
-                                        use the Service or the Service website unlawfully or fraudulently at any time.
-                                    </li>
-                                </ul>
-                            </>
+                            <span className="font-bold">All Users shall:</span>
                         </StandardText>
+                        <div>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">only access and use the Service on these Terms</li>
+                            </ul>
+                        </div>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                            <span className="font-bold">Users shall not:</span>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">
+                                    copy and content on the Service Website, other than in accordance with these Terms
+                                    or the licence terms applicable to any User Content;
+                                </li>
+                                <li className="mb-6">
+                                    do anything which may cause (whether on purpose or not) the introduction or spread
+                                    of a virus, Trojan horse, logic bombs spyware or any other programs designed to
+                                    affect the operation of any computer software or hardware;
+                                </li>
+                                <li className="mb-6">
+                                    attempt to gain unauthorised access to the Service website, the server on which the
+                                    Service website is stored or any server or computer or database connected to the
+                                    Service website;
+                                </li>
+                                <li className="mb-6">
+                                    attack the Service website via a denial-of-service attack or a distributed denial-of
+                                    service attack;
+                                </li>
+                                <li className="mb-6">act dishonestly or unprofessionally</li>
+                                <li className="mb-6">create a false identity on the Service website</li>
+                                <li className="mb-6">
+                                    misrepresent your current or previous positions, professional qualifications
+                                    employment for, affiliation with any organisation or other accreditations;
+                                </li>
+                                <li className="mb-6">use (or attempt to use) any other Users log-in details;</li>
+                                <li className="mb-6">link to the Service website:</li>
+                            </ul>
+                            <ul className="ml-16 list-disc">
+                                <li className="mb-6">
+                                    in a way that damages Jisc&apos;s reputation or takes advantage of it;
+                                </li>
+                                <li className="mb-6">
+                                    in a way that suggests any form of association, approval or endorsement on
+                                    Jisc&aposs;s part where none exists;
+                                </li>
+                                <li className="mb-6">
+                                    where Jisc has withdrawn permission to link to the Service website;
+                                </li>
+                            </ul>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">
+                                    sell, rent, lease, redistribute, broadcast, publicly display, transmit, communicate,
+                                    modify, sub-license or transfer or assign any part of the Service website, or your
+                                    rights to use the Service website (under these Terms) to any third party
+                                </li>
+                                <li className="mb-6">infringe the rights of Jisc or of any other User; or</li>
+                                <li className="mb-6">
+                                    use the Service or the Service website unlawfully or fraudulently at any time.
+                                </li>
+                            </ul>
+                        </div>
                         <Components.PageSubTitle text="SECTION 8: BREACH OF THESE TERMS" className="mt-8" />
                         <StandardText>
-                            <>
-                                Where Jisc reasonably believes or suspects that a User is in breach of these Terms (or
-                                any other terms reference herein), Jisc may take such action as it deems appropriate (at
-                                its discretion), including:
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">issuing a warning;</li>
-                                    <li className="mb-6">
-                                        removing users from accessing the Service at any time, without warning
-                                    </li>
-                                    <li className="mb-6">
-                                        closing or suspending your account at any time without notice;
-                                    </li>
-                                    <li className="mb-6">
-                                        taking legal proceedings against you for reimbursement of all costs on an
-                                        indemnity basis (including, but not limited to, reasonable administrative and
-                                        legal costs) resulting from the breach;
-                                    </li>
-                                    <li className="mb-6">taking any further legal action against you; and/ or</li>
-                                    <li className="mb-6">
-                                        disclosing such information to law enforcement authorities as we reasonably feel
-                                        is necessary.
-                                    </li>
-                                </ul>
-                            </>
+                            Where Jisc reasonably believes or suspects that a User is in breach of these Terms (or any
+                            other terms reference herein), Jisc may take such action as it deems appropriate (at its
+                            discretion), including:
                         </StandardText>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">issuing a warning;</li>
+                                <li className="mb-6">
+                                    removing users from accessing the Service at any time, without warning
+                                </li>
+                                <li className="mb-6">closing or suspending your account at any time without notice;</li>
+                                <li className="mb-6">
+                                    taking legal proceedings against you for reimbursement of all costs on an indemnity
+                                    basis (including, but not limited to, reasonable administrative and legal costs)
+                                    resulting from the breach;
+                                </li>
+                                <li className="mb-6">taking any further legal action against you; and/ or</li>
+                                <li className="mb-6">
+                                    disclosing such information to law enforcement authorities as we reasonably feel is
+                                    necessary.
+                                </li>
+                            </ul>
+                        </div>
                         <Components.PageSubTitle text="SECTION 9: OTHER JISC MATERIAL" className="mt-8" />
                         <StandardText>
                             <>
@@ -436,44 +436,45 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 12: LIABILITY" className="mt-8" />
                         <StandardText>
+                            To the extent permitted by law, Jisc excludes all conditions, warranties, representations or
+                            other terms which may apply to the Service, the Service website or any User Content or
+                            guidance and resources made available on it, whether express or implied. In particular, Jisc
+                            excludes all conditions, warranties, representations or other terms:
+                        </StandardText>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">
+                                    that any User Content, guidance or resource will be of satisfactory quality or fit
+                                    for purpose;
+                                </li>
+                                <li className="mb-6">
+                                    in respect of the suitability of any User Content, guidance or resource, or
+                                    information and services contained on, or accessed via the Service website
+                                </li>
+                                <li className="mb-6">
+                                    in respect of the content of websites linked on the Service website;
+                                </li>
+                                <li className="mb-6">
+                                    that any User Content, guidance or resource complies with applicable laws and
+                                    regulation (including local laws which a resource may be subject to);
+                                </li>
+                                <li className="mb-6">
+                                    that use of the Service website or any resource will be compatible with all hardware
+                                    and software
+                                </li>
+                                <li className="mb-6">
+                                    that the Service or Service website will be bug or virus free, or that access to the
+                                    Service website will be uninterrupted;
+                                </li>
+                                <li className="mb-6">
+                                    that the use of Service or Service website or any content on it, will deliver a
+                                    specific outcome for Users; or
+                                </li>
+                                <li className="mb-6">that defects in Service or Service website will be corrected</li>
+                            </ul>
+                        </div>
+                        <StandardText>
                             <>
-                                To the extent permitted by law, Jisc excludes all conditions, warranties,
-                                representations or other terms which may apply to the Service, the Service website or
-                                any User Content or guidance and resources made available on it, whether express or
-                                implied. In particular, Jisc excludes all conditions, warranties, representations or
-                                other terms:
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">
-                                        that any User Content, guidance or resource will be of satisfactory quality or
-                                        fit for purpose;
-                                    </li>
-                                    <li className="mb-6">
-                                        in respect of the suitability of any User Content, guidance or resource, or
-                                        information and services contained on, or accessed via the Service website
-                                    </li>
-                                    <li className="mb-6">
-                                        in respect of the content of websites linked on the Service website;
-                                    </li>
-                                    <li className="mb-6">
-                                        that any User Content, guidance or resource complies with applicable laws and
-                                        regulation (including local laws which a resource may be subject to);
-                                    </li>
-                                    <li className="mb-6">
-                                        that use of the Service website or any resource will be compatible with all
-                                        hardware and software
-                                    </li>
-                                    <li className="mb-6">
-                                        that the Service or Service website will be bug or virus free, or that access to
-                                        the Service website will be uninterrupted;
-                                    </li>
-                                    <li className="mb-6">
-                                        that the use of Service or Service website or any content on it, will deliver a
-                                        specific outcome for Users; or
-                                    </li>
-                                    <li className="mb-6">
-                                        that defects in Service or Service website will be corrected
-                                    </li>
-                                </ul>
                                 If Jisc is liable to you in relation to your use of the Service for any cause whatever,
                                 and regardless of the form of the action then, unless the law says otherwise, we will
                                 only be responsible to you for loss or damage you suffer (i) that is a foreseeable
@@ -524,89 +525,86 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             </>
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 15: MISCELLANEOUS" className="mt-8" />
-                        <StandardText>
-                            <>
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6">
-                                        <span className="font-bold">No partnership: </span> Users acknowledge that these
-                                        Terms do not create or imply any partnership, joint venture or trust
-                                        relationship between Jisc and any User.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">Entire agreement: </span> These Terms (including the
-                                        Privacy Policy and any relevant User Content licence terms) contain all the
-                                        terms applicable to the use of the Service and Service website by you, and form
-                                        the entire agreement between you and Jisc.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">Invalidity/ enforceability: </span>Each of the terms
-                                        of these Terms operates separately. If any court or competent authority decides
-                                        that any of them are unlawful or unenforceable, the remaining conditions will
-                                        remain in full force and effect.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">No waiver: </span>If Jisc fails to insist that you
-                                        perform any of your obligations, or if Jisc does not enforce its rights against
-                                        you, or if Jisc delays in doing so, that will not mean that Jisc has waived its
-                                        rights against you and will not mean that you do not have to comply with those
-                                        obligations. Any waiver would need to be given by Jisc in writing.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">Matters outside of Jisc&apos;s control: </span>Jisc
-                                        will not be liable or responsible for any failure to perform, or delay in
-                                        performance of, any of its obligations under these Terms if that is caused by
-                                        events outside Jisc&apos;s reasonable control, including any act, event,
-                                        non-happening, omission or accident beyond our reasonable control. Some examples
-                                        of such an event are:
-                                    </li>
-                                </ul>
-                                <ul className="ml-16 list-disc">
-                                    <li className="mb-6">Strikes, lock-outs or other industrial action;</li>
-                                    <li className="mb-6">
-                                        Civil commotion, riot, invasion, terrorist attack or threat of terrorist attack,
-                                        war (whether declared or not) or threat or preparation for war;
-                                    </li>
-                                    <li className="mb-6">
-                                        Fire, explosion, storm, flood, earthquake, subsidence, epidemic or other natural
-                                        disaster;
-                                    </li>
-                                    <li className="mb-6">
-                                        Impossibility of the use of railways, shipping, aircraft, motor transport or
-                                        other means of public or private transport;
-                                    </li>
-                                    <li className="mb-6">
-                                        Impossibility of the use of public or private telecommunications networks; or
-                                    </li>
-                                    <li className="mb-6">
-                                        The acts, decrees, legislation, regulations or restrictions of any government.
-                                    </li>
-                                    Jisc&apos;s performance under these Terms will be suspended for the period that such
-                                    events set out above continues, and Jisc will have an extension of time to carry out
-                                    their obligations under any contract for the duration of that period. Where
-                                    possible, Jisc will use reasonable efforts to bring such event detailed above to a
-                                    close or to find a solution.
-                                </ul>
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-6 mt-6">
-                                        <span className="font-bold">Notices to you: </span> These Terms and the Privacy
-                                        Policy are drawn up in the English language. All written communications between
-                                        you and us relating to these Terms and the Privacy Policy will be given in
-                                        English. We will send any notices relating to any of the matters set out in
-                                        these Terms to the email address you use to access the Service or the Service.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">Governing law: </span> These Terms and any dispute
-                                        in relation to the materials available from the Service will be governed by laws
-                                        of England and Wales.
-                                    </li>
-                                    <li className="mb-6">
-                                        <span className="font-bold">Jurisdiction: </span> The English courts have
-                                        exclusive jurisdiction to settle any disputes which may arise out of or in
-                                        connection with these Terms or use of the Service and/or Service website
-                                    </li>
-                                </ul>
-                            </>
-                        </StandardText>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6">
+                                    <span className="font-bold">No partnership: </span> Users acknowledge that these
+                                    Terms do not create or imply any partnership, joint venture or trust relationship
+                                    between Jisc and any User.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">Entire agreement: </span> These Terms (including the
+                                    Privacy Policy and any relevant User Content licence terms) contain all the terms
+                                    applicable to the use of the Service and Service website by you, and form the entire
+                                    agreement between you and Jisc.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">Invalidity/ enforceability: </span>Each of the terms of
+                                    these Terms operates separately. If any court or competent authority decides that
+                                    any of them are unlawful or unenforceable, the remaining conditions will remain in
+                                    full force and effect.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">No waiver: </span>If Jisc fails to insist that you
+                                    perform any of your obligations, or if Jisc does not enforce its rights against you,
+                                    or if Jisc delays in doing so, that will not mean that Jisc has waived its rights
+                                    against you and will not mean that you do not have to comply with those obligations.
+                                    Any waiver would need to be given by Jisc in writing.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">Matters outside of Jisc&apos;s control: </span>Jisc will
+                                    not be liable or responsible for any failure to perform, or delay in performance of,
+                                    any of its obligations under these Terms if that is caused by events outside
+                                    Jisc&apos;s reasonable control, including any act, event, non-happening, omission or
+                                    accident beyond our reasonable control. Some examples of such an event are:
+                                </li>
+                            </ul>
+                            <ul className="ml-16 list-disc">
+                                <li className="mb-6">Strikes, lock-outs or other industrial action;</li>
+                                <li className="mb-6">
+                                    Civil commotion, riot, invasion, terrorist attack or threat of terrorist attack, war
+                                    (whether declared or not) or threat or preparation for war;
+                                </li>
+                                <li className="mb-6">
+                                    Fire, explosion, storm, flood, earthquake, subsidence, epidemic or other natural
+                                    disaster;
+                                </li>
+                                <li className="mb-6">
+                                    Impossibility of the use of railways, shipping, aircraft, motor transport or other
+                                    means of public or private transport;
+                                </li>
+                                <li className="mb-6">
+                                    Impossibility of the use of public or private telecommunications networks; or
+                                </li>
+                                <li className="mb-6">
+                                    The acts, decrees, legislation, regulations or restrictions of any government.
+                                </li>
+                                Jisc&apos;s performance under these Terms will be suspended for the period that such
+                                events set out above continues, and Jisc will have an extension of time to carry out
+                                their obligations under any contract for the duration of that period. Where possible,
+                                Jisc will use reasonable efforts to bring such event detailed above to a close or to
+                                find a solution.
+                            </ul>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-6 mt-6">
+                                    <span className="font-bold">Notices to you: </span> These Terms and the Privacy
+                                    Policy are drawn up in the English language. All written communications between you
+                                    and us relating to these Terms and the Privacy Policy will be given in English. We
+                                    will send any notices relating to any of the matters set out in these Terms to the
+                                    email address you use to access the Service or the Service.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">Governing law: </span> These Terms and any dispute in
+                                    relation to the materials available from the Service will be governed by laws of
+                                    England and Wales.
+                                </li>
+                                <li className="mb-6">
+                                    <span className="font-bold">Jurisdiction: </span> The English courts have exclusive
+                                    jurisdiction to settle any disputes which may arise out of or in connection with
+                                    these Terms or use of the Service and/or Service website
+                                </li>
+                            </ul>
+                        </div>
                         <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS: SCHEDULE 1 - DATA PROCESSING
                         </h1>
@@ -665,124 +663,130 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <br />
                                     means, in relation to any Processing under these Terms:
                                     <br />
-                                    <ol className="list-none">
-                                        <li className="ml-6">(a) the subject matter and duration of the Processing;</li>
-                                        <li className="ml-6">(b) the nature and purpose of the Processing;</li>
-                                        <li className="ml-6">(c) the type of Personal Data being Processed;</li>
-                                        <li className="ml-6">(d) the categories of Data Subjects; and</li>
-                                        <li className="ml-6">
-                                            (e) as applicable, the permitted recipients of the Personal Data;
-                                        </li>
-                                    </ol>
-                                    <br />
-                                    <span className="font-bold">Data Quality Requirements</span>
-                                    <br />
-                                    means those requirements set out in Article 5(1)(c) to (e) (inclusive) of the UK
-                                    GDPR;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Data Subject Request</span>
-                                    <br />
-                                    means an actual or purported subject access request or notice or complaint from (or
-                                    on behalf of) a Data Subject exercising their rights under the Data Protection
-                                    Legislation;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Data Subject</span>
-                                    <br />
-                                    has the meaning set out in the UK GDPR;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Freedom of Information Laws</span>
-                                    <br />
-                                    means the Freedom of Information Act 2000 (and any Scottish equivalent), the
-                                    Environmental Information Regulations 2004 (and any Scottish equivalent) and any
-                                    subordinate legislation made under this Act from time to time together with any
-                                    guidance and/or codes of practice issued by the UK Information Commissioner or
-                                    relevant Government Department in relation to such legislation;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">ICO</span>
-                                    <br />
-                                    means the UK Information Commissioner (including any successor or replacement);
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Permitted Country</span>
-                                    <br />
-                                    means a country, territory or jurisdiction that is either: (a) within the UK or the
-                                    European Economic Area; or (b) outside of the UK or European Economic Area but which
-                                    is the subject of an adequacy determination by the UK Secretary of State or the
-                                    European Commission (as applicable);
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Permitted Purpose</span>
-                                    <br />
-                                    for Jisc to provide the Service;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Personal Data</span>
-                                    <br />
-                                    has the meaning set out in the UK GDPR;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Personal Data Breach</span>
-                                    <br />
-                                    has the meaning set out in the UK GDPR (where the Personal Data directly affected by
-                                    the breach of security is that described in the Data Protection Particulars) and,
-                                    for the avoidance of doubt, includes a breach of Clause 4.1.3;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Personnel</span>
-                                    <br />
-                                    means all persons engaged or employed from time to time by Jisc in connection with
-                                    these Terms, including employees, consultants, contractors and permitted agents;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Processing</span>
-                                    <br />
-                                    has the meaning set out in the UK GDPR (and{' '}
-                                    <span className="font-bold">Process and Processed</span> shall be construed
-                                    accordingly);
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Processor</span>
-                                    <br />
-                                    has the meaning set out in the UK GDPR;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Regulator</span>
-                                    <br />
-                                    means the ICO and any other independent public authority which has jurisdiction over
-                                    a Party, including any regulator or supervisory authority which is responsible for
-                                    the monitoring and application of the Data Protection Legislation
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Regulator Correspondence</span>
-                                    <br />
-                                    means any correspondence from a Regulator in relation to the Processing of the
-                                    Personal Data in the User Content under or in connection with these Terms;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Security Requirements</span>
-                                    <br />
-                                    means the requirements regarding the security of the Personal Data, as set out in
-                                    the Data Protection Legislation (including, in particular, the measures set out in
-                                    Article 32(1) of the UK GDPR (taking due account of the matters described in Article
-                                    32(2) of the UK GDPR)) as applicable;
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">Third Party Request</span>
-                                    <br />
-                                    means a written request from any third party for disclosure of the Personal Data
-                                    where compliance with such request is required or purported to be required by law or
-                                    regulation; and
-                                    <br />
-                                    <br />
-                                    <span className="font-bold">User Content</span>
-                                    <br />
-                                    has the meaning as set out in Section 5 of the Terms;
-                                    <br />
-                                    <br />
+                                    <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                                        <ol className="list-none">
+                                            <li className="ml-6">
+                                                (a) the subject matter and duration of the Processing;
+                                            </li>
+                                            <li className="ml-6">(b) the nature and purpose of the Processing;</li>
+                                            <li className="ml-6">(c) the type of Personal Data being Processed;</li>
+                                            <li className="ml-6">(d) the categories of Data Subjects; and</li>
+                                            <li className="ml-6">
+                                                (e) as applicable, the permitted recipients of the Personal Data;
+                                            </li>
+                                        </ol>
+                                        <br />
+                                        <span className="font-bold">Data Quality Requirements</span>
+                                        <br />
+                                        means those requirements set out in Article 5(1)(c) to (e) (inclusive) of the UK
+                                        GDPR;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Data Subject Request</span>
+                                        <br />
+                                        means an actual or purported subject access request or notice or complaint from
+                                        (or on behalf of) a Data Subject exercising their rights under the Data
+                                        Protection Legislation;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Data Subject</span>
+                                        <br />
+                                        has the meaning set out in the UK GDPR;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Freedom of Information Laws</span>
+                                        <br />
+                                        means the Freedom of Information Act 2000 (and any Scottish equivalent), the
+                                        Environmental Information Regulations 2004 (and any Scottish equivalent) and any
+                                        subordinate legislation made under this Act from time to time together with any
+                                        guidance and/or codes of practice issued by the UK Information Commissioner or
+                                        relevant Government Department in relation to such legislation;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">ICO</span>
+                                        <br />
+                                        means the UK Information Commissioner (including any successor or replacement);
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Permitted Country</span>
+                                        <br />
+                                        means a country, territory or jurisdiction that is either: (a) within the UK or
+                                        the European Economic Area; or (b) outside of the UK or European Economic Area
+                                        but which is the subject of an adequacy determination by the UK Secretary of
+                                        State or the European Commission (as applicable);
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Permitted Purpose</span>
+                                        <br />
+                                        for Jisc to provide the Service;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Personal Data</span>
+                                        <br />
+                                        has the meaning set out in the UK GDPR;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Personal Data Breach</span>
+                                        <br />
+                                        has the meaning set out in the UK GDPR (where the Personal Data directly
+                                        affected by the breach of security is that described in the Data Protection
+                                        Particulars) and, for the avoidance of doubt, includes a breach of Clause 4.1.3;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Personnel</span>
+                                        <br />
+                                        means all persons engaged or employed from time to time by Jisc in connection
+                                        with these Terms, including employees, consultants, contractors and permitted
+                                        agents;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Processing</span>
+                                        <br />
+                                        has the meaning set out in the UK GDPR (and{' '}
+                                        <span className="font-bold">Process and Processed</span> shall be construed
+                                        accordingly);
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Processor</span>
+                                        <br />
+                                        has the meaning set out in the UK GDPR;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Regulator</span>
+                                        <br />
+                                        means the ICO and any other independent public authority which has jurisdiction
+                                        over a Party, including any regulator or supervisory authority which is
+                                        responsible for the monitoring and application of the Data Protection
+                                        Legislation
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Regulator Correspondence</span>
+                                        <br />
+                                        means any correspondence from a Regulator in relation to the Processing of the
+                                        Personal Data in the User Content under or in connection with these Terms;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Security Requirements</span>
+                                        <br />
+                                        means the requirements regarding the security of the Personal Data, as set out
+                                        in the Data Protection Legislation (including, in particular, the measures set
+                                        out in Article 32(1) of the UK GDPR (taking due account of the matters described
+                                        in Article 32(2) of the UK GDPR)) as applicable;
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">Third Party Request</span>
+                                        <br />
+                                        means a written request from any third party for disclosure of the Personal Data
+                                        where compliance with such request is required or purported to be required by
+                                        law or regulation; and
+                                        <br />
+                                        <br />
+                                        <span className="font-bold">User Content</span>
+                                        <br />
+                                        has the meaning as set out in Section 5 of the Terms;
+                                        <br />
+                                        <br />
+                                    </div>
                                 </div>
                             </div>
                         </StandardText>
