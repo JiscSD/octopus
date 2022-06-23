@@ -17,7 +17,7 @@ export const create = async (publicationId: string, data: I.CreateAffiliationReq
 };
 
 export const destroy = async (publicationId: string, affiliationId: string) => {
-    const affiliation = await client.prisma.affiliations.delete({
+    const affiliation = await client.prisma.affiliations.deleteMany({
         where: {
             publicationId,
             id: affiliationId
