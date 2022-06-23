@@ -453,7 +453,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {!!showProblems && (
                         <Components.PublicationContentSection
                             id="problems"
-                            title={`Problems created from this ${Helpers.formatPublicationType(publicationData.type)}`}
+                            title={`Problem statements branching from this ${Helpers.formatPublicationType(
+                                publicationData.type
+                            )}`}
                             hasBreak
                         >
                             <Components.List ordered={false}>
