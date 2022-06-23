@@ -178,12 +178,12 @@ const AimsData: JumpTo[] = [
 ];
 
 const CategorySidebar: React.FC<SidebarProps> = (props): JSX.Element => (
-    <div className="sticky top-16 space-y-2">
+    <div className="sticky top-16 space-y-2 border-l border-l-teal-200 pl-4">
         {props.jumpToList.map((jumpTo: JumpTo) => (
             <a
                 key={jumpTo.href}
                 href={`#${jumpTo.href}`}
-                className="mb-0.5 block w-fit rounded border-transparent py-0.5 text-lg text-grey-800 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
+                className="mb-0.5 block w-fit rounded border-transparent py-0.5 text-sm text-grey-800 outline-0 transition-colors duration-500 hover:text-teal-400 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
             >
                 {jumpTo.title}
             </a>
@@ -217,7 +217,7 @@ const OctopusAims: NextPage = (): React.ReactElement => (
                 </aside>
                 <div className="pt-14 lg:col-span-6 lg:pt-0">
                     {AimsData.map((content) => (
-                        <div key={content.href} id={content.href} className="mx-auto pt-4 lg:w-10/12">
+                        <div key={content.href} id={content.href} className="mx-auto lg:w-10/12">
                             <>
                                 <h2 className="my-8 flex space-x-1 font-montserrat text-3xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100">
                                     {content.title}

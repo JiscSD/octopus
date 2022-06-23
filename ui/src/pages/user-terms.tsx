@@ -32,9 +32,9 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
 
 const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
     return (
-        <span className="text-l mx-auto mb-5 block font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
+        <p className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
             {props.children}
-        </span>
+        </p>
     );
 };
 
@@ -51,7 +51,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
             <PageSection>
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                        <h1 className="mb-5 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
+                        <h1 className="mb-10 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
                             Octopus platform user terms
                         </h1>
                         <StandardText>

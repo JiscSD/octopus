@@ -54,6 +54,9 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
                         <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">FAQs</h3>
                     </Components.Link>
+                    <Components.Link href={Config.urls.getInvolved.path} className="mb-1 block max-w-fit p-1">
+                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Get involved</h3>
+                    </Components.Link>
                 </div>
                 {/** Links */}
                 <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">

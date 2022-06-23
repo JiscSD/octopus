@@ -130,13 +130,13 @@ const About: NextPage = (): React.ReactElement => (
                             <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Do you feel like these principles align with your own?
                             </h2>
-                            <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
+                            <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
                                 You can help to support Octopus by joining our user community.
-                            </h3>
+                            </p>
                             <Components.Button
+                                title="Learn more about getting involved."
                                 link
-                                href="https://www.jisc.ac.uk/get-involved/octopus-user-community"
-                                title="Join our user community"
+                                href={Config.urls.getInvolved.path}
                                 iconPosition="RIGHT"
                                 icon={
                                     <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
