@@ -67,6 +67,9 @@ const createPublicationSchema: I.Schema = {
         },
         fundersStatement: {
             type: 'string'
+        },
+        affiliationStatement: {
+            type: 'string'
         }
     },
     required: ['type', 'title'],

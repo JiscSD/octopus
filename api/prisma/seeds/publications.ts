@@ -149,6 +149,15 @@ const publicationSeeds = [
                 link: 'https://example.com'
             }
         },
+        affiliations: {
+            create: {
+                id: 'publication-problem-draft-affiliation',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
         coAuthors: {
             create: [
                 {

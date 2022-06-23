@@ -66,6 +66,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             language: store.language,
             conflictOfInterestStatus: store.conflictOfInterestStatus,
             conflictOfInterestText: store.conflictOfInterestText,
+            affiliationStatement: store.affiliationsStatement,
             fundersStatement: store.funderStatement
         };
 

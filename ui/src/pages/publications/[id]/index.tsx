@@ -144,7 +144,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { title: 'Main text', href: 'main-text' },
         ...list,
         { title: 'Funders', href: 'funders' },
-        { title: 'Conflict of interest', href: 'coi' }
+        { title: 'Conflict of interest', href: 'coi' },
+        { title: 'Affiliated organisations', href: 'affiliations' }
     ];
 
     const currentCoAuthor = React.useMemo(
@@ -614,11 +615,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     This {Helpers.formatPublicationType(publicationData.type)} has the following sources
                                     of funding:
                                 </p>
-                                <ul>
+                                <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {publicationData.funders?.map((funder) => {
                                         return (
                                             <li key={funder.id} className="ml-7 mt-1 list-disc">
-                                                <a href={funder.link} className=" text-teal-600 hover:underline">
+                                                <a
+                                                    href={funder.link}
+                                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                                >
                                                     {funder.name}
                                                 </a>{' '}
                                                 - {funder.city}, {funder.country}
@@ -628,6 +632,41 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </ul>
                                 <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {publicationData.fundersStatement}
+                                </p>
+                            </>
+                        )}
+                    </Components.PublicationContentSection>
+
+                    {/* Affiliated Organisations section */}
+                    <Components.PublicationContentSection id="affiliations" title="Affiliated Organisations" hasBreak>
+                        {!publicationData.affiliations.length ? (
+                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                No affiliated organisations have been specified for this{' '}
+                                {Helpers.formatPublicationType(publicationData.type)}.
+                            </p>
+                        ) : (
+                            <>
+                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    This {Helpers.formatPublicationType(publicationData.type)} has the following
+                                    affiliated organisations:
+                                </p>
+                                <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {publicationData.affiliations.map((affiliation) => {
+                                        return (
+                                            <li key={affiliation.id} className="ml-7 mt-1 list-disc">
+                                                <a
+                                                    href={affiliation.link}
+                                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                                >
+                                                    {affiliation.name}
+                                                </a>{' '}
+                                                - {affiliation.city}, {affiliation.country}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    {publicationData.affiliationStatement}
                                 </p>
                             </>
                         )}
