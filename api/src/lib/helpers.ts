@@ -241,3 +241,16 @@ export const OctopusInformation: I.OctopusInformation = {
         'zu'
     ]
 };
+
+export const formatFlagType = (flagType: I.FlagCategory) => {
+    const types = {
+        PLAGIARISM: 'Plagiarism',
+        ETHICAL_ISSUES: 'Ethical issues',
+        MISREPRESENTATION: 'Misrepresentation',
+        UNDECLARED_IMAGE_MANIPULATION: 'Undeclared image manipulation',
+        COPYRIGHT: 'Copyright',
+        INAPPROPRIATE: 'Inappropriate'
+    };
+
+    return types[flagType];
+};
