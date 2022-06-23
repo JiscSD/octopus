@@ -111,6 +111,13 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}
                   method: delete
                   cors: true
+    getPublicationLinks:
+        handler: src/components/publication/routes.getPublicationLinks
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/links
+                  method: get
+                  cors: true
     # Users
     getUsers:
         handler: src/components/user/routes.getAll

@@ -98,8 +98,8 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                     name: affiliation.name,
                     nameIdentifiers: [
                         {
-                            nameIdentifier: affiliation.ror,
-                            nameIdentifierScheme: 'ROR'
+                            nameIdentifier: affiliation.ror || affiliation.link,
+                            nameIdentifierScheme: affiliation.ror ? 'ROR' : 'Other'
                         }
                     ]
                 })),

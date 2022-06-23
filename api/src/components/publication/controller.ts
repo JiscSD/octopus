@@ -1,9 +1,9 @@
-import * as response from 'lib/response';
+import htmlToText from 'html-to-text';
+import * as I from 'interface';
 import * as helpers from 'lib/helpers';
+import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as ratingService from 'rating/service';
-import * as I from 'interface';
-import htmlToText from 'html-to-text';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -270,7 +270,22 @@ export const updateStatus = async (
 
         return response.json(200, updatedPublication);
     } catch (err) {
-        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getLinksForPublication = async (
+    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const data = await publicationService.getLinksForPublication(event.pathParameters.id);
+
+        if (!data.rootPublication || data.rootPublication.currentStatus !== 'LIVE') {
+            return response.json(404, { message: 'Not found.' });
+        }
+
+        return response.json(200, data);
+    } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

@@ -1,18 +1,18 @@
-import React from 'react';
-import useSWR, { useSWRConfig } from 'swr';
-import parse from 'html-react-parser';
-import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
+import parse from 'html-react-parser';
 import jwt from 'jsonwebtoken';
+import Head from 'next/head';
+import React from 'react';
+import useSWR from 'swr';
 
-import * as Interfaces from '@interfaces';
+import * as api from '@api';
 import * as Components from '@components';
+import * as Config from '@config';
 import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
-import * as Config from '@config';
 import * as Types from '@types';
-import * as api from '@api';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -25,11 +25,11 @@ type SidebarCardProps = {
 const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
     <div className="w-full space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 dark:bg-grey-900">
         <Components.PublicationSidebarCardGeneral publication={props.publication} />
-        <Components.PublicationSidebarCardRatings
+        {/* <Components.PublicationSidebarCardRatings
             id={props.publication.id}
             type={props.publication.type}
             ratings={props.publication.ratings}
-        />
+        /> */}
         <Components.PublicationSidebarCardActions publication={props.publication} />
         <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
     </div>
@@ -107,7 +107,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         `${Config.endpoints.publications}/${props.publicationId}`,
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
-    // const { mutate } = useSWRConfig();
 
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
@@ -239,7 +238,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 cancelButtonText="No, changes are needed"
                 title="Do you approve this publication?"
             />
-            <Layouts.Publication fixedHeader={false}>
+
+            <Layouts.Publication
+                fixedHeader={false}
+                publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
+            >
                 <section className="col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
                         <Components.Alert
@@ -344,7 +347,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <p className="mb-8">
+                        <p className="lg:mb-8">
                             <Components.Link
                                 href={`${Config.urls.viewUser.path}/${publicationData.user?.id}`}
                                 className="2 text-normal w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
@@ -683,7 +686,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </p>
                     </Components.PublicationContentSection>
                 </section>
-
                 <aside className="relative col-span-3 hidden xl:block">
                     <div className="sticky top-12 space-y-8">
                         <SidebarCard publication={publicationData} sectionList={sectionList} />

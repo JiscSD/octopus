@@ -385,5 +385,19 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "1d22c1c1-1652-4aa9-baa2-c19e007998a7",
+    "colId": "a791b042-4420-4b0e-bbf9-3681bfc648d9",
+    "containerId": "88c0f928-30e9-470d-a972-cde912ec77c0",
+    "name": "Get publication links",
+    "url": "{{host}}/{{version}}/publications/publication-user-2-hypothesis-1-live/links",
+    "method": "GET",
+    "sortNum": 210000,
+    "created": "2022-05-30T14:04:25.833Z",
+    "modified": "2022-05-31T09:27:28.340Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]
