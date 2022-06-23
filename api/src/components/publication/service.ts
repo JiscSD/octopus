@@ -1,6 +1,5 @@
-import * as client from 'lib/client';
-
 import * as I from 'interface';
+import * as client from 'lib/client';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -429,4 +428,124 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         isReady = true;
 
     return isReady;
+};
+
+export const getLinksForPublication = async (id: string) => {
+    const rootPublication = await get(id);
+
+    const linkedToPublications = await client.prisma.$queryRaw`
+        WITH RECURSIVE to_left AS (
+            SELECT "Links"."publicationFrom",
+                   "Links"."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pto".title "publicationToTitle",
+                   "pto"."publishedDate" "publicationToPublishedDate",
+                   "pto"."currentStatus" "publicationToCurrentStatus",
+                   "pto_user"."firstName" "publicationToFirstName",
+                   "pto_user"."lastName" "publicationToLastName"
+
+              FROM "Links"
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "Links"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "Links"."publicationTo"
+
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
+
+            WHERE "Links"."publicationFrom" = ${id}
+
+            UNION ALL
+
+            SELECT l."publicationFrom",
+                   l."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pto".title "publicationToTitle",
+                   "pto"."publishedDate" "publicationToPublishedDate",
+                   "pto"."currentStatus" "publicationToCurrentStatus",
+                   "pto_user"."firstName" "publicationToFirstName",
+                   "pto_user"."lastName" "publicationToLastName"
+              FROM "Links" l
+              JOIN to_left
+              ON to_left."publicationTo" = l."publicationFrom"
+
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "l"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "l"."publicationTo"
+
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
+        )
+        SELECT *
+          FROM to_left
+         WHERE "publicationToType" != "publicationFromType"
+           AND "publicationToType" != ${rootPublication?.type}
+           AND "publicationToCurrentStatus" = 'LIVE';
+    `;
+
+    const linkedFromPublications = await client.prisma.$queryRaw`
+        WITH RECURSIVE to_right AS (
+            SELECT "Links"."publicationFrom",
+                   "Links"."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pfrom".title "publicationFromTitle",
+                   "pfrom"."publishedDate" "publicationFromPublishedDate",
+                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
+                   "pfrom_user"."firstName" "publicationFromFirstName",
+                   "pfrom_user"."lastName" "publicationFromLastName"
+
+              FROM "Links"
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "Links"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "Links"."publicationTo"
+
+              LEFT JOIN "User" AS pfrom_user
+              ON "pfrom"."createdBy" = "pfrom_user"."id"
+
+            WHERE "Links"."publicationTo" = ${id}
+
+            UNION ALL
+
+            SELECT l."publicationFrom",
+                   l."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pfrom".title "publicationFromTitle",
+                   "pfrom"."publishedDate" "publicationFromPublishedDate",
+                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
+                   "pfrom_user"."firstName" "publicationFromFirstName",
+                   "pfrom_user"."lastName" "publicationFromLastName"
+              FROM "Links" l
+              JOIN to_right
+              ON to_right."publicationFrom" = l."publicationTo"
+
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "l"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "l"."publicationTo"
+
+              LEFT JOIN "User" AS pfrom_user
+              ON "pfrom"."createdBy" = "pfrom_user"."id"
+        )
+        SELECT *
+          FROM to_right
+         WHERE "publicationToType" != "publicationFromType"
+           AND "publicationFromType" != ${rootPublication?.type}
+           AND "publicationFromCurrentStatus" = 'LIVE';
+    `;
+
+    return {
+        rootPublication,
+        linkedFromPublications,
+        linkedToPublications
+    };
 };

@@ -37,3 +37,8 @@ export const updateStatus = middy(publicationController.updateStatus)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(publicationSchema.updateStatus, 'pathParameters'));
+
+export const getPublicationLinks = middy(publicationController.getLinksForPublication)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication(true));

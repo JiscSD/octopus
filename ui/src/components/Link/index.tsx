@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // Disabled due to NextLink using an anchor with an onClick
 /* eslint-disable jsx-a11y/click-events-have-key-events */ // Disabled due to having an onClick & not a key event listener
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 
 type Props = {
     href: string;
