@@ -147,7 +147,7 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             </div>
             <div class="footer">
                 <div class="footer-logo">
-                    <a href=${baseURL}" style='text-decoration: none;'>
+                    <a href="${baseURL}" style='text-decoration: none;'>
                         <img src="https://science-octopus.org/public/octopus.svg">
                     </a>
                     <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
@@ -191,7 +191,8 @@ export const send = async (options: I.EmailSendOptions) => {
 /* Templates */
 
 type NotifyCoAuthor = {
-    userName: string;
+    userFirstName: string;
+    userLastName: string | null;
     coAuthor: string;
     publicationId: string | null;
     publicationTitle: string | null;
@@ -200,7 +201,7 @@ type NotifyCoAuthor = {
 
 export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     const html = `
-    <p>${options.userName} has added you as an author of the following publication on Octopus:</p>
+    <p>${options.userFirstName} ${options?.userLastName} has added you as an author of the following publication on Octopus:</p>
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
@@ -217,7 +218,7 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     after the publication date.</p>
     `;
 
-    const text = `You have been added as a co-author to the following publication: ${options.publicationTitle}. You were added by ${options.userFirstName} ${options.userLastName}. To approve that you are the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false.`;
+    const text = `You have been added as a co-author to the following publication: ${options.publicationTitle}. You were added by ${options.userFirstName} ${options?.userLastName}. To approve that you are the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false.`;
 
     await send({
         html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),
@@ -230,12 +231,13 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
 type VerificationCode = {
     to: string;
     code: string;
-    userName: string;
+    userFirstName: string;
+    userLastName: string | null;
 };
 
 export const verificationCode = async (options: VerificationCode) => {
     const html = `
-    <p>Hi ${options.userName},</p>
+    <p>Hi ${options.userFirstName} ${options?.userLastName},</p>
     <br>
     <p>Welcome to Octopus!</p>
     <br>

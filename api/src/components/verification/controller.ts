@@ -25,7 +25,8 @@ export const requestCode = async (
         await email.verificationCode({
             to: event.queryStringParameters.email,
             code,
-            userName: `${event.user?.firstName} ${event.user?.lastName || ''}`
+            userFirstName: event.user.firstName,
+            userLastName: event.user.lastName
         });
 
         return response.json(200, { message: 'OK' });

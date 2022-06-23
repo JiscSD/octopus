@@ -152,7 +152,7 @@ export interface CreateLinkBody {
  */
 export interface User {
     id: string;
-    email: string;
+    email: string | null;
     createdAt: Date;
     firstName: string;
     lastName: string | null;

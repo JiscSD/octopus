@@ -76,10 +76,10 @@ export const createFlag = async (
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
-        if (publication?.user.email) {
+        if (publication?.user?.email) {
             emailPromises.push(
                 email.newRedFlagAuthorNotification({
-                    to: publication.user.email || '',
+                    to: publication.user.email,
                     publicationName: publication.title,
                     publicationId: publication.id,
                     flagId: flag.id,
@@ -91,14 +91,19 @@ export const createFlag = async (
         }
 
         // send email to the creator of the flag
-        emailPromises.push(
-            email.newRedFlagCreatorNotification({
-                to: event.user.email,
-                publicationName: publication.title,
-                publicationId: publication.id,
-                flagId: flag.id
-            })
-        );
+        if (event.user.email) {
+            emailPromises.push(
+                email.newRedFlagCreatorNotification({
+                    to: event.user.email,
+                    publicationName: publication.title,
+                    publicationId: publication.id,
+                    flagId: flag.id
+                })
+            );
+        }
+
+        // Send off notifications
+        await Promise.all(emailPromises);
 
         return response.json(200, flag);
     } catch (err) {
@@ -219,7 +224,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
-        if (publication?.user.email) {
+        if (publication?.user?.email) {
             emailPromises.push(
                 email.resolveRedFlagAuthorNotification({
                     to: publication.user.email,
@@ -232,14 +237,19 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         }
 
         // send email to the creator of the flag
-        emailPromises.push(
-            email.resolveRedFlagCreatorNotification({
-                to: event.user.email,
-                publicationName: publication?.title || '',
-                publicationId: publication?.id || '',
-                flagId: flag.id
-            })
-        );
+        if (event.user.email) {
+            emailPromises.push(
+                email.resolveRedFlagCreatorNotification({
+                    to: event.user.email,
+                    publicationName: publication?.title || '',
+                    publicationId: publication?.id || '',
+                    flagId: flag.id
+                })
+            );
+        }
+
+        // Send off notifications
+        await Promise.all(emailPromises);
 
         return response.json(200, resolveFlag);
     } catch (err) {
