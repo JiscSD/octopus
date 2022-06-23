@@ -101,12 +101,18 @@ let store: any = (set: (params: any) => void) => ({
     funders: [],
     updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
 
+    // Affiliations
+    affiliations: [],
+    updateAffiliations: (affiliations: Interfaces.Affiliations[]) => set(() => ({ affiliations })),
+    affiliationsStatement: '',
+    updateAffiliationsStatement: (affiliationsStatement: string) => set(() => ({ affiliationsStatement })),
+
     // Self declaration
     selfDeclaration: false,
     updateSelfDeclaration: (selfDeclaration: boolean) => set(() => ({ selfDeclaration }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = devtools(store);
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = devtools(store);
 
 const usePublicationCreationStore = create<Types.PublicationCreationStoreType>(store);
 

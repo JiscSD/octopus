@@ -1,21 +1,21 @@
 let host: string;
 let mediaBucket: string;
-const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_ENV}`;
+const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}`;
 let orcidAppiID: string;
 
-switch (process.env.NEXT_PUBLIC_ENV) {
+switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     case 'local':
         host = 'https://localhost:3001';
         mediaBucket = `http://localhost:4566/${bucketName}`;
         orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
         break;
-    case 'prod':
+    case 'main':
         host = 'https://octopus.ac';
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = '';
         break;
     default:
-        host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
+        host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
         orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
 }
@@ -204,6 +204,41 @@ const urls = {
         description: 'Find out more about the accessibility of the Octopus platform, and how to report issues.',
         keywords: ['open source', 'accessibility', 'publishing platform'],
         canonical: `${base.host}/accessibility`
+    },
+    authorGuide: {
+        path: '/author-guide',
+        title: 'Octopus Author Guide',
+        description: 'Step-by-step guide on how to create a new publication on Octopus.',
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/author-guide`
+    },
+    userTerms: {
+        path: '/user-terms',
+        title: 'Octopus User Terms',
+        description: "Octopus's user terms and conditions.",
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/user-terms`
+    },
+    getInvolved: {
+        path: '/get-involved',
+        title: 'Get involved with Octopus',
+        description: 'Find out how to participate directly in the Octopus project, and view our development roadmap.',
+        keywords: ['User community', 'platform development', 'user participation', 'Octopus publishing'],
+        canonical: `${base.host}/get-involved`
+    },
+    octopusAims: {
+        path: '/octopus-aims',
+        title: 'Octopus: aims and priorities',
+        description:
+            'Learn more about the aims and priorities of the Octopus platform, which is designed to positively disrupt research culture.',
+        keywords: [
+            'Octopus publishing',
+            'research culture',
+            'research assessment',
+            'open access publishing',
+            'open science'
+        ],
+        canonical: `${base.host}/octopus-aims`
     },
     404: {
         title: `404 Not Found - ${base.title}`

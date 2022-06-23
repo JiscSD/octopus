@@ -84,3 +84,4 @@ export { default as UserWorksTable } from './Users/WorksTable';
 export { default as HTMLVideo } from './Video/HTML';
 export { default as YouTubeVideo } from './Video/YouTube';
 export { default as VisualPublicationFlow } from './VisualPublicationFlow';
+export { default as RORForm } from './RORForm';

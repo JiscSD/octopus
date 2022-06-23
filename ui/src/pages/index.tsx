@@ -43,7 +43,7 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-
+    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
@@ -80,11 +80,8 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                                 onClick={(e) => toggleCmdPalette()}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
+                                <span className="mx-auto font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
                                     Quick search...
-                                </span>
-                                <span className="font-montserrat text-xs text-white-50 transition-colors duration-500 dark:text-grey-50">
-                                    {Helpers.setOSKey()}
                                 </span>
                             </button>
                         </div>
@@ -132,7 +129,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             content="Review our FAQs to find out more about how the platform works."
                             icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.faq.path}
-                            linkText="See FAQ's"
+                            linkText="See FAQs"
                         />
                     </div>
                 </section>

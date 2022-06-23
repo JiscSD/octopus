@@ -325,3 +325,17 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
                   method: delete
                   cors: true
+    createAffiliation:
+        handler: src/components/affiliations/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation
+                  method: post
+                  cors: true
+    deleteAffiliation:
+        handler: src/components/affiliations/routes.destroy
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
+                  method: delete
+                  cors: true
