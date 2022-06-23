@@ -269,6 +269,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                     message: 'Your red flag has now been saved.'
                 });
+
+                // Mutate original publication
+                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
             } else {
                 setError('You must provide a comment for this red flag.');
             }
