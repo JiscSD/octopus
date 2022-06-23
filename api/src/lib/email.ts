@@ -147,11 +147,11 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             </div>
             <div class="footer">
                 <div class="footer-logo">
-                    <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
-                        <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
-                    </a>
                     <a href=${baseURL}" style='text-decoration: none;'>
                         <img src="https://science-octopus.org/public/octopus.svg">
+                    </a>
+                    <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
+                        <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
                     </a>
                 </div>
                 <div class="footer-content">
@@ -165,6 +165,9 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
                     </p>
                     <p>0300 300 2212</p>
                     <p>Support hours: Mon - Fri 09:00 – 17:00 (UK time)</p>
+                    <p>
+                        <a href="${baseURL}/privacy">Privacy Notice</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -201,7 +204,7 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
-    <p>To <strong>confirm</strong> your involvement, and see a preview of the publication, click the button below:</p> 
+    <p>To <strong>confirm your involvement</strong>, and see a preview of the publication, click the button below:</p> 
     <br>
     <p style="text-align: center;"><a class="button" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am an author</a></p>
     <br>
@@ -240,14 +243,14 @@ export const verificationCode = async (options: VerificationCode) => {
     <br>
     <p class="code">${options.code}</p>
     <br>
+    <p>This email address will be used to deliver the Octopus service, as described in our <a href="${baseURL}/privacy">privacy policy</a>. You can update your 
+    email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
+    us at <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
+    <br>
     <p>Your account was created using your <a href="https://orcid.org/">ORCID identifier</a>. By creating an account, you have given
     permission for us to use your ORCID credentials to log you into the Octopus platform, and to display information from your ORCID 
     account, including name, affiliation, and existing works, on your Octopus profile page. If any information on your profile appears 
     incorrect or out of date, please update it in ORCID.</p>
-    <br>
-    <p>This email address will be used to deliver the Octopus service, as described in our <a href="${baseURL}/privacy">privacy policy</a>. You can update your 
-    email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
-    us at <a href='mailto:help@jisc.ac.uk'>help@jisc.ac.uk</a>.</p>
     `;
 
     const text = `Please enter the following code to verify your email address: ${options.code}`;

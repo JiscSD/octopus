@@ -221,7 +221,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
 
         // send email to the creator of the flag
         await email.resolveRedFlagCreatorNotification({
-            to: publication?.user.email || '',
+            to: event.user.email || '',
             publicationName: publication?.title || '',
             publicationId: publication?.id || '',
             flagId: flag.id
