@@ -92,6 +92,17 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                 ],
                 publisher: 'Octopus',
                 publicationYear: publication?.createdAt.getFullYear(),
+                contributors: publication?.affiliations.map((affiliation) => ({
+                    contributorType: 'Other',
+                    nameType: 'Organizational',
+                    name: affiliation.name,
+                    nameIdentifiers: [
+                        {
+                            nameIdentifier: affiliation.ror,
+                            nameIdentifierScheme: 'ROR'
+                        }
+                    ]
+                })),
                 language: 'en',
                 types: {
                     resourceTypeGeneral: 'Other',

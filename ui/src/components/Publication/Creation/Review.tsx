@@ -34,8 +34,8 @@ const Review: React.FC = (): React.ReactElement => {
         <>
             <Components.PublicationCreationStepTitle text="Review &#38; publish" />
             <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
-                Your publication will go live as soon as you select Publish. At this point the publication will be
-                date-stamped and a DOI created, establishing the work as yours.
+                Your publication will go live as soon as you select Publish. At this point, the publication will be
+                date-stamped and the DOI updated to be findable, which establishes the work as yours.
             </p>
             <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
                 It will appear publicly on your personal page for other researchers, institutions and funders to see,
