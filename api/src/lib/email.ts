@@ -294,7 +294,7 @@ export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNoti
 
     const text = `Your publication '${options.publicationName}' has been red flagged by ${options.submitter}. Flag type: ${options.type}. Flag message: ${options.flagReason}.`;
 
-    await send({
+    return send({
         html: standardHTMLEmailTemplate('Your publication has been red flagged', html),
         text,
         to: options.to,
@@ -324,7 +324,7 @@ export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNo
 
     const text = `You have successfully red flagged this publication. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
-    await send({
+    return send({
         html: standardHTMLEmailTemplate('Red flag created', html),
         text,
         to: options.to,
@@ -391,7 +391,7 @@ export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAu
 
     const text = `A red flag has been resolved for '${options.publicationName}'. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
-    await send({
+    return send({
         html: standardHTMLEmailTemplate('Red flag resolved', html),
         text,
         to: options.to,
@@ -419,7 +419,7 @@ export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagC
 
     const text = `Thank you for resolving the red flag you created for '${options.publicationName}'. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
-    await send({
+    return send({
         html: standardHTMLEmailTemplate('Red flag resolved', html),
         text,
         to: options.to,

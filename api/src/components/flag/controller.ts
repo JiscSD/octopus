@@ -75,23 +75,30 @@ export const createFlag = async (
         );
 
         // send email to the author aka the creator of the flagged publication
-        await email.newRedFlagAuthorNotification({
-            to: publication.user.email || '',
-            publicationName: publication.title,
-            publicationId: publication.id,
-            flagId: flag.id,
-            type: helpers.formatFlagType(event.body.category),
-            submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
-            flagReason: event.body.comment
-        });
+        const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+        if (publication?.user.email) {
+            emailPromises.push(
+                email.newRedFlagAuthorNotification({
+                    to: publication.user.email || '',
+                    publicationName: publication.title,
+                    publicationId: publication.id,
+                    flagId: flag.id,
+                    type: helpers.formatFlagType(event.body.category),
+                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
+                    flagReason: event.body.comment
+                })
+            );
+        }
 
         // send email to the creator of the flag
-        await email.newRedFlagCreatorNotification({
-            to: event.user.email,
-            publicationName: publication.title,
-            publicationId: publication.id,
-            flagId: flag.id
-        });
+        emailPromises.push(
+            email.newRedFlagCreatorNotification({
+                to: event.user.email,
+                publicationName: publication.title,
+                publicationId: publication.id,
+                flagId: flag.id
+            })
+        );
 
         return response.json(200, flag);
     } catch (err) {
@@ -211,21 +218,28 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         const publication = await publicationService.get(flag.publicationId);
 
         // send email to the author aka the creator of the flagged publication
-        await email.resolveRedFlagAuthorNotification({
-            to: publication?.user.email || '',
-            publicationName: publication?.title || '',
-            publicationId: publication?.id || '',
-            flagId: flag.id,
-            type: helpers.formatFlagType(flag.category)
-        });
+        const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+        if (publication?.user.email) {
+            emailPromises.push(
+                email.resolveRedFlagAuthorNotification({
+                    to: publication.user.email,
+                    publicationName: publication?.title || '',
+                    publicationId: publication?.id || '',
+                    flagId: flag.id,
+                    type: helpers.formatFlagType(flag.category)
+                })
+            );
+        }
 
         // send email to the creator of the flag
-        await email.resolveRedFlagCreatorNotification({
-            to: event.user.email || '',
-            publicationName: publication?.title || '',
-            publicationId: publication?.id || '',
-            flagId: flag.id
-        });
+        emailPromises.push(
+            email.resolveRedFlagCreatorNotification({
+                to: event.user.email,
+                publicationName: publication?.title || '',
+                publicationId: publication?.id || '',
+                flagId: flag.id
+            })
+        );
 
         return response.json(200, resolveFlag);
     } catch (err) {
