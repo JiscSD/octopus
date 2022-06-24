@@ -78,11 +78,11 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 </span>
                 <Components.Link
                     href="#"
-                    ariaLabel={`DOI Link ${props.publication.doi}`}
-                    className="flex items-center  text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                    ariaLabel={`DOI link: https://doi.org/${props.publication.doi}`}
+                    className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
-                    <span>{props.publication.doi ?? 'Coming soon...'}</span>
+                    <span>https://doi.org/{props.publication.doi}</span>
                     <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>

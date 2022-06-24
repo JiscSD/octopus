@@ -1,0 +1,102 @@
+{
+    "data": {
+        "types": "doi",
+        "attributes": {
+            "event": "publish", // ONCE PUBLISHED, A DOI CANNOT BE DELETED!
+            "url": "https://int.octopus.ac/publications/10.82259/ehpy-0763",
+            "doi": "10.82259/ehpy-0763",
+            "identifiers": [
+                {
+                    "identifier": "https://doi.org/10.82259/ehpy-0763",
+                    "identifierType": "DOI"
+                }
+            ],
+            "creators": [
+                {
+                    "name": "Victoria Allen",
+                    "nameType": "Personal",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "0001",
+                            "nameIdentifierScheme": "ORCID",
+                            "schemeUri": "orcid.org"
+                        }
+                    ]
+                },
+                {
+                    "name": "co-author one",
+                    "nameType": "Personal",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "0001",
+                            "nameIdentifierScheme": "ORCID",
+                            "schemeUri": "orcid.org"
+                        }
+                    ]
+                }
+            ],
+            "titles": [
+                {
+                    "title": "What is the connection between human needs and sustainable development?",
+                    "lang": "en"
+                }
+            ],
+            "publisher": "Octopus",
+            "publicationYear": 2020,
+            "contributors": [
+                {
+                    "contributorType": "Other",
+                    "nameType": "Organizational",
+                    "name": "University of Manchester",
+                    "nameIdentifiers": [
+                        {
+                            "nameIdentifier": "https://ror.org/027m9bs27",
+                            "nameIdentifierScheme": "ROR"
+                        }
+                    ]
+                }
+            ],
+            "language": "en",
+            "types": {
+                "resourceTypeGeneral": "Other",
+                "resourceType": "Problem"
+            },
+            "relatedIdentifiers": [
+                // Reviews
+                {
+                    "relatedIdentifier": "10.82259/publication-user-3-peer-review-2-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Reviews"
+                },
+                // List of everything to the right in the publication chain
+                {
+                    "relatedIdentifier": "10.82259/publication-user-1-hypothesis-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                },
+                {
+                    "relatedIdentifier": "10.82259/publication-user-2-problem-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                },
+                {
+                    "relatedIdentifier": "10.82259/publication-user-6-hypothesis-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                },
+                {
+                    "relatedIdentifier": "10.82259/publication-user-7-problem-1-live",
+                    "relatedIdentifierType": "DOI",
+                    "relationType": "Continues"
+                }
+            ],
+            "fundingReferences": [
+                {
+                    "funderName": "University of Manchester",
+                    "funderIdentifier": "https://ror.org/027m9bs27",
+                    "funderIdentifierType": "ROR"
+                }
+            ]
+        }
+    }
+}

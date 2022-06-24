@@ -135,7 +135,9 @@ export const create = async (
             });
         }
 
-        const publication = await publicationService.create(event.body, event.user);
+        const doi = await helpers.createEmptyDOI();
+
+        const publication = await publicationService.create(event.body, event.user, doi);
 
         return response.json(201, publication);
     } catch (err) {
@@ -260,6 +262,11 @@ export const updateStatus = async (
             publishedDate: updatedPublication.publishedDate,
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
+
+        // Publication is live, so update the DOI
+        const res = await helpers.updateDOI(publication.doi, publication);
+        console.log(res);
+        // TODO:  Do we want to do anything with this response?
 
         return response.json(200, updatedPublication);
     } catch (err) {

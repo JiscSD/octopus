@@ -4,7 +4,7 @@ import * as client from 'lib/client';
 describe('Delete publications', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can delete their own DRAFT publication', async () => {

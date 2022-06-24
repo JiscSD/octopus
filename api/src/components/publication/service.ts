@@ -143,6 +143,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,
@@ -172,6 +173,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,
@@ -282,9 +284,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
     return publications;
 };
 
-export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
+export const create = async (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) => {
     const publication = await client.prisma.publication.create({
         data: {
+            id: doiResponse.data.attributes.suffix,
+            doi: doiResponse.data.attributes.doi,
             title: e.title,
             type: e.type,
             licence: e.licence,
@@ -401,10 +405,18 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
+client.prisma.publication.create({
+    data: {}
+});
+
+export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+    if (!publication) {
+        return false;
+    }
+
     let isReady = false;
 
-    // @ts-ignore This needs looking at, type mismatch between infered type from get method to what Prisma has
+    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
@@ -412,6 +424,7 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
     const isAttemptToLive = status === 'LIVE';
 
@@ -423,9 +436,11 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
+        coAuthorsAreVerified &&
         isAttemptToLive
-    )
+    ) {
         isReady = true;
+    }
 
     return isReady;
 };

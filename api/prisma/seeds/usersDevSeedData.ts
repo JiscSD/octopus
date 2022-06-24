@@ -232,6 +232,22 @@ const userSeeds = [
         email: 'test-user-25@jisc.ac.uk',
         locked: false,
         apiKey: '000000025'
+    },
+    {
+        id: 'test-user-26-co-author-1',
+        orcid: '0026',
+        firstName: 'Co-Author',
+        lastName: 'One',
+        locked: false,
+        apiKey: '000000026'
+    },
+    {
+        id: 'test-user-27-co-author-2',
+        orcid: '0027',
+        firstName: 'Co-Author',
+        lastName: 'Two',
+        locked: false,
+        apiKey: '000000027'
     }
 ];
 

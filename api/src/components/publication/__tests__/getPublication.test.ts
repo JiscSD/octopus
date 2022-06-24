@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('View individual publications', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User who created publication can see DRAFT publication', async () => {

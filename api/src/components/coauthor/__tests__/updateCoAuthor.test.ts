@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Update co-author status', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Co-author updates their status to true', async () => {

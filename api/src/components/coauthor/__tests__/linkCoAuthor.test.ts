@@ -4,7 +4,7 @@ import * as client from 'lib/client';
 describe('Link co-author', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Link a co-author to a publication (allow)', async () => {

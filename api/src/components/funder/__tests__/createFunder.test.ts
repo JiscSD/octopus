@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('create a funder', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can add a funder to their DRAFT publication', async () => {

@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Create publication', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Valid publication created by real user, status is correct too (200)', async () => {

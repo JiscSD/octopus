@@ -18,6 +18,7 @@ const IncompleteIcon = () => (
 const Review: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const type = Stores.usePublicationCreationStore((state) => state.type);
+    const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
     const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
     const licence = Stores.usePublicationCreationStore((state) => state.licence);
@@ -33,8 +34,8 @@ const Review: React.FC = (): React.ReactElement => {
         <>
             <Components.PublicationCreationStepTitle text="Review &#38; publish" />
             <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
-                Your publication will go live as soon as you select Publish. At this point the publication will be
-                date-stamped and a DOI created, establishing the work as yours.
+                Your publication will go live as soon as you select Publish. At this point, the publication will be
+                date-stamped and the DOI updated to be findable, which establishes the work as yours.
             </p>
             <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
                 It will appear publicly on your personal page for other researchers, institutions and funders to see,
@@ -51,12 +52,21 @@ const Review: React.FC = (): React.ReactElement => {
                     </span>
                     {title.length ? <CompletedIcon /> : <IncompleteIcon />}
                 </div>
+
                 <div className="relative">
                     <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Links
                     </span>
                     {linkedTo.length ? <CompletedIcon /> : <IncompleteIcon />}
                 </div>
+
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Co-authors
+                    </span>
+                    {coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor) ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
+
                 <div className="relative">
                     <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Creative commons licence

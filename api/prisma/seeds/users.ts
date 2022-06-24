@@ -44,6 +44,22 @@ const userSeeds = [
         locked: false,
         apiKey: '4321',
         role: 'SUPER_USER'
+    },
+    {
+        id: 'test-user-5',
+        orcid: '0026',
+        firstName: 'Co-Author',
+        lastName: 'One',
+        locked: false,
+        apiKey: '000000005'
+    },
+    {
+        id: 'test-user-6',
+        orcid: '0027',
+        firstName: 'Co-Author',
+        lastName: 'Two',
+        locked: false,
+        apiKey: '000000006'
     }
 ];
 

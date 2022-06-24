@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('delete a funder', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can delete a funder from a DRAFT publication', async () => {

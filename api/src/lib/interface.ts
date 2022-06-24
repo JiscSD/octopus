@@ -4,6 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
+
+import * as publicationService from 'publication/service';
 export {
     ImageExtension,
     Languages,
@@ -137,6 +139,8 @@ export interface PublicationFilters {
     dateFrom?: string;
     dateTo?: string;
 }
+
+export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
 
 /**
  * @description Links
@@ -501,6 +505,18 @@ export interface GetFlagsByUserID {
 
 export interface GetFlagsByPublicationID {
     id: string;
+}
+
+export interface DOIResponse {
+    data: {
+        id: string;
+        type: 'dois';
+        attributes: {
+            doi: string;
+            prefix: string;
+            suffix: string;
+        };
+    };
 }
 
 //affiliations

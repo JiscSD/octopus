@@ -4,7 +4,7 @@ import cryptoRandomString from 'crypto-random-string';
 describe('Confirm a verification code', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User receives an error on incorrect code', async () => {

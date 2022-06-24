@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Create flags comments on a flag', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User who created the flag can leave comments', async () => {

@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Get all bookmarks', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Get a bookmark', async () => {
