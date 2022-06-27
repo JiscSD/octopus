@@ -98,7 +98,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
-    const [referenceInput, setReferenceInput] = React.useState('');
+    const [referenceInput, setReferenceInput] = React.useState(props.references[0]);
     const [referencesModalVisible, setReferencesModalVisible] = React.useState(false);
     const [referencesFilter, setReferencesFilter] = React.useState('');
     const [loading, setLoading] = React.useState(false);
@@ -241,8 +241,69 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         }
     };
 
+    const handleAddReference = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        let allReferences: any[] = [];
+
+        let x = [];
+
+        // all references stored in state
+        // whenever adding reference, loop through all references and insertContent
+
+        // props.editor.commands.command(({ tr }) => {
+        //     tr.doc.descendants((node, pos) => {
+        //         if (node.marks.find((mark) => mark.type.name === 'reference')) {
+        //             x.push({ location: node.marks[0].attrs.href });
+        //         }
+        //     });
+        //     return true;
+        // });
+
+        props.editor.commands.insertContent({
+            type: 'text',
+            marks: [
+                {
+                    type: 'reference',
+                    attrs: {
+                        href: referenceInput.location
+                    }
+                }
+            ],
+            text: '1'
+        });
+
+        let count = 0;
+        props.editor.commands.command(({ tr }) => {
+            tr.doc.descendants((node, pos) => {
+                if (node.marks.find((mark) => mark.type.name === 'reference')) {
+                    count++;
+                    node.text = count.toString();
+                    allReferences.push({ node, pos });
+                }
+            });
+            return true;
+        });
+
+        allReferences.forEach((ref, index) => {
+            props.editor.commands.insertContentAt(
+                { from: ref.pos, to: ref.node.text.length + ref.pos },
+                index.toString(),
+                {
+                    updateSelection: true
+                }
+            );
+        });
+
+        console.log(allReferences);
+    };
+
     const referencesFiltered = props.references.filter((reference: Interfaces.Reference) => {
-        return reference.text.toLowerCase().includes(referencesFilter.toLowerCase());
+        if (!referencesFilter) {
+            return referenceInput;
+        } else {
+            return reference.text.toLowerCase().includes(referencesFilter.toLowerCase());
+        }
     });
 
     React.useEffect(() => {
@@ -671,6 +732,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     </span>
                                     <HeadlessUi.Combobox.Input
                                         onChange={(event) => setReferencesFilter(event.target.value)}
+                                        displayValue={(reference: Interfaces.Reference) => reference.text}
                                         className="w-full cursor-pointer rounded-md pl-9 text-sm ring-offset-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                                         placeholder="Type to search"
                                     />
@@ -678,7 +740,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                         {referencesFiltered.map((reference) => (
                                             <HeadlessUi.Combobox.Option
                                                 key={reference.id}
-                                                value={reference.text}
+                                                value={reference}
                                                 className="cursor-pointer border-b border-transparent border-grey-300 p-2 text-sm text-grey-700 focus:ring-2 focus:ring-yellow-500"
                                             >
                                                 <i>{reference.text}</i>
@@ -699,7 +761,9 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 <button
                                     type="submit"
                                     name="insert"
-                                    onClick={(e) => {}}
+                                    onClick={(e) => {
+                                        handleAddReference(e);
+                                    }}
                                     className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
                                 >
                                     Insert
@@ -713,7 +777,9 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     );
 };
 
-// handleURLSourceUpload(e.target.value)
+const ReferenceLink = Link.extend({
+    name: 'reference'
+});
 
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
@@ -743,7 +809,8 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             TableCell,
             TipTapImage.configure({
                 inline: true
-            })
+            }),
+            ReferenceLink
         ],
         onUpdate: ({ editor }) => props.contentChangeHandler(editor.getHTML()),
         onSelectionUpdate: () => setLoading(true),
