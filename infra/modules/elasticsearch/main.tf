@@ -16,6 +16,7 @@ resource "random_string" "db_master_pass" {
 
 resource "aws_iam_service_linked_role" "elasticsearch" {
   aws_service_name = "es.amazonaws.com"
+  custom_suffix = "${var.environment}"
 }
 
 resource "aws_security_group" "elasticsearch" {
