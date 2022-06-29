@@ -18,15 +18,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     if (context.query.code) code = context.query.code;
     if (context.query.state) redirect = context.query.state;
-
-    console.log(code);
-    console.log(redirect);
     
-    //if (!code) {
-    //    return {
-    //        notFound: true
-    //    };
-    //}
+    if (!code) {
+        return {
+            notFound: true
+        };
+    }
 
     if (Array.isArray(code)) code = code[0];
 
@@ -51,11 +48,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         console.log(error);
     }
 
-    //if (!token || error) {
-    //    return {
-    //        notFound: true
-    //    };
-    //}
+    if (!token || error) {
+        return {
+            notFound: true
+        };
+    }
 
     return {
         props: { token, redirect: redirect || Config.urls.home.path }
@@ -75,7 +72,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
         const decodedJWT = Helpers.setAndReturnJWT(props.token);
         // @ts-ignore
         if (decodedJWT) setUser({ ...decodedJWT, token: props.token });
-        //setTimeout(() => router.push(props.redirect), 300);
+        setTimeout(() => router.push(props.redirect), 300);
     }, [props.token]);
 
     return (
