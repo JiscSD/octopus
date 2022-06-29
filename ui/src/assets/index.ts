@@ -1,4 +1,6 @@
 export { default as Logo } from './Logo';
+export { default as LogoLight } from './LogoLight';
+export { default as LogoDark } from './LogoDark';
 export { default as Wave } from './Wave';
 export { default as LinkingVerticalWave } from './LinkingVerticalWave';
 export { default as ORCID } from './ORCID';

@@ -96,12 +96,9 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white-50 dark:text-teal-200">
                         A collaboration with
                     </h4>
-                    <div className="flex space-x-4">
+                    <div className="flex">
                         <Components.Link href="https://jisc.ac.uk" openNew={true} className="flex">
                             <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
-                        </Components.Link>
-                        <Components.Link href="https://science-octopus.org/" openNew={true} className="flex">
-                            <Image src="/meta/octopus.svg" alt="Octopus logo" width={60} height={60} />
                         </Components.Link>
                     </div>
                 </div>
