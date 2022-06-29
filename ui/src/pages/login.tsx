@@ -19,11 +19,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.code) code = context.query.code;
     if (context.query.state) redirect = context.query.state;
 
-    if (!code) {
-        return {
-            notFound: true
-        };
-    }
+    console.log(code);
+    console.log(redirect);
+    
+    //if (!code) {
+    //    return {
+    //        notFound: true
+    //    };
+    //}
 
     if (Array.isArray(code)) code = code[0];
 
@@ -45,13 +48,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
+        console.log(error);
     }
 
-    if (!token || error) {
-        return {
-            notFound: true
-        };
-    }
+    //if (!token || error) {
+    //    return {
+    //        notFound: true
+    //    };
+    //}
 
     return {
         props: { token, redirect: redirect || Config.urls.home.path }
