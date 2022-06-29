@@ -384,68 +384,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     </header>
 
-                    {/* Publication chain */}
-                    <Components.PublicationContentSection id="publication-chain" title="Publication chain" hasBreak>
-                        <>
-                            <p className="mb-8 block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                All Octopus publications are linked in a chain aligned with the stages of the research
-                                process. Since this publication is a{' '}
-                                <Components.Link
-                                    href="#"
-                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                >
-                                    <>{Helpers.formatPublicationType(publicationData.type)}</>
-                                </Components.Link>
-                                .{' '}
-                                {publicationData.type !== 'PROBLEM' && (
-                                    <>
-                                        The publications preceeding this are{' '}
-                                        <Components.Link
-                                            href="#"
-                                            className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                        >
-                                            <>
-                                                {Helpers.formatPublicationType(
-                                                    Helpers.findPreviousPublicationType(publicationData.type)
-                                                )}
-                                            </>
-                                        </Components.Link>
-                                        .
-                                    </>
-                                )}{' '}
-                                {publicationData.type !== 'PEER_REVIEW' &&
-                                    publicationData.type !== 'REAL_WORLD_APPLICATION' && (
-                                        <>
-                                            The publications following this are{' '}
-                                            <Components.Link
-                                                href="#"
-                                                className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                            >
-                                                <>
-                                                    {Helpers.formatPublicationType(
-                                                        Helpers.findNextPublicationType(publicationData.type)
-                                                    )}
-                                                </>
-                                            </Components.Link>
-                                            .
-                                        </>
-                                    )}
-                            </p>
-                            {linkedPublicationsTo?.length || linkedPublicationsFrom?.length ? (
-                                <Components.RenderLinks
-                                    to={linkedPublicationsTo || []}
-                                    from={linkedPublicationsFrom || []}
-                                />
-                            ) : (
-                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {`This ${Helpers.formatPublicationType(
-                                        publicationData.type
-                                    )} does not have any linked to publications.`}
-                                </p>
-                            )}
-                        </>
-                    </Components.PublicationContentSection>
-
                     {/** Full text */}
                     <Components.PublicationContentSection id="main-text" hasBreak>
                         <div className="mb-4">
@@ -635,41 +573,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </ul>
                                 <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                     {publicationData.fundersStatement}
-                                </p>
-                            </>
-                        )}
-                    </Components.PublicationContentSection>
-
-                    {/* Affiliated Organisations section */}
-                    <Components.PublicationContentSection id="affiliations" title="Affiliated Organisations" hasBreak>
-                        {!publicationData.affiliations.length ? (
-                            <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                No affiliated organisations have been specified for this{' '}
-                                {Helpers.formatPublicationType(publicationData.type)}.
-                            </p>
-                        ) : (
-                            <>
-                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    This {Helpers.formatPublicationType(publicationData.type)} has the following
-                                    affiliated organisations:
-                                </p>
-                                <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {publicationData.affiliations.map((affiliation) => {
-                                        return (
-                                            <li key={affiliation.id} className="ml-7 mt-1 list-disc">
-                                                <a
-                                                    href={affiliation.link}
-                                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                                >
-                                                    {affiliation.name}
-                                                </a>{' '}
-                                                - {affiliation.city}, {affiliation.country}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {publicationData.affiliationStatement}
                                 </p>
                             </>
                         )}
