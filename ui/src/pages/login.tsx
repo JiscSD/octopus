@@ -75,7 +75,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
         const decodedJWT = Helpers.setAndReturnJWT(props.token);
         // @ts-ignore
         if (decodedJWT) setUser({ ...decodedJWT, token: props.token });
-        setTimeout(() => router.push(props.redirect), 300);
+        //setTimeout(() => router.push(props.redirect), 300);
     }, [props.token]);
 
     return (
