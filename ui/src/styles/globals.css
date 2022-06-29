@@ -72,3 +72,30 @@
         clip-path: polygon(100% 0, 0 0, 50% 100%);
     }
 }
+
+/* SVG logo */
+.cls-1-dark {
+    fill: #fff;
+}
+.cls-2-dark {
+    fill: #1e232d;
+}
+.cls-3-dark {
+    fill: #348cb2;
+}
+.cls-4-dark {
+    fill: #4ea6cc;
+}
+
+.cls-1-light {
+    fill: #fff;
+}
+.cls-2-light {
+    fill: #1e232d;
+}
+.cls-3-light {
+    fill: #1f4e63;
+}
+.cls-4-light {
+    fill: #4ea6cc;
+}

@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('create a affiliation', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can add an affiliation to their DRAFT publication', async () => {

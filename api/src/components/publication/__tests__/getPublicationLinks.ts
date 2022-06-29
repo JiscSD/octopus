@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Get links from a supplied publication', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Responds with 404 for non-existent publication', async () => {

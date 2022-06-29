@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('delete an affiliation', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can delete an affiliation from a DRAFT publication', async () => {
