@@ -18,7 +18,8 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
         //host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
         host = `https://octopus.ac`;
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
+        //orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
+        orcidAppiID = '';
 }
 
 export const base = {
