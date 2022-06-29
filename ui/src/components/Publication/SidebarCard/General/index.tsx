@@ -72,17 +72,17 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 </Components.Link>
             </div>
 
-            <div className="flex">
+            <div className="flex w-full whitespace-normal">
                 <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                     DOI:
                 </span>
                 <Components.Link
-                    href="#"
+                    href={`https://doi.org/${props.publication.doi}`}
                     ariaLabel={`DOI link: https://doi.org/${props.publication.doi}`}
-                    className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                    className="flex w-full items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
-                    <span>https://doi.org/{props.publication.doi}</span>
+                    <p className="break-words break-all">https://doi.org/{props.publication.doi}</p>
                     <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>
