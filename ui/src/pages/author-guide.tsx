@@ -91,9 +91,9 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     <span className="font-bold">What kind of work are you ready to publish? </span>{' '}
-                                    There are eight types in Octopus, from a well-defined research Problem to a
-                                    Real-World Application. These are intended to align with the research process, so
-                                    select the stage which matches where you are in your work.{' '}
+                                    There are eight types in Octopus, from a well-defined Research Problem to a Real
+                                    World Application. These are intended to align with the research process, so select
+                                    the stage which matches where you are in your work.{' '}
                                     <Components.Link
                                         href={Config.urls.faq.path}
                                         openNew={true}
@@ -157,12 +157,12 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                     publications are hierarchically linked in a collaborative chain, and each type needs
                                     to be linked to &apos;the one above it in the chain&apos;. This is designed to avoid
                                     vital missing links in the research record. For example, you can&apos;t publish an
-                                    Analysis without linking it to the relevant Results/Data, and you can&apos;t publish
-                                    any Results/Data without linking that to the Method/Protocol that you followed. A
-                                    Review (peer review) can, of course, be linked to any other type of publication; and
-                                    a Problem can also arise from any other publication type. You can publish all stages
-                                    of the chain (excluding a peer review of your own work!), but any author can also
-                                    create a linked publication from another&apos;s work.
+                                    Analysis without linking it to the relevant Results, and you can&apos;t publish any
+                                    Results without linking that to the Method that you followed. A Review (peer review)
+                                    can, of course, be linked to any other type of publication; and a Research Problem
+                                    can also arise from any other publication type. You can publish all stages of the
+                                    chain (excluding a peer review of your own work!), but any author can also create a
+                                    linked publication from another&apos;s work.
                                 </li>
                                 <li className="mb-8">
                                     <span className="font-bold">
@@ -176,13 +176,14 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                     be linked from.
                                     <br />
                                     <br />
-                                    At launch we will have some seed Problems for you to link from, but you may want to
-                                    publish a Problem specific to your research, and then the Hypothesis etc. However,
-                                    we recommend searching for existing Problems first. If you are recapping a
-                                    well-known Problem or Hypothesis which is not yet present on the site, then simply
-                                    treat this publication as you would the introduction to a paper – giving as good a
-                                    review of the literature and history of the ideas as you can, giving credit to those
-                                    who first wrote about them.
+                                    At launch we will have some seed Research Problems for you to link from, but you may
+                                    want to publish a Research Problem specific to your research, and then the
+                                    Rationale/Hypothesis etc. However, we recommend searching for existing Research
+                                    Problems first. If you are recapping a well-known Research Problem or
+                                    Rationale/Hypothesis which is not yet present on the site, then simply treat this
+                                    publication as you would the introduction to a paper – giving as good a review of
+                                    the literature and history of the ideas as you can, giving credit to those who first
+                                    wrote about them.
                                 </li>
                             </ul>
                         </StandardText>
@@ -271,10 +272,10 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                             <ul className="ml-8 list-disc">
                                 <li className="mb-8">
                                     <span className="font-bold">What other information will I need?</span> Some
-                                    publication types require additional information. Data publications require input on
-                                    data availability, data permissions, and details of ethical permissions. Hypotheses
-                                    and methods have the option to specify if a publication is equivalent to a
-                                    &apos;preregistration&apos; (i.e. being published before data has been collected).
+                                    publication types require additional information. Results publications require input
+                                    on data availability, data permissions, and details of ethical permissions.
+                                    Hypotheses and methods have the option to specify if a publication is equivalent to
+                                    a &apos;preregistration&apos; (i.e. being published before data has been collected).
                                 </li>
                             </ul>
                         </StandardText>

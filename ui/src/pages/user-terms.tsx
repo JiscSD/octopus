@@ -1029,14 +1029,14 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <br />
                                 The eight elements are:
                                 <ul className="ml-8 mt-2 list-disc">
-                                    <li className="mb-2">Problem</li>
-                                    <li className="mb-2">Hypothesis/rational</li>
-                                    <li className="mb-2">Methods/protocol</li>
-                                    <li className="mb-2">Data/result</li>
+                                    <li className="mb-2">Research Problem</li>
+                                    <li className="mb-2">Rationale/Hypothesis</li>
+                                    <li className="mb-2">Method</li>
+                                    <li className="mb-2">Results</li>
                                     <li className="mb-2">Analysis</li>
                                     <li className="mb-2">Interpretation</li>
-                                    <li className="mb-2">Real-world implementation</li>
-                                    <li className="mb-2">Peer review</li>
+                                    <li className="mb-2">Real World Application</li>
+                                    <li className="mb-2">Peer Review</li>
                                 </ul>
                                 <span className="font-bold">The nature and purpose of the Processing</span>
                                 <br />
@@ -1066,7 +1066,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <li className="mb-3">Amazon Web Services</li>
                                     <li className="mb-3">Octopus Publishing CIC</li>
                                     <li className="mb-3">
-                                        Datacite:{' '}
+                                        DataCite:{' '}
                                         <Components.Link
                                             href="https://datacite.org/"
                                             openNew={true}
