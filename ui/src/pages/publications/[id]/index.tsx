@@ -139,12 +139,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
-        { title: 'Publication chain', href: 'publication-chain' },
         { title: 'Main text', href: 'main-text' },
         ...list,
         { title: 'Funders', href: 'funders' },
-        { title: 'Conflict of interest', href: 'coi' },
-        { title: 'Affiliated organisations', href: 'affiliations' }
+        { title: 'Conflict of interest', href: 'coi' }
     ];
 
     const currentCoAuthor = React.useMemo(
