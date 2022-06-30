@@ -23,7 +23,7 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
 }
 
 export const base = {
-    title: 'Octopus. Built for Scientists.',
+    title: 'Octopus. Built for Researchers.',
     host
 };
 
