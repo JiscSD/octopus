@@ -18,7 +18,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     if (context.query.code) code = context.query.code;
     if (context.query.state) redirect = context.query.state;
-    
+
     if (!code) {
         return {
             notFound: true
