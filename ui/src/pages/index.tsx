@@ -4,7 +4,6 @@ import * as OutlineIcons from '@heroicons/react/outline';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
@@ -32,6 +31,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             latest,
             errors
+        },
+        redirect: {
+            destination: '/about',
+            permanent: false
         }
     };
 };
