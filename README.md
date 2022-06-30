@@ -101,12 +101,12 @@ All checks will need to pass in order for a PR to be reviewed and merged.
 There are eight publication types:
 
 -   **Research Problem** - a neatly defined scientific problem.
--   **Hypothesis/Rationale** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
--   **Methods/Protocols** - a practical method of testing an existing published Hypothesis.
--   **Data/Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
--   **Analysis** - a statistical or thematic analysis of existing published Data or Results.
+-   **Rationale/Hypothesis** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
+-   **Methods** - a practical method of testing an existing published Rationale/Hypothesis.
+-   **Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
+-   **Analysis** - a statistical or thematic analysis of existing published Results.
 -   **Interpretation** - a discussion around an existing published Analysis.
--   **Real-world Application** - real world applications arising from an existing published Interpretation.
+-   **Real World Application** - real world applications arising from an existing published Interpretation.
 -   **Peer Review** - A considered, detailed review of any of the above kinds of publication.
 
 ### Links

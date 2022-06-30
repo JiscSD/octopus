@@ -43,14 +43,14 @@ export const relativeDate = (value: string): string | null => {
  */
 export const formatPublicationType = (publicationType: Types.PublicationType): string => {
     const types = {
-        PROBLEM: 'Problem',
-        PROTOCOL: 'Protocol',
+        PROBLEM: 'Research Problem',
+        HYPOTHESIS: 'Rationale/Hypothesis',
+        PROTOCOL: 'Method',
+        DATA: 'Results',
         ANALYSIS: 'Analysis',
-        REAL_WORLD_APPLICATION: 'Real world application',
-        HYPOTHESIS: 'Hypothesis',
-        DATA: 'Data',
         INTERPRETATION: 'Interpretation',
-        PEER_REVIEW: 'Peer review'
+        REAL_WORLD_APPLICATION: 'Real World Application',
+        PEER_REVIEW: 'Peer Review'
     };
 
     return types[publicationType];

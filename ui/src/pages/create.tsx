@@ -128,7 +128,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     </div>
 
                     <div className="mb-10">
-                        <Components.PageSubTitle text="Title" className="!mb-4" />
+                        <Components.PageSubTitle text="Title*" className="!mb-4" />
                         <SupportText>
                             Titles should be concise, specific, and informative to help others find your work.
                         </SupportText>
@@ -146,9 +146,10 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         <SupportText>
                             Octopus has 8 publication types which closely align with the research process and move away
                             from the traditional research paper. These are linked to form a research chain, from initial
-                            Problem to Real-world Application. You will no longer need to structure your publications
-                            like a paper, with an abstract and introduction, as the publication chain itself serves this
-                            role. You will be asked to write a very short description to aid discovery.{' '}
+                            Research Problem to Real World Application. You will no longer need to structure your
+                            publications like a paper, with an abstract and introduction, as the publication chain
+                            itself serves this role. You will be asked to write a very short description to aid
+                            discovery.{' '}
                             <Components.Link
                                 href={Config.urls.about.path}
                                 ariaLabel="Read more about the Octopus publication types."

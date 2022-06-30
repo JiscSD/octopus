@@ -53,9 +53,9 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         HYPOTHESIS: {
             id: 'HYPOTHESIS',
-            heading: 'Hypothesis',
+            heading: 'Rationale/Hypothesis',
             content:
-                'An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.',
+                'An original hypothesis relating to an existing published Research Problem or the rationale for how you think the Research Problem could be addressed.',
             ratings: {
                 HYPOTHESIS_WELL_DEFINED: {
                     id: 'HYPOTHESIS_WELL_DEFINED',
@@ -91,8 +91,8 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         PROTOCOL: {
             id: 'PROTOCOL',
-            heading: 'Protocol',
-            content: 'A practical method of testing an existing published Hypothesis.',
+            heading: 'Method',
+            content: 'A practical method of testing an existing published Rationale/Hypothesis.',
             ratings: {
                 PROTOCOL_CLEAR: {
                     id: 'PROTOCOL_CLEAR',
@@ -128,7 +128,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         DATA: {
             id: 'DATA',
-            heading: 'Data',
+            heading: 'Results',
             content:
                 'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
             ratings: {
@@ -167,7 +167,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         ANALYSIS: {
             id: 'ANALYSIS',
             heading: 'Analysis',
-            content: 'A statistical or thematic analysis of existing published Data or Results.',
+            content: 'A statistical or thematic analysis of existing published Results.',
             ratings: {
                 ANALYSIS_CLEAR: {
                     id: 'ANALYSIS_CLEAR',
@@ -239,14 +239,14 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         REAL_WORLD_APPLICATION: {
             id: 'REAL_WORLD_APPLICATION',
-            heading: 'Real-world Application',
-            content: 'Real world applications arising from an existing published Interpretation.',
+            heading: 'Real World Application',
+            content: 'Real World Applications arising from an existing published Interpretation.',
             ratings: {
                 REAL_WORLD_APPLICATION_CLEAR: {
                     id: 'REAL_WORLD_APPLICATION_CLEAR',
                     value: 'Details clear',
                     description:
-                        'Please assess whether this real-world application has been written in such a way that it is clear exactly how the knowledge could be applied (any pieces of knowledge missing, that would need to be addressed before this application could be brought to the real world should be raised as new Problems linked to this publication)',
+                        'Please assess whether this real-world application has been written in such a way that it is clear exactly how the knowledge could be applied (any pieces of knowledge missing, that would need to be addressed before this application could be brought to the real world should be raised as new Research Problems linked to this publication)',
                     labels: {
                         negative: 'Not at all clear in its details',
                         positive: 'Perfectly clear and understandable'
@@ -277,7 +277,7 @@ export const octopusInformation: Interfaces.OctopusInformation = {
             id: 'PEER_REVIEW',
             heading: 'Review',
             content:
-                'A considered, detailed peer review of one of the above kinds of publication. Octopus reviews are open and post-publication.',
+                'A considered, detailed peer review of one of the other kinds of publication. Octopus reviews are open and post-publication.',
             ratings: {
                 REVIEW_CLEAR: {
                     id: 'REVIEW_CLEAR',
