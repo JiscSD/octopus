@@ -58,7 +58,8 @@ const About: NextPage = (): React.ReactElement => (
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                         <h1 className="mb-5 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
-                            Learn about Octopus.
+                            Free, fast and fair: The global primary research record where researchers record their work
+                            in full detail
                         </h1>
                         <h2 className="text-l mx-auto mb-5 block text-center font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
                             Octopus is not just another publishing platform, it is designed to be the primary research
@@ -189,7 +190,7 @@ const About: NextPage = (): React.ReactElement => (
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ type: 'spring', delay: 0.5 }}
-                className="mt-10 transition-all duration-500 md:mt-0"
+                className="my-10 transition-all duration-500 md:mt-0"
             >
                 <div className="mx-auto mb-2 flex flex-col items-center gap-1 font-montserrat text-base font-semibold uppercase tracking-wide text-grey-900 transition-colors duration-500 dark:text-white-50 lg:text-xl">
                     <OutlineIcons.UserCircleIcon className="mb-2 h-6 w-6 rounded-full bg-teal-500 p-1 text-white-50 shadow transition-colors duration-500" />
@@ -200,7 +201,7 @@ const About: NextPage = (): React.ReactElement => (
                     open and post-publication.
                 </div>
             </Framer.motion.div>
-            <PageSection>
+            {/* <PageSection>
                 <>
                     <Components.PageSubTitle text="Get started with Octopus" className="text-center" />
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
@@ -227,7 +228,7 @@ const About: NextPage = (): React.ReactElement => (
                         />
                     </div>
                 </>
-            </PageSection>
+            </PageSection> */}
         </Layouts.Standard>
     </>
 );

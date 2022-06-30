@@ -56,7 +56,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="container mx-auto px-8 py-8 lg:py-24">
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                         <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl ">
-                            Free, fast and fair: the global primary research record where researchers record their work
+                            Free, fast and fair: The global primary research record where researchers record their work
                             in full detail
                         </h1>
                         <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
