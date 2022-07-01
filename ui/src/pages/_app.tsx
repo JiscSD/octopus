@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
+import * as NextRouter from 'next/router';
 import NextNprogress from 'nextjs-progressbar';
 
 import * as Components from '@components';
@@ -11,8 +12,21 @@ import * as api from '@api';
 
 import '../styles/globals.css';
 
+// TODO: Remove after ORCID login is fixed
+const tempAllowedPaths = [
+    '/about',
+    '/faq',
+    '/privacy',
+    '/terms',
+    '/accessibility',
+    '/author-guide',
+    '/octopus-aims',
+    '/get-involved'
+];
+
 const App = ({ Component, pageProps }: Types.AppProps) => {
     const isMounted = React.useRef(false);
+    const router = NextRouter.useRouter();
     const [loading, setLoading] = React.useState(true);
     const darkMode = Stores.usePreferencesStore((state) => state.darkMode);
     const showCmdPalette = Stores.useGlobalsStore((state) => state.showCmdPalette);
@@ -38,13 +52,17 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     }, [showCmdPalette, toggleCmdPalette]);
 
     React.useEffect(() => {
+        // TODO: Remove after ORCID login is fixed
+        if (!tempAllowedPaths.includes(router.asPath)) {
+            router.push('/about');
+        }
         isMounted.current = true;
         setUpCmdPalListeners();
         setLoading(false);
         return () => {
             isMounted.current = false;
         };
-    }, []);
+    }, [router.asPath]);
 
     return (
         <>

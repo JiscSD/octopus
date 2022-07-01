@@ -4,7 +4,6 @@ import * as OutlineIcons from '@heroicons/react/outline';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
@@ -18,6 +17,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const errors: Errors = {
         latest: null
     };
+    console.log(context.resolvedUrl);
 
     let latest: unknown = [];
     try {
@@ -32,6 +32,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             latest,
             errors
+        },
+        // TODO: Temp redirect for now until ORCID login gets fixed
+        redirect: {
+            destination: '/about',
+            permanent: false
         }
     };
 };
@@ -43,7 +48,6 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
@@ -56,7 +60,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="container mx-auto px-8 py-8 lg:py-24">
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
                         <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl ">
-                            Free, fast and fair: the global primary research record where researchers record their work
+                            Free, fast and fair: The global primary research record where researchers record their work
                             in full detail
                         </h1>
                         <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
