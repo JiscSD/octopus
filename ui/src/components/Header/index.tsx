@@ -58,13 +58,12 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                             {/* Commenting out for temp holding page */}
                             {/* <Components.Search /> */}
                             {/* <Components.Nav /> */}
-                            {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />}
+                            {/* {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />} */}
                             <Components.EnableDarkMode />
                         </div>
                     </div>
                 </div>
             </header>
-            )
         </>
     );
 };
