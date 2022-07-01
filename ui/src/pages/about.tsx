@@ -37,7 +37,7 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ type: 'spring' }}
-            className="container mx-auto my-16 mt-10 px-8 transition-all duration-500 lg:mx-auto lg:pt-10 2xl:my-36"
+            className="container mx-auto my-16 px-8 transition-all duration-500 lg:mx-auto lg:pt-10 2xl:my-36"
         >
             {props.children}
         </Framer.motion.div>
@@ -54,10 +54,16 @@ const About: NextPage = (): React.ReactElement => (
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
-            <PageSection>
+            <Framer.motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: 'spring' }}
+                className="container mx-auto my-10 px-8 transition-all duration-500 lg:mx-auto lg:pt-10"
+            >
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                        <h1 className="mb-5 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
+                        <h1 className="mb-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
                             Free, fast and fair: The global primary research record where researchers record their work
                             in full detail
                         </h1>
@@ -98,7 +104,8 @@ const About: NextPage = (): React.ReactElement => (
                         </Components.Link>
                     </div>
                 </>
-            </PageSection>
+            </Framer.motion.div>
+
             <PageSection>
                 <div className="grid grid-cols-1 gap-2 lg:my-10 lg:grid-cols-2 lg:gap-4 2xl:grid-cols-4">
                     <CardItem
