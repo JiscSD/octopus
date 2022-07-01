@@ -32,6 +32,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             latest,
             errors
+        },
+        // TODO: Temp redirect for now until ORCID login gets fixed
+        redirect: {
+            destination: '/about',
+            permanent: false
         }
     };
 };
