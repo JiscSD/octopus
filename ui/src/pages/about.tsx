@@ -208,6 +208,7 @@ const About: NextPage = (): React.ReactElement => (
                     open and post-publication.
                 </div>
             </Framer.motion.div>
+            {/* TODO: Re add these links once ORCID login has been fixed*/}
             {/* <PageSection>
                 <>
                     <Components.PageSubTitle text="Get started with Octopus" className="text-center" />
