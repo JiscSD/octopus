@@ -17,6 +17,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const errors: Errors = {
         latest: null
     };
+    console.log(context.resolvedUrl);
 
     let latest: unknown = [];
     try {
@@ -31,10 +32,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             latest,
             errors
-        },
-        redirect: {
-            destination: '/about',
-            permanent: false
         }
     };
 };
@@ -46,7 +43,6 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
