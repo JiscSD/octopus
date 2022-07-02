@@ -23,9 +23,17 @@ provider:
             - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
     environment:
         STAGE: ${self:provider.stage}
+        DATABASE_URL: ${ssm:/db_connection_string_${self:provider.stage}_octopus}
+        ELASTICSEARCH_PROTOCOL: 'https'
         ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
         ELASTICSEARCH_PASSWORD: ${ssm:/elasticsearch_password_${self:provider.stage}_octopus}
         ELASTICSEARCH_ENDPOINT: ${ssm:/elasticsearch_endpoint_${self:provider.stage}_octopus}
+        JWT_SECRET: ${ssm:/jwt_secret_${self:provider.stage}_octopus}
+        VALIDATION_CODE_EXPIRY: 10
+        VALIDATION_CODE_ATTEMPTS: 3
+        ORCID_ID: ${ssm:/orcid_app_id_${self:provider.stage}_octopus}
+        ORCID_SECRET: ${ssm:/orcid_secret_key_${self:provider.stage}_octopus}
+
     deploymentBucket:
         tags:
             Project: Octopus

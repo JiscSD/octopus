@@ -67,6 +67,12 @@ module "s3" {
 }
 
 module "ses" {
-    source = "../modules/ses"
-    environment = local.environment
+  source = "../modules/ses"
+  environment = local.environment
+}
+
+module "api" {
+  source = "../modules/api"
+  environment = local.environment
+  project_name = local.project_name
 }
