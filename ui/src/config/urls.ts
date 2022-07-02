@@ -22,9 +22,9 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     //TODO: Pre-made cases, probably unused. 
     // Decide env setup and probably remove the below.
     case 'main':
-        host = 'https://octopus.ac';
+        host = 'https://int.octopus.ac';
         mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = '';
+        orcidAppiID = 'APP-FEKD033IO62K51EQ';
         break;
     default:
         //host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
