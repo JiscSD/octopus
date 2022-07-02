@@ -2,9 +2,9 @@ let host: string;
 let mediaBucket: string;
 let orcidAppiID: string;
 
-host = process.env.BASE_URL
-orcidAppiID = process.env.ORCID_APP_ID;
-mediaBucket = process.env.MEDIA_BUCKET
+host = process.env.BASE_URL!;
+orcidAppiID = process.env.ORCID_APP_ID!;
+mediaBucket = process.env.MEDIA_BUCKET!;
 
 if(process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
     host = 'https://localhost:3001';
