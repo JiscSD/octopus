@@ -1,37 +1,15 @@
 let host: string;
 let mediaBucket: string;
-const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}`;
 let orcidAppiID: string;
 
-switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
-    case 'local':
-        host = 'https://localhost:3001';
-        mediaBucket = `http://localhost:4566/${bucketName}`;
-        orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
-        break;
-    case 'int':
-        host = `https://int.octopus.ac`;
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = 'APP-FEKD033IO62K51EQ';
-    case 'prod':
-        host = `https://octopus.ac`;
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        //orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
-        orcidAppiID = 'APP-FEKD033IO62K51EQ';
-    
-    //TODO: Pre-made cases, probably unused. 
-    // Decide env setup and probably remove the below.
-    case 'main':
-        host = 'https://int.octopus.ac';
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = 'APP-FEKD033IO62K51EQ';
-        break;
-    default:
-        //host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
-        host = `https://octopus.ac`;
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        //orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
-        orcidAppiID = 'APP-FEKD033IO62K51EQ';
+host = process.env.BASE_URL
+orcidAppiID = process.env.ORCID_APP_ID;
+mediaBucket = process.env.MEDIA_BUCKET
+
+if(process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
+    host = 'https://localhost:3001';
+    mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
+    orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
 }
 
 export const base = {
