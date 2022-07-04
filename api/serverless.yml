@@ -33,6 +33,10 @@ provider:
         VALIDATION_CODE_ATTEMPTS: 3
         ORCID_ID: ${ssm:/orcid_app_id_${self:provider.stage}_octopus}
         ORCID_SECRET: ${ssm:/orcid_secret_key_${self:provider.stage}_octopus}
+        DOI_PREFIX: ${ssm:/doi_prefix_${self:provider.stage}_octopus}
+        DATACITE_ENDPOINT: ${ssm:/datacite_endpoint_${self:provider.stage}_octopus}
+        DATACITE_USER: ${ssm:/datacite_user_${self:provider.stage}_octopus}
+        DATACITE_PASSWORD: ${ssm:/datacite_password_${self:provider.stage}_octopus}
 
     deploymentBucket:
         tags:
