@@ -14,7 +14,7 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 callbackURL = 'https://localhost:3001/login';
                 break;
             case 'prod':
-                callbackURL = 'https://octopus.ac/login';
+                callbackURL = 'https://prod.octopus.ac/login'; // TODO: Change to www. when we update url
                 break;
             default:
                 callbackURL = `https://${process.env.STAGE}.octopus.ac/login`;
