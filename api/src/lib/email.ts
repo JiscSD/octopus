@@ -23,8 +23,8 @@ switch (process.env.STAGE) {
         mailConfig = {
             SES: { ses, aws }
         };
-        from = 'no-reply@octopus.ac';
-        baseURL = 'https://octopus.ac';
+        from = 'no-reply@prod.octopus.ac';
+        baseURL = 'https://prod.octopus.ac'; // TODO: Change to www. when we update url
         break;
     default:
         mailConfig = {

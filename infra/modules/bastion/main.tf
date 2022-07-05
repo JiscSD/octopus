@@ -24,7 +24,7 @@ resource "aws_security_group" "ec2_sg" {
 
 resource "aws_instance" "bastion" {
     ami                         = "ami-0bb3fad3c0286ebd5"
-    instance_type               = "t2.nano"
+    instance_type               = "t3.small"
     subnet_id                   = var.public_subnet
     vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
     key_name                    = var.ec2_key_name
