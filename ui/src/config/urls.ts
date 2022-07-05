@@ -4,20 +4,20 @@ let orcidAppiID: string;
 
 function checkEnvVariable(variable: string | undefined): string {
     if(variable === undefined){
-        throw new Error(`Environment Variable "${variable}" is undefined.`)
+        throw new Error("Environment Variable is undefined.")
+    } else {
+        return variable!
     }
-    
-    return variable!
 }
-
-host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
-orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
-mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
 
 if(process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
     host = 'https://localhost:3001';
     mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
     orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
+} else {
+    host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+    mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+    orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 }
 
 export const base = {
