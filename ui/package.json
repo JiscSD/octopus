@@ -20,7 +20,7 @@
         "lint": "next lint",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
-        "lighthouse": "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF=int lhci autorun"
+        "lighthouse": "lhci autorun"
     },
     "dependencies": {
         "@atlaskit/code": "^14.3.2",

@@ -3,14 +3,14 @@ let mediaBucket: string;
 let orcidAppiID: string;
 
 function checkEnvVariable(variable: string | undefined): string {
-    if(variable === undefined){
-        throw new Error("Environment Variable is undefined.")
+    if (variable === undefined) {
+        throw new Error('Environment Variable is undefined.');
     } else {
-        return variable!
+        return variable!;
     }
 }
 
-if(process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
     host = 'https://localhost:3001';
     mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
     orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
