@@ -29,11 +29,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
     const updateEthicalStatementFreeText = Stores.usePublicationCreationStore(
         (state) => state.updateEthicalStatementFreeText
     );
-    const ethicalStatementProvidedBy = Stores.usePublicationCreationStore((state) => state.ethicalStatementProvidedBy);
-    const updateEthicalStatementProvidedBy = Stores.usePublicationCreationStore(
-        (state) => state.updateEthicalStatementProvidedBy
-    );
-    console.log(ethicalStatementProvidedBy);
+    console.log(ethicalStatementFreeText);
 
     // Data permissions statement
     const dataPermissionsStatement = Stores.usePublicationCreationStore((state) => state.dataPermissionsStatement);
@@ -82,21 +78,6 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 {parse(option)}
                             </span>
                         </label>
-                        // <label htmlFor="false" className="flex items-center space-x-2 hover:cursor-pointer">
-                        //     <input
-                        //         type="radio"
-                        //         name="false"
-                        //         id="false"
-                        //         checked={ethicalStatement === false}
-                        //         onChange={() => updateEthicalStatement(false)}
-                        //         className="hover:cursor-pointer"
-                        //         aria-label="The results and data in this publication does not involve human or animal subjects."
-                        //     />
-                        //     <span className="ml-2 text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        //         The results and data in this publication does <strong>not</strong> involve human or animal
-                        //         subjects.{' '}
-                        //     </span>
-                        // </label>
                     ))}
                 </fieldset>
 
@@ -115,7 +96,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 rows={3}
                                 className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
                                 required
-                                value={ethicalStatementProvidedBy ?? ''}
+                                value={ethicalStatementFreeText ?? ''}
                                 onChange={(e) => updateEthicalStatementFreeText(e.target.value)}
                             />
                         </>
