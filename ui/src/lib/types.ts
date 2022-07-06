@@ -67,10 +67,12 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
-    updateEthicalStatement: (ethicalStatement: boolean) => void;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    updateEthicalStatement: (ethicalStatement: string) => void;
+    ethicalStatementProvidedBy: string | null;
+    updateEthicalStatementProvidedBy: (dataPermissionsStatementProvidedBy: string | null) => void;
     dataAccessStatement: string | null;
     updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
