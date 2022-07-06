@@ -53,6 +53,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
 
     const createPublication = async () => {
         setError(null);
+
         try {
             const response = await api.post<{ id: string }>(
                 Config.endpoints.publications,
@@ -73,6 +74,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     props.token
                 );
             }
+            console.log(response);
 
             router.push({
                 pathname: `${Config.urls.viewPublication.path}/${response.data.id}/edit`
