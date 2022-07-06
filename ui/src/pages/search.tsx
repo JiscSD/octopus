@@ -234,7 +234,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
 
-                        <label htmlFor="search-type" className="relative col-span-12 block lg:col-span-3">
+                        <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Searching
                             </span>
