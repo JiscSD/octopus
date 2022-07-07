@@ -105,11 +105,51 @@ export const initialDevSeed = async (): Promise<void> => {
     }
 };
 
-initialDevSeed()
-    .catch((e) => {
-        console.error(e);
-        // process.exit(1);
-    })
-    .finally(async () => {
-        await client.prisma.$disconnect();
+
+export const initialProdSeed = async (): Promise<void> => {
+    // Create users
+    await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
+
+    const doesIndexExists = await client.search.indices.exists({
+        index: 'publications'
     });
+
+    if (doesIndexExists.body) {
+        await client.search.indices.delete({
+            index: 'publications'
+        });
+    }
+
+    for (const problem of SeedData.problemsProd) {
+        await client.prisma.publication.create({
+            // @ts-ignore
+            data: problem
+        });
+
+    }
+
+};
+
+switch (process.env.STAGE) {
+    case 'prod':
+        initialProdSeed()
+        .catch((e) => {
+            console.error(e);
+            // process.exit(1);
+        })
+        .finally(async () => {
+            await client.prisma.$disconnect();
+        });
+    
+    break;
+    default:
+        initialDevSeed()
+        .catch((e) => {
+            console.error(e);
+            // process.exit(1);
+        })
+        .finally(async () => {
+            await client.prisma.$disconnect();
+        });
+    
+}
