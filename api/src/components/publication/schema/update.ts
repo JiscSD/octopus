@@ -37,7 +37,7 @@ const updatePublicationSchema: I.Schema = {
             enum: H.OctopusInformation.languages
         },
         ethicalStatement: {
-            type: 'boolean'
+            type: 'string'
         },
         ethicalStatementFreeText: {
             type: 'string'
