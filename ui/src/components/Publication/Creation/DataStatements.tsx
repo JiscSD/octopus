@@ -6,19 +6,19 @@ import * as Components from '@components';
 import * as Stores from '@stores';
 
 const ethicalStatementOptions: string[] = [
-    'The results and data in this publication involved human or animal subjects.',
-    'The results and data in this publication does not involve human or animal subjects.'
+    'The results in this publication involved human or animal subjects.',
+    'The results in this publication do <strong>not</strong> involve human or animal subjects.'
 ];
 const dataPermissionsOptions: string[] = [
-    'The results and data in this publication involved access to owned or copyrighted materials',
-    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors)'
+    'The results in this publication involved access to owned or copyrighted materials.',
+    'The results in this publication do <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
 ];
 const dataAccessOptions: string[] = [
-    'This publication includes all the relevant results or data collected by the authors',
-    'This publication contains a sample of relevant results or data, with the full data publicly stored on another platform',
-    'This publication contains partial data because full data contains transcripts of interviews, which were impossible to anonymise or where the participants did not consent to sharing',
-    'This publication contains partial data because the raw data contains confidential information, protected by a non-disclosure agreement or copyright (e.g. of digital images, maps, texts, audio-visual material)',
-    'This publication contains representative digital data of physical samples or records (e.g. of museum objects, geological samples, tissue samples, images). Relevant accession/reference numbers and associated information of where the originals are stored are provided'
+    'This publication includes all the relevant results or data collected by the authors.',
+    'This publication contains a sample of relevant results or data, with the full data publicly stored on another platform.',
+    'This publication contains partial data because full data contains transcripts of interviews, which were impossible to anonymise or where the participants did not consent to sharing.',
+    'This publication contains partial data because the raw data contains confidential information, protected by a non-disclosure agreement or copyright (e.g. of digital images, maps, texts, audio-visual material).',
+    'This publication contains representative digital data of physical samples or records (e.g. of museum objects, geological samples, tissue samples, images). Relevant accession/reference numbers and associated information of where the originals are stored are provided.'
 ];
 
 const DataStatements: React.FC = (): React.ReactElement => {
@@ -157,8 +157,8 @@ const DataStatements: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Data access statement" />
                 <span className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    If relevant, please provide a data access statement which describes where the results and data
-                    associated with your publication can be found, and how they can be accessed.{' '}
+                    If relevant, please provide a data access statement which describes where the results associated
+                    with your publication can be found, and how they can be accessed.{' '}
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Select from the pre-defined statements below, or create your own. You can provide a link to any
