@@ -64,7 +64,7 @@ export interface CorePublication {
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
-    ethicalStatement: string;
+    ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
 }
 
@@ -388,7 +388,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     language: Types.Languages;
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string;
-    ethicalStatement?: string;
+    ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;
