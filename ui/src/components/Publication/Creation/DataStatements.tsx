@@ -29,7 +29,6 @@ const DataStatements: React.FC = (): React.ReactElement => {
     const updateEthicalStatementFreeText = Stores.usePublicationCreationStore(
         (state) => state.updateEthicalStatementFreeText
     );
-    console.log(ethicalStatementFreeText);
 
     // Data permissions statement
     const dataPermissionsStatement = Stores.usePublicationCreationStore((state) => state.dataPermissionsStatement);
