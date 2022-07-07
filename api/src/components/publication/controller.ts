@@ -40,7 +40,7 @@ export const get = async (
 
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, { publication });
+            return response.json(200, publication);
         }
 
         if (!publication) {
@@ -55,7 +55,7 @@ export const get = async (
             event.user?.id === publication.user.id ||
             publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
         ) {
-            return response.json(200, { ...publication });
+            return response.json(200, publication);
         }
 
         return response.json(404, {
