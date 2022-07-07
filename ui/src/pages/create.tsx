@@ -74,7 +74,6 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     props.token
                 );
             }
-            console.log(response);
 
             router.push({
                 pathname: `${Config.urls.viewPublication.path}/${response.data.id}/edit`
