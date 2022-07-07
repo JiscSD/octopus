@@ -66,8 +66,8 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 checked={option === ethicalStatement}
                                 onChange={() => {
                                     updateEthicalStatement(option);
-                                    if (option === ethicalStatementOptions[0]) {
-                                        updateEthicalStatementFreeText('');
+                                    if (option === ethicalStatementOptions[1]) {
+                                        updateEthicalStatementFreeText(null);
                                     }
                                 }}
                                 className="hover:cursor-pointer"
