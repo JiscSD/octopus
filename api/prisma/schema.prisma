@@ -26,7 +26,6 @@ model User {
     coAuthors            CoAuthors[]
     Publication          Publication[]
     PublicationFlags     PublicationFlags[]
-    PublicationRatings   PublicationRatings[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
@@ -80,7 +79,6 @@ model Publication {
     linkedTo                           Links[]                @relation("from")
     linkedFrom                         Links[]                @relation("to")
     publicationFlags                   PublicationFlags[]
-    publicationRatings                 PublicationRatings[]
     publicationStatus                  PublicationStatus[]
     PublicationBookmarks               PublicationBookmarks[]
     funders                            Funders[]
@@ -168,18 +166,6 @@ model FlagComments {
     createdAt DateTime         @default(now())
     user      User             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
-}
-
-model PublicationRatings {
-    id            String      @id @default(cuid())
-    publicationId String
-    userId        String
-    rating        Int
-    category      String
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, userId, category])
 }
 
 model PublicationBookmarks {

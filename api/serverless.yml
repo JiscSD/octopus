@@ -192,21 +192,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
                   method: patch
                   cors: true
-    # Ratings
-    createRatings:
-        handler: src/components/rating/routes.upsert
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/ratings
-                  method: post
-                  cors: true
-    getRatings:
-        handler: src/components/rating/routes.get
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/ratings
-                  method: get
-                  cors: true
     # Flags
     getFlag:
         handler: src/components/flag/routes.get

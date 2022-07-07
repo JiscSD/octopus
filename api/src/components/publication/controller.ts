@@ -3,7 +3,6 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
-import * as ratingService from 'rating/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -39,12 +38,9 @@ export const get = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        const aggregate = await ratingService.getAggregate(event.pathParameters.id);
-        const overall = await ratingService.getOverall(event.pathParameters.id);
-
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, { publication });
         }
 
         if (!publication) {
@@ -59,7 +55,7 @@ export const get = async (
             event.user?.id === publication.user.id ||
             publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
         ) {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, { ...publication });
         }
 
         return response.json(404, {

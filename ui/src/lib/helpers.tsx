@@ -263,16 +263,6 @@ export const getBase64FromFile = async (file: Blob): Promise<string> =>
         };
     });
 
-export const findRating = (
-    index: number,
-    ratingList: Interfaces.APIRatingShape[],
-    publicationType: Types.PublicationType
-): number | null => {
-    const ratingType = Object.values(Config.values.octopusInformation.publications[publicationType].ratings)[index].id;
-    const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
-    return found ? found.rating : null;
-};
-
 export const formatKeywords = (keywordsAsString: string): string[] => {
     let formattedKeywords: string[] = [];
     if (keywordsAsString.length) {
