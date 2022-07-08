@@ -39,7 +39,7 @@ provider:
               - 'ses:SendRawEmail'
           Resource: '*'
         - Effect: 'Allow'
-          Resource: 'arn:aws:s3:::science-octopus-publishing-images-${self:provider.stage}'
+          Resource: 'arn:aws:s3:::science-octopus-publishing-images-${self:provider.stage}/*'
           Action: 's3:PutObject'
 custom:
     customDomain:
