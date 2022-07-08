@@ -492,10 +492,10 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 }}
                             />
                         )}
-                        <Components.PublicationSidebarCardActionsButton
+                        {/* <Components.PublicationSidebarCardActionsButton
                             label="Rate this publication"
                             onClick={() => setShowRatingsModel(true)}
-                        />
+                        /> */}
                         <Components.PublicationSidebarCardActionsButton
                             label="Flag a concern with this publication"
                             onClick={() => setShowRedFlagModel(true)}
@@ -517,7 +517,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         href={Config.urls.orcidLogin.path}
                         className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >
-                        Sign in for more actions
+                        <Assets.ORCID width={25} height={25} className="mr-2 rounded-md bg-orcid fill-white-50 p-1" />
+                        <span> Sign in for more actions</span>
                     </Components.Link>
                 </>
             )}
