@@ -98,6 +98,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
 
                     <div className="mb-10">
                         <Components.PageSubTitle text="Record a piece of research" className="!mb-4" />
+
                         <SupportText>
                             Octopus is designed for officially recording your research contributions to the primary
                             research record. It is different from writing an article for a journal (which you can do
@@ -125,6 +126,14 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             guidelines in health research. You will also be given the opportunity to link to additional
                             resources deposited on specialist platforms (such as data or code repositories).
                         </SupportText>
+                        <Components.Link
+                            href={Config.urls.authorGuide.path}
+                            className="my-6 flex w-44 items-center justify-between rounded-lg bg-teal-400 px-8 py-4 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                        >
+                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">
+                                Author Guide
+                            </span>
+                        </Components.Link>
                     </div>
 
                     <div className="mb-10">
