@@ -16,11 +16,13 @@ import * as React from 'react';
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     Helpers.guardPrivateRoute(context);
 
-    let state: string | string[] | null = '/';
+    let state: string | string[] | null = null;
     let newUser: boolean | null = false;
 
     if (context.query.state) {
-        state = context.query.state;
+        state = Buffer.from(String(context.query.state), 'base64url').toString('utf-8');
+    } else {
+        state = '/';
     }
 
     if (context.query.newUser) {
