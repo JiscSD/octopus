@@ -70,9 +70,9 @@ describe('Update publication', () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({ apiKey: 123456789 })
-            .send({ licence: 'CC_BY_ND' });
+            .send({ licence: 'CC_BY_SA' });
 
-        expect(updatePublication.body.licence).toEqual('CC_BY_ND');
+        expect(updatePublication.body.licence).toEqual('CC_BY_SA');
     });
 
     test('Can update keywords', async () => {
