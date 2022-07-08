@@ -49,7 +49,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     <Components.Link
                         href="mailto:help@jisc.ac.uk"
                         openNew={true}
-                        className="mb-2 block w-fit rounded underline decoration-teal-500 decoration-2 underline-offset-2 outline-0 hover:decoration-teal-600 focus:ring-2 focus:ring-yellow-400"
+                        className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
                     >
                         help@jisc.ac.uk
                     </Components.Link>{' '}
