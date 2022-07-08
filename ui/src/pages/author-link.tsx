@@ -67,6 +67,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             code,
             approve: false
         });
+
+        return {
+            props: {
+                title: 'You have indicated that you are not a co-author.',
+                message: 'Thank you for responding. You have now been removed from this draft publication.',
+                statusCode: 200
+            }
+        };
     } catch (err) {
         return {
             props: {
@@ -74,15 +82,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             }
         };
     }
-
-    return {
-        props: {},
-        redirect: { permanent: true, destination: Config.urls.home.path }
-    };
 };
 
 type Props = {
+    title?: string;
     message: string;
+    statusCode?: number;
 };
 
 const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
@@ -90,12 +95,21 @@ const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
         <Head>
             <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <Layouts.Error
-            title="Page not found."
-            windowTitle={Config.urls[404].title}
-            content={props.message}
-            statusCode={404}
-        />
+        {props.statusCode == 200 ? (
+            <Layouts.InformationLanding
+                title={props.title ? `${props.title}` : ''}
+                windowTitle={props.title || ''}
+                content={props.message}
+                statusCode={props.statusCode || 200}
+            />
+        ) : (
+            <Layouts.Error
+                title={'Page not found.'}
+                windowTitle={Config.urls[404].title}
+                content={props.message}
+                statusCode={404}
+            />
+        )}
     </>
 );
 
