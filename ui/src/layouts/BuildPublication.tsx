@@ -42,6 +42,11 @@ type BuildPublicationProps = {
     children: React.ReactNode;
 };
 
+const dataPermissionsOptions: string[] = [
+    'The results and data in this publication involved access to owned or copyrighted materials',
+    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors)'
+];
+
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
@@ -163,7 +168,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (!store.title) ready = { ready: false, message: 'You must provide a title' };
         if (!store.content) ready = { ready: false, message: 'You must provide main text' };
         if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
-        if (!store.linkTo.length)
+        if (!store.linkTo?.length)
             ready = { ready: false, message: 'You must link this publication to at least one other' };
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             ready = {
@@ -176,11 +181,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 ready = { ready: false, message: 'You must select an ethical statement option' };
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
+            if (
+                store.dataPermissionsStatementProvidedBy === null &&
+                store.dataPermissionsStatement === dataPermissionsOptions[0]
+            )
+                ready = {
+                    ready: false,
+                    message: 'You must provide details of who gave permission for the data collection and sharing'
+                };
         }
         if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
             ready = { ready: false, message: 'All co-authors must be verified.' };
         }
-
         return ready;
     };
 
@@ -198,6 +210,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.type,
         store.ethicalStatement,
         store.dataPermissionsStatement,
+        store.dataPermissionsStatementProvidedBy,
         store.coAuthors
     ]);
 
