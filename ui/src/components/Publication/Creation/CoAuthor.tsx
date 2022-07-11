@@ -1,11 +1,10 @@
-import React from 'react';
-import * as Framer from 'framer-motion';
-import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/outline';
+import * as Framer from 'framer-motion';
+import React from 'react';
 
+import * as api from '@api';
 import * as Components from '@components';
 import * as Stores from '@stores';
-import * as api from '@api';
 
 const CoAuthor: React.FC = (): React.ReactElement => {
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
@@ -46,6 +45,18 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         },
         [user, publicationId]
     );
+
+    const refreshCoAuthors = React.useCallback(async () => {
+        setLoading(true);
+
+        try {
+            const response = await api.get(`/publications/${publicationId}`, user?.token);
+            updateCoAuthors(response.data.coAuthors);
+            setLoading(false);
+        } catch {
+            setLoading(false);
+        }
+    }, [user, publicationId]);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -115,6 +126,19 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="flex min-w-full justify-end">
+                            <Components.Button
+                                title="Refresh"
+                                onClick={refreshCoAuthors}
+                                iconPosition="LEFT"
+                                icon={
+                                    <OutlineIcons.RefreshIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                }
+                                textSize="sm"
+                                className="py-2 px-1"
+                                disabled={loading}
+                            />
                         </div>
                     </div>
                 </div>
