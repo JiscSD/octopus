@@ -91,7 +91,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
                         <Components.ActionCard
                             title="Publish your work"
-                            content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
+                            content="Recording your work on Octopus is different from publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
                             icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.createPublication.path}
                             linkText="Publish your work"
