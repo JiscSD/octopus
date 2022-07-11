@@ -43,8 +43,8 @@ type BuildPublicationProps = {
 };
 
 const dataPermissionsOptions: string[] = [
-    'The results and data in this publication involved access to owned or copyrighted materials',
-    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors)'
+    'The results and data in this publication involved access to owned or copyrighted materials.',
+    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
 ];
 
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {

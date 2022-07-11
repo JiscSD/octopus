@@ -13,8 +13,8 @@ const dataAccessOptions: string[] = [
     'This publication contains representative digital data of physical samples or records (e.g. of museum objects, geological samples, tissue samples, images). Relevant accession/reference numbers and associated information of where the originals are stored are provided'
 ];
 const dataPermissionsOptions: string[] = [
-    'The results and data in this publication involved access to owned or copyrighted materials',
-    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors)'
+    'The results and data in this publication involved access to owned or copyrighted materials.',
+    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
 ];
 
 const DataStatements: React.FC = (): React.ReactElement => {
