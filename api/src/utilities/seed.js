@@ -19,7 +19,8 @@ const loadData = async () => {
         }
         let [title, parent1, parent2, content] = row.split('\t');
         title = title.replace(/\"/g, '');
-        parent1 = parent1.replace(/\"/g, '');
+        console.log(index,title,parent1,parent2);
+      parent1 = parent1.replace(/\"/g, '');
         parent2 = parent2.replace(/\"/g, '');
         content = content.replace(/\"/g, '');
         parent1ID = titleIDStore.get(parent1);
@@ -62,7 +63,7 @@ const createPublication = async (title, content) => {
             title,
             ethicalStatement: false,
             conflictOfInterestStatus: false,
-            language: 'en',
+   	        language: 'en',
             licence: 'CC_BY',
             content: content || title,
             description: title || ''
@@ -71,7 +72,7 @@ const createPublication = async (title, content) => {
         const create = await axios.post(`${url}/publications?apiKey=${apiKey}`, payload);
         return create.data;
     } catch (err) {
-        console.log(err);
+	    console.log(title, err);
         return false;
     }
 };
