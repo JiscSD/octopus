@@ -42,11 +42,6 @@ type BuildPublicationProps = {
     children: React.ReactNode;
 };
 
-const dataPermissionsOptions: string[] = [
-    'The results and data in this publication involved access to owned or copyrighted materials.',
-    'The results and data in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
-];
-
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
@@ -182,8 +177,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
             if (
-                store.dataPermissionsStatementProvidedBy === null &&
-                store.dataPermissionsStatement === dataPermissionsOptions[0]
+                !store.dataPermissionsStatementProvidedBy &&
+                store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
             )
                 ready = {
                     ready: false,
