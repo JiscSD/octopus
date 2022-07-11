@@ -1,7 +1,7 @@
 import * as Interfaces from '@interfaces';
 
+export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -114,7 +114,7 @@ export type PublicationType =
 
 export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
-export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_NC' | 'CC_BY_NC_SA';
 
 export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN';
 
