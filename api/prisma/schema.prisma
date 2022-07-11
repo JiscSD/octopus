@@ -59,7 +59,7 @@ model Publication {
     licence                            LicenceType            @default(CC_BY)
     conflictOfInterestStatus           Boolean?               @default(false)
     conflictOfInterestText             String?
-    ethicalStatement                   Boolean?
+    ethicalStatement                   String?
     ethicalStatementFreeText           String?
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?

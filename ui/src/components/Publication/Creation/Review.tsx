@@ -95,7 +95,7 @@ const Review: React.FC = (): React.ReactElement => {
                             <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Ethical statement
                             </span>
-                            {ethicalStatement ? <CompletedIcon /> : <IncompleteIcon />}
+                            {ethicalStatement?.length ? <CompletedIcon /> : <IncompleteIcon />}
                         </div>
 
                         <div className="relative">
