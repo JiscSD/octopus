@@ -4,15 +4,13 @@ import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
+import * as Config from '@config';
 
 const ethicalStatementOptions: string[] = [
     'The results in this publication involved human or animal subjects.',
     'The results in this publication do <strong>not</strong> involve human or animal subjects.'
 ];
-const dataPermissionsOptions: string[] = [
-    'The results in this publication involved access to owned or copyrighted materials.',
-    'The results in this publication do <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
-];
+
 const dataAccessOptions: string[] = [
     'This publication includes all the relevant results or data collected by the authors.',
     'This publication contains a sample of relevant results or data, with the full data publicly stored on another platform.',
@@ -107,7 +105,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Data permissions statement" required />
                 <fieldset className="my-8 space-y-3">
-                    {dataPermissionsOptions.map((option) => (
+                    {Config.values.dataPermissionsOptions.map((option) => (
                         <label
                             key={option}
                             htmlFor={option}
@@ -120,7 +118,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 checked={option === dataPermissionsStatement}
                                 onChange={() => {
                                     updateDataPermissionsStatement(option);
-                                    if (option === dataPermissionsOptions[1]) {
+                                    if (option === Config.values.dataPermissionsOptions[1]) {
                                         updateDataPermissionsStatementProvidedBy(null);
                                     }
                                 }}
@@ -134,7 +132,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     ))}
                 </fieldset>
 
-                {dataPermissionsStatement === dataPermissionsOptions[0] && (
+                {dataPermissionsStatement === Config.values.dataPermissionsOptions[0] && (
                     <>
                         <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                             Permission for the data collection and sharing was given by <Components.RequiredIndicator />
