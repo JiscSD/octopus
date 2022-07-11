@@ -1,12 +1,12 @@
-import React from 'react';
-import JWT from 'jsonwebtoken';
-import Cookies from 'js-cookie';
-import * as luxon from 'luxon';
-import fileDownload from 'js-file-download';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import fileDownload from 'js-file-download';
+import JWT from 'jsonwebtoken';
+import * as luxon from 'luxon';
+import React from 'react';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 /**
@@ -178,7 +178,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
             Location: `${Config.urls.verify.path}?state=${Buffer.from(
                 context.req.url || Config.urls.home.path,
                 'utf-8'
-            )}&newUser=true`
+            ).toString('base64')}&newUser=true`
         });
         context.res.end();
     }
