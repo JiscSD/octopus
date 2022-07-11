@@ -107,6 +107,7 @@ export const initialDevSeed = async (): Promise<void> => {
 
 
 export const initialProdSeed = async (): Promise<void> => {
+    console.log("running initialProdSeed")
     // Create users
     await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
 
@@ -125,6 +126,26 @@ export const initialProdSeed = async (): Promise<void> => {
             // @ts-ignore
             data: problem
         });
+
+        if (problem.currentStatus === 'LIVE') {
+            await client.search.create({
+                index: 'publications',
+                id: problem.id,
+                body: {
+                    id: problem.id,
+                    type: problem.type,
+                    title: problem.title,
+                    licence: problem.licence,
+                    description: problem.description,
+                    keywords: problem.keywords,
+                    content: problem.content,
+                    language: 'en',
+                    currentStatus: problem.currentStatus,
+                    publishedDate: problem.publishedDate,
+                    cleanContent: htmlToText.convert(problem.content)
+                }
+            });
+        }    
 
     }
 
