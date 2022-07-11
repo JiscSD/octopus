@@ -444,9 +444,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {publicationData.ethicalStatement
-                                        ? 'The results and data in this publication involved human or animal subjects.'
-                                        : 'The results and data in this publication does not involve human or animal subjects.'}
+                                    {parse(publicationData.ethicalStatement)}
                                 </p>
                                 {!!publicationData.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
