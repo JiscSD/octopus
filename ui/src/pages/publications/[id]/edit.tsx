@@ -139,9 +139,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.DATA_STATEMENT,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -151,9 +151,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -163,9 +163,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -175,8 +175,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
         }

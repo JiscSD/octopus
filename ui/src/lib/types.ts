@@ -1,7 +1,7 @@
 import * as Interfaces from '@interfaces';
 
+export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -67,10 +67,10 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
-    updateEthicalStatement: (ethicalStatement: boolean) => void;
-    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
+    updateEthicalStatement: (ethicalStatement: string) => void;
     dataAccessStatement: string | null;
     updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
@@ -114,7 +114,7 @@ export type PublicationType =
 
 export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
-export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_NC' | 'CC_BY_NC_SA';
 
 export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN';
 

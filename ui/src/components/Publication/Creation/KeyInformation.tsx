@@ -41,7 +41,19 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     You retain the copyright to your work, and can choose what licence you would like to assign it.
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Contact the Octopus team if you would like to use a license that isn&apos;t listed.
+                    Please note that your licence must allow derivative works, to support current and expected
+                    functionality on the site (e.g. translation).
+                </span>
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                    Contact the Octopus team at{' '}
+                    <Components.Link
+                        href="mailto:help@jisc.ac.uk"
+                        openNew={true}
+                        className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                    >
+                        help@jisc.ac.uk
+                    </Components.Link>{' '}
+                    if you would like to use a license that isn&apos;t listed.
                 </span>
                 <div className="items-center lg:flex">
                     <select

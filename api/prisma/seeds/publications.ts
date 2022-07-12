@@ -566,6 +566,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-LIVE',
         currentStatus: 'LIVE',
+        doi: '10.82259/cty5-2g23',
         user: {
             connect: {
                 id: 'test-user-1'

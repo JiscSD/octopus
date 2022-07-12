@@ -58,7 +58,7 @@ model Publication {
     licence                            LicenceType            @default(CC_BY)
     conflictOfInterestStatus           Boolean?               @default(false)
     conflictOfInterestText             String?
-    ethicalStatement                   Boolean?
+    ethicalStatement                   String?
     ethicalStatementFreeText           String?
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
@@ -220,10 +220,8 @@ enum PublicationFlagCategoryEnum {
 enum LicenceType {
     CC_BY
     CC_BY_SA
-    CC_BY_ND
     CC_BY_NC
     CC_BY_NC_SA
-    CC_BY_NC_ND
 }
 
 enum Languages {

@@ -439,9 +439,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {publicationData.ethicalStatement
-                                        ? 'The results and data in this publication involved human or animal subjects.'
-                                        : 'The results and data in this publication does not involve human or animal subjects.'}
+                                    {parse(publicationData.ethicalStatement)}
                                 </p>
                                 {!!publicationData.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
@@ -538,35 +536,41 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
                     {/* Publication funders section */}
                     <Components.PublicationContentSection id="funders" title="Funders" hasBreak>
-                        {!publicationData.funders?.length ? (
+                        {!publicationData.funders?.length && !publicationData.fundersStatement ? (
                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                 No sources of funding have been specified for this{' '}
                                 {Helpers.formatPublicationType(publicationData.type)}.
                             </p>
                         ) : (
                             <>
-                                <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    This {Helpers.formatPublicationType(publicationData.type)} has the following sources
-                                    of funding:
-                                </p>
-                                <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {publicationData.funders?.map((funder) => {
-                                        return (
-                                            <li key={funder.id} className="ml-7 mt-1 list-disc">
-                                                <a
-                                                    href={funder.link}
-                                                    className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                                >
-                                                    {funder.name}
-                                                </a>{' '}
-                                                - {funder.city}, {funder.country}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                                <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                    {publicationData.fundersStatement}
-                                </p>
+                                {publicationData.funders?.length ? (
+                                    <>
+                                        <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                            This {Helpers.formatPublicationType(publicationData.type)} has the following
+                                            sources of funding:
+                                        </p>
+                                        <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                            {publicationData.funders?.map((funder) => {
+                                                return (
+                                                    <li key={funder.id} className="ml-7 mt-1 list-disc">
+                                                        <a
+                                                            href={funder.link}
+                                                            className="text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                                        >
+                                                            {funder.name}
+                                                        </a>{' '}
+                                                        - {funder.city}, {funder.country}
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </>
+                                ) : null}
+                                {publicationData.fundersStatement ? (
+                                    <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                        {publicationData.fundersStatement}
+                                    </p>
+                                ) : null}
                             </>
                         )}
                     </Components.PublicationContentSection>

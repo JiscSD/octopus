@@ -297,6 +297,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <button
                                     type="submit"
                                     form="query-form"
+                                    aria-label="Search"
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
