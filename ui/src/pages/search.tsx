@@ -498,6 +498,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         >
                                                             Previous
                                                         </button>
+
                                                         <button
                                                             onClick={(e) => {
                                                                 window.scrollTo({ top: 0, behavior: 'smooth' });
