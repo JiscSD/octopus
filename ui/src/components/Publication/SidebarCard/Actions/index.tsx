@@ -76,6 +76,14 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     };
 
     // Adds a small delay so the error just instantly jump off the screen
+    React.useEffect(() => {
+        if (!showRedFlagModel) {
+            setTimeout(() => {
+                setError(undefined);
+                setRedFlagComment('');
+            }, 500);
+        }
+    }, [showRedFlagModel]);
 
     return (
         <>
