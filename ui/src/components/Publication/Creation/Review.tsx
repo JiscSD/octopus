@@ -105,12 +105,14 @@ const Review: React.FC = (): React.ReactElement => {
                             {dataPermissionsStatement?.length ? <CompletedIcon /> : <IncompleteIcon />}
                         </div>
 
-                        <div className="relative">
-                            <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Data permissions statement provided by
-                            </span>
-                            {dataPermissionsStatementProvidedBy?.length ? <CompletedIcon /> : <IncompleteIcon />}
-                        </div>
+                        {dataPermissionsStatement === Config.values.dataPermissionsOptions[0] && (
+                            <div className="relative">
+                                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    Data permissions statement provided by
+                                </span>
+                                {dataPermissionsStatementProvidedBy?.length ? <CompletedIcon /> : <IncompleteIcon />}
+                            </div>
+                        )}
                     </>
                 )}
             </div>

@@ -858,6 +858,11 @@ export const octopusInformation: Interfaces.OctopusInformation = {
     }
 };
 
+export const dataPermissionsOptions: string[] = [
+    'The results in this publication involved access to owned or copyrighted materials.',
+    'The results in this publication does <strong>not</strong> involve access to materials owned or copyrighted materials (except those in the private ownership of the authors).'
+];
+
 export const HTMLStyles = `
     custom-table 
     prose
