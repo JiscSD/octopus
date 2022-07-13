@@ -78,46 +78,6 @@ const publicationSeeds = [
                 }
             }
         },
-        publicationRatings: {
-            create: [
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_WELL_DEFINED',
-                    userId: 'test-user-2',
-                    rating: 5,
-                    category: 'PROBLEM_WELL_DEFINED'
-                },
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_ORIGINAL',
-                    userId: 'test-user-2',
-                    rating: 10,
-                    category: 'PROBLEM_ORIGINAL'
-                },
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_IMPORTANT',
-                    userId: 'test-user-2',
-                    rating: 8,
-                    category: 'PROBLEM_IMPORTANT'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_WELL_DEFINED',
-                    userId: 'test-user-3',
-                    rating: 7,
-                    category: 'PROBLEM_WELL_DEFINED'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_ORIGINAL',
-                    userId: 'test-user-3',
-                    rating: 8,
-                    category: 'PROBLEM_ORIGINAL'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_IMPORTANT',
-                    userId: 'test-user-3',
-                    rating: 6,
-                    category: 'PROBLEM_IMPORTANT'
-                }
-            ]
-        },
         publicationStatus: {
             create: [
                 {
@@ -235,30 +195,6 @@ const publicationSeeds = [
                 {
                     status: 'LIVE',
                     createdAt: '2022-01-22T15:51:42.523Z'
-                }
-            ]
-        },
-        publicationRatings: {
-            create: [
-                {
-                    userId: 'test-user-2',
-                    rating: 5,
-                    category: 'HYPOTHESIS_WELL_DEFINED'
-                },
-                {
-                    userId: 'test-user-2',
-                    rating: 10,
-                    category: 'HYPOTHESIS_ORIGINAL'
-                },
-                {
-                    userId: 'test-user-3',
-                    rating: 7,
-                    category: 'HYPOTHESIS_WELL_DEFINED'
-                },
-                {
-                    userId: 'test-user-3',
-                    rating: 8,
-                    category: 'HYPOTHESIS_ORIGINAL'
                 }
             ]
         }
