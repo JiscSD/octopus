@@ -9,7 +9,7 @@ describe('delete a funder', () => {
     test('User can delete a funder from a DRAFT publication', async () => {
         const funder = await testUtils.agent
             .delete('/publications/publication-problem-draft/funders/publication-problem-draft-funder')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(funder.status).toEqual(200);
     });

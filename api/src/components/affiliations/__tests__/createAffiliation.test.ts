@@ -9,7 +9,7 @@ describe('create a affiliation', () => {
     test('User can add an affiliation to their DRAFT publication', async () => {
         const affiliation = await testUtils.agent
             .post('/publications/publication-problem-draft/affiliation')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',
@@ -61,7 +61,7 @@ describe('create a affiliation', () => {
     test('User must send correct information to create an affiliation (no name)', async () => {
         const affiliation = await testUtils.agent
             .post('/publications/publication-problem-draft/affiliation')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 city: 'Example city',
                 country: 'Example country',
@@ -73,7 +73,7 @@ describe('create a affiliation', () => {
     test('User must send correct information to create an affiliation (no city)', async () => {
         const affiliation = await testUtils.agent
             .post('/publications/publication-problem-draft/affiliation')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 country: 'Example country',
@@ -85,7 +85,7 @@ describe('create a affiliation', () => {
     test('User must send correct information to create an affiliation (no country)', async () => {
         const affiliation = await testUtils.agent
             .post('/publications/publication-problem-draft/affiliation')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',
@@ -97,7 +97,7 @@ describe('create a affiliation', () => {
     test('User must send correct information to create an affiliation (no link)', async () => {
         const affiliation = await testUtils.agent
             .post('/publications/publication-problem-draft/affiliation')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',
