@@ -9,7 +9,7 @@ describe('Delete co-author', () => {
     test('Delete a co-author', async () => {
         const deleteCoAuthor = await testUtils.agent
             .delete('/publications/publication-problem-draft/coauthor/testCoAuthor')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(200);
     });
@@ -17,7 +17,7 @@ describe('Delete co-author', () => {
     test('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
         const deleteCoAuthor = await testUtils.agent
             .delete('/publications/publication-problem-draft/coauthor/invalid-id')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(404);
     });
@@ -33,7 +33,7 @@ describe('Delete co-author', () => {
     test('Cannot Delete a co-author record if the publication is live', async () => {
         const deleteCoAuthor = await testUtils.agent
             .delete('/publications/publication-problem-draft/coauthor/testCoAuthorLive')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(404);
     });

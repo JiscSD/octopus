@@ -7,10 +7,11 @@ describe('Link co-author', () => {
         await testUtils.testSeed();
     });
 
+    // At the moment "message": "To link yourself as a co-author, you must be logged in."
     test('Link a co-author to a publication (allow)', async () => {
         const link = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '987654321' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'testemail@test.com',
                 code: 'test',
@@ -61,7 +62,7 @@ describe('Link co-author', () => {
     test('Cannot link as co-author if you are the creator', async () => {
         const link = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'testemail@test.com',
                 code: 'test',

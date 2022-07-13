@@ -9,7 +9,7 @@ describe('create coauthor', () => {
     test('Create a co-author', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'emailtest@emailtest.com'
             });
@@ -20,7 +20,7 @@ describe('create coauthor', () => {
     test('Cannot create a co-author without a valid email', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'test'
             });
@@ -64,7 +64,7 @@ describe('create coauthor', () => {
     test('Cannot create a co-author record when a record is already there for email & publicationId', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'testemail@test.com'
             });
