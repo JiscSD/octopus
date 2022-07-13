@@ -61,7 +61,6 @@ export { default as PublicationSidebar } from './Publication/Sidebar';
 export { default as PublicationSidebarCardActions } from './Publication/SidebarCard/Actions';
 export { default as PublicationSidebarCardActionsButton } from './Publication/SidebarCard/Actions/Button';
 export { default as PublicationSidebarCardGeneral } from './Publication/SidebarCard/General';
-export { default as PublicationSidebarCardRatings } from './Publication/SidebarCard/Ratings';
 export { default as PublicationSidebarCardSections } from './Publication/SidebarCard/Sections';
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
