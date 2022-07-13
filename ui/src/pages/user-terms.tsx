@@ -250,9 +250,9 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <Components.PageSubTitle text="SECTION 5: USER CONTENT" className="mt-8" />
                         <StandardText>
                             <>
-                                Registered Users can create publications on the Service website, submit ratings on other
-                                user&apos;s publications, place red flags against content or add links between
-                                other&apos;s content (<span className="font-bold">User Content</span>).
+                                Registered Users can create publications on the Service website, place red flags against
+                                content or add links between other&apos;s content (
+                                <span className="font-bold">User Content</span>).
                                 <br />
                                 <br />
                                 When you create a publication on the Service website as a Registered User, you will be

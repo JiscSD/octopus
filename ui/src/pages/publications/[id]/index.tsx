@@ -25,11 +25,6 @@ type SidebarCardProps = {
 const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
     <div className="w-full space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 dark:bg-grey-900">
         <Components.PublicationSidebarCardGeneral publication={props.publication} />
-        {/* <Components.PublicationSidebarCardRatings
-            id={props.publication.id}
-            type={props.publication.type}
-            ratings={props.publication.ratings}
-        /> */}
         <Components.PublicationSidebarCardActions publication={props.publication} />
         <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
     </div>
