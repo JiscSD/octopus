@@ -1,5 +1,9 @@
 // playwright.config.ts
 import { devices, type PlaywrightTestConfig } from '@playwright/test';
+import dotenv from 'dotenv';
+
+// Read from default ".env" file.
+dotenv.config();
 
 const config: PlaywrightTestConfig = {
     forbidOnly: !!process.env.CI,
@@ -15,10 +19,6 @@ const config: PlaywrightTestConfig = {
         {
             name: 'firefox',
             use: { ...devices['Desktop Firefox'] }
-        },
-        {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'] }
         }
     ]
 };

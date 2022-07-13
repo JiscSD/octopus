@@ -1,27 +1,33 @@
 import { expect, test } from '@playwright/test';
-import { login, logout } from './helpers';
+import * as Helpers from './helpers';
 
 const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
-const ORCID_TEST_NAME = process.env.ORCID_TEST_NAME || '';
 
-test('Can sign in using ORCID', async ({ browser, context }) => {
+test('Logged out: Can sign in using ORCID', async ({ browser, context }) => {
     const page = await browser.newPage({ ignoreHTTPSErrors: true });
     page.goto(UI_BASE);
 
-    await login(page);
+    await Helpers.login(page);
 
-    await expect(page.locator(`text=${ORCID_TEST_NAME}`)).toBeVisible;
+    await expect(page.locator(`text=${process.env.ORCID_TEST_NAME}`)).toBeVisible;
 });
 
-test('Can sign out using ORCID', async ({ browser, context }) => {
+test('Logged in: Can sign out using ORCID', async ({ browser, context }) => {
     const page = await browser.newPage({ ignoreHTTPSErrors: true });
     page.goto(UI_BASE);
 
-    await login(page);
+    await Helpers.login(page);
 
-    await expect(page.locator(`text=${ORCID_TEST_NAME}`)).toBeVisible;
+    await expect(page.locator(`text=${process.env.ORCID_TEST_NAME}`)).toBeVisible;
 
-    await logout(page);
+    await Helpers.logout(page);
 
     await expect(page.locator('[aria-label="Sign in with ORCID"]')).toBeVisible;
+});
+
+test('Logged out: Cannot access Publish', async ({ browser, context }) => {
+    const page = await browser.newPage({ ignoreHTTPSErrors: true });
+    page.goto(`${UI_BASE}/create`);
+    await page.waitForNavigation();
+    await expect(page.url()).toContain('https://orcid.org/');
 });
