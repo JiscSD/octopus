@@ -1,7 +1,7 @@
 const problems = [
     {
-        id: 'vwch-7f37',
-        doi: '10.82259/vwch-7f37',
+        id: 'why',
+        doi: '10.57874/why',
         title: 'What makes everything we can detect in the universe around us the way that it is, and why?',
         type: 'PROBLEM',
         licence: 'CC_BY',
