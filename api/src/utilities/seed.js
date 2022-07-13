@@ -4,7 +4,7 @@ const titleIDStore = new Map();
 // Manually create the GOD problem via seed data per env (this one is for int)
 titleIDStore.set(
     'What makes everything we can detect in the universe around us the way that it is, and why?',
-    'vwch-7f37'
+    'why'
 );
 const tsv = fs.readFileSync('./data.txt', 'utf-8');
 const loadData = async () => {
