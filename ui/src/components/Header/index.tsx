@@ -20,7 +20,26 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
-            <Components.Banner text="This is a beta release still under active development. Please don't use it for recording your real work... yet!" />
+            <Components.Banner>
+                <>
+                    This is a beta release under active development. Help us improve by providing{' '}
+                    <Components.Link
+                        href="https://forms.office.com/pages/responsepage.aspx?id=TTn5SBSKJ02CpvNfEjYSBdQdk25FM49NmnYND3Z_nExUNE5TNzVQNTdXNTY0UFdOT05CNkZUVDBZSy4u"
+                        className="w-fit underline  underline-offset-4"
+                        openNew
+                    >
+                        feedback
+                    </Components.Link>{' '}
+                    or contacting{' '}
+                    <Components.Link
+                        href="mailto:help@jisc.ac.uk"
+                        openNew
+                        className="w-fit underline  underline-offset-4"
+                    >
+                        help@jisc.ac.uk
+                    </Components.Link>
+                </>
+            </Components.Banner>
             {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
