@@ -9,7 +9,7 @@ describe('Get a bookmark', () => {
     test('Get a bookmark', async () => {
         const bookmark = await testUtils.agent
             .get('/publications/publication-hypothesis-live/bookmark')
-            .query({ apiKey: '1234' });
+            .query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(200);
     });

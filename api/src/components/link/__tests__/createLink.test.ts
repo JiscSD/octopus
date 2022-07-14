@@ -8,15 +8,15 @@ describe('Create links', () => {
         await testUtils.testSeed();
     });
 
-    test('User can create link from PROTOCOL (in DRAFT) to HYPOTHESIS (LIVE)', async () => {
+    test('User can create link from DATA (in DRAFT) to PROTOCOL (LIVE)', async () => {
         const link = await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             })
             .send({
-                to: 'publication-hypothesis-live',
-                from: 'publication-protocol-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(link.statusCode).toEqual(200);
@@ -26,11 +26,11 @@ describe('Create links', () => {
         const linkAttemptOne = await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             })
             .send({
-                to: 'publication-hypothesis-live',
-                from: 'publication-protocol-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(linkAttemptOne.statusCode).toEqual(200);
@@ -38,11 +38,11 @@ describe('Create links', () => {
         const linkAttemptTwo = await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             })
             .send({
-                to: 'publication-hypothesis-live',
-                from: 'publication-protocol-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(linkAttemptTwo.statusCode).toEqual(404);

@@ -8,9 +8,9 @@ beforeEach(async () => {
 describe('Update publication status', () => {
     test('User with permissions can update their publication to LIVE from DRAFT (after creating a link)', async () => {
         const updatePublicationAttemptOne = await testUtils.agent
-            .put('/publications/publication-protocol-draft/status/LIVE')
+            .put('/publications/publication-analysis-draft/status/LIVE')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             });
 
         expect(updatePublicationAttemptOne.status).toEqual(404);
@@ -19,17 +19,17 @@ describe('Update publication status', () => {
         await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             })
             .send({
-                from: 'publication-protocol-draft',
-                to: 'publication-hypothesis-live'
+                from: 'publication-analysis-draft',
+                to: 'publication-data-live'
             });
 
         const updatePublicationAttemptTwo = await testUtils.agent
-            .put('/publications/publication-protocol-draft/status/LIVE')
+            .put('/publications/publication-analysis-draft/status/LIVE')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             });
 
         expect(updatePublicationAttemptTwo.status).toEqual(200);
@@ -139,7 +139,7 @@ describe('Update publication status', () => {
 
     test('Publication owner can publish if all co-authors are confirmed', async () => {
         const updatePublication = await testUtils.agent
-            .put('/publications/publication-problem-draft/status/LIVE')
+            .put('/publications/publication-protocol-draft/status/LIVE')
             .query({
                 apiKey: '000000005'
             });

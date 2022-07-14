@@ -66,7 +66,7 @@ describe('create coauthor', () => {
             .post('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '000000005' })
             .send({
-                email: 'testemail@test.com'
+                email: 'test-user-6@jisc.ac.uk'
             });
 
         expect(coauthor.status).toEqual(409);

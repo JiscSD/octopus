@@ -7,7 +7,7 @@ describe('Get all bookmarks', () => {
     });
 
     test('Get a bookmark', async () => {
-        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '1234' });
+        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(200);
         expect(bookmark.body).toHaveLength(2);

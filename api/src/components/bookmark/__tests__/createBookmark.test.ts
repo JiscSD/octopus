@@ -9,7 +9,7 @@ describe('create a bookmark', () => {
     test('Create a bookmark', async () => {
         const bookmark = await testUtils.agent
             .post('/publications/publication-problem-live/bookmark')
-            .query({ apiKey: '1234' });
+            .query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(200);
     });
@@ -35,7 +35,7 @@ describe('create a bookmark', () => {
     test('Cannot create a bookmark on a publication that is not live', async () => {
         const bookmark = await testUtils.agent
             .post('/publications/publication-problem-draft/bookmark')
-            .query({ apiKey: '1234' });
+            .query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(403);
     });
