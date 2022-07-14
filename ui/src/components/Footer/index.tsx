@@ -4,6 +4,7 @@ import Image from 'next/image';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
+import * as SolidIcons from '@heroicons/react/solid';
 
 type Props = {
     waves: boolean;
@@ -39,6 +40,15 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     >
                         <Assets.Twitter width={25} height={25} className="fill-white-50" />
                     </Components.Link>
+                    <Components.Link href="mailto:help@jisc.ac.uk" openNew={true} ariaLabel="Email" className="h-fit">
+                        <SolidIcons.MailIcon width={26} height={26} className="fill-white-50" />
+                    </Components.Link>
+                </div>
+                {/* contact us section */}
+                <div className="col-span-1 mb-6 md:col-span-4">
+                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                        Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
+                    </h3>
                 </div>
                 {/** Links */}
                 <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
@@ -72,7 +82,6 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         </h3>
                     </Components.Link>
                 </div>
-
                 {/** Socket */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
                     <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white-50 dark:text-teal-200">
@@ -107,12 +116,6 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         &nbsp;
                     </h4>
                     <div className="flex"></div>
-                </div>
-                {/* contact us section */}
-                <div className="col-span-1 mb-4 mt-14 md:col-span-2 lg:col-span-3">
-                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                        Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
-                    </h3>
                 </div>
             </div>
             <Components.ScrollToTop />
