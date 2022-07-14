@@ -64,7 +64,7 @@ export interface CorePublication {
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string;
     ethicalStatementFreeText: string | null;
 }
 
@@ -79,7 +79,6 @@ export interface Publication extends CorePublication {
     dataPermissionsStatement: string | null;
     dataPermissionsStatementProvidedBy: string | null;
     selfDeclaration: boolean;
-    ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
@@ -247,46 +246,12 @@ export interface BookmarkedPublication {
     };
 }
 
-export interface Rating {
-    aggregate: RatingEntry[];
-    overall: {
-        _avg: {
-            rating: number;
-        };
-        _count: {
-            rating: number;
-        };
-    };
-}
-
-export interface RatingEntry {
-    id: string;
-    category: Types.Ratings;
-    _count: {
-        id: number;
-    };
-    _avg: {
-        rating: number | null;
-    };
-}
-
 export interface OctopusInformation {
     publications: {
         [key in Types.PublicationType]: {
             id: Types.PublicationType;
             heading: string;
             content: string;
-            ratings: {
-                [key in Types.Ratings]?: {
-                    id: Types.Ratings;
-                    value: string;
-                    description: string;
-                    labels: {
-                        negative: string;
-                        positive: string;
-                    };
-                };
-            };
         };
     };
     licences: {
@@ -325,13 +290,6 @@ export interface TextEditorImage {
     url: null | string;
     libraryUrl: null | string;
     width: null | string;
-}
-export interface APIRatingShape {
-    id: string;
-    publicationId: string;
-    userId: string;
-    rating: number;
-    category: Types.Ratings;
 }
 
 export interface ImagePreview {
@@ -388,7 +346,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     language: Types.Languages;
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string;
-    ethicalStatement?: boolean | null;
+    ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;

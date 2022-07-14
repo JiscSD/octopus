@@ -234,7 +234,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
 
-                        <label htmlFor="search-type" className="relative col-span-12 block lg:col-span-3">
+                        <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Searching
                             </span>
@@ -277,7 +277,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         <form
                             name="query-form"
                             id="query-form"
-                            className="col-span-12 lg:col-span-3 xl:col-span-4"
+                            className="col-span-12 lg:col-span-7"
                             onSubmit={handlerSearchFormSubmit}
                         >
                             <label htmlFor="search-query" className="relative block w-full">
@@ -297,6 +297,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <button
                                     type="submit"
                                     form="query-form"
+                                    aria-label="Search"
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
@@ -497,6 +498,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         >
                                                             Previous
                                                         </button>
+
                                                         <button
                                                             onClick={(e) => {
                                                                 window.scrollTo({ top: 0, behavior: 'smooth' });

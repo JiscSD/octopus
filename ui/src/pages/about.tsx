@@ -107,12 +107,12 @@ const About: NextPage = (): React.ReactElement => (
                     />
                     <CardItem
                         title="Emphasis on quality"
-                        content="Researchers should be recognised for the quality of their contributions, with work judged on its intrinsic merits not on anything else. The eight publication types on Octopus are designed to remove the incentives that lead to publication bias and questionable research practices because each part of the research process is now treated independently, not on how much it supports a hypothesis or theory. In Octopus, ‘findings’ are no more important than theories, methods, analyses or implementation – each are published independently and stand on their own merits. Octopus is also designed to remove sources of potential bias when assessing work: there are no photos, institutions or first names on publications that might affect ratings or reviews."
+                        content="Researchers should be recognised for the quality of their contributions, with work judged on its intrinsic merits not on anything else. The eight publication types on Octopus are designed to remove the incentives that lead to publication bias and questionable research practices because each part of the research process is now treated independently, not on how much it supports a hypothesis or theory. In Octopus, ‘findings’ are no more important than theories, methods, analyses or implementation – each are published independently and stand on their own merits. Octopus is also designed to remove sources of potential bias when assessing work: there are no photos, institutions or first names on publications that might affect reviews."
                         icon={<OutlineIcons.ShieldCheckIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
                         title="Fair recognition for researchers"
-                        content="The smaller publications on Octopus encourage more meaningful author groups which accurately reflect who contributed directly to each element. This creates a fairer recognition structure for those in specialist roles. All activity on platform is also recorded and stored on a user’s public profile – including publications, peer reviews, ratings and red flags – which over time will build a clear picture of their contributions to the collaborative Octopus community."
+                        content="The smaller publications on Octopus encourage more meaningful author groups which accurately reflect who contributed directly to each element. This creates a fairer recognition structure for those in specialist roles. All activity on platform is also recorded and stored on a user’s public profile – including publications, peer reviews and red flags – which over time will build a clear picture of their contributions to the collaborative Octopus community."
                         icon={<OutlineIcons.ScaleIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
@@ -206,7 +206,7 @@ const About: NextPage = (): React.ReactElement => (
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
                         <Components.ActionCard
                             title="Publish your work"
-                            content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
+                            content="Recording your work on Octopus is different from publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
                             icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.createPublication.path}
                             linkText="Publish your work"

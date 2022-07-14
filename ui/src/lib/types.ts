@@ -1,7 +1,7 @@
 import * as Interfaces from '@interfaces';
 
+export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
-export type { GetServerSideProps, NextPage, GetServerSidePropsContext } from 'next';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -67,10 +67,10 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
-    updateEthicalStatement: (ethicalStatement: boolean) => void;
-    updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => void;
+    updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
+    updateEthicalStatement: (ethicalStatement: string) => void;
     dataAccessStatement: string | null;
     updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
@@ -114,35 +114,9 @@ export type PublicationType =
 
 export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
-export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_ND' | 'CC_BY_NC' | 'CC_BY_NC_SA' | 'CC_BY_NC_ND';
+export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_NC' | 'CC_BY_NC_SA';
 
 export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN';
-
-export type Ratings =
-    | 'PROBLEM_WELL_DEFINED'
-    | 'PROBLEM_ORIGINAL'
-    | 'PROBLEM_IMPORTANT'
-    | 'HYPOTHESIS_WELL_DEFINED'
-    | 'HYPOTHESIS_ORIGINAL'
-    | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'PROTOCOL_CLEAR'
-    | 'PROTOCOL_ORIGINAL'
-    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
-    | 'DATA_WELL_ANNOTATED'
-    | 'DATA_SIZE_OF_DATASET'
-    | 'DATA_FOLLOWED_PROTOCOL'
-    | 'ANALYSIS_CLEAR'
-    | 'ANALYSIS_ORIGINAL'
-    | 'ANALYSIS_APPROPRIATE_METHODOLOGY'
-    | 'INTERPRETATION_CLEAR'
-    | 'INTERPRETATION_INSIGHTFUL'
-    | 'INTERPRETATION_CONSISTENT_WITH_DATA'
-    | 'REAL_WORLD_APPLICATION_CLEAR'
-    | 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT'
-    | 'REAL_WORLD_APPLICATION_IMPACTFUL'
-    | 'REVIEW_CLEAR'
-    | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL';
 
 export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';
 

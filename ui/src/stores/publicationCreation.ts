@@ -78,7 +78,7 @@ let store: any = (set: (params: any) => void) => ({
     // Ethical statement
     ethicalStatement: null,
     ethicalStatementFreeText: null,
-    updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
+    updateEthicalStatement: (ethicalStatement: string) => set(() => ({ ethicalStatement })),
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
 
     dataAccessStatement: null,
