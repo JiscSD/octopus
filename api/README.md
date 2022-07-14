@@ -38,7 +38,7 @@ To start the API:
 ~/api$ npm run start:local
 ```
 
-To run all tests locally:
+To run all tests locally (the API must be running first):
 
 ```bash
 ~/api$ npm run test:local

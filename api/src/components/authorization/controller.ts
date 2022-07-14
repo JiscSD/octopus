@@ -8,17 +8,7 @@ import * as authorizationService from 'authorization/service';
 
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
-        let callbackURL = '';
-        switch (process.env.STAGE) {
-            case 'local':
-                callbackURL = 'https://localhost:3001/login';
-                break;
-            case 'prod':
-                callbackURL = 'https://prod.octopus.ac/login'; // TODO: Change to www. when we update url
-                break;
-            default:
-                callbackURL = `https://${process.env.STAGE}.octopus.ac/login`;
-        }
+        const callbackURL = process.env.AUTHORISATION_CALLBACK_URL;
 
         const orcidRequest = await axios.post(
             'https://orcid.org/oauth/token',
