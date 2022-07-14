@@ -75,7 +75,7 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
             types: 'doi',
             attributes: {
                 event: 'publish',
-                url: `${process.env.BASE_URL}/publications/${doi}`,
+                url: `${process.env.BASE_URL}/publications/${publication.id}`,
                 doi: doi,
                 identifiers: [
                     {
