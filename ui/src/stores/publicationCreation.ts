@@ -20,6 +20,8 @@ let store: any = (set: (params: any) => void) => ({
                 description: '',
                 funderStatement: '',
                 funders: [],
+                affiliationsStatement: '',
+                affiliations: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
