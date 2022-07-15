@@ -83,7 +83,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">About the service:</span> To see more information on the
                                     Jisc&apos;s Octopus service and what it offers see our service information page at:
                                     <Components.Link
-                                        href="/about"
+                                        href={Config.urls.about.path}
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
@@ -121,7 +121,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">Privacy Policy:</span> Our Privacy Policy also applies
                                     to your use of the Service:
                                     <Components.Link
-                                        href="/privacy"
+                                        href={Config.urls.privacy.path}
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
@@ -501,7 +501,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     The Service&apos;s accessibility statement is set out at{' '}
                                 </span>
                                 <Components.Link
-                                    href="/accessibility"
+                                    href={Config.urls.accessibility.path}
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >
