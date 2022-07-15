@@ -71,7 +71,7 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlagAttempt2.status).toEqual(404);
+        expect(createFlagAttempt2.status).toEqual(400);
     });
 
     test('Cannot create a valid flag for a publication that is in DRAFT', async () => {

@@ -8,8 +8,8 @@ describe('Update co-author status', () => {
 
     test('Co-author updates their status to true', async () => {
         const coAuthor = await testUtils.agent
-            .patch('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '1234' })
+            .patch('/publications/publication-hypothesis-draft/coauthor')
+            .query({ apiKey: '000000006' })
             .send({
                 confirm: true
             });
@@ -20,7 +20,7 @@ describe('Update co-author status', () => {
     test('Co-author updates their status to false', async () => {
         const coAuthor = await testUtils.agent
             .patch('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '1234' })
+            .query({ apiKey: '000000006' })
             .send({
                 confirm: true
             });

@@ -9,7 +9,7 @@ describe('delete an affiliation', () => {
     test('User can delete an affiliation from a DRAFT publication', async () => {
         const affiliation = await testUtils.agent
             .delete('/publications/publication-problem-draft/affiliation/publication-problem-draft-affiliation')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(affiliation.status).toEqual(200);
     });
