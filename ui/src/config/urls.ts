@@ -147,11 +147,11 @@ const urls = {
         canonical: `${base.host}`
     },
     terms: {
-        path: '/terms',
+        path: '/user-terms',
         title: `Terms - ${base.title}`,
         description: 'Terms and conditions relevant to the Octopus site, including details on our open-source licence.',
         keywords: ['open access', 'open source', 'open license', 'open licence', 'GPLv3'],
-        canonical: `${base.host}/terms`
+        canonical: `${base.host}/user-terms`
     },
     privacy: {
         path: '/privacy',
