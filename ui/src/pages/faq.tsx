@@ -67,7 +67,7 @@ const faqContents = [
         href: 'how_account_octopus',
         id: 'how_account_octopus',
         heading: 'How do I create an account?',
-        content: `<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='${Config.urls.privacy.path}/privacy' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>`
+        content: `<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='${Config.urls.privacy.path}' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>`
     },
     {
         title: 'Does each publication get a DOI?',
