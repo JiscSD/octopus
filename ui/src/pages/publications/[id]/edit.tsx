@@ -263,6 +263,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateCoAuthors(props.draftedPublication.coAuthors);
         store.updateFunders(props.draftedPublication.funders);
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
+        store.updateAffiliations(props.draftedPublication.affiliations);
+        store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
     }, []);
 
     React.useEffect(() => {
