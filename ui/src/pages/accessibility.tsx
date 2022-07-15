@@ -21,7 +21,7 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                     <p>This statement applies to content published on </p>
                     <Components.Link
                         className="mb-6 w-fit rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
-                        href="/"
+                        href={Config.urls.home.path}
                     >
                         <span>https://www.octopus.ac</span>
                     </Components.Link>
