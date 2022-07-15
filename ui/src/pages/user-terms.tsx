@@ -83,11 +83,11 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">About the service:</span> To see more information on the
                                     Jisc&apos;s Octopus service and what it offers see our service information page at:
                                     <Components.Link
-                                        href="https://int.octopus.ac/about"
+                                        href="/about"
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
-                                        https://int.octopus.ac/about.
+                                        https://www.octopus.ac/about.
                                     </Components.Link>
                                 </li>
                                 <li className="mb-6">
@@ -121,11 +121,11 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">Privacy Policy:</span> Our Privacy Policy also applies
                                     to your use of the Service:
                                     <Components.Link
-                                        href="https://int.octopus.ac/privacy"
+                                        href="/privacy"
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
-                                        https://int.octopus.ac/privacy
+                                        https://www.octopus.ac/privacy
                                     </Components.Link>
                                 </li>
                                 <li className="mb-6">
@@ -501,11 +501,11 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     The Service&apos;s accessibility statement is set out at{' '}
                                 </span>
                                 <Components.Link
-                                    href="https://int.octopus.ac/accessibility"
+                                    href="/accessibility"
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >
-                                    https://int.octopus.ac/accessibility
+                                    https://www.octopus.ac/accessibility
                                 </Components.Link>
                             </>
                         </StandardText>
@@ -515,7 +515,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 Jisc has an internal complaints procedure. We aim to handle all complaints efficiently
                                 and quickly. If you have complaints regarding the Service please visit{' '}
                                 <Components.Link
-                                    href="https://int.octopus.ac/accessibility"
+                                    href="https://www.jisc.ac.uk/contact/complaints-and-escalations"
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >

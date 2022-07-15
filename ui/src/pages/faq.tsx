@@ -68,7 +68,7 @@ const faqContents = [
         id: 'how_account_octopus',
         heading: 'How do I create an account?',
         content:
-            "<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='https://int.octopus.ac/privacy' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>"
+            "<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='/privacy' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>"
     },
     {
         title: 'Does each publication get a DOI?',
@@ -84,7 +84,7 @@ const faqContents = [
         id: 'how_doi_octopus',
         heading: 'Is everything on Octopus open access?',
         content:
-            "<p className='mb-2'>All research recorded on Octopus is made available under an open access license, and anyone can read this content without creating an account.</p><p className='mb-2'>However, authors retain the copyright to their work and can select which license they publish under. So, be sure to check on a case-by-case basis before you share, adapt, or build upon another’s work.</p><p className='mb-2'>The platform itself is published under the open-source license GPLv3. The platform code is available via our public <a href='https://github.com/JiscSD/octopus' className='underline'>Github repository</a>, and we invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='https://int.octopus.ac/terms' className='underline'>Terms page</a> for more information.</p>"
+            "<p className='mb-2'>All research recorded on Octopus is made available under an open access license, and anyone can read this content without creating an account.</p><p className='mb-2'>However, authors retain the copyright to their work and can select which license they publish under. So, be sure to check on a case-by-case basis before you share, adapt, or build upon another’s work.</p><p className='mb-2'>The platform itself is published under the open-source license GPLv3. The platform code is available via our public <a href='https://github.com/JiscSD/octopus' className='underline'>Github repository</a>, and we invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='/terms' className='underline'>Terms page</a> for more information.</p>"
     },
     {
         title: 'What about copyright?',
