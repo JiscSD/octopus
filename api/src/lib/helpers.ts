@@ -1,5 +1,5 @@
-import * as cheerio from 'cheerio';
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 import * as I from 'interface';
 
@@ -18,6 +18,16 @@ export const isHTMLSafe = (content: string) => {
     });
 
     return !error;
+};
+
+export const getSafeHTML = (content: string) => {
+    const $ = cheerio.load(content, null, false);
+
+    $('*').map((_, element) => {
+        return $(element).removeAttr('class').removeAttr('style');
+    });
+
+    return $.html();
 };
 
 export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
