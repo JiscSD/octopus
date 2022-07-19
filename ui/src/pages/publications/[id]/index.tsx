@@ -439,7 +439,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {parse(publicationData.ethicalStatement)}
+                                    {publicationData.ethicalStatement}
                                 </p>
                                 {!!publicationData.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
