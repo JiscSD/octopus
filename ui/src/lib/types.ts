@@ -61,8 +61,8 @@ export type PublicationCreationStoreType = {
     updateLicence: (licence: LicenceType) => void;
     language: Languages;
     updateLanguage: (language: Languages) => void;
-    conflictOfInterestStatus: boolean;
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => void;
+    conflictOfInterestStatus: boolean | undefined;
+    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean | undefined) => void;
     conflictOfInterestText: string;
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];

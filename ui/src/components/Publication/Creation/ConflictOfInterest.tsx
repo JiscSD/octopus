@@ -21,6 +21,7 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
     const updateConflictOfInterestText = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
     );
+    console.log(conflictOfInterestStatus);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -38,8 +39,8 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="coi"
                             value="true"
-                            checked={conflictOfInterestStatus}
                             id="coi-true"
+                            checked={conflictOfInterestStatus}
                             onChange={() => updateConflictOfInterestStatus(true)}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
@@ -51,8 +52,8 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="coi"
                             value="false"
-                            checked={!conflictOfInterestStatus}
                             id="coi-false"
+                            checked={conflictOfInterestStatus === false}
                             onChange={() => updateConflictOfInterestStatus(false)}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>

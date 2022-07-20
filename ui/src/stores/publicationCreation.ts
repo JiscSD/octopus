@@ -25,7 +25,7 @@ let store: any = (set: (params: any) => void) => ({
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
-                conflictOfInterestStatus: true,
+                conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
@@ -68,7 +68,7 @@ let store: any = (set: (params: any) => void) => ({
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),
 
     // COI
-    conflictOfInterestStatus: true,
+    conflictOfInterestStatus: undefined,
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
     updateConflictOfInterestText: (conflictOfInterestText: string) => set(() => ({ conflictOfInterestText })),
