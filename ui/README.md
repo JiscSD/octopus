@@ -46,7 +46,7 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ## Testing
 
-UI tests will be written using Jest. Currently there will be no UI tests for Alpha release.
+End-to-end tests will be written using [Playwright](https://playwright.dev/) (TBC).
 
 ---
 
