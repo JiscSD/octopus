@@ -102,12 +102,6 @@ More information on migrations in Prisma can be found here: [Prisma Migrate Docu
 
 ## Testing
 
-API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working.
-
----
-
-## Workflows on push
-
-We have a job which runs the API test suite through github-actions. If any of the API tests fail, then the action will fail.
+API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working. These can be run manually using `npm run test:local`.
 
 ---
