@@ -20,7 +20,7 @@ A new way to publish your scientific work that's fast, free and fair.
 
 To run this application locally you will need:
 
--   [Node v14](https://nodejs.org/en/blog/release/v14.17.3/)
+-   [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
 -   [Docker](https://www.docker.com/)
 -   [Serverless Framework](https://www.serverless.com/)
 -   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
@@ -48,6 +48,11 @@ ELASTICSEARCH_PASSWORD=admin
 ELASTICSEARCH_ENDPOINT=localhost:9200
 VALIDATION_CODE_EXPIRY=10
 VALIDATION_CODE_ATTEMPTS=3
+
+DOI_PREFIX=DATACITE_DOI_PREFIX
+DATACITE_ENDPOINT=https://api.test.datacite.org/dois
+DATACITE_USER=DATACITE_API_USER
+DATACITE_PASSWORD=DATACITE_API_PASSWORD
 ```
 
 Then you can seed the database and start the API:
