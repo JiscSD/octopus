@@ -165,14 +165,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
         if (!store.linkTo?.length)
             ready = { ready: false, message: 'You must link this publication to at least one other' };
-        if (store.conflictOfInterestStatus !== true || store.conflictOfInterestStatus !== false) {
-            ready = { ready: false, message: 'You must select a conflict of interest option' };
-        }
+
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             ready = {
                 ready: false,
                 message: 'You have selected there is a conflict of interest, please provide a reason.'
             };
+        }
+        if (typeof store.conflictOfInterestStatus == 'undefined') {
+            ready = { ready: false, message: 'You must select a conflict of interest option' };
         }
         if (store.conflictOfInterestStatus === false) {
             ready = { ready: true, message: '' };
