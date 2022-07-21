@@ -175,9 +175,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (typeof store.conflictOfInterestStatus == 'undefined') {
             ready = { ready: false, message: 'You must select a conflict of interest option' };
         }
-        if (store.conflictOfInterestStatus === false) {
-            ready = { ready: true, message: '' };
-        }
         if (store.type === Config.values.octopusInformation.publications.DATA.id) {
             if (store.ethicalStatement === null)
                 ready = { ready: false, message: 'You must select an ethical statement option' };
