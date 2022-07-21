@@ -4,12 +4,13 @@ The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [cr
 
 ---
 
-## Local setup
+## Getting started
 
-For local development, in the **UI directory** run:
+To start the UI, in the **UI directory** run:
 
 ```bash
-~/ui$ npm run dev
+$ ~/ui$ npm install
+$ ~/ui$ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

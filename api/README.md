@@ -12,11 +12,31 @@ The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL]
 
 ### Environment File
 
-Create a `.env` file inside `~/api` using `cp .env.example .env` and updating the values within to match your environment.
+Create a `.env` file inside `~/api` using `cp .env.example .env` and updating the values within to match your environment:
 
-## Local setup
+```bash
+DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
+ORCID_SECRET=ORCID_SECRET_FROM_APP
+ORCID_ID=APP-ORCID_APP_ID_FROM_APP
+JWT_SECRET=abcdefghijklmnopqrstuvwxyz
+STAGE=local
+EMAIL_SENDER_ADDRESS=no-reply@local.ac
+BASE_URL=https://localhost:3001
+AUTHORISATION_CALLBACK_URL=${BASE_URL}/login
+ELASTICSEARCH_PROTOCOL=http
+ELASTICSEARCH_USER=admin
+ELASTICSEARCH_PASSWORD=admin
+ELASTICSEARCH_ENDPOINT=localhost:9200
+VALIDATION_CODE_EXPIRY=10
+VALIDATION_CODE_ATTEMPTS=3
 
-To run the API locally:
+DOI_PREFIX=DATACITE_DOI_PREFIX
+DATACITE_ENDPOINT=https://api.test.datacite.org/dois
+DATACITE_USER=DATACITE_API_USER
+DATACITE_PASSWORD=DATACITE_API_PASSWORD
+```
+
+## Getting started
 
 First, start up Docker Desktop and within the **root directory** run:
 
@@ -32,10 +52,12 @@ Then, open another terminal and within the **API directory** run:
 ~/api$ npm i
 ```
 
-To start the API:
+Then you can seed the database and start the API:
 
 ```bash
-~/api$ npm run start:local
+$ ~/api$ npm install
+$ ~/api$ npm run seed:local
+$ ~/api$ npm run start:local
 ```
 
 To run all tests locally (the API must be running first):
@@ -43,6 +65,8 @@ To run all tests locally (the API must be running first):
 ```bash
 ~/api$ npm run test:local
 ```
+
+To view the UI, you will also need to start the UI Next.js application. More information can be found in the [UI readme](../ui/README.md).
 
 ---
 
