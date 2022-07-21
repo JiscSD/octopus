@@ -12,7 +12,7 @@ The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL]
 
 ### Environment File
 
-Create a `.env` file inside `api/prisma` with credentials to connect to the postgres db which is hosted in the provided docker container.
+Create a `.env` file inside `~/api` using `cp .env.example .env` and updating the values within to match your environment.
 
 ## Local setup
 
@@ -51,8 +51,7 @@ To run all tests locally (the API must be running first):
 ## Commands
 
 Whenever a change is made to the Prisma Schema you must run `npx prisma generate` in order for the Prisma Client to update.  
-If you do not run this, the application
-code will break as the client will not reflect the latest schema.
+If you do not run this, the application code will break as the client will not reflect the latest schema.
 
 ```bash
 ~/api$ npx prisma generate
