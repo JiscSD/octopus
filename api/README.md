@@ -4,15 +4,19 @@ The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL]
 
 ## Prerequisites
 
--   Install [Node.js](https://github.com/nodejs/node) `v14`.
-    -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
--   [Serverless](https://www.serverless.com/).
--   [Docker Compose](https://docs.docker.com/get-docker/).
--   .env file.
+-   Install [Node](https://github.com/nodejs/node) `v14` (`v14.18.1` or greater).
+-   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
+-   Install [Docker](https://docs.docker.com/get-docker).
+-   Install [Serverless](https://www.serverless.com).
+-   Obtain credentials to allow access to the [ORCID Public/Member API](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/).
+-   Obtain credentials to allow access to the [DataCite API](https://support.datacite.org/docs/api).
+-   Create your environment file as described below.
 
 ### Environment File
 
-Create a `.env` file inside `~/api` using `cp .env.example .env` and updating the values within to match your environment:
+Create a `.env` file inside `~/api` using `cp .env.example .env`.
+
+Make sure to update the values within to match your environment.
 
 ```bash
 DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
@@ -55,7 +59,6 @@ Then, open another terminal and within the **API directory** run:
 Then you can seed the database and start the API:
 
 ```bash
-$ ~/api$ npm install
 $ ~/api$ npm run seed:local
 $ ~/api$ npm run start:local
 ```
