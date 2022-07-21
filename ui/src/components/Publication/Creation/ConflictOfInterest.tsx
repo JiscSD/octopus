@@ -21,7 +21,6 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
     const updateConflictOfInterestText = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
     );
-    console.log(conflictOfInterestStatus);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
