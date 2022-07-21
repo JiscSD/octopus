@@ -49,10 +49,15 @@ On reaching `/verify` The flow for this is as follows:
 1. User enters their email address, and requests a code be sent to them.
 2. A short 7 character code (eg. `UR10WDK`) is then emailed to the provided address.
 3. The user then enters this code in the supplied field, and clicks to verify.
+4. The user is then redirected to their previously entered destination (if supplied).
 
 On successful verification, the user email address is added to their account, and they will not be prompted again.
 
-Successive failures will result in a code being invalidated, requiring a new code to be sent. The thresholds for this are set within the [API](./api/README.md) `.env` file as `VALIDATION_CODE_EXPIRY` (in minutes) and `VALIDATION_CODE_ATTEMPTS` (the number of permitted attempts).
+Successive failures will result in a code being invalidated, requiring a new code to be sent.
+
+Codes remain valid for a set period in minutes, and beyond this the code is no longer accepted by the API.
+
+The thresholds for both validity period and successive falures are set within the [API](./api/README.md) `.env` file as `VALIDATION_CODE_EXPIRY` (in minutes) and `VALIDATION_CODE_ATTEMPTS` (the number of permitted attempts) respectively.
 
 If a user has not received a code, or has entered the incorrect email address, they are also presented with an option to update their email address or to send a new code.
 
