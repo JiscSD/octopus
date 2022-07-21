@@ -9,7 +9,7 @@ The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [cr
 To start the UI, in the **UI directory** run:
 
 ```bash
-$ ~/ui$ npm install
+$ ~/ui$ npm i
 $ ~/ui$ npm run dev
 ```
 
