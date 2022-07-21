@@ -67,8 +67,6 @@ A previously verified user can also update their email address via their "My pub
 
 A user email address is only updated once successfully verified, so entering a new email here will not reflect on the user account until they have completed the process.
 
-
-
 ---
 
 ## Branching Model
