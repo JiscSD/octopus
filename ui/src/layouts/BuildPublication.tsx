@@ -1,14 +1,14 @@
-import React from 'react';
-import * as Router from 'next/router';
-import * as ReactIconsFA from 'react-icons/fa';
 import * as OutlineIcons from '@heroicons/react/outline';
+import * as Router from 'next/router';
+import React from 'react';
+import * as ReactIconsFA from 'react-icons/fa';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as Config from '@config';
 import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
+import * as Stores from '@stores';
 
 type NavigationButtonProps = {
     text: string;
