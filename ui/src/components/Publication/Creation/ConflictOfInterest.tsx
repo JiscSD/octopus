@@ -53,7 +53,10 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             value="false"
                             id="coi-false"
                             checked={conflictOfInterestStatus === false}
-                            onChange={() => updateConflictOfInterestStatus(false)}
+                            onChange={() => {
+                                updateConflictOfInterestStatus(false);
+                                updateConflictOfInterestText('');
+                            }}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
                     </label>
