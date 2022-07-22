@@ -3,13 +3,13 @@ import * as testUtils from 'lib/testUtils';
 describe('create coauthor', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Create a co-author', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'emailtest@emailtest.com'
             });
@@ -20,7 +20,7 @@ describe('create coauthor', () => {
     test('Cannot create a co-author without a valid email', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 email: 'test'
             });
@@ -64,9 +64,9 @@ describe('create coauthor', () => {
     test('Cannot create a co-author record when a record is already there for email & publicationId', async () => {
         const coauthor = await testUtils.agent
             .post('/publications/publication-problem-draft/coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
-                email: 'testemail@test.com'
+                email: 'test-user-6@jisc.ac.uk'
             });
 
         expect(coauthor.status).toEqual(409);

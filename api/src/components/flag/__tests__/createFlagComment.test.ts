@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Create flags comments on a flag', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User who created the flag can leave comments', async () => {
@@ -61,7 +61,7 @@ describe('Create flags comments on a flag', () => {
         const createFlagComment = await testUtils.agent
             .post('/flag/publication-problem-live-flag/comment')
             .query({
-                apiKey: '1234'
+                apiKey: '000000003'
             })
             .send({
                 comment: 'Comments'

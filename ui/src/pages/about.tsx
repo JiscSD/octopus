@@ -72,21 +72,27 @@ const About: NextPage = (): React.ReactElement => (
                             accessibility of all primary research, in full.
                         </h2>
                     </div>
-                    <div className="mx-auto mb-20 mt-5 flex w-fit space-x-6">
+                    <div className="mx-auto mb-20 mt-10 flex w-fit space-x-6 ">
                         <Components.Link
                             href={Config.urls.faq.path}
-                            className=" flex w-52 items-center justify-between rounded-lg bg-teal-400 p-5 text-center text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                            className="flex items-center justify-between rounded-lg bg-teal-400 px-8 py-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                        >
+                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">FAQs</span>
+                        </Components.Link>
+                        <Components.Link
+                            href={Config.urls.authorGuide.path}
+                            className="flex items-center justify-between rounded-lg bg-teal-400 px-8 py-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
                         >
                             <span className="text-center font-montserrat text-sm leading-none tracking-wide">
-                                How to use Octopus
+                                Author Guide
                             </span>
                         </Components.Link>
                         <Components.Link
-                            href={Config.urls.about.path}
-                            className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
+                            href={Config.urls.octopusAims.path}
+                            className="flex items-center justify-between rounded-lg bg-teal-400 px-6 py-5 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
                         >
                             <span className="text-center font-montserrat text-sm leading-none tracking-wide">
-                                Octopus in depth
+                                Our aims in detail
                             </span>
                         </Components.Link>
                     </div>
@@ -101,12 +107,12 @@ const About: NextPage = (): React.ReactElement => (
                     />
                     <CardItem
                         title="Emphasis on quality"
-                        content="Researchers should be recognised for the quality of their contributions, with work judged on its intrinsic merits not on anything else. The eight publication types on Octopus are designed to remove the incentives that lead to publication bias and questionable research practices because each part of the research process is now treated independently, not on how much it supports a hypothesis or theory. In Octopus, ‘findings’ are no more important than theories, methods, analyses or implementation – each are published independently and stand on their own merits. Octopus is also designed to remove sources of potential bias when assessing work: there are no photos, institutions or first names on publications that might affect ratings or reviews."
+                        content="Researchers should be recognised for the quality of their contributions, with work judged on its intrinsic merits not on anything else. The eight publication types on Octopus are designed to remove the incentives that lead to publication bias and questionable research practices because each part of the research process is now treated independently, not on how much it supports a hypothesis or theory. In Octopus, ‘findings’ are no more important than theories, methods, analyses or implementation – each are published independently and stand on their own merits. Octopus is also designed to remove sources of potential bias when assessing work: there are no photos, institutions or first names on publications that might affect reviews."
                         icon={<OutlineIcons.ShieldCheckIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
                         title="Fair recognition for researchers"
-                        content="The smaller publications on Octopus encourage more meaningful author groups which accurately reflect who contributed directly to each element. This creates a fairer recognition structure for those in specialist roles. All activity on platform is also recorded and stored on a user’s public profile – including publications, peer reviews, ratings and red flags – which over time will build a clear picture of their contributions to the collaborative Octopus community."
+                        content="The smaller publications on Octopus encourage more meaningful author groups which accurately reflect who contributed directly to each element. This creates a fairer recognition structure for those in specialist roles. All activity on platform is also recorded and stored on a user’s public profile – including publications, peer reviews and red flags – which over time will build a clear picture of their contributions to the collaborative Octopus community."
                         icon={<OutlineIcons.ScaleIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
@@ -124,13 +130,13 @@ const About: NextPage = (): React.ReactElement => (
                             <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Do you feel like these principles align with your own?
                             </h2>
-                            <h3 className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
+                            <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
                                 You can help to support Octopus by joining our user community.
-                            </h3>
+                            </p>
                             <Components.Button
+                                title="Learn more about getting involved."
                                 link
-                                href="https://www.jisc.ac.uk/get-involved/octopus-user-community"
-                                title="Join our user community"
+                                href={Config.urls.getInvolved.path}
                                 iconPosition="RIGHT"
                                 icon={
                                     <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
@@ -200,7 +206,7 @@ const About: NextPage = (): React.ReactElement => (
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
                         <Components.ActionCard
                             title="Publish your work"
-                            content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
+                            content="Recording your work on Octopus is different from publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
                             icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.createPublication.path}
                             linkText="Publish your work"

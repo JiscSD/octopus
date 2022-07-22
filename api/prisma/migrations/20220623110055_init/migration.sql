@@ -80,7 +80,7 @@ CREATE TABLE "Publication" (
     "description" TEXT,
     "keywords" TEXT[],
     "content" TEXT,
-    "doi" TEXT,
+    "doi" TEXT NOT NULL,
     "language" "Languages" NOT NULL DEFAULT E'en',
     "publishedDate" TIMESTAMP(3),
     "currentStatus" "PublicationStatusEnum" NOT NULL DEFAULT E'DRAFT',
@@ -88,6 +88,7 @@ CREATE TABLE "Publication" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "fundersStatement" TEXT,
+    "affiliationStatement" TEXT,
 
     CONSTRAINT "Publication_pkey" PRIMARY KEY ("id")
 );
@@ -107,11 +108,24 @@ CREATE TABLE "Funders" (
 );
 
 -- CreateTable
+CREATE TABLE "Affiliations" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "country" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "link" TEXT NOT NULL,
+    "ror" TEXT,
+    "publicationId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Affiliations_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Links" (
     "id" TEXT NOT NULL,
     "publicationFrom" TEXT NOT NULL,
     "publicationTo" TEXT NOT NULL,
-    "active" BOOLEAN DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -216,6 +230,9 @@ ALTER TABLE "Publication" ADD CONSTRAINT "Publication_createdBy_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "Funders" ADD CONSTRAINT "Funders_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Affiliations" ADD CONSTRAINT "Affiliations_publicationId_fkey" FOREIGN KEY ("publicationId") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Links" ADD CONSTRAINT "Links_publicationFrom_fkey" FOREIGN KEY ("publicationFrom") REFERENCES "Publication"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Get individual user', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Correct user returned', async () => {

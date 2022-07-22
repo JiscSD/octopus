@@ -4,6 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
+import * as publicationService from 'publication/service';
+
 export {
     ImageExtension,
     Languages,
@@ -74,12 +76,13 @@ export interface CreatePublicationRequestBody {
     content?: string;
     language?: Languages;
     fundersStatement: string;
-    ethicalStatement?: boolean;
+    ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    affiliationStatement?: string;
 }
 
 export interface OpenSearchPublication {
@@ -115,7 +118,7 @@ export interface UpdatePublicationRequestBody {
     keywords?: string[];
     id?: string;
     language?: Languages;
-    ethicalStatement?: boolean;
+    ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
@@ -136,6 +139,8 @@ export interface PublicationFilters {
     dateFrom?: string;
     dateTo?: string;
 }
+
+export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
 
 /**
  * @description Links
@@ -404,39 +409,6 @@ export interface GetBookmarkPathParams {
 export interface GetAllBookmarkPathParams {
     id: string;
 }
-/* @description Ratings
- */
-
-export type Ratings =
-    | 'PROBLEM_WELL_DEFINED'
-    | 'PROBLEM_ORIGINAL'
-    | 'PROBLEM_IMPORTANT'
-    | 'HYPOTHESIS_WELL_DEFINED'
-    | 'HYPOTHESIS_ORIGINAL'
-    | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'PROTOCOL_CLEAR'
-    | 'PROTOCOL_ORIGINAL'
-    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
-    | 'DATA_WELL_ANNOTATED'
-    | 'DATA_SIZE_OF_DATASET'
-    | 'DATA_FOLLOWED_PROTOCOL'
-    | 'ANALYSIS_CLEAR'
-    | 'ANALYSIS_ORIGINAL'
-    | 'ANALYSIS_APPROPRIATE_METHODOLOGY'
-    | 'INTERPRETATION_CLEAR'
-    | 'INTERPRETATION_INSIGHTFUL'
-    | 'INTERPRETATION_CONSISTENT_WITH_DATA'
-    | 'REAL_WORLD_APPLICATION_CLEAR'
-    | 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT'
-    | 'REAL_WORLD_APPLICATION_IMPACTFUL'
-    | 'REVIEW_CLEAR'
-    | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL';
-
-export interface CreateRatingRequestBody {
-    type: Ratings;
-    value: number;
-}
 
 /**
  * @description References
@@ -461,11 +433,7 @@ export interface UpdateReferencePath {
 }
 
 export interface OctopusInformation {
-    publications: {
-        [key in PublicationType]: {
-            ratingCategories: Ratings[];
-        };
-    };
+    publications: PublicationType[];
     languages: Languages[];
 }
 export interface CreateFlagCommentBody {
@@ -482,10 +450,6 @@ export interface ResolveFlagPathParams {
 
 export interface DestroyImagePathParams {
     id: string;
-}
-
-export interface GetRatingsQueryParams {
-    user?: string;
 }
 
 export interface EmailSendOptions {
@@ -522,4 +486,35 @@ export interface GetFlagsByUserID {
 
 export interface GetFlagsByPublicationID {
     id: string;
+}
+
+export interface DOIResponse {
+    data: {
+        id: string;
+        type: 'dois';
+        attributes: {
+            doi: string;
+            prefix: string;
+            suffix: string;
+        };
+    };
+}
+
+//affiliations
+
+export interface CreateAffiliationPathParams {
+    id: string;
+}
+
+export interface DeleteAffiliationPathParams {
+    id: string;
+    affiliation: string;
+}
+
+export interface CreateAffiliationRequestBody {
+    name: string;
+    ror?: string;
+    city: string;
+    country: string;
+    link: string;
 }

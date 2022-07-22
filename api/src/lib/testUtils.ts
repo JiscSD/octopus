@@ -8,7 +8,7 @@ jest.setTimeout(60000);
 
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
-export const initialSeed = async (): Promise<void> => {
+export const testSeed = async (): Promise<void> => {
     for (const user of seeds.users) {
         await client.prisma.user.create({
             // @ts-ignore

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
+import * as SolidIcons from '@heroicons/react/solid';
 
 type Props = {
     waves: boolean;
@@ -39,6 +40,15 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     >
                         <Assets.Twitter width={25} height={25} className="fill-white-50" />
                     </Components.Link>
+                    <Components.Link href="mailto:help@jisc.ac.uk" openNew={true} ariaLabel="Email" className="h-fit">
+                        <SolidIcons.MailIcon width={26} height={26} className="fill-white-50" />
+                    </Components.Link>
+                </div>
+                {/* contact us section */}
+                <div className="col-span-1 mb-6 md:col-span-4">
+                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                        Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
+                    </h3>
                 </div>
                 {/** Links */}
                 <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
@@ -53,6 +63,9 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     </Components.Link>
                     <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
                         <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">FAQs</h3>
+                    </Components.Link>
+                    <Components.Link href={Config.urls.getInvolved.path} className="mb-1 block max-w-fit p-1">
+                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Get involved</h3>
                     </Components.Link>
                 </div>
                 {/** Links */}
@@ -92,12 +105,9 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white-50 dark:text-teal-200">
                         A collaboration with
                     </h4>
-                    <div className="flex space-x-4">
+                    <div className="flex">
                         <Components.Link href="https://jisc.ac.uk" openNew={true} className="flex">
                             <Image src="/images/jisc-logo.svg" alt="Jisc Logo" width={60} height={60} />
-                        </Components.Link>
-                        <Components.Link href="https://science-octopus.org/" openNew={true} className="flex">
-                            <Image src="/meta/octopus.svg" alt="Octopus logo" width={60} height={60} />
                         </Components.Link>
                     </div>
                 </div>

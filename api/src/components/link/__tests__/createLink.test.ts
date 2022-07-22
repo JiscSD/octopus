@@ -5,18 +5,18 @@ import * as linkService from 'link/service';
 describe('Create links', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
-    test('User can create link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE)', async () => {
+    test('User can create link from DATA (in DRAFT) to PROTOCOL (LIVE)', async () => {
         const link = await testUtils.agent
             .post('/links')
             .query({
                 apiKey: '123456789'
             })
             .send({
-                to: 'publication-problem-live',
-                from: 'publication-hypothesis-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(link.statusCode).toEqual(200);
@@ -29,8 +29,8 @@ describe('Create links', () => {
                 apiKey: '123456789'
             })
             .send({
-                to: 'publication-problem-live',
-                from: 'publication-hypothesis-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(linkAttemptOne.statusCode).toEqual(200);
@@ -41,8 +41,8 @@ describe('Create links', () => {
                 apiKey: '123456789'
             })
             .send({
-                to: 'publication-problem-live',
-                from: 'publication-hypothesis-draft'
+                to: 'publication-protocol-live',
+                from: 'publication-data-draft'
             });
 
         expect(linkAttemptTwo.statusCode).toEqual(404);
@@ -66,7 +66,7 @@ describe('Create links', () => {
         const link = await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '123456789'
+                apiKey: '000000005'
             })
             .send({
                 to: 'publication-hypothesis-draft',
@@ -96,7 +96,7 @@ describe('Create links', () => {
                 from: 'publication-hypothesis-draft'
             });
 
-        expect(link.statusCode).toEqual(404);
+        expect(link.statusCode).toEqual(401);
     });
 });
 

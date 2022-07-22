@@ -3,13 +3,13 @@ import * as testUtils from 'lib/testUtils';
 describe('delete a funder', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can delete a funder from a DRAFT publication', async () => {
         const funder = await testUtils.agent
             .delete('/publications/publication-problem-draft/funders/publication-problem-draft-funder')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(funder.status).toEqual(200);
     });

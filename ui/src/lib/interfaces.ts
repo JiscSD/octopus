@@ -1,7 +1,6 @@
+import * as Types from '@types';
 import * as Axios from 'axios';
 import React from 'react';
-
-import * as Types from '@types';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -33,14 +32,18 @@ export interface PublicationRef {
         lastName: string;
         orcid: string;
     };
+    linkedTo: LinkTo[];
+    linkedFrom: LinkFrom[];
 }
 
 export interface LinkTo {
+    linkedTo: any;
     id: string;
     publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
+    linkedFrom: any;
     id: string;
     publicationFromRef: PublicationRef;
 }
@@ -61,7 +64,7 @@ export interface CorePublication {
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string;
     ethicalStatementFreeText: string | null;
 }
 
@@ -76,10 +79,11 @@ export interface Publication extends CorePublication {
     dataPermissionsStatement: string | null;
     dataPermissionsStatementProvidedBy: string | null;
     selfDeclaration: boolean;
-    ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
+    affiliations: Affiliations[];
+    affiliationStatement: string | null;
     publicationFlags: Flag[];
     references: Reference[];
 }
@@ -91,6 +95,32 @@ export interface Reference {
     type: ReferenceType;
     text: string;
     location?: string;
+}
+
+export interface PublicationWithLinks {
+    rootPublication: Publication;
+    linkedToPublications: {
+        publicationFrom: string;
+        publicationTo: string;
+        publicationFromType: Types.PublicationType;
+        publicationToType: Types.PublicationType;
+        publicationToTitle: string;
+        publicationToPublishedDate: string;
+        publicationToCurrentStatus: Types.PublicationStatuses;
+        publicationToFirstName: string;
+        publicationToLastName: string;
+    }[];
+    linkedFromPublications: {
+        publicationFrom: string;
+        publicationTo: string;
+        publicationFromType: Types.PublicationType;
+        publicationToType: Types.PublicationType;
+        publicationFromTitle: string;
+        publicationFromPublishedDate: string;
+        publicationFromCurrentStatus: Types.PublicationStatuses;
+        publicationFromFirstName: string;
+        publicationFromLastName: string;
+    }[];
 }
 
 export interface CoAuthor {
@@ -226,46 +256,12 @@ export interface BookmarkedPublication {
     };
 }
 
-export interface Rating {
-    aggregate: RatingEntry[];
-    overall: {
-        _avg: {
-            rating: number;
-        };
-        _count: {
-            rating: number;
-        };
-    };
-}
-
-export interface RatingEntry {
-    id: string;
-    category: Types.Ratings;
-    _count: {
-        id: number;
-    };
-    _avg: {
-        rating: number | null;
-    };
-}
-
 export interface OctopusInformation {
     publications: {
         [key in Types.PublicationType]: {
             id: Types.PublicationType;
             heading: string;
             content: string;
-            ratings: {
-                [key in Types.Ratings]?: {
-                    id: Types.Ratings;
-                    value: string;
-                    description: string;
-                    labels: {
-                        negative: string;
-                        positive: string;
-                    };
-                };
-            };
         };
     };
     licences: {
@@ -305,13 +301,6 @@ export interface TextEditorImage {
     libraryUrl: null | string;
     width: null | string;
 }
-export interface APIRatingShape {
-    id: string;
-    publicationId: string;
-    userId: string;
-    rating: number;
-    category: Types.Ratings;
-}
 
 export interface ImagePreview {
     name: string;
@@ -319,6 +308,15 @@ export interface ImagePreview {
 }
 
 export interface Funder {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror?: string;
+    id: string;
+}
+
+export interface Affiliations {
     name: string;
     country: string;
     city: string;
@@ -358,12 +356,13 @@ export interface PublicationUpdateRequestBody extends JSON {
     language: Types.Languages;
     conflictOfInterestStatus: boolean;
     conflictOfInterestText: string;
-    ethicalStatement?: boolean | null;
+    ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
+    affiliationStatement?: string | null;
 }
 
 export interface CreationStep {

@@ -45,6 +45,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
+        console.log(error);
     }
 
     if (!token || error) {

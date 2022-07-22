@@ -27,7 +27,6 @@
             "authorization/*": ["src/components/authorization/*"],
             "verification/*": ["src/components/verification/*"],
             "image/*": ["src/components/image/*"],
-            "rating/*": ["src/components/rating/*"],
             "coauthor/*": ["src/components/coauthor/*"],
             "funder/*": ["src/components/funder/*"],
             "flag/*": ["src/components/flag/*"],

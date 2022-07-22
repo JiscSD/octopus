@@ -1,5 +1,6 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/solid';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
@@ -63,12 +64,12 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 classesCopy.background = 'bg-green-300 dark:bg-green-500';
                 break;
             case 'RED_FLAG':
-                classesCopy.title = 'text-white-50';
-                classesCopy.details = 'text-white-100';
+                classesCopy.title = 'text-red-800';
+                classesCopy.details = 'text-red-700';
                 classesCopy.icon = (
-                    <OutlineIcons.FlagIcon className={`h-5 w-5 text-white-100 ${classes.icon}`} aria-hidden="true" />
+                    <SolidIcons.FlagIcon className={`h-5 w-5 text-red-800 ${classes.icon}`} aria-hidden="true" />
                 );
-                classesCopy.background = 'bg-red-500';
+                classesCopy.background = 'bg-red-50';
                 break;
             default:
                 // Info

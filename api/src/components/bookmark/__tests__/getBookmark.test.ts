@@ -3,13 +3,13 @@ import * as testUtils from 'lib/testUtils';
 describe('Get a bookmark', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Get a bookmark', async () => {
         const bookmark = await testUtils.agent
             .get('/publications/publication-hypothesis-live/bookmark')
-            .query({ apiKey: '1234' });
+            .query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(200);
     });

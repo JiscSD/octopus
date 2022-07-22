@@ -1,8 +1,8 @@
+import * as coAuthorService from 'coauthor/service';
+import * as email from 'email';
+import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
-import * as coAuthorService from 'coauthor/service';
-import * as I from 'interface';
-import * as email from 'email';
 
 export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateCoAuthorRequestBody, undefined, I.CreateCoAuthorPathParams>
@@ -45,7 +45,7 @@ export const create = async (
         await email.notifyCoAuthor({
             coAuthor: event.body.email,
             userFirstName: event.user.firstName,
-            userLastName: event.user.lastName || '',
+            userLastName: event.user.lastName,
             code: coAuthor.code,
             publicationId: event.pathParameters.id,
             publicationTitle: publication.title || 'No title yet'
@@ -124,6 +124,13 @@ export const link = async (
             if (!event.user) {
                 return response.json(403, {
                     message: 'To link yourself as a co-author, you must be logged in.'
+                });
+            }
+
+            // Cannot link user without a verified email address
+            if (!event.user.email) {
+                return response.json(403, {
+                    message: 'To link yourself as a co-author, you must have a verified email address.'
                 });
             }
 

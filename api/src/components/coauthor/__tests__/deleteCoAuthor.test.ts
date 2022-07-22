@@ -3,13 +3,13 @@ import * as testUtils from 'lib/testUtils';
 describe('Delete co-author', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Delete a co-author', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete('/publications/publication-problem-draft/coauthor/testCoAuthor')
-            .query({ apiKey: '123456789' });
+            .delete('/publications/publication-problem-draft/coauthor/coauthor-test-user-6-problem-draft')
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(200);
     });
@@ -17,14 +17,14 @@ describe('Delete co-author', () => {
     test('Cannot Delete a co-author without a valid id/coauthor has not been added to this publication', async () => {
         const deleteCoAuthor = await testUtils.agent
             .delete('/publications/publication-problem-draft/coauthor/invalid-id')
-            .query({ apiKey: '123456789' });
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(404);
     });
 
     test('Cannot Delete a co-author record if the user is not the author of a publication', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete('/publications/publication-problem-draft/coauthor/testCoAuthor')
+            .delete('/publications/publication-problem-draft/coauthor/coauthor-test-user-5-problem-draft')
             .query({ apiKey: '987654321' });
 
         expect(deleteCoAuthor.status).toEqual(403);
@@ -32,15 +32,15 @@ describe('Delete co-author', () => {
 
     test('Cannot Delete a co-author record if the publication is live', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete('/publications/publication-problem-draft/coauthor/testCoAuthorLive')
-            .query({ apiKey: '123456789' });
+            .delete('/publications/publication-problem-draft/coauthor/co-author-test-user-6-problem-live')
+            .query({ apiKey: '000000005' });
 
         expect(deleteCoAuthor.status).toEqual(404);
     });
 
     test('Cannot Delete a co-author record on a publication that does not exist', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete('/publications/non-existent-publication/coauthor/testCoAuthor')
+            .delete('/publications/non-existent-publication/coauthor/coauthor-test-user-5-problem-draft')
             .query({ apiKey: '123456789' });
 
         expect(deleteCoAuthor.status).toEqual(404);

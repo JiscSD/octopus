@@ -20,7 +20,7 @@ export const initialDevSeed = async (): Promise<void> => {
 
     // Create publications
     // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
-    for (let publication of SeedData.publicationsDevSeedData) {
+    for (const publication of SeedData.publicationsDevSeedData) {
         await client.prisma.publication.create({
             // @ts-ignore
             data: publication
@@ -47,7 +47,7 @@ export const initialDevSeed = async (): Promise<void> => {
         }
     }
 
-    for (let problem of SeedData.problems) {
+    for (const problem of SeedData.problems) {
         await client.prisma.publication.create({
             // @ts-ignore
             data: problem

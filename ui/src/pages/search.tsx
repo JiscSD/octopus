@@ -234,7 +234,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
 
-                        <label htmlFor="search-type" className="relative col-span-12 block lg:col-span-3">
+                        <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Searching
                             </span>
@@ -277,7 +277,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         <form
                             name="query-form"
                             id="query-form"
-                            className="col-span-12 lg:col-span-3 xl:col-span-4"
+                            className="col-span-12 lg:col-span-7"
                             onSubmit={handlerSearchFormSubmit}
                         >
                             <label htmlFor="search-query" className="relative block w-full">
@@ -297,6 +297,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <button
                                     type="submit"
                                     form="query-form"
+                                    aria-label="Search"
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
@@ -354,46 +355,52 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </div>
                                         ))}
                                     </div>
-                                    <form
-                                        name="date-form"
-                                        id="date-form"
-                                        className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                        onSubmit={handlerDateFormSubmit}
-                                    >
-                                        <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                            Date Range
-                                        </legend>
-                                        <label htmlFor="date-from" className="relative block w-full">
-                                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                Date From:
-                                            </span>
-                                            <input
-                                                name="date-from"
-                                                id="date-from"
-                                                type="date"
-                                                placeholder="Date from..."
-                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                disabled={isValidating}
-                                                value={dateFrom}
-                                                onChange={(e) => setDateFrom(e.target.value)}
-                                            />
-                                        </label>
-                                        <label htmlFor="date-to" className="relative block w-full">
-                                            <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                Date to:
-                                            </span>
-                                            <input
-                                                name="date-to"
-                                                id="date-to"
-                                                type="date"
-                                                placeholder="Date to..."
-                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                disabled={isValidating}
-                                                value={dateTo}
-                                                onChange={(e) => setDateTo(e.target.value)}
-                                            />
-                                        </label>
-                                    </form>
+
+                                    {searchType === 'publications' ? (
+                                        <Framer.motion.form
+                                            name="date-form"
+                                            id="date-form"
+                                            className="col-span-12 lg:col-span-3 xl:col-span-4"
+                                            onSubmit={handlerDateFormSubmit}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                        >
+                                            <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                Date Range
+                                            </legend>
+                                            <label htmlFor="date-from" className="relative block w-full">
+                                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                    Date From:
+                                                </span>
+                                                <input
+                                                    name="date-from"
+                                                    id="date-from"
+                                                    type="date"
+                                                    placeholder="Date from..."
+                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                    disabled={isValidating}
+                                                    value={dateFrom}
+                                                    onChange={(e) => setDateFrom(e.target.value)}
+                                                />
+                                            </label>
+                                            <label htmlFor="date-to" className="relative block w-full">
+                                                <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                    Date to:
+                                                </span>
+                                                <input
+                                                    name="date-to"
+                                                    id="date-to"
+                                                    type="date"
+                                                    placeholder="Date to..."
+                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                    disabled={isValidating}
+                                                    value={dateTo}
+                                                    onChange={(e) => setDateTo(e.target.value)}
+                                                />
+                                            </label>
+                                        </Framer.motion.form>
+                                    ) : null}
                                 </div>
 
                                 <div className="pt-6">
@@ -433,7 +440,10 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     <Components.Alert
                                         severity="INFO"
                                         title="No results found"
-                                        details={['Placeholder support text here', 'Placeholder support text here']}
+                                        details={[
+                                            'Try a different search criteria.',
+                                            'If you think something is wrong, please contact the helpdesk.'
+                                        ]}
                                     />
                                 )}
 
@@ -488,6 +498,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         >
                                                             Previous
                                                         </button>
+
                                                         <button
                                                             onClick={(e) => {
                                                                 window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -1,9 +1,8 @@
-import * as response from 'lib/response';
-import * as helpers from 'lib/helpers';
-import * as publicationService from 'publication/service';
-import * as ratingService from 'rating/service';
-import * as I from 'interface';
 import htmlToText from 'html-to-text';
+import * as I from 'interface';
+import * as helpers from 'lib/helpers';
+import * as response from 'lib/response';
+import * as publicationService from 'publication/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -39,12 +38,9 @@ export const get = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        const aggregate = await ratingService.getAggregate(event.pathParameters.id);
-        const overall = await ratingService.getOverall(event.pathParameters.id);
-
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, publication);
         }
 
         if (!publication) {
@@ -59,7 +55,7 @@ export const get = async (
             event.user?.id === publication.user.id ||
             publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
         ) {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, publication);
         }
 
         return response.json(404, {
@@ -105,6 +101,7 @@ export const deletePublication = async (
 
         return response.json(200, { message: `Publication ${event.pathParameters.id} deleted` });
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -135,10 +132,13 @@ export const create = async (
             });
         }
 
-        const publication = await publicationService.create(event.body, event.user);
+        const doi = await helpers.createEmptyDOI();
+
+        const publication = await publicationService.create(event.body, event.user, doi);
 
         return response.json(201, publication);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -166,14 +166,7 @@ export const update = async (
         }
 
         if (event.body.content) {
-            const isHTMLSafe = helpers.isHTMLSafe(event.body.content);
-
-            if (!isHTMLSafe) {
-                return response.json(404, {
-                    message:
-                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
-                });
-            }
+            event.body.content = helpers.getSafeHTML(event.body.content);
         }
 
         if (event.body.id) {
@@ -210,6 +203,7 @@ export const update = async (
 
         return response.json(200, updatedPublication);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -261,7 +255,29 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
 
+        // Publication is live, so update the DOI
+        const res = await helpers.updateDOI(publication.doi, publication);
+        console.log(res);
+        // TODO:  Do we want to do anything with this response?
+
         return response.json(200, updatedPublication);
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getLinksForPublication = async (
+    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const data = await publicationService.getLinksForPublication(event.pathParameters.id);
+
+        if (!data.rootPublication || data.rootPublication.currentStatus !== 'LIVE') {
+            return response.json(404, { message: 'Not found.' });
+        }
+
+        return response.json(200, data);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

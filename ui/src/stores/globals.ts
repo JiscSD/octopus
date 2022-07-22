@@ -8,7 +8,7 @@ let store: any = (set: any): Types.GlobalsStoreType => ({
     toggleCmdPalette: () => set((state: Types.GlobalsStoreType) => ({ showCmdPalette: !state.showCmdPalette }))
 });
 
-if (process.env.NEXT_PUBLIC_ENV === 'local') store = zustandMiddleware.devtools(store);
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = zustandMiddleware.devtools(store);
 
 const useGlobalsStore = create<Types.GlobalsStoreType>(store);
 

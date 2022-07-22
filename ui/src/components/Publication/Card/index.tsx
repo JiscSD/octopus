@@ -17,7 +17,6 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
         <div
             className={`rounded-t-lg border-b border-teal-500 bg-white-50 p-4 transition-colors duration-500 dark:bg-grey-700 ${props.bodyClassName}`}
         >
-            {/** Averaged rating to go here */}
             <p className="mb-4 mt-2 block min-h-[6rem] font-montserrat text-lg font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white-50 lg:min-h-[7rem] 2xl:text-xl">
                 {props.publication.title.length > 80
                     ? Helpers.truncateString(props.publication.title, 69)

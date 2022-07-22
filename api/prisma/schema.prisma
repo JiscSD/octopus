@@ -26,7 +26,6 @@ model User {
     coAuthors            CoAuthors[]
     Publication          Publication[]
     PublicationFlags     PublicationFlags[]
-    PublicationRatings   PublicationRatings[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
@@ -59,7 +58,7 @@ model Publication {
     licence                            LicenceType            @default(CC_BY)
     conflictOfInterestStatus           Boolean?               @default(false)
     conflictOfInterestText             String?
-    ethicalStatement                   Boolean?
+    ethicalStatement                   String?
     ethicalStatementFreeText           String?
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
@@ -68,7 +67,7 @@ model Publication {
     description                        String?
     keywords                           String[]
     content                            String?
-    doi                                String?
+    doi                                String
     language                           Languages              @default(en)
     publishedDate                      DateTime?
     currentStatus                      PublicationStatusEnum  @default(DRAFT)
@@ -80,12 +79,13 @@ model Publication {
     linkedTo                           Links[]                @relation("from")
     linkedFrom                         Links[]                @relation("to")
     publicationFlags                   PublicationFlags[]
-    publicationRatings                 PublicationRatings[]
     publicationStatus                  PublicationStatus[]
     PublicationBookmarks               PublicationBookmarks[]
     References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
+    affiliations                       Affiliations[]
+    affiliationStatement               String?
 }
 
 model References {
@@ -110,11 +110,23 @@ model Funders {
     createdAt   DateTime    @default(now())
 }
 
+model Affiliations {
+    id            String  @id @default(cuid())
+    name          String
+    country       String
+    city          String
+    link          String
+    ror           String?
+    publicationId String
+
+    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    createdAt   DateTime    @default(now())
+}
+
 model Links {
     id                 String      @id @default(cuid())
     publicationFrom    String
     publicationTo      String
-    active             Boolean?    @default(true)
     createdAt          DateTime    @default(now())
     updatedAt          DateTime    @updatedAt
     publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
@@ -164,18 +176,6 @@ model FlagComments {
     createdAt DateTime         @default(now())
     user      User             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
-}
-
-model PublicationRatings {
-    id            String      @id @default(cuid())
-    publicationId String
-    userId        String
-    rating        Int
-    category      String
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, userId, category])
 }
 
 model PublicationBookmarks {
@@ -230,10 +230,8 @@ enum PublicationFlagCategoryEnum {
 enum LicenceType {
     CC_BY
     CC_BY_SA
-    CC_BY_ND
     CC_BY_NC
     CC_BY_NC_SA
-    CC_BY_NC_ND
 }
 
 enum Languages {

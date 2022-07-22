@@ -66,6 +66,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             language: store.language,
             conflictOfInterestStatus: store.conflictOfInterestStatus,
             conflictOfInterestText: store.conflictOfInterestText,
+            affiliationStatement: store.affiliationsStatement,
             fundersStatement: store.funderStatement
         };
 
@@ -162,7 +163,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (!store.title) ready = { ready: false, message: 'You must provide a title' };
         if (!store.content) ready = { ready: false, message: 'You must provide main text' };
         if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
-        if (!store.linkTo.length)
+        if (!store.linkTo?.length)
             ready = { ready: false, message: 'You must link this publication to at least one other' };
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             ready = {
@@ -175,8 +176,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 ready = { ready: false, message: 'You must select an ethical statement option' };
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
+            if (
+                !store.dataPermissionsStatementProvidedBy &&
+                store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+            )
+                ready = {
+                    ready: false,
+                    message: 'You must provide details of who gave permission for the data collection and sharing'
+                };
         }
-
+        if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+            ready = { ready: false, message: 'All co-authors must be verified.' };
+        }
         return ready;
     };
 
@@ -193,7 +204,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.linkTo,
         store.type,
         store.ethicalStatement,
-        store.dataPermissionsStatement
+        store.dataPermissionsStatement,
+        store.dataPermissionsStatementProvidedBy,
+        store.coAuthors
     ]);
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature

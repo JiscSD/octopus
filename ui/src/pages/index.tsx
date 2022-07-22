@@ -43,7 +43,7 @@ type Props = {
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-
+    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>
@@ -76,15 +76,12 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.Link>
                             <button
                                 aria-label="Open search"
-                                className="flex w-52 items-center justify-between rounded-lg bg-teal-400 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
+                                className="flex w-52 items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
                                 onClick={(e) => toggleCmdPalette()}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
+                                <span className="mx-auto font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
                                     Quick search...
-                                </span>
-                                <span className="font-montserrat text-xs text-white-50 transition-colors duration-500 dark:text-grey-50">
-                                    {Helpers.setOSKey()}
                                 </span>
                             </button>
                         </div>
@@ -94,7 +91,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
                         <Components.ActionCard
                             title="Publish your work"
-                            content="Recording your work on Octopus is different to publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
+                            content="Recording your work on Octopus is different from publishing a paper. There are eight publication types that are aligned with the research process and designed to help researchers of all types share their work and be recognised for it."
                             icon={<OutlineIcons.PencilIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.createPublication.path}
                             linkText="Publish your work"
@@ -132,7 +129,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             content="Review our FAQs to find out more about how the platform works."
                             icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.faq.path}
-                            linkText="See FAQ's"
+                            linkText="See FAQs"
                         />
                     </div>
                 </section>

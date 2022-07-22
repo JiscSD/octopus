@@ -1,6 +1,5 @@
-import * as client from 'lib/client';
-
 import * as I from 'interface';
+import * as client from 'lib/client';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -102,6 +101,16 @@ export const get = async (id: string) => {
                     ror: true
                 }
             },
+            affiliations: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
@@ -134,6 +143,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,
@@ -163,6 +173,7 @@ export const get = async (id: string) => {
                             description: true,
                             keywords: true,
                             type: true,
+                            doi: true,
                             user: {
                                 select: {
                                     id: true,
@@ -273,9 +284,11 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
     return publications;
 };
 
-export const create = async (e: I.CreatePublicationRequestBody, user: I.User) => {
+export const create = async (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) => {
     const publication = await client.prisma.publication.create({
         data: {
+            id: doiResponse.data.attributes.suffix,
+            doi: doiResponse.data.attributes.doi,
             title: e.title,
             type: e.type,
             licence: e.licence,
@@ -290,6 +303,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User) =>
             dataAccessStatement: e.dataAccessStatement,
             selfDeclaration: e.selfDeclaration,
             fundersStatement: e.fundersStatement,
+            affiliationStatement: e.affiliationStatement,
             user: {
                 connect: {
                     id: user.id
@@ -391,10 +405,14 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.Publication, status: string) => {
+export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+    if (!publication) {
+        return false;
+    }
+
     let isReady = false;
 
-    // @ts-ignore This needs looking at, type mismatch between infered type from get method to what Prisma has
+    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
     const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
     const conflictOfInterest = validateConflictOfInterest(publication);
@@ -402,6 +420,7 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
     const isAttemptToLive = status === 'LIVE';
 
@@ -413,9 +432,131 @@ export const isPublicationReadyToPublish = (publication: I.Publication, status: 
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
+        coAuthorsAreVerified &&
         isAttemptToLive
-    )
+    ) {
         isReady = true;
+    }
 
     return isReady;
+};
+
+export const getLinksForPublication = async (id: string) => {
+    const rootPublication = await get(id);
+
+    const linkedToPublications = await client.prisma.$queryRaw`
+        WITH RECURSIVE to_left AS (
+            SELECT "Links"."publicationFrom",
+                   "Links"."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pto".title "publicationToTitle",
+                   "pto"."publishedDate" "publicationToPublishedDate",
+                   "pto"."currentStatus" "publicationToCurrentStatus",
+                   "pto_user"."firstName" "publicationToFirstName",
+                   "pto_user"."lastName" "publicationToLastName"
+
+              FROM "Links"
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "Links"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "Links"."publicationTo"
+
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
+
+            WHERE "Links"."publicationFrom" = ${id}
+
+            UNION ALL
+
+            SELECT l."publicationFrom",
+                   l."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pto".title "publicationToTitle",
+                   "pto"."publishedDate" "publicationToPublishedDate",
+                   "pto"."currentStatus" "publicationToCurrentStatus",
+                   "pto_user"."firstName" "publicationToFirstName",
+                   "pto_user"."lastName" "publicationToLastName"
+              FROM "Links" l
+              JOIN to_left
+              ON to_left."publicationTo" = l."publicationFrom"
+
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "l"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "l"."publicationTo"
+
+              LEFT JOIN "User" AS pto_user
+              ON "pto"."createdBy" = "pto_user"."id"
+        )
+        SELECT *
+          FROM to_left
+         WHERE "publicationToType" != "publicationFromType"
+           AND "publicationToType" != ${rootPublication?.type}
+           AND "publicationToCurrentStatus" = 'LIVE';
+    `;
+
+    const linkedFromPublications = await client.prisma.$queryRaw`
+        WITH RECURSIVE to_right AS (
+            SELECT "Links"."publicationFrom",
+                   "Links"."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pfrom".title "publicationFromTitle",
+                   "pfrom"."publishedDate" "publicationFromPublishedDate",
+                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
+                   "pfrom_user"."firstName" "publicationFromFirstName",
+                   "pfrom_user"."lastName" "publicationFromLastName"
+
+              FROM "Links"
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "Links"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "Links"."publicationTo"
+
+              LEFT JOIN "User" AS pfrom_user
+              ON "pfrom"."createdBy" = "pfrom_user"."id"
+
+            WHERE "Links"."publicationTo" = ${id}
+
+            UNION ALL
+
+            SELECT l."publicationFrom",
+                   l."publicationTo",
+                   "pfrom".type "publicationFromType",
+                   "pto".type "publicationToType",
+                   "pfrom".title "publicationFromTitle",
+                   "pfrom"."publishedDate" "publicationFromPublishedDate",
+                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
+                   "pfrom_user"."firstName" "publicationFromFirstName",
+                   "pfrom_user"."lastName" "publicationFromLastName"
+              FROM "Links" l
+              JOIN to_right
+              ON to_right."publicationFrom" = l."publicationTo"
+
+              LEFT JOIN "Publication" AS pfrom
+              ON "pfrom".id = "l"."publicationFrom"
+
+              LEFT JOIN "Publication" AS pto
+              ON "pto".id = "l"."publicationTo"
+
+              LEFT JOIN "User" AS pfrom_user
+              ON "pfrom"."createdBy" = "pfrom_user"."id"
+        )
+        SELECT *
+          FROM to_right
+         WHERE "publicationToType" != "publicationFromType"
+           AND "publicationFromType" != ${rootPublication?.type}
+           AND "publicationFromCurrentStatus" = 'LIVE';
+    `;
+
+    return {
+        rootPublication,
+        linkedFromPublications,
+        linkedToPublications
+    };
 };

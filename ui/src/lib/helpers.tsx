@@ -1,19 +1,19 @@
-import React from 'react';
-import JWT from 'jsonwebtoken';
-import Cookies from 'js-cookie';
-import * as luxon from 'luxon';
-import fileDownload from 'js-file-download';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import fileDownload from 'js-file-download';
+import JWT from 'jsonwebtoken';
+import * as luxon from 'luxon';
+import React from 'react';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 /**
  * @description Truncates a string
  */
 export const truncateString = (value: string, length: number): string => {
-    return value.length ? `${value.substring(0, length)}...` : '...';
+    return value.length ? (length < value.length ? `${value.substring(0, length)}...` : value) : value;
 };
 
 /**
@@ -43,14 +43,14 @@ export const relativeDate = (value: string): string | null => {
  */
 export const formatPublicationType = (publicationType: Types.PublicationType): string => {
     const types = {
-        PROBLEM: 'Problem',
-        PROTOCOL: 'Protocol',
+        PROBLEM: 'Research Problem',
+        HYPOTHESIS: 'Rationale/Hypothesis',
+        PROTOCOL: 'Method',
+        DATA: 'Results',
         ANALYSIS: 'Analysis',
-        REAL_WORLD_APPLICATION: 'Real world application',
-        HYPOTHESIS: 'Hypothesis',
-        DATA: 'Data',
         INTERPRETATION: 'Interpretation',
-        PEER_REVIEW: 'Peer review'
+        REAL_WORLD_APPLICATION: 'Real World Application',
+        PEER_REVIEW: 'Peer Review'
     };
 
     return types[publicationType];
@@ -178,7 +178,7 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
             Location: `${Config.urls.verify.path}?state=${Buffer.from(
                 context.req.url || Config.urls.home.path,
                 'utf-8'
-            )}&newUser=true`
+            ).toString('base64')}&newUser=true`
         });
         context.res.end();
     }
@@ -262,16 +262,6 @@ export const getBase64FromFile = async (file: Blob): Promise<string> =>
             reject(error);
         };
     });
-
-export const findRating = (
-    index: number,
-    ratingList: Interfaces.APIRatingShape[],
-    publicationType: Types.PublicationType
-): number | null => {
-    const ratingType = Object.values(Config.values.octopusInformation.publications[publicationType].ratings)[index].id;
-    const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
-    return found ? found.rating : null;
-};
 
 export const formatKeywords = (keywordsAsString: string): string[] => {
     let formattedKeywords: string[] = [];

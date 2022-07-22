@@ -3,7 +3,7 @@ import * as testUtils from 'lib/testUtils';
 describe('Resolve a flag', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('The flagger can resolve the flag', async () => {
@@ -24,7 +24,7 @@ describe('Resolve a flag', () => {
 
     test('A super user can resolve the flag', async () => {
         const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
-            apiKey: '4321'
+            apiKey: '000000004'
         });
 
         expect(resolveFlag.status).toEqual(200);
@@ -32,7 +32,7 @@ describe('Resolve a flag', () => {
 
     test('An unrelated user cannot resolve a flag', async () => {
         const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
-            apiKey: '1234'
+            apiKey: '000000003'
         });
 
         expect(resolveFlag.status).toEqual(403);

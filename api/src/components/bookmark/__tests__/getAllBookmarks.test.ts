@@ -3,11 +3,11 @@ import * as testUtils from 'lib/testUtils';
 describe('Get all bookmarks', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('Get a bookmark', async () => {
-        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '1234' });
+        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '000000003' });
 
         expect(bookmark.status).toEqual(200);
         expect(bookmark.body).toHaveLength(2);

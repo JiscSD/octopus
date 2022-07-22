@@ -38,6 +38,9 @@ provider:
               - 'ses:SendEmail'
               - 'ses:SendRawEmail'
           Resource: '*'
+        - Effect: 'Allow'
+          Resource: 'arn:aws:s3:::science-octopus-publishing-images-${self:provider.stage}/*'
+          Action: 's3:PutObject'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
@@ -110,6 +113,13 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
                   method: delete
+                  cors: true
+    getPublicationLinks:
+        handler: src/components/publication/routes.getPublicationLinks
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/links
+                  method: get
                   cors: true
     # Users
     getUsers:
@@ -184,21 +194,6 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
                   method: patch
-                  cors: true
-    # Ratings
-    createRatings:
-        handler: src/components/rating/routes.upsert
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/ratings
-                  method: post
-                  cors: true
-    getRatings:
-        handler: src/components/rating/routes.get
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/ratings
-                  method: get
                   cors: true
     # Flags
     getFlag:
@@ -356,5 +351,17 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
+    createAffiliation:
+        handler: src/components/affiliations/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation
+                  method: post
+                  cors: true
+    deleteAffiliation:
+        handler: src/components/affiliations/routes.destroy
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
                   method: delete
                   cors: true

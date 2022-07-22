@@ -76,8 +76,18 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         </li>
                     </ul>
                     <p className="mb-4">
-                        As well as data from ORCID, all user activity (such as submitted content, ratings, red flags,
-                        and related publications), is stored by Jisc and will be displayed on your public user profile.
+                        As well as data from ORCID, all user activity (such as submitted content, red flags, and related
+                        publications), is stored by Jisc and will be displayed on your public user profile.
+                    </p>
+                    <p className="mb-4">
+                        Further data protection particulars are detailed in the{' '}
+                        <Components.Link
+                            openNew
+                            className="rounded underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400"
+                            href={Config.urls.userTerms.path}
+                        >
+                            platform T&Cs
+                        </Components.Link>
                     </p>
                 </section>
             </Layouts.Information>

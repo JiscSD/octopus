@@ -14,9 +14,9 @@ resource "random_string" "db_master_pass" {
   }
 }
 
-resource "aws_iam_service_linked_role" "elasticsearch" {
-  aws_service_name = "es.amazonaws.com"
-}
+# resource "aws_iam_service_linked_role" "elasticsearch" {
+#   aws_service_name = "es.amazonaws.com"
+# }
 
 resource "aws_security_group" "elasticsearch" {
   name   = "${var.environment}-elasticsearch-sg"
@@ -96,9 +96,9 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   }
   CONFIG
 
-  depends_on = [
-    aws_iam_service_linked_role.elasticsearch
-  ]
+#   depends_on = [
+#     aws_iam_service_linked_role.elasticsearch
+#   ]
 }
 
 // Save password to SSM

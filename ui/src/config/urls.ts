@@ -1,27 +1,27 @@
 let host: string;
 let mediaBucket: string;
-const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_ENV}`;
 let orcidAppiID: string;
 
-switch (process.env.NEXT_PUBLIC_ENV) {
-    case 'local':
-        host = 'https://localhost:3001';
-        mediaBucket = `http://localhost:4566/${bucketName}`;
-        orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
-        break;
-    case 'prod':
-        host = 'https://octopus.ac';
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = '';
-        break;
-    default:
-        host = `https://${process.env.NEXT_PUBLIC_ENV}.octopus.ac`;
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
+function checkEnvVariable(variable: string | undefined): string {
+    if (variable === undefined) {
+        throw new Error('Environment Variable is undefined.');
+    } else {
+        return variable!;
+    }
+}
+
+if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
+    host = 'https://localhost:3001';
+    mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
+    orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
+} else {
+    host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+    mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+    orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 }
 
 export const base = {
-    title: 'Octopus. Built for Scientists.',
+    title: 'Octopus | Built for Researchers',
     host
 };
 
@@ -147,11 +147,11 @@ const urls = {
         canonical: `${base.host}`
     },
     terms: {
-        path: '/terms',
+        path: '/user-terms',
         title: `Terms - ${base.title}`,
         description: 'Terms and conditions relevant to the Octopus site, including details on our open-source licence.',
         keywords: ['open access', 'open source', 'open license', 'open licence', 'GPLv3'],
-        canonical: `${base.host}/terms`
+        canonical: `${base.host}/user-terms`
     },
     privacy: {
         path: '/privacy',
@@ -204,6 +204,41 @@ const urls = {
         description: 'Find out more about the accessibility of the Octopus platform, and how to report issues.',
         keywords: ['open source', 'accessibility', 'publishing platform'],
         canonical: `${base.host}/accessibility`
+    },
+    authorGuide: {
+        path: '/author-guide',
+        title: 'Octopus Author Guide',
+        description: 'Step-by-step guide on how to create a new publication on Octopus.',
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/author-guide`
+    },
+    userTerms: {
+        path: '/user-terms',
+        title: 'Octopus User Terms',
+        description: "Octopus's user terms and conditions.",
+        keywords: ['Open access', 'publishing', 'open science', 'publishing science', 'publishing research'],
+        canonical: `${base.host}/user-terms`
+    },
+    getInvolved: {
+        path: '/get-involved',
+        title: 'Get involved with Octopus',
+        description: 'Find out how to participate directly in the Octopus project, and view our development roadmap.',
+        keywords: ['User community', 'platform development', 'user participation', 'Octopus publishing'],
+        canonical: `${base.host}/get-involved`
+    },
+    octopusAims: {
+        path: '/octopus-aims',
+        title: 'Octopus: aims and priorities',
+        description:
+            'Learn more about the aims and priorities of the Octopus platform, which is designed to positively disrupt research culture.',
+        keywords: [
+            'Octopus publishing',
+            'research culture',
+            'research assessment',
+            'open access publishing',
+            'open science'
+        ],
+        canonical: `${base.host}/octopus-aims`
     },
     404: {
         title: `404 Not Found - ${base.title}`

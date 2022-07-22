@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 import * as I from 'interface';
@@ -19,41 +20,147 @@ export const isHTMLSafe = (content: string) => {
     return !error;
 };
 
-export const OctopusInformation: I.OctopusInformation = {
-    publications: {
-        PROBLEM: {
-            ratingCategories: ['PROBLEM_WELL_DEFINED', 'PROBLEM_ORIGINAL', 'PROBLEM_IMPORTANT']
-        },
-        HYPOTHESIS: {
-            ratingCategories: ['HYPOTHESIS_WELL_DEFINED', 'HYPOTHESIS_ORIGINAL', 'HYPOTHESIS_SCIENTIFICALLY_VALID']
-        },
-        PROTOCOL: {
-            ratingCategories: ['PROTOCOL_CLEAR', 'PROTOCOL_ORIGINAL', 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS']
-        },
-        DATA: {
-            ratingCategories: ['DATA_WELL_ANNOTATED', 'DATA_SIZE_OF_DATASET', 'DATA_FOLLOWED_PROTOCOL']
-        },
-        ANALYSIS: {
-            ratingCategories: ['ANALYSIS_CLEAR', 'ANALYSIS_ORIGINAL', 'ANALYSIS_APPROPRIATE_METHODOLOGY']
-        },
-        INTERPRETATION: {
-            ratingCategories: [
-                'INTERPRETATION_CLEAR',
-                'INTERPRETATION_INSIGHTFUL',
-                'INTERPRETATION_CONSISTENT_WITH_DATA'
-            ]
-        },
-        REAL_WORLD_APPLICATION: {
-            ratingCategories: [
-                'REAL_WORLD_APPLICATION_CLEAR',
-                'REAL_WORLD_APPLICATION_IMPACTFUL',
-                'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT'
-            ]
-        },
-        PEER_REVIEW: {
-            ratingCategories: ['REVIEW_CLEAR', 'REVIEW_INSIGHTFUL', 'REVIEW_ORIGINAL']
+export const getSafeHTML = (content: string) => {
+    const $ = cheerio.load(content, null, false);
+
+    $('*').map((_, element) => {
+        return $(element).removeAttr('class').removeAttr('style');
+    });
+
+    return $.html();
+};
+
+export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
+    const payload = {
+        data: {
+            type: 'dois',
+            attributes: {
+                prefix: process.env.DOI_PREFIX // 10.82259/xydggf.546547
+            }
         }
-    },
+    };
+
+    const doi = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+
+    return doi.data;
+};
+
+export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata) => {
+    // Get creator
+    const creator = {
+        name: `${publication?.user.firstName} ${publication?.user.lastName}`,
+        nameType: 'Personal',
+        nameIdentifiers: [
+            {
+                nameIdentifier: publication?.user.orcid,
+                nameIdentifierScheme: 'orcid',
+                schemeUri: 'orcid.org'
+            }
+        ]
+    };
+
+    // Get co-authors
+    const coAuthors = publication?.coAuthors.map((coAuthor) => ({
+        name:
+            coAuthor.user?.firstName && coAuthor.user?.firstName
+                ? `${coAuthor.user?.firstName} ${coAuthor.user?.lastName}`
+                : `${coAuthor.email}`,
+        nameType: 'Personal',
+        nameIdentifiers: [
+            {
+                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'Orcid ID not provided',
+                nameIdentifierScheme: 'orcid',
+                schemeUri: 'orcid.org'
+            }
+        ]
+    }));
+
+    const payload = {
+        data: {
+            types: 'doi',
+            attributes: {
+                event: 'publish',
+                url: `${process.env.BASE_URL}/publications/${publication?.id}`,
+                doi: doi,
+                identifiers: [
+                    {
+                        identifier: `https://doi.org/${doi}`,
+                        identifierType: 'DOI'
+                    }
+                ],
+                creators: coAuthors ? [...coAuthors, creator] : [creator],
+                titles: [
+                    {
+                        title: publication?.title,
+                        lang: 'en'
+                    }
+                ],
+                publisher: 'Octopus',
+                publicationYear: publication?.createdAt.getFullYear(),
+                contributors: publication?.affiliations.map((affiliation) => ({
+                    contributorType: 'Other',
+                    nameType: 'Organizational',
+                    name: affiliation.name,
+                    nameIdentifiers: [
+                        {
+                            nameIdentifier: affiliation.ror || affiliation.link,
+                            nameIdentifierScheme: affiliation.ror ? 'ROR' : 'Other'
+                        }
+                    ]
+                })),
+                language: 'en',
+                types: {
+                    resourceTypeGeneral: 'Other',
+                    resourceType: publication?.type
+                },
+                relatedIdentifiers: publication?.linkedTo.map((relatedIdentifier) =>
+                    relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
+                        ? {
+                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                              relatedIdentifierType: 'DOI',
+                              relationType: 'Reviews'
+                          }
+                        : {
+                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                              relatedIdentifierType: 'DOI',
+                              relationType: 'Continues'
+                          }
+                ),
+                fundingReferences: publication?.funders.map((funder) => ({
+                    funderName: funder.name,
+                    funderReference: funder.ror || funder.link,
+                    funderIdentifierType: funder.ror ? 'ROR' : 'Other'
+                }))
+            }
+        }
+    };
+
+    const doiRes = await axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT as string}/${doi}`, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+
+    return doiRes.data;
+};
+
+export const OctopusInformation: I.OctopusInformation = {
+    publications: [
+        'PROBLEM',
+        'HYPOTHESIS',
+        'PROTOCOL',
+        'DATA',
+        'ANALYSIS',
+        'INTERPRETATION',
+        'REAL_WORLD_APPLICATION',
+        'PEER_REVIEW'
+    ],
     languages: [
         'ab',
         'aa',
@@ -240,4 +347,17 @@ export const OctopusInformation: I.OctopusInformation = {
         'za',
         'zu'
     ]
+};
+
+export const formatFlagType = (flagType: I.FlagCategory) => {
+    const types = {
+        PLAGIARISM: 'Plagiarism',
+        ETHICAL_ISSUES: 'Ethical issues',
+        MISREPRESENTATION: 'Misrepresentation',
+        UNDECLARED_IMAGE_MANIPULATION: 'Undeclared image manipulation',
+        COPYRIGHT: 'Copyright',
+        INAPPROPRIATE: 'Inappropriate'
+    };
+
+    return types[flagType];
 };

@@ -66,21 +66,21 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         />
         <GridItem
             className="row-start-2 row-end-2 lg:col-start-2 lg:col-end-2"
-            title="Hypothesis/Rationale"
-            content="An original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed."
+            title="Rationale/Hypothesis"
+            content="An original hypothesis relating to an existing published Research Problem or the rationale for how you think the Research Problem could be addressed."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
         <GridItem
             className="row-start-3 row-end-3 lg:col-start-1 lg:col-end-2"
-            title="Methods/Protocols"
-            content="A practical method of testing an existing published Hypothesis."
+            title="Methods"
+            content="A practical method of testing an existing published Rationale/Hypothesis."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
         <GridItem
             className="row-start-4 row-end-4 lg:col-start-2 lg:col-end-2"
-            title="Data/Results"
+            title="Results"
             content="Raw data or summarised results collected according to an existing published Method (can be linked to a data repository)."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
@@ -88,7 +88,7 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         <GridItem
             className="row-start-5 row-end-5 lg:col-start-1 lg:col-end-2"
             title="Analysis"
-            content="A statistical or thematic analysis of existing published Data or Results."
+            content="A statistical or thematic analysis of existing published Results."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />
@@ -101,8 +101,8 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         />
         <GridItem
             className="row-start-7 row-end-7 lg:col-start-1 lg:col-end-2"
-            title="Real-world Application"
-            content="Real world applications arising from an existing published Interpretation."
+            title="Real World Application"
+            content="Real World Applications arising from an existing published Interpretation."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />

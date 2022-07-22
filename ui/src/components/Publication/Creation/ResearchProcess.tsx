@@ -61,9 +61,9 @@ const ResearchProcess: React.FC = () => {
                         onChange={() => updateSelfDeclaration(!selfDeclaration)}
                     />
                     <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {type === 'PROTOCOL' && 'Data has not yet been collected according to this method/protocol.'}
+                        {type === 'PROTOCOL' && 'Results have not yet been collected according to this method.'}
                         {type === 'HYPOTHESIS' &&
-                            'Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)'}
+                            'Results have not yet been collected to test this hypothesis (i.e. this is a pre-registration).'}
                     </span>
                 </label>
             </fieldset>

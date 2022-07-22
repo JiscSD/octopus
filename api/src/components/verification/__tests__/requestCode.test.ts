@@ -4,7 +4,7 @@ import cryptoRandomString from 'crypto-random-string';
 describe('Request a verification code', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
-        await testUtils.initialSeed();
+        await testUtils.testSeed();
     });
 
     test('User can request a code and receives an email to their address', async () => {
@@ -15,6 +15,6 @@ describe('Request a verification code', () => {
         const inbox = await testUtils.getEmails(email);
 
         expect(request.status).toEqual(200);
-        expect(inbox.items[0].Content.Headers.Subject).toContain('Verify your email');
+        expect(inbox.items[0].Content.Headers.Subject).toContain('Verify your Octopus account');
     });
 });

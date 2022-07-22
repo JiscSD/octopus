@@ -94,10 +94,13 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
-                <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" required />
+                <Components.PublicationCreationStepTitle
+                    text="What publications should this publication be linked from?"
+                    required
+                />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     All publications in Octopus are linked to each other to form research chains, branching down from
-                    research Problems to Real world implementations.
+                    research problems to real world implementations.
                 </p>
 
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
@@ -122,7 +125,7 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     This approach structures the content of the platform and makes your work more discoverable. It also
                     helps you avoid repeating work, as there is no need to keep re-writing descriptions of well-known
-                    Problems, or Methods etc.
+                    Research Problems, or Methods etc.
                 </p>
             </div>
 

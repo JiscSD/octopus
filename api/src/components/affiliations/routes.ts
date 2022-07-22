@@ -1,16 +1,17 @@
 import middy from '@middy/core';
 
 import * as middleware from 'middleware';
-import * as ratingsController from 'rating/controller';
-import * as ratingSchema from 'rating/schema';
 
-export const upsert = middy(ratingsController.upsert)
+import * as affiliationController from './controller';
+import * as affiliationSchema from './schema';
+
+export const create = middy(affiliationController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(ratingSchema.upsert, 'body'));
+    .use(middleware.validator(affiliationSchema.create, 'body'));
 
-export const get = middy(ratingsController.get)
+export const destroy = middy(affiliationController.destroy)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.validator(ratingSchema.get, 'queryStringParameters'));
+    .use(middleware.authentication());
