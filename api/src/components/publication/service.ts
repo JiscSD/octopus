@@ -444,6 +444,21 @@ export const isPublicationReadyToPublish = (publication: I.PublicationWithMetada
 export const getLinksForPublication = async (id: string) => {
     const rootPublication = await get(id);
 
+    /*
+     * This set of queries provides two result sets:
+     *
+     * "linkedToPublications" refers to publications to the left of the publication chain.
+     * "linkedFromPublications" refers to publications that follow to the right of the publication chain.
+     *
+     * The basic function of each query is to recursively select linked publications in each individual direction of the chain.
+     * This can then be used to generate a tree representation branching from a root publication.
+     *
+     * Additional rules:
+     *
+     * 1. Only LIVE publications are returned.
+     * 2. To limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
+     */
+
     const linkedToPublications = await client.prisma.$queryRaw`
         WITH RECURSIVE to_left AS (
             SELECT "Links"."publicationFrom",

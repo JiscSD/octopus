@@ -4,12 +4,13 @@ The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [cr
 
 ---
 
-## Local setup
+## Getting started
 
-For local development, in the **UI directory** run:
+To start the UI, in the **UI directory** run:
 
 ```bash
-~/ui$ npm run dev
+$ ~/ui$ npm i
+$ ~/ui$ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -46,7 +47,7 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ## Testing
 
-UI tests will be written using Jest. Currently there will be no UI tests for Alpha release.
+End-to-end tests will be written using [Playwright](https://playwright.dev/) (TBC).
 
 ---
 
