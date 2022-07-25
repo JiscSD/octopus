@@ -79,7 +79,7 @@ const Review: React.FC = (): React.ReactElement => {
                         Conflict of interest
                     </span>
                     {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
-                    {!conflictOfInterestStatus && <CompletedIcon />}
+                    {conflictOfInterestStatus === false && <CompletedIcon />}
                 </div>
 
                 <div className="relative">
