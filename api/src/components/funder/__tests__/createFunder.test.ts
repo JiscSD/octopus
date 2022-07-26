@@ -9,7 +9,7 @@ describe('create a funder', () => {
     test('User can add a funder to their DRAFT publication', async () => {
         const funder = await testUtils.agent
             .post('/publications/publication-problem-draft/funders')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',
@@ -61,7 +61,7 @@ describe('create a funder', () => {
     test('User must send correct information to create a funder (no name)', async () => {
         const funder = await testUtils.agent
             .post('/publications/publication-problem-draft/funders')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 city: 'Example city',
                 country: 'Example country',
@@ -73,7 +73,7 @@ describe('create a funder', () => {
     test('User must send correct information to create a funder (no city)', async () => {
         const funder = await testUtils.agent
             .post('/publications/publication-problem-draft/funders')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 country: 'Example country',
@@ -85,7 +85,7 @@ describe('create a funder', () => {
     test('User must send correct information to create a funder (no country)', async () => {
         const funder = await testUtils.agent
             .post('/publications/publication-problem-draft/funders')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',
@@ -97,7 +97,7 @@ describe('create a funder', () => {
     test('User must send correct information to create a funder (no link)', async () => {
         const funder = await testUtils.agent
             .post('/publications/publication-problem-draft/funders')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
                 name: 'Example name',
                 city: 'Example city',

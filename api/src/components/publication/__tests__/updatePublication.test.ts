@@ -39,22 +39,22 @@ describe('Update publication', () => {
         expect(updatePublication.status).toEqual(200);
     });
 
-    test('Cannot update publication content if HTML not "safe" (1)', async () => {
+    test('HTML is sanitised if not "safe" (1)', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({ apiKey: 123456789 })
             .send({ content: '<p class="class">Hello <a href="#nathan">Nathan</a></p>' });
 
-        expect(updatePublication.status).toEqual(404);
+        expect(updatePublication.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
     });
 
-    test('Cannot update publication content if HTML not "safe" (2)', async () => {
+    test('HTML is sanitised if not "safe" (2)', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({ apiKey: 123456789 })
             .send({ content: '<p style="color: red;">Hello <a href="#nathan">Nathan</a></p>' });
 
-        expect(updatePublication.status).toEqual(404);
+        expect(updatePublication.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
     });
 
     test('Can update publication id', async () => {
@@ -70,9 +70,9 @@ describe('Update publication', () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({ apiKey: 123456789 })
-            .send({ licence: 'CC_BY_ND' });
+            .send({ licence: 'CC_BY_SA' });
 
-        expect(updatePublication.body.licence).toEqual('CC_BY_ND');
+        expect(updatePublication.body.licence).toEqual('CC_BY_SA');
     });
 
     test('Can update keywords', async () => {

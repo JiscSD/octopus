@@ -139,9 +139,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.DATA_STATEMENT,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -151,9 +151,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -163,9 +163,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -175,8 +175,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
         }
@@ -227,10 +227,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             store.updateLanguage(props.draftedPublication.language);
         }
 
-        if (props.draftedPublication.conflictOfInterestStatus) {
-            store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        }
-
         if (props.draftedPublication.conflictOfInterestText) {
             store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
             store.updateLinkTo(props.draftedPublication.linkedTo);
@@ -263,6 +259,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateCoAuthors(props.draftedPublication.coAuthors);
         store.updateFunders(props.draftedPublication.funders);
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
+        store.updateAffiliations(props.draftedPublication.affiliations);
+        store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
+        store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
     }, []);
 
     React.useEffect(() => {

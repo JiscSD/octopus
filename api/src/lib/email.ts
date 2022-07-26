@@ -2,13 +2,14 @@ import nodemailer from 'nodemailer';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
 
-let from;
-let mailConfig;
-let baseURL;
+const from=process.env.EMAIL_SENDER_ADDRESS;
+const baseURL=process.env.BASE_URL;
 
 const ses = new aws.SES({
     region: 'eu-west-1'
 });
+
+let mailConfig;
 
 switch (process.env.STAGE) {
     case 'local':
@@ -16,22 +17,11 @@ switch (process.env.STAGE) {
             host: '0.0.0.0',
             port: 1025
         };
-        from = 'no-reply@local.ac';
-        baseURL = 'https://localhost:3001';
-        break;
-    case 'prod':
-        mailConfig = {
-            SES: { ses, aws }
-        };
-        from = 'no-reply@prod.octopus.ac';
-        baseURL = 'https://prod.octopus.ac'; // TODO: Change to www. when we update url
         break;
     default:
         mailConfig = {
             SES: { ses, aws }
         };
-        from = `no-reply@${process.env.STAGE}.octopus.ac`;
-        baseURL = `https://${process.env.STAGE}.octopus.ac`;
         break;
 }
 

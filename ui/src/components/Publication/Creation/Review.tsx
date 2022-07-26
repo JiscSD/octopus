@@ -39,7 +39,7 @@ const Review: React.FC = (): React.ReactElement => {
             </p>
             <p className="mb-2 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
                 It will appear publicly on your personal page for other researchers, institutions and funders to see,
-                alongside others’ subsequent reviews and ratings of it.
+                alongside others’ subsequent reviews of it.
             </p>
             <p className="mb-10 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50 xl:w-9/12">
                 Please note that publications cannot be edited post-publication.
@@ -79,7 +79,7 @@ const Review: React.FC = (): React.ReactElement => {
                         Conflict of interest
                     </span>
                     {conflictOfInterestStatus && conflictOfInterestText.length ? <CompletedIcon /> : <IncompleteIcon />}
-                    {!conflictOfInterestStatus && <CompletedIcon />}
+                    {conflictOfInterestStatus === false && <CompletedIcon />}
                 </div>
 
                 <div className="relative">
@@ -95,7 +95,7 @@ const Review: React.FC = (): React.ReactElement => {
                             <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 Ethical statement
                             </span>
-                            {ethicalStatement ? <CompletedIcon /> : <IncompleteIcon />}
+                            {ethicalStatement?.length ? <CompletedIcon /> : <IncompleteIcon />}
                         </div>
 
                         <div className="relative">
@@ -105,12 +105,14 @@ const Review: React.FC = (): React.ReactElement => {
                             {dataPermissionsStatement?.length ? <CompletedIcon /> : <IncompleteIcon />}
                         </div>
 
-                        <div className="relative">
-                            <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Data permissions statement provided by
-                            </span>
-                            {dataPermissionsStatementProvidedBy?.length ? <CompletedIcon /> : <IncompleteIcon />}
-                        </div>
+                        {dataPermissionsStatement === Config.values.dataPermissionsOptions[0] && (
+                            <div className="relative">
+                                <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    Data permissions statement provided by
+                                </span>
+                                {dataPermissionsStatementProvidedBy?.length ? <CompletedIcon /> : <IncompleteIcon />}
+                            </div>
+                        )}
                     </>
                 )}
             </div>

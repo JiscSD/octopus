@@ -163,24 +163,35 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (!store.title) ready = { ready: false, message: 'You must provide a title' };
         if (!store.content) ready = { ready: false, message: 'You must provide main text' };
         if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
-        if (!store.linkTo.length)
+        if (!store.linkTo?.length)
             ready = { ready: false, message: 'You must link this publication to at least one other' };
+
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             ready = {
                 ready: false,
                 message: 'You have selected there is a conflict of interest, please provide a reason.'
             };
         }
+        if (typeof store.conflictOfInterestStatus == 'undefined') {
+            ready = { ready: false, message: 'You must select a conflict of interest option' };
+        }
         if (store.type === Config.values.octopusInformation.publications.DATA.id) {
             if (store.ethicalStatement === null)
                 ready = { ready: false, message: 'You must select an ethical statement option' };
             if (store.dataPermissionsStatement === null)
                 ready = { ready: false, message: 'You must select a data permissions option' };
+            if (
+                !store.dataPermissionsStatementProvidedBy &&
+                store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+            )
+                ready = {
+                    ready: false,
+                    message: 'You must provide details of who gave permission for the data collection and sharing'
+                };
         }
         if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
             ready = { ready: false, message: 'All co-authors must be verified.' };
         }
-
         return ready;
     };
 
@@ -198,6 +209,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         store.type,
         store.ethicalStatement,
         store.dataPermissionsStatement,
+        store.dataPermissionsStatementProvidedBy,
         store.coAuthors
     ]);
 

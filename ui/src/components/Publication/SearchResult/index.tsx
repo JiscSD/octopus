@@ -51,7 +51,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
             `}
         >
             <div className="z-10 col-span-11 w-full">
-                <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400">
+                <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400 dark:text-teal-200">
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
                 <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">

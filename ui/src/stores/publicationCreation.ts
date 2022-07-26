@@ -20,10 +20,12 @@ let store: any = (set: (params: any) => void) => ({
                 description: '',
                 funderStatement: '',
                 funders: [],
+                affiliationsStatement: '',
+                affiliations: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
-                conflictOfInterestStatus: true,
+                conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
@@ -66,7 +68,7 @@ let store: any = (set: (params: any) => void) => ({
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),
 
     // COI
-    conflictOfInterestStatus: true,
+    conflictOfInterestStatus: undefined,
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
     updateConflictOfInterestText: (conflictOfInterestText: string) => set(() => ({ conflictOfInterestText })),
@@ -78,7 +80,7 @@ let store: any = (set: (params: any) => void) => ({
     // Ethical statement
     ethicalStatement: null,
     ethicalStatementFreeText: null,
-    updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
+    updateEthicalStatement: (ethicalStatement: string) => set(() => ({ ethicalStatement })),
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
 
     dataAccessStatement: null,

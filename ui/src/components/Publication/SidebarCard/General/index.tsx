@@ -89,29 +89,18 @@ const General: React.FC<Props> = (props): React.ReactElement => {
             {props.publication.type !== 'PEER_REVIEW' && (
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Peer reviews:
+                        Peer reviews: ({peerReviewCount})
                     </span>
-                    <Components.Link
-                        href="#peer-reviews"
-                        ariaLabel="Peer review count"
-                        className="flex items-center  text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                    >
-                        {peerReviewCount === 0
-                            ? 'Write a review'
-                            : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
-                    </Components.Link>
                 </div>
             )}
             {!!activeFlags && (
                 <div className="flex">
                     <span className="mr-2 flex items-center text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Red flags:{' '}
-                        <div className="mx-1 inline-flex">
-                            {uniqueRedFlagCategoryList.map((category) => (
-                                <SolidIcons.FlagIcon key={category} className="h-4 w-4 text-red-500" />
-                            ))}
-                        </div>
-                        ({activeFlags.length})
+                        Red flags:
+                        {uniqueRedFlagCategoryList.map((category) => (
+                            <SolidIcons.FlagIcon key={category} className="ml-1 h-4 w-4 text-red-500" />
+                        ))}
+                        <p className="ml-1">({activeFlags.length})</p>
                     </span>
                 </div>
             )}

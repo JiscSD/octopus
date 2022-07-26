@@ -1,14 +1,11 @@
-import React from 'react';
-import Head from 'next/head';
-import JWT from 'jsonwebtoken';
-
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
+import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as Layouts from '@layouts';
+import * as Types from '@types';
+import JWT from 'jsonwebtoken';
+import Head from 'next/head';
+import React from 'react';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let email = null;
@@ -39,16 +36,18 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (approve === 'true') {
         try {
             const token = Helpers.guardPrivateRoute(context);
-
-            await api.patch(
-                `/publications/${publication}/link-coauthor`,
-                {
-                    email,
-                    code,
-                    approve: true
-                },
-                token
-            );
+            // Only attempt to link if user has an email in their token
+            if ((JWT.decode(token) as Types.UserType).email) {
+                await api.patch(
+                    `/publications/${publication}/link-coauthor`,
+                    {
+                        email,
+                        code,
+                        approve: true
+                    },
+                    token
+                );
+            }
         } catch (err) {
             return {
                 props: {
@@ -68,6 +67,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             code,
             approve: false
         });
+
+        return {
+            props: {
+                title: 'You have indicated that you are not a co-author.',
+                message: 'Thank you for responding. You have now been removed from this draft publication.',
+                statusCode: 200
+            }
+        };
     } catch (err) {
         return {
             props: {
@@ -75,15 +82,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             }
         };
     }
-
-    return {
-        props: {},
-        redirect: { permanent: true, destination: Config.urls.home.path }
-    };
 };
 
 type Props = {
+    title?: string;
     message: string;
+    statusCode?: number;
 };
 
 const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
@@ -91,12 +95,21 @@ const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
         <Head>
             <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <Layouts.Error
-            title="Page not found."
-            windowTitle={Config.urls[404].title}
-            content={props.message}
-            statusCode={404}
-        />
+        {props.statusCode == 200 ? (
+            <Layouts.InformationLanding
+                title={props.title ? `${props.title}` : ''}
+                windowTitle={props.title || ''}
+                content={props.message}
+                statusCode={props.statusCode || 200}
+            />
+        ) : (
+            <Layouts.Error
+                title={'Page not found.'}
+                windowTitle={Config.urls[404].title}
+                content={props.message}
+                statusCode={404}
+            />
+        )}
     </>
 );
 

@@ -60,9 +60,11 @@ const publicationSeeds = [
         },
         coAuthors: {
             create: {
-                id: 'testCoAuthorLive',
-                email: 'live-test@test.com',
-                code: 'test'
+                id: 'coauthor-test-user-6-problem-live',
+                email: 'test-user-6@jisc.ac.uk',
+                code: 'test-code-user-6',
+                confirmedCoAuthor: true,
+                linkedUser: 'test-user-6'
             }
         },
         publicationFlags: {
@@ -77,46 +79,6 @@ const publicationSeeds = [
                     }
                 }
             }
-        },
-        publicationRatings: {
-            create: [
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_WELL_DEFINED',
-                    userId: 'test-user-2',
-                    rating: 5,
-                    category: 'PROBLEM_WELL_DEFINED'
-                },
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_ORIGINAL',
-                    userId: 'test-user-2',
-                    rating: 10,
-                    category: 'PROBLEM_ORIGINAL'
-                },
-                {
-                    id: 'publication-problem-live-test-user-2-PROBLEM_IMPORTANT',
-                    userId: 'test-user-2',
-                    rating: 8,
-                    category: 'PROBLEM_IMPORTANT'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_WELL_DEFINED',
-                    userId: 'test-user-3',
-                    rating: 7,
-                    category: 'PROBLEM_WELL_DEFINED'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_ORIGINAL',
-                    userId: 'test-user-3',
-                    rating: 8,
-                    category: 'PROBLEM_ORIGINAL'
-                },
-                {
-                    id: 'publication-problem-live-test-user-3-PROBLEM_IMPORTANT',
-                    userId: 'test-user-3',
-                    rating: 6,
-                    category: 'PROBLEM_IMPORTANT'
-                }
-            ]
         },
         publicationStatus: {
             create: [
@@ -172,18 +134,17 @@ const publicationSeeds = [
         coAuthors: {
             create: [
                 {
-                    id: 'testCoAuthor',
-                    email: 'testemail@test.com',
-                    code: 'test',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5'
-                },
-                {
-                    id: 'testCoAuthor2',
-                    email: 'testemai2l@test.com',
-                    code: 'test2',
+                    id: 'coauthor-test-user-6-problem-draft',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
                     confirmedCoAuthor: true,
                     linkedUser: 'test-user-6'
+                },
+                {
+                    id: 'coauthor-test-user-7-problem-draft',
+                    email: 'test-user-7@jisc.ac.uk',
+                    code: 'test-code-user-7',
+                    confirmedCoAuthor: false
                 }
             ]
         },
@@ -237,30 +198,6 @@ const publicationSeeds = [
                     createdAt: '2022-01-22T15:51:42.523Z'
                 }
             ]
-        },
-        publicationRatings: {
-            create: [
-                {
-                    userId: 'test-user-2',
-                    rating: 5,
-                    category: 'HYPOTHESIS_WELL_DEFINED'
-                },
-                {
-                    userId: 'test-user-2',
-                    rating: 10,
-                    category: 'HYPOTHESIS_ORIGINAL'
-                },
-                {
-                    userId: 'test-user-3',
-                    rating: 7,
-                    category: 'HYPOTHESIS_WELL_DEFINED'
-                },
-                {
-                    userId: 'test-user-3',
-                    rating: 8,
-                    category: 'HYPOTHESIS_ORIGINAL'
-                }
-            ]
         }
     },
     {
@@ -286,18 +223,16 @@ const publicationSeeds = [
         coAuthors: {
             create: [
                 {
-                    id: 'testCoAuthorHypothesis',
-                    email: 'testemail@test.com',
-                    code: 'test',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5'
-                },
-                {
-                    id: 'testCoAuthorHypothesis2',
-                    email: 'testemai2l@test.com',
-                    code: 'test2',
+                    id: 'coauthor-test-user-6-hypothesis-draft',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
                     confirmedCoAuthor: false,
                     linkedUser: 'test-user-6'
+                },
+                {
+                    id: 'coauthor-test-user-7-hypothesis-draft',
+                    email: 'test-user-7@jisc.ac.uk',
+                    code: 'test-code-user-7'
                 }
             ]
         },
@@ -343,20 +278,28 @@ const publicationSeeds = [
         id: 'publication-protocol-draft',
         title: 'Publication PROTOCOL-DRAFT',
         type: 'PROTOCOL',
+        licence: 'CC_BY',
         content: 'Publication PROTOCOL-DRAFT',
         currentStatus: 'DRAFT',
+        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g08',
         user: {
             connect: {
                 id: 'test-user-5'
             }
         },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-hypothesis-live'
+            }
+        },
         coAuthors: {
             create: {
-                id: 'testCoAuthorTrue',
-                email: 'testemail@test.com',
-                code: 'testcode',
-                confirmedCoAuthor: true
+                id: 'coauthor-test-user-6-protocol-draft',
+                email: 'test-user-6@jisc.ac.uk',
+                code: 'test-code-user-6',
+                confirmedCoAuthor: true,
+                linkedUser: 'test-user-6'
             }
         },
         publicationStatus: {
@@ -401,8 +344,10 @@ const publicationSeeds = [
         id: 'publication-data-draft',
         title: 'Publication DATA-DRAFT',
         type: 'DATA',
+        licence: 'CC_BY',
         content: 'Publication DATA-DRAFT',
         currentStatus: 'DRAFT',
+        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g10',
         user: {
             connect: {
@@ -451,8 +396,10 @@ const publicationSeeds = [
         id: 'publication-analysis-draft',
         title: 'Publication ANALYSIS-DRAFT',
         type: 'ANALYSIS',
+        licence: 'CC_BY',
         content: 'Publication ANALYSIS-DRAFT',
         currentStatus: 'DRAFT',
+        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g12',
         user: {
             connect: {
@@ -598,6 +545,7 @@ const publicationSeeds = [
         }
     },
     {
+        // This is listed as problem but is a hypothesis
         id: 'publication-problem-draft-no-content',
         title: 'Publication PROBLEM-DRAFT',
         type: 'HYPOTHESIS',
@@ -630,6 +578,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-LIVE',
         currentStatus: 'LIVE',
+        doi: '10.82259/cty5-2g23',
         user: {
             connect: {
                 id: 'test-user-1'

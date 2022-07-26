@@ -26,7 +26,6 @@ model User {
     coAuthors            CoAuthors[]
     Publication          Publication[]
     PublicationFlags     PublicationFlags[]
-    PublicationRatings   PublicationRatings[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
@@ -57,9 +56,9 @@ model Publication {
     type                               PublicationType
     title                              String?
     licence                            LicenceType            @default(CC_BY)
-    conflictOfInterestStatus           Boolean?               @default(false)
+    conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
-    ethicalStatement                   Boolean?
+    ethicalStatement                   String?
     ethicalStatementFreeText           String?
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
@@ -80,7 +79,6 @@ model Publication {
     linkedTo                           Links[]                @relation("from")
     linkedFrom                         Links[]                @relation("to")
     publicationFlags                   PublicationFlags[]
-    publicationRatings                 PublicationRatings[]
     publicationStatus                  PublicationStatus[]
     PublicationBookmarks               PublicationBookmarks[]
     funders                            Funders[]
@@ -170,18 +168,6 @@ model FlagComments {
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
 }
 
-model PublicationRatings {
-    id            String      @id @default(cuid())
-    publicationId String
-    userId        String
-    rating        Int
-    category      String
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, userId, category])
-}
-
 model PublicationBookmarks {
     id            String      @id @default(cuid())
     publicationId String
@@ -234,10 +220,8 @@ enum PublicationFlagCategoryEnum {
 enum LicenceType {
     CC_BY
     CC_BY_SA
-    CC_BY_ND
     CC_BY_NC
     CC_BY_NC_SA
-    CC_BY_NC_ND
 }
 
 enum Languages {

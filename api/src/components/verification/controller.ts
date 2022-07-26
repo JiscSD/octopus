@@ -68,6 +68,7 @@ export const confirmCode = async (
             return response.json(200, { token });
         }
 
+        // Regardless of outcome, we want to log the code entry attempt
         const increment = await verificationService.incrementAttempts(verification.orcid);
 
         // Expire code on repeated failures to enter correct value
