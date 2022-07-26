@@ -43,12 +43,10 @@ const DataStatements: React.FC = (): React.ReactElement => {
     // Data access statement
     const dataAccessStatement = Stores.usePublicationCreationStore((state) => state.dataAccessStatement);
     const updateDataAccessStatement = Stores.usePublicationCreationStore((state) => state.updateDataAccessStatement);
-    const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState<string | null>('');
-
-    // dataAccessOptions.includes(dataAccessStatement) ? setDataAccessStatementOther(dataAccessStatement);
+    const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState('');
 
     React.useEffect(() => {
-        if (!dataAccessOptions.includes(dataAccessStatement)) {
+        if (!dataAccessOptions.includes(dataAccessStatement) && dataAccessStatement !== null) {
             setDataAccessStatementOther(dataAccessStatement);
         }
     }, []);
