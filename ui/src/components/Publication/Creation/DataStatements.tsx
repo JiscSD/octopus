@@ -43,7 +43,15 @@ const DataStatements: React.FC = (): React.ReactElement => {
     // Data access statement
     const dataAccessStatement = Stores.usePublicationCreationStore((state) => state.dataAccessStatement);
     const updateDataAccessStatement = Stores.usePublicationCreationStore((state) => state.updateDataAccessStatement);
-    const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState('');
+    const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState<string | null>('');
+
+    // dataAccessOptions.includes(dataAccessStatement) ? setDataAccessStatementOther(dataAccessStatement);
+
+    React.useEffect(() => {
+        if (!dataAccessOptions.includes(dataAccessStatement)) {
+            setDataAccessStatementOther(dataAccessStatement);
+        }
+    }, []);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
