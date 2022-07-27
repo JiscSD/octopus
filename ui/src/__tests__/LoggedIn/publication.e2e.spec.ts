@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import * as Helpers from './helpers';
+import * as Helpers from '../helpers';
 
 const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
 

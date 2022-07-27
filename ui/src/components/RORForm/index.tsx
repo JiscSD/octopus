@@ -395,7 +395,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             </label>
                             <textarea
                                 name="free-text"
-                                className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
+                                className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
                             `}
                                 placeholder="Enter any details"
                                 value={props.type == 'funders' ? funderStatement ?? '' : affiliationsStatement ?? ''}

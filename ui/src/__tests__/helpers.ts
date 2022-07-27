@@ -1,10 +1,11 @@
-import { Page } from '@playwright/test';
+import { chromium, Page } from '@playwright/test';
 import * as Type from '@types';
 
 const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
 const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
 const ORCID_TEST_NAME = process.env.ORCID_TEST_NAME;
-const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
+
+export const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
 
 if (!ORCID_TEST_USER || !ORCID_TEST_PASS || !ORCID_TEST_NAME) throw 'Environment variables not set';
 
