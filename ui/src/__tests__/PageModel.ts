@@ -1,6 +1,9 @@
 export const PageModel = {
     header: {
-        searchButton: ':nth-match(:text("Search"), 1)'
+        searchButton: 'header > div > div > div > button:text("Search")',
+        loginButton: 'role=button[name="Sign in with ORCID"]',
+        usernameButton: 'button[data-testid="username-button"]',
+        logoutButton: 'button:text("Log out")'
     },
     footer: {
         links: [
@@ -15,8 +18,6 @@ export const PageModel = {
         ]
     },
     homepage: {
-        h1: 'h1',
-        loginButton: 'role=button[name="Sign in with ORCID"]',
         cards: [
             '_react=ActionCard[title = "Publish your work"]',
             '_react=ActionCard[title = "Read publications"]',
@@ -29,8 +30,7 @@ export const PageModel = {
         quickSearch: 'button[aria-label="Open search"]',
         quickSearchInput: 'input[placeholder="Search publications"]',
         publicationSearchResult: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-        darkModeToggle: '#headlessui-switch-7',
-        backToTopButton: ''
+        darkModeToggle: '#headlessui-switch-7'
     },
     about: {},
     terms: {},
@@ -38,10 +38,18 @@ export const PageModel = {
     getInvolved: {},
     accessibility: {},
     browse: {},
-    search: {},
+    search: {
+        searchInput: 'css=[placeholder="Type here and press enter..."]',
+        publicationSearchResult: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
+        noPublicationsFound: '_react=Alert[title = "No results found"]'
+    },
     livePublication: {},
     authorInfo: {},
-    login: {},
+    login: {
+        username: '#username',
+        password: '#password',
+        signInButton: '#signin-button'
+    },
     confirmEmail: {},
     publish: {},
     myPublications: {},
