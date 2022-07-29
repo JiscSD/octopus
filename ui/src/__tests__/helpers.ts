@@ -1,4 +1,4 @@
-import { chromium, Page } from '@playwright/test';
+import { chromium, expect, Page } from '@playwright/test';
 import * as Type from '@types';
 import { PageModel } from './PageModel';
 
@@ -15,6 +15,7 @@ export const login = async (page: Page) => {
     await page.fill(PageModel.login.username, ORCID_TEST_USER);
     await page.fill(PageModel.login.password, ORCID_TEST_PASS);
     await page.locator(PageModel.login.signInButton).click();
+    await page.waitForNavigation();
 };
 
 export const logout = async (page: Page) => {
@@ -23,6 +24,8 @@ export const logout = async (page: Page) => {
         await userMenu.click();
         await page.locator(PageModel.header.logoutButton).click();
     }
+    await page.waitForNavigation();
+    await expect(page.locator(PageModel.header.loginButton)).toBeVisible();
 };
 
 export const selectFirstPublication = async (page: Page, type: Type.PublicationType = 'PROBLEM') => {
