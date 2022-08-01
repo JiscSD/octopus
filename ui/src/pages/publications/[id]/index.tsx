@@ -354,7 +354,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     coAuthor.user && (
                                         <>
                                             <Components.Link
-                                                href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
+                                                href={`${Config.urls.viewUser.path}/${coAuthor.linkedUser}`}
                                                 className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                             >
                                                 <>
