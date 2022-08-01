@@ -17,18 +17,21 @@ type NavigationButtonProps = {
     className?: string;
     icon: React.ReactElement;
     iconPosition: 'LEFT' | 'RIGHT';
+    saveButton?: boolean;
 };
 
 const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`font-lg flex items-center space-x-2 rounded-sm py-1 text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
+        className={`font-lg flex items-center  rounded-xl ${
+            props.saveButton ? 'bg-green-600' : 'bg-teal-700'
+        } py-2 px-2 text-white-50 shadow-lg outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-30 disabled:hover:cursor-not-allowed dark:text-white-50 ${
             props.className ? props.className : ''
         }`}
     >
         {props.iconPosition === 'LEFT' && props.icon}
-        <span>{props.text}</span>
+        <span className="px-1">{props.text}</span>
         {props.iconPosition === 'RIGHT' && props.icon}
     </button>
 );
@@ -294,7 +297,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Previous"
                                 disabled={props.currentStep <= 0}
                                 onClick={() => props.setStep((prevState: number) => prevState - 1)}
-                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-200" />}
                                 iconPosition="LEFT"
                             />
 
@@ -302,7 +305,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Next"
                                 disabled={props.currentStep >= props.steps.length - 1}
                                 onClick={() => props.setStep((prevState: number) => prevState + 1)}
-                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
 
@@ -320,7 +323,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     }
                                 }}
                                 disabled={!isReadyToPreview}
-                                icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
 
@@ -329,7 +332,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 onClick={() => setPublishModalVisibility(true)}
                                 disabled={!isReadyToPreview}
                                 className=""
-                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
 
@@ -337,14 +340,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 text="Save"
                                 onClick={() => setSaveModalVisibility(true)}
                                 className=""
-                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
+                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-200" />}
                                 iconPosition="RIGHT"
+                                saveButton={true}
                             />
                             <NavigationButton
                                 text="Delete draft"
                                 onClick={() => setDeleteModalVisibility(true)}
                                 className=""
-                                icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
                         </div>
@@ -354,13 +358,30 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     {/* bottom next and back nav buttons */}
                     <div className="flex justify-end space-x-8 ">
                         <NavigationButton
+                            text="Preview"
+                            onClick={async () => {
+                                try {
+                                    await saveCurrent();
+                                    router.push({
+                                        pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                    });
+                                } catch (err) {
+                                    const { message } = err as Interfaces.JSONResponseError;
+                                    store.setError(message);
+                                }
+                            }}
+                            disabled={!isReadyToPreview}
+                            icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-200" />}
+                            iconPosition="RIGHT"
+                        />
+                        <NavigationButton
                             text="Previous"
                             disabled={props.currentStep <= 0}
                             onClick={() => {
                                 props.setStep((prevState: number) => prevState - 1);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                            icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-200" />}
                             iconPosition="LEFT"
                         />
                         {props.steps.length - 1 === props.currentStep ? (
@@ -369,7 +390,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 onClick={() => setPublishModalVisibility(true)}
                                 disabled={!isReadyToPreview}
                                 className=""
-                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
                         ) : (
@@ -380,7 +401,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     props.setStep((prevState: number) => prevState + 1);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
-                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-200" />}
                                 iconPosition="RIGHT"
                             />
                         )}
