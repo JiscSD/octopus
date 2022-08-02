@@ -333,6 +333,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 iconPosition="RIGHT"
                                 className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                             />
+
                             <NavigationButton
                                 text="Save"
                                 onClick={() => setSaveModalVisibility(true)}
@@ -340,6 +341,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                                 iconPosition="RIGHT"
                             />
+
                             <NavigationButton
                                 text="Delete draft"
                                 onClick={() => setDeleteModalVisibility(true)}
@@ -365,6 +367,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                             iconPosition="RIGHT"
                         />
+
                         <NavigationButton
                             text="Previous"
                             disabled={props.currentStep <= 0}
@@ -375,6 +378,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                             iconPosition="LEFT"
                         />
+
                         {props.steps.length - 1 === props.currentStep ? (
                             <>
                                 <NavigationButton
@@ -391,16 +395,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         }
                                     }}
                                     disabled={!isReadyToPreview}
-                                    icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
+                                    icon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                     iconPosition="RIGHT"
+                                    className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                                 />
+
                                 <NavigationButton
                                     text="Publish"
                                     onClick={() => setPublishModalVisibility(true)}
                                     disabled={!isReadyToPreview}
-                                    className=""
-                                    icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                    icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                     iconPosition="RIGHT"
+                                    className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                                 />
                             </>
                         ) : (
