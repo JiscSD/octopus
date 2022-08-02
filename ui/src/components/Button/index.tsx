@@ -25,31 +25,27 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             focus:ring-2
             focus:ring-yellow-400
             disabled:select-none
-            disabled:opacity-30
+            disabled:opacity-50
             disabled:hover:cursor-not-allowed
             ${props.className ?? ''}
-            bg-teal-700 
-            text-white-50
-            shadow-xl
-            p-2
-            rounded-xl
             `;
     }, [props.className]);
 
     const childStyles = React.useMemo(() => {
         return `
-            ${props.iconPosition === 'LEFT' ? 'ml-3 px-1' : ''}
-            ${props.iconPosition === 'RIGHT' ? 'mr-3 px-1' : ''}
+            ${props.iconPosition === 'LEFT' ? 'ml-3' : ''}
+            ${props.iconPosition === 'RIGHT' ? 'mr-3' : ''}
             ${props.padding ? props.padding : 'py-2'}
             font-montserrat
             text-${props.textSize ? props.textSize : 'sm'}
             font-semibold
-
-
+            text-grey-800
+            dark:text-white-50
             transition-colors
             duration-500
-            px-1
-
+            border-b-2
+            border-b-teal-400
+            dark:border-b-teal-500
             `;
     }, [props.iconPosition]);
 
