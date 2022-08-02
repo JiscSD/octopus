@@ -350,6 +350,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         </div>
                     </div>
                     {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
+                    <div>
+                        <p className="text-md mb-6 block font-semibold text-grey-700 transition-colors duration-500 dark:text-white-100">
+                            Remember to save this draft before navigating away from the publication form.
+                        </p>
+                    </div>
                     <div className="mb-12">{props.children}</div>
                     {/* bottom next and back nav buttons */}
                     <div className="flex justify-end space-x-8 ">
