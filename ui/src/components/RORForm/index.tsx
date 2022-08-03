@@ -357,7 +357,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                                 className="mt-3 w-1/2"
                             />
                         ) : null}
-                        </div>
+                    </div>
                 </fieldset>
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
