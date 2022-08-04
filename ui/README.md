@@ -23,25 +23,25 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ### Languages
 
--   [TypeScript]('https://www.typescriptlang.org/') - [See config]('./tsconfig.json')
+-   [TypeScript](https://www.typescriptlang.org/) - [See config](./tsconfig.json)
 
 ### Frameworks
 
--   [Next.js]('https://nextjs.org/') - [See config]('./next.config.js')
--   [Tailwind CSS]('https://tailwindcss.com/') - [See config]('./tailwind.config.js')
+-   [Next.js](https://nextjs.org/) - [See config](./next.config.js)
+-   [Tailwind CSS](https://tailwindcss.com/) - [See config](./tailwind.config.js)
 
 ### Libraries
 
--   [Framer Motion]('https://www.framer.com/motion/')
--   [Luxon]('https://moment.github.io/luxon/')
--   [PostCSS]('https://postcss.org/')
--   [SWR]('https://swr.vercel.app/')
--   [Zustand]('https://github.com/pmndrs/zustand/')
+-   [Framer Motion](https://www.framer.com/motion/)
+-   [Luxon](https://moment.github.io/luxon/)
+-   [PostCSS](https://postcss.org/)
+-   [SWR](https://swr.vercel.app/)
+-   [Zustand](https://github.com/pmndrs/zustand/)
 
 ### Linting
 
--   [ESLint]('https://eslint.org/') - [See config]('./.eslintrc.json')
--   [Prettier]('https://prettier.io/') - [See config]('./.prettierrc.json')
+-   [ESLint](https://eslint.org/) - [See config](./.eslintrc.json)
+-   [Prettier](https://prettier.io/) - [See config](./.prettierrc.json)
 
 ---
 
@@ -53,6 +53,6 @@ End-to-end tests will be written using [Playwright](https://playwright.dev/) (TB
 
 ## Workflows on push
 
-We have a job which utilises [Lighthouse CI]('https://github.com/GoogleChrome/lighthouse-ci') to run an accessibility audit on all pages - [See config]('./lighthouserc.js'). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
+We have a job which utilises [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) to run an accessibility audit on all pages - [See config](./lighthouserc.js). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
 
 ---
