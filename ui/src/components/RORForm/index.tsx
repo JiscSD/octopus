@@ -337,9 +337,16 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             }}
                         />
                         <Components.Button
-                        className="pl-5"
+                            className="pl-5"
                             title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
-                            disabled={method =='ror' || name == '' || link == '' || city == '' || link == '' || isLinkValid == false}
+                            disabled={
+                                method == 'ror' ||
+                                name == '' ||
+                                link == '' ||
+                                city == '' ||
+                                link == '' ||
+                                isLinkValid == false
+                            }
                             onClick={onSubmitHandler}
                             iconPosition="RIGHT"
                             icon={
@@ -350,7 +357,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                                 )
                             }
                         />
-                        {!isLinkValid && link && method === 'manual'? (
+                        {!isLinkValid && link && method === 'manual' ? (
                             <Components.Alert
                                 severity="ERROR"
                                 title="Please enter a valid URL."
