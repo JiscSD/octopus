@@ -1,10 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
 const titleIDStore = new Map();
-// Manually create the GOD problem via seed data per env (this one is for int)
+// Manually create the GOD problem via seed data per env then update the DOI here
 titleIDStore.set(
-    'What makes everything we can detect in the universe around us the way that it is, and why?',
-    'why'
+    'What makes everything we can detect in the universe around us the way that it is, and why?', // GOD problem text
+    'why' // GOD problem DOI
 );
 const tsv = fs.readFileSync('./data.txt', 'utf-8');
 const loadData = async () => {
