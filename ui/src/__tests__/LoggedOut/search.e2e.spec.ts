@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import * as Helpers from '../helpers';
 import { PageModel } from '../PageModel';
 
-test.describe('Check publication search, publication page and author page, logged out', () => {
+test.describe('Check publication search, publication page, author page, browse page, logged out', () => {
     test('Search for a full publication title, partial publication title and no results, logged out', async ({
         browser
     }) => {
@@ -62,7 +62,7 @@ test.describe('Check publication search, publication page and author page, logge
         // Test filters TODO
     });
 
-    test('Check publication and author page, logged out', async ({ browser }) => {
+    test('Check publication, author and browse page, logged out', async ({ browser }) => {
         // Start up test
         test.setTimeout(60000);
         const page = await browser.newPage({ ignoreHTTPSErrors: true });
@@ -85,8 +85,6 @@ test.describe('Check publication search, publication page and author page, logge
         // Check visualisation
         await expect(page.locator(PageModel.livePublication.visualisationProblem)).toBeVisible();
 
-        // Check bookmark, flag link, review link is not there TODO
-
         // Check content, linked problems, funders, conflict of interest sections
         await expect(page.locator(PageModel.livePublication.content)).toBeVisible();
         await expect(page.locator(PageModel.livePublication.linkedProblems)).toBeVisible();
@@ -105,7 +103,11 @@ test.describe('Check publication search, publication page and author page, logge
 
         // Check download pdf/json TODO
 
-        // Check verify email link/sign in link (check for both with different logins)
+        // Check sign in for more button and that bookmark, flag link, review link are not visible
+        await expect(page.locator(PageModel.livePublication.signInForMoreButton).locator('visible=true')).toBeVisible();
+        await expect(page.locator(PageModel.livePublication.bookmark)).not.toBeVisible();
+        await expect(page.locator(PageModel.livePublication.flagConcern)).not.toBeVisible();
+        await expect(page.locator(PageModel.livePublication.writeReview)).not.toBeVisible();
 
         // Check and click author link
         await page.locator(PageModel.livePublication.authorLink).click();
@@ -124,16 +126,12 @@ test.describe('Check publication search, publication page and author page, logge
             await expect(page.locator(orcidDataSection)).toBeVisible();
         }
 
-        // Check Octopus publications section
-        await page.locator(PageModel.authorInfo.showAll).click();
-        await expect(page.locator(PageModel.authorInfo.result).locator('visible=true')).toHaveCount(1059, {
-            timeout: 55000
-        });
-    });
+        // Check Octopus publications section TODO/ change when we have test user
+        // await page.locator(PageModel.authorInfo.showAll).click();
+        // await expect(page.locator(PageModel.authorInfo.result).locator('visible=true')).toHaveCount(1059, {
+        //     timeout: 55000
+        // });
 
-    test('Check browse page, logged out', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
         await page.goto(Helpers.UI_BASE);
 
         // Navigate to browse page

@@ -89,17 +89,17 @@ test.describe('Static pages, logged out', () => {
 
         // Check terms
         await page.locator(PageModel.footer.links[5]).click();
-        await expect(page).toHaveURL(Helpers.UI_BASE + '/user-terms');
+        await expect(page).toHaveURL(`${Helpers.UI_BASE}/user-terms`);
         await page.goBack();
 
         // Check privacy
         await page.locator(PageModel.footer.links[6]).click();
-        await expect(page).toHaveURL(Helpers.UI_BASE + '/privacy');
+        await expect(page).toHaveURL(`${Helpers.UI_BASE}/privacy`);
         await page.goBack();
 
         // Check accessibility
         await page.locator(PageModel.footer.links[7]).click();
-        await expect(page).toHaveURL(Helpers.UI_BASE + '/accessibility');
+        await expect(page).toHaveURL(`${Helpers.UI_BASE}/accessibility`);
         await page.goBack();
 
         // Finish test

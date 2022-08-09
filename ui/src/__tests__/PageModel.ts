@@ -5,7 +5,8 @@ export const PageModel = {
         usernameButton: 'button[data-testid="username-button"]',
         logoutButton: 'button:text("Log out")',
         browseButton: 'ul a[role="button"]:has-text("Browse")',
-        publishButton: 'ul a[role="button"]:has-text("Publish")'
+        publishButton: 'ul a[role="button"]:has-text("Publish")',
+        myBookmarksButton: 'a[href="/my-bookmarks"]'
     },
     footer: {
         links: [
@@ -82,7 +83,19 @@ export const PageModel = {
         coi: 'h2:has-text("Conflict of interest")',
         licenceLink: 'aside a[role="button"]:has-text("CC BY 4.0")',
         doiLink: 'aside [aria-label="DOI link: https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
-        authorLink: 'text=S. Octopus'
+        authorLink: 'text=S. Octopus',
+        signInForMoreButton: 'text=Sign in for more actions',
+        addBookmark: '[title="Bookmark this publication"]',
+        removeBookmark: '[title="Remove bookmark"]',
+        writeReview: '[aria-label="Write review"]',
+        flagConcern: '[aria-label="Flag a concern with this publication"]',
+        redFlagComment: '#red-flag-comment',
+        redFlagSubmit: '[aria-label="Submit"]',
+        redFlagAlert: 'text=This publication has active red flags for:',
+        redFlagLink: '[aria-label="View red flags"]',
+        redFlagPreview: '#red-flags > div > div > div > a[title="View  comment thread"]',
+        resolveFlag: 'text=Resolve flag',
+        confirmResolve: 'button[aria-label="Resolve"]'
     },
     authorInfo: {
         name: 'text=Science Octopus',
@@ -99,7 +112,9 @@ export const PageModel = {
     confirmEmail: {},
     publish: {},
     myPublications: {},
-    myBookmarks: {},
+    myBookmarks: {
+        bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'
+    },
     coauthorApprove: {},
     coauthorDeny: {}
 };
