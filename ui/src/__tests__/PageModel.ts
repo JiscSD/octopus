@@ -6,7 +6,9 @@ export const PageModel = {
         logoutButton: 'button:text("Log out")',
         browseButton: 'ul a[role="button"]:has-text("Browse")',
         publishButton: 'ul a[role="button"]:has-text("Publish")',
-        myBookmarksButton: 'a[href="/my-bookmarks"]'
+        myBookmarksButton: 'a[href="/my-bookmarks"]',
+        myPublicationsButton: 'a[href="/account"]',
+        myProfileButton: 'a[href="/authors/cl6m84wm800007syp9fxsv425"]'
     },
     footer: {
         links: [
@@ -61,10 +63,6 @@ export const PageModel = {
             'h3:text("Real World Application")'
         ]
     },
-    terms: {},
-    privacy: {},
-    getInvolved: {},
-    accessibility: {},
     browse: {
         card: '_react=Card',
         viewAllPublications: '[aria-label="View all publications"]',
@@ -85,6 +83,7 @@ export const PageModel = {
         doiLink: 'aside [aria-label="DOI link: https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
         authorLink: 'text=S. Octopus',
         signInForMoreButton: 'text=Sign in for more actions',
+        verifyEmailForMoreButton: 'text=Verify your email for more actions',
         addBookmark: '[title="Bookmark this publication"]',
         removeBookmark: '[title="Remove bookmark"]',
         writeReview: '[aria-label="Write review"]',
@@ -110,10 +109,15 @@ export const PageModel = {
         signInButton: '#signin-button'
     },
     confirmEmail: {},
-    publish: {},
     myPublications: {},
     myBookmarks: {
         bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'
+    },
+    publish: {
+        title: 'input[type="text"]',
+        publicationType: 'select#publicationType',
+        confirmPublicationType: 'input[type="checkbox"]',
+        createThisPublicationButton: 'button[aria-label="Create this publication"]'
     },
     coauthorApprove: {},
     coauthorDeny: {}

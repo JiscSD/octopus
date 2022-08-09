@@ -7,7 +7,7 @@ test.describe('Check publication search, publication page, author page, browse p
         browser
     }) => {
         // Start up test
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Navigate to search page
@@ -64,8 +64,7 @@ test.describe('Check publication search, publication page, author page, browse p
 
     test('Check publication, author and browse page, logged out', async ({ browser }) => {
         // Start up test
-        test.setTimeout(60000);
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Navigate to search page
@@ -105,7 +104,7 @@ test.describe('Check publication search, publication page, author page, browse p
 
         // Check sign in for more button and that bookmark, flag link, review link are not visible
         await expect(page.locator(PageModel.livePublication.signInForMoreButton).locator('visible=true')).toBeVisible();
-        await expect(page.locator(PageModel.livePublication.bookmark)).not.toBeVisible();
+        await expect(page.locator(PageModel.livePublication.addBookmark)).not.toBeVisible();
         await expect(page.locator(PageModel.livePublication.flagConcern)).not.toBeVisible();
         await expect(page.locator(PageModel.livePublication.writeReview)).not.toBeVisible();
 

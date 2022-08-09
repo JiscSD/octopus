@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 import * as Helpers from '../helpers';
 import { PageModel } from '../PageModel';
 
-test.describe('Check publication search, publication page, author page, browse page, logged in', () => {
+test.describe('Check pages for: search, live publication, author, browse, profile', () => {
     test('Check publication, author and browse page, logged in', async ({ browser }) => {
+        test.setTimeout(40000);
         // Start up test
-        test.setTimeout(60000);
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Login
@@ -26,7 +26,6 @@ test.describe('Check publication search, publication page, author page, browse p
         // Click on search result
         await page.locator(PageModel.search.publicationSearchResult).click();
         await expect(page.locator('h1')).toHaveText('How has life on earth evolved?');
-        await page.pause();
 
         // Check visualisation
         await expect(page.locator(PageModel.livePublication.visualisationProblem)).toBeVisible();
@@ -109,7 +108,15 @@ test.describe('Check publication search, publication page, author page, browse p
         // await expect(page.locator(PageModel.authorInfo.result).locator('visible=true')).toHaveCount(1059, {
         //     timeout: 55000
         // });
+    });
+    test('Check browse and profile page, logged in', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+        await page.goto(Helpers.UI_BASE);
 
+        // Login
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
         await page.goto(Helpers.UI_BASE);
 
         // Navigate to browse page
@@ -124,6 +131,19 @@ test.describe('Check publication search, publication page, author page, browse p
 
         // Expect 5 cards
         await expect(page.locator(PageModel.browse.card).locator('visible=true')).toHaveCount(5);
+
+        // Check my profile page
+        await page.goto(Helpers.UI_BASE);
+        await page.locator(PageModel.header.usernameButton).click();
+        await page.locator(PageModel.header.myProfileButton).click();
+
+        // Check name
+        await expect(page.locator('h1')).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        // Check ORCID data sections
+        for await (const orcidDataSection of PageModel.authorInfo.orcidData) {
+            await expect(page.locator(orcidDataSection)).toBeVisible();
+        }
 
         // Finish test
         await browser.close();

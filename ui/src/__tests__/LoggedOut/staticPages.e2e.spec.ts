@@ -5,7 +5,7 @@ import * as Helpers from '../helpers';
 test.describe('Static pages, logged out', () => {
     test('Check homepage', async ({ browser }) => {
         // Start up test
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Expect elements to be visible
@@ -44,7 +44,7 @@ test.describe('Static pages, logged out', () => {
 
     test('Check about page', async ({ browser }) => {
         // Start up test
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
         await page.locator(PageModel.footer.links[2]).click();
 
@@ -84,7 +84,7 @@ test.describe('Static pages, logged out', () => {
 
     test('Check static pages in the footer', async ({ browser }) => {
         // Start up test
-        const page = await browser.newPage({ ignoreHTTPSErrors: true });
+        const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Check terms
