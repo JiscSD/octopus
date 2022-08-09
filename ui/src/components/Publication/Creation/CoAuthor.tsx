@@ -86,17 +86,19 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         if (e.key === 'Enter') addCoAuthorToPublication();
                     }}
                 />
-                <button
-                    className="ml-px rounded-full outline-none focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
-                    onClick={addCoAuthorToPublication}
+                <Components.Button
+                    title="Send co-author invite"
                     disabled={!coAuthor}
-                >
-                    {loading ? (
-                        <OutlineIcons.RefreshIcon className="h-8 w-8 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                    ) : (
-                        <OutlineIcons.PlusCircleIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                    )}{' '}
-                </button>
+                    onClick={addCoAuthorToPublication}
+                    iconPosition="RIGHT"
+                    icon={
+                        loading ? (
+                            <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                        ) : (
+                            <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                        )
+                    }
+                />
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
