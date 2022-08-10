@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import ClickAwayListener from 'react-click-away-listener';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/outline';
