@@ -230,11 +230,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         if (props.draftedPublication.references) {
             store.updateReferences(props.draftedPublication.references);
         }
-
-        if (props.draftedPublication.conflictOfInterestStatus) {
-            store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        }
-
+        
         if (props.draftedPublication.conflictOfInterestText) {
             store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
             store.updateLinkTo(props.draftedPublication.linkedTo);
@@ -269,6 +265,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
         store.updateAffiliations(props.draftedPublication.affiliations);
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
+        store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
     }, []);
 
     React.useEffect(() => {

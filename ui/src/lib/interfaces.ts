@@ -73,7 +73,7 @@ export interface Publication extends CorePublication {
     user: User;
     linkedFrom: LinkFrom[];
     linkedTo: LinkTo[];
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
     dataPermissionsStatement: string | null;
@@ -354,7 +354,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string;
     ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;

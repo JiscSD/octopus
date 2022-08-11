@@ -56,7 +56,7 @@ model Publication {
     type                               PublicationType
     title                              String?
     licence                            LicenceType            @default(CC_BY)
-    conflictOfInterestStatus           Boolean?               @default(false)
+    conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
     ethicalStatement                   String?
     ethicalStatementFreeText           String?

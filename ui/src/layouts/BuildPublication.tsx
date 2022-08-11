@@ -23,7 +23,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = (props) => (
     <button
         disabled={props.disabled}
         onClick={props.onClick}
-        className={`font-lg flex items-center space-x-2 rounded-sm py-1 text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
+        className={`font-lg flex items-center space-x-2 py-1 text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50 ${
             props.className ? props.className : ''
         }`}
     >
@@ -165,11 +165,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
         if (!store.linkTo?.length)
             ready = { ready: false, message: 'You must link this publication to at least one other' };
+
         if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
             ready = {
                 ready: false,
                 message: 'You have selected there is a conflict of interest, please provide a reason.'
             };
+        }
+        if (typeof store.conflictOfInterestStatus == 'undefined') {
+            ready = { ready: false, message: 'You must select a conflict of interest option' };
         }
         if (store.type === Config.values.octopusInformation.publications.DATA.id) {
             if (store.ethicalStatement === null)
@@ -316,26 +320,28 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     }
                                 }}
                                 disabled={!isReadyToPreview}
-                                icon={<OutlineIcons.EyeIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                 iconPosition="RIGHT"
+                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                             />
 
                             <NavigationButton
                                 text="Publish"
                                 onClick={() => setPublishModalVisibility(true)}
                                 disabled={!isReadyToPreview}
-                                className=""
-                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
+                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                 iconPosition="RIGHT"
+                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
                             />
 
                             <NavigationButton
                                 text="Save"
                                 onClick={() => setSaveModalVisibility(true)}
-                                className=""
-                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-teal-600" />}
+                                className="rounded border-2 border-transparent bg-green-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                                 iconPosition="RIGHT"
                             />
+
                             <NavigationButton
                                 text="Delete draft"
                                 onClick={() => setDeleteModalVisibility(true)}
@@ -346,9 +352,22 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         </div>
                     </div>
                     {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
+                    <div>
+                        <p className="text-md mb-6 block font-semibold text-grey-700 transition-colors duration-500 dark:text-white-100">
+                            Remember to save this draft before navigating away from the publication form.
+                        </p>
+                    </div>
                     <div className="mb-12">{props.children}</div>
                     {/* bottom next and back nav buttons */}
                     <div className="flex justify-end space-x-8 ">
+                        <NavigationButton
+                            text="Save"
+                            onClick={() => setSaveModalVisibility(true)}
+                            className="rounded border-2 border-transparent bg-green-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                            icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
+                            iconPosition="RIGHT"
+                        />
+
                         <NavigationButton
                             text="Previous"
                             disabled={props.currentStep <= 0}
@@ -359,15 +378,37 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                             iconPosition="LEFT"
                         />
+
                         {props.steps.length - 1 === props.currentStep ? (
-                            <NavigationButton
-                                text="Publish"
-                                onClick={() => setPublishModalVisibility(true)}
-                                disabled={!isReadyToPreview}
-                                className=""
-                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-teal-600" />}
-                                iconPosition="RIGHT"
-                            />
+                            <>
+                                <NavigationButton
+                                    text="Preview"
+                                    onClick={async () => {
+                                        try {
+                                            await saveCurrent();
+                                            router.push({
+                                                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                            });
+                                        } catch (err) {
+                                            const { message } = err as Interfaces.JSONResponseError;
+                                            store.setError(message);
+                                        }
+                                    }}
+                                    disabled={!isReadyToPreview}
+                                    icon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
+                                    iconPosition="RIGHT"
+                                    className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                                />
+
+                                <NavigationButton
+                                    text="Publish"
+                                    onClick={() => setPublishModalVisibility(true)}
+                                    disabled={!isReadyToPreview}
+                                    icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                    iconPosition="RIGHT"
+                                    className="rounded border-2 border-transparent bg-teal-600 px-2.5 py-1.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                                />
+                            </>
                         ) : (
                             <NavigationButton
                                 text="Next"

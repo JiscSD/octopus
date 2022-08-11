@@ -39,13 +39,10 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             font-montserrat
             text-${props.textSize ? props.textSize : 'sm'}
             font-semibold
-
             text-grey-800
             dark:text-white-50
-
             transition-colors
             duration-500
-
             border-b-2
             border-b-teal-400
             dark:border-b-teal-500
