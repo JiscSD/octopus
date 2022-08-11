@@ -20,7 +20,7 @@ const defaultValues = [
 
 const Nav: React.FC = (): React.ReactElement => {
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isMobile = Hooks.useMediaQuery('(max-width: 900px)');
+    const isDesktop = Hooks.useMediaQuery('(min-width: 1024px)');
 
     const items = useMemo(
         () =>
@@ -51,7 +51,7 @@ const Nav: React.FC = (): React.ReactElement => {
         [user]
     );
 
-    return isMobile ? <Components.NavMobile items={items} /> : <Components.NavDesktop items={items} />;
+    return isDesktop ? <Components.NavDesktop items={items} /> : <Components.NavMobile items={items} />;
 };
 
 export default Nav;
