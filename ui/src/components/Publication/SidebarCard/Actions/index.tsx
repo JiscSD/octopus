@@ -180,27 +180,12 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             {user && user.email ? (
                 props.publication.user.id !== user.id && (
                     <>
-                        {props.publication.type !== 'PEER_REVIEW' && (
-                            <Components.PublicationSidebarCardActionsButton
-                                label="Write review"
-                                onClick={() => {
-                                    router.push({
-                                        pathname: `${Config.urls.createPublication.path}`,
-                                        query: {
-                                            for: props.publication.id,
-                                            type: 'PEER_REVIEW'
-                                        }
-                                    });
-                                }}
-                            />
-                        )}
-
                         {Helpers.linkedPublicationTypes[
                             props.publication.type as keyof typeof Helpers.linkedPublicationTypes
-                        ].map((item) => {
+                        ].map((item: Types.PublicationType, index: string) => {
                             return (
                                 <Components.PublicationSidebarCardActionsButton
-                                    label={`Write a ${Helpers.formatPublicationType(item)}`}
+                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
                                     key={item}
                                     onClick={() => {
                                         router.push({
@@ -214,6 +199,21 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 />
                             );
                         })}
+
+                        {props.publication.type !== 'PEER_REVIEW' && (
+                            <Components.PublicationSidebarCardActionsButton
+                                label="Write a review"
+                                onClick={() => {
+                                    router.push({
+                                        pathname: `${Config.urls.createPublication.path}`,
+                                        query: {
+                                            for: props.publication.id,
+                                            type: 'PEER_REVIEW'
+                                        }
+                                    });
+                                }}
+                            />
+                        )}
 
                         <Components.PublicationSidebarCardActionsButton
                             label="Flag a concern with this publication"

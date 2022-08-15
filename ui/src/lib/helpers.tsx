@@ -285,10 +285,10 @@ export const checkLinkIsValid = (text: string) => {
 
 export const linkedPublicationTypes = {
     PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
-    HYPOTHESIS: ['PROBLEM', 'METHOD'],
+    HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
     PROTOCOL: ['PROBLEM', 'DATA'],
     DATA: ['PROBLEM', 'ANALYSIS'],
-    ANALYSIS: ['PROBLEM', 'IMPLEMENTATION'],
+    ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
     INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
     REAL_WORLD_APPLICATION: ['PROBLEM']
 };
