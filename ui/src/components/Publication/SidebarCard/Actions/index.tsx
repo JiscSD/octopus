@@ -194,6 +194,27 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 }}
                             />
                         )}
+
+                        {Helpers.linkedPublicationTypes[
+                            props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                        ].map((item) => {
+                            return (
+                                <Components.PublicationSidebarCardActionsButton
+                                    label={`Write a ${Helpers.formatPublicationType(item)}`}
+                                    key={item}
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: `${Config.urls.createPublication.path}`,
+                                            query: {
+                                                for: props.publication.id,
+                                                type: item
+                                            }
+                                        });
+                                    }}
+                                />
+                            );
+                        })}
+
                         <Components.PublicationSidebarCardActionsButton
                             label="Flag a concern with this publication"
                             onClick={() => setShowRedFlagModel(true)}
