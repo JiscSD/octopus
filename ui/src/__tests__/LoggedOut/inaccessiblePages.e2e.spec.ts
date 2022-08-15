@@ -9,22 +9,25 @@ test.describe('Checking inaccessible pages', () => {
 
         // Check publish create page
         await page.goto(`${Helpers.UI_BASE}/create`);
-        await page.waitForNavigation();
+        await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
 
         // Check account page
+        await page.goBack();
         await page.goto(`${Helpers.UI_BASE}/account`);
-        await page.waitForNavigation();
+
+        await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
 
         // Check my bookmarks page
+        await page.goBack();
         await page.goto(`${Helpers.UI_BASE}/my-bookmarks`);
-        await page.waitForNavigation();
+        await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
     });
 
     test.skip('Unverified email: live publication page', async ({ browser }) => {
-        // Check live publication page options - need to have an account that hasn't verified their email address
+        // TODO unskip when we have an account that hasn't verified their email address
 
         // Start up test
         const page = await browser.newPage();
@@ -53,8 +56,5 @@ test.describe('Checking inaccessible pages', () => {
         // await expect(page.locator(PageModel.livePublication.addBookmark)).not.toBeVisible(); TODO uncomment this when this is fixed!
         await expect(page.locator(PageModel.livePublication.flagConcern)).not.toBeVisible();
         await expect(page.locator(PageModel.livePublication.writeReview)).not.toBeVisible();
-
-        // Finish test
-        await browser.close();
     });
 });

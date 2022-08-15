@@ -101,8 +101,5 @@ test.describe('Static pages, logged out', () => {
         await page.locator(PageModel.footer.links[7]).click();
         await expect(page).toHaveURL(`${Helpers.UI_BASE}/accessibility`);
         await page.goBack();
-
-        // Finish test
-        await browser.close();
     });
 });
