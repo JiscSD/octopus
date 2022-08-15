@@ -101,9 +101,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 />
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
+                <div className="overflow-x-auto">
+                    <div className="inline-block min-w-full py-2 align-middle">
+                        <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
                             <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
                                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                     <tr>
