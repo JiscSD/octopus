@@ -117,7 +117,36 @@ export const PageModel = {
         title: 'input[type="text"]',
         publicationType: 'select#publicationType',
         confirmPublicationType: 'input[type="checkbox"]',
-        createThisPublicationButton: 'button[aria-label="Create this publication"]'
+        createThisPublicationButton: 'button[aria-label="Create this publication"]',
+        nextButton: 'button:has-text("Next") >> nth=1',
+        keyInformation: {
+            licence: 'select#licence',
+            rorID: 'input[name="ror"]',
+            addAffiliationButton: 'button[aria-label="Add affiliation"]',
+            manualAffiliationSelect: 'input#manual',
+            manualAffiliationName: 'input[placeholder="Name"]',
+            manualAffiliationCity: 'input[placeholder="City"]',
+            manualAffiliationLink: 'input[placeholder="Link"]',
+            affiliationDetails: 'textarea[placeholder="Enter any details"]'
+        },
+        linkedPub: {
+            input: 'input[placeholder="Search for publications"]',
+            searchResult:
+                '[role="option"]:has-text("How do living organisms function, survive, reproduce and evolve?")',
+            addLink: 'button[aria-label="Add link"]'
+        },
+        text: {
+            editor: 'div[contenteditable=true]',
+            language: 'select[name="language"]',
+            description:
+                'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
+            keywords:
+                'text=KeywordsInclude up to 10 keywords relating to your content. These can be comma-s >> textarea'
+        },
+        coi: {
+            true: '#coi-true',
+            false: '#coi-false'
+        }
     },
     coauthorApprove: {},
     coauthorDeny: {}
