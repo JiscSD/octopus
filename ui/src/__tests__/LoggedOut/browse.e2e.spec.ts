@@ -3,7 +3,7 @@ import * as Helpers from '../helpers';
 import { PageModel } from '../PageModel';
 
 test.describe('Browse', () => {
-    test('Check browse page when logged out', async ({ browser }) => {
+    test('Browse contents', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);

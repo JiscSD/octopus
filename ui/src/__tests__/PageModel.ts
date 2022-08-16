@@ -101,7 +101,7 @@ export const PageModel = {
         orcid: 'a[role="button"]:has-text("XXXX-XXXX-XXXX-XXXX")',
         orcidData: ['h2:has-text("Employment")', 'h2:has-text("Education")', 'h2:has-text("Works")'],
         showAll: 'button:has-text("Show all")',
-        result: '_react=SearchResult'
+        result: '_react=SearchResult[publication.id="cl3fz14dr0001es6i5ji51rq4"]'
     },
     login: {
         username: '#username',

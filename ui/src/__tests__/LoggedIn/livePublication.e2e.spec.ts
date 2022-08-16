@@ -12,7 +12,7 @@ test.describe('Live Publication', () => {
         await Helpers.login(page);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
 
-        // Click on search result
+        // Go to live publication page
         await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
         await expect(page.locator('h1')).toHaveText('How has life on earth evolved?');
 
@@ -34,8 +34,6 @@ test.describe('Live Publication', () => {
             'href',
             'https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4'
         );
-
-        // Check download pdf/json TODO
 
         // Confirm review link
         await expect(page.locator(PageModel.livePublication.writeReview).locator('visible=true')).toBeVisible();
@@ -124,10 +122,21 @@ test.describe('Live Publication', () => {
             await expect(page.locator(orcidDataSection)).toBeVisible();
         }
 
-        // Check Octopus publications section TODO/ change when we have test user
-        // await page.locator(PageModel.authorInfo.showAll).click();
-        // await expect(page.locator(PageModel.authorInfo.result).locator('visible=true')).toHaveCount(1059, {
-        //     timeout: 55000
-        // });
+        // Check Author publications section
+        await page.locator(PageModel.authorInfo.showAll).click();
+        await page.waitForSelector(PageModel.authorInfo.result);
+        await expect(page.locator(PageModel.authorInfo.result)).toBeVisible();
+    });
+
+    test.skip('Download pdf/json', async ({ browser }) => {
+        // test TODO
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
     });
 });

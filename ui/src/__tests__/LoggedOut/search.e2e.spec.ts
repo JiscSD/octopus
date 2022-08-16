@@ -38,14 +38,13 @@ test.describe('Search logged out', () => {
         await Helpers.search(page, 'thisShouldProduceNoResults', PageModel.search.noPublicationsFound);
     });
 
-    test('Search filters', async ({ browser }) => {
+    test.skip('Search filters', async ({ browser }) => {
+        // test TODO
         // Start up test
         const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
 
         // Navigate to search page
         await page.locator(PageModel.header.searchButton).click();
-
-        // Test filters TODO
     });
 });
