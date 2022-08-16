@@ -15,7 +15,7 @@ export const login = async (page: Page) => {
     await page.fill(PageModel.login.username, ORCID_TEST_USER);
     await page.fill(PageModel.login.password, ORCID_TEST_PASS);
     await page.locator(PageModel.login.signInButton).click();
-    await page.waitForLoadState();
+    await page.waitForSelector(PageModel.header.usernameButton);
 };
 
 export const logout = async (page: Page) => {

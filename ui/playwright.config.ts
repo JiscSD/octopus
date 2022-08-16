@@ -6,26 +6,26 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config: PlaywrightTestConfig = {
+    workers: 4,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     use: {
         trace: 'on-first-retry',
         ignoreHTTPSErrors: true,
-        headless: false,
+        // headless: false
         launchOptions: {
-            slowMo: 100
+            slowMo: 200
         }
     },
-    // TODO uncomment firefox once tests are written
     projects: [
         {
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] }
+        },
+        {
+            name: 'firefox',
+            use: { ...devices['Desktop Firefox'] }
         }
-        // {
-        //     name: 'firefox',
-        //     use: { ...devices['Desktop Firefox'] }
-        // }
     ]
 };
 export default config;

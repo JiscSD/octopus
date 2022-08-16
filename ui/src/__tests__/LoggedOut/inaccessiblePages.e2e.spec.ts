@@ -8,20 +8,20 @@ test.describe('Checking inaccessible pages', () => {
         const page = await browser.newPage();
 
         // Check publish create page
-        await page.goto(`${Helpers.UI_BASE}/create`);
+        await page.goto(`${Helpers.UI_BASE}/create`, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
 
         // Check account page
         await page.goBack();
-        await page.goto(`${Helpers.UI_BASE}/account`);
+        await page.goto(`${Helpers.UI_BASE}/account`, { waitUntil: 'domcontentloaded' });
 
         await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
 
         // Check my bookmarks page
         await page.goBack();
-        await page.goto(`${Helpers.UI_BASE}/my-bookmarks`);
+        await page.goto(`${Helpers.UI_BASE}/my-bookmarks`, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
     });
