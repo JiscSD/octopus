@@ -22,10 +22,18 @@ const useMediaQuery = (query: string): boolean => {
         handleChange();
 
         // Listen matchMedia
-        matchMedia.addEventListener('change', handleChange);
+        if (matchMedia.addListener) {
+            matchMedia.addListener(handleChange);
+        } else {
+            matchMedia.addEventListener('change', handleChange);
+        }
 
         return () => {
-            matchMedia.removeEventListener('change', handleChange);
+            if (matchMedia.removeListener) {
+                matchMedia.removeListener(handleChange);
+            } else {
+                matchMedia.removeEventListener('change', handleChange);
+            }
         };
     }, [handleChange, query]);
 
