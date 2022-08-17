@@ -22,7 +22,7 @@ To run this application locally you will need:
 
 -   [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
 -   [Docker](https://www.docker.com/)
--   [Serverless Framework](https://www.serverless.com/)
+-   [Serverless Framework (Version 2.72.3)](https://www.serverless.com/) 
 -   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 ## Getting started
