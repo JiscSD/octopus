@@ -283,16 +283,12 @@ export const checkLinkIsValid = (text: string) => {
     return urlR.test(lowerCaseText);
 };
 
-export const linkedPublicationTypes = (publicationType: Types.PublicationType): string[] => {
-    const types = {
-        PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
-        HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
-        PROTOCOL: ['PROBLEM', 'DATA'],
-        DATA: ['PROBLEM', 'ANALYSIS'],
-        ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
-        INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
-        REAL_WORLD_APPLICATION: ['PROBLEM']
-    };
-
-    return types[publicationType as keyof typeof types];
+export const linkedPublicationTypes = {
+    PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
+    HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
+    PROTOCOL: ['PROBLEM', 'DATA'],
+    DATA: ['PROBLEM', 'ANALYSIS'],
+    ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
+    INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
+    REAL_WORLD_APPLICATION: ['PROBLEM']
 };

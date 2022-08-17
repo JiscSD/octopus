@@ -180,7 +180,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             {user && user.email ? (
                 props.publication.user.id !== user.id && (
                     <>
-                        {Helpers.linkedPublicationTypes(props.publication.type).map((item: any) => {
+                        {Helpers.linkedPublicationTypes[
+                            props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                        ].map((item: any) => {
                             return (
                                 <Components.PublicationSidebarCardActionsButton
                                     label={`Write a linked ${Helpers.formatPublicationType(item)}`}
