@@ -180,9 +180,29 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             {user && user.email ? (
                 props.publication.user.id !== user.id && (
                     <>
+                        {Helpers.linkedPublicationTypes[
+                            props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                        ].map((item: any) => {
+                            return (
+                                <Components.PublicationSidebarCardActionsButton
+                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
+                                    key={item}
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: `${Config.urls.createPublication.path}`,
+                                            query: {
+                                                for: props.publication.id,
+                                                type: item
+                                            }
+                                        });
+                                    }}
+                                />
+                            );
+                        })}
+
                         {props.publication.type !== 'PEER_REVIEW' && (
                             <Components.PublicationSidebarCardActionsButton
-                                label="Write review"
+                                label="Write a review"
                                 onClick={() => {
                                     router.push({
                                         pathname: `${Config.urls.createPublication.path}`,
@@ -194,6 +214,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 }}
                             />
                         )}
+
                         <Components.PublicationSidebarCardActionsButton
                             label="Flag a concern with this publication"
                             onClick={() => setShowRedFlagModel(true)}
