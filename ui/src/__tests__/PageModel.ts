@@ -118,7 +118,9 @@ export const PageModel = {
         publicationType: 'select#publicationType',
         confirmPublicationType: 'input[type="checkbox"]',
         createThisPublicationButton: 'button[aria-label="Create this publication"]',
-        nextButton: 'button:has-text("Next") >> nth=1',
+        nextButton: 'button:has-text("Next") >> nth=0',
+        previewButton: 'button:has-text("Preview") >> nth=0',
+        publishButton: 'button:has-text("Publish") >> nth=0',
         keyInformation: {
             licence: 'select#licence',
             rorID: 'input[name="ror"]',
@@ -131,8 +133,6 @@ export const PageModel = {
         },
         linkedPub: {
             input: 'input[placeholder="Search for publications"]',
-            searchResult:
-                '[role="option"]:has-text("How do living organisms function, survive, reproduce and evolve?")',
             addLink: 'button[aria-label="Add link"]'
         },
         text: {
@@ -147,6 +147,15 @@ export const PageModel = {
             true: '#coi-true',
             false: '#coi-false',
             TextBox: '#conflictOfInterestStatus'
+        },
+        funders: {
+            rorID: 'input[name="ror"]',
+            addAffiliationButton: 'button[aria-label="Add funder"]',
+            manualAffiliationSelect: 'input#manual',
+            manualAffiliationName: 'input[placeholder="Name"]',
+            manualAffiliationCity: 'input[placeholder="City"]',
+            manualAffiliationLink: 'input[placeholder="Link"]',
+            affiliationDetails: 'textarea[placeholder="Enter any details"]'
         }
     },
     coauthorApprove: {},

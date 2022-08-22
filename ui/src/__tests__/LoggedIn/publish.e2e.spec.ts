@@ -48,11 +48,15 @@ export const publicationFlowKeyInformation = async (
     await page.locator(PageModel.publish.nextButton).click();
 };
 
-export const publicationFlowLinkedPublication = async (page: Page, linkedPubSearchTerm: string) => {
+export const publicationFlowLinkedPublication = async (
+    page: Page,
+    linkedPubSearchTerm: string,
+    linkedPubTitle: string
+) => {
     // Linked pub
     await page.locator(PageModel.publish.linkedPub.input).click();
     await page.keyboard.type(linkedPubSearchTerm);
-    await page.locator(PageModel.publish.linkedPub.searchResult).click();
+    await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
     await page.locator(PageModel.publish.linkedPub.addLink).click();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -99,10 +103,32 @@ export const publicationFlowConflictOfInterest = async (
 
 export const publicationFlowFunders = async (
     page: Page,
-    pubType: Type.PublicationType,
-    licenceType: Type.LicenceType
+    rorId: string,
+    rorName: string,
+    rorCity: string,
+    rorLink: string,
+    extraDetails: string
 ) => {
     // Funders
+    // Add ROR ID funder
+    await page.locator(PageModel.publish.funders.rorID).click();
+    await page.keyboard.type(rorId);
+    await page.locator(PageModel.publish.funders.addAffiliationButton).click();
+    // Add Manual funder
+    await page.locator(PageModel.publish.funders.manualAffiliationSelect).click();
+    await page.locator(PageModel.publish.funders.manualAffiliationName).click();
+    await page.keyboard.type(rorName);
+    await page.locator(PageModel.publish.funders.manualAffiliationCity).click();
+    await page.keyboard.type(rorCity);
+    await page.locator(PageModel.publish.funders.manualAffiliationLink).click();
+    await page.keyboard.type(rorLink);
+    await page.locator(PageModel.publish.funders.addAffiliationButton).click();
+
+    // Further info on funders
+    await page.locator(PageModel.publish.keyInformation.affiliationDetails).click();
+    await page.keyboard.type(extraDetails);
+
+    await page.locator(PageModel.publish.nextButton).click();
 };
 
 export const publicationFlowCoauthors = async (
@@ -122,7 +148,7 @@ export const publicationFlowReview = async (
 };
 
 test.describe('Publication flow', () => {
-    test('Pub flow', async ({ browser }) => {
+    test('Create a problem (standard publication)', async ({ browser }) => {
         test.slow();
         // Start up test
         const page = await browser.newPage();
@@ -142,8 +168,21 @@ test.describe('Publication flow', () => {
             'ror.com',
             'extra details'
         );
-        await publicationFlowLinkedPublication(page, 'living organisms');
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
         await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.pause();
+
+        // Check preview
+        // Pub type, language, licence
+        // title, author, text, funders, coi
     });
 });
