@@ -176,31 +176,30 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     <span className="ml-1">json</span>
                 </button>
             </div>
-
             {user && user.email ? (
-                props.publication.user.id !== user.id && (
-                    <>
-                        {Helpers.linkedPublicationTypes[
-                            props.publication.type as keyof typeof Helpers.linkedPublicationTypes
-                        ].map((item: any) => {
-                            return (
-                                <Components.PublicationSidebarCardActionsButton
-                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
-                                    key={item}
-                                    onClick={() => {
-                                        router.push({
-                                            pathname: `${Config.urls.createPublication.path}`,
-                                            query: {
-                                                for: props.publication.id,
-                                                type: item
-                                            }
-                                        });
-                                    }}
-                                />
-                            );
-                        })}
+                <>
+                    {Helpers.linkedPublicationTypes[
+                        props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                    ].map((item: any) => {
+                        return (
+                            <Components.PublicationSidebarCardActionsButton
+                                label={`Write a linked ${Helpers.formatPublicationType(item)}`}
+                                key={item}
+                                onClick={() => {
+                                    router.push({
+                                        pathname: `${Config.urls.createPublication.path}`,
+                                        query: {
+                                            for: props.publication.id,
+                                            type: item
+                                        }
+                                    });
+                                }}
+                            />
+                        );
+                    })}
 
-                        {props.publication.type !== 'PEER_REVIEW' && (
+                    {props.publication.type !== 'PEER_REVIEW' && props.publication.user.id !== user.id && (
+                        <>
                             <Components.PublicationSidebarCardActionsButton
                                 label="Write a review"
                                 onClick={() => {
@@ -213,14 +212,14 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                     });
                                 }}
                             />
-                        )}
-
-                        <Components.PublicationSidebarCardActionsButton
-                            label="Flag a concern with this publication"
-                            onClick={() => setShowRedFlagModel(true)}
-                        />
-                    </>
-                )
+                            )
+                            <Components.PublicationSidebarCardActionsButton
+                                label="Flag a concern with this publication"
+                                onClick={() => setShowRedFlagModel(true)}
+                            />
+                        </>
+                    )}
+                </>
             ) : user && !user.email ? (
                 <>
                     <Components.Link
