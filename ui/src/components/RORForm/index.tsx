@@ -235,11 +235,11 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             type="radio"
                             defaultChecked={method === 'ror'}
                             onChange={(e) => setMethod('ror')}
-                            className="border-gray-300 mb-1 h-4 w-4 text-teal-600 focus:ring-teal-600"
+                            className="border-gray-300 mb-2 h-4 w-4 text-teal-600 focus:ring-teal-600"
                         />
                         <label
                             htmlFor="ror"
-                            className="text-gray-700 mb-1 ml-3 block text-sm font-medium dark:text-white-100"
+                            className="text-gray-700 mb-2 ml-3 block text-sm font-medium dark:text-white-100"
                         >
                             Enter ROR ID
                         </label>
@@ -368,8 +368,8 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                 </fieldset>
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div className="my-2">
+                    <div className="inline-block min-w-full py-2 align-middle">
                         {specifiedArray.length ? (
                             <div className="mb-6 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
                                 <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
@@ -403,7 +403,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             <Components.Alert
                                 severity="INFO"
                                 title={`This publication does not have any ${props.type}.`}
-                                className="w-1/2"
+                                className="w-full lg:w-1/2"
                             />
                         )}
 
@@ -417,10 +417,10 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             </label>
                             <textarea
                                 name="free-text"
-                                className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
-                            `}
+                                className="mb-2 mt-3 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
                                 placeholder="Enter any details"
                                 value={props.type == 'funders' ? funderStatement ?? '' : affiliationsStatement ?? ''}
+                                rows={5}
                                 onChange={(e) =>
                                     props.type == 'funders'
                                         ? updateFunderStatement(e.target.value)

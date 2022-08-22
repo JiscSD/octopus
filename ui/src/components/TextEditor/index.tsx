@@ -286,7 +286,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     return (
         props.editor && (
             <>
-                <div className="flex items-center">
+                <div className="flex">
                     <HeadlessUi.Listbox value={selected} onChange={setSelected}>
                         <div className="relative mt-1">
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
@@ -331,9 +331,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </div>
                     </HeadlessUi.Listbox>
 
-                    <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
-
-                    <div className="flex">
+                    <div className="flex max-w-full items-center overflow-x-auto lg:max-w-md xl:max-w-xl 2xl:max-w-full">
+                        <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}
@@ -653,6 +652,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
     const [importModalVisible, setImportModalVisible] = React.useState(false);
 
     const textEditor = tiptap.useEditor({
+        autofocus: true,
         extensions: [
             StarterKit,
             Link.configure({
@@ -681,11 +681,6 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         },
         content: props.defaultContent
     });
-
-    // Focus the editor on render
-    React.useEffect(() => {
-        if (textEditor) textEditor.commands.focus('start');
-    }, [textEditor]);
 
     return textEditor ? (
         <>
