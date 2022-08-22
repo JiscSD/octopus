@@ -145,7 +145,8 @@ export const PageModel = {
         },
         coi: {
             true: '#coi-true',
-            false: '#coi-false'
+            false: '#coi-false',
+            TextBox: '#conflictOfInterestStatus'
         }
     },
     coauthorApprove: {},
