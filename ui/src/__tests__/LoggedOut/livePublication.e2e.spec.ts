@@ -74,7 +74,6 @@ test.describe('Live Publication', () => {
         // Click on search result
         await page.locator(PageModel.search.publicationSearchResult).click();
         await expect(page.locator('h1')).toHaveText('How has life on earth evolved?');
-        await page.pause();
         await expect(
             page.locator(PageModel.livePublication.verifyEmailForMoreButton).locator('visible=true')
         ).toBeVisible();

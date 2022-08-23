@@ -148,7 +148,7 @@ export const publicationFlowReview = async (
 };
 
 const problemPublication = {
-    pubType: 'PROBLEM',
+    pubType: 'Research Problem',
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
@@ -156,6 +156,30 @@ const problemPublication = {
     text: 'main text',
     coi: 'This Research Problem does not have any specified conflicts of interest.',
     funding: 'This Research Problem has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const hypothesisPublication = {
+    pubType: 'Rationale/Hypothesis',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Rationale/Hypothesis does not have any specified conflicts of interest.',
+    funding: 'This Rationale/Hypothesis has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const methodPublication = {
+    pubType: 'Method',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Method does not have any specified conflicts of interest.',
+    funding: 'This Method has the following sources of funding:',
     fundingExtraDetails: 'extra details'
 };
 
@@ -173,7 +197,7 @@ interface PublicationTestType {
 
 export const checkPublication = async (page: Page, publication: PublicationTestType) => {
     const publicationTemplate = (publication: PublicationTestType): string[] => [
-        `text=${publication.pubType}`,
+        `aside >> text=Publication type:${publication.pubType}`,
         `text=${publication.language}`,
         `text=${publication.licence}`,
         `main > section > header > p > a:has-text("${process.env.ORCID_TEST_NAME}")`,
@@ -190,7 +214,6 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
 
 test.describe('Publication flow', () => {
     test('Create a problem (standard publication)', async ({ browser }) => {
-        test.slow();
         // Start up test
         const page = await browser.newPage();
 
@@ -224,10 +247,89 @@ test.describe('Publication flow', () => {
         await checkPublication(page, problemPublication);
 
         // Publish and check live publication
-        await page.pause();
         await page.locator(PageModel.publish.draftEditButton).click();
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
         await checkPublication(page, problemPublication);
+    });
+
+    test('Create a hypothesis (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        await createPublication(page, 'test title', 'HYPOTHESIS');
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'ror.com',
+            'extra details'
+        );
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, hypothesisPublication);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, hypothesisPublication);
+    });
+
+    test('Create a method (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        await createPublication(page, 'test title', 'PROTOCOL');
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'ror.com',
+            'extra details'
+        );
+        await publicationFlowLinkedPublication(
+            page,
+            'a',
+            'Hypothesis of Improving the quality of life for sustainable'
+        );
+        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, methodPublication);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, methodPublication);
     });
 });
