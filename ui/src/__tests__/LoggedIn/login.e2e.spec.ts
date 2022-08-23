@@ -7,9 +7,7 @@ test.describe('Login', () => {
         const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`, {
-            timeout: 10000
-        });
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
 
         await Helpers.logout(page);
 

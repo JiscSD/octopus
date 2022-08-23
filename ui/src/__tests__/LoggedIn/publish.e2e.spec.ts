@@ -147,6 +147,47 @@ export const publicationFlowReview = async (
     // Review and publish
 };
 
+const problemPublication = {
+    pubType: 'PROBLEM',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Research Problem does not have any specified conflicts of interest.',
+    funding: 'This Research Problem has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+interface PublicationTestType {
+    pubType: string;
+    language: string;
+    licence: string;
+    title: string;
+    author: string;
+    text: string;
+    coi: string;
+    funding: string;
+    fundingExtraDetails: string;
+}
+
+export const checkPublication = async (page: Page, publication: PublicationTestType) => {
+    const publicationTemplate = (publication: PublicationTestType): string[] => [
+        `text=${publication.pubType}`,
+        `text=${publication.language}`,
+        `text=${publication.licence}`,
+        `main > section > header > p > a:has-text("${process.env.ORCID_TEST_NAME}")`,
+        `h1:has-text("${publication.title}")`,
+        `text=${publication.coi}`,
+        `text=${publication.funding}`,
+        `text=${publication.fundingExtraDetails}`
+    ];
+
+    for await (const publicationContent of publicationTemplate(publication)) {
+        await expect(page.locator(`${publicationContent}`).locator('visible=true')).toBeVisible();
+    }
+};
+
 test.describe('Publication flow', () => {
     test('Create a problem (standard publication)', async ({ browser }) => {
         test.slow();
@@ -177,12 +218,16 @@ test.describe('Publication flow', () => {
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
+        // Preview and check preview draft publication
         await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
-        await page.pause();
+        await checkPublication(page, problemPublication);
 
-        // Check preview
-        // Pub type, language, licence
-        // title, author, text, funders, coi
+        // Publish and check live publication
+        await page.pause();
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, problemPublication);
     });
 });
