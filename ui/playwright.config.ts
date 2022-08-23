@@ -6,14 +6,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config: PlaywrightTestConfig = {
-    timeout: 50000,
+    timeout: 120000,
     workers: 4,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     use: {
         trace: 'on-first-retry',
         ignoreHTTPSErrors: true,
-        // headless: false
+        // headless: false,
         launchOptions: {
             slowMo: 200
         }

@@ -183,6 +183,42 @@ const methodPublication = {
     fundingExtraDetails: 'extra details'
 };
 
+const analysisPublication = {
+    pubType: 'Analysis',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Analysis does not have any specified conflicts of interest.',
+    funding: 'This Analysis has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const interpretationPublication = {
+    pubType: 'Interpretation',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Interpretation does not have any specified conflicts of interest.',
+    funding: 'This Interpretation has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const realWorldApplicationPublication = {
+    pubType: 'Real World Application',
+    language: 'Afar',
+    licence: 'CC BY-NC 4.0',
+    title: 'test title',
+    author: `${process.env.ORCID_TEST_NAME}`,
+    text: 'main text',
+    coi: 'This Real World Application does not have any specified conflicts of interest.',
+    funding: 'This Real World Application has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
 interface PublicationTestType {
     pubType: string;
     language: string;
@@ -213,6 +249,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
 };
 
 test.describe('Publication flow', () => {
+    test.describe.configure({ mode: 'parallel' });
     test('Create a problem (standard publication)', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
@@ -331,5 +368,121 @@ test.describe('Publication flow', () => {
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
         await checkPublication(page, methodPublication);
+    });
+
+    test('Create an analysis (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        await createPublication(page, 'test title', 'ANALYSIS');
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'ror.com',
+            'extra details'
+        );
+        await publicationFlowLinkedPublication(
+            page,
+            'a',
+            'Data attached to Improving the quality of life for sustainable development'
+        );
+        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, analysisPublication);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, analysisPublication);
+    });
+
+    test('Create an interpretation (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        await createPublication(page, 'test title', 'INTERPRETATION');
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'ror.com',
+            'extra details'
+        );
+        await publicationFlowLinkedPublication(page, 'a', 'Analysis of Improving the quality of life for sustainable');
+        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, interpretationPublication);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, interpretationPublication);
+    });
+
+    test('Create a real world application (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+
+        await createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'ror.com',
+            'extra details'
+        );
+        await publicationFlowLinkedPublication(
+            page,
+            'a',
+            'Interpretation of Improving the quality of life for sustainable'
+        );
+        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.nextButton).click();
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, realWorldApplicationPublication);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await checkPublication(page, realWorldApplicationPublication);
     });
 });
