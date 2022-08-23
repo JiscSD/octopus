@@ -22,24 +22,8 @@ test.describe('Live Publication', () => {
         await page.locator(PageModel.search.publicationSearchResult).click();
         await expect(page.locator('h1')).toHaveText('How has life on earth evolved?');
 
-        // Check visualisation
-        await expect(page.locator(PageModel.livePublication.visualisationProblem)).toBeVisible();
-
-        // Check content, linked problems, funders, conflict of interest sections
-        await expect(page.locator(PageModel.livePublication.content)).toBeVisible();
-        await expect(page.locator(PageModel.livePublication.linkedProblems)).toBeVisible();
-        await expect(page.locator(PageModel.livePublication.funders)).toBeVisible();
-        await expect(page.locator(PageModel.livePublication.coi)).toBeVisible();
-
-        // Expect licence and DOI link
-        await expect(page.locator(PageModel.livePublication.licenceLink)).toHaveAttribute(
-            'href',
-            'https://creativecommons.org/licenses/by/4.0/'
-        );
-        await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
-            'href',
-            'https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4'
-        );
+        // Check sections
+        Helpers.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4');
 
         // Check sign in for more button and that bookmark, flag link, review link are not visible
         await expect(page.locator(PageModel.livePublication.signInForMoreButton).locator('visible=true')).toBeVisible();

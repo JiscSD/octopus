@@ -74,12 +74,18 @@ export const PageModel = {
         noPublicationsFound: '_react=Alert[title = "No results found"]'
     },
     livePublication: {
-        visualisationProblem: 'a[role="button"]:has-text("How has life on earth evolved?")',
-        content: '#main-text >> text=How has life on earth evolved?',
-        linkedProblems: 'text=Research Problem statements branching from this Research Problem',
-        funders: 'h2:has-text("Funders")',
-        coi: 'h2:has-text("Conflict of interest")',
-        licenceLink: 'aside a[role="button"]:has-text("CC BY 4.0")',
+        visibleSections: [
+            // visualisation
+            'a[role="button"]:has-text("How has life on earth evolved?")',
+            // content
+            '#main-text >> text=How has life on earth evolved?',
+            // linked problems
+            'text=Research Problem statements branching from this Research Problem',
+            // funders
+            'h2:has-text("Funders")',
+            // coi
+            'h2:has-text("Conflict of interest")'
+        ],
         doiLink: 'aside [aria-label="DOI link: https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
         authorLink: 'text=S. Octopus',
         signInForMoreButton: 'text=Sign in for more actions',

@@ -44,3 +44,26 @@ export const search = async (page: Page, searchTerm: string, publicationSearchRe
     await expect(page.locator('h1')).toHaveText(`Search results for ${searchTerm}`);
     await expect(page.locator(publicationSearchResult)).toBeVisible();
 };
+
+export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
+    // Go to live publication page
+    await page.goto(`${UI_BASE}/publications/${id}`, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('h1')).toBeVisible();
+
+    // Check visualisation, content, linked problems, funders, conflict of interest sections
+    for await (const visibleSection of PageModel.livePublication.visibleSections) {
+        await expect(page.locator(`${visibleSection}`).locator('visible=true')).toBeVisible();
+    }
+
+    // Expect DOI link
+    await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
+        'href',
+        `https://doi.org/10.82259/${id}`
+    );
+
+    if (loggedIn) {
+        // Confirm review link
+        await page.locator(PageModel.livePublication.writeReview).locator('visible=true').click();
+        await expect(page).toHaveURL(`${UI_BASE}/create?for=${id}&type=PEER_REVIEW`);
+    }
+};
