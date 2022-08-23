@@ -891,11 +891,7 @@ export const HTMLStyles = `
     dark:prose-blockquote:text-grey-300
     dark:prose-strong:text-teal-300
 `
-    .split(' ')
-    .map((i) => {
-        return i.replace(/\n/g, '').length ? i.replace(/\n/g, '') : undefined;
-    })
-    .filter((i) => !!i)
+    .split('\n')
     .join(' ');
 
 export const HTMLStylesTiptapEditor = `
@@ -920,9 +916,5 @@ export const HTMLStylesTiptapEditor = `
     prose-blockquote:text-grey-600
     prose-strong:text-grey-800
 `
-    .split(' ')
-    .map((i) => {
-        return i.replace(/\n/g, '').length ? i.replace(/\n/g, '') : undefined;
-    })
-    .filter((i) => !!i)
+    .split('\n')
     .join(' ');
