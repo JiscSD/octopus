@@ -105,7 +105,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (store.type === 'DATA') {
                 body.ethicalStatement = store.ethicalStatement;
                 body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
-                if (store.dataAccessStatement?.length) body.dataAccessStatement = store.dataAccessStatement;
+                body.dataAccessStatement = store.dataAccessStatement;
                 if (store.dataPermissionsStatement?.length) {
                     body.dataPermissionsStatement = store.dataPermissionsStatement;
                     body.dataPermissionsStatementProvidedBy = store.dataPermissionsStatementProvidedBy;
