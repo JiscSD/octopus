@@ -35,10 +35,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const addReferencesRef = React.useRef(null);
 
     const fetchAndSetReferences = React.useCallback(async () => {
-        try {
-            const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
-            updateReferences(response.data);
-        } catch (err) {}
+        if (publicationId) {
+            try {
+                const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
+                updateReferences(response.data);
+            } catch (err) {
+                /**
+                 * @TODO - handle errors - eg. cannot load references...
+                 */
+            }
+        }
     }, [user, publicationId]);
 
     const addReferences = React.useCallback(async () => {
@@ -49,7 +55,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
             const pattern =
                 /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
 
-            const matches = `${referenceField.current.value}`.matchAll(pattern);
+            const referenceFieldValue = referenceField.current.value;
+            const matches = referenceFieldValue ? referenceFieldValue.matchAll(pattern) : undefined;
 
             // Iterate through matches
             if (matches) {
@@ -73,6 +80,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                         location = null;
                     }
 
+                    /**
+                     * @TODO - improve this logic
+                     * don't save references into DB until user saves publications
+                     * generate reference IDs on the UI
+                     *
+                     */
                     const createdReference = await api.post<Interfaces.Reference>(
                         `/publications/${publicationId}/reference`,
                         {
@@ -85,17 +98,33 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
                     matchArray.push(createdReference.data);
                 }
+
                 fetchAndSetReferences();
                 referenceField.current.value = '';
             }
             // No references found
-        } catch (err) {}
+        } catch (err) {
+            /**
+             * @TODO - handle errors - eg. cannot save references...
+             */
+        }
     }, [publicationId, user]);
 
     const destroyReference = React.useCallback(
         async (id: string) => {
-            await api.destroy(`/publications/${publicationId}/reference/${id}`, user?.token);
-            fetchAndSetReferences();
+            /**
+             * @TODO - improve this
+             * prevent user to click on delete icon multiple times
+             *
+             */
+            try {
+                await api.destroy(`/publications/${publicationId}/reference/${id}`, user?.token);
+                fetchAndSetReferences();
+            } catch (error) {
+                /**
+                 * @TODO - handle errors - eg. cannot delete reference...
+                 */
+            }
         },
         [publicationId, user]
     );
