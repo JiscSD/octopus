@@ -597,6 +597,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
     defaultContent: string;
+    references?: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
