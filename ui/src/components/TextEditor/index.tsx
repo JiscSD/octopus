@@ -37,7 +37,6 @@ interface MenuBarProps {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     importModalVisible: boolean;
     setImportModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    references: Interfaces.Reference[];
 }
 
 const MenuBar: React.FC<MenuBarProps> = (props) => {
@@ -98,9 +97,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
-    const [referenceInput, setReferenceInput] = React.useState(props.references[0]);
-    const [referencesModalVisible, setReferencesModalVisible] = React.useState(false);
-    const [referencesFilter, setReferencesFilter] = React.useState('');
+    
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<null | string>(null);
 
@@ -240,71 +237,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             });
         }
     };
-
-    const handleAddReference = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        let allReferences: any[] = [];
-
-        let x = [];
-
-        // all references stored in state
-        // whenever adding reference, loop through all references and insertContent
-
-        // props.editor.commands.command(({ tr }) => {
-        //     tr.doc.descendants((node, pos) => {
-        //         if (node.marks.find((mark) => mark.type.name === 'reference')) {
-        //             x.push({ location: node.marks[0].attrs.href });
-        //         }
-        //     });
-        //     return true;
-        // });
-
-        props.editor.commands.insertContent({
-            type: 'text',
-            marks: [
-                {
-                    type: 'reference',
-                    attrs: {
-                        href: referenceInput.location
-                    }
-                }
-            ],
-            text: '1'
-        });
-
-        let count = 0;
-        props.editor.commands.command(({ tr }) => {
-            tr.doc.descendants((node, pos) => {
-                if (node.marks.find((mark) => mark.type.name === 'reference')) {
-                    count++;
-                    node.text = count.toString();
-                    allReferences.push({ node, pos });
-                }
-            });
-            return true;
-        });
-
-        allReferences.forEach((ref, index) => {
-            props.editor.commands.insertContentAt(
-                { from: ref.pos, to: ref.node.text.length + ref.pos },
-                index.toString(),
-                {
-                    updateSelection: true
-                }
-            );
-        });
-
-        console.log(allReferences);
-    };
-
-    const referencesFiltered = props.references.filter((reference: Interfaces.Reference) => {
-        if (!referencesFilter) {
-            return referenceInput;
-        } else {
-            return reference.text.toLowerCase().includes(referencesFilter.toLowerCase());
-        }
-    });
 
     React.useEffect(() => {
         if (props.editor) {
@@ -489,14 +421,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         >
                             <FAIcons.FaLink className="h-3 w-3 text-grey-700" aria-hidden="true" />
                         </button>
-                        <button
-                            type="button"
-                            className={props.editor.isActive('insertReference') ? activeMenuIconStyles : menuIconStyles}
-                            onClick={() => setReferencesModalVisible(true)}
-                            title="Insert reference"
-                        >
-                            <FAIcons.FaBook className="h-3 w-3 text-grey-700" aria-hidden="true" />
-                        </button>
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
@@ -665,125 +589,14 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
-
-                {/* Import document modal */}
-                <HeadlessUi.Dialog
-                    open={props.importModalVisible}
-                    onClose={() => props.setImportModalVisible(false)}
-                    className="fixed inset-0 z-10 overflow-y-auto"
-                >
-                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
-                        <HeadlessUi.Dialog.Title className="sr-only">
-                            Import a Word document (.docx only)
-                        </HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                            <label htmlFor="document-import">
-                                <input
-                                    name="document-import"
-                                    ref={importDocumentInput}
-                                    type="file"
-                                    aria-label="Choose a Word document"
-                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                                />
-                                <span className="sr-only">Choose a Word document</span>
-                            </label>
-                            <div className="mt-6 flex justify-between space-x-4">
-                                <button
-                                    type="submit"
-                                    name="insert"
-                                    onClick={(e) => handleImportDocument(e, false)}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
-                                >
-                                    Insert
-                                </button>
-                                <button
-                                    type="submit"
-                                    name="replace"
-                                    onClick={(e) => handleImportDocument(e, true)}
-                                    disabled={props.editor.isEmpty}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
-                                >
-                                    Replace existing
-                                </button>
-                            </div>
-                        </HeadlessUi.Dialog.Description>
-                    </div>
-                </HeadlessUi.Dialog>
-
-                {/* Insert reference modal */}
-                <HeadlessUi.Dialog
-                    open={referencesModalVisible}
-                    onClose={() => setReferencesModalVisible(false)}
-                    className="fixed inset-0 z-10 overflow-y-auto"
-                >
-                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
-                        <HeadlessUi.Dialog.Title className="sr-only">Insert reference</HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                            <label htmlFor="document-import" className="relative">
-                                <HeadlessUi.Combobox value={referenceInput} onChange={setReferenceInput}>
-                                    <span className="absolute left-px rounded-md p-2">
-                                        <SolidIcon.SearchIcon className="h-6 w-6 text-teal-500" />
-                                    </span>
-                                    <HeadlessUi.Combobox.Input
-                                        onChange={(event) => setReferencesFilter(event.target.value)}
-                                        displayValue={(reference: Interfaces.Reference) => reference.text}
-                                        className="w-full cursor-pointer rounded-md pl-9 text-sm ring-offset-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                                        placeholder="Type to search"
-                                    />
-                                    <HeadlessUi.Combobox.Options className="my-4">
-                                        {referencesFiltered.map((reference) => (
-                                            <HeadlessUi.Combobox.Option
-                                                key={reference.id}
-                                                value={reference}
-                                                className="cursor-pointer border-b border-transparent border-grey-300 p-2 text-sm text-grey-700 focus:ring-2 focus:ring-yellow-500"
-                                            >
-                                                <i>{reference.text}</i>
-                                                <span className="text-teal-600">{reference.location}</span>
-                                            </HeadlessUi.Combobox.Option>
-                                        ))}
-                                        {referencesFilter && referencesFiltered.length == 0 && (
-                                            <>
-                                                <span className="text-sm font-semibold text-grey-700">
-                                                    No results found.
-                                                </span>
-                                            </>
-                                        )}
-                                    </HeadlessUi.Combobox.Options>
-                                </HeadlessUi.Combobox>
-                            </label>
-                            <div className="mt-6 flex justify-between space-x-4">
-                                <button
-                                    type="submit"
-                                    name="insert"
-                                    onClick={(e) => {
-                                        handleAddReference(e);
-                                    }}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
-                                >
-                                    Insert
-                                </button>
-                            </div>
-                        </HeadlessUi.Dialog.Description>
-                    </div>
-                </HeadlessUi.Dialog>
             </>
         )
     );
 };
 
-const ReferenceLink = Link.extend({
-    name: 'reference'
-});
-
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
     defaultContent: string;
-    references: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
@@ -810,7 +623,6 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             TipTapImage.configure({
                 inline: true
             }),
-            ReferenceLink
         ],
         onUpdate: ({ editor }) => props.contentChangeHandler(editor.getHTML()),
         onSelectionUpdate: () => setLoading(true),
@@ -845,7 +657,6 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                     setLoading={setLoading}
                     importModalVisible={importModalVisible}
                     setImportModalVisible={setImportModalVisible}
-                    references={props.references}
                 />
                 <tiptap.EditorContent editor={textEditor} />
             </div>
