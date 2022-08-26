@@ -230,7 +230,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         if (props.draftedPublication.references) {
             store.updateReferences(props.draftedPublication.references);
         }
-        
+
         if (props.draftedPublication.conflictOfInterestText) {
             store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
             store.updateLinkTo(props.draftedPublication.linkedTo);

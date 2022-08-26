@@ -97,7 +97,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
-    
+
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<null | string>(null);
 
@@ -622,7 +622,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             TableCell,
             TipTapImage.configure({
                 inline: true
-            }),
+            })
         ],
         onUpdate: ({ editor }) => props.contentChangeHandler(editor.getHTML()),
         onSelectionUpdate: () => setLoading(true),
