@@ -1,5 +1,16 @@
+import React from 'react';
 import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/solid';
+import * as tiptap from '@tiptap/react';
+import * as Mammoth from 'mammoth';
+import * as FAIcons from 'react-icons/fa';
+import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Interfaces from '@interfaces';
+import * as Stores from '@stores';
+import * as Types from '@types';
+
 import TipTapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
@@ -7,18 +18,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import TextAlign from '@tiptap/extension-text-align';
-import * as tiptap from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import * as Mammoth from 'mammoth';
-import React from 'react';
-import * as FAIcons from 'react-icons/fa';
-
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
-import * as Types from '@types';
 
 type LetterIconType = {
     letter: string;
@@ -586,6 +586,53 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     />
                                 ]}
                             />
+                        </HeadlessUi.Dialog.Description>
+                    </div>
+                </HeadlessUi.Dialog>
+
+                {/* Import document modal */}
+                <HeadlessUi.Dialog
+                    open={props.importModalVisible}
+                    onClose={() => props.setImportModalVisible(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
+                        <HeadlessUi.Dialog.Title className="sr-only">
+                            Import a Word document (.docx only)
+                        </HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                            <label htmlFor="document-import">
+                                <input
+                                    name="document-import"
+                                    ref={importDocumentInput}
+                                    type="file"
+                                    aria-label="Choose a Word document"
+                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                />
+                                <span className="sr-only">Choose a Word document</span>
+                            </label>
+                            <div className="mt-6 flex justify-between space-x-4">
+                                <button
+                                    type="submit"
+                                    name="insert"
+                                    onClick={(e) => handleImportDocument(e, false)}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Insert
+                                </button>
+                                <button
+                                    type="submit"
+                                    name="replace"
+                                    onClick={(e) => handleImportDocument(e, true)}
+                                    disabled={props.editor.isEmpty}
+                                    className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                                >
+                                    Replace existing
+                                </button>
+                            </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
