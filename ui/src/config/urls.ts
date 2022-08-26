@@ -256,7 +256,8 @@ const urls = {
     orcidLogin: {
         path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
     },
-    mediaBucket
+    mediaBucket,
+    baseUrl: base.host
 };
 
 export default urls;
