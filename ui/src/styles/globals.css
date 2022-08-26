@@ -43,6 +43,22 @@
     .custom-table td {
         @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
+
+    /* Defined separately as the custom table was casuing errors on
+    tiptap editors tables */
+    .custom-table-tiptap-editor table {
+        @apply table-fixed;
+    }
+    .custom-table-tiptap-editor tr:nth-child(event) {
+        @apply bg-white-50;
+    }
+    .custom-table-tiptap-editor tr:nth-child(odd) {
+        @apply bg-grey-50;
+    }
+    .custom-table-tiptap-editor th,
+    .custom-table-tiptap-editor td {
+        @apply border border-teal-500 px-1 py-0 lg:px-2;
+    }
 }
 
 @layer components {
