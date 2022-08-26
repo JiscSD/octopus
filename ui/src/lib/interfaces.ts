@@ -85,6 +85,16 @@ export interface Publication extends CorePublication {
     affiliations: Affiliations[];
     affiliationStatement: string | null;
     publicationFlags: Flag[];
+    references: Reference[];
+}
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
 }
 
 export interface PublicationWithLinks {
