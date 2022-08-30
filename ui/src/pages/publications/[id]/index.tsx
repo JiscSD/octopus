@@ -69,7 +69,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             if (currentUser.id) {
                 const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
                 const isOwner = currentUser.id === publication.createdBy;
-    
+
                 if (!isCoAuthor && !isOwner) {
                     isBookmarkVisible = true;
                 }
