@@ -178,7 +178,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     const textContent = paragraphElement?.textContent?.trim();
 
                     if (!textContent) {
-                        return;
+                        continue;
                     }
 
                     // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
