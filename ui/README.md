@@ -6,6 +6,15 @@ The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [cr
 
 ## Getting started
 
+Create a `.env` file inside `~/ui` using `cp .env.example .env`. Update it to add your ORCID (the same one you used in the api .env file):
+
+```
+# set to same as ORCID_ID in api .env file
+NEXT_PUBLIC_ORCID_APP_ID=PUT_ORCID_APP_ID_HERE
+```
+
+Leave the rest of the file as is.
+
 To start the UI, in the **UI directory** run:
 
 ```bash
@@ -13,7 +22,7 @@ $ ~/ui$ npm i
 $ ~/ui$ npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [https://localhost:3001](https://localhost:3001) with your browser to see the result.
 
 To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).
 
