@@ -42,7 +42,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     name="language"
                     id="language"
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
-                    className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
+                    className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
                 >
                     {Config.values.octopusInformation.languages.map((entry) => (

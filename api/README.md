@@ -40,6 +40,16 @@ DATACITE_USER=DATACITE_API_USER
 DATACITE_PASSWORD=DATACITE_API_PASSWORD
 ```
 
+### AWS Credentials File
+You will need a octopus credential profile to run locally, this can be populated with dummy data presented below:
+
+```bash
+[octopus]
+aws_access_key_id=xxx
+aws_secret_access_key=yyy
+aws_session_token=zxcxczcx
+```
+
 ## Getting started
 
 First, start up Docker Desktop and within the **root directory** run:

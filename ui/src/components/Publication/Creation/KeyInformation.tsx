@@ -61,7 +61,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                         name="publicationType"
                         value={licence}
                         onChange={(e) => updateLicence(e.target.value as Types.LicenceType)}
-                        className="mb-4 block w-fit rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
+                        className="mb-4 block w-1/2 rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0"
                         required
                     >
                         {Object.values(Config.values.octopusInformation.licences).map((type) => (

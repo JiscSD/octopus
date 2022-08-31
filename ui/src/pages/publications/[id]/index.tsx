@@ -236,7 +236,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 fixedHeader={false}
                 publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
             >
-                <section className="col-span-9">
+                <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
                         <Components.Alert
                             className="mb-4"
@@ -354,7 +354,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     coAuthor.user && (
                                         <>
                                             <Components.Link
-                                                href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
+                                                href={`${Config.urls.viewUser.path}/${coAuthor.linkedUser}`}
                                                 className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                             >
                                                 <>
@@ -372,7 +372,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </div>
                         )}
 
-                        <div className="block xl:hidden">
+                        <div className="block lg:hidden">
                             {publicationData && <SidebarCard publication={publicationData} sectionList={sectionList} />}
                         </div>
                     </header>
@@ -586,7 +586,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </p>
                     </Components.PublicationContentSection>
                 </section>
-                <aside className="relative col-span-3 hidden xl:block">
+                <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
                         <SidebarCard publication={publicationData} sectionList={sectionList} />
                     </div>

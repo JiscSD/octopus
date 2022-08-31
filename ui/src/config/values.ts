@@ -891,9 +891,30 @@ export const HTMLStyles = `
     dark:prose-blockquote:text-grey-300
     dark:prose-strong:text-teal-300
 `
-    .split(' ')
-    .map((i) => {
-        return i.replace(/\n/g, '').length ? i.replace(/\n/g, '') : undefined;
-    })
-    .filter((i) => !!i)
+    .split('\n')
+    .join(' ');
+
+export const HTMLStylesTiptapEditor = `
+    custom-table-tiptap-editor
+    prose
+    w-full
+    max-w-none
+    text-grey-800
+    transition-colors 
+    duration-500 
+    prose-headings:font-medium 
+    prose-headings:font-montserrat 
+    prose-headings:text-grey-800 
+    prose-a:text-grey-800 
+    prose-a:underline 
+    prose-a:decoration-teal-500 
+    prose-a:decoration-2 
+    prose-a:underline-offset-1 
+    prose-a:outline-none 
+    focus:prose-a:bg-yellow-300 
+    prose-blockquote:border-teal-500 
+    prose-blockquote:text-grey-600
+    prose-strong:text-grey-800
+`
+    .split('\n')
     .join(' ');

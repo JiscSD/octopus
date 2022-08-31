@@ -1,8 +1,4 @@
 User-agent: *
 Allow: *
 
-User-agent: *
-Disallow: /create
-Disallow: /search
-
 Sitemap: https://octopus.ac/sitemap.xml

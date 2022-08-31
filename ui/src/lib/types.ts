@@ -2,6 +2,7 @@ import * as Interfaces from '@interfaces';
 
 export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
+export type { AxiosError } from 'axios';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -71,7 +72,7 @@ export type PublicationCreationStoreType = {
     ethicalStatementFreeText: string | null;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
     updateEthicalStatement: (ethicalStatement: string) => void;
-    dataAccessStatement: string | null;
+    dataAccessStatement: string;
     updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
     updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;

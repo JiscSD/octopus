@@ -282,3 +282,13 @@ export const checkLinkIsValid = (text: string) => {
     );
     return urlR.test(lowerCaseText);
 };
+
+export const linkedPublicationTypes = {
+    PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
+    HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
+    PROTOCOL: ['PROBLEM', 'DATA'],
+    DATA: ['PROBLEM', 'ANALYSIS'],
+    ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
+    INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
+    REAL_WORLD_APPLICATION: ['PROBLEM']
+};
