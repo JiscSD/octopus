@@ -194,11 +194,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             let type: Interfaces.ReferenceType;
                             let text = currentParagraph; // original html string
 
-                            if (match.groups.DOI) {
+                            if (match?.groups?.DOI) {
                                 type = 'DOI';
                                 location = match.groups.DOI;
                                 text = text.replace(match.groups.DOI, '');
-                            } else if (match.groups.URL) {
+                            } else if (match?.groups?.URL) {
                                 type = 'URL';
                                 location = match.groups.URL;
                                 text = text.replace(match.groups.URL, '');
