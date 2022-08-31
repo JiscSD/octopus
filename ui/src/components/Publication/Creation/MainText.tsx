@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as api from '@api';
+import * as HeadlessUi from '@headlessui/react';
 import * as Assets from '@assets';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -13,6 +14,7 @@ import * as Config from '@config';
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import EditReference from 'src/components/EditReference';
 
 const menuIconStyles = 'p-2 hover:bg-grey-100 hover:rounded focus:outline-yellow-500';
 const activeMenuIconStyles = 'p-2 bg-grey-100 rounded focus:outline-yellow-500';
@@ -142,6 +144,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const user = Stores.useAuthStore((state) => state.user);
 
     const [loading, setLoading] = React.useState(true);
+    const [editReferenceModalVisible, setEditReferenceModalVisible] = React.useState(false);
+    const [modalReferenceInfo, setModalReferenceInfo] = React.useState<Interfaces.Reference>({
+        id: "",
+        type: 'URL',
+        text: '',
+    });
 
     React.useEffect(() => {
         fetchAndSetReferences();
@@ -256,6 +264,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
         [fetchAndSetReferences, publicationId, user?.token]
     );
 
+    const editReference = async (reference: Interfaces.Reference) => {
+        console.log(reference)
+        setModalReferenceInfo(reference)
+        setEditReferenceModalVisible(true)
+    };
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
@@ -320,7 +334,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">   
+                                                <button
+                                                    onClick={(e) => editReference(reference)}
+                                                    className="rounded-full">
+                                                    <FAIcons.FaEdit className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400" aria-hidden="true" />
+                                                </button>                                                                                             
                                                 <div dangerouslySetInnerHTML={{ __html: reference.text }}></div>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -385,6 +404,27 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     </span>
                 </div>
             </div>
+
+
+             {/* Import document modal */}
+             <HeadlessUi.Dialog
+                    open={editReferenceModalVisible}
+                    onClose={() => setEditReferenceModalVisible(false)}
+                    className="fixed inset-0 z-10 overflow-y-auto"
+                >
+                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
+                        <HeadlessUi.Dialog.Title className="sr-only">
+                            Edit reference 
+                        </HeadlessUi.Dialog.Title>
+                        <HeadlessUi.Dialog.Description>
+                          <EditReference
+                            reference={modalReferenceInfo}
+                            loading={false}/>
+                        </HeadlessUi.Dialog.Description>
+                    </div>
+                </HeadlessUi.Dialog>
         </div>
     );
 };
