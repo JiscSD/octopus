@@ -5,6 +5,9 @@ export const getAllByPublication = async (publicationId: string) => {
     const references = await client.prisma.references.findMany({
         where: {
             publicationId
+        },
+        orderBy: {
+            entryId: 'asc'
         }
     });
     return references;

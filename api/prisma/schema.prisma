@@ -90,6 +90,7 @@ model Publication {
 
 model References {
     id            String        @id @default(cuid())
+    entryId       Int           @default(autoincrement()) 
     publicationId String
     type          ReferenceType
     text          String

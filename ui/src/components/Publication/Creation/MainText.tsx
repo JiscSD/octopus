@@ -272,15 +272,61 @@ const MainText: React.FC = (): React.ReactElement | null => {
         setEditReferenceModalVisible(true)
     };
 
-    const saveEditReferenceChanges = async (referenceID: string, referenceContent: string) => {
-        console.log(referenceID)
-        console.log(referenceContent)
-        setEditReferenceModalVisible(false)
-    }
+    const saveEditReferenceChanges = React.useCallback(
+        async (referenceID: string, referenceContent: string) => {
+            const paragraphElement = new DOMParser()
+                .parseFromString(referenceContent, 'text/html')
+                .querySelector('p');
+            const textContent = paragraphElement?.textContent?.trim();
 
-    const closeModal = () => {
-        setEditReferenceModalVisible(false)
-    }
+            if (!textContent) {
+                return;
+            }
+
+            // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
+            const pattern =
+                /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
+
+            const matches = textContent.matchAll(pattern);
+            
+            // Iterate through matches
+            if (matches) {
+                for (const match of matches) {
+                    let location: string | null;
+                    let type: Interfaces.ReferenceType;
+                    let text = referenceContent; // original html string
+                    const originalRef = referenceContent; // store original reference for editing singly later
+
+                    if (match?.groups?.DOI) {
+                        type = 'DOI';
+                        location = match.groups.DOI;
+                        text = text.replace(match.groups.DOI, '');
+                    } else if (match?.groups?.URL) {
+                        type = 'URL';
+                        location = match.groups.URL;
+                        text = text.replace(match.groups.URL, '');
+                    } else {
+                        type = 'TEXT';
+                        location = null;
+                    }
+
+                    await api.patch(
+                        `/publications/${publicationId}/reference/${referenceID}`,
+                        {
+                            type,
+                            text,
+                            location,
+                            originalRef
+                        },
+                        user?.token
+                    );
+                }
+            }
+            setEditReferenceModalVisible(false)
+            fetchAndSetReferences();
+        },
+        [fetchAndSetReferences, publicationId, user?.token]
+    )
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -437,7 +483,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     <EditReference
                         reference={modalReferenceInfo}
                         positiveActionCallback={saveEditReferenceChanges}
-                        negativeActionCallback={closeModal}
+                        negativeActionCallback={() => setEditReferenceModalVisible(false)}
                         MenuBar={MenuBar}
                         loading={false}/>
                 </div>
