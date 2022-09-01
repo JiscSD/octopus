@@ -433,6 +433,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             reference={modalReferenceInfo}
                             positiveActionCallback={saveEditReferenceChanges}
                             negativeActionCallback={closeModal}
+                            MenuBar={MenuBar}
                             loading={false}/>
                         </HeadlessUi.Dialog.Description>
                     </div>
