@@ -39,6 +39,7 @@
         "@tiptap/starter-kit": "^2.0.0-beta.183",
         "axios": "^0.25.0",
         "chart.js": "^2.9.4",
+        "cuid": "^2.1.8",
         "framer-motion": "^6.0.0",
         "html-react-parser": "^1.4.5",
         "js-cookie": "^3.0.1",

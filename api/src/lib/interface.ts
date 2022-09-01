@@ -83,6 +83,7 @@ export interface CreatePublicationRequestBody {
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
     affiliationStatement?: string;
+    references?: Reference[];
 }
 
 export interface OpenSearchPublication {
@@ -124,6 +125,7 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    References?: Reference[];
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -417,7 +419,7 @@ export interface GetAllBookmarkPathParams {
 export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
-    referenceId: string;
+    id: string;
     type: ReferenceType;
     text: string;
     location?: string;
@@ -430,6 +432,10 @@ export interface CreateReferencePath {
 export interface UpdateReferencePath {
     id: string;
     referenceId: string;
+}
+
+export interface RemoveAllReferencesPath {
+    publicationId: string;
 }
 
 export interface OctopusInformation {

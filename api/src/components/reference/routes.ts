@@ -23,3 +23,8 @@ export const remove = middy(referenceController.remove)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
+
+export const removeAll = middy(referenceController.removeAll)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());

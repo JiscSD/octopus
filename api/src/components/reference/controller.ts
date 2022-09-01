@@ -47,3 +47,15 @@ export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefin
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const removeAll = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemoveAllReferencesPath>) => {
+    try {
+        // TODO: Check ownership
+
+        const reference = await referenceService.removeAll(event.pathParameters.publicationId);
+
+        return response.json(200, reference);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
