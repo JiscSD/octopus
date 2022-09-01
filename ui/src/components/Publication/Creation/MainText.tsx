@@ -270,6 +270,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
         setEditReferenceModalVisible(true)
     };
 
+    const saveEditReferenceChanges = (reference: Interfaces.Reference) => {
+        console.log(reference.id)
+        setEditReferenceModalVisible(false)
+    }
+
+    const closeModal = () => {
+        setEditReferenceModalVisible(false)
+    }
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
@@ -337,6 +346,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">   
                                                 <button
                                                     onClick={(e) => editReference(reference)}
+                                                    title="Edit reference"
                                                     className="rounded-full">
                                                     <FAIcons.FaEdit className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400" aria-hidden="true" />
                                                 </button>                                                                                             
@@ -421,6 +431,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                         <HeadlessUi.Dialog.Description>
                           <EditReference
                             reference={modalReferenceInfo}
+                            positiveActionCallback={saveEditReferenceChanges}
+                            negativeActionCallback={closeModal}
                             loading={false}/>
                         </HeadlessUi.Dialog.Description>
                     </div>
