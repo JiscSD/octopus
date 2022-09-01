@@ -60,6 +60,12 @@ const updatePublicationSchema: I.Schema = {
         },
         affiliationStatement: {
             type: 'string'
+        },
+        references: {
+            type: 'array',
+            items: {
+                type: 'object'
+            }
         }
     },
     additionalProperties: false

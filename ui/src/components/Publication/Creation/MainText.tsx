@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as api from '@api';
+
 import * as Assets from '@assets';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -13,6 +13,7 @@ import * as Config from '@config';
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import cuid from 'cuid';
 
 const menuIconStyles = 'p-2 hover:bg-grey-100 hover:rounded focus:outline-yellow-500';
 const activeMenuIconStyles = 'p-2 bg-grey-100 rounded focus:outline-yellow-500';
@@ -128,145 +129,94 @@ const AddReferences: React.FC<AddReferencesProps> = ({ addReferences }) => {
 };
 
 const MainText: React.FC = (): React.ReactElement | null => {
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const description = Stores.usePublicationCreationStore((state) => state.description);
-    const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
-    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
-    const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
-    const content: string = Stores.usePublicationCreationStore((state) => state.content);
-    const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
-    const language = Stores.usePublicationCreationStore((state) => state.language);
-    const updateLanguage = Stores.usePublicationCreationStore((state) => state.updateLanguage);
-    const references = Stores.usePublicationCreationStore((state) => state.references);
-    const updateReferences = Stores.usePublicationCreationStore((state) => state.updateReferences);
-    const user = Stores.useAuthStore((state) => state.user);
+    const {
+        id: publicationId,
+        updateDescription,
+        keywords,
+        updateKeywords,
+        content,
+        description,
+        updateContent,
+        language,
+        updateLanguage,
+        references,
+        updateReferences
+    } = Stores.usePublicationCreationStore();
 
-    const [loading, setLoading] = React.useState(true);
+    const addReferences = (editorContent: string) => {
+        const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
 
-    React.useEffect(() => {
-        fetchAndSetReferences();
-        setLoading(false);
-    }, [content, user, publicationId]);
+        if (!paragraphsArray.length) {
+            return;
+        }
 
-    const fetchAndSetReferences = React.useCallback(async () => {
-        if (publicationId) {
-            try {
-                const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
-                updateReferences(response.data);
-            } catch (err) {
-                /**
-                 * @TODO - handle errors - eg. cannot load references...
-                 */
+        let referencesArray = references || [];
+
+        for (let i = 0; i < paragraphsArray.length; i++) {
+            const currentParagraph = paragraphsArray[i].trim();
+            const paragraphElement = new DOMParser().parseFromString(currentParagraph, 'text/html').querySelector('p');
+            const textContent = paragraphElement?.textContent?.trim();
+
+            if (!textContent) {
+                continue;
+            }
+
+            // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
+            const pattern =
+                /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
+
+            const matches = textContent.matchAll(pattern);
+
+            // Iterate through matches
+            if (matches) {
+                for (const match of matches) {
+                    let location: string | null;
+                    let type: Interfaces.ReferenceType;
+                    let text = currentParagraph; // original html string
+
+                    if (match?.groups?.DOI) {
+                        type = 'DOI';
+                        location = match.groups.DOI;
+                        text = text.replace(
+                            match.groups.DOI,
+                            `<a href="${match.groups.DOI}" target="_blank" rel="noreferrer noopener">${match.groups.DOI}</a>`
+                        );
+                    } else if (match?.groups?.URL) {
+                        type = 'URL';
+                        location = match.groups.URL;
+                        text = text.replace(
+                            match.groups.URL,
+                            `<a href="${match.groups.URL}" target="_blank" rel="noreferrer noopener">${match.groups.URL}</a>`
+                        );
+                    } else {
+                        type = 'TEXT';
+                        location = null;
+                    }
+
+                    const newReference: Interfaces.Reference = {
+                        id: cuid(),
+                        publicationId,
+                        type,
+                        text,
+                        location
+                    };
+
+                    referencesArray.push(newReference);
+                }
             }
         }
-    }, [user, publicationId]);
+        updateReferences(referencesArray);
+    };
 
-    const addReferences = React.useCallback(
-        async (editorContent: string) => {
-            try {
-                const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
-
-                if (!paragraphsArray.length) {
-                    return;
-                }
-
-                for (let i = 0; i < paragraphsArray.length; i++) {
-                    const currentParagraph = paragraphsArray[i].trim();
-                    const paragraphElement = new DOMParser()
-                        .parseFromString(currentParagraph, 'text/html')
-                        .querySelector('p');
-                    const textContent = paragraphElement?.textContent?.trim();
-
-                    if (!textContent) {
-                        continue;
-                    }
-
-                    // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
-                    const pattern =
-                        /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
-
-                    const matches = textContent.matchAll(pattern);
-
-                    // Iterate through matches
-                    if (matches) {
-                        for (const match of matches) {
-                            let location: string | null;
-                            let type: Interfaces.ReferenceType;
-                            let text = currentParagraph; // original html string
-
-                            if (match?.groups?.DOI) {
-                                type = 'DOI';
-                                location = match.groups.DOI;
-                                text = text.replace(
-                                    match.groups.DOI,
-                                    `<a href="${match.groups.DOI}" target="_blank" rel="noreferrer noopener">${match.groups.DOI}</a>`
-                                );
-                            } else if (match?.groups?.URL) {
-                                type = 'URL';
-                                location = match.groups.URL;
-                                text = text.replace(
-                                    match.groups.URL,
-                                    `<a href="${match.groups.URL}" target="_blank" rel="noreferrer noopener">${match.groups.URL}</a>`
-                                );
-                            } else {
-                                type = 'TEXT';
-                                location = null;
-                            }
-
-                            /**
-                             * @TODO - improve this logic
-                             * don't save references into DB until user saves publications
-                             * generate reference IDs on the UI
-                             *
-                             */
-                            await api.post<Interfaces.Reference>(
-                                `/publications/${publicationId}/reference`,
-                                {
-                                    type,
-                                    text,
-                                    location
-                                },
-                                user?.token
-                            );
-                        }
-                    }
-                }
-
-                fetchAndSetReferences();
-            } catch (err) {
-                console.log(err);
-                /**
-                 * @TODO - handle errors - eg. cannot save references...
-                 */
-            }
-        },
-        [fetchAndSetReferences, publicationId, user?.token]
-    );
-
-    const destroyReference = React.useCallback(
-        async (id: string) => {
-            /**
-             * @TODO - improve this
-             * prevent user to click on delete icon multiple times
-             *
-             */
-            try {
-                await api.destroy(`/publications/${publicationId}/reference/${id}`, user?.token);
-                fetchAndSetReferences();
-            } catch (error) {
-                /**
-                 * @TODO - handle errors - eg. cannot delete reference...
-                 */
-            }
-        },
-        [fetchAndSetReferences, publicationId, user?.token]
-    );
+    const destroyReference = (id: string) => {
+        updateReferences(references.filter((item) => item.id !== id));
+    };
 
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                {!loading ? (
+                {content ? (
                     <Components.TextEditor
                         defaultContent={content}
                         contentChangeHandler={updateContent}
@@ -317,7 +267,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Title
                                         </th>
-                                        <th className='"whitespace-pre " py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6'>
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                             Location
                                         </th>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 "></th>
@@ -326,7 +276,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
                                                 <Components.ParseHTML content={reference.text}></Components.ParseHTML>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -341,11 +291,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                     onClick={(e) => destroyReference(reference.id)}
                                                     className="rounded-full"
                                                 >
-                                                    {loading ? (
-                                                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    ) : (
-                                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    )}
+                                                    <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                                 </button>
                                             </td>
                                         </tr>

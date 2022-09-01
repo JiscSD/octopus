@@ -3,6 +3,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as referenceService from 'reference/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -136,6 +137,15 @@ export const create = async (
 
         const publication = await publicationService.create(event.body, event.user, doi);
 
+        // add references to the publication
+        event.body.references?.map(async (item) => {
+            try {
+                await referenceService.create(item);
+            } catch (err) {
+                console.log(err);
+            }
+        });
+
         return response.json(201, publication);
     } catch (err) {
         console.log(err);
@@ -200,6 +210,15 @@ export const update = async (
         }
 
         const updatedPublication = await publicationService.update(event.pathParameters.id, event.body);
+
+        // updating references
+        // if references already exist, then we need to rewrite them instead of appending them to the array
+        // if (publication?.references !== event.body.references) {
+        // await referenceService.removeAll(publication.id);
+
+        event.body.References?.map(async (item) => {
+            await referenceService.create(item);
+        });
 
         return response.json(200, updatedPublication);
     } catch (err) {

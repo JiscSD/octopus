@@ -88,6 +88,13 @@ export interface Publication extends CorePublication {
     references: Reference[];
 }
 
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
+}
+
 export interface PublicationWithLinks {
     rootPublication: Publication;
     linkedToPublications: {
@@ -120,7 +127,7 @@ export interface Reference {
     id: string;
     type: ReferenceType;
     text: string;
-    location?: string;
+    location?: string | null;
 }
 
 export interface CoAuthor {
@@ -363,6 +370,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
     affiliationStatement?: string | null;
+    references?: Reference[] | null;
 }
 
 export interface CreationStep {

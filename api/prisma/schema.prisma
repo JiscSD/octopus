@@ -89,7 +89,7 @@ model Publication {
 }
 
 model References {
-    id            String                @id @default(cuid())
+    id            String        @id
     publicationId String
     type          ReferenceType
     text          String
