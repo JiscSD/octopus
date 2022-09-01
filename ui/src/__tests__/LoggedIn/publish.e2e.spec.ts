@@ -147,7 +147,6 @@ export const publicationFlowReview = async (
     // Review and publish
 };
 
-
 const problemPublication = {
     pubType: 'Research Problem',
     language: 'Afar',
