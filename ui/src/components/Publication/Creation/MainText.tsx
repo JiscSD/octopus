@@ -270,8 +270,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
         setEditReferenceModalVisible(true)
     };
 
-    const saveEditReferenceChanges = (reference: Interfaces.Reference) => {
-        console.log(reference.id)
+    const saveEditReferenceChanges = async (referenceID: string, referenceContent: string) => {
+        console.log(referenceID)
+        console.log(referenceContent)
         setEditReferenceModalVisible(false)
     }
 
@@ -416,28 +417,29 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
 
-             {/* Import document modal */}
-             <HeadlessUi.Dialog
-                    open={editReferenceModalVisible}
-                    onClose={() => setEditReferenceModalVisible(false)}
-                    className="fixed inset-0 z-10 overflow-y-auto"
-                >
-                    <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            {/* Import document modal */}
+            <HeadlessUi.Dialog
+                open={editReferenceModalVisible}
+                onClose={() => setEditReferenceModalVisible(false)}
+                className="fixed inset-0 z-10 overflow-y-auto"
+            >
+                <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
-                        <HeadlessUi.Dialog.Title className="sr-only">
-                            Edit reference 
-                        </HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                          <EditReference
-                            reference={modalReferenceInfo}
-                            positiveActionCallback={saveEditReferenceChanges}
-                            negativeActionCallback={closeModal}
-                            MenuBar={MenuBar}
-                            loading={false}/>
-                        </HeadlessUi.Dialog.Description>
-                    </div>
-                </HeadlessUi.Dialog>
+                <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
+                    <HeadlessUi.Dialog.Title className="sr-only">
+                        Edit reference 
+                    </HeadlessUi.Dialog.Title>
+                    <HeadlessUi.Dialog.Description className="mb-2">
+                        Edit Reference
+                    </HeadlessUi.Dialog.Description>
+                    <EditReference
+                        reference={modalReferenceInfo}
+                        positiveActionCallback={saveEditReferenceChanges}
+                        negativeActionCallback={closeModal}
+                        MenuBar={MenuBar}
+                        loading={false}/>
+                </div>
+            </HeadlessUi.Dialog>
         </div>
     );
 };

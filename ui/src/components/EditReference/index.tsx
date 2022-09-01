@@ -14,7 +14,7 @@ interface MenuBarProps {
 }
 
 type Props = {
-    positiveActionCallback: (reference: Interfaces.Reference) => void;
+    positiveActionCallback: (referenceID: string, referenceContent: string) => void;
     negativeActionCallback: () => void;
     MenuBar: React.FC<MenuBarProps>;
     reference: Interfaces.Reference;
@@ -23,6 +23,17 @@ type Props = {
 
 const EditReference: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(true);
+
+    const handleReferenceSave = () => {
+        if (!textEditor) {
+            return;
+        }
+        if (!textEditor?.getText().trim()) {
+            return;
+        }
+        props.positiveActionCallback(props.reference.id, textEditor.getHTML());
+    }
+    
     const textEditor = tiptap.useEditor({
         content: props.reference.text,
         extensions: [StarterKit, Underline],
@@ -53,7 +64,7 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
                 <Components.ModalButton
                     text="Save"
                     title="Save"
-                    onClick={() => props.positiveActionCallback(props.reference)}
+                    onClick={handleReferenceSave}
                     disabled={props.loading}
                     loading={props.loading}
                     actionType="POSITIVE"
