@@ -95,6 +95,7 @@ export interface Reference {
     type: ReferenceType;
     text: string;
     location?: string;
+    originalRef: string;
 }
 
 export interface PublicationWithLinks {

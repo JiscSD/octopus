@@ -94,6 +94,7 @@ model References {
     type          ReferenceType
     text          String
     location      String?
+    originalRef   String
     publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 

@@ -12,6 +12,9 @@ const create: I.Schema = {
         },
         location: {
             type: 'string'
+        },
+        originalRef: {
+            type: 'string'
         }
     },
     required: ['type', 'text'],

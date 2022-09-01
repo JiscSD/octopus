@@ -35,7 +35,7 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
     }
     
     const textEditor = tiptap.useEditor({
-        content: props.reference.text,
+        content: props.reference.originalRef,
         extensions: [StarterKit, Underline],
         onSelectionUpdate: () => setLoading(true),
         editorProps: {

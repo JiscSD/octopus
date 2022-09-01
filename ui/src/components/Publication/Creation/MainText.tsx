@@ -149,6 +149,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
         id: "",
         type: 'URL',
         text: '',
+        originalRef: ''
     });
 
     React.useEffect(() => {
@@ -201,6 +202,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             let location: string | null;
                             let type: Interfaces.ReferenceType;
                             let text = currentParagraph; // original html string
+                            const originalRef = currentParagraph; // store original reference for editing singly later
 
                             if (match?.groups?.DOI) {
                                 type = 'DOI';
@@ -226,7 +228,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 {
                                     type,
                                     text,
-                                    location
+                                    location,
+                                    originalRef
                                 },
                                 user?.token
                             );
@@ -265,7 +268,6 @@ const MainText: React.FC = (): React.ReactElement | null => {
     );
 
     const editReference = async (reference: Interfaces.Reference) => {
-        console.log(reference)
         setModalReferenceInfo(reference)
         setEditReferenceModalVisible(true)
     };
