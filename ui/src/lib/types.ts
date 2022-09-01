@@ -95,7 +95,7 @@ export type PublicationCreationStoreType = {
     updateReferences: (references: Interfaces.Reference[]) => void;
 };
 
-export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;
+export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
 
 export type SearchType = 'publications' | 'users';
 
