@@ -10,7 +10,7 @@ test.describe('My profile', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         // Check my profile page
         await page.goto(Helpers.UI_BASE);
@@ -18,7 +18,7 @@ test.describe('My profile', () => {
         await page.locator(PageModel.header.myProfileButton).click();
 
         // Check name
-        await expect(page.locator('h1')).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator('h1')).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         // Check ORCID data sections
         for await (const orcidDataSection of PageModel.authorInfo.orcidData) {

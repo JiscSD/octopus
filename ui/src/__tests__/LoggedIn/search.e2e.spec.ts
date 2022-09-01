@@ -10,7 +10,7 @@ test.describe('Search', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         // search and check result
         await Helpers.search(page, 'How has life on earth evolved?', PageModel.search.publicationSearchResult);

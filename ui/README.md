@@ -61,7 +61,8 @@ End-to-end tests use [Playwright](https://playwright.dev/).
 To run the tests you need to set the following in the .env file to match a test ORCID account (it doesn't have to be the same account used for the NEXT_PUBLIC_ORCID_APP_ID):
 
 ```
-ORCID_TEST_NAME=<name as defined in orchid account>
+ORCID_TEST_FIRST_NAME=<first name as defined in orchid account>
+ORCID_TEST_LAST_NAME=<last name as defined in orchid account>
 ORCID_TEST_USER=
 ORCID_TEST_PASS=
 

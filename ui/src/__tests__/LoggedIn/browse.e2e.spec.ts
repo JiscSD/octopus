@@ -10,7 +10,7 @@ test.describe('Browse', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         // Navigate to browse page
         await page.locator(PageModel.header.browseButton).click();

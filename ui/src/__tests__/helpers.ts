@@ -4,7 +4,8 @@ import { PageModel } from './PageModel';
 
 const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
 const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
-const ORCID_TEST_NAME = process.env.ORCID_TEST_NAME;
+export const ORCID_TEST_NAME = `${process.env.ORCID_TEST_FIRST_NAME} ${process.env.ORCID_TEST_LAST_NAME}`;
+export const ORCID_TEST_SHORT_NAME = `${process.env.ORCID_TEST_FIRST_NAME?.[0]}. ${process.env.ORCID_TEST_LAST_NAME}`;
 
 export const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
 

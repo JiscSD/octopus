@@ -147,12 +147,13 @@ export const publicationFlowReview = async (
     // Review and publish
 };
 
+
 const problemPublication = {
     pubType: 'Research Problem',
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Research Problem does not have any specified conflicts of interest.',
     funding: 'This Research Problem has the following sources of funding:',
@@ -164,7 +165,7 @@ const hypothesisPublication = {
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Rationale/Hypothesis does not have any specified conflicts of interest.',
     funding: 'This Rationale/Hypothesis has the following sources of funding:',
@@ -176,7 +177,7 @@ const methodPublication = {
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Method does not have any specified conflicts of interest.',
     funding: 'This Method has the following sources of funding:',
@@ -188,7 +189,7 @@ const analysisPublication = {
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Analysis does not have any specified conflicts of interest.',
     funding: 'This Analysis has the following sources of funding:',
@@ -200,7 +201,7 @@ const interpretationPublication = {
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Interpretation does not have any specified conflicts of interest.',
     funding: 'This Interpretation has the following sources of funding:',
@@ -212,7 +213,7 @@ const realWorldApplicationPublication = {
     language: 'Afar',
     licence: 'CC BY-NC 4.0',
     title: 'test title',
-    author: `${process.env.ORCID_TEST_NAME}`,
+    author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
     coi: 'This Real World Application does not have any specified conflicts of interest.',
     funding: 'This Real World Application has the following sources of funding:',
@@ -236,7 +237,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `aside >> text=Publication type:${publication.pubType}`,
         `text=${publication.language}`,
         `text=${publication.licence}`,
-        `main > section > header > p > a:has-text("${process.env.ORCID_TEST_SHORT_NAME}")`,
+        `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
@@ -257,7 +258,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'PROBLEM');
         await publicationFlowKeyInformation(
@@ -297,7 +298,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'HYPOTHESIS');
         await publicationFlowKeyInformation(
@@ -337,7 +338,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'PROTOCOL');
         await publicationFlowKeyInformation(
@@ -377,7 +378,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'ANALYSIS');
         await publicationFlowKeyInformation(
@@ -417,7 +418,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'INTERPRETATION');
         await publicationFlowKeyInformation(
@@ -453,7 +454,7 @@ test.describe('Publication flow', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.ORCID_TEST_NAME);
 
         await createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
         await publicationFlowKeyInformation(

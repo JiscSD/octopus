@@ -7,7 +7,7 @@ test.describe('Login', () => {
         const page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         await Helpers.logout(page);
 

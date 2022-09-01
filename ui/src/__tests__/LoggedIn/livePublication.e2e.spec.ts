@@ -65,7 +65,7 @@ test.describe('Live Publication', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         Helpers.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4', true);
     });
@@ -77,7 +77,7 @@ test.describe('Live Publication', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         testBookmarking(page, 'cl3fz14dr0001es6i5ji51rq4');
     });
@@ -89,7 +89,7 @@ test.describe('Live Publication', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
         testFlagging(page, 'cl3fz14dr0001es6i5ji51rq4', 'testing the flagging functionality');
     });
@@ -101,7 +101,7 @@ test.describe('Live Publication', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
         await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
 
         // Check and click author link
@@ -135,7 +135,7 @@ test.describe('Live Publication', () => {
         // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${process.env.ORCID_TEST_NAME}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
         await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
     });
     test.skip('Write a review for this pub', async ({ browser }) => {});
