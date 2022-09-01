@@ -236,7 +236,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `aside >> text=Publication type:${publication.pubType}`,
         `text=${publication.language}`,
         `text=${publication.licence}`,
-        `main > section > header > p > a:has-text("${process.env.ORCID_TEST_NAME}")`,
+        `main > section > header > p > a:has-text("${process.env.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,

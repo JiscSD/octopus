@@ -69,8 +69,8 @@ ORCID_TEST_PASS=
 
 You need the API and the UI to be running. To run the tests use:
 
-```
- $ ~/ui $ npm run test:e2e
+```bash
+$ ~/ui $ npm run test:e2e
 
 ```
 

@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a[role="button"]:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a[href="/authors/cl6m84wm800007syp9fxsv425"]'
+        myProfileButton: 'a:has-text("My profile")'
     },
     footer: {
         links: [
@@ -132,7 +132,7 @@ export const PageModel = {
         keyInformation: {
             licence: 'select#licence',
             rorID: 'input[name="ror"]',
-            addAffiliationButton: 'button[aria-label="Add affiliation"]',
+            addAffiliationButton: 'button[aria-label="Add affiliation"]:enabled',
             manualAffiliationSelect: 'input#manual',
             manualAffiliationName: 'input[placeholder="Name"]',
             manualAffiliationCity: 'input[placeholder="City"]',
@@ -158,7 +158,7 @@ export const PageModel = {
         },
         funders: {
             rorID: 'input[name="ror"]',
-            addAffiliationButton: 'button[aria-label="Add funder"]',
+            addAffiliationButton: 'button[aria-label="Add funder"]:enabled',
             manualAffiliationSelect: 'input#manual',
             manualAffiliationName: 'input[placeholder="Name"]',
             manualAffiliationCity: 'input[placeholder="City"]',
