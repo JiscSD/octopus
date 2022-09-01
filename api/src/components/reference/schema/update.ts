@@ -3,6 +3,9 @@ import * as I from 'interface';
 const update: I.Schema = {
     type: 'object',
     properties: {
+        id: {
+            type: 'string'
+        },
         type: {
             type: 'string',
             enum: <I.ReferenceType[]>['DOI', 'URL', 'TEXT']

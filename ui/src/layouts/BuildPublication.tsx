@@ -99,7 +99,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,
                 affiliationStatement: store.affiliationsStatement,
-                fundersStatement: store.funderStatement
+                fundersStatement: store.funderStatement,
+                references: store.references
             };
 
             if (store.type === 'DATA') {

@@ -13,7 +13,7 @@ function checkEnvVariable(variable: string | undefined): string {
 if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
     host = 'https://localhost:3001';
     mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
-    orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
+    orcidAppiID = 'APP-CYFKUKZH3ZDW81SL';
 } else {
     host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
     mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);

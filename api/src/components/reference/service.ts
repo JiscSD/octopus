@@ -33,3 +33,12 @@ export const remove = async (id: string) => {
     });
     return deleted;
 };
+
+export const removeAll = async (publicationId: string) => {
+    const deleted = await client.prisma.references.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+    return deleted;
+};
