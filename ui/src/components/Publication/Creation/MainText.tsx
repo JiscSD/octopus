@@ -144,30 +144,14 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
     const [loading, setLoading] = React.useState(false);
 
-    // React.useEffect(() => {
-    //     fetchAndSetReferences();
-    //     setLoading(false);
-    // }, [content, user, publicationId]);
-
-    // const fetchAndSetReferences = React.useCallback(async () => {
-    //     if (publicationId) {
-    //         try {
-    //             const response = await api.get(`/publications/${publicationId}/reference`, user?.token);
-    //             updateReferences(response.data);
-    //         } catch (err) {
-    //             /**
-    //              * @TODO - handle errors - eg. cannot load references...
-    //              */
-    //         }
-    //     }
-    // }, [user, publicationId]);
-
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
 
         if (!paragraphsArray.length) {
             return;
         }
+
+        let referencesArray = references || [];
 
         for (let i = 0; i < paragraphsArray.length; i++) {
             const currentParagraph = paragraphsArray[i].trim();
@@ -208,17 +192,17 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
                     const newReference: Interfaces.Reference = {
                         id: uniqueId,
+                        publicationId,
                         type,
                         text,
                         location
                     };
 
-                    references && references.length
-                        ? updateReferences([...references, newReference])
-                        : updateReferences([newReference]);
+                    referencesArray.push(newReference);
                 }
             }
         }
+        updateReferences(referencesArray);
     };
 
     const destroyReference = (id: string) => {
@@ -293,7 +277,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 <div dangerouslySetInnerHTML={{ __html: reference.text }}></div>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <a href={reference.location}>{reference.location}</a>
+                                                {reference.location && (
+                                                    <a href={reference.location}>{reference.location}</a>
+                                                )}
                                             </td>
                                             <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                                 <button
