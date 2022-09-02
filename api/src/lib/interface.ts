@@ -125,7 +125,7 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
-    References?: Reference[];
+    references?: Reference[];
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
