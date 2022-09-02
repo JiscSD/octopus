@@ -6,6 +6,9 @@ const create: I.Schema = {
         id: {
             type: 'string'
         },
+        publicationId: {
+            type: 'string'
+        },
         type: {
             type: 'string',
             enum: <I.ReferenceType[]>['DOI', 'URL', 'TEXT']
