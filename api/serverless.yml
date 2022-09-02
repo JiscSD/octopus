@@ -361,53 +361,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
                   method: delete
                   cors: true
-    createAffiliation:
-        handler: src/components/affiliations/routes.create
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/affiliation
-                  method: post
-                  cors: true
-    deleteAffiliation:
-        handler: src/components/affiliations/routes.destroy
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
-                  method: delete
-                  cors: true
-    # References
-    getReferences:
-        handler: src/components/reference/routes.get
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
-                  method: get
-                  cors: true
-    createReference:
-        handler: src/components/reference/routes.create
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
-                  method: post
-                  cors: true
-    updateReference:
-        handler: src/components/reference/routes.update
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
-                  method: patch
-                  cors: true
-    deleteReference:
-        handler: src/components/reference/routes.remove
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
-                  method: delete
-                  cors: true
 
     # Affiliations
     createAffiliation:
