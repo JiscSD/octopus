@@ -146,7 +146,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const [loading, setLoading] = React.useState(true);
     const [editReferenceModalVisible, setEditReferenceModalVisible] = React.useState(false);
     const [modalReferenceInfo, setModalReferenceInfo] = React.useState<Interfaces.Reference>({
-        id: "",
+        id: '',
         type: 'URL',
         text: '',
         originalRef: ''
@@ -268,15 +268,13 @@ const MainText: React.FC = (): React.ReactElement | null => {
     );
 
     const editReference = async (reference: Interfaces.Reference) => {
-        setModalReferenceInfo(reference)
-        setEditReferenceModalVisible(true)
+        setModalReferenceInfo(reference);
+        setEditReferenceModalVisible(true);
     };
 
     const saveEditReferenceChanges = React.useCallback(
         async (referenceID: string, referenceContent: string) => {
-            const paragraphElement = new DOMParser()
-                .parseFromString(referenceContent, 'text/html')
-                .querySelector('p');
+            const paragraphElement = new DOMParser().parseFromString(referenceContent, 'text/html').querySelector('p');
             const textContent = paragraphElement?.textContent?.trim();
 
             if (!textContent) {
@@ -288,7 +286,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
 
             const matches = textContent.matchAll(pattern);
-            
+
             // Iterate through matches
             if (matches) {
                 for (const match of matches) {
@@ -322,11 +320,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     );
                 }
             }
-            setEditReferenceModalVisible(false)
+            setEditReferenceModalVisible(false);
             fetchAndSetReferences();
         },
         [fetchAndSetReferences, publicationId, user?.token]
-    )
+    );
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -392,13 +390,17 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">   
+                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                                 <button
                                                     onClick={(e) => editReference(reference)}
                                                     title="Edit reference"
-                                                    className="rounded-full">
-                                                    <FAIcons.FaEdit className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400" aria-hidden="true" />
-                                                </button>                                                                                             
+                                                    className="rounded-full"
+                                                >
+                                                    <FAIcons.FaEdit
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                </button>
                                                 <div dangerouslySetInnerHTML={{ __html: reference.text }}></div>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -464,7 +466,6 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 </div>
             </div>
 
-
             {/* Import document modal */}
             <HeadlessUi.Dialog
                 open={editReferenceModalVisible}
@@ -474,18 +475,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
                 <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-128 xl:w-160">
-                    <HeadlessUi.Dialog.Title className="sr-only">
-                        Edit reference 
-                    </HeadlessUi.Dialog.Title>
-                    <HeadlessUi.Dialog.Description className="mb-2">
-                        Edit Reference
-                    </HeadlessUi.Dialog.Description>
+                    <HeadlessUi.Dialog.Title className="sr-only">Edit reference</HeadlessUi.Dialog.Title>
+                    <HeadlessUi.Dialog.Description className="mb-2">Edit Reference</HeadlessUi.Dialog.Description>
                     <EditReference
                         reference={modalReferenceInfo}
                         positiveActionCallback={saveEditReferenceChanges}
                         negativeActionCallback={() => setEditReferenceModalVisible(false)}
                         MenuBar={MenuBar}
-                        loading={false}/>
+                        loading={false}
+                    />
                 </div>
             </HeadlessUi.Dialog>
         </div>

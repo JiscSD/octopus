@@ -19,7 +19,7 @@ type Props = {
     MenuBar: React.FC<MenuBarProps>;
     reference: Interfaces.Reference;
     loading: boolean;
-}
+};
 
 const EditReference: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(true);
@@ -32,8 +32,8 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
             return;
         }
         props.positiveActionCallback(props.reference.id, textEditor.getHTML());
-    }
-    
+    };
+
     const textEditor = tiptap.useEditor({
         content: props.reference.originalRef,
         extensions: [StarterKit, Underline],
@@ -47,13 +47,13 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
-        {textEditor && (
-            <div className="w-full rounded-md border border-grey-100 bg-white-50 p-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
-                <props.MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
-                <tiptap.EditorContent editor={textEditor} />
-            </div>
-        )}
-        <div className="mt-6 flex justify-between space-x-4">
+            {textEditor && (
+                <div className="w-full rounded-md border border-grey-100 bg-white-50 p-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+                    <props.MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
+                    <tiptap.EditorContent editor={textEditor} />
+                </div>
+            )}
+            <div className="mt-6 flex justify-between space-x-4">
                 <Components.ModalButton
                     text="Cancel"
                     title="Cancel"
@@ -71,7 +71,7 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
                 />
             </div>
         </>
-    )
-}
+    );
+};
 
 export default EditReference;
