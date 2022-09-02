@@ -1,0 +1,49 @@
+import middy from '@middy/core';
+
+import * as I from 'interface';
+import * as response from 'lib/response';
+import * as userService from 'user/service';
+import * as authorizationService from 'authorization/service';
+import * as publicationService from 'publication/service';
+
+const checkOwnership = (): middy.MiddlewareObj => {
+    const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (request): Promise<I.JSONResponse | void> => {
+        try {
+            let user: null | I.User = null;
+
+            const apiKey = request.event.queryStringParameters?.apiKey;
+            const bearerToken = request.event.headers.Authorization;
+
+            if (apiKey) {
+                user = await userService.getByApiKey(apiKey);
+            } else if (bearerToken) {
+                user = authorizationService.validateJWT(bearerToken.split(' ')[1]);
+            }
+
+            // if there's no user account, and authentication is *not* optional, then the request is blocked.
+            if (!user) {
+                return response.json(401, { message: 'Please enter either a valid apiKey or bearer token.' });
+            }
+            const publicationId = request.event.pathParameters?.id;
+
+            if (publicationId) {
+                const publication = await publicationService.get(publicationId);
+                if (publication && publication.createdBy !== user.id) {
+                    return response.json(401, {
+                        message: 'User is not the author of this publication.'
+                    });
+                }
+            }
+
+            Object.assign(request.event, { user });
+        } catch (err) {
+            console.log(err);
+            return response.json(401, { message: 'Unknown authentication error, please contact help@jisc.ac.uk.' });
+        }
+    };
+    return {
+        before
+    };
+};
+
+export default checkOwnership;
