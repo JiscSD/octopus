@@ -42,3 +42,14 @@ export const removeAll = async (publicationId: string) => {
     });
     return deleted;
 };
+
+export const updateAll = async (publicationId, data) => {
+    await client.prisma.references.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+
+    const created = await client.prisma.references.createMany({ data });
+    return created;
+};
