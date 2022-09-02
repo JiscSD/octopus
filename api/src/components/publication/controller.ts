@@ -213,12 +213,13 @@ export const update = async (
 
         // updating references
         // if references already exist, then we need to rewrite them instead of appending them to the array
-        // if (publication?.references !== event.body.references) {
-        // await referenceService.removeAll(publication.id);
+        if (publication?.references !== event.body.references) {
+            await referenceService.removeAll(publication.id);
 
-        event.body.References?.map(async (item) => {
-            await referenceService.create(item);
-        });
+            event.body.references?.map(async (item) => {
+                await referenceService.create(item);
+            });
+        }
 
         return response.json(200, updatedPublication);
     } catch (err) {
