@@ -280,7 +280,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateAffiliations(props.draftedPublication.affiliations);
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        store.updateReferences(props.draftedPublication.references);
     }, []);
 
     React.useEffect(() => {
