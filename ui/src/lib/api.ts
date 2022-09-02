@@ -60,7 +60,7 @@ export const patch = async (url: string, body: Interfaces.JSON, token?: string |
     return response;
 };
 
-export const put = async (url: string, body: Interfaces.JSON, token: string | undefined): Promise<AxiosResponse> => {
+export const put = async (url: string, body: any, token: string | undefined): Promise<AxiosResponse> => {
     const headers = {
         headers: {
             Authorization: `Bearer ${token}`

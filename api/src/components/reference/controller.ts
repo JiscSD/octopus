@@ -33,6 +33,7 @@ export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
 };
 
 export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>) => {
+    console.log(event.body);
     try {
         const reference = await referenceService.updateAll(event.pathParameters.id, event.body);
 
