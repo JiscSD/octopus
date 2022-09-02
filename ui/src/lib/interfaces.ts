@@ -90,6 +90,7 @@ export interface Publication extends CorePublication {
 
 export interface Reference {
     id: string;
+    publicationId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;

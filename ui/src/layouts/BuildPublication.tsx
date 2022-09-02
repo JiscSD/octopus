@@ -99,8 +99,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,
                 affiliationStatement: store.affiliationsStatement,
-                fundersStatement: store.funderStatement,
-                references: store.references
+                fundersStatement: store.funderStatement
             };
 
             if (store.type === 'DATA') {
@@ -121,6 +120,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             /**
              * @TODO - save references for this publication after OCT-360
              */
+
+            const references = store.references;
+
+            await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/reference`,
+                references,
+                props.token
+            );
 
             if (message) {
                 setToast({
