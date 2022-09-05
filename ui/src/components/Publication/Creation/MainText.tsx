@@ -197,11 +197,17 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             if (match?.groups?.DOI) {
                                 type = 'DOI';
                                 location = match.groups.DOI;
-                                text = text.replace(match.groups.DOI, '');
+                                text = text.replace(
+                                    match.groups.DOI,
+                                    `<a href="${match.groups.DOI}" target="_blank" rel="noreferrer noopener">${match.groups.DOI}</a>`
+                                );
                             } else if (match?.groups?.URL) {
                                 type = 'URL';
                                 location = match.groups.URL;
-                                text = text.replace(match.groups.URL, '');
+                                text = text.replace(
+                                    match.groups.URL,
+                                    `<a href="${match.groups.URL}" target="_blank" rel="noreferrer noopener">${match.groups.URL}</a>`
+                                );
                             } else {
                                 type = 'TEXT';
                                 location = null;
@@ -320,11 +326,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <div dangerouslySetInnerHTML={{ __html: reference.text }}></div>
+                                            <td className="space-nowrap py-4 pl-4 pr-3 text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                                <Components.ParseHTML content={reference.text}></Components.ParseHTML>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <a href={reference.location}>{reference.location}</a>
+                                                {reference.location && (
+                                                    <Components.Link href={reference.location} openNew>
+                                                        {reference.location}
+                                                    </Components.Link>
+                                                )}
                                             </td>
                                             <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                                 <button
