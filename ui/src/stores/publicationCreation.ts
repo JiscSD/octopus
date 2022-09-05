@@ -26,7 +26,7 @@ let store: any = (set: (params: any) => void) => ({
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
                 references: [],
-                conflictOfInterestStatus: false,
+                conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
