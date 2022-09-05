@@ -4,8 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-
 import * as publicationService from 'publication/service';
+
 export {
     ImageExtension,
     Languages,
@@ -441,6 +441,28 @@ export type Ratings =
 export interface CreateRatingRequestBody {
     type: Ratings;
     value: number;
+}
+
+/**
+ * @description References
+ */
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    referenceId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
+}
+
+export interface CreateReferencePath {
+    id: string;
+}
+
+export interface UpdateReferencePath {
+    id: string;
+    referenceId: string;
 }
 
 /**

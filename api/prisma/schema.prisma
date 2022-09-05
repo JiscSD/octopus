@@ -437,3 +437,9 @@ enum ReferenceType {
     URL
     TEXT
 }
+
+enum ReferenceType {
+    DOI
+    URL
+    TEXT
+}

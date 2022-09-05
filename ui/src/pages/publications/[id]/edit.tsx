@@ -227,6 +227,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             store.updateLanguage(props.draftedPublication.language);
         }
 
+        if (props.draftedPublication.references) {
+            store.updateReferences(props.draftedPublication.references);
+        }
+
         if (props.draftedPublication.conflictOfInterestText) {
             store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
             store.updateLinkTo(props.draftedPublication.linkedTo);
