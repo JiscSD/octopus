@@ -1,17 +1,17 @@
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Framer from 'framer-motion';
-import Head from 'next/head';
-import * as Router from 'next/router';
 import React from 'react';
+import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/outline';
+import * as Router from 'next/router';
+import * as Framer from 'framer-motion';
 
-import * as api from '@api';
 import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
+import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
+import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import * as api from '@api';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
