@@ -438,8 +438,3 @@ enum ReferenceType {
     TEXT
 }
 
-enum ReferenceType {
-    DOI
-    URL
-    TEXT
-}
