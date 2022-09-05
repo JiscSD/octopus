@@ -1,24 +1,24 @@
 import React from 'react';
+import * as HeadlessUi from '@headlessui/react';
+import * as SolidIcon from '@heroicons/react/solid';
 import * as tiptap from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
+import * as Mammoth from 'mammoth';
+import * as FAIcons from 'react-icons/fa';
+import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Interfaces from '@interfaces';
+import * as Stores from '@stores';
+import * as Types from '@types';
+
 import TipTapImage from '@tiptap/extension-image';
-import TextAlign from '@tiptap/extension-text-align';
+import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import * as Mammoth from 'mammoth';
-import * as SolidIcon from '@heroicons/react/solid';
-import * as HeadlessUi from '@headlessui/react';
-import * as FAIcons from 'react-icons/fa';
-
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import TableRow from '@tiptap/extension-table-row';
+import TextAlign from '@tiptap/extension-text-align';
+import StarterKit from '@tiptap/starter-kit';
 
 type LetterIconType = {
     letter: string;
@@ -97,6 +97,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
+
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<null | string>(null);
 
@@ -640,11 +641,10 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     );
 };
 
-// handleURLSourceUpload(e.target.value)
-
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
     defaultContent: string;
+    references?: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {

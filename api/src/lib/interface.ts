@@ -4,8 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-
 import * as publicationService from 'publication/service';
+
 export {
     ImageExtension,
     Languages,

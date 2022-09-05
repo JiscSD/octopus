@@ -2,11 +2,7 @@
     "extends": "./tsconfig.alias.json",
     "compilerOptions": {
         "target": "es5",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
+        "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
@@ -18,14 +14,9 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "incremental": true
+        "incremental": true,
+        "downlevelIteration": true // this is needed for ES5 - https://mariusschulz.com/blog/downlevel-iteration-for-es3-es5-in-typescript
     },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
 }
