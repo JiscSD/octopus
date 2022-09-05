@@ -6,7 +6,7 @@ import * as Types from '@types';
 import JWT from 'jsonwebtoken';
 import Head from 'next/head';
 import React from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let email = null;
@@ -49,7 +49,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                     token
                 );
             }
-        } catch (err: unknown | Types.AxiosError) {
+        } catch (err: unknown | AxiosError) {
             if (axios.isAxiosError(err)) {
                 return {
                     props: {
