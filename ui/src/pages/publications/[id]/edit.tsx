@@ -1,9 +1,9 @@
+import React from 'react';
+import Head from 'next/head';
+
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as Framer from 'framer-motion';
-import Head from 'next/head';
 import * as Router from 'next/router';
-import React from 'react';
-import useSWR from 'swr';
 
 import * as api from '@api';
 import * as Components from '@components';

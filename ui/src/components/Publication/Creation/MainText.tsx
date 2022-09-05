@@ -129,20 +129,19 @@ const AddReferences: React.FC<AddReferencesProps> = ({ addReferences }) => {
 };
 
 const MainText: React.FC = (): React.ReactElement | null => {
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const description = Stores.usePublicationCreationStore((state) => state.description);
-    const updateDescription = Stores.usePublicationCreationStore((state) => state.updateDescription);
-    const keywords = Stores.usePublicationCreationStore((state) => state.keywords);
-    const updateKeywords = Stores.usePublicationCreationStore((state) => state.updateKeywords);
-    const content: string = Stores.usePublicationCreationStore((state) => state.content);
-    const updateContent = Stores.usePublicationCreationStore((state) => state.updateContent);
-    const language = Stores.usePublicationCreationStore((state) => state.language);
-    const updateLanguage = Stores.usePublicationCreationStore((state) => state.updateLanguage);
-    const references = Stores.usePublicationCreationStore((state) => state.references);
-    const updateReferences = Stores.usePublicationCreationStore((state) => state.updateReferences);
-    const user = Stores.useAuthStore((state) => state.user);
-
-    const [loading, setLoading] = React.useState(false);
+    const {
+        id: publicationId,
+        updateDescription,
+        keywords,
+        updateKeywords,
+        content,
+        description,
+        updateContent,
+        language,
+        updateLanguage,
+        references,
+        updateReferences
+    } = Stores.usePublicationCreationStore();
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -213,7 +212,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                {!loading ? (
+                {content ? (
                     <Components.TextEditor
                         defaultContent={content}
                         contentChangeHandler={updateContent}
@@ -286,11 +285,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                     onClick={(e) => destroyReference(reference.id)}
                                                     className="rounded-full"
                                                 >
-                                                    {loading ? (
-                                                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    ) : (
-                                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    )}
+                                                    <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                                 </button>
                                             </td>
                                         </tr>
