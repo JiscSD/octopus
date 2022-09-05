@@ -216,17 +216,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                {content ? (
-                    <Components.TextEditor
-                        defaultContent={content}
-                        contentChangeHandler={updateContent}
-                        references={references}
-                    />
-                ) : (
-                    <div className="mt-16 flex animate-bounce justify-center">
-                        <Assets.Logo width={60} height={60} className="fill-teal-500" />
-                    </div>
-                )}
+                <Components.TextEditor
+                    defaultContent={content}
+                    contentChangeHandler={updateContent}
+                    references={references}
+                />
             </div>
 
             <div>

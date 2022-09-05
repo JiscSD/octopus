@@ -364,7 +364,6 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
     affiliationStatement?: string | null;
-    references?: Reference[] | null;
 }
 
 export interface CreationStep {
