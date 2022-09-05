@@ -117,15 +117,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             }
 
             await api.patch(`${Config.endpoints.publications}/${props.publication.id}`, body, props.token);
-            /**
-             * @TODO - save references for this publication after OCT-360
-             */
 
-            const references = store.references;
-
+            // update references for this publication
             await api.put(
                 `${Config.endpoints.publications}/${props.publication.id}/reference`,
-                references,
+                store.references,
                 props.token
             );
 
