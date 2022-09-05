@@ -104,6 +104,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
 
+    const { data: references = [] } = useSWR<Interfaces.Reference[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/reference`,
+        (url) => api.get(url, props.userToken).then(({ data }) => data)
+    );
+
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
@@ -137,6 +142,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const sectionList = [
         { title: 'Main text', href: 'main-text' },
         ...list,
+        { title: 'References', href: 'references' },
         { title: 'Funders', href: 'funders' },
         { title: 'Conflict of interest', href: 'coi' }
     ];
@@ -383,6 +389,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <div className="mb-4">
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
+                    </Components.PublicationContentSection>
+
+                    {/* References */}
+                    <Components.PublicationContentSection id="references" title="References" hasBreak>
+                        {references.map((reference) => (
+                            <div key={reference.id} className="py-2">
+                                <Components.ParseHTML content={reference.text} />
+                            </div>
+                        ))}
                     </Components.PublicationContentSection>
 
                     {/* Linked from problems */}

@@ -4,7 +4,7 @@ type Props = {
     id: string;
     title?: string;
     hasBreak?: boolean;
-    children: React.ReactChildren | React.ReactChild;
+    children: React.ReactNode;
 };
 
 const ContentSection: React.FC<Props> = (props): React.ReactElement => (

@@ -197,11 +197,17 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             if (match?.groups?.DOI) {
                                 type = 'DOI';
                                 location = match.groups.DOI;
-                                text = text.replace(match.groups.DOI, '');
+                                text = text.replace(
+                                    match.groups.DOI,
+                                    `<a href="${match.groups.DOI}" target="_blank" rel="noreferrer noopener">${match.groups.DOI}</a>`
+                                );
                             } else if (match?.groups?.URL) {
                                 type = 'URL';
                                 location = match.groups.URL;
-                                text = text.replace(match.groups.URL, '');
+                                text = text.replace(
+                                    match.groups.URL,
+                                    `<a href="${match.groups.URL}" target="_blank" rel="noreferrer noopener">${match.groups.URL}</a>`
+                                );
                             } else {
                                 type = 'TEXT';
                                 location = null;
@@ -320,11 +326,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <div dangerouslySetInnerHTML={{ __html: reference.text }}></div>
+                                            <td className="space-nowrap py-4 pl-4 pr-3 text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                                <Components.ParseHTML content={reference.text}></Components.ParseHTML>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <a href={reference.location}>{reference.location}</a>
+                                                {reference.location && (
+                                                    <Components.Link href={reference.location} openNew>
+                                                        {reference.location}
+                                                    </Components.Link>
+                                                )}
                                             </td>
                                             <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                                 <button
@@ -353,63 +363,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     Include a short description of your publication to aid discovery. This can be no more than 160
                     characters in length.
                 </span>
-                <div className="flex flex-col items-end space-y-4">
-                    <textarea
-                        required
-                        rows={3}
-                        ref={addReferencesRef}
-                        className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                    ></textarea>
-                    <Components.Button
-                        link
-                        onClick={(e) => addReferences()}
-                        title={'Add references'}
-                        iconPosition={'RIGHT'}
-                        icon={
-                            <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                        }
-                    />
-                    {references && references.length > 0 && (
-                        <div className="w-full overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
-                            <table className="min-w-full table-fixed divide-y divide-grey-100 dark:divide-teal-300">
-                                <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
-                                    <tr>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
-                                            Title
-                                        </th>
-                                        <th className='"whitespace-pre " py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6'>
-                                            Location
-                                        </th>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 "></th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                    {references.map((reference) => (
-                                        <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                {reference.text}
-                                            </td>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                <a href={reference.location}>{reference.location}</a>
-                                            </td>
-                                            <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                                <button
-                                                    onClick={(e) => destroyReference(reference.id)}
-                                                    className="rounded-full"
-                                                >
-                                                    {loading ? (
-                                                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    ) : (
-                                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                    )}
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                <textarea
+                    required
+                    rows={3}
+                    maxLength={160}
+                    value={description}
+                    onChange={(e) => updateDescription(e.target.value)}
+                    className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                />
+                <div className="mt-2 flex justify-end">
+                    <span className="text-xs text-grey-500 dark:text-white-50">{description.length} / 160</span>
                 </div>
             </div>
 

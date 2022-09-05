@@ -117,6 +117,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             }
 
             await api.patch(`${Config.endpoints.publications}/${props.publication.id}`, body, props.token);
+            /**
+             * @TODO - save references for this publication after OCT-360
+             */
 
             if (message) {
                 setToast({
