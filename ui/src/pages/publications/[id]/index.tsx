@@ -65,13 +65,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (token) {
         //check if user is author / co author. if so the bookmark icon won't display
         const currentUser = jwt.decode(token) as any;
+        if (Date.now() <= currentUser.exp * 1000) {
+            if (currentUser.id) {
+                const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
+                const isOwner = currentUser.id === publication.createdBy;
 
-        if (currentUser.id) {
-            const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
-            const isOwner = currentUser.id === publication.createdBy;
-
-            if (!isCoAuthor && !isOwner) {
-                isBookmarkVisible = true;
+                if (!isCoAuthor && !isOwner) {
+                    isBookmarkVisible = true;
+                }
             }
         }
     }

@@ -298,22 +298,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Short description" />
+                <Components.PublicationCreationStepTitle text="Description" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
-                    Include a short description of your publication to aid discovery. This can be no more than 160
-                    characters in length.
+                    Include a short description of your publication to aid discovery. We recommend around 160 characters
+                    in length.
                 </span>
                 <textarea
                     required
-                    rows={3}
-                    maxLength={160}
+                    rows={5}
                     value={description}
                     onChange={(e) => updateDescription(e.target.value)}
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                />
-                <div className="mt-2 flex justify-end">
-                    <span className="text-xs text-grey-500 dark:text-white-50">{description.length} / 160</span>
-                </div>
+                ></textarea>
             </div>
 
             <div>
