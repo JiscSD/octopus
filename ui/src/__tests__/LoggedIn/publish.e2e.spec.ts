@@ -66,7 +66,7 @@ export const publicationFlowMainText = async (
     page: Page,
     mainText: string,
     language: Type.Languages,
-    references:string[],
+    references: string[],
     description: string,
     keywords: string
 ) => {
@@ -74,7 +74,7 @@ export const publicationFlowMainText = async (
     await page.locator(PageModel.publish.text.editor).click();
     await page.keyboard.type(mainText);
     await page.locator(PageModel.publish.text.references).click();
-    for(let reference of references) {
+    for (let reference of references) {
         await page.keyboard.type(`${reference}\n`);
     }
     await page.locator(PageModel.publish.text.addRefernecesButton).click();
@@ -153,7 +153,7 @@ export const publicationFlowReview = async (
     // Review and publish
 };
 
-const referencesList = ["Ref 1 (doi:10.1177/0272989X11403490)","Ref 2 https://www.testrefurl1234.com"]
+const referencesList = ['Ref 1 (doi:10.1177/0272989X11403490)', 'Ref 2 https://www.testrefurl1234.com'];
 
 const problemPublication = {
     pubType: 'Research Problem',
@@ -486,7 +486,7 @@ test.describe('Publication flow', () => {
             'a',
             'Interpretation of Improving the quality of life for sustainable'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', referencesList , 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
