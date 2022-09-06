@@ -14,6 +14,7 @@ import * as Config from '@config';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import cuid from 'cuid';
+import cuid from 'cuid';
 
 const menuIconStyles = 'p-2 hover:bg-grey-100 hover:rounded focus:outline-yellow-500';
 const activeMenuIconStyles = 'p-2 bg-grey-100 rounded focus:outline-yellow-500';

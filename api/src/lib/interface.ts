@@ -450,28 +450,6 @@ export interface CreateRatingRequestBody {
 export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
-    referenceId: string;
-    type: ReferenceType;
-    text: string;
-    location?: string;
-}
-
-export interface CreateReferencePath {
-    id: string;
-}
-
-export interface UpdateReferencePath {
-    id: string;
-    referenceId: string;
-}
-
-/**
- * @description References
- */
-
-export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
-
-export interface Reference {
     id: string;
     type: ReferenceType;
     text: string;

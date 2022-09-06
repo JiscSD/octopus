@@ -93,7 +93,7 @@ model References {
     type          ReferenceType
     text          String
     location      String?
-    publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {

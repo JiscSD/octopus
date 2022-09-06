@@ -369,6 +369,7 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
                   method: delete
                   cors: true
+    # Affiliations
     createAffiliation:
         handler: src/components/affiliations/routes.create
         events:

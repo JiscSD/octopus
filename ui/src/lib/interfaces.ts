@@ -88,8 +88,6 @@ export interface Publication extends CorePublication {
     references: Reference[];
 }
 
-export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
-
 export interface Reference {
     id: string;
     publicationId: string;
@@ -122,6 +120,15 @@ export interface PublicationWithLinks {
         publicationFromFirstName: string;
         publicationFromLastName: string;
     }[];
+}
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
 }
 
 export interface CoAuthor {
