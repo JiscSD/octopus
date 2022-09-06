@@ -33,3 +33,23 @@ export const remove = async (id: string) => {
     });
     return deleted;
 };
+
+export const removeAll = async (publicationId: string) => {
+    const deleted = await client.prisma.references.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+    return deleted;
+};
+
+export const updateAll = async (publicationId, data) => {
+    await client.prisma.references.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+
+    const created = await client.prisma.references.createMany({ data });
+    return created;
+};
