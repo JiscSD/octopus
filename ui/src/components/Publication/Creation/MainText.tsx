@@ -216,11 +216,13 @@ const MainText: React.FC = (): React.ReactElement | null => {
         <div className="space-y-12 2xl:space-y-16">
             <div>
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                <Components.TextEditor
-                    defaultContent={content}
-                    contentChangeHandler={updateContent}
-                    references={references}
-                />
+                {publicationId && (
+                    <Components.TextEditor
+                        defaultContent={content}
+                        contentChangeHandler={updateContent}
+                        references={references}
+                    />
+                )}
             </div>
 
             <div>

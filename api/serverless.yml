@@ -361,6 +361,14 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
                   method: delete
                   cors: true
+    deleteAllReference:
+        handler: src/components/reference/routes.removeAll
+        warmup: true
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/reference
+                  method: delete
+                  cors: true
     createAffiliation:
         handler: src/components/affiliations/routes.create
         events:
