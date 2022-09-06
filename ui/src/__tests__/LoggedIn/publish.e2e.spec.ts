@@ -253,7 +253,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `text=${publication.licence}`,
         `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
-        `text=${publication.references[0]}`, // just the first refernece as the second has a url
+        `text=${publication.references[0]}`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
         `text=${publication.fundingExtraDetails}`
