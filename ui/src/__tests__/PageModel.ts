@@ -144,8 +144,10 @@ export const PageModel = {
             addLink: 'button[aria-label="Add link"]'
         },
         text: {
-            editor: 'div[contenteditable=true]',
+            editor: '.ProseMirror >> nth=0',
             language: 'select[name="language"]',
+            references:'text=ReferencesInclude your reference list for this publication. References should be >> div >> nth=4',
+            addRefernecesButton: 'button[name="Add references"]',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
             keywords:
