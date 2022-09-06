@@ -3,6 +3,12 @@ import * as I from 'interface';
 const create: I.Schema = {
     type: 'object',
     properties: {
+        id: {
+            type: 'string'
+        },
+        publicationId: {
+            type: 'string'
+        },
         type: {
             type: 'string',
             enum: <I.ReferenceType[]>['DOI', 'URL', 'TEXT']

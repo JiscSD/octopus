@@ -1,8 +1,9 @@
+import React from 'react';
+import Head from 'next/head';
+
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as Framer from 'framer-motion';
-import Head from 'next/head';
 import * as Router from 'next/router';
-import React from 'react';
 
 import * as api from '@api';
 import * as Components from '@components';
@@ -127,7 +128,7 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const store = Stores.usePublicationCreationStore();
+    const { updateReferences, ...store } = Stores.usePublicationCreationStore();
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
@@ -193,6 +194,22 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
 
+    const fetchAndSetReferences = React.useCallback(async () => {
+        if (props.draftedPublication.id) {
+            try {
+                const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
+                updateReferences(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftedPublication.id, props.token, updateReferences]);
+
+    React.useEffect(() => {
+        fetchAndSetReferences();
+    }, [fetchAndSetReferences]);
+
     React.useEffect(() => {
         if (props.draftedPublication.id) {
             store.updateId(props.draftedPublication.id);
@@ -225,10 +242,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
         if (props.draftedPublication.language) {
             store.updateLanguage(props.draftedPublication.language);
-        }
-
-        if (props.draftedPublication.references) {
-            store.updateReferences(props.draftedPublication.references);
         }
 
         if (props.draftedPublication.conflictOfInterestText) {
