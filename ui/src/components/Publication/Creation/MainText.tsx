@@ -300,7 +300,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Description" />
+                <Components.PublicationCreationStepTitle text="Short description" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. We recommend around 160 characters
                     in length.

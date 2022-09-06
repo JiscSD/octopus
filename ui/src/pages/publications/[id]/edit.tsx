@@ -200,9 +200,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
                 updateReferences(response.data);
             } catch (err) {
-                /**
-                 * @TODO - handle errors - eg. cannot load references...
-                 */
+                // todo: improve error handling
+                console.log(err);
             }
         }
     }, [props.draftedPublication.id, props.token, updateReferences]);
