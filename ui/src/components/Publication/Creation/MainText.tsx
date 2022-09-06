@@ -256,45 +256,59 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 <div className="flex flex-col items-end space-y-4">
                     <AddReferences addReferences={addReferences} />
                     {references && references.length > 0 && (
-                        <div className="w-full overflow-hidden pt-8 shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
-                            <table className="min-w-full table-fixed divide-y divide-grey-100 dark:divide-teal-300">
-                                <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
-                                    <tr>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
-                                            Title
-                                        </th>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
-                                            Location
-                                        </th>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 "></th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                    {references.map((reference) => (
-                                        <tr key={reference.id}>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
-                                                <Components.ParseHTML content={reference.text}></Components.ParseHTML>
-                                            </td>
-                                            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                                {reference.location && (
-                                                    <Components.Link href={reference.location} openNew>
-                                                        {reference.location}
-                                                    </Components.Link>
-                                                )}
-                                            </td>
-                                            <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                                <button
-                                                    onClick={(e) => destroyReference(reference.id)}
-                                                    className="rounded-full"
-                                                >
-                                                    <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                </button>
-                                            </td>
+                        <>
+                            <div className="w-full overflow-hidden pt-8 shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
+                                <table className="min-w-full table-fixed divide-y divide-grey-100 dark:divide-teal-300">
+                                    <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
+                                        <tr>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                                Title
+                                            </th>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                                Location
+                                            </th>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 "></th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
+                                        {references.map((reference) => (
+                                            <tr key={reference.id}>
+                                                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                                    <Components.ParseHTML
+                                                        content={reference.text}
+                                                    ></Components.ParseHTML>
+                                                </td>
+                                                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                                                    {reference.location && (
+                                                        <Components.Link href={reference.location} openNew>
+                                                            {reference.location}
+                                                        </Components.Link>
+                                                    )}
+                                                </td>
+                                                <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                                    <button
+                                                        onClick={(e) => destroyReference(reference.id)}
+                                                        className="rounded-full"
+                                                    >
+                                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <Components.Button
+                                    title="Delete all references"
+                                    onClick={() => updateReferences([])}
+                                    iconPosition="RIGHT"
+                                    icon={
+                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    }
+                                />
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
