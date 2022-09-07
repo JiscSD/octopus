@@ -55,19 +55,19 @@ const EditReference: React.FC<Props> = (props): React.ReactElement => {
             )}
             <div className="mt-6 flex justify-between space-x-4">
                 <Components.ModalButton
-                    text="Cancel"
-                    title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
-                    disabled={props.loading}
-                    actionType="NEGATIVE"
-                />
-                <Components.ModalButton
                     text="Save"
                     title="Save"
                     onClick={handleReferenceSave}
                     disabled={props.loading}
-                    loading={props.loading}
                     actionType="POSITIVE"
+                />
+                <Components.ModalButton
+                    text="Save"
+                    title="Save"
+                    onClick={() => props.negativeActionCallback()}
+                    disabled={props.loading}
+                    loading={props.loading}
+                    actionType="NEGATIVE"
                 />
             </div>
         </>
