@@ -1,5 +1,6 @@
 import * as Types from '@types';
 import * as Axios from 'axios';
+import * as tiptap from '@tiptap/react';
 import React from 'react';
 
 export interface JSON {
@@ -378,4 +379,10 @@ export interface CreationStep {
     subTitle: string;
     component: React.ReactElement;
     icon: React.ReactElement;
+}
+
+export interface MenuBarProps {
+    editor: tiptap.Editor;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
