@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 
-import * as Assets from '@assets';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as OutlineIcons from '@heroicons/react/outline';
-import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as tiptap from '@tiptap/react';
@@ -161,49 +159,49 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 continue;
             }
 
-            // Pattern using regex groups to retrieve reference text and to determine whether a string contains DOI or URI
-            const pattern =
-                /(?<TEXT>.+?(?=http))((?<DOI>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\s]+)))))(10{1}\.([^\n]+)))|(?<URL>((((http|https):\/\/)(([-a-zA-Z0-9_]{1,265}([^\n]+)))))))|(?<TEXTONLY>.+?(?=$))/g;
+            const URL_REGEX = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g;
 
-            const matches = textContent.matchAll(pattern);
-
-            // Iterate through matches
-            if (matches) {
-                for (const match of matches) {
-                    let location: string | null;
-                    let type: Interfaces.ReferenceType;
-                    let text = currentParagraph; // original html string
-
-                    if (match?.groups?.DOI) {
-                        type = 'DOI';
-                        location = match.groups.DOI;
-                        text = text.replace(
-                            match.groups.DOI,
-                            `<a href="${match.groups.DOI}" target="_blank" rel="noreferrer noopener">${match.groups.DOI}</a>`
-                        );
-                    } else if (match?.groups?.URL) {
-                        type = 'URL';
-                        location = match.groups.URL;
-                        text = text.replace(
-                            match.groups.URL,
-                            `<a href="${match.groups.URL}" target="_blank" rel="noreferrer noopener">${match.groups.URL}</a>`
-                        );
-                    } else {
-                        type = 'TEXT';
-                        location = null;
-                    }
-
-                    const newReference: Interfaces.Reference = {
-                        id: cuid(),
-                        publicationId,
-                        type,
-                        text,
-                        location
-                    };
-
-                    referencesArray.push(newReference);
-                }
+            const urlMatches = textContent.match(URL_REGEX) || [];
+            if (!urlMatches?.length) {
+                // no urls have been found
+                referencesArray.push({
+                    id: cuid(),
+                    publicationId,
+                    type: 'TEXT',
+                    text: currentParagraph,
+                    location: null
+                });
+                // skip the other checks
+                continue;
             }
+
+            // reverse the order for easier access
+            const reversedUrlMatches = urlMatches.reverse(); // we only need the last DOI/URL
+
+            // get the last valid DOI url
+            const DOI_REGEX = /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g;
+            const doiUrl = reversedUrlMatches.find((match) => DOI_REGEX.test(match));
+
+            if (doiUrl) {
+                referencesArray.push({
+                    id: cuid(),
+                    publicationId,
+                    type: 'DOI',
+                    text: currentParagraph,
+                    location: doiUrl
+                });
+                continue;
+            }
+
+            // extract the last URL
+            const lastUrl = reversedUrlMatches[0];
+            referencesArray.push({
+                id: cuid(),
+                publicationId,
+                type: 'URL',
+                text: currentParagraph,
+                location: lastUrl
+            });
         }
         updateReferences(referencesArray);
     };
@@ -273,7 +271,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                     {references.map((reference) => (
                                         <tr key={reference.id}>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
-                                                <Components.ParseHTML content={reference.text}></Components.ParseHTML>
+                                                <Components.ParseHTML
+                                                    content={
+                                                        reference.location
+                                                            ? reference.text.replaceAll(
+                                                                  reference.location,
+                                                                  `<a href="${reference.location}" target="_blank" rel="noreferrer noopener">${reference.location}</a>`
+                                                              )
+                                                            : reference.text
+                                                    }
+                                                ></Components.ParseHTML>
                                             </td>
                                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                                 {reference.location && (
