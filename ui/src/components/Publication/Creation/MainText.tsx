@@ -141,8 +141,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
         references,
         updateReferences
     } = Stores.usePublicationCreationStore();
+    const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
-    const [selectedReferenceDelete, setSelectedReferenceDelete] = useState<Interfaces.Reference | null>(null);
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -211,12 +211,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
     const destroyReference = (id: string) => {
         updateReferences(references.filter((item) => item.id !== id));
-        setSelectedReferenceDelete(null)
+        setSelectedReference(null)
         setDeleteModalVisibility(false);
     };
 
     const handleDeleteReference = (reference: Interfaces.Reference) => {
-        setSelectedReferenceDelete(reference);
+        setSelectedReference(reference);
         setDeleteModalVisibility(true);
     }
 
@@ -227,8 +227,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
                 positiveActionCallback={() => {
-                    if(selectedReferenceDelete) {
-                        destroyReference(selectedReferenceDelete.id);                
+                    if(selectedReference) {
+                        destroyReference(selectedReference.id);                
                     }
                 }}
                 positiveButtonText="Delete"
