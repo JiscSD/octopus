@@ -1,7 +1,6 @@
+import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
-import * as tiptap from '@tiptap/react';
-import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
