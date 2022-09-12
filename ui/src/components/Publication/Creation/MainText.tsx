@@ -66,6 +66,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences
     } = Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
+    const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -109,12 +110,23 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const saveReferenceChanges = useCallback(
         (reference: Interfaces.Reference) => {
             const modifiedReference = getTransformedReference(reference);
+
+            if (typeof selectedReferenceIndex === 'number') {
+                // it's a new reference
+                const newReferencesArray = [...references];
+                // add new reference right after the selected index
+                newReferencesArray.splice(selectedReferenceIndex + 1, 0, modifiedReference);
+                updateReferences(newReferencesArray);
+                setSelectedReferenceIndex(null);
+                return setSelectedReference(null);
+            }
+
             updateReferences(
                 references.map((reference) => (reference.id === modifiedReference.id ? modifiedReference : reference))
             );
             setSelectedReference(null);
         },
-        [references, updateReferences]
+        [references, selectedReferenceIndex, updateReferences]
     );
 
     return (
@@ -172,10 +184,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                     </th>
                                     <th></th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                {references.map((reference) => (
+                                {references.map((reference, index) => (
                                     <tr key={reference.id}>
                                         <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
                                             <Components.ParseHTML
@@ -196,11 +209,32 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 </Components.Link>
                                             )}
                                         </td>
-                                        <td className="py-4 px-6 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                             <button
-                                                onClick={() => setSelectedReference(reference)}
+                                                className="rounded-full p-2"
+                                                title="Add reference"
+                                                onClick={() => {
+                                                    setSelectedReferenceIndex(index);
+                                                    setSelectedReference({
+                                                        id: cuid(), // generate new id
+                                                        publicationId,
+                                                        text: '',
+                                                        type: 'TEXT',
+                                                        location: null
+                                                    });
+                                                }}
+                                            >
+                                                <FAIcons.FaPlus
+                                                    className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                    aria-hidden="true"
+                                                />
+                                            </button>
+                                        </td>
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                            <button
+                                                className="rounded-full p-2"
                                                 title="Edit reference"
-                                                className="rounded-full"
+                                                onClick={() => setSelectedReference(reference)}
                                             >
                                                 <FAIcons.FaEdit
                                                     className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
@@ -208,10 +242,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 />
                                             </button>
                                         </td>
-                                        <td className="py-4 px-6 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                             <button
+                                                className="rounded-full p-2"
+                                                title="Delete reference"
                                                 onClick={() => destroyReference(reference.id)}
-                                                className="rounded-full"
                                             >
                                                 <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                             </button>
