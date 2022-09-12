@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -67,6 +67,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
     } = Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
     const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
+    const isAddingReference = useMemo(() => selectedReferenceIndex !== null, [selectedReferenceIndex]);
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -103,7 +104,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences(references.filter((item) => item.id !== id));
     };
 
-    const handleClose = useCallback(() => {
+    const handleCloseReferenceModal = useCallback(() => {
         setSelectedReference(null);
     }, []);
 
@@ -111,14 +112,13 @@ const MainText: React.FC = (): React.ReactElement | null => {
         (reference: Interfaces.Reference) => {
             const modifiedReference = getTransformedReference(reference);
 
-            if (typeof selectedReferenceIndex === 'number') {
+            if (isAddingReference && selectedReferenceIndex !== null) {
                 // it's a new reference
                 const newReferencesArray = [...references];
                 // add new reference right after the selected index
                 newReferencesArray.splice(selectedReferenceIndex + 1, 0, modifiedReference);
                 updateReferences(newReferencesArray);
-                setSelectedReferenceIndex(null);
-                return setSelectedReference(null);
+                return handleCloseReferenceModal();
             }
 
             updateReferences(
@@ -126,7 +126,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             );
             setSelectedReference(null);
         },
-        [references, selectedReferenceIndex, updateReferences]
+        [handleCloseReferenceModal, isAddingReference, references, selectedReferenceIndex, updateReferences]
     );
 
     return (
@@ -241,7 +241,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         aria-hidden="true"
                                                     />
                                                 }
-                                                onClick={() => setSelectedReference(reference)}
+                                                onClick={() => {
+                                                    if (isAddingReference) {
+                                                        setSelectedReferenceIndex(null); // reset modal title
+                                                    }
+                                                    setSelectedReference(reference);
+                                                }}
                                             />
                                         </td>
                                         <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
@@ -302,9 +307,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <Components.EditReferenceModal
+                title={isAddingReference ? 'Add reference' : 'Edit reference'}
                 reference={selectedReference}
                 onSave={saveReferenceChanges}
-                onClose={handleClose}
+                onClose={handleCloseReferenceModal}
             />
         </div>
     );
