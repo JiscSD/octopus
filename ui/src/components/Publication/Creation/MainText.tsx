@@ -210,9 +210,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             )}
                                         </td>
                                         <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <button
-                                                className="rounded-full p-2"
-                                                title="Add reference"
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Add"
+                                                icon={
+                                                    <FAIcons.FaPlus
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                }
                                                 onClick={() => {
                                                     setSelectedReferenceIndex(index);
                                                     setSelectedReference({
@@ -223,33 +229,30 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         location: null
                                                     });
                                                 }}
-                                            >
-                                                <FAIcons.FaPlus
-                                                    className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                    aria-hidden="true"
-                                                />
-                                            </button>
+                                            />
                                         </td>
                                         <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <button
-                                                className="rounded-full p-2"
-                                                title="Edit reference"
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Edit"
+                                                icon={
+                                                    <FAIcons.FaEdit
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                }
                                                 onClick={() => setSelectedReference(reference)}
-                                            >
-                                                <FAIcons.FaEdit
-                                                    className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                    aria-hidden="true"
-                                                />
-                                            </button>
+                                            />
                                         </td>
                                         <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <button
-                                                className="rounded-full p-2"
-                                                title="Delete reference"
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Delete"
+                                                icon={
+                                                    <OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                                }
                                                 onClick={() => destroyReference(reference.id)}
-                                            >
-                                                <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                            </button>
+                                            />
                                         </td>
                                     </tr>
                                 ))}
