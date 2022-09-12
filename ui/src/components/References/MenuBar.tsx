@@ -1,11 +1,17 @@
 import * as React from 'react';
-import * as Interfaces from '@interfaces'
 import * as FAIcons from 'react-icons/fa';
+import * as tiptap from '@tiptap/react';
 
 const menuIconStyles = 'p-2 hover:bg-grey-100 hover:rounded focus:outline-yellow-500';
 const activeMenuIconStyles = 'p-2 bg-grey-100 rounded focus:outline-yellow-500';
 
-const MenuBar = (props: Interfaces.MenuBarProps) => {
+type MenuBarProps = {
+    editor: tiptap.Editor;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const MenuBar: React.FC<MenuBarProps> = (props) => {
     return (
         props.editor && (
             <div className="flex items-center">
@@ -59,4 +65,4 @@ const MenuBar = (props: Interfaces.MenuBarProps) => {
     );
 };
 
-export default MenuBar;
+export default React.memo(MenuBar);

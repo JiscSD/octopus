@@ -380,9 +380,3 @@ export interface CreationStep {
     component: React.ReactElement;
     icon: React.ReactElement;
 }
-
-export interface MenuBarProps {
-    editor: tiptap.Editor;
-    loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
