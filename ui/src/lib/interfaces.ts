@@ -379,9 +379,14 @@ export interface CreationStep {
     component: React.ReactElement;
     icon: React.ReactElement;
 }
+<<<<<<< HEAD
 
 export interface MenuBarProps {
     editor: tiptap.Editor;
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+=======
+>>>>>>> 815c301 (finished edit single reference)
+
+
