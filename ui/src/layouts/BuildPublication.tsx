@@ -255,7 +255,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             <main className="container flex min-h-screen px-8">
                 {lg ? (
                     <aside
-                        className={`w-full min-w-[18rem] max-w-[22rem] flex-col justify-between border-r border-transparent bg-teal-700 pt-9 transition-all duration-300 dark:border-grey-400 lg:flex 2xl:max-w-[25rem]`}
+                        className={`flex w-[30%] min-w-[18rem] max-w-[22rem] flex-col justify-between border-r border-transparent bg-teal-700 pt-9 transition-all duration-300 dark:border-grey-400 2xl:max-w-[25rem]`}
                     >
                         <ul className="sticky top-0 min-h-[70%] space-y-2">
                             {props.steps.map((step, index) => (
@@ -340,7 +340,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         ></div>
                     </>
                 )}
-                <section className="w-full border-grey-100 py-8 transition-colors duration-500 dark:border-grey-400 lg:py-8 lg:pl-8 xl:py-12 xl:pl-16">
+                <section className="w-full border-grey-100 py-8 transition-colors duration-500 dark:border-grey-400 lg:w-[70%] lg:py-8 lg:pl-8 xl:py-12 xl:pl-16">
                     <div className="mb-12 flex flex-wrap items-center justify-between gap-8">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
                             {Helpers.formatPublicationType(store.type)}

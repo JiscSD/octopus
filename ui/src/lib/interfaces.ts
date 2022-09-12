@@ -1,6 +1,6 @@
+import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
-import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
