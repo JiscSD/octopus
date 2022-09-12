@@ -211,15 +211,14 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
     const destroyReference = (id: string) => {
         updateReferences(references.filter((item) => item.id !== id));
-        setSelectedReference(null)
+        setSelectedReference(null);
         setDeleteModalVisibility(false);
     };
 
     const handleDeleteReference = (reference: Interfaces.Reference) => {
         setSelectedReference(reference);
         setDeleteModalVisibility(true);
-    }
-
+    };
 
     return (
         <>
@@ -227,8 +226,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
                 positiveActionCallback={() => {
-                    if(selectedReference) {
-                        destroyReference(selectedReference.id);                
+                    if (selectedReference) {
+                        destroyReference(selectedReference.id);
                     }
                 }}
                 positiveButtonText="Delete"
@@ -236,7 +235,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 title="Are you sure you want to delete this reference"
                 icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm"> Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. </p>
+                <p className="text-gray-500 text-sm">
+                    {' '}
+                    Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are
+                    you sure you want to delete this reference? This action cannot be undone.{' '}
+                </p>
             </Components.Modal>
             <div className="space-y-12 2xl:space-y-16">
                 <div>
@@ -274,9 +277,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 <div className="space-y-4">
                     <Components.PublicationCreationStepTitle text="References" />
                     <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
-                        Include your reference list for this publication. References should be line-separated and include a
-                        DOI or other URL. Once you have added your references, you can create reference links in the main
-                        text editor.
+                        Include your reference list for this publication. References should be line-separated and
+                        include a DOI or other URL. Once you have added your references, you can create reference links
+                        in the main text editor.
                     </span>
                     <div className="flex flex-col items-end space-y-4">
                         <AddReferences addReferences={addReferences} />
@@ -302,9 +305,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         content={
                                                             reference.location
                                                                 ? reference.text.replaceAll(
-                                                                    reference.location,
-                                                                    `<a href="${reference.location}" target="_blank" rel="noreferrer noopener">${reference.location}</a>`
-                                                                )
+                                                                      reference.location,
+                                                                      `<a href="${reference.location}" target="_blank" rel="noreferrer noopener">${reference.location}</a>`
+                                                                  )
                                                                 : reference.text
                                                         }
                                                     ></Components.ParseHTML>
