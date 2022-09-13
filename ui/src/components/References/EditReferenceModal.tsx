@@ -67,7 +67,7 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
                 as="div"
                 open={true}
                 onClose={onClose}
-                className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto py-20"
+                className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto py-20"
             >
                 <HeadlessUI.Transition.Child
                     as={React.Fragment}

@@ -170,10 +170,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     DOI or other URL. Once you have added your references, you can create reference links in the main
                     text editor.
                 </span>
-                <Components.AddReferences addReferences={addReferences} />
+                <div className="pb-8">
+                    <Components.AddReferences addReferences={addReferences} />
+                </div>
                 {references && references.length > 0 && (
-                    <div className="overflow-x-auto pt-8 shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                        <table className="w-full divide-y divide-grey-100 overflow-hidden rounded-lg dark:divide-teal-300">
+                    <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
+                        <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
                             <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                 <tr>
                                     <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
