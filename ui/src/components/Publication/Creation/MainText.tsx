@@ -223,15 +223,29 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         aria-hidden="true"
                                                     />
                                                 }
-                                                onClick={() => {
-                                                    setSelectedReferenceIndex(index);
-                                                    setSelectedReference({
-                                                        id: cuid(), // generate new id
-                                                        publicationId,
-                                                        text: '',
-                                                        type: 'TEXT',
-                                                        location: null
-                                                    });
+                                                onClick={async () => {
+                                                    const confirmed = await confirmation(
+                                                        'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
+                                                        'Are you sure you want to add this reference?',
+                                                        <FAIcons.FaPlus
+                                                            className="h-8 w-8 text-grey-600"
+                                                            aria-hidden="true"
+                                                        />,
+                                                        'Continue'
+                                                    );
+
+                                                    if (confirmed) {
+                                                        setTimeout(() => {
+                                                            setSelectedReferenceIndex(index);
+                                                            setSelectedReference({
+                                                                id: cuid(), // generate new id
+                                                                publicationId,
+                                                                text: '',
+                                                                type: 'TEXT',
+                                                                location: null
+                                                            });
+                                                        }, 300); // wait for confirmation  modal transition
+                                                    }
                                                 }}
                                             />
                                         </td>
