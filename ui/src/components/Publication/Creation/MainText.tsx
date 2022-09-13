@@ -236,9 +236,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
-                    {' '}
                     Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are
-                    you sure you want to delete this reference? This action cannot be undone.{' '}
+                    you sure you want to delete this reference? This action cannot be undone.
                 </p>
             </Components.Modal>
             <div className="space-y-12 2xl:space-y-16">
