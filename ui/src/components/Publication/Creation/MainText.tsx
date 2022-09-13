@@ -100,7 +100,6 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences(referencesArray);
     };
 
-
     const destroyReference = (id: string) => {
         updateReferences(references.filter((item) => item.id !== id));
     };
@@ -218,11 +217,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
                                                         'Are you sure you want to delete this reference?',
                                                         <OutlineIcons.TrashIcon
-                                                            className='h-10 w-10 text-grey-600'
-                                                            aria-hidden="true"/>
-                                                    )
-                                                    if(confirmed) {
-                                                        destroyReference(reference.id)
+                                                            className="h-10 w-10 text-grey-600"
+                                                            aria-hidden="true"
+                                                        />
+                                                    );
+                                                    if (confirmed) {
+                                                        destroyReference(reference.id);
                                                     }
                                                 }}
                                                 className="rounded-full"
