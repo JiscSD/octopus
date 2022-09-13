@@ -219,7 +219,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         <OutlineIcons.TrashIcon
                                                             className="h-10 w-10 text-grey-600"
                                                             aria-hidden="true"
-                                                        />
+                                                        />,
+                                                        'Delete'
                                                     );
                                                     if (confirmed) {
                                                         destroyReference(reference.id);
