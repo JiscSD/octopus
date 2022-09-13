@@ -8,6 +8,7 @@ import * as Types from '@types';
 import * as Interfaces from '@interfaces';
 import * as FAIcons from 'react-icons/fa';
 import * as Config from '@config';
+import * as Contexts from '@contexts';
 
 import cuid from 'cuid';
 
@@ -66,6 +67,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences
     } = Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
+    const confirmation = Contexts.useConfirmationModal();
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -210,7 +212,20 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                         </td>
                                         <td className="py-4 px-6 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                             <button
-                                                onClick={() => destroyReference(reference.id)}
+                                                onClick={async () => {
+                                                    const confirmed = await confirmation(
+                                                        'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
+                                                        'Are you sure you want to delete this reference?',
+                                                        <OutlineIcons.TrashIcon
+                                                            className="h-10 w-10 text-grey-600"
+                                                            aria-hidden="true"
+                                                        />,
+                                                        'Delete'
+                                                    );
+                                                    if (confirmed) {
+                                                        destroyReference(reference.id);
+                                                    }
+                                                }}
                                                 className="rounded-full"
                                             >
                                                 <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
