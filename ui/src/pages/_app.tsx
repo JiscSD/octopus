@@ -10,6 +10,7 @@ import * as Types from '@types';
 import * as api from '@api';
 
 import '../styles/globals.css';
+import * as Contexts from '@contexts';
 
 const App = ({ Component, pageProps }: Types.AppProps) => {
     const isMounted = React.useRef(false);
@@ -47,7 +48,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     }, []);
 
     return (
-        <>
+        <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
@@ -90,7 +91,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     </Framer.MotionConfig>
                 </SWR.SWRConfig>
             )}
-        </>
+        </Contexts.ConfirmationModalProvider>
     );
 };
 
