@@ -8,6 +8,7 @@ import * as Types from '@types';
 import * as Interfaces from '@interfaces';
 import * as FAIcons from 'react-icons/fa';
 import * as Config from '@config';
+import * as Contexts from '@contexts';
 
 import cuid from 'cuid';
 
@@ -68,6 +69,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
     const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
     const isAddingReference = useMemo(() => selectedReferenceIndex !== null, [selectedReferenceIndex]);
+    const confirmation = Contexts.useConfirmationModal();
 
     const addReferences = (editorContent: string) => {
         const paragraphsArray = editorContent.match(/<p>(.*?)<\/p>/g) || [];
@@ -258,7 +260,20 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 icon={
                                                     <OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                                 }
-                                                onClick={() => destroyReference(reference.id)}
+                                                onClick={async () => {
+                                                    const confirmed = await confirmation(
+                                                        'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
+                                                        'Are you sure you want to delete this reference?',
+                                                        <OutlineIcons.TrashIcon
+                                                            className="h-10 w-10 text-grey-600"
+                                                            aria-hidden="true"
+                                                        />,
+                                                        'Delete'
+                                                    );
+                                                    if (confirmed) {
+                                                        destroyReference(reference.id);
+                                                    }
+                                                }}
                                             />
                                         </td>
                                     </tr>
