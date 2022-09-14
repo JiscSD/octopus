@@ -65,8 +65,8 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
         // eslint-disable-next-line @typescript-eslint/dot-notation
         const works = userInformation['activities-summary'].works['group'].map((work) => ({
             title: work['work-summary'][0].title.title.value || null,
-            doi: work['work-summary'][0]['external-ids'] === null ? null :
-                work['work-summary'][0]['external-ids']['external-id'].find(
+            doi:
+                work['work-summary'][0]['external-ids']?.['external-id'].find(
                     (externalId) => externalId['external-id-type'] === 'doi'
                 )?.['external-id-value'] || null,
             publishedDate: {
