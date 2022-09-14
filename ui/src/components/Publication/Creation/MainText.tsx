@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -67,6 +67,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences
     } = Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
+    const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
+    const isAddingReference = useMemo(() => selectedReferenceIndex !== null, [selectedReferenceIndex]);
     const confirmation = Contexts.useConfirmationModal();
 
     const addReferences = (editorContent: string) => {
@@ -104,19 +106,29 @@ const MainText: React.FC = (): React.ReactElement | null => {
         updateReferences(references.filter((item) => item.id !== id));
     };
 
-    const handleClose = useCallback(() => {
+    const handleCloseReferenceModal = useCallback(() => {
         setSelectedReference(null);
     }, []);
 
     const saveReferenceChanges = useCallback(
         (reference: Interfaces.Reference) => {
             const modifiedReference = getTransformedReference(reference);
+
+            if (isAddingReference && selectedReferenceIndex !== null) {
+                // it's a new reference
+                const newReferencesArray = [...references];
+                // add new reference right after the selected index
+                newReferencesArray.splice(selectedReferenceIndex + 1, 0, modifiedReference);
+                updateReferences(newReferencesArray);
+                return handleCloseReferenceModal();
+            }
+
             updateReferences(
                 references.map((reference) => (reference.id === modifiedReference.id ? modifiedReference : reference))
             );
             setSelectedReference(null);
         },
-        [references, updateReferences]
+        [handleCloseReferenceModal, isAddingReference, references, selectedReferenceIndex, updateReferences]
     );
 
     return (
@@ -160,10 +172,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     DOI or other URL. Once you have added your references, you can create reference links in the main
                     text editor.
                 </span>
-                <Components.AddReferences addReferences={addReferences} />
+                <div className="pb-8">
+                    <Components.AddReferences addReferences={addReferences} />
+                </div>
                 {references && references.length > 0 && (
-                    <div className="overflow-x-auto pt-8 shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                        <table className="w-full divide-y divide-grey-100 overflow-hidden rounded-lg dark:divide-teal-300">
+                    <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
+                        <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
                             <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                 <tr>
                                     <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
@@ -174,10 +188,11 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                     </th>
                                     <th></th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                {references.map((reference) => (
+                                {references.map((reference, index) => (
                                     <tr key={reference.id}>
                                         <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
                                             <Components.ParseHTML
@@ -198,20 +213,67 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 </Components.Link>
                                             )}
                                         </td>
-                                        <td className="py-4 px-6 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <button
-                                                onClick={() => setSelectedReference(reference)}
-                                                title="Edit reference"
-                                                className="rounded-full"
-                                            >
-                                                <FAIcons.FaEdit
-                                                    className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                    aria-hidden="true"
-                                                />
-                                            </button>
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Add"
+                                                icon={
+                                                    <FAIcons.FaPlus
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                }
+                                                onClick={async () => {
+                                                    const confirmed = await confirmation(
+                                                        'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
+                                                        'Are you sure you want to add this reference?',
+                                                        <FAIcons.FaPlus
+                                                            className="h-8 w-8 text-grey-600"
+                                                            aria-hidden="true"
+                                                        />,
+                                                        'Continue'
+                                                    );
+
+                                                    if (confirmed) {
+                                                        setTimeout(() => {
+                                                            setSelectedReferenceIndex(index);
+                                                            setSelectedReference({
+                                                                id: cuid(), // generate new id
+                                                                publicationId,
+                                                                text: '',
+                                                                type: 'TEXT',
+                                                                location: null
+                                                            });
+                                                        }, 300); // wait for confirmation  modal transition
+                                                    }
+                                                }}
+                                            />
                                         </td>
-                                        <td className="py-4 px-6 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <button
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Edit"
+                                                icon={
+                                                    <FAIcons.FaEdit
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                }
+                                                onClick={() => {
+                                                    if (isAddingReference) {
+                                                        setSelectedReferenceIndex(null); // reset modal title
+                                                    }
+                                                    setSelectedReference(reference);
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Delete"
+                                                icon={
+                                                    <OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                                }
                                                 onClick={async () => {
                                                     const confirmed = await confirmation(
                                                         'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
@@ -226,10 +288,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         destroyReference(reference.id);
                                                     }
                                                 }}
-                                                className="rounded-full"
-                                            >
-                                                <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                            </button>
+                                            />
                                         </td>
                                     </tr>
                                 ))}
@@ -279,9 +338,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <Components.EditReferenceModal
+                title={isAddingReference ? 'Add reference' : 'Edit reference'}
                 reference={selectedReference}
                 onSave={saveReferenceChanges}
-                onClose={handleClose}
+                onClose={handleCloseReferenceModal}
             />
         </div>
     );

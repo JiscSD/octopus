@@ -11,12 +11,13 @@ import Underline from '@tiptap/extension-underline';
 import MenuBar from './MenuBar';
 
 type Props = {
+    title: string;
     reference: Interfaces.Reference | null;
     onSave: (reference: Interfaces.Reference) => void;
     onClose: () => void;
 };
 
-const EditReferenceModal: React.FC<Props> = ({ reference, onSave, onClose }): React.ReactElement => {
+const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose }): React.ReactElement => {
     const [loading, setLoading] = useState(true);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -66,7 +67,7 @@ const EditReferenceModal: React.FC<Props> = ({ reference, onSave, onClose }): Re
                 as="div"
                 open={true}
                 onClose={onClose}
-                className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto py-20"
+                className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto py-20"
             >
                 <HeadlessUI.Transition.Child
                     as={React.Fragment}
@@ -94,7 +95,7 @@ const EditReferenceModal: React.FC<Props> = ({ reference, onSave, onClose }): Re
                             as="h3"
                             className="pb-4 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"
                         >
-                            Edit reference
+                            {title}
                         </HeadlessUI.Dialog.Title>
                         {textEditor && (
                             <div className="w-full rounded-md border border-grey-100 bg-white-50 p-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
