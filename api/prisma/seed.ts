@@ -6,7 +6,7 @@ import * as client from '../src/lib/client';
 
 export const initialDevSeed = async (): Promise<void> => {
     // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
+    await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
 
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'
@@ -18,36 +18,9 @@ export const initialDevSeed = async (): Promise<void> => {
         });
     }
 
-    // Create publications
-    // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
-    for (const publication of SeedData.publicationsDevSeedData) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: publication
-        });
 
-        if (publication.currentStatus === 'LIVE') {
-            await client.search.create({
-                index: 'publications',
-                id: publication.id,
-                body: {
-                    id: publication.id,
-                    type: publication.type,
-                    title: publication.title,
-                    licence: publication.licence,
-                    description: publication.description,
-                    keywords: publication.keywords,
-                    content: publication.content,
-                    language: 'en',
-                    currentStatus: publication.currentStatus,
-                    publishedDate: publication.publishedDate,
-                    cleanContent: htmlToText.convert(publication.content)
-                }
-            });
-        }
-    }
 
-    for (const problem of SeedData.problems) {
+    for (const problem of SeedData.problemsProd) {
         await client.prisma.publication.create({
             // @ts-ignore
             data: problem

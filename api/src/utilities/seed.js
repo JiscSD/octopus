@@ -11,7 +11,6 @@ const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
     for (const row of rows) {
-        console.log(titleIDStore);
         index++;
         // Skip header of csv
         if (index === 0) {
@@ -56,6 +55,8 @@ if(!url || !apiKey) {
     console.log("API_URL and API_KEY env vars need to be set")
 }
 
+console.log(`API_URL= ${url} API_KEY= ${apiKey}`)
+
 const createPublication = async (title, content) => {
     try {
         const payload = {
@@ -66,9 +67,9 @@ const createPublication = async (title, content) => {
    	        language: 'en',
             licence: 'CC_BY',
             content: content || title,
-            description: title || ''
+            description: title.substr(0,160) || ''
         };
-        console.log(payload);
+        //console.log(payload);
         const create = await axios.post(`${url}/publications?apiKey=${apiKey}`, payload);
         return create.data;
     } catch (err) {
