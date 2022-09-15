@@ -26,60 +26,60 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
 
         const userInformation: I.ORCIDUser = ORCIDRequestPublicUserResponse.data;
 
-        const employment = userInformation['activities-summary'].employments['affiliation-group'].map(
+        const employment = userInformation?.['activities-summary']?.employments['affiliation-group'].map(
             (employmentItem) => ({
-                organisation: employmentItem.summaries[0]['employment-summary'].organization.name || null,
-                role: employmentItem.summaries[0]['employment-summary']['role-title'] || null,
-                department: employmentItem.summaries[0]['department-name'] || null,
+                organisation: employmentItem?.summaries?.[0]?.['employment-summary']?.organization?.name || null,
+                role: employmentItem?.summaries?.[0]?.['employment-summary']?.['role-title'] || null,
+                department: employmentItem?.summaries?.[0]?.['department-name'] || null,
                 startDate: {
-                    day: employmentItem.summaries[0]['employment-summary']['start-date']?.day?.value || null,
-                    month: employmentItem.summaries[0]['employment-summary']['start-date']?.month?.value || null,
-                    year: employmentItem.summaries[0]['employment-summary']['start-date']?.year?.value || null
+                    day: employmentItem?.summaries?.[0]?.['employment-summary']?.['start-date']?.day?.value || null,
+                    month: employmentItem?.summaries?.[0]?.['employment-summary']?.['start-date']?.month?.value || null,
+                    year: employmentItem?.summaries?.[0]?.['employment-summary']?.['start-date']?.year?.value || null
                 },
                 endDate: {
-                    day: employmentItem.summaries[0]['employment-summary']['end-date']?.day?.value || null,
-                    month: employmentItem.summaries[0]['employment-summary']['end-date']?.month?.value || null,
-                    year: employmentItem.summaries[0]['employment-summary']['end-date']?.year?.value || null
+                    day: employmentItem?.summaries?.[0]?.['employment-summary']?.['end-date']?.day?.value || null,
+                    month: employmentItem?.summaries?.[0]?.['employment-summary']?.['end-date']?.month?.value || null,
+                    year: employmentItem?.summaries?.[0]?.['employment-summary']?.['end-date']?.year?.value || null
                 }
             })
-        );
+        ) || null;
 
-        const education = userInformation['activities-summary'].educations['affiliation-group'].map(
+        const education = userInformation?.['activities-summary']?.educations['affiliation-group'].map(
             (educationItem) => ({
-                organisation: educationItem.summaries[0]['education-summary'].organization.name || null,
-                role: educationItem.summaries[0]['education-summary']['role-title'] || null,
-                department: educationItem.summaries[0]['department-name'] || null,
+                organisation: educationItem?.summaries?.[0]?.['education-summary']?.organization?.name || null,
+                role: educationItem?.summaries?.[0]?.['education-summary']?.['role-title'] || null,
+                department: educationItem?.summaries?.[0]?.['department-name'] || null,
                 startDate: {
-                    day: educationItem.summaries[0]['education-summary']['start-date']?.day?.value || null,
-                    month: educationItem.summaries[0]['education-summary']['start-date']?.month?.value || null,
-                    year: educationItem.summaries[0]['education-summary']['start-date']?.year?.value || null
+                    day: educationItem?.summaries?.[0]?.['education-summary']?.['start-date']?.day?.value || null,
+                    month: educationItem?.summaries?.[0]?.['education-summary']?.['start-date']?.month?.value || null,
+                    year: educationItem?.summaries?.[0]?.['education-summary']?.['start-date']?.year?.value || null
                 },
                 endDate: {
-                    day: educationItem.summaries[0]['education-summary']['end-date']?.day?.value || null,
-                    month: educationItem.summaries[0]['education-summary']['end-date']?.month?.value || null,
-                    year: educationItem.summaries[0]['education-summary']['end-date']?.year?.value || null
+                    day: educationItem?.summaries?.[0]?.['education-summary']?.['end-date']?.day?.value || null,
+                    month: educationItem?.summaries?.[0]?.['education-summary']?.['end-date']?.month?.value || null,
+                    year: educationItem?.summaries?.[0]?.['education-summary']?.['end-date']?.year?.value || null
                 }
             })
-        );
+        ) || null;
 
         // eslint-disable-next-line @typescript-eslint/dot-notation
-        const works = userInformation['activities-summary'].works['group'].map((work) => ({
-            title: work['work-summary'][0].title.title.value || null,
+        const works = userInformation?.['activities-summary']?.works['group'].map((work) => ({
+            title: work['work-summary']?.[0]?.title?.title?.value || null,
             doi:
-                work['work-summary'][0]['external-ids']['external-id'].find(
+                work['work-summary']?.[0]?.['external-ids']?.['external-id'].find(
                     (externalId) => externalId['external-id-type'] === 'doi'
                 )?.['external-id-value'] || null,
             publishedDate: {
-                day: work['work-summary'][0]['publication-date']?.day?.value || null,
-                month: work['work-summary'][0]['publication-date']?.month?.value || null,
-                year: work['work-summary'][0]['publication-date']?.year?.value || null
+                day: work['work-summary']?.[0]?.['publication-date']?.day?.value || null,
+                month: work['work-summary']?.[0]?.['publication-date']?.month?.value || null,
+                year: work['work-summary']?.[0]?.['publication-date']?.year?.value || null
             },
-            url: work['work-summary'][0]?.url?.value || null
-        }));
+            url: work['work-summary']?.[0]?.url?.value || null
+        })) || null;
 
         const user = await userService.upsertUser(orcidRequest.data.orcid, {
-            firstName: userInformation.person.name['given-names']?.value || '',
-            lastName: userInformation.person.name['family-name']?.value || '',
+            firstName: userInformation?.person?.name?.['given-names']?.value || '',
+            lastName: userInformation?.person?.name?.['family-name']?.value || '',
             employment,
             education,
             works
