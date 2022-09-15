@@ -20,7 +20,7 @@ const create: I.Schema = {
             type: 'string'
         }
     },
-    required: ['type', 'text'],
+    required: ['type', 'text', 'id', 'publicationId'],
     additionalProperties: false
 };
 

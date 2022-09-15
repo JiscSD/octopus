@@ -1,6 +1,7 @@
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as referenceService from 'reference/service';
+import * as publicationService from 'publication/service';
 
 export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePath>) => {
     try {
@@ -14,7 +15,25 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.CreateReferencePath>) => {
     try {
-        const reference = await referenceService.create({ publicationId: event.pathParameters.id, ...event.body });
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You can only add references to a draft publication.'
+            });
+        }
+
+        // if (event.body.id == "" || event.body.publicationId == "" || event.body.publicationId )
+
+        const reference = await referenceService.create({ ...event.body });
 
         return response.json(200, reference);
     } catch (err) {
@@ -24,6 +43,22 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
 
 export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.UpdateReferencePath>) => {
     try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You can only add references to a draft publication.'
+            });
+        }
+
         const reference = await referenceService.update(event.pathParameters.referenceId, event.body);
 
         return response.json(200, reference);
@@ -34,6 +69,22 @@ export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
 
 export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>) => {
     try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You can only add references to a draft publication.'
+            });
+        }
+
         const reference = await referenceService.updateAll(event.pathParameters.id, event.body);
 
         return response.json(200, reference);
@@ -45,6 +96,21 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
 
 export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateReferencePath>) => {
     try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You can only remove references from a draft publication.'
+            });
+        }
         const reference = await referenceService.remove(event.pathParameters.referenceId);
 
         return response.json(200, reference);
@@ -55,7 +121,22 @@ export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefin
 
 export const removeAll = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemoveAllReferencesPath>) => {
     try {
-        const reference = await referenceService.removeAll(event.pathParameters.publicationId);
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You can only remove references from a draft publication.'
+            });
+        }
+        const reference = await referenceService.removeAll(event.pathParameters.id);
 
         return response.json(200, reference);
     } catch (err) {

@@ -434,7 +434,7 @@ export interface UpdateReferencePath {
 }
 
 export interface RemoveAllReferencesPath {
-    publicationId: string;
+    id: string;
 }
 
 export interface OctopusInformation {

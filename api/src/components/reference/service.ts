@@ -10,7 +10,7 @@ export const getAllByPublication = async (publicationId: string) => {
     return references;
 };
 
-export const create = async (data) => {
+export const create = async (data: I.Reference) => {
     const created = await client.prisma.references.create({ data });
     return created;
 };
