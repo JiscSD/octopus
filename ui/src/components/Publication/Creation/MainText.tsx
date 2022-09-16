@@ -12,43 +12,60 @@ import * as Contexts from '@contexts';
 
 import cuid from 'cuid';
 
-const getTransformedReference = (reference: Interfaces.Reference): Interfaces.Reference => {
-    const URL_REGEX = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g;
-    const urlMatches = reference.text.match(URL_REGEX) || [];
-
-    if (!urlMatches?.length) {
-        // no urls have been found
-        return {
-            ...reference,
-            type: 'TEXT',
-            text: reference.text,
-            location: null
-        };
-    }
+const getTransformedReference = (reference: Interfaces.Reference, textContent: string): Interfaces.Reference => {
+    const urlMatches = Helpers.getURLsFromText(textContent);
 
     // reverse the order for easier access
     const reversedUrlMatches = urlMatches.reverse(); // we only need the last DOI/URL
 
-    // get the last valid DOI url
-    const DOI_REGEX = /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g;
-    const doiUrl = reversedUrlMatches.find((match) => DOI_REGEX.test(match));
+    // get the last valid DOI url if exists
+    const doiUrl = reversedUrlMatches.find((match) => Helpers.validateDOI(match));
 
     if (doiUrl) {
         return {
             ...reference,
             type: 'DOI',
-            text: reference.text,
+            text: reference.text.replace(doiUrl, ''),
             location: doiUrl
         };
     }
 
+    // check for DOI strings
+    const doiStrings = Helpers.getFullDOIsStrings(textContent);
+    if (doiStrings.length) {
+        // get the last DOI string
+        const lastDoiString = doiStrings.pop();
+        if (lastDoiString) {
+            // extract the DOI only
+            const doi = Helpers.getDOIsFromText(lastDoiString)[0];
+            if (doi) {
+                return {
+                    ...reference,
+                    type: 'DOI',
+                    text: reference.text.replace(lastDoiString, ''), // remove DOI string
+                    location: `https://doi.org/${doi}` // convert to DOI url
+                };
+            }
+        }
+    }
+
     // extract the last URL
     const lastUrl = reversedUrlMatches[0];
+    if (lastUrl) {
+        return {
+            ...reference,
+            type: 'URL',
+            text: reference.text.replace(lastUrl, ''),
+            location: lastUrl
+        };
+    }
+
+    // no urls have been found
     return {
         ...reference,
-        type: 'URL',
+        type: 'TEXT',
         text: reference.text,
-        location: lastUrl
+        location: null
     };
 };
 
@@ -89,13 +106,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 continue; // don't add empty references
             }
 
-            const newReference = getTransformedReference({
-                id: cuid(),
-                publicationId,
-                type: 'TEXT',
-                text: currentParagraph,
-                location: null
-            });
+            const newReference = getTransformedReference(
+                {
+                    id: cuid(),
+                    publicationId,
+                    type: 'TEXT',
+                    text: currentParagraph,
+                    location: null
+                },
+                textContent
+            );
 
             referencesArray.push(newReference);
         }
@@ -111,20 +131,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
     }, []);
 
     const saveReferenceChanges = useCallback(
-        (reference: Interfaces.Reference) => {
-            const modifiedReference = getTransformedReference(reference);
-
+        (newReference: Interfaces.Reference) => {
             if (isAddingReference && selectedReferenceIndex !== null) {
                 // it's a new reference
                 const newReferencesArray = [...references];
                 // add new reference right after the selected index
-                newReferencesArray.splice(selectedReferenceIndex + 1, 0, modifiedReference);
+                newReferencesArray.splice(selectedReferenceIndex + 1, 0, newReference);
                 updateReferences(newReferencesArray);
                 return handleCloseReferenceModal();
             }
 
             updateReferences(
-                references.map((reference) => (reference.id === modifiedReference.id ? modifiedReference : reference))
+                references.map((reference) => (reference.id === newReference.id ? newReference : reference))
             );
             setSelectedReference(null);
         },
@@ -195,16 +213,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 {references.map((reference, index) => (
                                     <tr key={reference.id}>
                                         <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
-                                            <Components.ParseHTML
-                                                content={
-                                                    reference.location
-                                                        ? reference.text.replaceAll(
-                                                              reference.location,
-                                                              `<a href="${reference.location}" target="_blank" rel="noreferrer noopener">${reference.location}</a>`
-                                                          )
-                                                        : reference.text
-                                                }
-                                            ></Components.ParseHTML>
+                                            <Components.ParseHTML content={reference.text} />
                                         </td>
                                         <td className="w-[40%] min-w-[250px] break-all py-4 pl-4 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                             {reference.location && (

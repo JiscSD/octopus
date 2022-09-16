@@ -5,10 +5,12 @@ import * as Components from '@components';
 import * as tiptap from '@tiptap/react';
 import * as Config from '@config';
 import * as HeadlessUI from '@headlessui/react';
+import * as Helpers from '@helpers';
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import MenuBar from './MenuBar';
+import Placeholder from '@tiptap/extension-placeholder';
 
 type Props = {
     title: string;
@@ -20,10 +22,19 @@ type Props = {
 const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose }): React.ReactElement => {
     const [loading, setLoading] = useState(true);
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [referenceLink, setReferenceLink] = useState<string | null | undefined>(null);
 
     const textEditor = tiptap.useEditor({
         content: reference?.text,
-        extensions: [StarterKit, Underline],
+        extensions: [
+            StarterKit,
+            Underline,
+            Placeholder.configure({
+                placeholder: 'Type your reference text...',
+                emptyEditorClass:
+                    'cursor-text before:content-[attr(data-placeholder)] before:absolute before:opacity-60 before-pointer-events-none'
+            })
+        ],
         onSelectionUpdate: () => setLoading(true),
         editorProps: {
             attributes: {
@@ -35,6 +46,7 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
     useEffect(() => {
         if (reference?.id) {
             textEditor?.commands?.setContent(reference.text);
+            setReferenceLink(reference.location);
             setSubmitError(null);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,8 +70,16 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
             return setSubmitError('New lines are not allowed within the reference text.');
         }
 
-        onSave({ ...reference, text: htmlString });
-    }, [onSave, reference, textEditor]);
+        if (referenceLink) {
+            const isValidUrl = Helpers.validateURL(referenceLink?.trim());
+
+            if (!isValidUrl) {
+                return setSubmitError('Reference link must be a valid URL starting with "http".');
+            }
+        }
+
+        onSave({ ...reference, text: htmlString, location: referenceLink?.trim() });
+    }, [onSave, reference, referenceLink, textEditor]);
 
     return (
         <HeadlessUI.Transition.Root show={Boolean(reference)} as={React.Fragment}>
@@ -103,6 +123,14 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
                                 <tiptap.EditorContent editor={textEditor} />
                             </div>
                         )}
+
+                        <input
+                            className="mt-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
+                            autoComplete="off"
+                            placeholder="Type your reference link..."
+                            value={referenceLink || ''}
+                            onChange={(e) => setReferenceLink(e.target.value)}
+                        />
 
                         {submitError && <Components.Alert severity="WARNING" title={submitError} className="mt-4" />}
 
