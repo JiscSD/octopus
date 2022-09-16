@@ -31,7 +31,11 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
             });
         }
 
-        // if (event.body.id == "" || event.body.publicationId == "" || event.body.publicationId )
+        if (event.body.publicationId !== event.pathParameters.id || event.body.id == '' || event.body.text == '') {
+            return response.json(422, {
+                message: 'Please fill out all of the required fields.'
+            });
+        }
 
         const reference = await referenceService.create({ ...event.body });
 
