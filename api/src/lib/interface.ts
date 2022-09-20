@@ -433,7 +433,7 @@ export interface UpdateReferencePath {
     referenceId: string;
 }
 
-export interface RemoveAllReferencesPath {
+export interface RemoveAllReferencesPathParams {
     id: string;
 }
 

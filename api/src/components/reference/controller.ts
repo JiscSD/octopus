@@ -123,7 +123,9 @@ export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefin
     }
 };
 
-export const removeAll = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemoveAllReferencesPath>) => {
+export const removeAll = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemoveAllReferencesPathParams>
+) => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
