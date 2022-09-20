@@ -395,16 +395,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <Components.PublicationContentSection id="references" title="References" hasBreak>
                         {references.map((reference) => (
                             <div key={reference.id} className="py-2">
-                                <Components.ParseHTML
-                                    content={
-                                        reference.location
-                                            ? reference.text.replaceAll(
-                                                  reference.location,
-                                                  `<a href="${reference.location}" target="_blank" rel="noreferrer noopener">${reference.location}</a>`
-                                              )
-                                            : reference.text
-                                    }
-                                />
+                                <Components.ParseHTML content={reference.text} />
+                                {reference.location && (
+                                    <div className="underline dark:text-white-50">
+                                        <Components.Link href={reference.location} openNew>
+                                            {reference.location}
+                                        </Components.Link>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </Components.PublicationContentSection>
