@@ -136,6 +136,13 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: get
                   cors: true
+    getUserPublications:
+        handler: src/components/user/routes.getPublications
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/{id}/publications
+                  method: get
+                  cors: true
     # Auth
     authorization:
         handler: src/components/authorization/routes.authorize
@@ -144,11 +151,11 @@ functions:
                   path: ${self:custom.versions.v1}/authorization
                   method: post
                   cors: true
-    getUserPublications:
-        handler: src/components/user/routes.getPublications
+    verifyToken:
+        handler: src/components/authorization/routes.verifyToken
         events:
             - http:
-                  path: ${self:custom.versions.v1}/users/{id}/publications
+                  path: ${self:custom.versions.v1}/verifyToken
                   method: get
                   cors: true
     # Links

@@ -1,12 +1,11 @@
+import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import fileDownload from 'js-file-download';
 import JWT from 'jsonwebtoken';
-import * as luxon from 'luxon';
-import React from 'react';
 
+import * as luxon from 'luxon';
 import * as Config from '@config';
-import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 /**
@@ -153,32 +152,43 @@ export const clearJWT = () => {
 };
 
 /**
+ * @description returns JWT from browser cookies
+ */
+export const getJWT = () => Cookies.get(Config.keys.cookieStorage.token);
+
+/**
  * @description For use in NextJS SSR, check cookies for token & set the response location
  */
 export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
     const cookies = context.req.cookies;
     const token = cookies[Config.keys.cookieStorage.token];
+    const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
+
+    const redirectToORCIDLogin = () => {
+        context.res.writeHead(302, {
+            Location: `${Config.urls.orcidLogin.path}&state=${redirectTo}`
+        });
+
+        context.res.end();
+    };
 
     if (!token) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            ).toString('base64')}`
-        });
-        context.res.end();
-        throw new Error('Token not valid');
+        redirectToORCIDLogin();
     }
 
-    // Only allow users with a verified email to access guarded routes
-    const decoded = JWT.decode(token) as Types.UserType;
+    let decodedToken = JWT.decode(token) as Types.UserType;
 
-    if (!decoded.email && !context.req.url?.startsWith(`${Config.urls.verify.path}`)) {
+    if (!decodedToken) {
+        redirectToORCIDLogin();
+    }
+
+    const { email } = decodedToken; // check user email
+    const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
+
+    // Only allow users with a verified email to access guarded routes
+    if (!email && !isVerifyEmailPage) {
         context.res.writeHead(302, {
-            Location: `${Config.urls.verify.path}?state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            ).toString('base64')}&newUser=true`
+            Location: `${Config.urls.verify.path}?state=${redirectTo}&newUser=true`
         });
         context.res.end();
     }

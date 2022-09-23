@@ -112,7 +112,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             forPublicationID,
             step,
             token,
-            error
+            error,
+            protectedPage: true
         }
     };
 };

@@ -27,7 +27,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             publicationForID,
             publicationType,
-            token
+            token,
+            protectedPage: true
         }
     };
 };

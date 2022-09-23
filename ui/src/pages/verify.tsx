@@ -15,30 +15,20 @@ import * as React from 'react';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     Helpers.guardPrivateRoute(context);
-
-    let state: string | string[] | null = null;
-    let newUser: boolean | null = false;
-
-    if (context.query.state) {
-        state = Buffer.from(String(context.query.state), 'base64url').toString('utf-8');
-    } else {
-        state = '/';
-    }
-
-    if (context.query.newUser) {
-        newUser = Boolean(context.query.newUser == 'true');
-    }
+    const homeUrl = encodeURIComponent(Config.urls.home.path);
+    const { state: redirectTo = homeUrl, newUser } = context.query;
 
     return {
         props: {
-            state,
-            newUser
+            redirectTo,
+            newUser: newUser === 'true',
+            protectedPage: true
         }
     };
 };
 
 type Props = {
-    state: string;
+    redirectTo: string;
     newUser: boolean;
 };
 
@@ -104,7 +94,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 const decodedJWT = Helpers.setAndReturnJWT(getToken.data.token) as Types.UserType;
                 if (decodedJWT && user) setUser({ ...decodedJWT, token: getToken.data.token });
                 setSuccess(true);
-                setTimeout(() => Router.push(decodeURIComponent(props.state)), 1000);
+                setTimeout(() => Router.push(decodeURIComponent(props.redirectTo)), 1000);
             } else {
                 throw new Error();
             }

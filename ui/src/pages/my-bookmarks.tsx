@@ -29,7 +29,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             user,
             usersBookmarks,
-            token
+            token,
+            protectedPage: true
         }
     };
 };

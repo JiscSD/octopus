@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import JWT from 'jsonwebtoken';
+import { useRouter } from 'next/router';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -37,7 +38,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            user
+            user,
+            protectedPage: true
         }
     };
 };
@@ -47,6 +49,7 @@ type Props = {
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {
+    const router = useRouter();
     const livePublications = React.useMemo(
         () => props.user.Publication.filter((publication) => publication.currentStatus === 'LIVE'),
         [props.user.Publication]
@@ -84,7 +87,9 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         {props.user.email && (
                             <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
                                 Email: {props.user.email} (
-                                <Components.Link href={`${Config.urls.verify.path}/?state=/account`}>
+                                <Components.Link
+                                    href={`${Config.urls.verify.path}/?state=${encodeURIComponent(router.asPath)}`}
+                                >
                                     <span className="font-semibold text-teal-500">Update</span>
                                 </Components.Link>
                                 )
