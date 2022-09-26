@@ -66,7 +66,7 @@ export const publicationFlowMainText = async (
     page: Page,
     mainText: string,
     language: Type.Languages,
-    references: string[],
+    references: Array<References>,
     description: string,
     keywords: string
 ) => {
@@ -75,7 +75,7 @@ export const publicationFlowMainText = async (
     await page.keyboard.type(mainText);
     await page.locator(PageModel.publish.text.references).click();
     for (let reference of references) {
-        await page.keyboard.type(`${reference}\n`);
+        await page.keyboard.type(`${reference.reference} ${reference.refURL} \n`);
     }
     await page.locator(PageModel.publish.text.addRefernecesButton).click();
     await page.locator(PageModel.publish.text.language).selectOption(language);
@@ -153,7 +153,15 @@ export const publicationFlowReview = async (
     // Review and publish
 };
 
-const referencesList = ['Ref 1 (doi:10.1177/0272989X11403490)', 'Ref 2 https://www.testrefurl1234.com'];
+interface References {
+    reference: string;
+    refURL: string;
+}
+
+const referencesList: Array<References> = [
+    { reference: 'Pighin S, Savadori L, Barilli E, Cremonesi L', refURL: '(doi:10.1177/0272989X11403490)' },
+    { reference: 'Reyna, V.F. and Brainerd, C.J., 2008. Numeracy', refURL: 'https://www.testrefurl1234.com' }
+];
 
 const problemPublication = {
     pubType: 'Research Problem',
@@ -240,7 +248,7 @@ interface PublicationTestType {
     title: string;
     author: string;
     text: string;
-    references: string[];
+    references: Array<References>;
     coi: string;
     funding: string;
     fundingExtraDetails: string;
@@ -253,7 +261,8 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `text=${publication.licence}`,
         `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
-        `text=${publication.references[0]}`,
+        `text=${publication.references[1].reference}`,
+        `text=${publication.references[1].refURL}`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
         `text=${publication.fundingExtraDetails}`
