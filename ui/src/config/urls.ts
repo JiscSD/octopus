@@ -248,7 +248,7 @@ const urls = {
         canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
+        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket
 };
