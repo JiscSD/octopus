@@ -30,7 +30,7 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
             StarterKit,
             Underline,
             Placeholder.configure({
-                placeholder: 'Type your reference text...',
+                placeholder: 'Add your reference text...',
                 emptyEditorClass:
                     'cursor-text before:content-[attr(data-placeholder)] before:absolute before:opacity-60 before-pointer-events-none'
             })
@@ -117,6 +117,9 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
                         >
                             {title}
                         </HeadlessUI.Dialog.Title>
+                        <h4 className="flex space-x-1 pb-1 font-montserrat text-base font-medium text-grey-800 transition-colors duration-500 dark:text-white-100">
+                            Reference text
+                        </h4>
                         {textEditor && (
                             <div className="w-full rounded-md border border-grey-100 bg-white-50 p-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                                 <MenuBar editor={textEditor} loading={loading} setLoading={setLoading} />
@@ -124,10 +127,14 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
                             </div>
                         )}
 
+                        <h4 className="mt-8 flex space-x-1 pb-1 font-montserrat text-base font-medium text-grey-800 transition-colors duration-500 dark:text-white-100">
+                            Reference link
+                        </h4>
+
                         <input
-                            className="mt-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
                             autoComplete="off"
-                            placeholder="Type your reference link..."
+                            placeholder="Add your reference link..."
                             value={referenceLink || ''}
                             onChange={(e) => setReferenceLink(e.target.value)}
                         />
