@@ -1,6 +1,6 @@
+import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
-import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -88,14 +88,6 @@ export interface Publication extends CorePublication {
     references: Reference[];
 }
 
-export interface Reference {
-    id: string;
-    publicationId: string;
-    type: ReferenceType;
-    text: string;
-    location?: string | null;
-}
-
 export interface PublicationWithLinks {
     rootPublication: Publication;
     linkedToPublications: {
@@ -126,6 +118,7 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
+    publicationId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
