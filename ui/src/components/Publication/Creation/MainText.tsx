@@ -194,116 +194,138 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     <Components.AddReferences addReferences={addReferences} />
                 </div>
                 {references && references.length > 0 && (
-                    <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                        <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
-                            <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
-                                <tr>
-                                    <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
-                                        Title
-                                    </th>
-                                    <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
-                                        Location
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                {references.map((reference, index) => (
-                                    <tr key={reference.id}>
-                                        <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
-                                            <Components.ParseHTML content={reference.text} />
-                                        </td>
-                                        <td className="w-[40%] min-w-[250px] break-all py-4 pl-4 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                            {reference.location && (
-                                                <Components.Link href={reference.location} openNew>
-                                                    {reference.location}
-                                                </Components.Link>
-                                            )}
-                                        </td>
-                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <Components.IconButton
-                                                className="p-2"
-                                                title="Add"
-                                                icon={
-                                                    <FAIcons.FaPlus
-                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                }
-                                                onClick={async () => {
-                                                    const confirmed = await confirmation(
-                                                        'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
-                                                        'Are you sure you want to add this reference?',
-                                                        <FAIcons.FaPlus
-                                                            className="h-8 w-8 text-grey-600"
-                                                            aria-hidden="true"
-                                                        />,
-                                                        'Continue'
-                                                    );
-
-                                                    if (confirmed) {
-                                                        setTimeout(() => {
-                                                            setSelectedReferenceIndex(index);
-                                                            setSelectedReference({
-                                                                id: cuid(), // generate new id
-                                                                publicationId,
-                                                                text: '',
-                                                                type: 'TEXT',
-                                                                location: null
-                                                            });
-                                                        }, 300); // wait for confirmation  modal transition
-                                                    }
-                                                }}
-                                            />
-                                        </td>
-                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <Components.IconButton
-                                                className="p-2"
-                                                title="Edit"
-                                                icon={
-                                                    <FAIcons.FaEdit
-                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                }
-                                                onClick={() => {
-                                                    if (isAddingReference) {
-                                                        setSelectedReferenceIndex(null); // reset modal title
-                                                    }
-                                                    setSelectedReference(reference);
-                                                }}
-                                            />
-                                        </td>
-                                        <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                                            <Components.IconButton
-                                                className="p-2"
-                                                title="Delete"
-                                                icon={
-                                                    <OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                                }
-                                                onClick={async () => {
-                                                    const confirmed = await confirmation(
-                                                        'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
-                                                        'Are you sure you want to delete this reference?',
-                                                        <OutlineIcons.TrashIcon
-                                                            className="h-10 w-10 text-grey-600"
-                                                            aria-hidden="true"
-                                                        />,
-                                                        'Delete'
-                                                    );
-                                                    if (confirmed) {
-                                                        destroyReference(reference.id);
-                                                    }
-                                                }}
-                                            />
-                                        </td>
+                    <>
+                        <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
+                            <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
+                                <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
+                                    <tr>
+                                        <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                            Title
+                                        </th>
+                                        <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                            Location
+                                        </th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
+                                    {references.map((reference, index) => (
+                                        <tr key={reference.id}>
+                                            <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                                <Components.ParseHTML content={reference.text} />
+                                            </td>
+                                            <td className="w-[40%] min-w-[250px] break-all py-4 pl-4 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                                                {reference.location && (
+                                                    <Components.Link href={reference.location} openNew>
+                                                        {reference.location}
+                                                    </Components.Link>
+                                                )}
+                                            </td>
+                                            <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Add"
+                                                    icon={
+                                                        <FAIcons.FaPlus
+                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                            aria-hidden="true"
+                                                        />
+                                                    }
+                                                    onClick={async () => {
+                                                        const confirmed = await confirmation(
+                                                            'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
+                                                            'Are you sure you want to add this reference?',
+                                                            <FAIcons.FaPlus
+                                                                className="h-8 w-8 text-grey-600"
+                                                                aria-hidden="true"
+                                                            />,
+                                                            'Continue'
+                                                        );
+
+                                                        if (confirmed) {
+                                                            setTimeout(() => {
+                                                                setSelectedReferenceIndex(index);
+                                                                setSelectedReference({
+                                                                    id: cuid(), // generate new id
+                                                                    publicationId,
+                                                                    text: '',
+                                                                    type: 'TEXT',
+                                                                    location: null
+                                                                });
+                                                            }, 300); // wait for confirmation  modal transition
+                                                        }
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Edit"
+                                                    icon={
+                                                        <FAIcons.FaEdit
+                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                            aria-hidden="true"
+                                                        />
+                                                    }
+                                                    onClick={() => {
+                                                        if (isAddingReference) {
+                                                            setSelectedReferenceIndex(null); // reset modal title
+                                                        }
+                                                        setSelectedReference(reference);
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Delete"
+                                                    icon={
+                                                        <OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                                    }
+                                                    onClick={async () => {
+                                                        const confirmed = await confirmation(
+                                                            'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
+                                                            'Are you sure you want to delete this reference?',
+                                                            <OutlineIcons.TrashIcon
+                                                                className="h-10 w-10 text-grey-600"
+                                                                aria-hidden="true"
+                                                            />,
+                                                            'Delete'
+                                                        );
+                                                        if (confirmed) {
+                                                            destroyReference(reference.id);
+                                                        }
+                                                    }}
+                                                />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="pb-8 text-right">
+                            <Components.Button
+                                title="Delete all references"
+                                onClick={async () => {
+                                    const confirmed = await confirmation(
+                                        'This action cannot be undone.',
+                                        'Are you sure you want to delete all references from this publication?',
+                                        <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
+                                        'Delete all'
+                                    );
+                                    if (confirmed) {
+                                        updateReferences([]);
+                                    }
+                                }}
+                                iconPosition="RIGHT"
+                                icon={
+                                    <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                }
+                            />
+                        </div>
+                    </>
                 )}
             </div>
 
