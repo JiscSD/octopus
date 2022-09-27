@@ -63,6 +63,12 @@ export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undef
             });
         }
 
+        if (event.body.publicationId !== event.pathParameters.id) {
+            return response.json(403, {
+                message: 'Please enter the correct publication id.'
+            });
+        }
+
         const reference = await referenceService.update(event.pathParameters.referenceId, event.body);
 
         return response.json(200, reference);
@@ -86,6 +92,13 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
         if (publication.currentStatus !== 'DRAFT') {
             return response.json(403, {
                 message: 'You can only add references to a draft publication.'
+            });
+        }
+
+        // check that we are updating the publication with the correct id
+        if (event.body.some((reference) => reference.publicationId !== event.pathParameters.id)) {
+            return response.json(403, {
+                message: 'Please enter the correct publication id.'
             });
         }
 
@@ -115,6 +128,7 @@ export const remove = async (event: I.AuthenticatedAPIRequest<undefined, undefin
                 message: 'You can only remove references from a draft publication.'
             });
         }
+
         const reference = await referenceService.remove(event.pathParameters.referenceId);
 
         return response.json(200, reference);
