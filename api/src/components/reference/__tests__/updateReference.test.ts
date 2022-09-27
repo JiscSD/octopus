@@ -13,7 +13,7 @@ describe('update a reference', () => {
             .send({
                 id: '01',
                 location: 'http://octopus.ac',
-                publicationId: 'publication-problem-draft',
+                publicationId: 'publication-interpretation-draft',
                 text: '<p>Reference 1</p>',
                 type: 'TEXT'
             });
