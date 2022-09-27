@@ -112,7 +112,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                         <Components.ActionCard
                             title="Create an account"
-                            content="Before you can publish research work, you need to create an account via ORCiD. ORCiD is a system of unique, persistent digital identifiers developed specifically for researchers."
+                            content="Before you can publish research work, you need to create an account via ORCID®. ORCID is a system of unique, persistent digital identifiers developed specifically for researchers."
                             icon={<OutlineIcons.UserGroupIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.orcidLogin.path}
                             linkText="Create an account"

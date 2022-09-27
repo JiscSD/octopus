@@ -73,7 +73,7 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
         nameType: 'Personal',
         nameIdentifiers: [
             {
-                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'Orcid ID not provided',
+                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'ORCID iD not provided',
                 nameIdentifierScheme: 'orcid',
                 schemeUri: 'orcid.org'
             }

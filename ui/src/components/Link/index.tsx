@@ -11,7 +11,7 @@ type Props = {
     openNew?: boolean;
     ariaLabel?: string;
     children: React.ReactChildren | React.ReactChild | React.ReactElement[];
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 const CustomLink: React.FC<Props> = (props): React.ReactElement => (

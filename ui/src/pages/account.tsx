@@ -10,6 +10,7 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Assets from '@assets';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // If not logged in, i.e no token with the right key, send them to ocrid to login and return
@@ -77,15 +78,19 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                             {props.user.firstName} {props.user.lastName}
                         </h1>
                     </div>
-                    <div className="items-end lg:flex">
-                        <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
-                            ORCID:{' '}
-                            <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
+                    <div className="flex flex-wrap items-center gap-2 lg:gap-0">
+                        <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-normal text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
+                            <Components.Link
+                                className="flex w-fit items-center gap-2"
+                                href={`https://orcid.org/${props.user.orcid}`}
+                                openNew={true}
+                            >
+                                <Assets.OrcidLogoIcon width={24} />
                                 <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                             </Components.Link>
                         </h2>
                         {props.user.email && (
-                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
+                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-normal text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
                                 Email: {props.user.email} (
                                 <Components.Link
                                     href={`${Config.urls.verify.path}/?state=${encodeURIComponent(router.asPath)}`}

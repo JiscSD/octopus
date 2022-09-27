@@ -5,6 +5,7 @@ import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
+import * as Assets from '@assets';
 
 type Props = {
     publication: Interfaces.Publication;
@@ -23,7 +24,8 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
                     : props.publication.title}
             </p>
             <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
+                {props.publication.user.firstName[0]}. {props.publication.user.lastName}{' '}
+                <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
             </span>
             <div className="flex items-center justify-between">
                 <span className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
