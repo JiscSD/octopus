@@ -14,7 +14,7 @@ describe('update all references', () => {
                 {
                     id: '04',
                     location: 'http://octopus.ac',
-                    publicationId: 'publication-problem-draft',
+                    publicationId: 'publication-interpretation-draft',
                     text: '<p>Reference 1</p>',
                     type: 'TEXT'
                 }
@@ -58,19 +58,31 @@ describe('update all references', () => {
     });
 
     test('All of the references should be replaced with the new references ', async () => {
+        const newReferencesArray = [
+            {
+                id: '04',
+                location: 'http://octopus.ac',
+                publicationId: 'publication-interpretation-draft',
+                text: '<p>Reference 1</p>',
+                type: 'TEXT'
+            },
+            {
+                id: '05',
+                location: 'http://google.com',
+                publicationId: 'publication-interpretation-draft',
+                text: '<p>Reference 2</p>',
+                type: 'TEXT'
+            }
+        ];
+
         const reference = await testUtils.agent
             .put('/publications/publication-interpretation-draft/reference')
             .query({ apiKey: '123456789' })
-            .send([
-                {
-                    id: '04',
-                    location: 'http://octopus.ac',
-                    publicationId: 'publication-problem-draft',
-                    text: '<p>Reference 1</p>',
-                    type: 'TEXT'
-                }
-            ]);
+            .send(newReferencesArray);
 
-        expect(reference.body.count).toEqual(1);
+        const checkReference = await testUtils.agent.get('/publications/publication-interpretation-draft/reference');
+
+        expect(reference.body.count).toEqual(2);
+        expect(checkReference.body).toEqual(newReferencesArray);
     });
 });

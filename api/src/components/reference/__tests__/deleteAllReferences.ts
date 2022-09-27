@@ -22,7 +22,7 @@ describe('delete all references', () => {
         expect(reference.status).toEqual(403);
     });
 
-    test('The author can only delete references from a draft publication', async () => {
+    test('The author can only delete references from a live publication', async () => {
         const reference = await testUtils.agent
             .delete('/publications/publication-real-world-application-live/reference')
             .query({ apiKey: '123456789' });
