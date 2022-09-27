@@ -14,7 +14,7 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.CreateReferencePath>) => {
     try {
-        const reference = await referenceService.create({ publicationId: event.pathParameters.id, ...event.body });
+        const reference = await referenceService.create({ ...event.body });
 
         return response.json(200, reference);
     } catch (err) {
