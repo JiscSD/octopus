@@ -73,19 +73,29 @@ export const publicationFlowMainText = async (
     // Text
     await page.locator(PageModel.publish.text.editor).click();
     await page.keyboard.type(mainText);
-    await page.locator(PageModel.publish.text.references).click();
-    for (let reference of references) {
-        await page.keyboard.type(`${reference.reference} ${reference.refURL} \n`);
-    }
-    await page.locator(PageModel.publish.text.addRefernecesButton).click();
+    await addListOfReferences(page,references);
+    await deleteAllReferences(page);
+    await addListOfReferences(page,references);
     await page.locator(PageModel.publish.text.language).selectOption(language);
     await page.locator(PageModel.publish.text.description).click();
     await page.keyboard.type(description);
     await page.locator(PageModel.publish.text.keywords).click();
     await page.keyboard.type(keywords);
-
     await page.locator(PageModel.publish.nextButton).click();
 };
+
+const addListOfReferences = async (page:Page, references:Array<References>) => {
+    await page.locator(PageModel.publish.text.references).click();
+    for (let reference of references) {
+        await page.keyboard.type(`${reference.reference} ${reference.refURL} \n`);
+    }
+    await page.locator(PageModel.publish.text.addRefernecesButton).click();
+}
+
+const deleteAllReferences = async (page:Page) => {
+    await page.locator(PageModel.publish.text.deleteAllReferencesButton).click();
+    await page.locator(PageModel.publish.text.deleteAllModalButton).click();
+}
 
 export const publicationFlowConflictOfInterest = async (
     page: Page,
