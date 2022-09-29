@@ -29,8 +29,11 @@ const loadData = async () => {
         }
         if(title.length >160) {
             console.log(`too long\t"${title}"\t"${parent1}"\t"${parent2}"\t"${content}"`);
-            }
+            continue;    
+        }
 
+        // only record ones we know would have been created
+        // TODO check output of this with DB
         titleIDStore.set(title,"found");     
     }
 };
