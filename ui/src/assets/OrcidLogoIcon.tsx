@@ -7,9 +7,8 @@ type Props = {
 
 const OrcidLogoIcon: React.FC<Props> = (props): React.ReactElement => (
     <svg
-        className={props.className || ''}
+        className={props.className}
         width={props.width}
-        height="auto"
         viewBox="0 0 72 72"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
