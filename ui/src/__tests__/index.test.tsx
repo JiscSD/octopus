@@ -3,9 +3,14 @@ import * as Components from '@components';
 import * as OutlineIcons from '@heroicons/react/outline';
 import '@testing-library/jest-dom'
 
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+ 
+Enzyme.configure({ adapter: new Adapter() });
+
 const button = <Components.Button
     className="children:border-0"
-    disabled={true}
+    disabled={false}
     icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
     iconPosition="RIGHT"
     onClick={() => {return true}}
@@ -25,6 +30,21 @@ describe('Button tests', () => {
 
   it('Button to be disabled', () => {
     render(button)
-    expect(screen.getByRole('button')).toBeDisabled()
+    expect(screen.getByRole('button')).toBeEnabled()
+  });
+
+  it('Button able to be clicked', () => {
+    const mockCallback = jest.fn();
+    const mockButton =  shallow(<Components.Button
+      className="children:border-0"
+      disabled={false}
+      icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+      iconPosition="RIGHT"
+      onClick={mockCallback}
+      title={'Click me'} 
+    />)
+
+    mockButton.find('button').simulate('click')
+    expect(mockCallback.mock.calls.length).toEqual(1);
   });
 });
