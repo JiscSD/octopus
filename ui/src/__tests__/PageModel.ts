@@ -151,7 +151,7 @@ export const PageModel = {
             addRefernecesButton: 'button[name="Add references"]',
             deleteAllReferencesButton: 'button[name="Delete all references"]',
             deleteAllModalButton: '[aria-label="Delete all"]',
-            continueModalButton:'[aria-label="Continue"]',
+            continueModalButton: '[aria-label="Continue"]',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
             keywords:
