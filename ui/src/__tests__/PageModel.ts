@@ -150,10 +150,10 @@ export const PageModel = {
                 'text=ReferencesInclude your reference list for this publication. References should be >> div >> nth=4',
             addRefernecesButton: 'button[name="Add references"]',
             deleteAllReferencesButton: 'button[name="Delete all references"]',
-            deleteAllModalButton: '[aria-label="Delete all"]',
+            deleteAllReferencesModalButton: '[aria-label="Delete all"]',
             continueModalButton: '[aria-label="Continue"]',
             saveReferenceModalButton: '[aria-label="Save"]',
-            deleteModalButton: '[aria-label="Delete"]',
+            deleteReferenceModalButton: '[aria-label="Delete"]',
             // using xpath to locate the elements until a better solution is found
             deleteFirstReferenceButton:
                 '//*[@id="__next"]/div/div/main/section/div[3]/section/div/div[3]/div[2]/table/tbody/tr[1]/td[5]/div/button',

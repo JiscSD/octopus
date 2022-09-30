@@ -107,7 +107,7 @@ const addReferences = async (page: Page, references: Array<Reference>) => {
 
 const deleteAllReferences = async (page: Page) => {
     await page.locator(PageModel.publish.text.deleteAllReferencesButton).click();
-    await page.locator(PageModel.publish.text.deleteAllModalButton).click();
+    await page.locator(PageModel.publish.text.deleteAllReferencesModalButton).click();
 };
 
 const addASingleReference = async (page: Page, reference: Reference) => {
@@ -124,7 +124,7 @@ const addASingleReference = async (page: Page, reference: Reference) => {
 
 const deleteFirstReference = async (page: Page) => {
     await page.locator(PageModel.publish.text.deleteFirstReferenceButton).click();
-    await page.locator(PageModel.publish.text.deleteModalButton).click();
+    await page.locator(PageModel.publish.text.deleteReferenceModalButton).click();
 };
 
 export const publicationFlowConflictOfInterest = async (
