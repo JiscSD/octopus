@@ -62,20 +62,33 @@ export const publicationFlowLinkedPublication = async (
     await page.locator(PageModel.publish.nextButton).click();
 };
 
+interface Reference {
+    text: string;
+    refURL: string;
+}
+
+const referencesList: Array<Reference> = [
+    { text: 'Pighin S, Savadori L, Barilli E, Cremonesi L', refURL: '(doi:10.1177/0272989X11403490)' },
+    { text: 'Reyna, V.F. and Brainerd, C.J., 2008. Numeracy', refURL: 'https://www.testrefurl1234.com' }
+];
+
 export const publicationFlowMainText = async (
     page: Page,
     mainText: string,
     language: Type.Languages,
-    references: Array<References>,
+    references: Array<Reference>,
     description: string,
     keywords: string
 ) => {
     // Text
     await page.locator(PageModel.publish.text.editor).click();
     await page.keyboard.type(mainText);
-    await addListOfReferences(page, references);
+    await addReferences(page, references);
+    await addASingleReference(page, references[1]);
+    await deleteFirstReference(page);
     await deleteAllReferences(page);
-    await addListOfReferences(page, references);
+    // re-add references
+    await addReferences(page, references);
     await page.locator(PageModel.publish.text.language).selectOption(language);
     await page.locator(PageModel.publish.text.description).click();
     await page.keyboard.type(description);
@@ -84,10 +97,10 @@ export const publicationFlowMainText = async (
     await page.locator(PageModel.publish.nextButton).click();
 };
 
-const addListOfReferences = async (page: Page, references: Array<References>) => {
+const addReferences = async (page: Page, references: Array<Reference>) => {
     await page.locator(PageModel.publish.text.references).click();
     for (let reference of references) {
-        await page.keyboard.type(`${reference.reference} ${reference.refURL} \n`);
+        await page.keyboard.type(`${reference.text} ${reference.refURL} \n`);
     }
     await page.locator(PageModel.publish.text.addRefernecesButton).click();
 };
@@ -95,6 +108,23 @@ const addListOfReferences = async (page: Page, references: Array<References>) =>
 const deleteAllReferences = async (page: Page) => {
     await page.locator(PageModel.publish.text.deleteAllReferencesButton).click();
     await page.locator(PageModel.publish.text.deleteAllModalButton).click();
+};
+
+const addASingleReference = async (page: Page, reference: Reference) => {
+    await page.locator(PageModel.publish.text.addReferenceButton).click();
+    await page.locator(PageModel.publish.text.continueModalButton).click();
+    await page.keyboard.type(`${reference.text}`);
+    await page.keyboard.press('Tab');
+    await page.keyboard.type(`${reference.refURL}`);
+    // await page.locator(PageModel.publish.text.saveReferenceModalButton).click();
+    // using tab + enter to save the model until a solution is found for above selector to work
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+};
+
+const deleteFirstReference = async (page: Page) => {
+    await page.locator(PageModel.publish.text.deleteFirstReferenceButton).click();
+    await page.locator(PageModel.publish.text.deleteModalButton).click();
 };
 
 export const publicationFlowConflictOfInterest = async (
@@ -162,16 +192,6 @@ export const publicationFlowReview = async (
 ) => {
     // Review and publish
 };
-
-interface References {
-    reference: string;
-    refURL: string;
-}
-
-const referencesList: Array<References> = [
-    { reference: 'Pighin S, Savadori L, Barilli E, Cremonesi L', refURL: '(doi:10.1177/0272989X11403490)' },
-    { reference: 'Reyna, V.F. and Brainerd, C.J., 2008. Numeracy', refURL: 'https://www.testrefurl1234.com' }
-];
 
 const problemPublication = {
     pubType: 'Research Problem',
@@ -258,7 +278,7 @@ interface PublicationTestType {
     title: string;
     author: string;
     text: string;
-    references: Array<References>;
+    references: Array<Reference>;
     coi: string;
     funding: string;
     fundingExtraDetails: string;
@@ -271,7 +291,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `text=${publication.licence}`,
         `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
-        `text=${publication.references[1].reference}`,
+        `text=${publication.references[1].text}`,
         `text=${publication.references[1].refURL}`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
