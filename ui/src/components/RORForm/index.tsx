@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
@@ -160,7 +159,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
     const [link, setLink] = React.useState('');
-    const [isLinkValid, setIsLinkValid] = React.useState(false);
+    const [isLinkValid, setIsLinkValid] = React.useState(true);
     const [submitLoading, setSubmitLoading] = React.useState(false);
 
     const [rorLoading, setRorLoading] = React.useState(false);
@@ -194,6 +193,12 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     }, [method]);
 
     const onSubmitHandler = async () => {
+        const isValidLink = Helpers.validateURL(link);
+
+        if (!isValidLink) {
+            return setIsLinkValid(false);
+        }
+
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
@@ -332,8 +337,10 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             type="url"
                             value={link}
                             onChange={(e) => {
-                                setIsLinkValid(Helpers.checkLinkIsValid(e.target.value));
                                 setLink(e.target.value);
+                                if (!isLinkValid) {
+                                    setIsLinkValid(true);
+                                }
                             }}
                         />
                         <Components.Button
@@ -357,7 +364,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                                 )
                             }
                         />
-                        {!isLinkValid && link && method === 'manual' ? (
+                        {method === 'manual' && !isLinkValid ? (
                             <Components.Alert
                                 severity="ERROR"
                                 title="Please enter a valid URL."
