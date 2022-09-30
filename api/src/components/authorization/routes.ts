@@ -10,6 +10,6 @@ export const authorize = middy(authorizationController.authorize)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.validator(authorizationSchema.authorize, 'body'));
 
-export const verifyToken = middy(authorizationController.verifyToken)
+export const getDecodedUserToken = middy(authorizationController.getDecodedUserToken)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.authentication());

@@ -10,7 +10,7 @@ const useAuthCheck = (protectedPage: boolean) => {
     const router = useRouter();
     const { setUser } = Stores.useAuthStore();
 
-    useSWR(Config.endpoints.verifyToken, async (verifyTokenUrl) => {
+    useSWR(Config.endpoints.decodeUserToken, async (decodeUserTokenUrl) => {
         // ignore if user is on the login page
         if (router.pathname.startsWith('/login')) {
             return;
@@ -19,8 +19,12 @@ const useAuthCheck = (protectedPage: boolean) => {
         const token = Helpers.getJWT();
 
         try {
+            if (!token) {
+                // skip the call to the backend if there's no token
+                throw new Error('No token found');
+            }
             // will throw an error if token is not valid
-            await api.get(verifyTokenUrl, token);
+            await api.get(decodeUserTokenUrl, token);
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
                 console.log(error);

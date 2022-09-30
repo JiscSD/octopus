@@ -12,22 +12,15 @@ import * as Types from '@types';
 import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.guardPrivateRoute(context);
+    // prevent unauthenticated users to access this page
+    await Helpers.guardPrivateRoute(context);
 
-    let publicationForID: string | string[] | null = null;
-    let publicationType: string | string[] | null = null;
-
-    if (context.query.for) publicationForID = context.query.for;
-    if (context.query.type) publicationType = context.query.type;
-
-    if (Array.isArray(publicationForID)) publicationForID = publicationForID[0];
-    if (Array.isArray(publicationType)) publicationType = publicationType[0];
+    const { for: publicationForID = null, type: publicationType = null } = context.query;
 
     return {
         props: {
             publicationForID,
             publicationType,
-            token,
             protectedPage: true
         }
     };
@@ -42,7 +35,6 @@ const SupportText: React.FC = (props): React.ReactElement => (
 type PageProps = {
     publicationForID: string | null;
     publicationType: Types.PublicationType | null;
-    token: string;
 };
 
 const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
@@ -62,7 +54,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     title,
                     type: publicationType
                 },
-                props.token
+                Helpers.getJWT()
             );
 
             if (props.publicationForID) {
@@ -72,7 +64,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         to: props.publicationForID,
                         from: response.data.id
                     },
-                    props.token
+                    Helpers.getJWT()
                 );
             }
 

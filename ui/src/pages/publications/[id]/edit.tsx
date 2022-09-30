@@ -71,7 +71,9 @@ const steps: Types.CreationSteps = {
 };
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.guardPrivateRoute(context);
+    // prevent unauthenticated users to access this page
+    await Helpers.guardPrivateRoute(context);
+    const token = Helpers.getJWT(context);
 
     let draftedPublicationID: string | string[] | null = null;
     let draftedPublication: Interfaces.Publication | null = null;

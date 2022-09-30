@@ -46,7 +46,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
                         <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
                         <Components.Link
-                            href={`${Config.urls.verify.path}?newUser=true`}
+                            href={`${Config.urls.verify.path}`}
                             className="w-fit underline decoration-2 underline-offset-4"
                         >
                             Please confirm your email address to publish content

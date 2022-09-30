@@ -13,9 +13,9 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const token = Helpers.guardPrivateRoute(context);
+    const decodedJWT = await Helpers.guardPrivateRoute(context);
     // If logged in, grab the token from cookies
-    const decodedJWT = JWT.decode(token);
+    const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
     let error: string | null = null;

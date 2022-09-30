@@ -1,3 +1,9 @@
+import * as React from 'react';
+
+import { AxiosError } from 'axios';
+import Head from 'next/head';
+import Router from 'next/router';
+
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
@@ -8,20 +14,17 @@ import * as SolidIcons from '@heroicons/react/solid';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import { AxiosError } from 'axios';
-import Head from 'next/head';
-import Router from 'next/router';
-import * as React from 'react';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    Helpers.guardPrivateRoute(context);
+    // prevent unauthenticated users to access this page
+    const decodedToken = await Helpers.guardPrivateRoute(context);
     const homeUrl = encodeURIComponent(Config.urls.home.path);
-    const { state: redirectTo = homeUrl, newUser } = context.query;
+    const { state: redirectTo = homeUrl } = context.query;
 
     return {
         props: {
             redirectTo,
-            newUser: newUser === 'true',
+            newUser: !decodedToken.email, // new users don't have an email yet
             protectedPage: true
         }
     };

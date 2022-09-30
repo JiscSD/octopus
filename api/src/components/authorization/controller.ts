@@ -93,7 +93,6 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
     }
 };
 
-export const verifyToken = async (event: I.AuthenticatedAPIRequest) => {
-    const decodedToken = event.user;
-    return response.json(200, { decodedToken });
+export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest) => {
+    return response.json(200, event.user);
 };

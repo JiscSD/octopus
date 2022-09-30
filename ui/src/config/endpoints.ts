@@ -8,6 +8,6 @@ const endpoints = {
     verification: `${api.baseURL}/verification`,
     flag: `${api.baseURL}/flag`,
     bookmarks: `${api.baseURL}/bookmarks`,
-    verifyToken: `${api.baseURL}/verifyToken`
+    decodeUserToken: `${api.baseURL}/decode-user-token`
 };
 export default endpoints;

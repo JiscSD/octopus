@@ -7,6 +7,7 @@ import JWT from 'jsonwebtoken';
 import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as api from '@api';
 
 /**
  * @description Truncates a string
@@ -154,14 +155,29 @@ export const clearJWT = () => {
 /**
  * @description returns JWT from browser cookies
  */
-export const getJWT = () => Cookies.get(Config.keys.cookieStorage.token);
+export const getJWT = (context?: Types.GetServerSidePropsContext) =>
+    context ? context.req.cookies[Config.keys.cookieStorage.token] : Cookies.get(Config.keys.cookieStorage.token);
+
+/**
+ *
+ * @param token string
+ * @returns decoded user token
+ */
+export const getDecodedUserToken = async (token: string) => {
+    try {
+        return (await (
+            await api.get(Config.endpoints.decodeUserToken, token)
+        ).data) as Types.UserType;
+    } catch (error) {
+        return null;
+    }
+};
 
 /**
  * @description For use in NextJS SSR, check cookies for token & set the response location
  */
-export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
-    const cookies = context.req.cookies;
-    const token = cookies[Config.keys.cookieStorage.token];
+export const guardPrivateRoute = async (context: Types.GetServerSidePropsContext): Promise<Types.UserType> => {
+    const token = getJWT(context);
     const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
 
     const redirectToORCIDLogin = () => {
@@ -174,26 +190,27 @@ export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): str
 
     if (!token) {
         redirectToORCIDLogin();
+        return {} as Types.UserType;
     }
 
-    let decodedToken = JWT.decode(token) as Types.UserType;
+    const decodedToken = await getDecodedUserToken(token);
 
     if (!decodedToken) {
         redirectToORCIDLogin();
+    } else {
+        const { email } = decodedToken; // check user email
+        const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
+
+        // Only allow users with a verified email to access guarded routes
+        if (!email && !isVerifyEmailPage) {
+            context.res.writeHead(302, {
+                Location: `${Config.urls.verify.path}?state=${redirectTo}`
+            });
+            context.res.end();
+        }
     }
 
-    const { email } = decodedToken; // check user email
-    const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
-
-    // Only allow users with a verified email to access guarded routes
-    if (!email && !isVerifyEmailPage) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.verify.path}?state=${redirectTo}&newUser=true`
-        });
-        context.res.end();
-    }
-
-    return token;
+    return decodedToken as Types.UserType;
 };
 
 /**
