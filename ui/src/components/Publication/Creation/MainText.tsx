@@ -36,9 +36,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 )}
             </div>
 
-            <div>
+            <div data-testid="main-text-select">
                 <Components.PublicationCreationStepTitle text="Language" required />
                 <select
+                    data-testid="main-text-select-element"
                     name="language"
                     id="language"
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
