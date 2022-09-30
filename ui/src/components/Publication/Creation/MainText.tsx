@@ -26,7 +26,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div data-testid="main-text">
-                <Components.PublicationCreationStepTitle text="Main text" required/>
+                <Components.PublicationCreationStepTitle text="Main text" required />
                 {!loading ? (
                     <Components.TextEditor defaultContent={content} contentChangeHandler={updateContent} />
                 ) : (
