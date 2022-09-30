@@ -225,10 +225,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                                         {references.map((reference, index) => (
                                             <tr key={reference.id}>
-                                                <td className="w-[60%] min-w-[400px] py-4 pl-4 text-sm text-grey-900 transition-colors duration-500 children:text-sm dark:text-white-50 sm:pl-6">
+                                                <td className="w-[60%] min-w-[250px] py-4 pl-4 text-grey-900 transition-colors duration-500 break-anywhere children:text-sm dark:text-white-50 sm:pl-6">
                                                     <Components.ParseHTML content={reference.text} />
                                                 </td>
-                                                <td className="w-[40%] min-w-[250px] break-all py-4 pl-4 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                                                <td className="w-[40%] min-w-[150px] break-all py-4 pl-4 text-sm text-grey-900 underline transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                                     {reference.location && (
                                                         <Components.Link href={reference.location} openNew>
                                                             {reference.location}
@@ -238,7 +238,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                 <td className="p-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                                                     <Components.IconButton
                                                         className="p-2"
-                                                        title="Add"
+                                                        title="Add below"
                                                         icon={
                                                             <FAIcons.FaPlus
                                                                 className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
@@ -298,7 +298,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         }
                                                         onClick={async () => {
                                                             const confirmed = await confirmation(
-                                                                'Deleting a reference may affect the accuracy of your reference numbering and in-text references. Are you sure you want to delete this reference? This action cannot be undone. ',
+                                                                'Deleting a reference may affect the accuracy of your reference numbering and in-text references. This action cannot be undone. ',
                                                                 'Are you sure you want to delete this reference?',
                                                                 <OutlineIcons.TrashIcon
                                                                     className="h-10 w-10 text-grey-600"
