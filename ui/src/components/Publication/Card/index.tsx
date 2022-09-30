@@ -24,14 +24,22 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
                     : props.publication.title}
             </p>
             <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                <Components.Link href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}>
+                {props.publication.user.id === 'octopus' ? (
                     <>
                         {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                     </>
-                </Components.Link>{' '}
-                <a href={`https://orcid.org/${props.publication.user.orcid}`} target="_blank" rel="noreferrer">
-                    <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
-                </a>
+                ) : (
+                    <>
+                        <Components.Link href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}>
+                            <>
+                                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
+                            </>
+                        </Components.Link>{' '}
+                        <a href={`https://orcid.org/${props.publication.user.orcid}`} target="_blank" rel="noreferrer">
+                            <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
+                        </a>
+                    </>
+                )}
             </span>
             <div className="flex items-center justify-between">
                 <span className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">

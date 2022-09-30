@@ -60,14 +60,16 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                         </h1>
                     </div>
                     <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        <Components.Link
-                            className="flex w-fit items-center gap-2"
-                            href={`https://orcid.org/${props.user.orcid}`}
-                            openNew={true}
-                        >
-                            <Assets.OrcidLogoIcon width={24} />
-                            <span className="font-semibold text-teal-500">{props.user.orcid}</span>
-                        </Components.Link>
+                        {props.user.id === 'octopus' ? null : (
+                            <Components.Link
+                                className="flex w-fit items-center gap-2"
+                                href={`https://orcid.org/${props.user.orcid}`}
+                                openNew={true}
+                            >
+                                <Assets.OrcidLogoIcon width={24} />
+                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                            </Components.Link>
+                        )}
                     </div>
                 </header>
 

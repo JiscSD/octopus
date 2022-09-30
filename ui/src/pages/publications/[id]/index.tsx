@@ -347,13 +347,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         {publicationData.user?.firstName[0]}. {publicationData.user?.lastName}
                                     </>
                                 </Components.Link>
-                                <Components.Link
-                                    className="ml-2 flex w-fit items-center"
-                                    href={`https://orcid.org/${publicationData?.user?.orcid}`}
-                                    openNew={true}
-                                >
-                                    <Assets.OrcidLogoIcon width={24} />
-                                </Components.Link>
+                                {publicationData.user.id !== 'octopus' && (
+                                    <Components.Link
+                                        className="ml-2 flex w-fit items-center"
+                                        href={`https://orcid.org/${publicationData?.user?.orcid}`}
+                                        openNew={true}
+                                    >
+                                        <Assets.OrcidLogoIcon width={24} />
+                                    </Components.Link>
+                                )}
                                 {publicationData.coAuthors?.length > 0 && (
                                     <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
                                         ,
