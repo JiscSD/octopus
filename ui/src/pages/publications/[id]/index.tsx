@@ -1,10 +1,9 @@
-import * as OutlineIcons from '@heroicons/react/outline';
+import React, { useMemo } from 'react';
 import parse from 'html-react-parser';
-import jwt from 'jsonwebtoken';
 import Head from 'next/head';
-import React from 'react';
 import useSWR from 'swr';
 
+import * as OutlineIcons from '@heroicons/react/outline';
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
@@ -36,8 +35,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let bookmark: boolean = false;
     let error: string | null = null;
 
-    const cookies = context.req.cookies;
-    const token = cookies[Config.keys.cookieStorage.token];
+    const token = Helpers.getJWT(context);
 
     try {
         const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, token);
@@ -60,23 +58,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
-    let isBookmarkVisible = false;
-
-    if (token) {
-        //check if user is author / co author. if so the bookmark icon won't display
-        const currentUser = jwt.decode(token) as any;
-        if (Date.now() <= currentUser.exp * 1000) {
-            if (currentUser.id) {
-                const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
-                const isOwner = currentUser.id === publication.createdBy;
-
-                if (!isCoAuthor && !isOwner) {
-                    isBookmarkVisible = true;
-                }
-            }
-        }
-    }
-
     return {
         props: {
             fallback: {
@@ -84,7 +65,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             },
             userToken: token || '',
             bookmark,
-            isBookmarkVisible,
             publicationId: publication.id
         }
     };
@@ -94,7 +74,6 @@ type Props = {
     publication: Interfaces.Publication;
     publicationId: string;
     bookmark: boolean;
-    isBookmarkVisible: boolean;
     userToken: string;
 };
 
@@ -107,15 +86,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
-    const linkedPublicationsTo = publicationData?.linkedTo;
-    const linkedPublicationsFrom = publicationData?.linkedFrom?.filter(
-        (link) => link.publicationFromRef.type !== 'PROBLEM' && link.publicationFromRef.type !== 'PEER_REVIEW'
-    );
-
     const peerReviews = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
     const problems = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM');
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+    const isBookmarkVisible = useMemo(() => {
+        if (!user || !publicationData) {
+            return false;
+        }
+
+        const isCoAuthor = publicationData.coAuthors.some((author) => author.id == user.id);
+        const isOwner = user.id === publicationData.createdBy;
+
+        if (!isCoAuthor && !isOwner) {
+            return true;
+        }
+
+        return false;
+    }, [publicationData, user]);
 
     const list = [];
 
@@ -323,7 +311,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
                                 {publicationData.title}
                             </h1>
-                            {props.isBookmarkVisible && (
+                            {isBookmarkVisible && (
                                 <div className="col-span-1 grid justify-items-end">
                                     <button
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"

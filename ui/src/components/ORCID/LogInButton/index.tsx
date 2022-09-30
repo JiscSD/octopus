@@ -8,9 +8,9 @@ type Props = {
     currentPath: string;
 };
 
-const LogIn: React.FC<Props> = (props): React.ReactElement => (
+const LogInButton: React.FC<Props> = (props): React.ReactElement => (
     <Components.Link
-        href={`${Config.urls.orcidLogin.path}&state=${Buffer.from(props.currentPath, 'utf-8').toString('base64')}`}
+        href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(props.currentPath)}`}
         ariaLabel="Sign in with ORCID"
         className="flex items-center rounded-md bg-orcid p-1 lg:mr-4 lg:p-2"
     >
@@ -19,4 +19,4 @@ const LogIn: React.FC<Props> = (props): React.ReactElement => (
     </Components.Link>
 );
 
-export default LogIn;
+export default LogInButton;
