@@ -153,7 +153,7 @@ export const clearJWT = () => {
 };
 
 /**
- * @description returns JWT from browser cookies
+ * @description returns JWT from browser cookies or SSR context
  */
 export const getJWT = (context?: Types.GetServerSidePropsContext) =>
     context ? context.req.cookies[Config.keys.cookieStorage.token] : Cookies.get(Config.keys.cookieStorage.token);
