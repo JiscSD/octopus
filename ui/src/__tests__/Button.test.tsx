@@ -18,6 +18,11 @@ const button = <Components.Button
 />
 
 describe('Button tests', () => {
+  it('Renders button component without crashing', () => {
+    render(button)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  });
+
   it('Button displays what is passed into prop title', () => {
     render(button)
     expect(screen.getByRole('button')).toHaveTextContent('Click me')
