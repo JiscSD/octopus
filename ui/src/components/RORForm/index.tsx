@@ -367,7 +367,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         {method === 'manual' && !isLinkValid ? (
                             <Components.Alert
                                 severity="ERROR"
-                                title='Reference link must be a valid URL starting with "http".'
+                                title='Please enter a valid URL starting with "http".'
                                 className="mt-3 w-1/2"
                             />
                         ) : null}
