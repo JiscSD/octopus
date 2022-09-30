@@ -85,11 +85,11 @@ jobs:
                   node-version: "14.x"
 
             - name: Install dependencies
-                working-directory: ./ui
-                run: npm ci
+              working-directory: ./ui
+              run: npm ci
             
             - name: Run jest tests
-                working-directory: ./ui
-                run: npm run test:jest
+              working-directory: ./ui
+              run: npm run test:jest
 
 
