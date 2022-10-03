@@ -102,7 +102,7 @@ const addReferences = async (page: Page, references: Array<Reference>) => {
     for (let reference of references) {
         await page.keyboard.type(`${reference.text} ${reference.refURL} \n`);
     }
-    await page.locator(PageModel.publish.text.addRefernecesButton).click();
+    await page.locator(PageModel.publish.text.addReferencesButton).click();
 };
 
 const deleteAllReferences = async (page: Page) => {
