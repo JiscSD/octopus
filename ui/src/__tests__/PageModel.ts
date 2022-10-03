@@ -148,7 +148,7 @@ export const PageModel = {
             language: 'select[name="language"]',
             references:
                 'text=ReferencesInclude your reference list for this publication. References should be >> div >> nth=4',
-            addRefernecesButton: 'button[name="Add references"]',
+            addReferencesButton: 'button[name="Add references"]',
             deleteAllReferencesButton: 'button[name="Delete all references"]',
             deleteAllReferencesModalButton: '[aria-label="Delete all"]',
             continueModalButton: '[aria-label="Continue"]',
