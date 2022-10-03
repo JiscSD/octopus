@@ -394,20 +394,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {/* References */}
                     {!!showReferences && (
-                    <Components.PublicationContentSection id="references" title="References" hasBreak>
-                        {references.map((reference) => (
-                            <div key={reference.id} className="py-2 break-anywhere">
-                                <Components.ParseHTML content={reference.text} />
-                                {reference.location && (
-                                    <div className="break-all underline dark:text-white-50">
-                                        <Components.Link href={reference.location} openNew>
-                                            {reference.location}
-                                        </Components.Link>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </Components.PublicationContentSection>
+                        <Components.PublicationContentSection id="references" title="References" hasBreak>
+                            {references.map((reference) => (
+                                <div key={reference.id} className="py-2 break-anywhere">
+                                    <Components.ParseHTML content={reference.text} />
+                                    {reference.location && (
+                                        <div className="break-all underline dark:text-white-50">
+                                            <Components.Link href={reference.location} openNew>
+                                                {reference.location}
+                                            </Components.Link>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Components.PublicationContentSection>
                     )}
 
                     {/* Linked from problems */}
