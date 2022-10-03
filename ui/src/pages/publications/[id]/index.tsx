@@ -124,11 +124,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
+    const showReferences = references?.length;
     const showProblems = problems?.length && publicationData?.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews?.length && publicationData?.type !== 'PEER_REVIEW';
     const showEthicalStatement = publicationData?.type === 'DATA';
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
+    if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
@@ -142,7 +144,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const sectionList = [
         { title: 'Main text', href: 'main-text' },
         ...list,
-        { title: 'References', href: 'references' },
         { title: 'Funders', href: 'funders' },
         { title: 'Conflict of interest', href: 'coi' }
     ];
@@ -392,6 +393,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </Components.PublicationContentSection>
 
                     {/* References */}
+                    {!!showReferences && (
                     <Components.PublicationContentSection id="references" title="References" hasBreak>
                         {references.map((reference) => (
                             <div key={reference.id} className="py-2 break-anywhere">
@@ -406,6 +408,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </div>
                         ))}
                     </Components.PublicationContentSection>
+                    )}
 
                     {/* Linked from problems */}
                     {!!showProblems && (

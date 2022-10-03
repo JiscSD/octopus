@@ -193,8 +193,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     <Components.Link className="underline" href="https://www.doi.org/10.1000/182" openNew>
                         https://www.doi.org/10.1000/182
                     </Components.Link>
-                    ) so that your readers can more easily access this content. Review your list in the reference
-                    manager below. We particularly recommend that you check that any URLs are displaying correctly. If
+                    ) so that your readers can more easily access this content. After clicking 'Add references', review your 
+                    list in the reference manager that will appear. We particularly recommend that you check that any URLs are displaying correctly. If
                     needed, you can edit, add, and delete individual references and reference links. If you wish to add
                     multiple references to an existing list, reuse the text field. When you click &quot;Add
                     references&quot;, your additional references will be added to the bottom of your existing list. If
