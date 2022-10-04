@@ -329,14 +329,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
                   method: get
                   cors: true
-    createReference:
-        handler: src/components/reference/routes.create
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
-                  method: post
-                  cors: true
     updateReference:
         handler: src/components/reference/routes.update
         warmup: true
@@ -352,22 +344,6 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
                   method: put
-                  cors: true
-    deleteReference:
-        handler: src/components/reference/routes.remove
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
-                  method: delete
-                  cors: true
-    deleteAllReference:
-        handler: src/components/reference/routes.removeAll
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
-                  method: delete
                   cors: true
     # Affiliations
     createAffiliation:
