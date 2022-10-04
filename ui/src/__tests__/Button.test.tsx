@@ -9,7 +9,6 @@ import Adapter from 'enzyme-adapter-react-16';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Button test suite with enabled button stating "click me"', () => {
-
     const button = (
         <Components.Button
             className="children:border-0"
@@ -24,11 +23,10 @@ describe('Button test suite with enabled button stating "click me"', () => {
     );
 
     beforeEach(() => {
-        render(button)
-    })
-    
+        render(button);
+    });
+
     it('Renders button component without crashing', () => {
-        
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
@@ -62,7 +60,6 @@ describe('Button test suite with enabled button stating "click me"', () => {
     });
 });
 
-
 describe('Button test suite with disabled button stating "click me"', () => {
     const button = (
         <Components.Button
@@ -78,11 +75,10 @@ describe('Button test suite with disabled button stating "click me"', () => {
     );
 
     beforeEach(() => {
-        render(button)
-    })
+        render(button);
+    });
 
     it('Button to be disabled', () => {
         expect(screen.getByRole('button')).toBeDisabled();
     });
-
-})
+});
