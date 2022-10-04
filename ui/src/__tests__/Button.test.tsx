@@ -37,7 +37,7 @@ describe('Button tests', () => {
         expect(screen.getByRole('button')).toHaveAccessibleDescription('Click me');
     });
 
-    it('Button to be disabled', () => {
+    it('Button to be enabled', () => {
         render(button);
         expect(screen.getByRole('button')).toBeEnabled();
     });

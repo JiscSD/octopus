@@ -27,6 +27,7 @@ const config: PlaywrightTestConfig = {
             name: 'firefox',
             use: { ...devices['Desktop Firefox'] }
         }
-    ]
+    ],
+    testDir: './src/__testing__'
 };
 export default config;
