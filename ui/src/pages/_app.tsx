@@ -1,58 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
+import NextProgressBar from 'nextjs-progressbar';
+
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
-import NextNprogress from 'nextjs-progressbar';
-
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Contexts from '@contexts';
+import * as Hooks from '@hooks';
 
 import '../styles/globals.css';
 
 const App = ({ Component, pageProps }: Types.AppProps) => {
-    const isMounted = React.useRef(false);
-    const [loading, setLoading] = React.useState(true);
-    const darkMode = Stores.usePreferencesStore((state) => state.darkMode);
-    const showCmdPalette = Stores.useGlobalsStore((state) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state) => state.toggleCmdPalette);
-    const user = Stores.useAuthStore((state) => state.user);
+    const [mounted, setMounted] = useState(false);
+    const { user } = Stores.useAuthStore();
+    const { darkMode } = Stores.usePreferencesStore();
+    const { showCmdPalette, toggleCmdPalette } = Stores.useGlobalsStore();
 
-    const setUpCmdPalListeners = React.useCallback(() => {
-        if (isMounted.current === true) {
-            document.addEventListener('keydown', (e) => {
-                if (window.navigator.appVersion.indexOf('Mac')) {
-                    if (e.metaKey && e.code === 'KeyK') {
-                        toggleCmdPalette();
-                    }
-                } else {
-                    if (e.ctrlKey && e.code === 'KeyK') {
-                        toggleCmdPalette();
-                    }
+    // check authentication client side
+    Hooks.useAuthCheck(Boolean(pageProps.protectedPage));
+
+    useEffect(() => {
+        setMounted(true);
+
+        const setUpCmdPalListeners = (e: KeyboardEvent) => {
+            if (window.navigator.userAgent.indexOf('Mac') !== -1) {
+                if (e.metaKey && e.code === 'KeyK') {
+                    toggleCmdPalette();
                 }
+            } else {
+                if (e.ctrlKey && e.code === 'KeyK') {
+                    toggleCmdPalette();
+                }
+            }
 
-                if (e.key === 'Escape' && !showCmdPalette) toggleCmdPalette();
-            });
-        }
-    }, [showCmdPalette, toggleCmdPalette]);
-
-    React.useEffect(() => {
-        isMounted.current = true;
-        setUpCmdPalListeners();
-        setLoading(false);
-        return () => {
-            isMounted.current = false;
+            if (e.key === 'Escape' && showCmdPalette) {
+                toggleCmdPalette();
+            }
         };
-    }, []);
+
+        document.addEventListener('keydown', setUpCmdPalListeners);
+        return () => {
+            setMounted(false);
+            document.removeEventListener('keydown', setUpCmdPalListeners);
+        };
+    }, [showCmdPalette, toggleCmdPalette]);
 
     return (
         <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
-            <NextNprogress
+            <NextProgressBar
                 color={'#348cb1'}
                 startPosition={0.3}
                 stopDelayMs={200}
@@ -62,7 +63,8 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     showSpinner: false
                 }}
             />
-            {!loading && (
+
+            {mounted && (
                 <SWR.SWRConfig
                     value={{
                         fetcher: (resource) => api.get(resource, user?.token),

@@ -1,6 +1,6 @@
 import React from 'react';
-import * as Router from 'next/router';
 
+import * as Router from 'next/router';
 import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Config from '@config';
@@ -10,12 +10,12 @@ const LogOutButton: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();
     const setUser = Stores.useAuthStore((state: Types.AuthStoreType) => state.setUser);
 
-    const handleLogOut = () => {
-        Helpers.clearJWT();
-        setUser(null);
-        router.push({
+    const handleLogOut = async () => {
+        await router.push({
             pathname: `${Config.urls.home.path}`
         });
+        Helpers.clearJWT();
+        setUser(null);
     };
 
     return (

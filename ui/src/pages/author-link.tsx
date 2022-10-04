@@ -36,9 +36,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // check user credentials
     if (approve === 'true') {
         try {
-            const token = Helpers.guardPrivateRoute(context);
+            // user must be logged in
+            const decodedToken = await Helpers.guardPrivateRoute(context);
             // Only attempt to link if user has an email in their token
-            if ((JWT.decode(token) as Types.UserType).email) {
+            if (decodedToken.email) {
                 await api.patch(
                     `/publications/${publication}/link-coauthor`,
                     {
@@ -46,7 +47,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                         code,
                         approve: true
                     },
-                    token
+                    Helpers.getJWT(context)
                 );
             }
         } catch (err: unknown | Types.AxiosError) {

@@ -67,7 +67,7 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/healthcheck
-                  method: get
+                  method: GET
                   cors: true
     seedOpenSearch:
         handler: src/lib/testUtils.openSearchSeed
@@ -77,49 +77,49 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications
-                  method: get
+                  method: GET
                   cors: true
     getPublication:
         handler: src/components/publication/routes.get
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
-                  method: get
+                  method: GET
                   cors: true
     createPublication:
         handler: src/components/publication/routes.create
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications
-                  method: post
+                  method: POST
                   cors: true
     updateStatus:
         handler: src/components/publication/routes.updateStatus
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/status/{status}
-                  method: put
+                  method: PUT
                   cors: true
     updatePublication:
         handler: src/components/publication/routes.update
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
-                  method: patch
+                  method: PATCH
                   cors: true
     deletePublication:
         handler: src/components/publication/routes.deletePublication
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}
-                  method: delete
+                  method: DELETE
                   cors: true
     getPublicationLinks:
         handler: src/components/publication/routes.getPublicationLinks
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/links
-                  method: get
+                  method: GET
                   cors: true
     # Users
     getUsers:
@@ -127,14 +127,21 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/users
-                  method: get
+                  method: GET
                   cors: true
     getUser:
         handler: src/components/user/routes.get
         events:
             - http:
                   path: ${self:custom.versions.v1}/users/{id}
-                  method: get
+                  method: GET
+                  cors: true
+    getUserPublications:
+        handler: src/components/user/routes.getPublications
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/{id}/publications
+                  method: GET
                   cors: true
     # Auth
     authorization:
@@ -142,14 +149,14 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/authorization
-                  method: post
+                  method: POST
                   cors: true
-    getUserPublications:
-        handler: src/components/user/routes.getPublications
+    getDecodedUserToken:
+        handler: src/components/authorization/routes.getDecodedUserToken
         events:
             - http:
-                  path: ${self:custom.versions.v1}/users/{id}/publications
-                  method: get
+                  path: ${self:custom.versions.v1}/decode-user-token
+                  method: GET
                   cors: true
     # Links
     createLink:
@@ -157,14 +164,14 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/links
-                  method: post
+                  method: POST
                   cors: true
     deleteLink:
         handler: src/components/link/routes.deleteLink
         events:
             - http:
                   path: ${self:custom.versions.v1}/links/{id}
-                  method: delete
+                  method: DELETE
                   cors: true
     # CoAuthors
     createCoAuthor:
@@ -172,28 +179,28 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
-                  method: post
+                  method: POST
                   cors: true
     deleteCoAuthor:
         handler: src/components/coauthor/routes.remove
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
-                  method: delete
+                  method: DELETE
                   cors: true
     linkCoAuthor:
         handler: src/components/coauthor/routes.link
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
-                  method: patch
+                  method: PATCH
                   cors: true
     updateCoAuthor:
         handler: src/components/coauthor/routes.update
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
-                  method: patch
+                  method: PATCH
                   cors: true
     # Flags
     getFlag:
@@ -201,42 +208,42 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/{id}
-                  method: get
+                  method: GET
                   cors: true
     createFlag:
         handler: src/components/flag/routes.createFlag
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/flag
-                  method: post
+                  method: POST
                   cors: true
     createFlagComment:
         handler: src/components/flag/routes.createFlagComment
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/{id}/comment
-                  method: post
+                  method: POST
                   cors: true
     resolveFlag:
         handler: src/components/flag/routes.resolveFlag
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/{id}/resolve
-                  method: post
+                  method: POST
                   cors: true
     getPublicationFlags:
         handler: src/components/flag/routes.getPublicationFlags
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/publication/{id}
-                  method: get
+                  method: GET
                   cors: true
     getUserFlags:
         handler: src/components/flag/routes.getUserFlags
         events:
             - http:
                   path: ${self:custom.versions.v1}/flag/user/{id}
-                  method: get
+                  method: GET
                   cors: true
     # Images
     createImage:
@@ -244,21 +251,21 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/images
-                  method: post
+                  method: POST
                   cors: true
     deleteImage:
         handler: src/components/image/routes.destroy
         events:
             - http:
                   path: ${self:custom.versions.v1}/images/{id}
-                  method: delete
+                  method: DELETE
                   cors: true
     getAllImages:
         handler: src/components/image/routes.getAll
         events:
             - http:
                   path: ${self:custom.versions.v1}/images
-                  method: get
+                  method: GET
                   cors: true
     # Bookmarks
     createBookmark:
@@ -266,28 +273,28 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
-                  method: post
+                  method: POST
                   cors: true
     removeBookmark:
         handler: src/components/bookmark/routes.remove
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
-                  method: delete
+                  method: DELETE
                   cors: true
     getBookmark:
         handler: src/components/bookmark/routes.get
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
-                  method: get
+                  method: GET
                   cors: true
     getAllBookmark:
         handler: src/components/bookmark/routes.getAll
         events:
             - http:
                   path: ${self:custom.versions.v1}/bookmarks
-                  method: get
+                  method: GET
                   cors: true
     # Verification
     requestVerification:
@@ -296,7 +303,7 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/verification/{id}
-                  method: get
+                  method: GET
                   cors: true
     confirmVerification:
         handler: src/components/verification/routes.confirmCode
@@ -304,21 +311,21 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/verification/{id}
-                  method: post
+                  method: POST
                   cors: true
     createFunder:
         handler: src/components/funder/routes.create
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/funders
-                  method: post
+                  method: POST
                   cors: true
     deleteFunder:
         handler: src/components/funder/routes.destroy
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
-                  method: delete
+                  method: DELETE
                   cors: true
     # References
     getReferences:
@@ -375,12 +382,12 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/affiliation
-                  method: post
+                  method: POST
                   cors: true
     deleteAffiliation:
         handler: src/components/affiliations/routes.destroy
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
-                  method: delete
+                  method: DELETE
                   cors: true
