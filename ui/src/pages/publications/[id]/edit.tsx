@@ -1,17 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Router from 'next/router';
-import * as Framer from 'framer-motion';
 
+import * as OutlineIcons from '@heroicons/react/outline';
+import * as Framer from 'framer-motion';
+import * as Router from 'next/router';
+
+import * as api from '@api';
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
+import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as api from '@api';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
@@ -130,7 +131,7 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const store = Stores.usePublicationCreationStore();
+    const { updateReferences, ...store } = Stores.usePublicationCreationStore();
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
@@ -195,6 +196,22 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
+
+    const fetchAndSetReferences = React.useCallback(async () => {
+        if (props.draftedPublication.id) {
+            try {
+                const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
+                updateReferences(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftedPublication.id, props.token, updateReferences]);
+
+    React.useEffect(() => {
+        fetchAndSetReferences();
+    }, [fetchAndSetReferences]);
 
     React.useEffect(() => {
         if (props.draftedPublication.id) {

@@ -8,6 +8,7 @@ import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Contexts from '@contexts';
 import * as Hooks from '@hooks';
 
 import '../styles/globals.css';
@@ -48,7 +49,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     }, [showCmdPalette, toggleCmdPalette]);
 
     return (
-        <>
+        <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
@@ -92,7 +93,7 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                     </Framer.MotionConfig>
                 </SWR.SWRConfig>
             )}
-        </>
+        </Contexts.ConfirmationModalProvider>
     );
 };
 

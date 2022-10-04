@@ -319,3 +319,21 @@ export const linkedPublicationTypes = {
     INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
     REAL_WORLD_APPLICATION: ['PROBLEM']
 };
+
+// original URL regex: /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/
+export const getURLsFromText = (text: string) =>
+    text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g) || [];
+
+export const validateURL = (value: string) =>
+    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
+
+// extracts DOIs including ‘DOI: 10.’ / ‘DOI:10.’ / ‘DOI-10.’ / ‘DOI - 10.’ / ‘DOI 10.’ etc...
+export const getFullDOIsStrings = (text: string) =>
+    text.match(
+        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi
+    ) || [];
+
+// extracts the DOIs only
+export const getDOIsFromText = (text: string) => text.match(/(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g) || [];
+
+export const validateDOI = (value: string) => /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/.test(value);

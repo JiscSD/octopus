@@ -83,6 +83,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
 
+    const { data: references = [] } = useSWR<Interfaces.Reference[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/reference`,
+        (url) => api.get(url, props.userToken).then(({ data }) => data)
+    );
+
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
@@ -107,11 +112,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
+    const showReferences = references?.length;
     const showProblems = problems?.length && publicationData?.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews?.length && publicationData?.type !== 'PEER_REVIEW';
     const showEthicalStatement = publicationData?.type === 'DATA';
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
+    if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
@@ -372,6 +379,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
                     </Components.PublicationContentSection>
+
+                    {/* References */}
+                    {!!showReferences && (
+                        <Components.PublicationContentSection id="references" title="References" hasBreak>
+                            {references.map((reference) => (
+                                <div key={reference.id} className="py-2 break-anywhere">
+                                    <Components.ParseHTML content={reference.text} />
+                                    {reference.location && (
+                                        <div className="break-all underline dark:text-white-50">
+                                            <Components.Link href={reference.location} openNew>
+                                                {reference.location}
+                                            </Components.Link>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Components.PublicationContentSection>
+                    )}
 
                     {/* Linked from problems */}
                     {!!showProblems && (

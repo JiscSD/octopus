@@ -203,10 +203,13 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                     correctly.
                                 </li>
                                 <li className="mb-6">
-                                    <span className="font-bold">How should references be formatted?</span> Please add a
-                                    line-separated list of references to the relevant field. Where appropriate, all
-                                    references should include a DOI or URL. You can then create superscript links
-                                    between the main text and the reference list.
+                                    <span className="font-bold">How should references be formatted?</span> You can use
+                                    your preferred reference style, but references must be line-separated. Where
+                                    appropriate, all references should include a DOI or URL. When adding references,
+                                    please separate them from the main text and instead add them to the dedicated
+                                    References field. Octopus will then review your references and identify any links –
+                                    we recommend checking that these are displaying correctly, and making any edits as
+                                    required.
                                 </li>
                                 <li className="mb-6">
                                     <span className="font-bold">
