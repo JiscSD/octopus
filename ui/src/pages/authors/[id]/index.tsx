@@ -8,6 +8,7 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Assets from '@assets';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestId = context.query.id;
@@ -58,12 +59,18 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                             {props.user.firstName} {props.user.lastName}
                         </h1>
                     </div>
-                    <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        ORCID:{' '}
-                        <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
-                            <span className="font-semibold text-teal-500">{props.user.orcid}</span>
-                        </Components.Link>
-                    </h3>
+                    <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        {props.user.id === 'octopus' ? null : (
+                            <Components.Link
+                                className="flex w-fit items-center gap-2"
+                                href={`https://orcid.org/${props.user.orcid}`}
+                                openNew={true}
+                            >
+                                <Assets.OrcidLogoIcon width={24} />
+                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                            </Components.Link>
+                        )}
+                    </div>
                 </header>
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">

@@ -1,12 +1,11 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { NextPage } from 'next';
 import Head from 'next/head';
+import { NextPage } from 'next';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Assets from '@assets';
 
 type Props = {
     faqContents: [{ href: string; title: string; content: string }];
@@ -67,7 +66,7 @@ const faqContents = [
         href: 'how_account_octopus',
         id: 'how_account_octopus',
         heading: 'How do I create an account?',
-        content: `<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='${Config.urls.privacy.path}' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>`
+        content: `<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/' target="_blank">ORCID®</a> account. You can login using your ORCID credentials. See our <a href='${Config.urls.privacy.path}' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className="mb-2"> ORCID is an independent non-profit organization that provides a persistent identifier – an ORCID iD – that distinguishes you from other researchers and a mechanism for linking your research outputs and activities to your iD. ORCID is integrated into many systems used by publishers, funders, institutions, and other research-related services. Learn more at <a className='underline' href='https://orcid.org/' target="_blank">ORCID.org</a></p><p className='mb-2'>If you do not yet have an ORCID account, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>`
     },
     {
         title: 'Does each publication get a DOI?',
