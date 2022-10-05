@@ -61,7 +61,7 @@ describe('Create flags comments on a flag', () => {
         const createFlagComment = await testUtils.agent
             .post('/flag/publication-problem-live-flag/comment')
             .query({
-                apiKey: '1234'
+                apiKey: '000000003'
             })
             .send({
                 comment: 'Comments'

@@ -45,6 +45,12 @@ const DataStatements: React.FC = (): React.ReactElement => {
     const updateDataAccessStatement = Stores.usePublicationCreationStore((state) => state.updateDataAccessStatement);
     const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState('');
 
+    React.useEffect(() => {
+        if (!dataAccessOptions.includes(dataAccessStatement) && dataAccessStatement !== null) {
+            setDataAccessStatementOther(dataAccessStatement);
+        }
+    }, []);
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             {/* Ethical statement */}

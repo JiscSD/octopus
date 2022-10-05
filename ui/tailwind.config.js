@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin');
 
 module.exports = {
     darkMode: 'class',
@@ -121,6 +122,9 @@ module.exports = {
             black: '#000000',
             orcid: '#437405'
         },
+        container: {
+            center: true
+        },
         fontFamily: {
             inter: ['Inter var', ...defaultTheme.fontFamily.sans],
             montserrat: ['Montserrat', ...defaultTheme.fontFamily.sans]
@@ -209,5 +213,20 @@ module.exports = {
             }
         }
     },
-    plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')]
+    plugins: [
+        require('@tailwindcss/typography'),
+        require('@tailwindcss/forms'),
+        function ({ addVariant }) {
+            addVariant('children', '& > *');
+        },
+        plugin(function ({ addUtilities }) {
+            const newUtilities = {
+                '.break-anywhere': {
+                    'overflow-wrap': 'anywhere'
+                }
+            };
+
+            addUtilities(newUtilities, ['responsive']);
+        })
+    ]
 };

@@ -166,14 +166,7 @@ export const update = async (
         }
 
         if (event.body.content) {
-            const isHTMLSafe = helpers.isHTMLSafe(event.body.content);
-
-            if (!isHTMLSafe) {
-                return response.json(404, {
-                    message:
-                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
-                });
-            }
+            event.body.content = helpers.getSafeHTML(event.body.content);
         }
 
         if (event.body.id) {

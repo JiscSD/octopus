@@ -1,8 +1,8 @@
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 let store: any = (set: (params: any) => void) => ({
@@ -20,10 +20,13 @@ let store: any = (set: (params: any) => void) => ({
                 description: '',
                 funderStatement: '',
                 funders: [],
+                affiliationsStatement: '',
+                affiliations: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
-                conflictOfInterestStatus: true,
+                references: [],
+                conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
@@ -50,6 +53,10 @@ let store: any = (set: (params: any) => void) => ({
     content: '',
     updateContent: (content: string) => set(() => ({ content })),
 
+    // References
+    references: [],
+    updateReferences: (references: Interfaces.Reference[]) => set(() => ({ references })),
+
     // Description
     description: '',
     updateDescription: (description: string) => set(() => ({ description })),
@@ -66,7 +73,7 @@ let store: any = (set: (params: any) => void) => ({
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),
 
     // COI
-    conflictOfInterestStatus: true,
+    conflictOfInterestStatus: undefined,
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
     updateConflictOfInterestText: (conflictOfInterestText: string) => set(() => ({ conflictOfInterestText })),

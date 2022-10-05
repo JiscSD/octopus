@@ -176,30 +176,53 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     <span className="ml-1">json</span>
                 </button>
             </div>
-
             {user && user.email ? (
-                props.publication.user.id !== user.id && (
-                    <>
-                        {props.publication.type !== 'PEER_REVIEW' && (
-                            <Components.PublicationSidebarCardActionsButton
-                                label="Write review"
-                                onClick={() => {
-                                    router.push({
-                                        pathname: `${Config.urls.createPublication.path}`,
-                                        query: {
-                                            for: props.publication.id,
-                                            type: 'PEER_REVIEW'
-                                        }
-                                    });
-                                }}
-                            />
-                        )}
-                        <Components.PublicationSidebarCardActionsButton
-                            label="Flag a concern with this publication"
-                            onClick={() => setShowRedFlagModel(true)}
-                        />
-                    </>
-                )
+                <>
+                    {/* if the publication is a peer review, no options shall be given to write a linked publication */}
+                    {props.publication.type !== 'PEER_REVIEW' && (
+                        <>
+                            {Helpers.linkedPublicationTypes[
+                                props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                            ].map((item: any) => {
+                                return (
+                                    <Components.PublicationSidebarCardActionsButton
+                                        label={`Write a linked ${Helpers.formatPublicationType(item)}`}
+                                        key={item}
+                                        onClick={() => {
+                                            router.push({
+                                                pathname: `${Config.urls.createPublication.path}`,
+                                                query: {
+                                                    for: props.publication.id,
+                                                    type: item
+                                                }
+                                            });
+                                        }}
+                                    />
+                                );
+                            })}
+                            {props.publication.user.id !== user.id && (
+                                <>
+                                    <Components.PublicationSidebarCardActionsButton
+                                        label="Write a review"
+                                        onClick={() => {
+                                            router.push({
+                                                pathname: `${Config.urls.createPublication.path}`,
+                                                query: {
+                                                    for: props.publication.id,
+                                                    type: 'PEER_REVIEW'
+                                                }
+                                            });
+                                        }}
+                                    />
+                                    <Components.PublicationSidebarCardActionsButton
+                                        label="Flag a concern with this publication"
+                                        onClick={() => setShowRedFlagModel(true)}
+                                    />
+                                </>
+                            )}
+                        </>
+                    )}
+                </>
             ) : user && !user.email ? (
                 <>
                     <Components.Link

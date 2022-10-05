@@ -18,7 +18,7 @@ const Publication: React.FC<Props> = (props): React.ReactElement => (
                 <Components.PublicationVisulization id={props.publicationId} />
             </div>
         )}
-        <main className="container mx-auto px-8 pb-6 pt-4 lg:grid lg:pb-16 lg:pt-8 xl:grid-cols-12 xl:gap-8 2xl:gap-16">
+        <main className="container mx-auto px-8 pb-6 pt-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-8 2xl:gap-16">
             {props.children}
         </main>
         <Components.Footer waves={true} />

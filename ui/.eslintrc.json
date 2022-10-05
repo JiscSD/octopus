@@ -1,11 +1,6 @@
 {
-    "extends": [
-        "next/core-web-vitals",
-        "plugin:jsx-a11y/recommended"
-    ],
+    "extends": ["next/core-web-vitals", "plugin:jsx-a11y/recommended"],
     "rules": {
-        // Disabled due to using an empty array in react monitor tools, useEffect, useCallback, useMemo
-        "react-hooks/exhaustive-deps": "off",
         // Disabled due to genuine need of using native <img /> tags over Next/Image
         "@next/next/no-img-element": "off"
     }

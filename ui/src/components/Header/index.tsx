@@ -20,14 +20,33 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
-            <Components.Banner text="This is a beta release still under active development. Please don't use it for recording your real work... yet!" />
+            <Components.Banner>
+                <>
+                    This is a beta release under active development. Help us improve by providing{' '}
+                    <Components.Link
+                        href="https://forms.office.com/pages/responsepage.aspx?id=TTn5SBSKJ02CpvNfEjYSBdQdk25FM49NmnYND3Z_nExUNE5TNzVQNTdXNTY0UFdOT05CNkZUVDBZSy4u"
+                        className="w-fit underline  underline-offset-4"
+                        openNew
+                    >
+                        feedback
+                    </Components.Link>{' '}
+                    or contacting{' '}
+                    <Components.Link
+                        href="mailto:help@jisc.ac.uk"
+                        openNew
+                        className="w-fit underline  underline-offset-4"
+                    >
+                        help@jisc.ac.uk
+                    </Components.Link>
+                </>
+            </Components.Banner>
             {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
                         <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
                         <Components.Link
-                            href={`${Config.urls.verify.path}?newUser=true`}
+                            href={`${Config.urls.verify.path}`}
                             className="w-fit underline decoration-2 underline-offset-4"
                         >
                             Please confirm your email address to publish content

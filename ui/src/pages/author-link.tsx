@@ -6,6 +6,7 @@ import * as Types from '@types';
 import JWT from 'jsonwebtoken';
 import Head from 'next/head';
 import React from 'react';
+import axios from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let email = null;
@@ -35,9 +36,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // check user credentials
     if (approve === 'true') {
         try {
-            const token = Helpers.guardPrivateRoute(context);
+            // user must be logged in
+            const decodedToken = await Helpers.guardPrivateRoute(context);
             // Only attempt to link if user has an email in their token
-            if ((JWT.decode(token) as Types.UserType).email) {
+            if (decodedToken.email) {
                 await api.patch(
                     `/publications/${publication}/link-coauthor`,
                     {
@@ -45,13 +47,24 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                         code,
                         approve: true
                     },
-                    token
+                    Helpers.getJWT(context)
                 );
             }
-        } catch (err) {
+        } catch (err: unknown | Types.AxiosError) {
+            if (axios.isAxiosError(err)) {
+                return {
+                    props: {
+                        title: 'Error linking you as a co-author.',
+                        statusCode: err.response?.status,
+                        message: err.response?.data.message
+                    }
+                };
+            }
+
             return {
                 props: {
-                    message: 'There was an error linking you as a co-author.'
+                    status: 500,
+                    message: 'Unknown server error'
                 }
             };
         }
@@ -104,10 +117,14 @@ const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
             />
         ) : (
             <Layouts.Error
-                title={'Page not found.'}
-                windowTitle={Config.urls[404].title}
+                title={props.title ? `${props.title}` : 'Error.'}
+                windowTitle={
+                    props.statusCode
+                        ? `${props.statusCode} - Octopus | Built for Researchers`
+                        : `${Config.urls[500].title}`
+                }
                 content={props.message}
-                statusCode={404}
+                statusCode={props.statusCode || 500}
             />
         )}
     </>

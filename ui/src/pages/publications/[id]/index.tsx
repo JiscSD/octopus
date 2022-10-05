@@ -1,10 +1,9 @@
-import * as OutlineIcons from '@heroicons/react/outline';
+import React, { useMemo } from 'react';
 import parse from 'html-react-parser';
-import jwt from 'jsonwebtoken';
 import Head from 'next/head';
-import React from 'react';
 import useSWR from 'swr';
 
+import * as OutlineIcons from '@heroicons/react/outline';
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
@@ -36,8 +35,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let bookmark: boolean = false;
     let error: string | null = null;
 
-    const cookies = context.req.cookies;
-    const token = cookies[Config.keys.cookieStorage.token];
+    const token = Helpers.getJWT(context);
 
     try {
         const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, token);
@@ -60,22 +58,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
-    let isBookmarkVisible = false;
-
-    if (token) {
-        //check if user is author / co author. if so the bookmark icon won't display
-        const currentUser = jwt.decode(token) as any;
-
-        if (currentUser.id) {
-            const isCoAuthor = publication?.coAuthors.some((author) => author.id == currentUser.id);
-            const isOwner = currentUser.id === publication.createdBy;
-
-            if (!isCoAuthor && !isOwner) {
-                isBookmarkVisible = true;
-            }
-        }
-    }
-
     return {
         props: {
             fallback: {
@@ -83,7 +65,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             },
             userToken: token || '',
             bookmark,
-            isBookmarkVisible,
             publicationId: publication.id
         }
     };
@@ -93,7 +74,6 @@ type Props = {
     publication: Interfaces.Publication;
     publicationId: string;
     bookmark: boolean;
-    isBookmarkVisible: boolean;
     userToken: string;
 };
 
@@ -103,26 +83,42 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
 
+    const { data: references = [] } = useSWR<Interfaces.Reference[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/reference`,
+        (url) => api.get(url, props.userToken).then(({ data }) => data)
+    );
+
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
-
-    const linkedPublicationsTo = publicationData?.linkedTo;
-    const linkedPublicationsFrom = publicationData?.linkedFrom?.filter(
-        (link) => link.publicationFromRef.type !== 'PROBLEM' && link.publicationFromRef.type !== 'PEER_REVIEW'
-    );
 
     const peerReviews = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
     const problems = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM');
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
+    const isBookmarkVisible = useMemo(() => {
+        if (!user || !publicationData) {
+            return false;
+        }
+
+        const isCoAuthor = publicationData.coAuthors.some((author) => author.id == user.id);
+        const isOwner = user.id === publicationData.createdBy;
+
+        if (!isCoAuthor && !isOwner) {
+            return true;
+        }
+
+        return false;
+    }, [publicationData, user]);
 
     const list = [];
 
+    const showReferences = references?.length;
     const showProblems = problems?.length && publicationData?.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews?.length && publicationData?.type !== 'PEER_REVIEW';
     const showEthicalStatement = publicationData?.type === 'DATA';
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
+    if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
@@ -236,7 +232,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 fixedHeader={false}
                 publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
             >
-                <section className="col-span-9">
+                <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
                         <Components.Alert
                             className="mb-4"
@@ -322,7 +318,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
                                 {publicationData.title}
                             </h1>
-                            {props.isBookmarkVisible && (
+                            {isBookmarkVisible && (
                                 <div className="col-span-1 grid justify-items-end">
                                     <button
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
@@ -354,7 +350,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     coAuthor.user && (
                                         <>
                                             <Components.Link
-                                                href={`${Config.urls.viewUser.path}/${coAuthor.user.orcid}`}
+                                                href={`${Config.urls.viewUser.path}/${coAuthor.linkedUser}`}
                                                 className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                             >
                                                 <>
@@ -372,7 +368,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </div>
                         )}
 
-                        <div className="block xl:hidden">
+                        <div className="block lg:hidden">
                             {publicationData && <SidebarCard publication={publicationData} sectionList={sectionList} />}
                         </div>
                     </header>
@@ -383,6 +379,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
                     </Components.PublicationContentSection>
+
+                    {/* References */}
+                    {!!showReferences && (
+                        <Components.PublicationContentSection id="references" title="References" hasBreak>
+                            {references.map((reference) => (
+                                <div key={reference.id} className="py-2 break-anywhere">
+                                    <Components.ParseHTML content={reference.text} />
+                                    {reference.location && (
+                                        <div className="break-all underline dark:text-white-50">
+                                            <Components.Link href={reference.location} openNew>
+                                                {reference.location}
+                                            </Components.Link>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Components.PublicationContentSection>
+                    )}
 
                     {/* Linked from problems */}
                     {!!showProblems && (
@@ -439,7 +453,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {parse(publicationData.ethicalStatement)}
+                                    {publicationData.ethicalStatement}
                                 </p>
                                 {!!publicationData.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
@@ -586,7 +600,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </p>
                     </Components.PublicationContentSection>
                 </section>
-                <aside className="relative col-span-3 hidden xl:block">
+                <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
                         <SidebarCard publication={publicationData} sectionList={sectionList} />
                     </div>

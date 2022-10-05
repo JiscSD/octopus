@@ -10,21 +10,16 @@ type Props = {
 };
 
 const Desktop: React.FC<Props> = (props): React.ReactElement => (
-    <nav className="hidden lg:block">
+    <nav>
         <ul className="flex items-center">
             {props.items.map((item) => (
                 <li key={item.value} className="first:ml-0 last:mr-0 md:mx-1 lg:mx-2">
-                    {!item.subItems && (
-                        <Components.Link href={item.value} className=" p-2 ">
-                            <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                {item.label}
-                            </span>
-                        </Components.Link>
-                    )}
-
-                    {item.subItems?.length && (
+                    {item.subItems?.length ? (
                         <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
-                            <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50">
+                            <HeadlessUI.Menu.Button
+                                data-testid="username-button"
+                                className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
+                            >
                                 <span className="flex items-center">
                                     {item.label}
                                     <OutlineIcons.ChevronDownIcon className="ml-2 h-4 w-4 text-grey-500 transition-colors duration-500 dark:text-teal-500" />
@@ -67,6 +62,12 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                 </HeadlessUI.Menu.Items>
                             </HeadlessUI.Transition>
                         </HeadlessUI.Menu>
+                    ) : (
+                        <Components.Link href={item.value} className=" p-2 ">
+                            <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                {item.label}
+                            </span>
+                        </Components.Link>
                     )}
                 </li>
             ))}

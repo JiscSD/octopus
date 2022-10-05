@@ -1,24 +1,24 @@
 import React from 'react';
+import * as HeadlessUi from '@headlessui/react';
+import * as SolidIcon from '@heroicons/react/solid';
 import * as tiptap from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
+import * as Mammoth from 'mammoth';
+import * as FAIcons from 'react-icons/fa';
+import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Interfaces from '@interfaces';
+import * as Stores from '@stores';
+import * as Types from '@types';
+
 import TipTapImage from '@tiptap/extension-image';
-import TextAlign from '@tiptap/extension-text-align';
+import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import * as Mammoth from 'mammoth';
-import * as SolidIcon from '@heroicons/react/solid';
-import * as HeadlessUi from '@headlessui/react';
-import * as FAIcons from 'react-icons/fa';
-
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import TableRow from '@tiptap/extension-table-row';
+import TextAlign from '@tiptap/extension-text-align';
+import StarterKit from '@tiptap/starter-kit';
 
 type LetterIconType = {
     letter: string;
@@ -97,6 +97,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
+
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<null | string>(null);
 
@@ -286,7 +287,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     return (
         props.editor && (
             <>
-                <div className="flex items-center">
+                <div className="flex">
                     <HeadlessUi.Listbox value={selected} onChange={setSelected}>
                         <div className="relative mt-1">
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
@@ -331,9 +332,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </div>
                     </HeadlessUi.Listbox>
 
-                    <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
-
-                    <div className="flex">
+                    <div className="flex max-w-full items-center overflow-x-auto lg:max-w-md xl:max-w-xl 2xl:max-w-full">
+                        <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}
@@ -641,11 +641,10 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     );
 };
 
-// handleURLSourceUpload(e.target.value)
-
 interface TextEditorProps {
     contentChangeHandler: (editor: any) => void;
     defaultContent: string;
+    references?: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
@@ -653,6 +652,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
     const [importModalVisible, setImportModalVisible] = React.useState(false);
 
     const textEditor = tiptap.useEditor({
+        autofocus: true,
         extensions: [
             StarterKit,
             Link.configure({
@@ -676,16 +676,11 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         onSelectionUpdate: () => setLoading(true),
         editorProps: {
             attributes: {
-                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[80px] xl:min-h-[150px] 2xl:min-h-[350px] dark:text-grey-800`
+                class: `${Config.values.HTMLStylesTiptapEditor} prose max-w-none mt-6 outline-none min-h-[150px] xl:min-h-[250px] dark:text-grey-800`
             }
         },
         content: props.defaultContent
     });
-
-    // Focus the editor on render
-    React.useEffect(() => {
-        if (textEditor) textEditor.commands.focus('start');
-    }, [textEditor]);
 
     return textEditor ? (
         <>

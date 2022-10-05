@@ -10,15 +10,9 @@ function checkEnvVariable(variable: string | undefined): string {
     }
 }
 
-if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
-    host = 'https://localhost:3001';
-    mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
-    orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
-} else {
-    host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
-    mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
-    orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
-}
+host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 
 export const base = {
     title: 'Octopus | Built for Researchers',
@@ -147,11 +141,11 @@ const urls = {
         canonical: `${base.host}`
     },
     terms: {
-        path: '/terms',
+        path: '/user-terms',
         title: `Terms - ${base.title}`,
         description: 'Terms and conditions relevant to the Octopus site, including details on our open-source licence.',
         keywords: ['open access', 'open source', 'open license', 'open licence', 'GPLv3'],
-        canonical: `${base.host}/terms`
+        canonical: `${base.host}/user-terms`
     },
     privacy: {
         path: '/privacy',
@@ -254,7 +248,7 @@ const urls = {
         canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
+        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket
 };

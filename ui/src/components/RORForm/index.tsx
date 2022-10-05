@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
@@ -160,7 +159,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
     const [link, setLink] = React.useState('');
-    const [isLinkValid, setIsLinkValid] = React.useState(false);
+    const [isLinkValid, setIsLinkValid] = React.useState(true);
     const [submitLoading, setSubmitLoading] = React.useState(false);
 
     const [rorLoading, setRorLoading] = React.useState(false);
@@ -194,6 +193,12 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     }, [method]);
 
     const onSubmitHandler = async () => {
+        const isValidLink = Helpers.validateURL(link);
+
+        if (!isValidLink) {
+            return setIsLinkValid(false);
+        }
+
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
@@ -235,11 +240,11 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             type="radio"
                             defaultChecked={method === 'ror'}
                             onChange={(e) => setMethod('ror')}
-                            className="border-gray-300 mb-1 h-4 w-4 text-teal-600 focus:ring-teal-600"
+                            className="border-gray-300 mb-2 h-4 w-4 text-teal-600 focus:ring-teal-600"
                         />
                         <label
                             htmlFor="ror"
-                            className="text-gray-700 mb-1 ml-3 block text-sm font-medium dark:text-white-100"
+                            className="text-gray-700 mb-2 ml-3 block text-sm font-medium dark:text-white-100"
                         >
                             Enter ROR ID
                         </label>
@@ -257,6 +262,20 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             placeholder="01rv9gx86 or https://ror.org/01rv9gx86"
                             value={ror}
                             onChange={(e) => getRorData(e.target.value)}
+                        />
+                        <Components.Button
+                            className="pl-5"
+                            title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
+                            disabled={ror == '' || rorError == true}
+                            onClick={onSubmitHandler}
+                            iconPosition="RIGHT"
+                            icon={
+                                submitLoading ? (
+                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                ) : (
+                                    <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                )
+                            }
                         />
                     </div>
                     <div className="mb-2 flex items-center">
@@ -318,36 +337,46 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             type="url"
                             value={link}
                             onChange={(e) => {
-                                setIsLinkValid(Helpers.checkLinkIsValid(e.target.value));
                                 setLink(e.target.value);
+                                if (!isLinkValid) {
+                                    setIsLinkValid(true);
+                                }
                             }}
                         />
-                        {!isLinkValid && link ? (
+                        <Components.Button
+                            className="pl-5"
+                            title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
+                            disabled={
+                                method == 'ror' ||
+                                name == '' ||
+                                link == '' ||
+                                city == '' ||
+                                link == '' ||
+                                isLinkValid == false
+                            }
+                            onClick={onSubmitHandler}
+                            iconPosition="RIGHT"
+                            icon={
+                                submitLoading ? (
+                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                ) : (
+                                    <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                )
+                            }
+                        />
+                        {method === 'manual' && !isLinkValid ? (
                             <Components.Alert
                                 severity="ERROR"
-                                title="Please enter a valid URL."
+                                title='Please enter a valid URL starting with "http".'
                                 className="mt-3 w-1/2"
                             />
                         ) : null}
                     </div>
                 </fieldset>
             </div>
-            <Components.Button
-                title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
-                disabled={name == '' || link == '' || city == '' || link == '' || isLinkValid == false}
-                onClick={onSubmitHandler}
-                iconPosition="RIGHT"
-                icon={
-                    submitLoading ? (
-                        <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                    ) : (
-                        <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                    )
-                }
-            />
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
-                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                <div className="my-2">
+                    <div className="inline-block min-w-full py-2 align-middle">
                         {specifiedArray.length ? (
                             <div className="mb-6 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
                                 <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
@@ -381,7 +410,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             <Components.Alert
                                 severity="INFO"
                                 title={`This publication does not have any ${props.type}.`}
-                                className="w-1/2"
+                                className="w-full lg:w-1/2"
                             />
                         )}
 
@@ -395,10 +424,10 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             </label>
                             <textarea
                                 name="free-text"
-                                className={`mb-2 mt-3 w-5/6 rounded border border-grey-100 bg-white-50 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400
-                            `}
+                                className="mb-2 mt-3 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
                                 placeholder="Enter any details"
                                 value={props.type == 'funders' ? funderStatement ?? '' : affiliationsStatement ?? ''}
+                                rows={5}
                                 onChange={(e) =>
                                     props.type == 'funders'
                                         ? updateFunderStatement(e.target.value)

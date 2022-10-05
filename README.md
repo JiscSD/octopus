@@ -16,51 +16,56 @@ A new way to publish your scientific work that's fast, free and fair.
 
 ---
 
-## Running locally
+## Prerequisites
 
 To run this application locally you will need:
 
--   [Node v14](https://nodejs.org/en/blog/release/v14.17.3/)
+-   [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
 -   [Docker](https://www.docker.com/)
--   [Serverless Framework](https://www.serverless.com/)
+-   [Serverless Framework (Version 2.72.3)](https://www.serverless.com/) 
 -   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
-First, you will need to setup the databases and email server:
+## Getting started
+-   [API instructions](./api/README.md)
+-   [UI instructions](./ui/README.md)
 
-```bash
-$ ~/octopus docker-compose up
-```
+## Authentication
 
-Before running the API, you will need to set the following `ENV` variables in `/api/.env`
+Octopus makes use of [ORCID](https://orcid.org) as a means of authenticating end users.
 
-```bash
-DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
-ORCID_SECRET=ORCID_SECRET_FROM_APP
-ORCID_ID=APP-ORCID_APP_ID_FROM_APP
-JWT_SECRET=abcdefghijklmnopqrstuvwxyz
-STAGE=local
-ELASTICSEARCH_PROTOCOL=http
-ELASTICSEARCH_USER=admin
-ELASTICSEARCH_PASSWORD=admin
-ELASTICSEARCH_ENDPOINT=localhost:9200
-VALIDATION_CODE_EXPIRY=10
-VALIDATION_CODE_ATTEMPTS=3
-```
+You will need to register a client with ORCID and enter your application ID and secret into your .env file as described in the [API instructions]((./api/README.md)).
 
-Then you can seed the database and start the API:
+-   [Registering a Public API client](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/)
+-   [ORCID documentation](https://info.orcid.org/documentation)
 
-```bash
-$ ~/octopus/api npm install
-$ ~/octopus/api npm run seed:local
-$ ~/octopus/api npm run start:local
-```
+In addition to this **only allow users who have verified their email address** can access areas of the site which require authentication (such as publishing content or accepting co-author status). The process of verification is explained below.
 
-To start the UI, simple:
+## Email verification
 
-```bash
-$ ~/octopus/ui npm install
-$ ~/octopus/ui npm run dev
-```
+Once an end user has logged in using their ORCID account, they will be prompted to verify their email address. This ensures that notifications can be successfully delivered to the recipient, as by default a user's email address in ORCID is not shared.
+
+On reaching `/verify` The flow for this is as follows:
+
+1. User enters their email address, and requests a code be sent to them.
+2. A short 7 character code (eg. `UR10WDK`) is then emailed to the provided address.
+3. The user then enters this code in the supplied field, and clicks to verify.
+4. The user is then redirected to their previously entered destination (if supplied).
+
+On successful verification, the user email address is added to their account, and they will not be prompted again.
+
+Successive failures will result in a code being invalidated, requiring a new code to be sent.
+
+Codes remain valid for a set period in minutes, and beyond this the code is no longer accepted by the API.
+
+The thresholds for both validity period and successive falures are set within the [API](./api/README.md) `.env` file as `VALIDATION_CODE_EXPIRY` (in minutes) and `VALIDATION_CODE_ATTEMPTS` (the number of permitted attempts) respectively.
+
+If a user has not received a code, or has entered the incorrect email address, they are also presented with an option to update their email address or to send a new code.
+
+### Updating email
+
+A previously verified user can also update their email address via their "My publications" page, or by visiting `/verify`.
+
+A user email address is only updated once successfully verified, so entering a new email here will not reflect on the user account until they have completed the process.
 
 ---
 

@@ -56,7 +56,7 @@ model Publication {
     type                               PublicationType
     title                              String?
     licence                            LicenceType            @default(CC_BY)
-    conflictOfInterestStatus           Boolean?               @default(false)
+    conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
     ethicalStatement                   String?
     ethicalStatementFreeText           String?
@@ -81,10 +81,20 @@ model Publication {
     publicationFlags                   PublicationFlags[]
     publicationStatus                  PublicationStatus[]
     PublicationBookmarks               PublicationBookmarks[]
+    References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
     affiliations                       Affiliations[]
     affiliationStatement               String?
+}
+
+model References {
+    id            String        @id
+    publicationId String
+    type          ReferenceType
+    text          String
+    location      String?
+    publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
@@ -409,4 +419,10 @@ enum Languages {
     yo
     za
     zu
+}
+
+enum ReferenceType {
+    DOI
+    URL
+    TEXT
 }

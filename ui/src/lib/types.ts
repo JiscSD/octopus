@@ -2,6 +2,7 @@ import * as Interfaces from '@interfaces';
 
 export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 export type { AppProps } from 'next/app';
+export type { AxiosError } from 'axios';
 
 export type PreferencesStoreTypes = {
     darkMode: boolean;
@@ -61,8 +62,8 @@ export type PublicationCreationStoreType = {
     updateLicence: (licence: LicenceType) => void;
     language: Languages;
     updateLanguage: (language: Languages) => void;
-    conflictOfInterestStatus: boolean;
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => void;
+    conflictOfInterestStatus: boolean | undefined;
+    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean | undefined) => void;
     conflictOfInterestText: string;
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
@@ -71,7 +72,7 @@ export type PublicationCreationStoreType = {
     ethicalStatementFreeText: string | null;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
     updateEthicalStatement: (ethicalStatement: string) => void;
-    dataAccessStatement: string | null;
+    dataAccessStatement: string;
     updateDataAccessStatement: (dataAccessStatement: string | null) => void;
     dataPermissionsStatement: string | null;
     updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
@@ -90,6 +91,8 @@ export type PublicationCreationStoreType = {
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
     selfDeclaration: boolean;
     updateSelfDeclaration: (selfDeclaration: boolean) => void;
+    references: Interfaces.Reference[];
+    updateReferences: (references: Interfaces.Reference[]) => void;
 };
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;

@@ -1,6 +1,6 @@
+import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
-import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -73,7 +73,7 @@ export interface Publication extends CorePublication {
     user: User;
     linkedFrom: LinkFrom[];
     linkedTo: LinkTo[];
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
     dataPermissionsStatement: string | null;
@@ -85,6 +85,7 @@ export interface Publication extends CorePublication {
     affiliations: Affiliations[];
     affiliationStatement: string | null;
     publicationFlags: Flag[];
+    references: Reference[];
 }
 
 export interface PublicationWithLinks {
@@ -111,6 +112,16 @@ export interface PublicationWithLinks {
         publicationFromFirstName: string;
         publicationFromLastName: string;
     }[];
+}
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    publicationId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
 }
 
 export interface CoAuthor {
@@ -344,7 +355,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string;
     ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
