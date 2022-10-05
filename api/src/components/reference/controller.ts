@@ -13,38 +13,6 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
     }
 };
 
-export const update = async (event: I.AuthenticatedAPIRequest<I.Reference, undefined, I.UpdateReferencePath>) => {
-    try {
-        const publication = await publicationService.get(event.pathParameters.id);
-
-        //check that the publication exists
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        //check that the publication is live
-        if (publication.currentStatus !== 'DRAFT') {
-            return response.json(403, {
-                message: 'You can only add references to a draft publication.'
-            });
-        }
-
-        if (event.body.publicationId !== event.pathParameters.id) {
-            return response.json(403, {
-                message: 'Please enter the correct publication id.'
-            });
-        }
-
-        const reference = await referenceService.update(event.pathParameters.referenceId, event.body);
-
-        return response.json(200, reference);
-    } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
 export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>) => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);

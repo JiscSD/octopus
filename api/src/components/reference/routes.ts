@@ -7,13 +7,6 @@ export const get = middy(referenceController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.authentication(true));
 
-export const update = middy(referenceController.update)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication())
-    .use(middleware.checkOwnership())
-    .use(middleware.validator(referenceSchema.update, 'body'));
-
 export const updateAll = middy(referenceController.updateAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())

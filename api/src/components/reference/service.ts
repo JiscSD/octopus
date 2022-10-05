@@ -1,4 +1,3 @@
-import * as I from 'interface';
 import * as client from 'lib/client';
 
 export const getAllByPublication = async (publicationId: string) => {
@@ -10,16 +9,6 @@ export const getAllByPublication = async (publicationId: string) => {
     return references;
 };
 
-export const update = async (id: string, data: I.Reference) => {
-    const updated = await client.prisma.references.update({
-        data,
-        where: {
-            id
-        }
-    });
-    return updated;
-};
-
 export const updateAll = async (publicationId, data) => {
     await client.prisma.references.deleteMany({
         where: {
@@ -27,6 +16,8 @@ export const updateAll = async (publicationId, data) => {
         }
     });
 
-    const created = await client.prisma.references.createMany({ data });
+    const created = await client.prisma.references.createMany({
+        data
+    });
     return created;
 };

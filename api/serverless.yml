@@ -329,14 +329,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
                   method: get
                   cors: true
-    updateReference:
-        handler: src/components/reference/routes.update
-        warmup: true
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference/{referenceId}
-                  method: patch
-                  cors: true
     updateAllReference:
         handler: src/components/reference/routes.updateAll
         warmup: true
