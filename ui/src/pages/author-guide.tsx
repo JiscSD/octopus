@@ -81,8 +81,8 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                             <ul className="ml-8 list-disc">
                                 <li className="mb-8">
                                     <span className="font-bold">Sign in</span> using your ORCID® credentials (or create
-                                    an ORCID iD if you don’t have one). You will also need to provide a verified email
-                                    address so that you can receive essential service notifications.
+                                    an ORCID account if you don’t have one). You will also need to provide a verified
+                                    email address so that you can receive essential service notifications.
                                 </li>
                             </ul>
                         </StandardText>
