@@ -23,12 +23,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let publication: Interfaces.Publication | null = null;
     let isResolvable = false;
     let isCommentable = false;
-    const token = context.req.cookies[Config.keys.cookieStorage.token];
-    const decodedToken = jwt.decode(token) as Interfaces.CoreUser;
-    const swrKey = `${Config.endpoints.flag}/${context.query.flagId}`;
+    const token = Helpers.getJWT(context);
+    const decodedToken = token ? await Helpers.getDecodedUserToken(token) : null;
+    const flagUrl = `${Config.endpoints.flag}/${context.query.flagId}`;
 
     try {
-        const flagResponse = await api.get(swrKey, token);
+        const flagResponse = await api.get(flagUrl, token);
         flag = flagResponse.data;
 
         const publicationResponse = await api.get(`${Config.endpoints.publications}/${flag?.publicationId}`, token);
@@ -58,9 +58,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             error,
             isCommentable,
             isResolvable,
-            swrKey,
+            flagUrl,
             fallback: {
-                [swrKey]: {
+                [flagUrl]: {
                     data: flag
                 }
             }
@@ -74,7 +74,7 @@ type Props = {
     error: string | null;
     isCommentable: boolean;
     isResolvable: boolean;
-    swrKey: string;
+    flagUrl: string;
     fallback: {
         data: Interfaces.FlagWithComments;
     };
@@ -83,7 +83,7 @@ type Props = {
 const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const { data, isValidating, error, mutate } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(
-        props.swrKey,
+        props.flagUrl,
         {
             fallback: props.fallback
         }

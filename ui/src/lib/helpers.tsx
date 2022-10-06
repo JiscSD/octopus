@@ -1,13 +1,13 @@
+import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import fileDownload from 'js-file-download';
 import JWT from 'jsonwebtoken';
-import * as luxon from 'luxon';
-import React from 'react';
 
+import * as luxon from 'luxon';
 import * as Config from '@config';
-import * as Interfaces from '@interfaces';
 import * as Types from '@types';
+import * as api from '@api';
 
 /**
  * @description Truncates a string
@@ -141,7 +141,7 @@ export const randomWholeNumberInRange = (min: number, max: number): number => {
  */
 export const setAndReturnJWT = (token: string) => {
     const expireTime = 8 / 24;
-    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime });
+    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime, secure: true });
     return JWT.decode(token);
 };
 
@@ -153,37 +153,64 @@ export const clearJWT = () => {
 };
 
 /**
+ * @description returns JWT from browser cookies or SSR context
+ */
+export const getJWT = (context?: Types.GetServerSidePropsContext) =>
+    context ? context.req.cookies[Config.keys.cookieStorage.token] : Cookies.get(Config.keys.cookieStorage.token);
+
+/**
+ *
+ * @param token string
+ * @returns decoded user token
+ */
+export const getDecodedUserToken = async (token: string) => {
+    try {
+        return (await (
+            await api.get(Config.endpoints.decodeUserToken, token)
+        ).data) as Types.UserType;
+    } catch (error) {
+        return null;
+    }
+};
+
+/**
  * @description For use in NextJS SSR, check cookies for token & set the response location
  */
-export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
-    const cookies = context.req.cookies;
-    const token = cookies[Config.keys.cookieStorage.token];
+export const guardPrivateRoute = async (context: Types.GetServerSidePropsContext): Promise<Types.UserType> => {
+    const token = getJWT(context);
+    const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
+
+    const redirectToORCIDLogin = () => {
+        context.res.writeHead(302, {
+            Location: `${Config.urls.orcidLogin.path}&state=${redirectTo}`
+        });
+
+        context.res.end();
+    };
 
     if (!token) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            ).toString('base64')}`
-        });
-        context.res.end();
-        throw new Error('Token not valid');
+        redirectToORCIDLogin();
+        return {} as Types.UserType;
     }
 
-    // Only allow users with a verified email to access guarded routes
-    const decoded = JWT.decode(token) as Types.UserType;
+    const decodedToken = await getDecodedUserToken(token);
 
-    if (!decoded.email && !context.req.url?.startsWith(`${Config.urls.verify.path}`)) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.verify.path}?state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            ).toString('base64')}&newUser=true`
-        });
-        context.res.end();
+    if (!decodedToken) {
+        redirectToORCIDLogin();
+    } else {
+        const { email } = decodedToken; // check user email
+        const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
+
+        // Only allow users with a verified email to access guarded routes
+        if (!email && !isVerifyEmailPage) {
+            context.res.writeHead(302, {
+                Location: `${Config.urls.verify.path}?state=${redirectTo}`
+            });
+            context.res.end();
+        }
     }
 
-    return token;
+    return decodedToken as Types.UserType;
 };
 
 /**
@@ -292,3 +319,21 @@ export const linkedPublicationTypes = {
     INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
     REAL_WORLD_APPLICATION: ['PROBLEM']
 };
+
+// original URL regex: /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/
+export const getURLsFromText = (text: string) =>
+    text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g) || [];
+
+export const validateURL = (value: string) =>
+    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
+
+// extracts DOIs including ‘DOI: 10.’ / ‘DOI:10.’ / ‘DOI-10.’ / ‘DOI - 10.’ / ‘DOI 10.’ etc...
+export const getFullDOIsStrings = (text: string) =>
+    text.match(
+        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi
+    ) || [];
+
+// extracts the DOIs only
+export const getDOIsFromText = (text: string) => text.match(/(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g) || [];
+
+export const validateDOI = (value: string) => /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/.test(value);

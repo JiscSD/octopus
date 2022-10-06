@@ -13,6 +13,7 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
     }
 };
 
+
 export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>) => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);

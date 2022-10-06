@@ -11,10 +11,9 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const token = Helpers.guardPrivateRoute(context);
+    await Helpers.guardPrivateRoute(context);
     // If logged in, grab the token from cookies
-
-    let user: Interfaces.User | null = null;
+    const token = Helpers.getJWT(context);
 
     let usersBookmarks: Interfaces.BookmarkedPublicationsData[] = [];
 
@@ -27,9 +26,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            user,
             usersBookmarks,
-            token
+            token,
+            protectedPage: true
         }
     };
 };
