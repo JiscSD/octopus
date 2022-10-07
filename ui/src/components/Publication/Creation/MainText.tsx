@@ -151,7 +151,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
     return (
         <div className="space-y-12 2xl:space-y-16">
-            <div>
+            <div data-testid="main-text">
                 <Components.PublicationCreationStepTitle text="Main text" required />
                 {publicationId && (
                     <Components.TextEditor
@@ -162,9 +162,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 )}
             </div>
 
-            <div>
+            <div data-testid="main-text-select">
                 <Components.PublicationCreationStepTitle text="Language" required />
                 <select
+                    data-testid="main-text-select-element"
                     name="language"
                     id="language"
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
