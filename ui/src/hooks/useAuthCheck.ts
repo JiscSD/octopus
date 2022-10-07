@@ -27,7 +27,7 @@ const useAuthCheck = (protectedPage: boolean) => {
             await api.get(decodeUserTokenUrl, token);
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
-                console.log(error);
+                console.log((error as Error).message);
             }
 
             // check if current page is protected
