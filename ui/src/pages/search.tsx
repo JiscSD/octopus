@@ -72,7 +72,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${query || ''}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
@@ -126,7 +126,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${query || ''}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
