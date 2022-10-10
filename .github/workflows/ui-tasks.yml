@@ -23,7 +23,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm ci
+              run: npm i
 
             - name: Run prettier check
               working-directory: ./ui
@@ -44,7 +44,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm ci
+              run: npm i
 
             - name: Run lint
               working-directory: ./ui
@@ -65,7 +65,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm ci && npm install -g @lhci/cli@0.8.x
+              run: npm i && npm install -g @lhci/cli@0.8.x
 
             - name: Run build
               working-directory: ./ui
@@ -90,7 +90,7 @@ jobs:
 
             - name: Install dependencies
               working-directory: ./ui
-              run: npm ci
+              run: npm i
             
             - name: Run jest tests
               working-directory: ./ui
