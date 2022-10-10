@@ -13,6 +13,7 @@ const customJestConfig = {
         '^@layouts(.*)$': '<rootDir>/src/layouts$1',
         '^@components(.*)$': '<rootDir>/src/components$1',
         '^@config(.*)$': '<rootDir>/src/config$1',
+        '^@contexts(.*)$': '<rootDir>/src/contexts$1',
         '^@stores(.*)$': '<rootDir>/src/stores$1',
         '^@assets(.*)$': '<rootDir>/src/assets$1',
         '^@hooks(.*)$': '<rootDir>/src/hooks$1',
