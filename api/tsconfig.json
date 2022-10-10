@@ -42,6 +42,9 @@
             "link/*": [
                 "src/components/link/*"
             ],
+            "reference/*": [
+                "src/components/reference/*"
+            ],
             "authorization/*": [
                 "src/components/authorization/*"
             ],

@@ -11,13 +11,13 @@ type Props = {
     openNew?: boolean;
     ariaLabel?: string;
     children: React.ReactChildren | React.ReactChild | React.ReactElement[];
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 const CustomLink: React.FC<Props> = (props): React.ReactElement => (
     <Link href={props.href} scroll={props.scroll}>
         <a
-            className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
+            className={`rounded border-transparent decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
                 props.className ? props.className : ''
             }`}
             target={props.openNew ? '_blank' : ''}

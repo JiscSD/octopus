@@ -4,8 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-
 import * as publicationService from 'publication/service';
+
 export {
     ImageExtension,
     Languages,
@@ -408,6 +408,33 @@ export interface GetBookmarkPathParams {
 
 export interface GetAllBookmarkPathParams {
     id: string;
+}
+
+/**
+ * @description References
+ */
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    publicationId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string;
+}
+
+export interface CreateReferencePath {
+    id: string;
+}
+
+export interface UpdateReferencePath {
+    id: string;
+    referenceId: string;
+}
+
+export interface RemoveAllReferencesPath {
+    publicationId: string;
 }
 
 export interface OctopusInformation {

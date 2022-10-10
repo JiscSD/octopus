@@ -87,3 +87,5 @@ export { default as YouTubeVideo } from './Video/YouTube';
 export { default as VisualPublicationFlow } from './VisualPublicationFlow';
 export { default as IconButton } from './IconButton';
 export { default as Tooltip } from './Tooltip';
+export { default as AddReferences } from './References/AddReferences';
+export { default as EditReferenceModal } from './References/EditReferenceModal';

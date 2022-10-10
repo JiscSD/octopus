@@ -12,6 +12,7 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import * as Assets from '@assets';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -83,6 +84,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (url) => api.get(url, props.userToken || '').then((data) => data.data)
     );
 
+    const { data: references = [] } = useSWR<Interfaces.Reference[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/reference`,
+        (url) => api.get(url, props.userToken).then(({ data }) => data)
+    );
+
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
@@ -107,11 +113,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
+    const showReferences = references?.length;
     const showProblems = problems?.length && publicationData?.type !== 'PEER_REVIEW';
     const showPeerReviews = peerReviews?.length && publicationData?.type !== 'PEER_REVIEW';
     const showEthicalStatement = publicationData?.type === 'DATA';
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
+    if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
@@ -329,31 +337,58 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <p className="lg:mb-8">
-                            <Components.Link
-                                href={`${Config.urls.viewUser.path}/${publicationData.user?.id}`}
-                                className="2 text-normal w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                            >
-                                <>
-                                    {publicationData.user?.firstName[0]}. {publicationData.user?.lastName}
-                                </>
-                            </Components.Link>
-                            {publicationData.coAuthors?.map(
-                                (coAuthor) =>
-                                    coAuthor.user && (
-                                        <>
-                                            <Components.Link
-                                                href={`${Config.urls.viewUser.path}/${coAuthor.linkedUser}`}
-                                                className="2 text-normal mb-8 w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                                            >
-                                                <>
-                                                    , {coAuthor.user.firstName[0]}. {coAuthor.user.lastName}
-                                                </>
-                                            </Components.Link>
-                                        </>
-                                    )
-                            )}
-                        </p>
+                        <div className="mb-4 flex flex-wrap items-center gap-2 lg:mb-8">
+                            <div className="flex w-fit items-center">
+                                <Components.Link
+                                    href={`${Config.urls.viewUser.path}/${publicationData.user?.id}`}
+                                    className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                >
+                                    <>
+                                        {publicationData.user?.firstName[0]}. {publicationData.user?.lastName}
+                                    </>
+                                </Components.Link>
+                                {publicationData.user.id !== 'octopus' && (
+                                    <Components.Link
+                                        className="ml-2 flex w-fit items-center"
+                                        href={`https://orcid.org/${publicationData?.user?.orcid}`}
+                                        openNew={true}
+                                    >
+                                        <Assets.OrcidLogoIcon width={24} />
+                                    </Components.Link>
+                                )}
+                                {publicationData.coAuthors?.length > 0 && (
+                                    <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
+                                        ,
+                                    </span>
+                                )}
+                            </div>
+                            {publicationData.coAuthors
+                                ?.filter((coAuthor) => coAuthor?.user)
+                                .map((coAuthor, index) => (
+                                    <div key={coAuthor.id} className="flex w-fit items-center">
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${coAuthor?.linkedUser}`}
+                                            className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                        >
+                                            <>
+                                                {coAuthor?.user?.firstName[0]}. {coAuthor?.user?.lastName}
+                                            </>
+                                        </Components.Link>
+                                        <Components.Link
+                                            className="ml-2 flex w-fit items-center"
+                                            href={`https://orcid.org/${coAuthor?.user?.orcid}`}
+                                            openNew={true}
+                                        >
+                                            <Assets.OrcidLogoIcon width={24} />
+                                        </Components.Link>
+                                        {index < publicationData.coAuthors?.length - 1 && (
+                                            <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
+                                                ,
+                                            </span>
+                                        )}
+                                    </div>
+                                ))}
+                        </div>
 
                         {publicationData.type !== 'PEER_REVIEW' && (
                             <div className="hidden xl:block">
@@ -372,6 +407,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
                     </Components.PublicationContentSection>
+
+                    {/* References */}
+                    {!!showReferences && (
+                        <Components.PublicationContentSection id="references" title="References" hasBreak>
+                            {references.map((reference) => (
+                                <div key={reference.id} className="py-2 break-anywhere">
+                                    <Components.ParseHTML content={reference.text} />
+                                    {reference.location && (
+                                        <div className="break-all underline dark:text-white-50">
+                                            <Components.Link href={reference.location} openNew>
+                                                {reference.location}
+                                            </Components.Link>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Components.PublicationContentSection>
+                    )}
 
                     {/* Linked from problems */}
                     {!!showProblems && (

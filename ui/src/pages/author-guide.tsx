@@ -69,7 +69,7 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >
-                                    ORCiD.
+                                    ORCID iD.
                                 </Components.Link>
                             </>
                         </StandardText>
@@ -80,9 +80,9 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-8">
-                                    <span className="font-bold">Sign in</span> using your ORCiD credentials (or create
-                                    an ORCiD if you don’t have one). You will also need to provide a verified email
-                                    address so that you can receive essential service notifications.
+                                    <span className="font-bold">Sign in</span> using your ORCID® credentials (or create
+                                    an ORCID account if you don’t have one). You will also need to provide a verified
+                                    email address so that you can receive essential service notifications.
                                 </li>
                             </ul>
                         </StandardText>
@@ -203,10 +203,13 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                     correctly.
                                 </li>
                                 <li className="mb-6">
-                                    <span className="font-bold">How should references be formatted?</span> Please add a
-                                    line-separated list of references to the relevant field. Where appropriate, all
-                                    references should include a DOI or URL. You can then create superscript links
-                                    between the main text and the reference list.
+                                    <span className="font-bold">How should references be formatted?</span> You can use
+                                    your preferred reference style, but references must be line-separated. Where
+                                    appropriate, all references should include a DOI or URL. When adding references,
+                                    please separate them from the main text and instead add them to the dedicated
+                                    References field. Octopus will then review your references and identify any links –
+                                    we recommend checking that these are displaying correctly, and making any edits as
+                                    required.
                                 </li>
                                 <li className="mb-6">
                                     <span className="font-bold">

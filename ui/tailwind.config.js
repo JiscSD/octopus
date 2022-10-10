@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin');
 
 module.exports = {
     darkMode: 'class',
@@ -217,6 +218,15 @@ module.exports = {
         require('@tailwindcss/forms'),
         function ({ addVariant }) {
             addVariant('children', '& > *');
-        }
+        },
+        plugin(function ({ addUtilities }) {
+            const newUtilities = {
+                '.break-anywhere': {
+                    'overflow-wrap': 'anywhere'
+                }
+            };
+
+            addUtilities(newUtilities, ['responsive']);
+        })
     ]
 };
