@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const updateAll: I.Schema = {
+const create: I.Schema = {
     type: 'array',
     items: {
         type: 'object',
@@ -27,4 +27,4 @@ const updateAll: I.Schema = {
     }
 };
 
-export default updateAll;
+export default create;

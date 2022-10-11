@@ -24,10 +24,6 @@ export const testSeed = async (): Promise<void> => {
         });
     }
 
-    await client.prisma.references.createMany({
-        data: seeds.referencesSeedData
-    });
-
     await client.prisma.publicationBookmarks.createMany({
         data: seeds.bookmarkedPublicationSeeds
     });
