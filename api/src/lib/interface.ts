@@ -76,6 +76,7 @@ export interface CreatePublicationRequestBody {
     content?: string;
     language?: Languages;
     fundersStatement: string;
+    conflictOfInterestStatus?: boolean | null;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;

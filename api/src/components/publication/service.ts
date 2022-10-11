@@ -296,6 +296,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
             keywords: e.keywords,
             content: e.content,
             language: e.language,
+            conflictOfInterestStatus: e.conflictOfInterestStatus,
             ethicalStatement: e.ethicalStatement,
             ethicalStatementFreeText: e.ethicalStatementFreeText,
             dataPermissionsStatement: e.dataPermissionsStatement,
