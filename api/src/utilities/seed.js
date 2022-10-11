@@ -1,6 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const cuid = require('cuid')
+const cuid = require('cuid');
 const titleIDStore = new Map();
 // Manually create the GOD problem via seed data per env then update the DOI here
 titleIDStore.set(
@@ -29,12 +29,15 @@ const loadData = async () => {
         parent1ID = titleIDStore.get(parent1);
         parent2ID = titleIDStore.get(parent2);
 
+        // Before creating publication, check to see if it is already in the system
+        const doesPublicationExist = checkIfPublicationExists(title);
+
         const publicationCreation = await createPublication(title, content);
 
         if (!publicationCreation) {
             continue;
         }
-        
+
         if (!parent1ID && !parent2ID) {
             continue;
         }
@@ -46,9 +49,9 @@ const loadData = async () => {
         if (parent2ID) {
             await createLink(publicationCreation.id, parent2ID);
         }
-        
+
         const references = [];
-        
+
         for (let key in splitRow) {
             if (key > 4) {
                 if (splitRow[key] == '') {
@@ -60,54 +63,41 @@ const loadData = async () => {
 
         let formattedReferences = [];
 
-        if(references.length) {
+        if (references.length) {
             formattedReferences = formatReference(references, publicationCreation.id);
         }
-        
+
         // Add references
-        if(formattedReferences.length) {
-            await addReferencesToPublication(publicationCreation.id, formattedReferences)
+        if (formattedReferences.length) {
+            await addReferencesToPublication(publicationCreation.id, formattedReferences);
         }
 
-        // Before we launch the publication we will add the references to it
-        // TODO:
-        // Create publication - done
-        // Sperate reference from URL
-        // format reference text
-        // send request to create references endpoint with an array of formated
-        // references along with the publication id
-        // replace publication id with real one from the response data 
-
-        // you can reseed the database if something goes wrong with the ingest of this data 
-        // error handle if blank row at end of file or elsewhere 
         await launchPublication(publicationCreation.id);
-    
-
-
     }
 };
-const url = 'http://localhost:4003/local/v1'
-const apiKey = '097869bd-afc9-4f7b-9c92-b61515432e7c'
+const url = 'http://localhost:4003/local/v1';
+const apiKey = '097869bd-afc9-4f7b-9c92-b61515432e7c';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
 }
 
-const addReferencesToPublication =  async (publicationId, references) => {
-    
-    try { 
+const checkIfPublicationExists = async (title) => {
+    return true;
+};
+
+const addReferencesToPublication = async (publicationId, references) => {
+    try {
         const referencesResponse = await axios.put(
             `${url}/publications/${publicationId}/reference?apiKey=${apiKey}`,
             references
         );
         return referencesResponse.data;
-    }
-    catch(err) {
-        console.log(err)
+    } catch (err) {
+        console.log(err);
         return false;
     }
-
-}
+};
 
 const createPublication = async (title, content) => {
     try {
@@ -152,7 +142,6 @@ const launchPublication = async (id) => {
     }
 };
 
-
 const formatReference = (references, publicationId) => {
     const paragraphsArray = references;
     if (!paragraphsArray.length) {
@@ -180,7 +169,7 @@ const formatReference = (references, publicationId) => {
     }
 
     return referencesArray;
-}
+};
 
 const getTransformedReference = (reference, textContent) => {
     const urlMatches = getURLsFromText(textContent);
@@ -256,6 +245,5 @@ const getFullDOIsStrings = (text) =>
 const getDOIsFromText = (text) => text.match(/(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g) || [];
 
 const validateDOI = (value) => /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/.test(value);
-
 
 loadData();
