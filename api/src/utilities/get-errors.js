@@ -29,7 +29,7 @@ const loadData = async () => {
         if (!parent1ID && !parent2ID) {
             console.log(
                 `missing parents${
-                    toolongIDStore[parent1ID] ? ' (parent too long)' : ''
+                    toolongIDStore.has(parent1) ? ' (parent too long)' : ''
                 }\t"${title}"\t"${parent1}"\t"${parent2}"\t"${content}" `
             );
             missingParentIDStore.set(parent1, title);
@@ -47,13 +47,16 @@ const loadData = async () => {
     }
 
     missingParentIDStore.forEach((title, parent) => {
-            if (allIDStore.has(parent)) {
-                console.log(`circular reference or out of order parent\t"${parent}"\t"${title}"`);
+        if (allIDStore.has(parent) ) {
+            if(toolongIDStore.has(parent)) {
+                console.log(`parent too long\t"${parent}"\t"${title}"`);
             } else {
-                console.log(`parent not in file\t"${parent}"\t"${title}"`);
+                console.log(`circular reference or out of order parent\t"${parent}"\t"${title}"`);
             }
+        } else {
+            console.log(`parent not in file\t"${parent}"\t"${title}"`);
+        }
     });
-
 };
 
 loadData();
