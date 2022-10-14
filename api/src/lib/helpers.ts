@@ -361,3 +361,10 @@ export const formatFlagType = (flagType: I.FlagCategory) => {
 
     return types[flagType];
 };
+
+export function sanitizeSearchQuery(searchQuery: string) {
+    return searchQuery
+        .replace(/[+\-*^|/!=<>&~#_%\\]/g, '') // removes any characters which are used as operators or wildcards in postgresql
+        .trim()
+        .replace(/\s+/g, '|'); // replace whitespace with single OR
+}

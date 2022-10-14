@@ -24,7 +24,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
         data: { data: results = [] } = {},
         error,
         isValidating
-    } = useSWR(`/${searchType}?search=${query}&limit=10`, null, {
+    } = useSWR(`/${searchType}?search=${encodeURIComponent(query)}&limit=10`, null, {
         fallback: {
             '/publications': []
         },
