@@ -57,9 +57,10 @@ const loadData = async () => {
                     console.log(`parent too long\t"${parent}"\t"${title}"`);
                 } else if (isCircular(parent, title)) {
                     console.log(`circular reference \t"${parent}"\t"${title}"`);
-                } else {
+                } else if (titleIDStore.has(parent)) {
+                    // the parent was created but too late
                     console.log(`out of order parent\t"${parent}"\t"${title}"`);
-                }
+                } // else parent's ancestor missing due to one of the above and therefore should be created
             } else {
                 console.log(`parent not in file\t"${parent}"\t"${title}"`);
             }
