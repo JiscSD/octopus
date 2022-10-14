@@ -32,7 +32,11 @@ const loadData = async () => {
                     toolongIDStore.has(parent1) ? ' (parent too long)' : ''
                 }\t"${title}"\t"${parent1}"\t"${parent2}"\t"${content}" `
             );
-            missingParentIDStore.set(parent1, title);
+            if (missingParentIDStore.get(parent1)) {
+                missingParentIDStore.get(parent1).add(title);
+            } else {
+                missingParentIDStore.set(parent1, new Set().add(title));
+            }
             continue;
         }
         if (title.length > 160) {
@@ -46,17 +50,42 @@ const loadData = async () => {
         titleIDStore.set(title, 'found');
     }
 
-    missingParentIDStore.forEach((title, parent) => {
-        if (allIDStore.has(parent) ) {
-            if(toolongIDStore.has(parent)) {
-                console.log(`parent too long\t"${parent}"\t"${title}"`);
+    missingParentIDStore.forEach((titles, parent) => {
+        titles.forEach((title) => {
+            if (allIDStore.has(parent)) {
+                if (toolongIDStore.has(parent)) {
+                    console.log(`parent too long\t"${parent}"\t"${title}"`);
+                } else if (isCircular(parent, title)) {
+                    console.log(`circular reference \t"${parent}"\t"${title}"`);
+                } else {
+                    console.log(`out of order parent\t"${parent}"\t"${title}"`);
+                }
             } else {
-                console.log(`circular reference or out of order parent\t"${parent}"\t"${title}"`);
+                console.log(`parent not in file\t"${parent}"\t"${title}"`);
             }
-        } else {
-            console.log(`parent not in file\t"${parent}"\t"${title}"`);
-        }
+        });
     });
+};
+
+const isCircular = (parent, title) => {
+    let found = false;
+    const titleAsParents = missingParentIDStore.get(title);
+    if (titleAsParents) {
+        for (const titleAsParent of titleAsParents) {
+            if (!found && titleAsParent != parent) {
+                if (isCircular(parent, titleAsParent)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (titleAsParent === parent) {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    return found;
 };
 
 loadData();
