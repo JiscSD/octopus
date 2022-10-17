@@ -30,7 +30,19 @@ const loadData = async () => {
         parent2ID = titleIDStore.get(parent2);
 
         // Before creating publication, check to see if it is already in the system
-        const doesPublicationExist = checkIfPublicationExists(title);
+        // if so skip it
+
+        // this needs to query /publications/{id} then checked the "linkedto" and the title against any parenets
+        // that have been provided
+        // to obtain the id I will need to 
+        console.log(title)
+        const doesPublicationExist = await checkIfPublicationExists(title, parent1ID, parent2ID);
+        
+        if(doesPublicationExist) {
+            titleIDStore.set(doesPublicationExist.title, doesPublicationExist.id);
+            console.log('Exists: ', index)
+            continue
+        }
 
         const publicationCreation = await createPublication(title, content);
 
@@ -73,17 +85,59 @@ const loadData = async () => {
         }
 
         await launchPublication(publicationCreation.id);
+        console.log('Live: ', title)
+        console.log('Index: ', index)
     }
 };
 const url = 'http://localhost:4003/local/v1';
-const apiKey = '097869bd-afc9-4f7b-9c92-b61515432e7c';
+const apiKey = 'cd924a4e-5046-4b47-9833-fa33758d9681';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
 }
 
-const checkIfPublicationExists = async (title) => {
-    return true;
+const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
+    console.log(title)    
+    const publicationsResponse = await axios.get(`${url}/publications?search=${title}`)
+
+    const publications = publicationsResponse.data.data;
+
+    const parents = [];
+    
+    if (typeof parent1ID !== 'undefined') {
+        parents.push(parent1ID)
+    }
+
+    if (typeof parent2ID !== 'undefined') {
+        parents.push(parent2ID)
+    }
+
+    for(let key in publications) {
+
+        if(publications[key].title === title) {
+            const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`)
+
+            // Skip checking more than two since we will only ever have max 2
+            // parents for seed data
+            if(publicationLinks.data.length > 2) {
+                continue
+            }
+            
+            // Only process if link data is returned
+            if(publicationLinks.data.length) {
+
+                const linkIDs = publicationLinks.data.map((link) => {
+                    return link.publicationTo;
+                })
+
+                if(linkIDs.sort().join(',') === parents.sort().join(',')){
+                    return publications[key];
+                }
+            }
+        }
+    }
+
+    return false;
 };
 
 const addReferencesToPublication = async (publicationId, references) => {
@@ -111,7 +165,6 @@ const createPublication = async (title, content) => {
             content: content || title,
             description: content
         };
-        console.log(payload);
         const create = await axios.post(`${url}/publications?apiKey=${apiKey}`, payload);
         return create.data;
     } catch (err) {
@@ -134,7 +187,6 @@ const createLink = async (pubFrom, pubTo) => {
 const launchPublication = async (id) => {
     try {
         const launched = await axios.put(`${url}/publications/${id}/status/LIVE?apiKey=${apiKey}`);
-        console.log(launched.data);
         return launched.data;
     } catch (err) {
         console.log(err);

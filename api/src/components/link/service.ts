@@ -1,4 +1,16 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
+
+export const getPublicationLinks = async (filter: I.GetLinksQueryParams) => {
+    console.log(filter.publicationID)
+    const link = await client.prisma.links.findMany({
+        where: {
+            publicationFrom: filter.publicationID
+        }
+    });
+
+    return link;
+}
 
 export const create = async (fromPublicationId: string, toPublicationId: string) => {
     const link = await client.prisma.links.create({

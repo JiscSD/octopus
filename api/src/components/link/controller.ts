@@ -4,6 +4,14 @@ import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetLinksQueryParams>): Promise<I.JSONResponse> => {
+    
+    if(event.queryStringParameters) {
+        const links = await linkService.getPublicationLinks(event.queryStringParameters)
+        return response.json(200, links)
+    }
+    return response.json(404, 'nothing found')
+}
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>) => {
     try {
         // function checks if the user has permission to see it in DRAFT mode
