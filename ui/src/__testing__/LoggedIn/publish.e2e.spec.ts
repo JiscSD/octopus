@@ -289,7 +289,7 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `aside >> text=Publication type:${publication.pubType}`,
         `text=${publication.language}`,
         `text=${publication.licence}`,
-        `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
+        `main > section > header > div >> a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
         `text=${publication.references[1].text}`,
         `text=${publication.references[1].refURL}`,

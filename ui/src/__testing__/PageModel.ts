@@ -147,18 +147,18 @@ export const PageModel = {
             editor: '.ProseMirror >> nth=0',
             language: 'select[name="language"]',
             references:
-                'text=ReferencesInclude your reference list for this publication. References should be >> div >> nth=4',
+            '.ProseMirror >> nth=1',
             addReferencesButton: 'button[name="Add references"]',
             deleteAllReferencesButton: 'button[name="Delete all references"]',
             deleteAllReferencesModalButton: '[aria-label="Delete all"]',
             continueModalButton: '[aria-label="Continue"]',
             saveReferenceModalButton: '[aria-label="Save"]',
-            deleteReferenceModalButton: '[aria-label="Delete"]',
+            deleteReferenceModalButton: '[title="Delete"]',
             // using xpath to locate the elements until a better solution is found
             deleteFirstReferenceButton:
-                '//*[@id="__next"]/div/div/main/section/div[3]/section/div/div[3]/div[2]/table/tbody/tr[1]/td[5]/div/button',
+                'button[aria-label="Delete"] >> nth=0',
             addReferenceButton:
-                '//*[@id="__next"]/div/div/main/section/div[3]/section/div/div[3]/div[2]/table/tbody/tr[1]/td[3]/div/button',
+                'button[aria-label="Add below"] >> nth=0',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
             keywords:
