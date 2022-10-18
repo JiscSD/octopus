@@ -79,13 +79,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: GET
                   cors: true
-    getPublicationViaTitle:
-        handler: src/components/publication/routes.getViaTitle
-        events: 
-            - http: 
-                path: ${self:custom.versions.v1}/publications/title
-                method: GET
-                cors: true
     getPublication:
         handler: src/components/publication/routes.get
         events:
