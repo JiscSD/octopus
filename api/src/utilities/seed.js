@@ -7,7 +7,7 @@ titleIDStore.set(
     'What makes everything we can detect in the universe around us the way that it is, and why?', // GOD problem text
     'why' // GOD problem DOI
 );
-const tsv = fs.readFileSync('./data3.txt', 'utf-8');
+const tsv = fs.readFileSync('./data.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
@@ -100,7 +100,7 @@ const loadData = async () => {
     }
 };
 const url = 'http://localhost:4003/local/v1';
-const apiKey = 'e38e9e82-a58b-472a-92ea-6ea14990ea33';
+const apiKey = '1d2f127c-96b4-4034-bde2-f3a0a75256f3';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
@@ -108,9 +108,8 @@ if (!url || !apiKey) {
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
 
-
-    const encoded = encodeURI(`${url}/publications?search=${title}`)
-    const publicationsResponse = await axios.get(encoded)
+    const encodedTitle = encodeURIComponent(title)
+    const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`)
 
     const publications = publicationsResponse.data.data;
 
