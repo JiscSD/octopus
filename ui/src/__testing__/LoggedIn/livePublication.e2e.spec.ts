@@ -110,12 +110,6 @@ test.describe('Live Publication', () => {
         // Check name
         await expect(page.locator(PageModel.authorInfo.name)).toBeVisible();
 
-        // Check ORCID link
-        await expect(page.locator(PageModel.authorInfo.orcid)).toHaveAttribute(
-            'href',
-            'https://orcid.org/XXXX-XXXX-XXXX-XXXX'
-        );
-
         // Check ORCID data sections
         for await (const orcidDataSection of PageModel.authorInfo.orcidData) {
             await expect(page.locator(orcidDataSection)).toBeVisible();
