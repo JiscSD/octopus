@@ -146,8 +146,7 @@ export const PageModel = {
         text: {
             editor: '.ProseMirror >> nth=0',
             language: 'select[name="language"]',
-            references:
-            '.ProseMirror >> nth=1',
+            references: '.ProseMirror >> nth=1',
             addReferencesButton: 'button[name="Add references"]',
             deleteAllReferencesButton: 'button[name="Delete all references"]',
             deleteAllReferencesModalButton: '[aria-label="Delete all"]',
@@ -155,10 +154,8 @@ export const PageModel = {
             saveReferenceModalButton: '[aria-label="Save"]',
             deleteReferenceModalButton: '[title="Delete"]',
             // using xpath to locate the elements until a better solution is found
-            deleteFirstReferenceButton:
-                'button[aria-label="Delete"] >> nth=0',
-            addReferenceButton:
-                'button[aria-label="Add below"] >> nth=0',
+            deleteFirstReferenceButton: 'button[aria-label="Delete"] >> nth=0',
+            addReferenceButton: 'button[aria-label="Add below"] >> nth=0',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
             keywords:
