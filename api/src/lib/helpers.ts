@@ -365,6 +365,6 @@ export const formatFlagType = (flagType: I.FlagCategory) => {
 export function sanitizeSearchQuery(searchQuery: string) {
     return searchQuery
         .trim()
-        .replace(/[+\-*^|/!=<>()'&~#_%\\]/g, (match) => '\\' + match) // escape any characters which are used as operators or wildcards in postgresql
+        .replace(/[^a-z0-9\s]/g, (match) => '\\' + match) // escape all the non-alphanumeric characters which may break the search
         .replace(/\s+/g, '|'); // replace whitespace with single OR
 }
