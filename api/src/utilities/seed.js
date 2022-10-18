@@ -7,7 +7,7 @@ titleIDStore.set(
     'What makes everything we can detect in the universe around us the way that it is, and why?', // GOD problem text
     'why' // GOD problem DOI
 );
-const tsv = fs.readFileSync('./data2.txt', 'utf-8');
+const tsv = fs.readFileSync('./data3.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
@@ -15,90 +15,102 @@ const loadData = async () => {
     for (const row of rows) {
         index++;
 
-        // Skip header of csv
-        if (index === 0) {
-            continue;
-        }
-
-        const splitRow = row.split('\t');
-        let [title, parent1, parent2, content] = splitRow;
-        title = title.replace(/\"/g, '');
-        parent1 = parent1.replace(/\"/g, '');
-        parent2 = parent2.replace(/\"/g, '');
-        content = content.replace(/\"/g, '');
-        parent1ID = titleIDStore.get(parent1);
-        parent2ID = titleIDStore.get(parent2);
-
-        // Before creating publication, check to see if it is already in the system
-        // if so skip it
-
-        // this needs to query /publications/{id} then checked the "linkedto" and the title against any parenets
-        // that have been provided
-        // to obtain the id I will need to 
-        console.log(title)
-        const doesPublicationExist = await checkIfPublicationExists(title, parent1ID, parent2ID);
-        
-        if(doesPublicationExist) {
-            titleIDStore.set(doesPublicationExist.title, doesPublicationExist.id);
-            console.log('Exists: ', index)
-            continue
-        }
-
-        const publicationCreation = await createPublication(title, content);
-
-        if (!publicationCreation) {
-            continue;
-        }
-
-        if (!parent1ID && !parent2ID) {
-            continue;
-        }
-
-        titleIDStore.set(publicationCreation.title, publicationCreation.id);
-        if (parent1ID) {
-            await createLink(publicationCreation.id, parent1ID);
-        }
-        if (parent2ID) {
-            await createLink(publicationCreation.id, parent2ID);
-        }
-
-        const references = [];
-
-        for (let key in splitRow) {
-            if (key > 4) {
-                if (splitRow[key] == '') {
-                    break;
-                }
-                references.push(splitRow[key]);
+        try {
+            // Skip header of csv
+            if (index === 0) {
+                continue;
             }
+
+            const splitRow = row.split('\t');
+            let [title, parent1, parent2, content] = splitRow;
+            title = title.replace(/\"/g, '');
+            console.log(title)
+            parent1 = parent1.replace(/\"/g, '');
+            parent2 = parent2.replace(/\"/g, '');
+            content = content.replace(/\"/g, '');
+            parent1ID = titleIDStore.get(parent1);
+            parent2ID = titleIDStore.get(parent2);
+
+            // Before creating publication, check to see if it is already in the system
+            // if so skip it
+
+            // this needs to query /publications/{id} then checked the "linkedto" and the title against any parenets
+            // that have been provided
+            // to obtain the id I will need to 
+            const doesPublicationExist = await checkIfPublicationExists(title, parent1ID, parent2ID);
+
+            if(doesPublicationExist) {
+                titleIDStore.set(doesPublicationExist.title, doesPublicationExist.id);
+                console.log('Exists: ', index)
+                continue
+            }
+
+            const publicationCreation = await createPublication(title, content);
+
+            if (!publicationCreation) {
+                continue;
+            }
+
+            if (!parent1ID && !parent2ID) {
+                continue;
+            }
+
+            titleIDStore.set(publicationCreation.title, publicationCreation.id);
+            if (parent1ID) {
+                await createLink(publicationCreation.id, parent1ID);
+            }
+            if (parent2ID) {
+                await createLink(publicationCreation.id, parent2ID);
+            }
+
+            const references = [];
+
+            for (let key in splitRow) {
+                if (key > 4) {
+                    if (splitRow[key] == '') {
+                        break;
+                    }
+                    references.push(splitRow[key]);
+                }
+            }
+
+            let formattedReferences = [];
+
+            if (references.length) {
+                formattedReferences = formatReference(references, publicationCreation.id);
+            }
+
+            // Add references
+            if (formattedReferences.length) {
+                await addReferencesToPublication(publicationCreation.id, formattedReferences);
+            }
+
+            await launchPublication(publicationCreation.id);
+            console.log('Live: ', title)
+            console.log('Index: ', index)
         }
-
-        let formattedReferences = [];
-
-        if (references.length) {
-            formattedReferences = formatReference(references, publicationCreation.id);
+        catch(err) {
+            fs.appendFile('erors.txt', err + ": " + row, function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+            });
+            continue;
         }
-
-        // Add references
-        if (formattedReferences.length) {
-            await addReferencesToPublication(publicationCreation.id, formattedReferences);
-        }
-
-        await launchPublication(publicationCreation.id);
-        console.log('Live: ', title)
-        console.log('Index: ', index)
+     
     }
 };
 const url = 'http://localhost:4003/local/v1';
-const apiKey = 'cd924a4e-5046-4b47-9833-fa33758d9681';
+const apiKey = 'e38e9e82-a58b-472a-92ea-6ea14990ea33';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
 }
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
-    console.log(title)    
-    const publicationsResponse = await axios.get(`${url}/publications?search=${title}`)
+
+
+    const encoded = encodeURI(`${url}/publications?search=${title}`)
+    const publicationsResponse = await axios.get(encoded)
 
     const publications = publicationsResponse.data.data;
 
@@ -112,7 +124,10 @@ const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
         parents.push(parent2ID)
     }
 
+    // console.log('Titles related to search for publication: ', title)
     for(let key in publications) {
+
+        // console.log(publications[key].title)
 
         if(publications[key].title === title) {
             const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`)
