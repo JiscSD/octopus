@@ -440,7 +440,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             />
                         ) : (
                             <Framer.AnimatePresence>
-                                {!!error && (
+                                {error && (
                                     <Components.Alert
                                         severity="ERROR"
                                         title={error}
@@ -459,7 +459,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     />
                                 )}
 
-                                {!error && !isValidating && !!results?.data && (
+                                {!isValidating && results?.data?.length && (
                                     <>
                                         <div className="rounded">
                                             {results.data.map((result: any, index: number) => {
