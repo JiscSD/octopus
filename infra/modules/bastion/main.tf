@@ -9,6 +9,14 @@ resource "aws_security_group" "ec2_sg" {
         cidr_blocks = var.allowable_ips
     }
 
+    ingress {
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = var.third_party_vpn_ips
+        description = "openvpn3rd.jisc.ac.uk"
+    }
+
     egress {
         from_port   = 0
         to_port     = 0
@@ -33,5 +41,7 @@ resource "aws_instance" "bastion" {
     tags = {
         Name        = "bastion_${var.environment}"
         Environment = var.environment
+        "GIIT:Schedule:Daily:Enable" = "TRUE"
+        "GIIT:Schedule:Daily:TheSchedule" =	"mon,tue,wed,thu,fri;0830;mon,tue,wed,thu,fri;1800;"
     }
 }
