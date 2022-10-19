@@ -16,6 +16,7 @@ const loadData = async () => {
         index++;
 
         try {
+
             // Skip header of csv
             if (index === 0) {
                 continue;
@@ -31,12 +32,9 @@ const loadData = async () => {
             parent1ID = titleIDStore.get(parent1);
             parent2ID = titleIDStore.get(parent2);
 
-            // Before creating publication, check to see if it is already in the system
-            // if so skip it
-
-            // this needs to query /publications/{id} then checked the "linkedto" and the title against any parenets
-            // that have been provided
-            // to obtain the id I will need to 
+            // Before creating the publication, check if it already exists.
+            // This needs to query /publications/{id} then query the send a request to /links with the
+            // publication ID 
             const doesPublicationExist = await checkIfPublicationExists(title, parent1ID, parent2ID);
 
             if(doesPublicationExist) {
@@ -76,6 +74,7 @@ const loadData = async () => {
 
             let formattedReferences = [];
 
+            // If the publication contains references, format them into the octopus spec
             if (references.length) {
                 formattedReferences = formatReference(references, publicationCreation.id);
             }
@@ -90,6 +89,8 @@ const loadData = async () => {
             console.log('Index: ', index)
         }
         catch(err) {
+            // If there happens to be an error, it's added to errors.txt with the error code
+            // and the row that is occured on.
             fs.appendFile('erors.txt', err + ": " + row, function (err) {
                 if (err) throw err;
                 console.log('Saved!');
@@ -99,8 +100,8 @@ const loadData = async () => {
      
     }
 };
-const url = 'http://localhost:4003/local/v1';
-const apiKey = '1d2f127c-96b4-4034-bde2-f3a0a75256f3';
+const url = process.env.API_URL
+const apiKey = process.env.API_KEY
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
@@ -108,6 +109,7 @@ if (!url || !apiKey) {
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
 
+    // Encode the URl parameter as it has the potential to use special characters, such as '&'
     const encodedTitle = encodeURIComponent(title)
     const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`)
 
@@ -123,24 +125,20 @@ const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
         parents.push(parent2ID)
     }
 
-    // console.log('Titles related to search for publication: ', title)
     for(let key in publications) {
-
-        // console.log(publications[key].title)
 
         if(publications[key].title === title) {
             const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`)
-
-            // Skip checking more than two since we will only ever have max 2
-            // parents for seed data
-            if(publicationLinks.data.length > 2) {
+            const publicationLinksResponse = publicationLinks.data;
+            // Skip checking more than two since we will only ever have max 2 parents for seed data
+            if(publicationLinksResponse.length > 2) {
                 continue
             }
             
             // Only process if link data is returned
-            if(publicationLinks.data.length) {
+            if(publicationLinksResponse.length) {
 
-                const linkIDs = publicationLinks.data.map((link) => {
+                const linkIDs = publicationLinksResponse.map((link) => {
                     return link.publicationTo;
                 })
 
@@ -208,6 +206,9 @@ const launchPublication = async (id) => {
     }
 };
 
+
+// All reference format code has come from whats already in octopus
+// but slightly adapted for this instance
 const formatReference = (references, publicationId) => {
     const paragraphsArray = references;
     if (!paragraphsArray.length) {
