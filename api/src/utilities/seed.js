@@ -16,7 +16,6 @@ const loadData = async () => {
         index++;
 
         try {
-
             // Skip header of csv
             if (index === 0) {
                 continue;
@@ -25,7 +24,7 @@ const loadData = async () => {
             const splitRow = row.split('\t');
             let [title, parent1, parent2, content] = splitRow;
             title = title.replace(/\"/g, '');
-            console.log(title)
+            console.log(title);
             parent1 = parent1.replace(/\"/g, '');
             parent2 = parent2.replace(/\"/g, '');
             content = content.replace(/\"/g, '');
@@ -34,13 +33,13 @@ const loadData = async () => {
 
             // Before creating the publication, check if it already exists.
             // This needs to query /publications/{id} then query the send a request to /links with the
-            // publication ID 
+            // publication ID
             const doesPublicationExist = await checkIfPublicationExists(title, parent1ID, parent2ID);
 
-            if(doesPublicationExist) {
+            if (doesPublicationExist) {
                 titleIDStore.set(doesPublicationExist.title, doesPublicationExist.id);
-                console.log('Exists: ', index)
-                continue
+                console.log('Exists: ', index);
+                continue;
             }
 
             const publicationCreation = await createPublication(title, content);
@@ -85,64 +84,59 @@ const loadData = async () => {
             }
 
             await launchPublication(publicationCreation.id);
-            console.log('Live: ', title)
-            console.log('Index: ', index)
-        }
-        catch(err) {
+            console.log('Live: ', title);
+            console.log('Index: ', index);
+        } catch (err) {
             // If there happens to be an error, it's added to errors.txt with the error code
             // and the row that is occured on.
-            fs.appendFile('erors.txt', err + ": " + row, function (err) {
+            fs.appendFile('erors.txt', err + ': ' + row, function (err) {
                 if (err) throw err;
                 console.log('Saved!');
             });
             continue;
         }
-     
     }
 };
-const url = process.env.API_URL
-const apiKey = process.env.API_KEY
+const url = process.env.API_URL;
+const apiKey = process.env.API_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
 }
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
-
     // Encode the URl parameter as it has the potential to use special characters, such as '&'
-    const encodedTitle = encodeURIComponent(title)
-    const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`)
+    const encodedTitle = encodeURIComponent(title);
+    const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`);
 
     const publications = publicationsResponse.data.data;
 
     const parents = [];
-    
+
     if (typeof parent1ID !== 'undefined') {
-        parents.push(parent1ID)
+        parents.push(parent1ID);
     }
 
     if (typeof parent2ID !== 'undefined') {
-        parents.push(parent2ID)
+        parents.push(parent2ID);
     }
 
-    for(let key in publications) {
-
-        if(publications[key].title === title) {
-            const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`)
+    for (let key in publications) {
+        if (publications[key].title === title) {
+            const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`);
             const publicationLinksResponse = publicationLinks.data;
             // Skip checking more than two since we will only ever have max 2 parents for seed data
-            if(publicationLinksResponse.length > 2) {
-                continue
+            if (publicationLinksResponse.length > 2) {
+                continue;
             }
-            
-            // Only process if link data is returned
-            if(publicationLinksResponse.length) {
 
+            // Only process if link data is returned
+            if (publicationLinksResponse.length) {
                 const linkIDs = publicationLinksResponse.map((link) => {
                     return link.publicationTo;
-                })
+                });
 
-                if(linkIDs.sort().join(',') === parents.sort().join(',')){
+                if (linkIDs.sort().join(',') === parents.sort().join(',')) {
                     return publications[key];
                 }
             }
@@ -205,7 +199,6 @@ const launchPublication = async (id) => {
         return false;
     }
 };
-
 
 // All reference format code has come from whats already in octopus
 // but slightly adapted for this instance
