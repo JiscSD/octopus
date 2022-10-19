@@ -116,10 +116,7 @@ const addASingleReference = async (page: Page, reference: Reference) => {
     await page.keyboard.type(`${reference.text}`);
     await page.keyboard.press('Tab');
     await page.keyboard.type(`${reference.refURL}`);
-    // await page.locator(PageModel.publish.text.saveReferenceModalButton).click();
-    // using tab + enter to save the model until a solution is found for above selector to work
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Enter');
+    await page.locator(PageModel.publish.text.saveReferenceModalButton).click();
 };
 
 const deleteFirstReference = async (page: Page) => {

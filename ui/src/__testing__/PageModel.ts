@@ -151,7 +151,7 @@ export const PageModel = {
             deleteAllReferencesButton: 'button[name="Delete all references"]',
             deleteAllReferencesModalButton: '[aria-label="Delete all"]',
             continueModalButton: '[aria-label="Continue"]',
-            saveReferenceModalButton: '[aria-label="Save"]',
+            saveReferenceModalButton: 'text=SaveCancel >> [aria-label="Save"]',
             deleteReferenceModalButton: '[title="Delete"]',
             // using xpath to locate the elements until a better solution is found
             deleteFirstReferenceButton: 'button[aria-label="Delete"] >> nth=0',
