@@ -79,8 +79,11 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
             const decodedJWT = Helpers.setAndReturnJWT(props.token) as Types.UserType;
             if (decodedJWT) {
                 setUser(Object.assign(decodedJWT, { token: props.token }));
+                const redirectTo = decodedJWT.email
+                    ? props.redirectTo
+                    : `${Config.urls.verify.path}?state=${encodeURIComponent(props.redirectTo)}`;
+                setTimeout(() => router.push(redirectTo), 1000);
             }
-            setTimeout(() => router.push(decodeURIComponent(props.redirectTo)), 1000);
         }
     }, [props.redirectTo, props.token, router, setUser]);
 
