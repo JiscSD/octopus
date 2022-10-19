@@ -1,3 +1,12 @@
+resource "aws_eip" "int_ip" {
+  vpc                       = true
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.bastion.id
+  allocation_id = aws_eip.int_ip.id
+}
+
 resource "aws_security_group" "ec2_sg" {
     name    = "ec2-sg"
     vpc_id  = var.vpc_id
@@ -7,6 +16,7 @@ resource "aws_security_group" "ec2_sg" {
         to_port     = 22
         protocol    = "tcp"
         cidr_blocks = var.allowable_ips
+        description = ""
     }
 
     ingress {
@@ -45,3 +55,4 @@ resource "aws_instance" "bastion" {
         "GIIT:Schedule:Daily:TheSchedule" =	"mon,tue,wed,thu,fri;0830;mon,tue,wed,thu,fri;1800;"
     }
 }
+
