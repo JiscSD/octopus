@@ -4,13 +4,16 @@ import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
-export const get = async (event: I.APIRequest<undefined, undefined, I.GetLinksQueryParams>): Promise<I.JSONResponse> => {
+export const get = async (event: I.APIRequest<undefined, I.GetLinksQueryParams>): Promise<I.JSONResponse> => {
     
-    if(event.queryStringParameters) {
-        const links = await linkService.getPublicationLinks(event.queryStringParameters)
+    const links = await linkService.getPublicationLinks(event.queryStringParameters.publicationID)
+    if(links.length) {
         return response.json(200, links)
     }
-    return response.json(404, 'nothing found')
+    return response.json(404, { 
+        "Error": 'No links found for publication id',
+        "ID":  event.queryStringParameters.publicationID
+    })
 }
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>) => {
     try {
