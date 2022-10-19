@@ -132,11 +132,10 @@ const getMetadata = async () => {
           }
         }
       );
-
-      createLogsFile(logs);
     });
   } catch (error) {
     addToLogs(`ERROR => ${error.message}`);
+  } finally {
     createLogsFile(logs);
   }
 };
