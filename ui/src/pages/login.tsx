@@ -46,7 +46,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             undefined
         );
         token = response.data as string;
-    } catch (err) {
+    } catch (error) {
         console.log(error);
         return {
             props: {
