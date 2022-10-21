@@ -102,45 +102,50 @@ const apiKey = process.env.API_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
+    return;
 }
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
     // Encode the URl parameter as it has the potential to use special characters, such as '&'
     const encodedTitle = encodeURIComponent(title);
-    const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`);
+    try {
+        const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`);
 
-    const publications = publicationsResponse.data.data;
+        const publications = publicationsResponse.data.data;
 
-    const parents = [];
+        const parents = [];
 
-    if (typeof parent1ID !== 'undefined') {
-        parents.push(parent1ID);
-    }
+        if (typeof parent1ID !== 'undefined') {
+            parents.push(parent1ID);
+        }
 
-    if (typeof parent2ID !== 'undefined') {
-        parents.push(parent2ID);
-    }
+        if (typeof parent2ID !== 'undefined') {
+            parents.push(parent2ID);
+        }
 
-    for (let key in publications) {
-        if (publications[key].title === title) {
-            const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`);
-            const publicationLinksResponse = publicationLinks.data;
-            // Skip checking more than two since we will only ever have max 2 parents for seed data
-            if (publicationLinksResponse.length > 2) {
-                continue;
-            }
+        for (let key in publications) {
+            if (publications[key].title === title) {
+                const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`);
+                const publicationLinksResponse = publicationLinks.data;
+                // Skip checking more than two since we will only ever have max 2 parents for seed data
+                if (publicationLinksResponse.length > 2) {
+                    continue;
+                }
 
-            // Only process if link data is returned
-            if (publicationLinksResponse.length) {
-                const linkIDs = publicationLinksResponse.map((link) => {
-                    return link.publicationTo;
-                });
+                // Only process if link data is returned
+                if (publicationLinksResponse.length) {
+                    const linkIDs = publicationLinksResponse.map((link) => {
+                        return link.publicationTo;
+                    });
 
-                if (linkIDs.sort().join(',') === parents.sort().join(',')) {
-                    return publications[key];
+                    if (linkIDs.sort().join(',') === parents.sort().join(',')) {
+                        return publications[key];
+                    }
                 }
             }
         }
+    } catch (error) {
+        // assume not found
     }
 
     return false;
@@ -160,6 +165,7 @@ const addReferencesToPublication = async (publicationId, references) => {
 };
 
 const createPublication = async (title, content) => {
+    console.log(`Creating: ${title}`);
     try {
         const payload = {
             type: 'PROBLEM',
