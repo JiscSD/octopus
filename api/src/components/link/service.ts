@@ -1,5 +1,4 @@
 import * as client from 'lib/client';
-import * as I from 'interface';
 
 export const getPublicationLinks = async (publicationID: string) => {
     
