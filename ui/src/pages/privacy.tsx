@@ -51,7 +51,7 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         you as an Octopus user:
                     </p>
                     <ul className="mb-4 ml-6 list-disc">
-                        <li>Name (via ORCID)</li>
+                        <li>Name (via ORCID®)</li>
                         <li>Affiliation (via ORCID)</li> <li>Current email address</li>
                     </ul>
                     <p className="mb-4">

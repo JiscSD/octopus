@@ -2,10 +2,10 @@ import React from 'react';
 import useSWR from 'swr';
 import moment from 'moment';
 import Head from 'next/head';
+
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
 import * as SolidIcons from '@heroicons/react/solid';
-
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -13,6 +13,13 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+
+/**
+ *
+ * @TODO - refactor getServerSideProps
+ * 1. remove unnecessary if statements
+ * 2. make sure correct publicationTypes are passed via props
+ */
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
@@ -58,7 +65,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         // ensure the value of the seach type is acceptable
         if (searchType === 'publications' || searchType === 'users') {
             try {
-                const response = await api.search(searchType, query, publicationTypes, limit, offset);
+                const response = await api.search(
+                    searchType,
+                    encodeURIComponent(query || ''),
+                    publicationTypes,
+                    limit,
+                    offset
+                );
                 results = response.data;
                 metadata = response.metadata;
                 error = null;
@@ -72,7 +85,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${query || ''}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
@@ -126,7 +139,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${query || ''}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}${
         searchType === 'publications' ? `&type=${publicationTypes}` : ''
     }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
@@ -427,7 +440,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             />
                         ) : (
                             <Framer.AnimatePresence>
-                                {!!error && (
+                                {error && (
                                     <Components.Alert
                                         severity="ERROR"
                                         title={error}
@@ -446,7 +459,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     />
                                 )}
 
-                                {!error && !isValidating && !!results?.data && (
+                                {!isValidating && results?.data?.length && (
                                     <>
                                         <div className="rounded">
                                             {results.data.map((result: any, index: number) => {

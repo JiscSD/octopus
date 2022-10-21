@@ -1,6 +1,7 @@
 import * as client from 'lib/client';
 
 import * as I from 'interface';
+import * as helpers from 'lib/helpers';
 
 export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
     const user = await client.prisma.user.upsert({
@@ -62,13 +63,14 @@ export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 
     if (filters.search) {
+        const searchQuery = helpers.sanitizeSearchQuery(filters.search);
         // @ts-ignore
         query.where = {
             firstName: {
-                search: filters.search?.replace(/ /gi, '|')
+                search: searchQuery
             },
             lastName: {
-                search: filters.search?.replace(/ /gi, '|')
+                search: searchQuery
             }
         };
     }

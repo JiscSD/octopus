@@ -17,3 +17,7 @@ variable "ec2_key_name" {
 variable "allowable_ips" {
     type = list(string)
 }
+
+variable "third_party_vpn_ips" {
+    type = list(string)
+}

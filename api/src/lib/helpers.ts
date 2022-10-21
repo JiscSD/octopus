@@ -73,7 +73,7 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
         nameType: 'Personal',
         nameIdentifiers: [
             {
-                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'Orcid ID not provided',
+                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'ORCID iD not provided',
                 nameIdentifierScheme: 'orcid',
                 schemeUri: 'orcid.org'
             }
@@ -361,3 +361,10 @@ export const formatFlagType = (flagType: I.FlagCategory) => {
 
     return types[flagType];
 };
+
+export function sanitizeSearchQuery(searchQuery: string) {
+    return searchQuery
+        .trim()
+        .replace(/[^a-z0-9\s]/g, (match) => '\\' + match) // escape all the non-alphanumeric characters which may break the search
+        .replace(/\s+/g, '|'); // replace whitespace with single OR
+}

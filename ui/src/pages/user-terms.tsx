@@ -178,7 +178,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                                 <li className="mb-6">
                                     A <span className="font-bold">Registered User </span> is an individual who has
-                                    created an Octopus user account affiliated with an ORCID ID by following the steps
+                                    created an Octopus user account affiliated with an ORCID® iD by following the steps
                                     set out in Section 3. A Registered User can search, browse, and view content
                                     published to the site, but can also publish their own research as well as review,
                                     rate, create links between, and red flag others&apos; publications. Registered Users
@@ -1076,7 +1076,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         </Components.Link>
                                     </li>
                                     <li className="mb-3">
-                                        ORCiD:{' '}
+                                        ORCID:{' '}
                                         <Components.Link
                                             href="https://orcid.org/"
                                             openNew={true}

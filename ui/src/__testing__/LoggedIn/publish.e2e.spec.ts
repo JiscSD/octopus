@@ -62,23 +62,66 @@ export const publicationFlowLinkedPublication = async (
     await page.locator(PageModel.publish.nextButton).click();
 };
 
+interface Reference {
+    text: string;
+    refURL: string;
+}
+
+const referencesList: Array<Reference> = [
+    { text: 'Pighin S, Savadori L, Barilli E, Cremonesi L', refURL: '(doi:10.1177/0272989X11403490)' },
+    { text: 'Reyna, V.F. and Brainerd, C.J., 2008. Numeracy', refURL: 'https://www.testrefurl1234.com' }
+];
+
 export const publicationFlowMainText = async (
     page: Page,
     mainText: string,
     language: Type.Languages,
+    references: Array<Reference>,
     description: string,
     keywords: string
 ) => {
     // Text
     await page.locator(PageModel.publish.text.editor).click();
     await page.keyboard.type(mainText);
+    await addReferences(page, references);
+    await addASingleReference(page, references[1]);
+    await deleteFirstReference(page);
+    await deleteAllReferences(page);
+    // re-add references
+    await addReferences(page, references);
     await page.locator(PageModel.publish.text.language).selectOption(language);
     await page.locator(PageModel.publish.text.description).click();
     await page.keyboard.type(description);
     await page.locator(PageModel.publish.text.keywords).click();
     await page.keyboard.type(keywords);
-
     await page.locator(PageModel.publish.nextButton).click();
+};
+
+const addReferences = async (page: Page, references: Array<Reference>) => {
+    await page.locator(PageModel.publish.text.references).click();
+    for (let reference of references) {
+        await page.keyboard.type(`${reference.text} ${reference.refURL} \n`);
+    }
+    await page.locator(PageModel.publish.text.addReferencesButton).click();
+};
+
+const deleteAllReferences = async (page: Page) => {
+    await page.locator(PageModel.publish.text.deleteAllReferencesButton).click();
+    await page.locator(PageModel.publish.text.deleteAllReferencesModalButton).click();
+};
+
+const addASingleReference = async (page: Page, reference: Reference) => {
+    await page.locator(PageModel.publish.text.addReferenceButton).click();
+    await page.locator(PageModel.publish.text.continueModalButton).click();
+    await page.keyboard.type(`${reference.text}`);
+    await page.keyboard.press('Tab');
+    await page.keyboard.type(`${reference.refURL}`);
+    await page.locator(PageModel.publish.text.saveReferenceModalButton).click();
+};
+
+const deleteFirstReference = async (page: Page) => {
+    await page.locator(PageModel.publish.text.deleteFirstReferenceButton).click();
+    await page.locator(PageModel.publish.text.deleteReferenceModalButton).click();
 };
 
 export const publicationFlowConflictOfInterest = async (
@@ -154,6 +197,7 @@ const problemPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Research Problem does not have any specified conflicts of interest.',
     funding: 'This Research Problem has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -166,6 +210,7 @@ const hypothesisPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Rationale/Hypothesis does not have any specified conflicts of interest.',
     funding: 'This Rationale/Hypothesis has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -178,6 +223,7 @@ const methodPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Method does not have any specified conflicts of interest.',
     funding: 'This Method has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -190,6 +236,7 @@ const analysisPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Analysis does not have any specified conflicts of interest.',
     funding: 'This Analysis has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -202,6 +249,7 @@ const interpretationPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Interpretation does not have any specified conflicts of interest.',
     funding: 'This Interpretation has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -214,6 +262,7 @@ const realWorldApplicationPublication = {
     title: 'test title',
     author: Helpers.ORCID_TEST_NAME,
     text: 'main text',
+    references: referencesList,
     coi: 'This Real World Application does not have any specified conflicts of interest.',
     funding: 'This Real World Application has the following sources of funding:',
     fundingExtraDetails: 'extra details'
@@ -226,6 +275,7 @@ interface PublicationTestType {
     title: string;
     author: string;
     text: string;
+    references: Array<Reference>;
     coi: string;
     funding: string;
     fundingExtraDetails: string;
@@ -236,8 +286,10 @@ export const checkPublication = async (page: Page, publication: PublicationTestT
         `aside >> text=Publication type:${publication.pubType}`,
         `text=${publication.language}`,
         `text=${publication.licence}`,
-        `main > section > header > p > a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
+        `main > section > header > div >> a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
         `h1:has-text("${publication.title}")`,
+        `text=${publication.references[1].text}`,
+        `text=${publication.references[1].refURL}`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
         `text=${publication.fundingExtraDetails}`
@@ -274,7 +326,7 @@ test.describe('Publication flow', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
@@ -314,7 +366,7 @@ test.describe('Publication flow', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
@@ -354,7 +406,7 @@ test.describe('Publication flow', () => {
             'a',
             'Hypothesis of Improving the quality of life for sustainable'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
@@ -394,7 +446,7 @@ test.describe('Publication flow', () => {
             'a',
             'Data attached to Improving the quality of life for sustainable development'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
@@ -430,7 +482,7 @@ test.describe('Publication flow', () => {
             'extra details'
         );
         await publicationFlowLinkedPublication(page, 'a', 'Analysis of Improving the quality of life for sustainable');
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
@@ -470,7 +522,7 @@ test.describe('Publication flow', () => {
             'a',
             'Interpretation of Improving the quality of life for sustainable'
         );
-        await publicationFlowMainText(page, 'main text', 'aa', 'description', 'key, words');
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
         await publicationFlowFunders(page, '01rv9gx86', 'funder name', 'funder city', 'funder.com', 'extra details');
 
