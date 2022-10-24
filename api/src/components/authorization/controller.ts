@@ -2,29 +2,38 @@ import axios from 'axios';
 
 import * as I from 'interface';
 import * as response from 'lib/response';
-
 import * as userService from 'user/service';
 import * as authorizationService from 'authorization/service';
 
 export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Promise<I.JSONResponse> => {
     try {
         const callbackURL = process.env.AUTHORISATION_CALLBACK_URL;
+        const clientId = process.env.ORCID_ID;
+        const clientSecret = process.env.ORCID_SECRET;
+        const code = event.body.code;
 
-        const orcidRequest = await axios.post(
-            'https://orcid.org/oauth/token',
-            `client_id=${process.env.ORCID_ID}&client_secret=${process.env.ORCID_SECRET}&grant_type=authorization_code&redirect_uri=${callbackURL}&code=${event.body.code}`
+        /**
+         * @TODO - remove "sandbox." after we get live Member API credentials
+         */
+        const orcidAuthRequest = await axios.post(
+            'https://sandbox.orcid.org/oauth/token',
+            `client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&redirect_uri=${callbackURL}&code=${code}`
         );
 
-        const ORCIDRequestPublicUserResponse = await axios.get(
-            `https://pub.orcid.org/v3.0/${orcidRequest.data.orcid}/record`,
-            {
-                headers: {
-                    Accept: 'application/json'
-                }
+        const orcidUserId = orcidAuthRequest.data.orcid;
+        const accessToken = orcidAuthRequest.data.access_token;
+
+        /**
+         * @TODO - remove "sandbox." after we get live Member API credentials
+         */
+        const orcidUserRequest = await axios.get(`https://api.sandbox.orcid.org/v3.0/${orcidUserId}/record`, {
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${accessToken}`
             }
-        );
+        });
 
-        const userInformation: I.ORCIDUser = ORCIDRequestPublicUserResponse.data;
+        const userInformation: I.ORCIDUser = orcidUserRequest.data;
 
         const employment =
             userInformation?.['activities-summary']?.employments['affiliation-group'].map((employmentItem) => ({
@@ -76,7 +85,7 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 url: work['work-summary']?.[0]?.url?.value || null
             })) || null;
 
-        const user = await userService.upsertUser(orcidRequest.data.orcid, {
+        const user = await userService.upsertUser(orcidUserId, {
             firstName: userInformation?.person?.name?.['given-names']?.value || '',
             lastName: userInformation?.person?.name?.['family-name']?.value || '',
             employment,

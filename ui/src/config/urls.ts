@@ -1,6 +1,6 @@
 let host: string;
 let mediaBucket: string;
-let orcidAppiID: string;
+let orcidAppId: string;
 
 function checkEnvVariable(variable: string | undefined): string {
     if (variable === undefined) {
@@ -12,7 +12,7 @@ function checkEnvVariable(variable: string | undefined): string {
 
 host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
 mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
-orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
+orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 
 export const base = {
     title: 'Octopus | Built for Researchers',
@@ -247,8 +247,11 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/login`
     },
+    /**
+     * @TODO -  remove "sandbox." after we get live Member API credentials
+     */
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
+        path: `https://sandbox.orcid.org/oauth/authorize?client_id=${orcidAppId}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket
 };
