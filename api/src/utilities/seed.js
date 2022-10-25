@@ -7,7 +7,7 @@ titleIDStore.set(
     'What makes everything we can detect in the universe around us the way that it is, and why?', // GOD problem text
     'why' // GOD problem DOI
 );
-const tsv = fs.readFileSync('./data.txt', 'utf-8');
+const tsv = fs.readFileSync('./missing-seed-data.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
@@ -24,12 +24,13 @@ const loadData = async () => {
             const splitRow = row.split('\t');
             let [title, parent1, parent2, content] = splitRow;
             title = title.replace(/\"/g, '');
-            console.log(title);
             parent1 = parent1.replace(/\"/g, '');
             parent2 = parent2.replace(/\"/g, '');
             content = content.replace(/\"/g, '');
             parent1ID = titleIDStore.get(parent1);
             parent2ID = titleIDStore.get(parent2);
+
+            console.log('Current Publication: ', title)
 
             // Before creating the publication, check if it already exists.
             // This needs to query /publications/{id} then query the send a request to /links with the
@@ -83,7 +84,17 @@ const loadData = async () => {
                 await addReferencesToPublication(publicationCreation.id, formattedReferences);
             }
 
-            await launchPublication(publicationCreation.id);
+            const didPublicationLaunch = await launchPublication(publicationCreation.id);
+            
+            if(!didPublicationLaunch) {
+                const errorMessage = 'Publication: ' + publicationCreation.id + ' Title: ' + publicationCreation.title + ' did not go live'
+                fs.appendFile('errors.txt', errorMessage, function (err) {
+                    if (err) throw err;
+                    console.log('Terminal error')
+                    return;
+                });    
+            }
+
             console.log('Live: ', title);
             console.log('Index: ', index);
         } catch (err) {
@@ -93,12 +104,12 @@ const loadData = async () => {
                 if (err) throw err;
                 console.log('Saved!');
             });
-            continue;
+            break;
         }
     }
 };
-const url = process.env.API_URL;
-const apiKey = process.env.API_KEY;
+const url = 'http://0.0.0.0:4003/local/v1'
+const apiKey = 'ed4e8de7-87f9-4f9d-8e2f-8c8f69efcd13'
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
