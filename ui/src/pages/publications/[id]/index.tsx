@@ -92,8 +92,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
 
-    const peerReviews = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW');
-    const problems = publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM');
+    const peerReviews =
+        publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW') || [];
+
+    // problems this publication is linked to
+    const parentProblems = publicationData?.linkedTo?.filter((link) => link.publicationToRef.type === 'PROBLEM') || [];
+
+    // problems linked from this publication
+    const childProblems =
+        publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const isBookmarkVisible = useMemo(() => {
@@ -113,14 +120,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
-    const showReferences = references?.length;
-    const showProblems = problems?.length && publicationData?.type !== 'PEER_REVIEW';
-    const showPeerReviews = peerReviews?.length && publicationData?.type !== 'PEER_REVIEW';
+    const showReferences = Boolean(references?.length);
+    const showChildProblems = Boolean(childProblems?.length);
+    const showParentProblems = Boolean(parentProblems?.length);
+    const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement = publicationData?.type === 'DATA';
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
-    if (showProblems) list.push({ title: 'Linked problems', href: 'problems' });
+    if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
     if (publicationData?.dataPermissionsStatement)
@@ -409,7 +417,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </Components.PublicationContentSection>
 
                     {/* References */}
-                    {!!showReferences && (
+                    {showReferences && (
                         <Components.PublicationContentSection id="references" title="References" hasBreak>
                             {references.map((reference) => (
                                 <div key={reference.id} className="py-2 break-anywhere">
@@ -426,29 +434,56 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </Components.PublicationContentSection>
                     )}
 
-                    {/* Linked from problems */}
-                    {!!showProblems && (
-                        <Components.PublicationContentSection
-                            id="problems"
-                            title={`Research Problem statements branching from this ${Helpers.formatPublicationType(
-                                publicationData.type
-                            )}`}
-                            hasBreak
-                        >
-                            <Components.List ordered={false}>
-                                {problems.map((link) => (
-                                    <Components.ListItem
-                                        key={link.id}
-                                        className="flex items-center font-semibold leading-3"
-                                    >
-                                        <Components.PublicationLink
-                                            publicationRef={link.publicationFromRef}
-                                            showType={false}
-                                        />
-                                    </Components.ListItem>
-                                ))}
-                            </Components.List>
-                        </Components.PublicationContentSection>
+                    {(showParentProblems || showChildProblems) && (
+                        <div id="problems">
+                            {/* Parent problems */}
+                            {showParentProblems && (
+                                <Components.PublicationContentSection
+                                    id="problems-linked-to"
+                                    title={'Research Problems this problem branches from'}
+                                    hasBreak
+                                >
+                                    <Components.List ordered={false}>
+                                        {parentProblems.map((link) => (
+                                            <Components.ListItem
+                                                key={link.id}
+                                                className="flex items-center font-semibold leading-3"
+                                            >
+                                                <Components.PublicationLink
+                                                    publicationRef={link.publicationToRef}
+                                                    showType={false}
+                                                />
+                                            </Components.ListItem>
+                                        ))}
+                                    </Components.List>
+                                </Components.PublicationContentSection>
+                            )}
+
+                            {/* Child problems */}
+                            {showChildProblems && (
+                                <Components.PublicationContentSection
+                                    id="problems-linked-from"
+                                    title={`Research Problem statements branching from this ${Helpers.formatPublicationType(
+                                        publicationData.type
+                                    )}`}
+                                    hasBreak
+                                >
+                                    <Components.List ordered={false}>
+                                        {childProblems.map((link) => (
+                                            <Components.ListItem
+                                                key={link.id}
+                                                className="flex items-center font-semibold leading-3"
+                                            >
+                                                <Components.PublicationLink
+                                                    publicationRef={link.publicationFromRef}
+                                                    showType={false}
+                                                />
+                                            </Components.ListItem>
+                                        ))}
+                                    </Components.List>
+                                </Components.PublicationContentSection>
+                            )}
+                        </div>
                     )}
 
                     {/* Linked peer reviews */}
