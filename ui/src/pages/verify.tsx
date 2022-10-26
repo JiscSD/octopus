@@ -135,11 +135,16 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
                     <p className="mb-6 block text-grey-700 transition-colors duration-500 dark:text-grey-50 lg:w-3/4">
-                        Your Octopus account has been created, and is linked to your ORCID® iD. To complete your account
-                        setup, please verify your email address.
-                        <br />
-                        <br />A verified email is required for essential service notifications. We’ll use it as
-                        described in our privacy notice (at{' '}
+                        {props.newUser && (
+                            <>
+                                Your Octopus account has been created, and is linked to your ORCID® iD. To complete your
+                                account setup, please verify your email address.
+                                <br />
+                                <br />
+                            </>
+                        )}
+                        A verified email is required for essential service notifications. We’ll use it as described in
+                        our privacy notice (at{' '}
                         <Components.Link
                             href={Config.urls.privacy.canonical}
                             className="rounded border-transparent underline decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400"
