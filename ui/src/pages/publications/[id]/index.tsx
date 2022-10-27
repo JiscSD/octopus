@@ -440,7 +440,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             {showParentProblems && (
                                 <Components.PublicationContentSection
                                     id="problems-linked-to"
-                                    title={'Research Problems this problem branches from'}
+                                    title="Research problems above this in the hierarchy"
                                     hasBreak
                                 >
                                     <Components.List ordered={false}>
@@ -463,9 +463,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             {showChildProblems && (
                                 <Components.PublicationContentSection
                                     id="problems-linked-from"
-                                    title={`Research Problem statements branching from this ${Helpers.formatPublicationType(
-                                        publicationData.type
-                                    )}`}
+                                    title="Research problems below this in the hierarchy"
                                     hasBreak
                                 >
                                     <Components.List ordered={false}>
