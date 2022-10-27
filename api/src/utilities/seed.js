@@ -30,7 +30,7 @@ const loadData = async () => {
             parent1ID = titleIDStore.get(parent1);
             parent2ID = titleIDStore.get(parent2);
 
-            console.log('Current Publication: ', title)
+            console.log('Current Publication: ', title);
 
             // Before creating the publication, check if it already exists.
             // This needs to query /publications/{id} then query the send a request to /links with the
@@ -42,18 +42,18 @@ const loadData = async () => {
                 console.log('Exists: ', index);
                 continue;
             }
-            
+
             const publicationCreation = await createPublication(title, content);
 
             if (!publicationCreation) {
-                logError("Publication failed to create for: " + title)
+                logError('Publication failed to create for: ' + title);
                 return;
             }
 
             if (!parent1ID && !parent2ID) {
-                logError("Missing parents for publication: " + title)
+                logError('Missing parents for publication: ' + title);
                 // Remove draft publication so the file can be re-run with the corrections
-                await deleteDraftPublication(publicationCreation.id)
+                await deleteDraftPublication(publicationCreation.id);
                 return;
             }
 
@@ -90,31 +90,30 @@ const loadData = async () => {
             }
 
             await launchPublication(publicationCreation.id);
-            
+
             // Check if publication was set to draft, if it was error and delete
-            const didPublicationLaunch = await checkIfPublicationIsLive(publicationCreation.id)
+            const didPublicationLaunch = await checkIfPublicationIsLive(publicationCreation.id);
 
             // If a publication did not go LIVE check it's data as it could effect
-            // further publication from going live if it is their parent and missing. 
-            if(!didPublicationLaunch) {
-                logError("Publication failed to go live: " + title)
-                await deleteDraftPublication(publicationCreation.id)
+            // further publication from going live if it is their parent and missing.
+            if (!didPublicationLaunch) {
+                logError('Publication failed to go live: ' + title);
+                await deleteDraftPublication(publicationCreation.id);
                 return;
             }
-            
-            console.log('Publication: ' + title + " is live")
-            console.log('Index: ', index);
 
+            console.log('Publication: ' + title + ' is live');
+            console.log('Index: ', index);
         } catch (err) {
             // If there happens to be an error, it's added to errors.txt with the error code
             // and the row that is occured on.
-            logError(err + ': ' + row)
+            logError(err + ': ' + row);
             break;
         }
     }
 };
-const url = process.env.API_URL
-const apiKey = process.env.API_KEY
+const url = process.env.API_URL;
+const apiKey = process.env.API_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
@@ -122,26 +121,25 @@ if (!url || !apiKey) {
 }
 
 const deleteDraftPublication = async (id) => {
-    await axios.delete(`${url}/publications/${id}?apiKey=${apiKey}`)
-}
+    await axios.delete(`${url}/publications/${id}?apiKey=${apiKey}`);
+};
 
 const checkIfPublicationIsLive = async (id) => {
+    const response = await axios.get(`${url}/publications/${id}`);
 
-    const response = await axios.get(`${url}/publications/${id}`)
-    
-    if(response.data.currentStatus === 'LIVE') {
+    if (response.data.currentStatus === 'LIVE') {
         return true;
     }
 
     return false;
-}
+};
 
 const logError = (message) => {
-    fs.appendFile('errors.txt', message + "\n", function (err) {
+    fs.appendFile('errors.txt', message + '\n', function (err) {
         if (err) throw err;
         console.log('Error logged');
     });
-}
+};
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
     // Encode the URl parameter as it has the potential to use special characters, such as '&'
