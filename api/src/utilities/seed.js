@@ -42,18 +42,23 @@ const loadData = async () => {
                 console.log('Exists: ', index);
                 continue;
             }
-
+            
             const publicationCreation = await createPublication(title, content);
 
             if (!publicationCreation) {
-                continue;
+                logError("Publication failed to create for: " + title)
+                return;
             }
 
             if (!parent1ID && !parent2ID) {
-                continue;
+                logError("Missing parents for publication: " + title)
+                // Remove draft publication so the file can be re-run with the corrections
+                await deleteDraftPublication(publicationCreation.id)
+                return;
             }
 
             titleIDStore.set(publicationCreation.title, publicationCreation.id);
+
             if (parent1ID) {
                 await createLink(publicationCreation.id, parent1ID);
             }
@@ -84,36 +89,58 @@ const loadData = async () => {
                 await addReferencesToPublication(publicationCreation.id, formattedReferences);
             }
 
-            const didPublicationLaunch = await launchPublication(publicationCreation.id);
+            await launchPublication(publicationCreation.id);
             
-            if(!didPublicationLaunch) {
-                const errorMessage = 'Publication: ' + publicationCreation.id + ' Title: ' + publicationCreation.title + ' did not go live'
-                fs.appendFile('errors.txt', errorMessage, function (err) {
-                    if (err) throw err;
-                    console.log('Terminal error')
-                    return;
-                });    
-            }
+            // Check if publication was set to draft, if it was error and delete
+            const didPublicationLaunch = await checkIfPublicationIsLive(publicationCreation.id)
 
-            console.log('Live: ', title);
+            // If a publication did not go LIVE check it's data as it could effect
+            // further publication from going live if it is their parent and missing. 
+            if(!didPublicationLaunch) {
+                logError("Publication failed to go live: " + title)
+                await deleteDraftPublication(publicationCreation.id)
+                return;
+            }
+            
+            console.log('Publication: ' + title + " is live")
             console.log('Index: ', index);
+
         } catch (err) {
             // If there happens to be an error, it's added to errors.txt with the error code
             // and the row that is occured on.
-            fs.appendFile('erors.txt', err + ': ' + row, function (err) {
-                if (err) throw err;
-                console.log('Saved!');
-            });
+            logError(err + ': ' + row)
             break;
         }
     }
 };
-const url = 'http://0.0.0.0:4003/local/v1'
-const apiKey = 'ed4e8de7-87f9-4f9d-8e2f-8c8f69efcd13'
+const url = process.env.API_URL
+const apiKey = process.env.API_KEY
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
     return;
+}
+
+const deleteDraftPublication = async (id) => {
+    await axios.delete(`${url}/publications/${id}?apiKey=${apiKey}`)
+}
+
+const checkIfPublicationIsLive = async (id) => {
+
+    const response = await axios.get(`${url}/publications/${id}`)
+    
+    if(response.data.currentStatus === 'LIVE') {
+        return true;
+    }
+
+    return false;
+}
+
+const logError = (message) => {
+    fs.appendFile('errors.txt', message + "\n", function (err) {
+        if (err) throw err;
+        console.log('Error logged');
+    });
 }
 
 const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
