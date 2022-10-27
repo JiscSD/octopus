@@ -27,6 +27,7 @@ const useAuthCheck = (protectedPage: boolean) => {
             const response = await api.get(decodeUserTokenUrl, token);
             const decodedToken = response.data;
 
+            // check if user logged in from a different tab
             if (decodedToken && !user) {
                 setUser({ ...decodedToken, token });
             }
