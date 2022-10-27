@@ -8,7 +8,7 @@ titleIDStore.set(
     'why' // GOD problem DOI
 );
 
-const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?'
+const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?';
 
 const tsv = fs.readFileSync('./initialdata.txt', 'utf-8');
 const loadData = async () => {
@@ -55,10 +55,10 @@ const loadData = async () => {
 
             if (!parent1ID && !parent2ID) {
                 // God problem, creates a duplicate if present in seed data, this will
-                // check for that and remove it without ending the script. 
-                if(title === godProblemTitle) {
-                    await deleteDraftPublication(publicationCreation.id);    
-                    continue
+                // check for that and remove it without ending the script.
+                if (title === godProblemTitle) {
+                    await deleteDraftPublication(publicationCreation.id);
+                    continue;
                 }
 
                 logError('Missing parents for publication: ' + title);
@@ -122,8 +122,9 @@ const loadData = async () => {
         }
     }
 };
-const url = 'http://localhost:4003/local/v1'
-const apiKey = '1aa000dc-93bc-4996-a5b8-ff5902496377'
+
+const url = process.env.API_URL;
+const apiKey = process.env.APY_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
