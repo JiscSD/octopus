@@ -8,7 +8,7 @@ import * as api from '@api';
 
 const useAuthCheck = (protectedPage: boolean) => {
     const router = useRouter();
-    const { setUser } = Stores.useAuthStore();
+    const { user, setUser } = Stores.useAuthStore();
 
     useSWR(Config.endpoints.decodeUserToken, async (decodeUserTokenUrl) => {
         // ignore if user is on the login page
@@ -24,7 +24,13 @@ const useAuthCheck = (protectedPage: boolean) => {
                 throw new Error('No token found');
             }
             // will throw an error if token is not valid
-            await api.get(decodeUserTokenUrl, token);
+            const response = await api.get(decodeUserTokenUrl, token);
+            const decodedToken = response.data;
+
+            // check if user logged in from a different tab
+            if (decodedToken && !user) {
+                setUser({ ...decodedToken, token });
+            }
         } catch (error) {
             if (process.env.NODE_ENV === 'development') {
                 console.log((error as Error).message);
