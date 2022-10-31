@@ -124,7 +124,7 @@ const loadData = async () => {
 };
 
 const url = process.env.API_URL;
-const apiKey = process.env.APY_KEY;
+const apiKey = process.env.API_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
