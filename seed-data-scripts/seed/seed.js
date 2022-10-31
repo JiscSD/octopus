@@ -10,7 +10,7 @@ titleIDStore.set(
 
 const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?';
 
-const tsv = fs.readFileSync('./initialdata.txt', 'utf-8');
+const tsv = fs.readFileSync('./data.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
