@@ -135,7 +135,6 @@ const About: NextPage = (): React.ReactElement => (
                             </p>
                             <Components.Button
                                 title="Learn more about getting involved."
-                                link
                                 href={Config.urls.getInvolved.path}
                                 iconPosition="RIGHT"
                                 icon={

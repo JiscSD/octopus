@@ -79,7 +79,6 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                             {/* view all publication & authors buttons */}
                             <div className="grid-row-2 mb-6 grid">
                                 <Components.Button
-                                    link
                                     href={`${
                                         Config.urls.search.path
                                     }?for=publications&type=${Config.values.publicationTypes.join()}`}
@@ -91,7 +90,6 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="w-fit"
                                 />
                                 <Components.Button
-                                    link
                                     href={`${Config.urls.search.path}?for=users`}
                                     title="View all authors"
                                     iconPosition="RIGHT"

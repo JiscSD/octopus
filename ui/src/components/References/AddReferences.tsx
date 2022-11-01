@@ -35,7 +35,6 @@ const AddReferences: React.FC<AddReferencesProps> = ({ addReferences }) => {
             )}
 
             <Components.Button
-                link
                 onClick={(e) => {
                     if (!textEditor) {
                         return;

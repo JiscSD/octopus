@@ -2,10 +2,8 @@ import React from 'react';
 
 import * as Components from '@components';
 
-type Props = {
+type CommonProps = {
     title: string;
-    href?: string;
-    link?: boolean;
     icon?: React.ReactElement;
     iconPosition?: 'LEFT' | 'RIGHT';
     onClick?: (e: React.MouseEvent) => void;
@@ -14,6 +12,10 @@ type Props = {
     textSize?: string;
     padding?: string;
 };
+
+type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };
+
+type Props = CommonProps & ConditionalProps;
 
 const Button: React.FC<Props> = (props): React.ReactElement | null => {
     const parentStyles = React.useMemo(() => {
@@ -47,45 +49,38 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-teal-400
             dark:border-b-teal-500
             `;
-    }, [props.iconPosition]);
+    }, [props.iconPosition, props.padding, props.textSize]);
 
-    if (props.link && props.href) {
-        return (
-            <Components.Link
-                href={props.href}
-                title={props.title}
-                ariaLabel={props.title}
-                className={parentStyles}
-                openNew
-            >
-                <>
-                    {props.iconPosition === 'LEFT' && props.icon}
-                    <span className={childStyles}>{props.title}</span>
-                    {props.iconPosition === 'RIGHT' && props.icon}
-                </>
-            </Components.Link>
-        );
-    }
-
-    if (props.onClick) {
-        return (
-            <button
-                type="button"
-                title={props.title}
-                name={props.title}
-                aria-label={props.title}
-                onClick={props.onClick}
-                disabled={props.disabled}
-                className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
-            >
+    return props.href ? (
+        <Components.Link
+            href={props.href}
+            title={props.title}
+            ariaLabel={props.title}
+            className={parentStyles}
+            openNew={props.openNew}
+            onClick={props.onClick}
+        >
+            <>
                 {props.iconPosition === 'LEFT' && props.icon}
                 <span className={childStyles}>{props.title}</span>
                 {props.iconPosition === 'RIGHT' && props.icon}
-            </button>
-        );
-    }
-
-    return null;
+            </>
+        </Components.Link>
+    ) : (
+        <button
+            type="button"
+            title={props.title}
+            name={props.title}
+            aria-label={props.title}
+            onClick={props.onClick}
+            disabled={props.disabled}
+            className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
+        >
+            {props.iconPosition === 'LEFT' && props.icon}
+            <span className={childStyles}>{props.title}</span>
+            {props.iconPosition === 'RIGHT' && props.icon}
+        </button>
+    );
 };
 
 export default Button;

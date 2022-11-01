@@ -29,7 +29,6 @@ const InformationLanding: React.FC<Props> = (props) => (
                 </h2>
                 <div className="mx-auto my-12 block space-x-8 text-grey-800 transition-colors duration-500 dark:text-white-50">
                     <Components.Button
-                        link
                         href={Config.urls.home.path}
                         title="Navigate to homepage"
                         iconPosition="LEFT"
@@ -38,7 +37,6 @@ const InformationLanding: React.FC<Props> = (props) => (
                         }
                     />
                     <Components.Button
-                        link
                         href={Config.urls.about.path}
                         title="What is Octopus?"
                         iconPosition="LEFT"
