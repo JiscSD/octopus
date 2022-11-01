@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import * as Components from '@components';
-import * as OutlineIcons from '@heroicons/react/outline';
 import '@testing-library/jest-dom';
 
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import * as Components from '@components';
+import * as OutlineIcons from '@heroicons/react/outline';
 
-Enzyme.configure({ adapter: new Adapter() });
+import { render, screen } from '@testing-library/react';
+import { shallow } from 'enzyme';
+import { configureEnzymeAdapter } from '../test-utils';
+
+configureEnzymeAdapter();
 
 describe('Button test suite with enabled button stating "click me"', () => {
     const button = (
