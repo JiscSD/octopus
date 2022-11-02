@@ -1,8 +1,5 @@
 import * as Components from '@components';
 import { render, screen } from '@testing-library/react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('MainText tests', () => {
     const component = <Components.PublicationCreationMainText />;

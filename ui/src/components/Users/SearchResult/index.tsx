@@ -1,11 +1,10 @@
 import React from 'react';
+
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Config from '@config';
-import * as Assets from '@assets';
 
 type Props = {
     user: Interfaces.CoreUser;
@@ -52,11 +51,41 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 {props.user.firstName}. {props.user?.lastName}
             </span>
             <div className="relative z-20 col-span-4 flex h-full items-center font-light text-grey-600 transition-colors duration-500 dark:text-grey-100 lg:col-span-3">
-                {/**
-                 * @TODO - will display current author affiliation here
-                 * GET /users endpoint doesn't return affiliations atm
-                 * This will be handled in OCT-385
-                 */}
+                {props.user.employment
+                    .filter((employment) => {
+                        const { day, month, year } = employment.endDate;
+
+                        if (!day && !month && !year) {
+                            // there's no end date
+                            return true;
+                        }
+
+                        const currentDate = new Date();
+
+                        if (Number(year) > currentDate.getFullYear()) {
+                            return true;
+                        }
+
+                        if (Number(year) === currentDate.getFullYear()) {
+                            // check month
+                            if (month && Number(month) - 1 < currentDate.getMonth()) {
+                                return false;
+                            }
+
+                            if (month && Number(month) - 1 === currentDate.getMonth()) {
+                                // check day of month
+                                if (day && Number(day) < currentDate.getDate()) {
+                                    return false;
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    }) // only show current employer
+                    .map((employment) => employment.organisation)
+                    .join(', ')}
             </div>
             <OutlineIcons.ChevronRightIcon className="col-span-1 hidden h-5 w-5 self-center justify-self-end text-teal-400 lg:block" />
         </Components.Link>
