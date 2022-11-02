@@ -59,6 +59,13 @@
     .custom-table-tiptap-editor td {
         @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
+
+    .visualization-box-title {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
 }
 
 @layer components {
