@@ -284,8 +284,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                         title="Resolve flag"
                                                         onClick={() => setShowResolveModal(true)}
                                                         disabled={isValidating || submitting}
-                                                        iconPosition="RIGHT"
-                                                        icon={
+                                                        endIcon={
                                                             <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 text-teal-400" />
                                                         }
                                                     />
@@ -294,8 +293,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                     title="Save comment"
                                                     onClick={submitComment}
                                                     disabled={isValidating || submitting}
-                                                    iconPosition="RIGHT"
-                                                    icon={<OutlineIcons.ChatIcon className="h-6 w-6 text-teal-400" />}
+                                                    endIcon={
+                                                        <OutlineIcons.ChatIcon className="h-6 w-6 text-teal-400" />
+                                                    }
                                                 />
                                             </div>
                                         </div>

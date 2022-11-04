@@ -353,39 +353,34 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             title="Preview"
                                             onClick={handlePreview}
                                             disabled={!isReadyToPreview}
-                                            icon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
-                                            iconPosition="RIGHT"
+                                            endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         />
                                         <Components.Button
                                             title="Publish"
                                             onClick={() => setPublishModalVisibility(true)}
                                             disabled={!isReadyToPreview}
-                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                            iconPosition="RIGHT"
+                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         />
                                         <Components.Button
                                             title="Save"
                                             onClick={() => setSaveModalVisibility(true)}
                                             className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
-                                            iconPosition="RIGHT"
+                                            endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                                         />
                                         <Components.Button
                                             title="Delete draft"
                                             onClick={() => setDeleteModalVisibility(true)}
                                             className="children:border-0"
-                                            icon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
-                                            iconPosition="RIGHT"
+                                            endIcon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
                                         />
                                     </div>
                                     <div className="flex gap-8">
                                         <Components.Button
                                             className="children:border-0"
                                             disabled={props.currentStep <= 0}
-                                            icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                            iconPosition="LEFT"
+                                            startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                             onClick={() => props.setStep((prevState: number) => prevState - 1)}
                                             title="Previous"
                                         />
@@ -393,8 +388,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         <Components.Button
                                             className="children:border-0"
                                             disabled={props.currentStep >= props.steps.length - 1}
-                                            icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                                            iconPosition="RIGHT"
+                                            endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                             onClick={() => props.setStep((prevState: number) => prevState + 1)}
                                             title="Next"
                                         />
@@ -459,14 +453,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     title="Save"
                                     onClick={() => setSaveModalVisibility(true)}
                                     className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                    icon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
-                                    iconPosition="RIGHT"
+                                    endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                                 />
                                 <Components.Button
                                     className="children:border-0"
                                     disabled={props.currentStep <= 0}
-                                    icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                    iconPosition="LEFT"
+                                    startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
                                     onClick={() => props.setStep((prevState: number) => prevState - 1)}
                                     title="Previous"
                                 />
@@ -493,8 +485,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     <Components.Button
                                         title="Preview"
                                         disabled={!isReadyToPreview}
-                                        icon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
-                                        iconPosition="RIGHT"
+                                        endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         onClick={handlePreview}
                                     />
@@ -502,8 +493,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     <Components.Button
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         disabled={!isReadyToPreview}
-                                        icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                        iconPosition="RIGHT"
+                                        endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                         title="Publish"
                                         onClick={() => setPublishModalVisibility(true)}
                                     />
@@ -529,8 +519,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <Components.Button
                                 className="children:border-0"
                                 disabled={props.currentStep >= props.steps.length - 1}
-                                iconPosition="RIGHT"
-                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                 title="Next"
                                 onClick={() => {
                                     props.setStep((prevState: number) => prevState + 1);

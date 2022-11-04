@@ -4,8 +4,8 @@ import * as Components from '@components';
 
 type CommonProps = {
     title: string;
-    icon?: React.ReactElement;
-    iconPosition?: 'LEFT' | 'RIGHT';
+    endIcon?: React.ReactElement;
+    startIcon?: React.ReactElement;
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
@@ -35,8 +35,8 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     const childStyles = React.useMemo(() => {
         return `
-            ${props.iconPosition === 'LEFT' ? 'ml-3' : ''}
-            ${props.iconPosition === 'RIGHT' ? 'mr-3' : ''}
+            ${props.startIcon ? 'ml-3' : ''}
+            ${props.endIcon ? 'mr-3' : ''}
             ${props.padding ? props.padding : 'py-2'}
             font-montserrat
             text-${props.textSize ? props.textSize : 'sm'}
@@ -49,7 +49,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-teal-400
             dark:border-b-teal-500
             `;
-    }, [props.iconPosition, props.padding, props.textSize]);
+    }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
 
     return props.href ? (
         <Components.Link
@@ -61,9 +61,9 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             onClick={props.onClick}
         >
             <>
-                {props.iconPosition === 'LEFT' && props.icon}
+                {props.startIcon}
                 <span className={childStyles}>{props.title}</span>
-                {props.iconPosition === 'RIGHT' && props.icon}
+                {props.endIcon}
             </>
         </Components.Link>
     ) : (
@@ -76,9 +76,9 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             disabled={props.disabled}
             className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
         >
-            {props.iconPosition === 'LEFT' && props.icon}
+            {props.startIcon}
             <span className={childStyles}>{props.title}</span>
-            {props.iconPosition === 'RIGHT' && props.icon}
+            {props.endIcon}
         </button>
     );
 };

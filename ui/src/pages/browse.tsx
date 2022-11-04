@@ -83,8 +83,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                         Config.urls.search.path
                                     }?for=publications&type=${Config.values.publicationTypes.join()}`}
                                     title="View all publications"
-                                    iconPosition="RIGHT"
-                                    icon={
+                                    endIcon={
                                         <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
                                     className="w-fit"
@@ -92,8 +91,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <Components.Button
                                     href={`${Config.urls.search.path}?for=users`}
                                     title="View all authors"
-                                    iconPosition="RIGHT"
-                                    icon={
+                                    endIcon={
                                         <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
                                     className="w-fit"

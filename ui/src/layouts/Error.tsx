@@ -31,8 +31,7 @@ const Error: React.FC<Props> = (props) => (
                     <Components.Button
                         href={Config.urls.home.path}
                         title="Navigate to homepage"
-                        iconPosition="LEFT"
-                        icon={
+                        startIcon={
                             <OutlineIcons.HomeIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50" />
                         }
                     />

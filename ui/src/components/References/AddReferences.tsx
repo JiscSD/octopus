@@ -49,8 +49,7 @@ const AddReferences: React.FC<AddReferencesProps> = ({ addReferences }) => {
                     textEditor?.commands.clearContent(true);
                 }}
                 title={'Add references'}
-                iconPosition={'RIGHT'}
-                icon={
+                endIcon={
                     <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                 }
             />
