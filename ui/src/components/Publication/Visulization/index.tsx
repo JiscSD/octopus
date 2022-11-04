@@ -48,24 +48,23 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
             `}
             >
                 <>
+                    <div
+                        className={`text-xs leading-snug line-clamp-3 xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
+                            props.current ? 'font-semibold' : 'font-medium'
+                        }`}
+                        title={props.publication.title}
+                        role="complementary"
+                        aria-label={props.publication.title}
+                    >
+                        <span>{props.publication.title}</span>
+                    </div>
                     <div className="space-y-1">
-                        <span
-                            className={`block h-24 text-xs leading-snug xl:h-16 2xl:text-sm ${
-                                props.current ? 'font-semibold' : 'font-medium'
-                            }`}
-                            title={props.publication.title}
-                            role="complementary"
-                            aria-label={props.publication.title}
-                        >
-                            {Helpers.truncateString(props.publication.title, 45)}
-                        </span>
-
                         <span
                             className={`${
                                 props.current
                                     ? 'font-medium text-teal-100'
                                     : 'text-grey-600 dark:font-medium dark:text-teal-50'
-                            } block text-xxs transition-colors duration-500 md:text-xs`}
+                            } block overflow-hidden text-ellipsis whitespace-nowrap text-xxs transition-colors duration-500 md:text-xs`}
                         >
                             {props.publication.firstName[0]} {props.publication.lastName}
                         </span>
