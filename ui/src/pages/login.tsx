@@ -13,7 +13,8 @@ import * as Hooks from '@hooks';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const homeUrl = encodeURIComponent(Config.urls.home.path);
-    const { code = null, state: redirectTo = homeUrl, error = null } = context.query;
+    const { code = null, state, error = null } = context.query;
+    const redirectTo = state ? encodeURIComponent(state as string) : homeUrl; // state comes back from orcid decoded
     let token: string | null = null;
 
     if (error) {
@@ -80,7 +81,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
             if (decodedJWT) {
                 setUser(Object.assign(decodedJWT, { token: props.token }));
                 const redirectTo = decodedJWT.email
-                    ? props.redirectTo
+                    ? decodeURIComponent(props.redirectTo)
                     : `${Config.urls.verify.path}?state=${encodeURIComponent(props.redirectTo)}`;
                 setTimeout(() => router.push(redirectTo), 1000);
             }

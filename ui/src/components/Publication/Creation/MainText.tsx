@@ -333,8 +333,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             updateReferences([]);
                                         }
                                     }}
-                                    iconPosition="RIGHT"
-                                    icon={
+                                    endIcon={
                                         <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
                                 />

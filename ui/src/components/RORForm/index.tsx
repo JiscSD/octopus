@@ -268,8 +268,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                             title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
                             disabled={ror == '' || rorError == true}
                             onClick={onSubmitHandler}
-                            iconPosition="RIGHT"
-                            icon={
+                            endIcon={
                                 submitLoading ? (
                                     <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (
@@ -355,8 +354,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                                 isLinkValid == false
                             }
                             onClick={onSubmitHandler}
-                            iconPosition="RIGHT"
-                            icon={
+                            endIcon={
                                 submitLoading ? (
                                     <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (

@@ -90,8 +90,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     title="Send co-author invite"
                     disabled={!coAuthor}
                     onClick={addCoAuthorToPublication}
-                    iconPosition="RIGHT"
-                    icon={
+                    endIcon={
                         loading ? (
                             <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                         ) : (
@@ -133,8 +132,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                             <Components.Button
                                 title="Refresh"
                                 onClick={refreshCoAuthors}
-                                iconPosition="LEFT"
-                                icon={
+                                startIcon={
                                     <OutlineIcons.RefreshIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
                                 textSize="sm"
