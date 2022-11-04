@@ -172,6 +172,7 @@ export interface CoreUser {
     createdAt: string;
     updatedAt: string;
     orcid: string;
+    employment: EmploymentRecord[];
 }
 export interface User extends CoreUser {
     education: EducationRecord[];

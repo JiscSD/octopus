@@ -108,10 +108,9 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                             </span>
                             <Components.Button
                                 title="Search for your organisation's ROR"
-                                link
                                 href="https://ror.org/"
-                                iconPosition="RIGHT"
-                                icon={
+                                openNew
+                                endIcon={
                                     <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
                             />

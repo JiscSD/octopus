@@ -29,11 +29,9 @@ const Error: React.FC<Props> = (props) => (
                 </h2>
                 <div className="mx-auto my-12 block text-grey-800 transition-colors duration-500 dark:text-white-50">
                     <Components.Button
-                        link
                         href={Config.urls.home.path}
                         title="Navigate to homepage"
-                        iconPosition="LEFT"
-                        icon={
+                        startIcon={
                             <OutlineIcons.HomeIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50" />
                         }
                     />

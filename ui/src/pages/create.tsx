@@ -213,8 +213,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         title="Create this publication"
                         disabled={!publicationType || !title.length || !confirmed}
                         onClick={createPublication}
-                        iconPosition="RIGHT"
-                        icon={
+                        endIcon={
                             <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />

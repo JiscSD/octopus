@@ -88,6 +88,7 @@ export const getAll = async (filters: I.UserFilters) => {
             firstName: true,
             lastName: true,
             orcid: true,
+            employment: true,
             Publication: {
                 select: {
                     id: true,

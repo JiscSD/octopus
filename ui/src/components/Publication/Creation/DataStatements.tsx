@@ -229,8 +229,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                 <Components.Button
                     title="Clear selection"
                     disabled={!dataAccessStatement}
-                    icon={<OutlineIcons.XIcon className="h-4 w-4" />}
-                    iconPosition="LEFT"
+                    startIcon={<OutlineIcons.XIcon className="h-4 w-4" />}
                     onClick={() => {
                         setDataAccessStatementOther('');
                         updateDataAccessStatement(null);

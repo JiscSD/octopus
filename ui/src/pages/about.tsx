@@ -135,10 +135,8 @@ const About: NextPage = (): React.ReactElement => (
                             </p>
                             <Components.Button
                                 title="Learn more about getting involved."
-                                link
                                 href={Config.urls.getInvolved.path}
-                                iconPosition="RIGHT"
-                                icon={
+                                endIcon={
                                     <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
                             />
