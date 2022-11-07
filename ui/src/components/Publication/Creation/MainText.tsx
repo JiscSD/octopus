@@ -163,11 +163,14 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div data-testid="main-text-select">
-                <Components.PublicationCreationStepTitle text="Language" required />
+                <label id="language-label">
+                    <Components.PublicationCreationStepTitle text="Language" required />
+                </label>
                 <select
                     data-testid="main-text-select-element"
                     name="language"
                     id="language"
+                    aria-labelledby='language-label'
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
                     className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
@@ -345,7 +348,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label id="short-description">
+                <label id="short-description-label">
                     <Components.PublicationCreationStepTitle text="Short description" />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
@@ -353,7 +356,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     characters in length.
                 </span>
                 <textarea
-                    aria-labelledby="short-description"
+                    aria-labelledby="short-description-label"
                     title="Short description"
                     required
                     rows={3}
@@ -369,7 +372,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label id="keywords">
+                <label id="keywords-label">
                     <Components.PublicationCreationStepTitle text="Keywords" />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
@@ -377,7 +380,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     separated.
                 </span>
                 <textarea
-                    aria-labelledby="keywords"
+                    aria-labelledby="keywords-label"
                     title="Keywords"
                     required
                     rows={5}
