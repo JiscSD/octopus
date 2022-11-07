@@ -345,17 +345,22 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Short description" />
+                <label id="short-description">
+                    <Components.PublicationCreationStepTitle text="Short description" />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. This can be no more than 160
                     characters in length.
                 </span>
                 <textarea
+                    aria-labelledby="short-description"
+                    title="Short description"
                     required
                     rows={3}
                     maxLength={160}
                     value={description}
                     onChange={(e) => updateDescription(e.target.value)}
+                    id="short-description"
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
@@ -364,12 +369,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Keywords" />
+                <label id="keywords">
+                    <Components.PublicationCreationStepTitle text="Keywords" />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include up to 10 keywords relating to your content. These can be comma-separated and/or line
                     separated.
                 </span>
                 <textarea
+                    aria-labelledby="keywords"
+                    title="Keywords"
                     required
                     rows={5}
                     value={keywords}
