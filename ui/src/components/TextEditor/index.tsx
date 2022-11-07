@@ -336,6 +336,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Bold"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}
                             className={props.editor.isActive('bold') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -343,6 +344,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Italic"
                             onClick={() => props.editor.chain().focus().toggleItalic().run()}
                             className={props.editor.isActive('italic') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -350,6 +352,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Strikethrough"
                             onClick={() => props.editor.chain().focus().toggleStrike().run()}
                             className={props.editor.isActive('strike') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -358,6 +361,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Align Left"
                             onClick={() => props.editor.chain().focus().setTextAlign('left').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'left' }) ? activeMenuIconStyles : menuIconStyles
@@ -367,6 +371,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Align Center"
                             onClick={() => props.editor.chain().focus().setTextAlign('center').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'center' }) ? activeMenuIconStyles : menuIconStyles
@@ -376,6 +381,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Align Right"
                             onClick={() => props.editor.chain().focus().setTextAlign('right').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'right' }) ? activeMenuIconStyles : menuIconStyles
@@ -386,6 +392,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Unordered list"
                             onClick={() => props.editor.chain().focus().toggleBulletList().run()}
                             className={props.editor.isActive('bulletList') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -393,6 +400,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Ordered List"
                             onClick={() => props.editor.chain().focus().toggleOrderedList().run()}
                             className={props.editor.isActive('orderedList') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -401,6 +409,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Code block"
                             onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
                             className={props.editor.isActive('codeBlock') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -408,6 +417,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Quote"
                             onClick={() => props.editor.chain().focus().toggleBlockquote().run()}
                             className={props.editor.isActive('blockquote') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -416,6 +426,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Link"
                             onClick={openLinkModal}
                             className={props.editor.isActive('link') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -424,6 +435,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Image"
                             onClick={() => {
                                 setImage({
                                     name: props.editor.getAttributes('image').title,
@@ -442,6 +454,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Horizontal rule"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -450,7 +463,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
-                            title="insertTable"
+                            title="Insert table"
                             className={props.editor.isActive('insertTable') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() =>
                                 props.editor
@@ -464,6 +477,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Add column"
                             className={props.editor.isActive('addColumnBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addColumnBefore().run()}
                         >
@@ -471,6 +485,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Stop"
                             className={props.editor.isActive('deleteColumn') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteColumn().run()}
                         >
@@ -478,6 +493,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Add row before"
                             className={props.editor.isActive('addRowBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addRowBefore().run()}
                         >
@@ -485,6 +501,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Delete row"
                             className={props.editor.isActive('deleteRow') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteRow().run()}
                         >
@@ -492,6 +509,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Delete table"
                             className={props.editor.isActive('deleteTable') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteTable().run()}
                         >
@@ -500,6 +518,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Undo"
                             className={props.editor.isActive('undo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().undo().run()}
                         >
@@ -507,6 +526,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Redo"
                             className={props.editor.isActive('redo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().redo().run()}
                         >
@@ -706,6 +726,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                     importModalVisible={importModalVisible}
                     setImportModalVisible={setImportModalVisible}
                 />
+
                 <tiptap.EditorContent editor={textEditor} />
             </div>
         </>

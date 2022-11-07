@@ -17,6 +17,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             <div className="flex items-center">
                 <button
                     type="button"
+                    title="Bold"
                     onClick={() => props.editor.chain().focus().toggleBold().run()}
                     className={props.editor.isActive('bold') ? activeMenuIconStyles : menuIconStyles}
                 >
@@ -24,6 +25,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 </button>
                 <button
                     type="button"
+                    title="Italic"
                     onClick={() => props.editor.chain().focus().toggleItalic().run()}
                     className={props.editor.isActive('italic') ? activeMenuIconStyles : menuIconStyles}
                 >
@@ -31,6 +33,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 </button>
                 <button
                     type="button"
+                    title="Strikethrough"
                     onClick={() => props.editor.chain().focus().toggleStrike().run()}
                     className={props.editor.isActive('strike') ? activeMenuIconStyles : menuIconStyles}
                 >
@@ -39,6 +42,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                 <button
                     type="button"
+                    title="Underline"
                     onClick={() => props.editor.chain().focus().toggleUnderline().run()}
                     className={props.editor.isActive('underline') ? activeMenuIconStyles : menuIconStyles}
                 >
@@ -48,6 +52,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                 <button
                     type="button"
+                    title="Undo"
                     className={props.editor.isActive('undo') ? activeMenuIconStyles : menuIconStyles}
                     onClick={() => props.editor.chain().focus().undo().run()}
                 >
@@ -55,6 +60,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 </button>
                 <button
                     type="button"
+                    title="Redo"
                     className={props.editor.isActive('redo') ? activeMenuIconStyles : menuIconStyles}
                     onClick={() => props.editor.chain().focus().redo().run()}
                 >
