@@ -49,7 +49,7 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
                             />
                         }
                         onClick={handleClick}
-                        />
+                    />
                 ) : (
                     <Components.IconButton
                         className="p-2"

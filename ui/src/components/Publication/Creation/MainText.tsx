@@ -170,7 +170,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     data-testid="main-text-select-element"
                     name="language"
                     id="language"
-                    aria-labelledby='language-label'
+                    aria-labelledby="language-label"
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
                     className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
@@ -222,7 +222,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Reference link
                                             </th>
-                                            <th colSpan={3} className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                            <th
+                                                colSpan={3}
+                                                className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6"
+                                            >
                                                 Actions
                                             </th>
                                         </tr>

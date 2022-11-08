@@ -62,7 +62,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 </span>
                 <div className="items-center lg:flex">
                     <select
-                        aria-labelledby='cc-licence-label'
+                        aria-labelledby="cc-licence-label"
                         id="licence"
                         name="publicationType"
                         value={licence}
