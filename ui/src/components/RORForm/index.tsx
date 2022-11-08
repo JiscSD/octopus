@@ -416,13 +416,14 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
 
                         <div className="mb-2 flex flex-col">
                             <label
-                                htmlFor="ror"
+                                id="ror-additional-info"
                                 className="text-gray-700 mt-6 block text-sm font-medium dark:text-white-100"
                             >
                                 If needed, provide further information on this publication’s{' '}
                                 {props.type == 'funders' ? 'funding arrangements' : 'affiliations'}.
                             </label>
                             <textarea
+                                aria-labelledby="ror-additional-info"
                                 name="free-text"
                                 className="mb-2 mt-3 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
                                 placeholder="Enter any details"
