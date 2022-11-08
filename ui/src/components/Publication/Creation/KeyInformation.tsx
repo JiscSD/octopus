@@ -23,7 +23,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
-                <label id="title-label">
+                <label htmlFor="title-label" id="title-label">
                     <Components.PublicationCreationStepTitle text="Title" required />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
