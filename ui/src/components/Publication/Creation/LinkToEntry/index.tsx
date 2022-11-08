@@ -41,7 +41,7 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
                 {loading ? (
                     <Components.IconButton
                         className="p-2"
-                        title="Delete"
+                        title="Refresh"
                         icon={
                             <OutlineIcons.RefreshIcon
                                 className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"

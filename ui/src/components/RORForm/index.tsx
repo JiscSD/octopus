@@ -74,18 +74,29 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
                 </td>
                 <td className="space-nowrap h-full items-center justify-center py-4 text-center">
                     {isLoading ? (
-                        <OutlineIcons.RefreshIcon
-                            className="ml-6 h-full w-7 animate-reverse-spin justify-center align-middle text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                            aria-hidden="true"
-                            aria-label="Loading ror data"
+                        <Components.IconButton
+                            className="p-2"
+                            title="Refresh"
+                            icon={
+                                <OutlineIcons.RefreshIcon
+                                    className="ml-6 h-full w-7 animate-reverse-spin justify-center align-middle text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                    aria-hidden="true"
+                                    aria-label="Loading ror data"
+                                />
+                            }
                         />
                     ) : (
-                        <button
-                            onClick={() => onDeleteRowHandler(props.item.id)}
+                        <Components.IconButton
                             className=" h-full justify-center align-middle"
-                        >
-                            <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                        </button>
+                            title="Delete"
+                            icon={
+                                <OutlineIcons.TrashIcon
+                                    className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50"
+                                    aria-hidden="true"
+                                />
+                            }
+                            onClick={() => onDeleteRowHandler(props.item.id)}
+                        />
                     )}
                 </td>
             </tr>
