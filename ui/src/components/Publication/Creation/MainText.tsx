@@ -163,7 +163,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div data-testid="main-text-select">
-                <label id="language-label">
+                <label htmlFor="language-label" id="language-label">
                     <Components.PublicationCreationStepTitle text="Language" required />
                 </label>
                 <select
@@ -351,7 +351,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label id="short-description-label">
+                <label htmlFor="short-description-label" id="short-description-label">
                     <Components.PublicationCreationStepTitle text="Short description" />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
@@ -375,7 +375,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label id="keywords-label">
+                <label htmlFor="keywords-label" id="keywords-label">
                     <Components.PublicationCreationStepTitle text="Keywords" />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">

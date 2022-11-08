@@ -39,7 +39,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 />
             </div>
             <div>
-                <label id="cc-licence-label">
+                <label htmlFor="cc-licence-label" id="cc-licence-label">
                     <Components.PublicationCreationStepTitle text="Creative commons licence" required />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
