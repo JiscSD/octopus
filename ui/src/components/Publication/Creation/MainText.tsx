@@ -222,9 +222,9 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Reference link
                                             </th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th colSpan={3} className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                                Actions
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
