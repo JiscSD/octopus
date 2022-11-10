@@ -1,3 +1,7 @@
+import React, { useEffect, useMemo, useRef } from 'react';
+import Xarrow from 'react-xarrows';
+import useSWR from 'swr';
+
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
@@ -5,9 +9,6 @@ import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 import * as Axios from 'axios';
 import * as Framer from 'framer-motion';
-import React from 'react';
-import Xarrow from 'react-xarrows';
-import useSWR from 'swr';
 
 interface BoxEntry {
     id: string;
@@ -41,7 +42,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                 className={`
             ${
                 props.current
-                    ? 'sticky top-0 border-teal-600 bg-teal-700 tracking-wide text-white-50 dark:bg-teal-800'
+                    ? 'border-teal-600 bg-teal-700 tracking-wide text-white-50 dark:bg-teal-800'
                     : 'border-transparent bg-teal-100 text-teal-800 hover:border-teal-600 dark:bg-grey-700 '
             }
              relative z-20 block overflow-hidden rounded-md border-2 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:text-white-100
@@ -49,7 +50,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
             >
                 <>
                     <div
-                        className={`text-xs leading-snug line-clamp-3 xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
+                        className={`mb-2 text-xs leading-snug line-clamp-3 xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
                             props.current ? 'font-semibold' : 'font-medium'
                         }`}
                         title={props.publication.title}
@@ -64,7 +65,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                                 props.current
                                     ? 'font-medium text-teal-100'
                                     : 'text-grey-600 dark:font-medium dark:text-teal-50'
-                            } block overflow-hidden text-ellipsis whitespace-nowrap text-xxs transition-colors duration-500 md:text-xs`}
+                            } block overflow-hidden text-ellipsis whitespace-nowrap text-xxs transition-colors duration-500 2xl:text-xs`}
                         >
                             {props.publication.firstName[0]} {props.publication.lastName}
                         </span>
@@ -72,27 +73,23 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         <time
                             className={`${
                                 props.current ? 'text-teal-50' : 'text-grey-600'
-                            } block h-8 text-xxs transition-colors duration-500 dark:text-grey-200 md:text-xs xl:h-auto`}
+                            } block text-xxs transition-colors duration-500 dark:text-grey-200 2xl:text-xs`}
                         >
-                            {Helpers.formatDate(props.publication.publishedDate)}
+                            {Helpers.formatDate(props.publication.publishedDate, 'short')}
                         </time>
                     </div>
                 </>
             </Components.Link>
             {props.pointer && (
-                <>
-                    <span className="absolute -top-1 z-10 h-3 w-full border-t-4 border-teal-50 transition-colors duration-500 dark:border-grey-800"></span>
-                    <Xarrow
-                        path="grid"
-                        strokeWidth={2}
-                        color={'#296d8a'}
-                        showHead={false}
-                        start={props.publication.id}
-                        end={props.pointer}
-                        zIndex={5}
-                    />
-                    <span className="absolute -bottom-3 z-10 h-3 w-full border-t-4 border-teal-50 transition-colors duration-500 dark:border-grey-800"></span>
-                </>
+                <Xarrow
+                    path="grid"
+                    strokeWidth={2}
+                    color={'#296d8a'}
+                    showHead={false}
+                    start={props.publication.id}
+                    end={props.pointer}
+                    zIndex={5}
+                />
             )}
         </Framer.motion.div>
     );
@@ -103,7 +100,7 @@ type VisulizationProps = {
 };
 
 const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement => {
-    const { data, error } = useSWR<Axios.AxiosResponse<Interfaces.PublicationWithLinks>>(
+    const { data } = useSWR<Axios.AxiosResponse<Interfaces.PublicationWithLinks>>(
         `${Config.endpoints.publications}/${props.id}/links`,
         null,
         {
@@ -112,6 +109,23 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
             }
         }
     );
+
+    const visualizationHeaderRef = useRef<HTMLDivElement>(null);
+    const visualizationWrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        // helper for visualization section allowing the header to be "sticky" while scrolling visualization content on x and y
+        const handleHorizontalScroll = () => {
+            if (visualizationWrapperRef.current && visualizationHeaderRef.current) {
+                // scroll visualization header to be in sync with the content
+                if (visualizationWrapperRef.current.scrollLeft !== visualizationHeaderRef.current.scrollLeft) {
+                    visualizationHeaderRef.current.scrollLeft = visualizationWrapperRef.current.scrollLeft;
+                }
+            }
+        };
+
+        visualizationWrapperRef.current?.addEventListener('scroll', handleHorizontalScroll);
+    }, []);
 
     const getBoxes = (publication: Interfaces.PublicationWithLinks, type: string) => {
         let boxes: BoxEntry[] = [];
@@ -160,23 +174,34 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
         return boxes;
     };
 
+    // We're not including peer reviews in the 'chain'
+    const filteredPublicationTypes = useMemo(
+        () => Config.values.publicationTypes.filter((type) => type !== 'PEER_REVIEW'),
+        []
+    );
+
     return (
-        <section className="scrollbar-vert mb-8 grid max-h-[32rem] min-h-[22rem] grid-cols-7 gap-y-4 gap-x-8 overflow-y-auto pb-[5px] xl:gap-x-8">
-            {Config.values.publicationTypes.map((type) => {
-                return (
-                    // We're not including peer reviews in the 'chain'
-                    type !== 'PEER_REVIEW' && (
-                        <div key={type} className="relative">
-                            <span className="sticky top-0 z-30 block h-12 bg-teal-50 p-2 pl-3 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:bg-grey-800 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
+        <section className="container mb-8 px-8 pt-8 lg:pt-16">
+            <div className="overflow-hidden bg-teal-50 dark:bg-grey-800" ref={visualizationHeaderRef}>
+                <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
+                    {filteredPublicationTypes.map((type) => (
+                        <div key={type}>
+                            <span className="block h-12 p-2 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
                                 {Helpers.formatPublicationType(type)}
                             </span>
-
-                            <div className="space-y-4 p-1">
-                                {/** data && !error === success */}
-                                {data && !error && (
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="sm:scrollbar-vert max-h-[24rem] overflow-y-auto xl:max-h-[30rem]">
+                <div className="sm:scrollbar min-h-[16rem] overflow-x-auto" ref={visualizationWrapperRef}>
+                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
+                        {filteredPublicationTypes.map((type) => (
+                            <div key={type} className="space-y-4 p-1">
+                                {data ? (
                                     <>
-                                        {getBoxes(data.data, type).map((publication) => {
-                                            return (
+                                        {getBoxes(data.data, type).map(
+                                            (publication) =>
                                                 type === publication.type && (
                                                     <Box
                                                         current={data.data.rootPublication.id == publication.id}
@@ -186,17 +211,14 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                                                         type={publication.type}
                                                     />
                                                 )
-                                            );
-                                        })}
+                                        )}
                                     </>
-                                )}
-
-                                {/** !data && error === error */}
+                                ) : null}
                             </div>
-                        </div>
-                    )
-                );
-            })}
+                        ))}
+                    </div>
+                </div>
+            </div>
         </section>
     );
 };

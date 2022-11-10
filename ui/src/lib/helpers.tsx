@@ -19,10 +19,10 @@ export const truncateString = (value: string, length: number): string => {
 /**
  * @description Formats a string ISO from the DB
  */
-export const formatDate = (value: string): string => {
+export const formatDate = (value: string, formatType?: 'short' | 'long'): string => {
     const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
-        month: 'long',
+        month: formatType || 'long',
         year: 'numeric'
     });
 
@@ -44,7 +44,7 @@ export const relativeDate = (value: string): string | null => {
 export const formatPublicationType = (publicationType: Types.PublicationType): string => {
     const types = {
         PROBLEM: 'Research Problem',
-        HYPOTHESIS: 'Rationale/Hypothesis',
+        HYPOTHESIS: 'Rationale / Hypothesis',
         PROTOCOL: 'Method',
         DATA: 'Results',
         ANALYSIS: 'Analysis',
