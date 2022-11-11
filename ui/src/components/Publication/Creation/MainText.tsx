@@ -163,11 +163,14 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div data-testid="main-text-select">
-                <Components.PublicationCreationStepTitle text="Language" required />
+                <label htmlFor="language-label" id="language-label">
+                    <Components.PublicationCreationStepTitle text="Language" required />
+                </label>
                 <select
                     data-testid="main-text-select-element"
                     name="language"
                     id="language"
+                    aria-labelledby="language-label"
                     onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
                     className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
@@ -219,9 +222,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                             <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Reference link
                                             </th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th
+                                                colSpan={3}
+                                                className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6"
+                                            >
+                                                Actions
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
@@ -344,17 +350,22 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Short description" />
+                <label htmlFor="short-description-label" id="short-description-label">
+                    <Components.PublicationCreationStepTitle text="Short description" />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. This can be no more than 160
                     characters in length.
                 </span>
                 <textarea
+                    aria-labelledby="short-description-label"
+                    title="Short description"
                     required
                     rows={3}
                     maxLength={160}
                     value={description}
                     onChange={(e) => updateDescription(e.target.value)}
+                    id="short-description"
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
@@ -363,12 +374,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <Components.PublicationCreationStepTitle text="Keywords" />
+                <label htmlFor="keywords-label" id="keywords-label">
+                    <Components.PublicationCreationStepTitle text="Keywords" />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include up to 10 keywords relating to your content. These can be comma-separated and/or line
                     separated.
                 </span>
                 <textarea
+                    aria-labelledby="keywords-label"
+                    title="Keywords"
                     required
                     rows={5}
                     value={keywords}

@@ -111,12 +111,6 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         </Components.Link>
                     </div>
                 </div>
-                <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-teal-400 dark:text-teal-200">
-                        &nbsp;
-                    </h4>
-                    <div className="flex"></div>
-                </div>
             </div>
             <Components.ScrollToTop />
         </footer>

@@ -106,7 +106,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                             <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
                                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                     <tr>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 " />
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Status
+                                        </th>
 
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Email
@@ -114,7 +116,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                                         <th className='"whitespace-pre " py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6'>
                                             User
                                         </th>
-                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 "></th>
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Delete
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
