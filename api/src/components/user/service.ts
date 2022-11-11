@@ -30,6 +30,7 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
             lastName: updateUserInformation.lastName,
             employment: updateUserInformation.employment,
             education: updateUserInformation.education,
+            works: updateUserInformation.works,
             orcid
         }
     });

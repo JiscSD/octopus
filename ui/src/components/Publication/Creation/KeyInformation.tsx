@@ -23,11 +23,14 @@ const KeyInformation: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
-                <Components.PublicationCreationStepTitle text="Title" required />
+                <label htmlFor="title-label" id="title-label">
+                    <Components.PublicationCreationStepTitle text="Title" required />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Titles should be concise, specific, and informative to help others find your work.
                 </span>
                 <input
+                    aria-labelledby="title-label"
                     required
                     type="text"
                     value={title}
@@ -36,7 +39,9 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 />
             </div>
             <div>
-                <Components.PublicationCreationStepTitle text="Creative commons licence" required />
+                <label htmlFor="cc-licence-label" id="cc-licence-label">
+                    <Components.PublicationCreationStepTitle text="Creative commons licence" required />
+                </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     You retain the copyright to your work, and can choose what licence you would like to assign it.
                 </span>
@@ -57,6 +62,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 </span>
                 <div className="items-center lg:flex">
                     <select
+                        aria-labelledby="cc-licence-label"
                         id="licence"
                         name="publicationType"
                         value={licence}

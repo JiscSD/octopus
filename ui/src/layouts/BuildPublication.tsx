@@ -291,6 +291,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 } fixed inset-0 z-20 flex w-[80%] max-w-[20rem] flex-col justify-between border-r border-transparent bg-teal-700 py-10 transition-transform duration-300 dark:border-grey-400`}
                             >
                                 <Components.IconButton
+                                    title="Toggle side bar"
                                     className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-t border-r border-b border-grey-400 bg-teal-700"
                                     icon={
                                         showSideBar ? (
