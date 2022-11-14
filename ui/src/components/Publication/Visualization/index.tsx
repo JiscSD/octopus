@@ -15,9 +15,8 @@ interface BoxEntry {
     title: string;
     firstName: string;
     lastName: string;
-    pointer?: string;
+    pointers?: string[];
     publishedDate: string;
-    direction?: 'right' | 'left' | 'auto';
     type: Types.PublicationType;
 }
 
@@ -25,7 +24,7 @@ interface BoxEntry {
 type BoxProps = {
     current: boolean;
     publication: BoxEntry;
-    pointer?: string;
+    pointers?: string[];
     type: string;
 };
 
@@ -80,19 +79,98 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                     </div>
                 </>
             </Components.Link>
-            {props.pointer && (
+            {props.pointers?.map((pointer, index) => (
                 <Xarrow
-                    path="grid"
+                    key={`arrow-${index}`}
+                    path="smooth"
                     strokeWidth={2}
                     color={'#296d8a'}
-                    showHead={false}
+                    showHead
                     start={props.publication.id}
-                    end={props.pointer}
+                    end={pointer}
                     zIndex={5}
+                    startAnchor={'right'}
+                    endAnchor={'left'}
+                    animateDrawing={0.2}
+                    curveness={0.5}
                 />
-            )}
+            ))}
         </Framer.motion.div>
     );
+};
+
+const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: string) => {
+    const { rootPublication, linkedToPublications, linkedFromPublications } = data;
+    const publications: BoxEntry[] = [];
+
+    if (rootPublication.type === type) {
+        // Push the root element first
+        publications.push({
+            id: rootPublication.id,
+            title: rootPublication.title,
+            firstName: rootPublication.user.firstName,
+            lastName: rootPublication.user.lastName,
+            publishedDate: rootPublication.publishedDate,
+            type: rootPublication.type,
+            pointers: linkedFromPublications
+                .filter(
+                    (publication) =>
+                        publication.publicationFromType !== 'PEER_REVIEW' &&
+                        publication.publicationTo === rootPublication.id
+                )
+                .map((p) => p.publicationFrom) // get the ids of all direct child publications
+        });
+    }
+
+    // Loop through all parent publications
+    for (const currentPublication of linkedToPublications) {
+        if (
+            currentPublication.publicationToType === type &&
+            !publications.find((publication) => publication.id === currentPublication.publicationTo)
+        ) {
+            publications.push({
+                id: currentPublication.publicationTo,
+                title: currentPublication.publicationToTitle,
+                firstName: currentPublication.publicationToFirstName,
+                lastName: currentPublication.publicationToLastName,
+                publishedDate: currentPublication.publicationToPublishedDate,
+                type: currentPublication.publicationToType,
+                pointers: linkedToPublications
+                    .filter(
+                        (publication) =>
+                            publication.publicationFromType !== 'PEER_REVIEW' &&
+                            publication.publicationTo === currentPublication.publicationTo
+                    )
+                    .map((publication) => publication.publicationFrom) // get the ids of all direct child publications
+            });
+        }
+    }
+
+    // Loop through all child publications
+    for (const currentPublication of linkedFromPublications) {
+        if (
+            currentPublication.publicationFromType === type &&
+            !publications.find((publication) => publication.id === currentPublication.publicationFrom)
+        ) {
+            publications.push({
+                id: currentPublication.publicationFrom,
+                title: currentPublication.publicationFromTitle,
+                firstName: currentPublication.publicationFromFirstName,
+                lastName: currentPublication.publicationFromLastName,
+                publishedDate: currentPublication.publicationFromPublishedDate,
+                type: currentPublication.publicationFromType,
+                pointers: linkedFromPublications
+                    .filter(
+                        (publication) =>
+                            publication.publicationFromType !== 'PEER_REVIEW' &&
+                            publication.publicationTo === currentPublication.publicationFrom
+                    )
+                    .map((publication) => publication.publicationFrom) // get the ids of all direct child publications
+            });
+        }
+    }
+
+    return publications;
 };
 
 type VisulizationProps = {
@@ -127,53 +205,6 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
         visualizationWrapperRef.current?.addEventListener('scroll', handleHorizontalScroll);
     }, []);
 
-    const getBoxes = (publication: Interfaces.PublicationWithLinks, type: string) => {
-        let boxes: BoxEntry[] = [];
-
-        // Push the root element first
-        boxes.push({
-            id: publication.rootPublication.id,
-            title: publication.rootPublication.title,
-            firstName: publication.rootPublication.user.firstName,
-            lastName: publication.rootPublication.user.lastName,
-            publishedDate: publication.rootPublication.publishedDate,
-            direction: 'auto',
-            type: publication.rootPublication.type
-        });
-
-        // Loop all linked to publications
-        for (const linked of publication.linkedToPublications) {
-            if (!boxes.find((box) => box.id === linked.publicationTo) && linked.publicationToType === type) {
-                boxes.push({
-                    id: linked.publicationTo,
-                    title: linked.publicationToTitle,
-                    firstName: linked.publicationToFirstName,
-                    lastName: linked.publicationToLastName,
-                    publishedDate: linked.publicationToPublishedDate,
-                    pointer: linked.publicationFrom,
-                    type: linked.publicationToType
-                });
-            }
-        }
-
-        // Loop all linked from publications
-        for (const linked of publication.linkedFromPublications) {
-            if (!boxes.find((box) => box.id === linked.publicationFrom) && linked.publicationFromType === type) {
-                boxes.push({
-                    id: linked.publicationFrom,
-                    title: linked.publicationFromTitle,
-                    firstName: linked.publicationFromFirstName,
-                    lastName: linked.publicationFromLastName,
-                    publishedDate: linked.publicationFromPublishedDate,
-                    pointer: linked.publicationTo,
-                    type: linked.publicationFromType
-                });
-            }
-        }
-
-        return boxes;
-    };
-
     // We're not including peer reviews in the 'chain'
     const filteredPublicationTypes = useMemo(
         () => Config.values.publicationTypes.filter((type) => type !== 'PEER_REVIEW'),
@@ -193,27 +224,27 @@ const Visulization: React.FC<VisulizationProps> = (props): React.ReactElement =>
                     ))}
                 </div>
             </div>
-            <div className="sm:scrollbar-vert max-h-[24rem] overflow-y-auto xl:max-h-[30rem]">
-                <div className="sm:scrollbar min-h-[16rem] overflow-x-auto" ref={visualizationWrapperRef}>
+            <div className="sm:scrollbar-vert max-h-[24rem] overflow-y-auto overflow-x-hidden xl:max-h-[30rem]">
+                <div
+                    className="sm:scrollbar min-h-[16rem] overflow-x-auto overflow-y-hidden"
+                    ref={visualizationWrapperRef}
+                >
                     <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
                         {filteredPublicationTypes.map((type) => (
                             <div key={type} className="space-y-4 p-1">
-                                {data ? (
+                                {data && (
                                     <>
-                                        {getBoxes(data.data, type).map(
-                                            (publication) =>
-                                                type === publication.type && (
-                                                    <Box
-                                                        current={data.data.rootPublication.id == publication.id}
-                                                        key={publication.id}
-                                                        pointer={publication.pointer}
-                                                        publication={publication}
-                                                        type={publication.type}
-                                                    />
-                                                )
-                                        )}
+                                        {getPublicationsByType(data.data, type).map((publication) => (
+                                            <Box
+                                                current={props.id == publication.id}
+                                                key={publication.id}
+                                                pointers={publication.pointers}
+                                                publication={publication}
+                                                type={publication.type}
+                                            />
+                                        ))}
                                     </>
-                                ) : null}
+                                )}
                             </div>
                         ))}
                     </div>
