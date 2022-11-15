@@ -19,6 +19,7 @@
         "start:local": "nodemon --config nodemon.json",
         "seed:local": "STAGE=local npx prisma migrate reset --force",
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
+        "reindex": "ts-node prisma/reindex.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint": "eslint src/"
