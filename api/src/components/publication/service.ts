@@ -561,11 +561,13 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "User" AS pfrom_user
               ON "pfrom"."createdBy" = "pfrom_user"."id"
+
+              WHERE "pto"."type" != 'PROBLEM'
         )
         SELECT *
           FROM to_right
          WHERE "publicationToType" != "publicationFromType"
-           AND "publicationFromType" != ${rootPublication?.type}
+           AND "publicationFromType" != 'PROBLEM'
            AND "publicationFromCurrentStatus" = 'LIVE';
     `;
 
