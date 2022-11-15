@@ -10,7 +10,7 @@ titleIDStore.set(
 
 const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?';
 
-const tsv = fs.readFileSync('./data.txt', 'utf-8');
+const tsv = fs.readFileSync('./initialdata.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
@@ -42,6 +42,33 @@ const loadData = async () => {
 
             if (doesPublicationExist) {
                 titleIDStore.set(doesPublicationExist.title, doesPublicationExist.id);
+
+                // Check if there are references to add 
+                const references = checkForRefrencesSeedData(splitRow)
+                let formattedReferences = [];
+
+
+                
+                if(references.length) {
+                    // Check if publication alread has references
+                    const doesPublicationHaveReferences = await checkForRefrences(doesPublicationExist.id)
+
+                    // WORK ON THIS LOGIC TO MAKE MORE SENSE IN TERMS OF HOW TO CHECK IF EXISTS AND HAS REFERENCES
+                    // SO THAT ITS MORE DRY 
+                    if(doesPublicationHaveReferences.length) {
+                        console.log('Publication already has references', index);
+                        continue;
+                    }
+
+                    formattedReferences = formatReference(references, doesPublicationExist.id);
+
+                    // Add references
+                    if (formattedReferences.length) {
+                        await addReferencesToPublication(doesPublicationExist.id, formattedReferences);
+                        console.log('Updated to include refrences: ', index);
+                    }
+                }
+            
                 console.log('Exists: ', index);
                 continue;
             }
@@ -76,27 +103,19 @@ const loadData = async () => {
                 await createLink(publicationCreation.id, parent2ID);
             }
 
-            const references = [];
-
-            for (let key in splitRow) {
-                if (key > 4) {
-                    if (splitRow[key] == '') {
-                        break;
-                    }
-                    references.push(splitRow[key]);
-                }
-            }
-
             let formattedReferences = [];
+
+            const references = checkForRefrencesSeedData(splitRow);
 
             // If the publication contains references, format them into the octopus spec
             if (references.length) {
                 formattedReferences = formatReference(references, publicationCreation.id);
-            }
 
-            // Add references
-            if (formattedReferences.length) {
-                await addReferencesToPublication(publicationCreation.id, formattedReferences);
+                // Add references
+                if (formattedReferences.length) {
+                    await addReferencesToPublication(publicationCreation.id, formattedReferences);
+                }
+
             }
 
             await launchPublication(publicationCreation.id);
@@ -123,12 +142,31 @@ const loadData = async () => {
     }
 };
 
-const url = process.env.API_URL;
-const apiKey = process.env.API_KEY;
+const url = 'http://0.0.0.0:4003/local/v1'
+const apiKey = 'bb449146-250c-4fcb-b402-ab75d17b2b02';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
     return;
+}
+
+const checkForRefrences = async (id) => {
+    const references = await axios.get(`${url}/publications/${id}/reference`);
+    return references.data;
+}
+
+const checkForRefrencesSeedData = (splitRow) => {
+    let references = [];
+    for (let key in splitRow) {
+        if (key > 4) {
+            if (splitRow[key] == '') {
+                break;
+            }
+            references.push(splitRow[key]);
+        }
+    }
+
+    return references;
 }
 
 const deleteDraftPublication = async (id) => {
