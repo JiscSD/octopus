@@ -86,6 +86,13 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}
                   method: GET
                   cors: true
+    getPublicationSeed:
+        handler: src/components/publication/routes.getPubSeed
+        events:
+            - http:
+                path:  ${self:custom.versions.v1}/publication/seed
+                method: GET
+                cors: true
     createPublication:
         handler: src/components/publication/routes.create
         events:

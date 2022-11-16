@@ -10,7 +10,7 @@ titleIDStore.set(
 
 const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?';
 
-const tsv = fs.readFileSync('./initialdata.txt', 'utf-8');
+const tsv = fs.readFileSync('./SeedData_all_final.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
@@ -53,20 +53,17 @@ const loadData = async () => {
                     // Check if publication alread has references
                     const doesPublicationHaveReferences = await checkForRefrences(doesPublicationExist.id)
 
-                    // WORK ON THIS LOGIC TO MAKE MORE SENSE IN TERMS OF HOW TO CHECK IF EXISTS AND HAS REFERENCES
-                    // SO THAT ITS MORE DRY 
-                    if(doesPublicationHaveReferences.length) {
-                        console.log('Publication already has references', index);
-                        continue;
-                    }
+                    if(doesPublicationHaveReferences.length === 0) {
+                        formattedReferences = formatReference(references, doesPublicationExist.id);
 
-                    formattedReferences = formatReference(references, doesPublicationExist.id);
-
-                    // Add references
-                    if (formattedReferences.length) {
-                        await addReferencesToPublication(doesPublicationExist.id, formattedReferences);
-                        console.log('Updated to include refrences: ', index);
+                        // Add references
+                        if (formattedReferences.length) {
+                            await addReferencesToPublication(doesPublicationExist.id, formattedReferences);
+                            console.log('Updated to include refrences: ');
+                        }
+                    
                     }
+                    console.log('Publication already has references');
                 }
             
                 console.log('Exists: ', index);
@@ -143,7 +140,7 @@ const loadData = async () => {
 };
 
 const url = 'http://0.0.0.0:4003/local/v1'
-const apiKey = 'bb449146-250c-4fcb-b402-ab75d17b2b02';
+const apiKey = 'd1e0f41e-e01e-4249-9382-90cb5c4e83c0';
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
@@ -190,7 +187,50 @@ const logError = (message) => {
     });
 };
 
-const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
+const checkIfPublicationExists =  async (title, parent1ID, parent2ID) => {
+    const encodedTitle = encodeURIComponent(title)
+
+    try {
+
+        const publicationsResponse = await axios.get(`${url}/publication/seed?title=${encodedTitle}`);
+        const publications = publicationsResponse.data.publication;
+
+        if(publications.length) {
+
+            const parents = [];
+
+            if (typeof parent1ID !== 'undefined') {
+                parents.push(parent1ID);
+            }
+    
+            if (typeof parent2ID !== 'undefined') {
+                parents.push(parent2ID);
+            }
+
+            let publicationFound = {};
+            publications.forEach((publication) => {
+                const linkIDs = publication.linkedTo.map((link) => {
+                    return link.publicationTo;
+                });
+
+                if (linkIDs.sort().join(',') === parents.sort().join(',')) {
+                    publicationFound = publication
+                }
+            })
+
+            if(Object.keys(publicationFound).length > 0) {
+                return publicationFound
+            }
+        }
+    }
+    catch (error) {
+        // assume we don't find the publication - 404
+        console.log(error)
+    }
+
+    return false;
+}
+const checkIfPublicationExistsOld = async (title, parent1ID, parent2ID) => {
     // Encode the URl parameter as it has the potential to use special characters, such as '&'
     const encodedTitle = encodeURIComponent(title);
     try {

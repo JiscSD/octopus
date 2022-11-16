@@ -101,6 +101,10 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicationQueryParams {
+    title: string;
+}
+
 export interface GetLinksQueryParams {
     publicationID: string
 }

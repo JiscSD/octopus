@@ -67,6 +67,28 @@ export const get = async (
     }
 };
 
+export const getPubSeed = async (
+    event: I.APIRequest<undefined, I.GetPublicationQueryParams>
+): Promise<I.JSONResponse> => {
+    try {
+
+        const publication = await publicationService.getPubSeed(event.queryStringParameters.title);
+       
+        if(publication !== null) {
+            return response.json(200, {
+                publication
+            })
+        }
+        return response.json(404, {
+            message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
+        });
+    }
+    catch(err) {
+        console.log(err)
+        return response.json(500, { message: 'Unknown server error.' })
+    }
+}
+
 export const deletePublication = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeletePublicationPathParams>
 ): Promise<I.JSONResponse> => {

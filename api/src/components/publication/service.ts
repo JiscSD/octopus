@@ -192,6 +192,29 @@ export const get = async (id: string) => {
     return publication;
 };
 
+export const getPubSeed = async (title: string) => {
+    const publication = await client.prisma.publication.findMany({
+        where: {
+            title,
+        },
+        include: {
+            linkedTo: {
+                where: {
+                    publicationToRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationTo: true,
+                }
+            }
+        }
+    });
+
+    return publication;
+}
+
 export const deletePublication = async (id: string) => {
     const deletedPublication = await client.prisma.publication.delete({
         where: {
