@@ -17,6 +17,7 @@ export const initialDevSeed = async (): Promise<void> => {
             index: 'publications'
         });
     }
+
     // Create publications 
     for (const publication of SeedData.publicationsDevSeedData) {
         await client.prisma.publication.create({
