@@ -2,11 +2,7 @@ import htmlToText from 'html-to-text';
 
 import * as client from '../src/lib/client';
 
-
-
-
-const reindex  = async () => {
-
+const reindex = async () => {
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'
     });
@@ -17,17 +13,15 @@ const reindex  = async () => {
         });
     }
 
-const pubs=await client.prisma.publication.findMany(
-    {
+    const pubs = await client.prisma.publication.findMany({
         where: {
             currentStatus: 'LIVE'
         }
-    }
-);
+    });
 
-console.log(`reindexing ${pubs.length}`);
+    console.log(`reindexing ${pubs.length}`);
 
-for (const pub of pubs) {
+    for (const pub of pubs) {
         await client.search.create({
             index: 'publications',
             id: pub.id,
@@ -46,8 +40,6 @@ for (const pub of pubs) {
             }
         });
     }
-}
-
-
+};
 
 reindex();
