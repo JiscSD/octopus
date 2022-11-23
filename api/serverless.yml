@@ -165,15 +165,6 @@ functions:
                   path: ${self:custom.versions.v1}/decode-user-token
                   method: GET
                   cors: true
-    # Links
-    getLinks:
-        handler: src/components/link/routes.get
-        events:
-            - http:
-                path: ${self:custom.versions.v1}/links
-                method: GET
-                cors: true
-
     createLink:
         handler: src/components/link/routes.create
         events:

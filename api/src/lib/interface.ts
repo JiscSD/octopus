@@ -105,10 +105,6 @@ export interface GetPublicationQueryParams {
     title: string;
 }
 
-export interface GetLinksQueryParams {
-    publicationID: string
-}
-
 export interface UpdatePublicationPathParams {
     id: string;
 }
