@@ -373,3 +373,24 @@ export interface CreationStep {
     component: React.ReactElement;
     icon: React.ReactElement;
 }
+
+export interface UserPublication {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    publishedDate: Date | null;
+    doi: string;
+    title: string | null;
+    type: Types.PublicationType;
+    currentStatus: Types.PublicationStatuses;
+    url_slug: string;
+    licence: Types.LicenceType;
+    content: string | null;
+}
+
+export interface UserPublicationsPage {
+    offset: number;
+    limit: number;
+    total: number;
+    results: UserPublication[];
+}
