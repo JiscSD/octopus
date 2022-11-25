@@ -195,6 +195,7 @@ export const get = async (id: string) => {
 export const getPubSeed = async (title: string) => {
     const publication = await client.prisma.publication.findMany({
         where: {
+            createdBy: 'octopus',
             title,
         },
         include: {
