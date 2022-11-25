@@ -196,7 +196,7 @@ export const getPubSeed = async (title: string) => {
     const publication = await client.prisma.publication.findMany({
         where: {
             createdBy: 'octopus',
-            title,
+            title
         },
         include: {
             linkedTo: {
@@ -207,14 +207,14 @@ export const getPubSeed = async (title: string) => {
                 },
                 select: {
                     id: true,
-                    publicationTo: true,
+                    publicationTo: true
                 }
             }
         }
     });
 
     return publication;
-}
+};
 
 export const deletePublication = async (id: string) => {
     const deletedPublication = await client.prisma.publication.delete({
