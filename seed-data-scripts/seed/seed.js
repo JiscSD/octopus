@@ -218,7 +218,7 @@ const checkIfPublicationExists = async (title, parent1ID, parent2ID) => {
     const publicationsResponse = await axios.get(
       `${url}/publication/seed?title=${encodedTitle}`
     );
-    const publications = publicationsResponse.data.publication;
+    const publications = publicationsResponse.data.publications;
 
     if (publications.length) {
       const parents = [];

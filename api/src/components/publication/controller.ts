@@ -71,16 +71,19 @@ export const getPubSeed = async (
     event: I.APIRequest<undefined, I.GetPublicationQueryParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.getPubSeed(event.queryStringParameters.title);
+        const publications = await publicationService.getPubSeed(event.queryStringParameters.title);
 
-        if (publication !== null) {
-            return response.json(200, {
-                publication
+        if (publications.length) {
+            return response.json(404, {
+                message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
             });
         }
-        return response.json(404, {
-            message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
+
+        
+        return response.json(200, {
+            publications
         });
+
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
