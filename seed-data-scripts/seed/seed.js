@@ -10,14 +10,14 @@ titleIDStore.set(
 
 const godProblemTitle = 'What makes everything we can detect in the universe around us the way that it is, and why?';
 
-const tsv = fs.readFileSync('./SeedData_all_final.txt', 'utf-8');
+const tsv = fs.readFileSync('./SeedData_all_final_updated.txt', 'utf-8');
 const loadData = async () => {
     const rows = tsv.split('\n');
     let index = -1;
 
     for (const row of rows) {
         index++;
-
+        
         try {
             // Skip header of csv
             if (index === 0) {
@@ -85,7 +85,7 @@ const loadData = async () => {
                     continue;
                 }
 
-                logError('Missing parents for publication: ' + title);
+                logError('Missing parents for publication: ' + title + 'Parents: ' + parent1 + ' - ' + parent2);
                 // Remove draft publication so the file can be re-run with the corrections
                 await deleteDraftPublication(publicationCreation.id);
                 return;
@@ -137,10 +137,10 @@ const loadData = async () => {
             break;
         }
     }
-};
+};  
 
-const url = 'http://0.0.0.0:4003/local/v1'
-const apiKey = 'd1e0f41e-e01e-4249-9382-90cb5c4e83c0';
+const url = process.env.API_URL;
+const apiKey = process.env.API_KEY;
 
 if (!url || !apiKey) {
     console.log('API_URL and API_KEY env vars need to be set');
@@ -230,51 +230,6 @@ const checkIfPublicationExists =  async (title, parent1ID, parent2ID) => {
 
     return false;
 }
-const checkIfPublicationExistsOld = async (title, parent1ID, parent2ID) => {
-    // Encode the URl parameter as it has the potential to use special characters, such as '&'
-    const encodedTitle = encodeURIComponent(title);
-    try {
-        const publicationsResponse = await axios.get(`${url}/publications?search=${encodedTitle}`);
-
-        const publications = publicationsResponse.data.data;
-
-        const parents = [];
-
-        if (typeof parent1ID !== 'undefined') {
-            parents.push(parent1ID);
-        }
-
-        if (typeof parent2ID !== 'undefined') {
-            parents.push(parent2ID);
-        }
-
-        for (let key in publications) {
-            if (publications[key].title === title) {
-                const publicationLinks = await axios.get(`${url}/links?publicationID=${publications[key].id}`);
-                const publicationLinksResponse = publicationLinks.data;
-                // Skip checking more than two since we will only ever have max 2 parents for seed data
-                if (publicationLinksResponse.length > 2) {
-                    continue;
-                }
-
-                // Only process if link data is returned
-                if (publicationLinksResponse.length) {
-                    const linkIDs = publicationLinksResponse.map((link) => {
-                        return link.publicationTo;
-                    });
-
-                    if (linkIDs.sort().join(',') === parents.sort().join(',')) {
-                        return publications[key];
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        // assume not found
-    }
-
-    return false;
-};
 
 const addReferencesToPublication = async (publicationId, references) => {
     try {
