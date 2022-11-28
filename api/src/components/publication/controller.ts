@@ -68,7 +68,7 @@ export const get = async (
 };
 
 export const getSeedDataPublications = async (
-    event: I.APIRequest<undefined, I.GetPublicationQueryParams>
+    event: I.APIRequest<undefined, I.GetSeedDataPublicationsFilters>
 ): Promise<I.JSONResponse> => {
     try {
         const publications = await publicationService.getSeedDataPublications(event.queryStringParameters.title);

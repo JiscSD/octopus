@@ -101,7 +101,7 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
-export interface GetPublicationQueryParams {
+export interface GetSeedDataPublicationsFilters  {
     title: string;
 }
 

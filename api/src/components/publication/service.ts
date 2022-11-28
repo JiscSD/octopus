@@ -213,7 +213,7 @@ export const getSeedDataPublications = async (title: string) => {
         }
     });
 
-    return publication;
+    return publications;
 };
 
 export const deletePublication = async (id: string) => {
