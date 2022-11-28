@@ -86,8 +86,8 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}
                   method: GET
                   cors: true
-    getPublicationSeed:
-        handler: src/components/publication/routes.getPubSeed
+    getSeedDataPublications:
+        handler: src/components/publication/routes.getSeedDataPublications
         events:
             - http:
                 path:  ${self:custom.versions.v1}/publication/seed

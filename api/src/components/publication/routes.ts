@@ -15,10 +15,9 @@ export const get = middy(publicationController.get)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication(true));
 
-export const getPubSeed = middy(publicationController.getPubSeed)
+export const getSeedDataPublications = middy(publicationController.getSeedDataPublications)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication(true));
+    .use(middleware.httpJsonBodyParser());
 
 export const create = middy(publicationController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
