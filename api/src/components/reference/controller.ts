@@ -24,11 +24,15 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
             });
         }
 
-        //check that the publication is live
-        if (publication.currentStatus !== 'DRAFT') {
-            return response.json(403, {
-                message: 'You can only add references to a draft publication.'
-            });
+        // Skip this check if the user is octopus, to allow for seed data
+        // to update live publications
+        if(event.user.id !== 'octopus') {
+            //check that the publication is live
+            if (publication.currentStatus !== 'DRAFT') {
+                return response.json(403, {
+                    message: 'You can only add references to a draft publication.'
+                });
+            }
         }
 
         // check that we are updating the publication with the correct id

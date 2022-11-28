@@ -18,13 +18,12 @@ export const initialDevSeed = async (): Promise<void> => {
         });
     }
 
-    // Create publications 
+    // Create publications
     for (const publication of SeedData.publicationsDevSeedData) {
         await client.prisma.publication.create({
             // @ts-ignore
             data: publication
         });
-
 
         if (publication.currentStatus === 'LIVE') {
             await client.search.create({
@@ -105,9 +104,8 @@ export const initialDevSeed = async (): Promise<void> => {
     }
 };
 
-
 export const initialProdSeed = async (): Promise<void> => {
-    console.log("running initialProdSeed")
+    console.log('running initialProdSeed');
     // Create users
     await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
 
@@ -145,32 +143,29 @@ export const initialProdSeed = async (): Promise<void> => {
                     cleanContent: htmlToText.convert(problem.content)
                 }
             });
-        }    
-
+        }
     }
-
 };
 
 switch (process.env.STAGE) {
     case 'prod':
         initialProdSeed()
-        .catch((e) => {
-            console.error(e);
-            // process.exit(1);
-        })
-        .finally(async () => {
-            await client.prisma.$disconnect();
-        });
-    
-    break;
+            .catch((e) => {
+                console.error(e);
+                // process.exit(1);
+            })
+            .finally(async () => {
+                await client.prisma.$disconnect();
+            });
+
+        break;
     default:
         initialDevSeed()
-        .catch((e) => {
-            console.error(e);
-            // process.exit(1);
-        })
-        .finally(async () => {
-            await client.prisma.$disconnect();
-        });
-    
+            .catch((e) => {
+                console.error(e);
+                // process.exit(1);
+            })
+            .finally(async () => {
+                await client.prisma.$disconnect();
+            });
 }
