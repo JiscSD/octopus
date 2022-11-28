@@ -90,7 +90,7 @@ functions:
         handler: src/components/publication/routes.getSeedDataPublications
         events:
             - http:
-                path:  ${self:custom.versions.v1}/publication/seed
+                path:  ${self:custom.versions.v1}/publications/seed-data-publications
                 method: GET
                 cors: true
     createPublication:
