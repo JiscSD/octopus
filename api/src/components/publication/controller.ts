@@ -67,11 +67,11 @@ export const get = async (
     }
 };
 
-export const getPubSeed = async (
+export const getSeedDataPublications = async (
     event: I.APIRequest<undefined, I.GetPublicationQueryParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publications = await publicationService.getPubSeed(event.queryStringParameters.title);
+        const publications = await publicationService.getSeedDataPublications(event.queryStringParameters.title);
         return response.json(200, {
             publications
         });
