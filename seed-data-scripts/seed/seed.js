@@ -338,7 +338,7 @@ const formatReference = (references, publicationId) => {
       },
       paragraphsArray[i]
     );
-    let referenceText = newReference.text.replace(/^""+$/g, "");
+    let referenceText = newReference.text.replace(/"(.*?)"/g, "$1")
     newReference = { ...newReference, text: referenceText };
     referencesArray.push(newReference);
   }
