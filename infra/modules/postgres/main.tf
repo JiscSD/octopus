@@ -49,6 +49,8 @@ resource "aws_db_instance" "rds" {
   db_subnet_group_name    = aws_db_subnet_group.database_subnet.name
 
   auto_minor_version_upgrade = false
+  allow_major_version_upgrade = true
+  apply_immediately = true
 
 
   tags = {
