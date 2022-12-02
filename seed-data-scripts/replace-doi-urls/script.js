@@ -68,6 +68,8 @@ const validateDOI = (value) =>
 
 const replaceDOIs = () => {
   const newFileData = [];
+  let invalidReferencesCount = 0;
+  let noCorrespondingTextCount = 0;
 
   try {
     fs.readFile(SEED_DATA_FILE, "utf8", (error, data) => {
@@ -102,18 +104,31 @@ const replaceDOIs = () => {
             .filter((part) => part !== "\t")
             .join("");
 
-          // find corresponding reference text for this DOI url
-          const referenceText = referencesArray
-            .find(
-              (reference) =>
-                reference[doiUrl] &&
-                typeof reference[doiUrl] === "string" &&
-                !reference[doiUrl].includes("<!DOCTYPE") // ignore html pages
-            )
-            ?.[doiUrl]?.split("\n") // remove new lines
-            .join("")
-            .split('"') // replace '"' with '""'
-            .join('""');
+          // find corresponding reference for this DOI url
+          const foundReference = referencesArray.find(
+            (reference) => reference[doiUrl]
+          );
+
+          if (!foundReference) {
+            noCorrespondingTextCount += 1;
+          }
+
+          // extract valid reference text only
+          const referenceText =
+            foundReference &&
+            typeof foundReference[doiUrl] === "string" &&
+            !foundReference[doiUrl].includes("<!DOCTYPE") && // ignore html pages
+            !foundReference[doiUrl].match(/(&[a-zA-Z]*;)|(<\/)/) // ignore if html markup
+              ? foundReference[doiUrl]
+                  ?.split("\n") // remove new lines
+                  .join("")
+                  .split('"') // replace '"' with '""'
+                  .join('""')
+              : null;
+
+          if (!referenceText) {
+            invalidReferencesCount += 1;
+          }
 
           currentLine = firstPart + `"${referenceText || doiUrl}"` + secondPart;
         });
@@ -136,9 +151,19 @@ const replaceDOIs = () => {
       );
 
       console.log(
-        "Successfully replaced DOIs with reference text. Please check",
+        "Successfully replaced DOIs with valid reference text. Please check",
         `${SEED_DATA_FILE.replace(`.${ext}`, "")}_updated.${ext}`,
         "file"
+      );
+
+      console.log(
+        noCorrespondingTextCount,
+        "references had no corresponding API response"
+      );
+
+      console.log(
+        invalidReferencesCount,
+        "references had invalid text (eg: html markup)"
       );
     });
   } catch (error) {

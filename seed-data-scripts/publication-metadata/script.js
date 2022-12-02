@@ -72,8 +72,7 @@ const getMetadata = async () => {
 
       const client = axios.create({
         headers: {
-          Accept: "text/x-bibliography",
-          style: "harvard-cite-them-right",
+          Accept: "text/x-bibliography; style=harvard-cite-them-right",
         },
         timeout: 1000 * 60, // abort if server didn't respond within 1 minute
       });
