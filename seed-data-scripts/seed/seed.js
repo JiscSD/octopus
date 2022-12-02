@@ -328,7 +328,7 @@ const formatReference = (references, publicationId) => {
     if (!paragraphsArray[i]) {
       continue; // don't add empty references
     }
-    const newReference = getTransformedReference(
+    let newReference = getTransformedReference(
       {
         id: cuid(),
         publicationId,
@@ -338,7 +338,8 @@ const formatReference = (references, publicationId) => {
       },
       paragraphsArray[i]
     );
-
+    let referenceText = newReference.text.replace(/(^")|("(?="))|("$)/g, '')
+    newReference = { ...newReference, text: referenceText };
     referencesArray.push(newReference);
   }
 
