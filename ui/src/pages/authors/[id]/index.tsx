@@ -110,6 +110,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                         {props.user.id === 'octopus' ? null : (
                             <Components.Link
+                                title="ORCID profile"
                                 className="flex w-fit items-center gap-2"
                                 href={`https://orcid.org/${props.user.orcid}`}
                                 openNew={true}

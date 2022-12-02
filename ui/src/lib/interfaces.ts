@@ -177,7 +177,7 @@ export interface CoreUser {
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
-    Publication: Publication[];
+    publications: Publication[];
     works: WorksRecord[];
 }
 
@@ -376,9 +376,9 @@ export interface CreationStep {
 
 export interface UserPublication {
     id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    publishedDate: Date | null;
+    createdAt: string;
+    updatedAt: string;
+    publishedDate: string | null;
     doi: string;
     title: string | null;
     type: Types.PublicationType;

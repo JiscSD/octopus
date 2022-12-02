@@ -11,7 +11,6 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
         limit: {
             type: 'number',
             minimum: 1,
-            maximum: 100,
             default: 10
         },
         orderBy: {

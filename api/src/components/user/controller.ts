@@ -40,7 +40,7 @@ export const getPublications = async (
         const user = isAccountOwner ? event.user : await userService.get(event.pathParameters.id);
 
         if (!user) {
-            return response.json(400, { message: 'Invalid user id' });
+            return response.json(400, { message: 'User not found' });
         }
 
         const userPublications = await userService.getPublications(
