@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
     db:
-        image: postgres:12.5
+        image: postgres:14.5
         command: postgres -c 'max_connections=1000'
         restart: always
         environment:
