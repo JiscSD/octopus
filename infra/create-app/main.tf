@@ -74,3 +74,7 @@ module "ses" {
     source = "../modules/ses"
     environment = local.environment
 }
+
+module "amplify" {
+  source = "../modules/amplify"
+}

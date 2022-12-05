@@ -58,6 +58,11 @@ resource "aws_db_instance" "rds" {
     Name        = "${var.project_name}_${var.environment}"
     Environment = var.environment
   }
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes = [latest_restorable_time]
+  }
 }
 
 // Save password to SSM
