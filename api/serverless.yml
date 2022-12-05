@@ -10,7 +10,6 @@ plugins:
     - serverless-webpack
     - serverless-offline
     - serverless-offline-ssm
-    - serverless-pseudo-parameters
     - serverless-webpack-prisma
 
 provider:
