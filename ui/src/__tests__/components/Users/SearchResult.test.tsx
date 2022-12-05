@@ -25,7 +25,7 @@ describe('Users Search Result', () => {
             />
         );
 
-        expect(screen.getByText(`${firstName}. ${lastName}`)).toBeInTheDocument();
+        expect(screen.getByText(`${firstName} ${lastName}`)).toBeInTheDocument();
     });
 
     it('should display a Letter Avatar like: JD', () => {

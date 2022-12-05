@@ -15,9 +15,9 @@
  * - run the script with the following command: 'node script.js [file_name].txt'
  */
 
-import axios from "axios";
-import axiosRetry from "axios-retry";
-import fs from "fs";
+const axios = require("axios");
+const axiosRetry = require("axios-retry");
+const fs = require("fs");
 
 // Make sure we got the filename on the command line.
 if (process.argv.length < 3) {
@@ -31,7 +31,7 @@ const CHUNK_SIZE = 10;
 
 const getURLsFromText = (text) =>
   text.match(
-    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g
+    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-()])/g
   ) || [];
 
 const validateDOI = (value) =>
@@ -72,9 +72,9 @@ const getMetadata = async () => {
 
       const client = axios.create({
         headers: {
-          Accept: "text/x-bibliography",
-          style: "harvard-cite-them-right",
+          Accept: "text/x-bibliography; style=harvard-cite-them-right",
         },
+        timeout: 1000 * 60, // abort if server didn't respond within 1 minute
       });
 
       axiosRetry(client, {
@@ -132,10 +132,11 @@ const getMetadata = async () => {
           }
         }
       );
+
+      createLogsFile(logs);
     });
   } catch (error) {
     addToLogs(`ERROR => ${error.message}`);
-  } finally {
     createLogsFile(logs);
   }
 };

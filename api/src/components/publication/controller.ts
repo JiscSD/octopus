@@ -67,6 +67,20 @@ export const get = async (
     }
 };
 
+export const getSeedDataPublications = async (
+    event: I.APIRequest<undefined, I.GetSeedDataPublicationsFilters>
+): Promise<I.JSONResponse> => {
+    try {
+        const publications = await publicationService.getSeedDataPublications(event.queryStringParameters.title);
+        return response.json(200, {
+            publications
+        });
+    } catch (err) {
+        console.log(err);
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 export const deletePublication = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeletePublicationPathParams>
 ): Promise<I.JSONResponse> => {

@@ -71,6 +71,33 @@ const userSeeds = [
         email: 'test-user-7@jisc.ac.uk',
         locked: false,
         apiKey: '000000007'
+    },
+    {
+        id: 'test-user-8',
+        orcid: '0000-0000-0000-0008',
+        firstName: 'Test',
+        lastName: 'CoAuthor 4',
+        email: 'test-user-8@jisc.ac.uk',
+        locked: false,
+        apiKey: '000000008'
+    },
+    {
+        id: 'test-user-9',
+        orcid: '0000-0000-0000-0009',
+        firstName: 'Test',
+        lastName: 'CoAuthor 5',
+        email: 'test-user-9@jisc.ac.uk',
+        locked: false,
+        apiKey: '000000009'
+    },
+    {
+        id: 'test-user-10',
+        orcid: '0000-0000-0000-0010',
+        firstName: 'Test',
+        lastName: 'CoAuthor 6',
+        email: 'test-user-10@jisc.ac.uk',
+        locked: false,
+        apiKey: '000000010'
     }
 ];
 

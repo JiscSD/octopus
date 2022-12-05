@@ -89,19 +89,7 @@ export const getAll = async (filters: I.UserFilters) => {
             firstName: true,
             lastName: true,
             orcid: true,
-            employment: true,
-            Publication: {
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    description: true,
-                    keywords: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
-                }
-            }
+            employment: true
         }
     });
 
