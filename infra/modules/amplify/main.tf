@@ -1,3 +1,11 @@
+data "aws_ssm_parameter" "orcid_prod" {
+    name = "orcid_app_id_prod_octopus"
+}
+
+data "aws_ssm_parameter" "orcid_int" {
+    name = "orcid_app_id_int_octopus"
+}
+
 resource "aws_amplify_app" "octopus-ui" {
   name = "octopus-ui"
   repository = "https://github.com/JiscSD/octopus"
@@ -93,4 +101,57 @@ applications:
       production_branch
     ]  
   }
+}
+
+resource "aws_amplify_branch" "main" {
+    app_id = aws_amplify_app.octopus-ui.id
+    branch_name = "main"
+    framework = "Next.js - SSR"
+    stage = "PRODUCTION"
+    environment_variables = {
+        "NEXT_PUBLIC_BASE_URL"              = "https://www.octopus.ac"
+        "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com" 
+        "NEXT_PUBLIC_ORCID_APP_ID"          = data.aws_ssm_parameter.orcid_int.value
+        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF" = "prod"
+    }
+}
+
+resource "aws_amplify_branch" "holding" {
+    app_id = aws_amplify_app.octopus-ui.id
+    branch_name = "holding"
+    framework = "Next.js - SSR"
+    environment_variables = {
+        "NEXT_PUBLIC_BASE_URL"              = "https://holding.octopus.ac" 
+        "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com" 
+        "NEXT_PUBLIC_ORCID_APP_ID"          = data.aws_ssm_parameter.orcid_int.value
+        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF" = "prod" 
+    }
+}
+
+resource "aws_amplify_branch" "int" {
+    app_id = aws_amplify_app.octopus-ui.id
+    branch_name = "int"
+    framework = "Next.js - SSR"
+    enable_notification = true
+    environment_variables       = {
+        "NEXT_PUBLIC_BASE_URL"              = "https://int.octopus.ac"
+        "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://science-octopus-publishing-images-int.s3.eu-west-1.amazonaws.com"
+        "NEXT_PUBLIC_ORCID_APP_ID"          = data.aws_ssm_parameter.orcid_int.value
+        "NEXT_PUBLIC_STAGE"                 = "int"
+        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF" = "int"
+    }
+}
+
+resource "aws_amplify_branch" "prod" {
+    app_id = aws_amplify_app.octopus-ui.id
+    branch_name = "prod"
+    framework = "Next.js - SSR"
+    enable_notification = true
+    environment_variables       = {
+        "NEXT_PUBLIC_BASE_URL"              = "https://www.octopus.ac" 
+        "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com" 
+        "NEXT_PUBLIC_ORCID_APP_ID"          = data.aws_ssm_parameter.orcid_prod.value
+        "NEXT_PUBLIC_STAGE"                 = "prod" 
+        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF" = "prod" 
+    }
 }
