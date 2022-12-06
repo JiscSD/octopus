@@ -11,6 +11,7 @@ plugins:
     - serverless-offline
     - serverless-offline-ssm
     - serverless-webpack-prisma
+    - serverless-prune-plugin
 
 provider:
     name: aws
@@ -76,6 +77,9 @@ custom:
             /elasticsearch_password_local_octopus: ${env:ELASTICSEARCH_PASSWORD}
             /elasticsearch_endpoint_local_octopus: ${env:ELASTICSEARCH_ENDPOINT}
 
+    prune:
+        automatic: true
+        number: 3
 functions:
     # App
     healthcheck:

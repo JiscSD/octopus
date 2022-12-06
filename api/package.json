@@ -75,6 +75,7 @@
         "serverless-offline": "^8.8.1",
         "serverless-offline-ssm": "^6.2.0",
         "serverless-plugin-warmup": "^6.2.0",
+        "serverless-prune-plugin": "^2.0.1",
         "serverless-webpack": "^5.6.0",
         "serverless-webpack-prisma": "^1.1.0",
         "source-map-support": "^0.5.21",
