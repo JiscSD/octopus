@@ -32,19 +32,22 @@ export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, un
 };
 
 export const getPublications = async (
-    event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
+    event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
 ) => {
     try {
-        // Authenticated account owners can retrieve private fields (such as email)
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
 
-        const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
+        const user = isAccountOwner ? event.user : await userService.get(event.pathParameters.id);
 
-        const userPublications = await userService.getPublications(event.pathParameters.id, statuses, isAccountOwner);
-
-        if (!userPublications) {
-            return response.json(404, { message: 'User not found' });
+        if (!user) {
+            return response.json(400, { message: 'User not found' });
         }
+
+        const userPublications = await userService.getPublications(
+            event.pathParameters.id,
+            event.queryStringParameters,
+            isAccountOwner
+        );
 
         return response.json(200, userPublications);
     } catch (err) {

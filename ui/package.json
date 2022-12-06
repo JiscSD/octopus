@@ -17,7 +17,6 @@
         "build": "next build",
         "start": "next start -p 3000",
         "start:int": "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF=int next start -p 3000",
-        "test:e2e": "npx playwright test --project=chromium && npx playwright test --project=firefox",
         "test:jest": "jest \".*\\.test\\.tsx\"",
         "lint": "next lint",
         "format:check": "npx prettier --check src/",
@@ -68,7 +67,6 @@
     },
     "devDependencies": {
         "@lhci/cli": "^0.8.2",
-        "@playwright/test": "^1.23.1",
         "@tailwindcss/line-clamp": "^0.4.2",
         "@tailwindcss/typography": "^0.5.0",
         "@testing-library/jest-dom": "^5.16.5",

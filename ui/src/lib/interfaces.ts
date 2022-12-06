@@ -177,7 +177,7 @@ export interface CoreUser {
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
-    Publication: Publication[];
+    publications: Publication[];
     works: WorksRecord[];
 }
 
@@ -372,4 +372,25 @@ export interface CreationStep {
     subTitle: string;
     component: React.ReactElement;
     icon: React.ReactElement;
+}
+
+export interface UserPublication {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedDate: string | null;
+    doi: string;
+    title: string | null;
+    type: Types.PublicationType;
+    currentStatus: Types.PublicationStatuses;
+    url_slug: string;
+    licence: Types.LicenceType;
+    content: string | null;
+}
+
+export interface UserPublicationsPage {
+    offset: number;
+    limit: number;
+    total: number;
+    results: UserPublication[];
 }

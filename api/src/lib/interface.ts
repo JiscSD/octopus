@@ -101,7 +101,7 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
-export interface GetSeedDataPublicationsFilters  {
+export interface GetSeedDataPublicationsFilters {
     title: string;
 }
 
@@ -526,4 +526,13 @@ export interface CreateAffiliationRequestBody {
     city: string;
     country: string;
     link: string;
+}
+
+export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
+
+export interface UserPublicationsFilters {
+    offset: number;
+    limit: number;
+    orderBy?: UserPublicationsOrderBy;
+    orderDirection?: OrderDirection;
 }

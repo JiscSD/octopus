@@ -144,6 +144,8 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
     );
 };
 
+let timeout: NodeJS.Timeout;
+
 const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     const funders = Stores.usePublicationCreationStore((state) => state.funders);
     const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
@@ -172,15 +174,17 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
     const [link, setLink] = React.useState('');
     const [isLinkValid, setIsLinkValid] = React.useState(true);
     const [submitLoading, setSubmitLoading] = React.useState(false);
-
     const [rorLoading, setRorLoading] = React.useState(false);
     const [rorError, setRorError] = React.useState(false);
 
-    const getRorData = React.useCallback(
-        async (value) => {
-            const actualRor = value.split('/')[value.split('/').length - 1];
-            setRor(value);
-            setRorLoading(true);
+    const getRorData = React.useCallback(async (value) => {
+        const actualRor = value.split('/')[value.split('/').length - 1];
+        setRor(value);
+        setRorLoading(true);
+
+        clearTimeout(timeout);
+
+        timeout = setTimeout(async () => {
             try {
                 const rorResponse = await axios.get(`https://api.ror.org/organizations/${actualRor}`);
                 setRorError(false);
@@ -193,9 +197,8 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                 setRorError(true);
             }
             setRorLoading(false);
-        },
-        [ror]
-    );
+        }, 300);
+    }, []);
 
     React.useEffect(() => {
         if (method === 'manual') {
@@ -277,7 +280,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         <Components.Button
                             className="pl-5"
                             title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
-                            disabled={ror == '' || rorError == true}
+                            disabled={!ror || rorLoading || rorError}
                             onClick={onSubmitHandler}
                             endIcon={
                                 submitLoading ? (

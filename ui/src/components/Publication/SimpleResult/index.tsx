@@ -5,7 +5,7 @@ import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 
 type Props = {
-    publication: Interfaces.CorePublication;
+    publication: Interfaces.UserPublication;
 };
 
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
