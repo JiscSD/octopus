@@ -1,5 +1,6 @@
-import * as client from 'lib/client';
+import { Prisma } from '@prisma/client';
 
+import * as client from 'lib/client';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 
@@ -117,7 +118,7 @@ export const getByApiKey = async (apiKey: string) => {
 };
 
 export const get = async (id: string, isAccountOwner = false) => {
-    const user = await client.prisma.user.findFirst({
+    const user = await client.prisma.user.findUnique({
         where: {
             id
         },
@@ -132,69 +133,52 @@ export const get = async (id: string, isAccountOwner = false) => {
             updatedAt: true,
             employment: true,
             education: true,
-            works: true,
-            Publication: {
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    doi: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    publishedDate: true,
-                    currentStatus: true,
-                    description: true,
-                    keywords: true,
-                    url_slug: true,
-                    licence: true,
-                    content: true,
-                    user: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
-                }
-            }
+            works: true
         }
     });
 
     return user;
 };
 
-export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>, isAccountOwner = false) => {
-    const userPublications = await client.prisma.user.findFirst({
-        where: {
-            id
-        },
+export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+    const { offset, limit, orderBy, orderDirection } = params;
+
+    // Account owners can retrieve their DRAFT publications also
+    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
+
+    const where: Prisma.PublicationWhereInput = {
+        createdBy: id,
+        currentStatus: {
+            in: statuses
+        }
+    };
+
+    const userPublications = await client.prisma.publication.findMany({
+        skip: offset,
+        take: limit,
+        where,
         select: {
             id: true,
-            firstName: true,
-            lastName: true,
-            orcid: true,
-            email: isAccountOwner ? true : false,
+            title: true,
+            type: true,
+            doi: true,
             createdAt: true,
             updatedAt: true,
-            Publication: {
-                where: {
-                    currentStatus: {
-                        in: statuses
-                    }
-                },
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    doi: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    publishedDate: true,
-                    currentStatus: true,
-                    url_slug: true,
-                    licence: true,
-                    content: true
-                }
-            }
-        }
+            publishedDate: true,
+            currentStatus: true,
+            url_slug: true,
+            licence: true,
+            content: true
+        },
+        orderBy:
+            orderBy && orderDirection
+                ? {
+                      [orderBy]: orderDirection
+                  }
+                : undefined
     });
 
-    return userPublications;
+    const totalUserPublications = await client.prisma.publication.count({ where });
+
+    return { offset, limit, total: totalUserPublications, results: userPublications };
 };

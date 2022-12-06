@@ -61,14 +61,16 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 <div className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
                     {props.publication.description ? (
                         <p>{props.publication.description}</p>
-                    ) : (
+                    ) : props.publication.content ? (
                         parse(Helpers.truncateString(props.publication.content, 370))
-                    )}
+                    ) : null}
                 </div>
 
                 <span className="flex text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Published {Helpers.relativeDate(props.publication.publishedDate)}, by{' '}
-                    {props.publication.user.firstName[0]}. {props.publication.user.lastName}
+                    {props.publication.publishedDate
+                        ? `Published ${Helpers.relativeDate(props.publication.publishedDate)}`
+                        : 'Draft'}
+                    , by {props.publication.user.firstName[0]}. {props.publication.user.lastName}
                 </span>
             </div>
 
