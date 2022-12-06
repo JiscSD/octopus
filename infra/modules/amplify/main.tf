@@ -6,6 +6,10 @@ data "aws_ssm_parameter" "orcid_int" {
   name = "orcid_app_id_int_octopus"
 }
 
+data "aws_iam_role" "service-role" {
+  name= "amplifyconsole-backend-role"
+  }
+
 resource "aws_amplify_app" "octopus-ui" {
   name                 = "octopus-ui"
   repository           = "https://github.com/JiscSD/octopus"
@@ -30,7 +34,7 @@ applications:
           - node_modules/**/*
     appRoot: ui
   EOT
-  iam_service_role_arn = "arn:aws:iam::948306873545:role/amplifyconsole-backend-role"
+  iam_service_role_arn = data.aws_iam_role.service-role.arn
   environment_variables = {
     "AMPLIFY_MONOREPO_APP_ROOT"         = "ui"
     "AMPLIFY_DIFF_DEPLOY"               = "false"
@@ -68,26 +72,6 @@ applications:
     source = "/privacy/privacy"
     status = "301"
     target = "/privacy"
-  }
-  custom_rule {
-    source = "/<*>"
-    status = "200"
-    target = "https://d2ylbkl403qrza.cloudfront.net/<*>"
-  }
-  custom_rule {
-    source = "/<*>"
-    status = "200"
-    target = "https://dwj7btrds8is2.cloudfront.net/<*>"
-  }
-  custom_rule {
-    source = "/<*>"
-    status = "200"
-    target = "https://d17u3l3tnvr7jr.cloudfront.net/<*>"
-  }
-  custom_rule {
-    source = "/<*>"
-    status = "200"
-    target = "https://d3ahr60abfvx5r.cloudfront.net/<*>"
   }
   custom_rule {
     source = "/<*>"
@@ -135,7 +119,7 @@ resource "aws_amplify_branch" "int" {
   enable_notification = true
   environment_variables = {
     "NEXT_PUBLIC_BASE_URL"              = "https://int.octopus.ac"
-    "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://science-octopus-publishing-images-int.s3.eu-west-1.amazonaws.com"
+    "NEXT_PUBLIC_MEDIA_BUCKET"          = "https://${var.image_bucket}"
     "NEXT_PUBLIC_ORCID_APP_ID"          = nonsensitive(data.aws_ssm_parameter.orcid_int.value)
     "NEXT_PUBLIC_STAGE"                 = "int"
     "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF" = "int"
@@ -159,7 +143,7 @@ resource "aws_amplify_branch" "prod" {
 
 resource "aws_amplify_domain_association" "octopus" {
   app_id                = aws_amplify_app.octopus-ui.id
-  domain_name           = "octopus.ac"
+  domain_name           = var.base_domain_name
   wait_for_verification = false
   sub_domain {
     branch_name = "holding"

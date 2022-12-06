@@ -36,13 +36,13 @@ module "network" {
 # }
 
 module "bastion" {
-  source        = "../modules/bastion"
-  vpc_id        = module.network.vpc_id
-  public_subnet = module.network.public_subnet_ids[0]
-  environment   = local.environment
-  allowable_ips = local.allowable_ips
+  source              = "../modules/bastion"
+  vpc_id              = module.network.vpc_id
+  public_subnet       = module.network.public_subnet_ids[0]
+  environment         = local.environment
+  allowable_ips       = local.allowable_ips
   third_party_vpn_ips = local.third_party_vpn_ips
-  ec2_key_name  = local.project_key_pair_name
+  ec2_key_name        = local.project_key_pair_name
 }
 
 module "postgres" {
@@ -66,16 +66,18 @@ module "elasticsearch" {
 }
 
 module "s3" {
-  source             = "../modules/s3"
-  environment        = local.environment
+  source      = "../modules/s3"
+  environment = local.environment
 }
 
 module "ses" {
-    source = "../modules/ses"
-    environment = local.environment
+  source      = "../modules/ses"
+  environment = local.environment
 }
 
 module "amplify" {
-  source = "../modules/amplify"
-  environment = local.environment
+  source           = "../modules/amplify"
+  environment      = local.environment
+  base_domain_name = var.base_domain_name
+  image_bucket     = module.s3.image_bucket
 }
