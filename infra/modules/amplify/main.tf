@@ -156,3 +156,34 @@ resource "aws_amplify_branch" "prod" {
   }
 
 }
+
+resource "aws_amplify_domain_association" "octopus" {
+  app_id                = aws_amplify_app.octopus-ui.id
+  domain_name           = "octopus.ac"
+  wait_for_verification = false
+  sub_domain {
+    branch_name = "holding"
+    prefix      = "holding"
+  }
+
+  sub_domain {
+    branch_name = "int"
+    prefix      = "int"
+  }
+
+  sub_domain {
+    branch_name = "prod"
+    prefix      = ""
+  }
+
+  sub_domain {
+    branch_name = "prod"
+    prefix      = "prod"
+  }
+
+  sub_domain {
+    branch_name = "prod"
+    prefix      = "www"
+  }
+
+}
