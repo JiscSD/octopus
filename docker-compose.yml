@@ -1,84 +1,84 @@
 version: "3.2"
 
 services:
-    db:
-        image: postgres:14.5
-        command: postgres -c 'max_connections=1000'
-        restart: always
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: mydbuser
-            POSTGRES_PASSWORD: mydbpwd
-        ports:
-            - "5435:5432"
+  db:
+    image: postgres:14.5
+    command: postgres -c 'max_connections=1000'
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: mydbuser
+      POSTGRES_PASSWORD: mydbpwd
+    ports:
+      - "5435:5432"
 
-    adminer:
-        image: adminer
-        restart: always
-        ports:
-            - 8080:8080
-        depends_on:
-            - db
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
 
-    mailhog:
-        image: mailhog/mailhog:latest
-        restart: always
-        ports:
-            - 1025:1025
-            - 8025:8025
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
 
-    localstack:
-        image: localstack/localstack:latest
-        ports:
-            - '4510-4559:4510-4559'
-            - '4566:4566'
-        environment:
-            - SERVICES=s3
-            - DEBUG=1
-            - DATA_DIR=/tmp/localstack/data
-        volumes:
-            - './.localstack:/tmp/localstack'
-            - '/var/run/docker.sock:/var/run/docker.sock'
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4510-4559:4510-4559"
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - "./.localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
-    opensearch-node1:
-        image: opensearchproject/opensearch:1.2.4
-        container_name: opensearch-node1
-        environment:
-            - cluster.name=opensearch-cluster
-            - node.name=opensearch-node1
-            - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
-            - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
-            - "DISABLE_INSTALL_DEMO_CONFIG=true" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
-            - "DISABLE_SECURITY_PLUGIN=true" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
-            - "discovery.type=single-node" # disables bootstrap checks that are enabled when network.host is set to a non-loopback address
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
-                hard: 65536
-        ports:
-            - 9200:9200
-            - 9600:9600 # required for Performance Analyzer
-        networks:
-            - opensearch-net
+  opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
+    image: opensearchproject/opensearch:2.3.0 # Specifying the latest available image - modify if you want a specific version
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster # Name the cluster
+      - node.name=opensearch-node1 # Name the node that will run in this container
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
+      - "discovery.type=single-node" # disables bootstrap checks that are enabled when network.host is set to a non-loopback address
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    ports:
+      - 9200:9200 # REST API
+      - 9600:9600 # Performance Analyzer
+    networks:
+      - opensearch-net # All of the containers will join the same Docker bridge network
 
-    opensearch-dashboards:
-        image: opensearchproject/opensearch-dashboards:1.2.0
-        container_name: opensearch-dashboards
-        ports:
-            - 5601:5601
-        expose:
-            - "5601"
-        environment:
-            - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]'
-            - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
-        networks:
-            - opensearch-net
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.3.0 # Make sure the version of opensearch-dashboards matches the version of opensearch installed on other nodes
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601 # Map host port 5601 to container port 5601
+    expose:
+      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+    networks:
+      - opensearch-net
 
 volumes:
-    opensearch-data1:
+  opensearch-data1:
 
 networks:
-    opensearch-net:
+  opensearch-net:
