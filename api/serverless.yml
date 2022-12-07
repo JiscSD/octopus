@@ -1,12 +1,17 @@
 service: octopus-api
 
+frameworkVersion: '3'
+
+useDotenv: true
+
 plugins:
+    - serverless-dotenv-plugin
     - serverless-domain-manager
     - serverless-webpack
     - serverless-offline
-    - serverless-pseudo-parameters
-    - serverless-dotenv-plugin
+    - serverless-offline-ssm
     - serverless-webpack-prisma
+    - serverless-prune-plugin
 
 provider:
     name: aws
@@ -60,6 +65,21 @@ custom:
     warmup:
         default:
             enabled: true
+    serverless-offline-ssm:
+        stages:
+            - local
+        ssm:
+            /local_octopus_sls_sg: '1'
+            /local_octopus_private_subnet_az1: '1'
+            /local_octopus_private_subnet_az2: '2'
+            /local_octopus_private_subnet_az3: '3'
+            /elasticsearch_user_local_octopus: ${env:ELASTICSEARCH_USER}
+            /elasticsearch_password_local_octopus: ${env:ELASTICSEARCH_PASSWORD}
+            /elasticsearch_endpoint_local_octopus: ${env:ELASTICSEARCH_ENDPOINT}
+
+    prune:
+        automatic: true
+        number: 3
 functions:
     # App
     healthcheck:
@@ -90,9 +110,9 @@ functions:
         handler: src/components/publication/routes.getSeedDataPublications
         events:
             - http:
-                path:  ${self:custom.versions.v1}/publications/seed-data-publications
-                method: GET
-                cors: true
+                  path: ${self:custom.versions.v1}/publications/seed-data-publications
+                  method: GET
+                  cors: true
     createPublication:
         handler: src/components/publication/routes.create
         events:
