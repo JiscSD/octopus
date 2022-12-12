@@ -1,6 +1,6 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
 
-The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
+The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
 
 ## Prerequisites
 
