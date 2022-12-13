@@ -5,11 +5,11 @@ frameworkVersion: '3'
 useDotenv: true
 
 plugins:
+    - serverless-offline-ssm
+    - serverless-offline
     - serverless-dotenv-plugin
     - serverless-domain-manager
     - serverless-webpack
-    - serverless-offline
-    - serverless-offline-ssm
     - serverless-webpack-prisma
     - serverless-prune-plugin
 
@@ -31,10 +31,6 @@ provider:
         ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
         ELASTICSEARCH_PASSWORD: ${ssm:/elasticsearch_password_${self:provider.stage}_octopus}
         ELASTICSEARCH_ENDPOINT: ${ssm:/elasticsearch_endpoint_${self:provider.stage}_octopus}
-        ORCID_ID: ${ssm/orcid_app_id_octopus}
-        ORCID_SECRET: ${ssm/orcid_secret_key_octopus}
-        ORCID_AUTH_URL: ${ssm:/orcid_auth_url_octopus}
-        ORCID_MEMBER_API_URL: ${ssm:/orcid_member_api_url_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -80,10 +76,6 @@ custom:
             /elasticsearch_user_local_octopus: ${env:ELASTICSEARCH_USER}
             /elasticsearch_password_local_octopus: ${env:ELASTICSEARCH_PASSWORD}
             /elasticsearch_endpoint_local_octopus: ${env:ELASTICSEARCH_ENDPOINT}
-            /orcid_app_id_octopus: ${env:ORCID_ID}
-            /orcid_secret_key_octopus: ${env:ORCID_SECRET}
-            /orcid_auth_url_octopus: ${env:ORCID_AUTH_URL}
-            /orcid_member_api_url_octopus: ${env:ORCID_MEMBER_API_URL}
     prune:
         automatic: true
         number: 3
