@@ -2,94 +2,93 @@ name: UI
 on: [push]
 
 env:
-  NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: int 
-  NEXT_PUBLIC_BASE_URL: https://int.octopus.ac  
-  NEXT_PUBLIC_MEDIA_BUCKET: https://science-octopus-publishing-images-int.s3.eu-west-1.amazonaws.com  
-  NEXT_PUBLIC_ORCID_APP_ID: APP-FEKD033IO62K51EQ
+  NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF: int
+  NEXT_PUBLIC_BASE_URL: https://int.octopus.ac
+  NEXT_PUBLIC_MEDIA_BUCKET: https://science-octopus-publishing-images-int.s3.eu-west-1.amazonaws.com
+  NEXT_PUBLIC_ORCID_APP_ID: APP-GXJE14DWV9NGHP5T
+  NEXT_PUBLIC_ORCID_AUTH_URL: https://sandbox.orcid.org/oauth
 
 jobs:
-    prettier:
-        timeout-minutes: 10
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  prettier:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Setup Node 14.x Environment
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "14.x"
+      - name: Setup Node 14.x Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
 
-            - name: Install dependencies
-              working-directory: ./ui
-              run: npm ci
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm ci
 
-            - name: Run prettier check
-              working-directory: ./ui
-              run: npm run format:check
+      - name: Run prettier check
+        working-directory: ./ui
+        run: npm run format:check
 
-    eslint:
-        timeout-minutes: 10
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  eslint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Setup Node 14.x Environment
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "14.x"
+      - name: Setup Node 14.x Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
 
-            - name: Install dependencies
-              working-directory: ./ui
-              run: npm ci
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm ci
 
-            - name: Run lint
-              working-directory: ./ui
-              run: npm run lint
+      - name: Run lint
+        working-directory: ./ui
+        run: npm run lint
 
-    lighthouseci:
-        timeout-minutes: 10
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  lighthouseci:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Setup Node 14.x Environment
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "14.x"
+      - name: Setup Node 14.x Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
 
-            - name: Install dependencies
-              working-directory: ./ui
-              run: npm ci && npm install -g @lhci/cli@0.8.x
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm ci && npm install -g @lhci/cli@0.8.x
 
-            - name: Run build
-              working-directory: ./ui
-              run: npm run build
+      - name: Run build
+        working-directory: ./ui
+        run: npm run build
 
-            - name: Run lighthouseCI
-              working-directory: ./ui
-              run: lhci autorun
+      - name: Run lighthouseCI
+        working-directory: ./ui
+        run: lhci autorun
 
-    ui-tests:
-        timeout-minutes: 10
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  ui-tests:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Setup Node 14.x Environment
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "14.x"
+      - name: Setup Node 14.x Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
 
-            - name: Install dependencies
-              working-directory: ./ui
-              run: npm ci
-            
-            - name: Run jest tests
-              working-directory: ./ui
-              run: npm run test:jest
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm ci
 
-
+      - name: Run jest tests
+        working-directory: ./ui
+        run: npm run test:jest
