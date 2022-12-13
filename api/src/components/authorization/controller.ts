@@ -10,23 +10,19 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
         const callbackURL = process.env.AUTHORISATION_CALLBACK_URL;
         const clientId = process.env.ORCID_ID;
         const clientSecret = process.env.ORCID_SECRET;
+        const orcidAuthUrl = process.env.ORCID_AUTH_URL;
+        const orcidMemberApiUrl = process.env.ORCID_MEMBER_API_URL;
         const code = event.body.code;
 
-        /**
-         * @TODO - remove "sandbox." after we get live Member API credentials
-         */
         const orcidAuthRequest = await axios.post(
-            'https://sandbox.orcid.org/oauth/token',
+            `${orcidAuthUrl}/token`,
             `client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&redirect_uri=${callbackURL}&code=${code}`
         );
 
         const orcidUserId = orcidAuthRequest.data.orcid;
         const accessToken = orcidAuthRequest.data.access_token;
 
-        /**
-         * @TODO - remove "sandbox." after we get live Member API credentials
-         */
-        const orcidUserRequest = await axios.get(`https://api.sandbox.orcid.org/v3.0/${orcidUserId}/record`, {
+        const orcidUserRequest = await axios.get(`${orcidMemberApiUrl}/${orcidUserId}/record`, {
             headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${accessToken}`
