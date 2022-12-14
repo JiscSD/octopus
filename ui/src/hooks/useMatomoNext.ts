@@ -1,5 +1,5 @@
-import { init, push } from '@socialgouv/matomo-next';
 import { useEffect } from 'react';
+import { init, push } from '@socialgouv/matomo-next';
 
 const useMatomoNext = () => {
     useEffect(() => {
