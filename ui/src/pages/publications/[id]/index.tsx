@@ -398,12 +398,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 ))}
                         </div>
 
-                        {publicationData.type !== 'PEER_REVIEW' && (
-                            <div className="hidden xl:block">
-                                <Components.PublicationVisualChain highlighted={publicationData.type} />
-                            </div>
-                        )}
-
                         <div className="block lg:hidden">
                             {publicationData && <SidebarCard publication={publicationData} sectionList={sectionList} />}
                         </div>
