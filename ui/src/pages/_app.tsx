@@ -22,6 +22,9 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     // check authentication client side
     Hooks.useAuthCheck(Boolean(pageProps.protectedPage));
 
+    // matomo tracking
+    Hooks.useMatomoNext();
+
     useEffect(() => {
         setMounted(true);
 
