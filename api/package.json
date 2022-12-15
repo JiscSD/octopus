@@ -71,7 +71,6 @@
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
         "serverless-domain-manager": "^5.2.0",
-        "serverless-dotenv-plugin": "^4.0.2",
         "serverless-middleware": "0.0.15",
         "serverless-offline": "^8.8.1",
         "serverless-offline-ssm": "^6.2.0",
