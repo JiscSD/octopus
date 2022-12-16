@@ -85,7 +85,6 @@ services:
 
   api:
     restart: always
-    environment: Test
     container_name: api-test
     depends_on:
       - opensearch-node1
@@ -95,11 +94,11 @@ services:
     ports:
       - '4005:4003'
     command: sh -c "npm run seed:local && npm run start:local"
-    env:
+    environment:
       DOI_PREFIX: 10.82259
       DATACITE_ENDPOINT: https://api.test.datacite.org/dois
-      DATACITE_USER: ${{ env.DATACITE_USER }}
-      DATACITE_PASSWORD: ${{ env.DATACITE_PASSWORD }}
+      DATACITE_USER: ${{ secrets.DATACITE_USER }}
+      DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
       BASE_URL: https://localhost:3001
       JWT_SECRET: PUT_JWT_SECRET_HERE      
       MAIL_SERVER: mailhog
