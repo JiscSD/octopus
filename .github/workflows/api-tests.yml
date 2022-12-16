@@ -23,7 +23,7 @@ jobs:
 
       - name: Run docker-compose
         working-directory: ./api
-        run: DATACITE_USER=${{ secrets.DATACITE_USER }} DATACITE_PASSWORD=${{ secrets.DATACITE_PASSWORD }} docker-compose -f "docker-compose.yml" up -d --build
+        run: DATACITE_USER=${{ secrets.DATACITE_USER }} DATACITE_PASSWORD=${{ secrets.DATACITE_PASSWORD }} ORCID_ID=${{ secrets.ORCID_ID }} ORCID_SECRET=${{ secrets.ORCID_SECRET }} docker-compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for API and DB to be ready
         run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailhog:8025 -timeout 120s
