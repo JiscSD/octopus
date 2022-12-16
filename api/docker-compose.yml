@@ -97,8 +97,6 @@ services:
     environment:
       DOI_PREFIX: 10.82259
       DATACITE_ENDPOINT: https://api.test.datacite.org/dois
-      DATACITE_USER: ${{ secrets.DATACITE_USER }}
-      DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
       BASE_URL: https://localhost:3001
       JWT_SECRET: PUT_JWT_SECRET_HERE      
       MAIL_SERVER: mailhog
