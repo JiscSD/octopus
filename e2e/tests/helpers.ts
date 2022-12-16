@@ -46,7 +46,7 @@ export const login = async (page: Page) => {
     const newPage = await context.newPage();
 
     // navigate to MailHog and take the last verification code
-    await newPage.goto("http://localhost:8025/");
+    await newPage.goto(`http://${process.env.MAIL_SERVER}:8025/`);
     await newPage.getByText("Verify your Octopus account").first().click();
     const verificationCode = await newPage
       .frameLocator("iframe")
