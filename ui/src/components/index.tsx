@@ -64,7 +64,6 @@ export { default as PublicationSidebarCardGeneral } from './Publication/SidebarC
 export { default as PublicationSidebarCardSections } from './Publication/SidebarCard/Sections';
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
-export { default as PublicationVisualChain } from './Publication/VisualChain';
 export { default as PublicationVisulization } from './Publication/Visualization';
 export { default as RenderLinks } from './RenderLinks';
 export { default as RequiredIndicator } from './RequiredIndicator';
