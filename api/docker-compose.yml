@@ -95,24 +95,28 @@ services:
       - '4005:4003'
     command: sh -c "npm run seed:local && npm run start:local"
     environment:
-      DOI_PREFIX: 10.82259
-      DATACITE_ENDPOINT: https://api.test.datacite.org/dois
-      BASE_URL: https://localhost:3001
-      AUTHORISATION_CALLBACK_URL: https://localhost:3001/login
-      JWT_SECRET: PUT_JWT_SECRET_HERE      
-      MAIL_SERVER: mailhog
-      LOCALSTACK_SERVER: localstack
-      STAGE: local
-      EMAIL_SENDER_ADDRESS: no-reply@local.ac
-      ELASTICSEARCH_PROTOCOL: http
-      ELASTICSEARCH_USER: admin
-      ELASTICSEARCH_PASSWORD: admin
-      ELASTICSEARCH_ENDPOINT: opensearch-node1:9200
-      ORCID_AUTH_URL: https://sandbox.orcid.org/oauth
-      ORCID_MEMBER_API_URL: https://api.sandbox.orcid.org/v3.0
-      VALIDATION_CODE_EXPIRY: 10
-      VALIDATION_CODE_ATTEMPTS: 3
-      DATABASE_URL: postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
+      - DATACITE_USER
+      - DATACITE_PASSWORD
+      - ORCID_ID
+      - ORCID_SECRET
+      - DOI_PREFIX=10.82259
+      - DATACITE_ENDPOINT=https://api.test.datacite.org/dois
+      - BASE_URL=https://localhost:3001
+      - AUTHORISATION_CALLBACK_URL=https://localhost:3001/login
+      - JWT_SECRET=PUT_JWT_SECRET_HERE      
+      - MAIL_SERVER=mailhog
+      - LOCALSTACK_SERVER=localstack
+      - STAGE=local
+      - EMAIL_SENDER_ADDRESS=no-reply@local.ac
+      - ELASTICSEARCH_PROTOCOL=http
+      - ELASTICSEARCH_USER=admin
+      - ELASTICSEARCH_PASSWORD=admin
+      - ELASTICSEARCH_ENDPOINT=opensearch-node1:9200
+      - ORCID_AUTH_URL=https://sandbox.orcid.org/oauth
+      - ORCID_MEMBER_API_URL=https://api.sandbox.orcid.org/v3.0
+      - VALIDATION_CODE_EXPIRY=10
+      - VALIDATION_CODE_ATTEMPTS=3
+      - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
   
 volumes:
   opensearch-data1:
