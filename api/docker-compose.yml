@@ -95,6 +95,7 @@ services:
       - '4005:4003'
     command: sh -c "npm run seed:local && npm run start:local"
     environment:
+      name: Test
       DOI_PREFIX: 10.82259
       DATACITE_ENDPOINT: https://api.test.datacite.org/dois
       DATACITE_USER: ${{ secrets.DATACITE_USER }}
