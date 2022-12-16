@@ -1,7 +1,3 @@
-let host: string;
-let mediaBucket: string;
-let orcidAppiID: string;
-
 function checkEnvVariable(variable: string | undefined): string {
     if (variable === undefined) {
         throw new Error('Environment Variable is undefined.');
@@ -10,9 +6,10 @@ function checkEnvVariable(variable: string | undefined): string {
     }
 }
 
-host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
-mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
-orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
+const host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
+const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
 export const base = {
     title: 'Octopus | Built for Researchers',
@@ -248,7 +245,7 @@ const urls = {
         canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
+        path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket
 };
