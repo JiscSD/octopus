@@ -107,6 +107,8 @@ services:
       ELASTICSEARCH_USER: admin
       ELASTICSEARCH_PASSWORD: admin
       ELASTICSEARCH_ENDPOINT: opensearch-node1:9200
+      ORCID_AUTH_URL: https://sandbox.orcid.org/oauth
+      ORCID_MEMBER_API_URL: https://api.sandbox.orcid.org/v3.0
       VALIDATION_CODE_EXPIRY: 10
       VALIDATION_CODE_ATTEMPTS: 3
       DATABASE_URL: postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
