@@ -98,6 +98,7 @@ services:
       DOI_PREFIX: 10.82259
       DATACITE_ENDPOINT: https://api.test.datacite.org/dois
       BASE_URL: https://localhost:3001
+      AUTHORISATION_CALLBACK_URL: https://localhost:3001/login
       JWT_SECRET: PUT_JWT_SECRET_HERE      
       MAIL_SERVER: mailhog
       LOCALSTACK_SERVER: localstack
