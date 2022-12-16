@@ -14,7 +14,7 @@ let mailConfig;
 switch (process.env.STAGE) {
     case 'local':
         mailConfig = {
-            host: '0.0.0.0',
+            host: process.env.MAIL_SERVER,
             port: 1025
         };
         break;

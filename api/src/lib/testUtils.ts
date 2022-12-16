@@ -74,7 +74,7 @@ export const clearDB = async (): Promise<void> => {
 };
 
 export const getEmails = async (query: string): Promise<any> => {
-    const emails = await axios.get('http://0.0.0.0:8025/api/v2/search', {
+    const emails = await axios.get(`http://${process.env.MAIL_SERVER}:8025/api/v2/search`, {
         params: {
             kind: 'to',
             query

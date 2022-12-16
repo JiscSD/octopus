@@ -5,6 +5,7 @@ import * as SeedData from './seeds';
 import * as client from '../src/lib/client';
 
 export const initialDevSeed = async (): Promise<void> => {
+
     // Create users
     await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
 
@@ -81,7 +82,7 @@ export const initialDevSeed = async (): Promise<void> => {
                 secretAccessKey: 'dummy-secret'
             },
             region: 'eu-west-1',
-            endpoint: 'http://localhost:4566',
+            endpoint: `http://${process.env.LOCALSTACK_SERVER}:4566`,
             s3ForcePathStyle: true
         });
 
