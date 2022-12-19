@@ -99,6 +99,8 @@ export type JSONValue = string | number | boolean | { [x: string]: JSONValue } |
 
 export type SearchType = 'publications' | 'users';
 
+export type SearchParameter = Interfaces.Publication | Interfaces.User;
+
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 
 export type UserOrderBySearchOption = 'updatedAt' | 'createdAt';

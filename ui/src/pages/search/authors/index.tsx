@@ -23,16 +23,13 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: string | string[] | null = null;
+    let searchType: Types.SearchType = 'users';
     let query: string | string[] | null = null;
-    let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-    let dateFrom: string | string[] | null = null;
-    let dateTo: string | string[] | null = null;
 
     // defaults to results
-    let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
+    let results: Interfaces.CoreUser[] | [] = [];
     let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error
@@ -40,66 +37,46 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // setting params
     if (context.query.query) query = context.query.query;
-    if (context.query.for) searchType = context.query.for;
-    if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
-    if (context.query.dateFrom) dateFrom = context.query.dateFrom;
-    if (context.query.dateTo) dateTo = context.query.dateTo;
+   
+    // If multiple of the same params are provided, pick the first
+    if (Array.isArray(query)) query = query[0];
+    if (Array.isArray(limit)) limit = limit[0];
+    if (Array.isArray(offset)) offset = offset[0];
 
-    // only if a search type is provided
-    if (searchType) {
-        // If multiple of the same params are provided, pick the first
-        if (Array.isArray(searchType)) searchType = searchType[0];
-        if (Array.isArray(query)) query = query[0];
-        if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
-        if (Array.isArray(limit)) limit = limit[0];
-        if (Array.isArray(offset)) offset = offset[0];
-        if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
-        if (Array.isArray(dateTo)) dateTo = dateTo[0];
+    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
+    limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
+    offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
 
-        // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
-        limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
-        offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
+    // ensure the value of the seach type is acceptable
+    // ensure the value of the search type is acceptable
 
-        // ensure the value of the seach type is acceptable
-        if (searchType === 'publications' || searchType === 'users') {
-            try {
-                const response = await api.search(
-                    searchType,
-                    encodeURIComponent(query || ''),
-                    publicationTypes,
-                    limit,
-                    offset
-                );
-                results = response.data;
-                metadata = response.metadata;
-                error = null;
-            } catch (err) {
-                const { message } = err as Interfaces.JSONResponseError;
-                error = message;
-            }
-        }
-    }
+    try {
+        const response = await api.search<Interfaces.User>(
+            searchType,
+            encodeURIComponent(query || ''),
+            limit,
+            offset,
+        );
+        results = response.data;
+        metadata = response.metadata;
+        error = null;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
+    } 
 
-    const dateFromFormatted = moment.utc(dateFrom);
-    const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}${
-        searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')
+}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
             searchType,
             query,
-            publicationTypes,
             limit,
             offset,
-            dateFrom,
-            dateTo,
             fallback: {
                 [swrKey]: results
             },

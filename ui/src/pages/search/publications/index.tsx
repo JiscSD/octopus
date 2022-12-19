@@ -59,12 +59,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // ensure the value of the search type is acceptable
     try {
-        const response: Interfaces.SearchResults<Interfaces.Publication> = await api.search(
+        const response = await api.search<Interfaces.Publication>(
             searchType,
             encodeURIComponent(query || ''),
-            publicationTypes,
             limit,
-            offset
+            offset,
+            publicationTypes,
         );
         results = response.data;
         metadata = response.metadata;

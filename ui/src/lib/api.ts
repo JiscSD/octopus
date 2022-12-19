@@ -86,13 +86,13 @@ export const destroy = async (url: string, token: string | undefined): Promise<A
     return response;
 };
 
-export const search = async (
+export const search = async<T extends Interfaces.Publication | Interfaces.User> (
     searchType: string | Types.SearchType,
     search: string | null = null,
-    publicationType: string | null = null,
     limit: number | null = null,
-    offset: number | null = null
-): Promise<Interfaces.SearchResults> => {
+    offset: number | null = null,
+    publicationType?: string | null,
+): Promise<Interfaces.SearchResults<T>> => {
     let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
     let params: string = '';
 
