@@ -100,7 +100,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType: Types.SearchType | string | undefined;
+    searchType?: Types.SearchType;
     query: string | null;
     publicationTypes: string | null;
     limit: string | null;
@@ -205,6 +205,23 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                 >
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
+
+                        <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
+                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                Searching
+                            </span>
+                            <select
+                                name="search-type"
+                                id="search-type"
+                                onChange={undefined}
+                                value={searchType}
+                                className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
+                                disabled={isValidating}
+                            >
+                                <option value="publications">Publications</option>
+                                <option value="users">Authors</option>
+                            </select>
+                        </label>
 
                         <label
                             htmlFor="order-direction"

@@ -69,7 +69,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
 
     const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')
-}&limit=${limit || '10'}&offset=${offset || '0'}`;
+        }&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -86,13 +86,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType: Types.SearchType | string | undefined;
+    searchType?: Types.SearchType;
     query: string | null;
-    publicationTypes: string | null;
     limit: string | null;
     offset: string | null;
-    dateFrom: string | null;
-    dateTo: string | null;
     error: string | null;
 };
 
@@ -102,25 +99,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     // params
     const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');
     const [query, setQuery] = React.useState(props.query ? props.query : '');
-    const [publicationTypes, setPublicationTypes] = React.useState(
-        props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
-    );
-    const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
-    const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
     // ugly complex swr key
 
-    const dateFromFormatted = moment.utc(dateFrom);
-    const dateToFormatted = moment.utc(dateTo);
-
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}${
-        searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -130,78 +115,16 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
-
-        router.push(
-            {
-                query: {
-                    ...router.query,
-                    dateTo,
-                    dateFrom
-                }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
-
-    const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        if (value === 'users') {
-            const paramsListCopy = { ...router.query };
-
-            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
-
-            router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
-        }
-        if (value === 'publications') {
-            router.push(
-                {
-                    query: {
-                        ...router.query,
-                        for: value,
-                        type: publicationTypes,
-                        query: searchInputRef.current?.value
-                    }
-                },
-                undefined,
-                { shallow: true }
-            );
-        }
-        setQuery('');
-        searchInputRef.current && (searchInputRef.current.value = '');
-        setSearchType(e.target.value);
-    };
-
-    const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
-        const current = publicationTypes ? publicationTypes.split(',') : [];
-        const uniqueSet = new Set(current);
-        e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
-        const uniqueArray = Array.from(uniqueSet).join(',');
-
-        router.push({ pathname: '/search', query: { for: searchType, type: uniqueArray } }, undefined, {
-            shallow: true
-        });
-
-        setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
-    };
-
     const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
         setOffset(0);
         setLimit(10);
-        if (searchType === 'publications') {
-            setPublicationTypes(Config.values.publicationTypes.join(','));
-        }
-        setDateFrom('');
-        setDateTo('');
     };
 
     React.useEffect(() => {
         setOffset(0);
-    }, [searchType, query, publicationTypes, limit]);
+    }, [query, limit]);
 
     return (
         <>
@@ -230,7 +153,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={handleChangeSearchType}
+                                onChange={undefined}
                                 value={searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
@@ -296,118 +219,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         </form>
                     </fieldset>
 
-                    <aside className="relative col-span-3 hidden lg:block">
-                        <Framer.AnimatePresence>
-                            <Framer.motion.fieldset
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="sticky top-16 space-y-6 divide-y divide-grey-100"
-                            >
-                                <div className="space-y-5">
-                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                        Publication types
-                                    </legend>
-                                    <div className="space-y-3">
-                                        {Config.values.publicationTypes.map((type) => (
-                                            <div
-                                                key={type}
-                                                className={`relative flex items-start ${
-                                                    searchType !== 'publications' && 'opacity-50'
-                                                }`}
-                                            >
-                                                <div className="flex h-5 items-center">
-                                                    <input
-                                                        id={type}
-                                                        aria-describedby={type}
-                                                        name={type}
-                                                        type="checkbox"
-                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                                                        checked={
-                                                            publicationTypes
-                                                                ? publicationTypes.split(',').includes(type)
-                                                                : false
-                                                        }
-                                                        onChange={(e) => collatePublicationTypes(e, type)}
-                                                        disabled={!results || searchType !== 'publications'}
-                                                    />
-                                                </div>
-                                                <div className="ml-3 text-sm">
-                                                    <label
-                                                        htmlFor={type}
-                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                        aria-disabled={!results || searchType !== 'publications'}
-                                                    >
-                                                        {Helpers.formatPublicationType(type)}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {searchType === 'publications' ? (
-                                        <Framer.motion.form
-                                            name="date-form"
-                                            id="date-form"
-                                            className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                            onSubmit={handlerDateFormSubmit}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                        >
-                                            <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                                Date Range
-                                            </legend>
-                                            <label htmlFor="date-from" className="relative block w-full">
-                                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                    Date From:
-                                                </span>
-                                                <input
-                                                    name="date-from"
-                                                    id="date-from"
-                                                    type="date"
-                                                    placeholder="Date from..."
-                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                    disabled={isValidating}
-                                                    value={dateFrom}
-                                                    onChange={(e) => setDateFrom(e.target.value)}
-                                                />
-                                            </label>
-                                            <label htmlFor="date-to" className="relative block w-full">
-                                                <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                    Date to:
-                                                </span>
-                                                <input
-                                                    name="date-to"
-                                                    id="date-to"
-                                                    type="date"
-                                                    placeholder="Date to..."
-                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                    disabled={isValidating}
-                                                    value={dateTo}
-                                                    onChange={(e) => setDateTo(e.target.value)}
-                                                />
-                                            </label>
-                                        </Framer.motion.form>
-                                    ) : null}
-                                </div>
-
-                                <div className="pt-6">
-                                    <button
-                                        onClick={resetFilters}
-                                        disabled={searchType !== 'publications'}
-                                        className="flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50"
-                                    >
-                                        <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
-                                            Clear filters
-                                        </span>
-                                        <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
-                                    </button>
-                                </div>
-                            </Framer.motion.fieldset>
-                        </Framer.AnimatePresence>
-                    </aside>
-
                     <article className="col-span-9 min-h-screen">
                         {props.error ? (
                             <Components.Alert
@@ -446,24 +257,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                     ? (classes += '!border-b-transparent !rounded-b')
                                                     : null;
 
-                                                if (searchType === 'publications') {
-                                                    return (
-                                                        <Components.PublicationSearchResult
-                                                            key={`publication-${index}-${result.id}`}
-                                                            publication={result}
-                                                            className={classes}
-                                                        />
-                                                    );
-                                                }
-                                                if (searchType === 'users') {
-                                                    return (
-                                                        <Components.UserSearchResult
-                                                            key={`user-${index}-${result.id}`}
-                                                            user={result}
-                                                            className={classes}
-                                                        />
-                                                    );
-                                                }
+                                                return (
+                                                    <Components.UserSearchResult
+                                                        key={`user-${index}-${result.id}`}
+                                                        user={result}
+                                                        className={classes}
+                                                    />
+                                                );
                                             })}
                                         </div>
 
