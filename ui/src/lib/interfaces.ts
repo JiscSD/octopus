@@ -181,8 +181,8 @@ export interface User extends CoreUser {
     works: WorksRecord[];
 }
 
-export interface SearchResults {
-    data: Publication[] | User[];
+export interface SearchResults<T extends Publication | User> {
+    data: T[];
     metadata: SearchResultMeta;
 }
 
