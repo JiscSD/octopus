@@ -95,7 +95,7 @@ services:
       - '4005:4003'
     command: sh -c "npm run seed:local && npm run start:local"
     environment:
-      - DATACITE_USER
+      - DATACITE_USER # this and next 3 come from calling environment 
       - DATACITE_PASSWORD
       - ORCID_ID
       - ORCID_SECRET
