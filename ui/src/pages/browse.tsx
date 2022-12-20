@@ -25,8 +25,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let latest: unknown = [];
     let metadata: unknown = {};
     try {
-        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 5, 0);
-        latest = latestResponse.data.reverse() as Interfaces.Publication[];
+        const latestResponse = await api.search<Interfaces.Publication>(
+            'publications',
+            null,
+            5,
+            0,
+            Config.values.publicationTypes.join()
+        );
+        latest = latestResponse.data.reverse();
         metadata = latestResponse.metadata;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;

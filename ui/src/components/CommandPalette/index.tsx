@@ -34,7 +34,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
     });
 
     const toggleSearchType = () =>
-        searchType === 'publications' ? setSearchType('users') : setSearchType('publications');
+        searchType === 'publications' ? setSearchType('authors') : setSearchType('publications');
 
     const handleGoToSearchResults = () => {
         toggleCmdPalette();
@@ -152,7 +152,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
                                             );
                                         }
 
-                                        if (searchType === 'users') {
+                                        if (searchType === 'authors') {
                                             return (
                                                 <Components.CommandPaletteResult
                                                     key={result.id}

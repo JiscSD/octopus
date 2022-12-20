@@ -1,6 +1,5 @@
 import React from 'react';
 import useSWR from 'swr';
-import moment from 'moment';
 import Head from 'next/head';
 
 import * as Router from 'next/router';
@@ -8,7 +7,6 @@ import * as Framer from 'framer-motion';
 import * as SolidIcons from '@heroicons/react/solid';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
-import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -22,7 +20,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: Types.SearchType = 'users';
+    let searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
@@ -61,9 +59,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(
-        (Array.isArray(query) ? query[0] : query) || ''
-    )}&limit=${limit || '10'}&offset=${offset || '0'}`;
+    const swrKey = `/users?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}&limit=${
+        limit || '10'
+    }&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -99,9 +97,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // ugly complex swr key
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${
-        offset || '0'
-    }`;
+    const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
