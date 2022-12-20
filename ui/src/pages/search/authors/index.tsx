@@ -17,8 +17,7 @@ import * as api from '@api';
 /**
  *
  * @TODO - refactor getServerSideProps
- * 1. remove unnecessary if statements
- * 2. make sure correct publicationTypes are passed via props
+ * remove unnecessary if statements
  */
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
@@ -39,7 +38,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.query) query = context.query.query;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
-   
+
     // If multiple of the same params are provided, pick the first
     if (Array.isArray(query)) query = query[0];
     if (Array.isArray(limit)) limit = limit[0];
@@ -53,23 +52,18 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // ensure the value of the search type is acceptable
 
     try {
-        const response = await api.search<Interfaces.User>(
-            searchType,
-            encodeURIComponent(query || ''),
-            limit,
-            offset,
-        );
+        const response = await api.search<Interfaces.User>(searchType, encodeURIComponent(query || ''), limit, offset);
         results = response.data;
         metadata = response.metadata;
         error = null;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
-    } 
+    }
 
-
-    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')
-        }&limit=${limit || '10'}&offset=${offset || '0'}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(
+        (Array.isArray(query) ? query[0] : query) || ''
+    )}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -97,7 +91,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
-    const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');
+    const [searchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
@@ -105,7 +99,9 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // ugly complex swr key
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${
+        offset || '0'
+    }`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -153,13 +149,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={undefined}
+                                onChange={(e) => router.push(`/search/${e.target.value}`)}
                                 value={searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
                                 <option value="publications">Publications</option>
-                                <option value="users">Authors</option>
+                                <option value="authors">Authors</option>
                             </select>
                         </label>
 

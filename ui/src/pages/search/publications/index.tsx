@@ -64,7 +64,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             encodeURIComponent(query || ''),
             limit,
             offset,
-            publicationTypes,
+            publicationTypes
         );
         results = response.data;
         metadata = response.metadata;
@@ -72,15 +72,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
-    } 
+    }
 
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')
-        }&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'
-        }${dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-        }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(
+        (Array.isArray(query) ? query[0] : query) || ''
+    )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
+        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
+    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
 
     return {
         props: {
@@ -130,10 +131,11 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')
-        }&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'
-        }${dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-        }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${publicationTypes}&limit=${
+        limit || '10'
+    }&offset=${offset || '0'}${dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''}${
+        dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''
+    }`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -213,13 +215,13 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={undefined}
+                                onChange={(e) => router.push(`/search/${e.target.value}`)}
                                 value={searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
                                 <option value="publications">Publications</option>
-                                <option value="users">Authors</option>
+                                <option value="authors">Authors</option>
                             </select>
                         </label>
 
@@ -293,10 +295,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                     </legend>
                                     <div className="space-y-3">
                                         {Config.values.publicationTypes.map((type) => (
-                                            <div
-                                                key={type}
-                                                className={`relative flex items-start`}
-                                            >
+                                            <div key={type} className={`relative flex items-start`}>
                                                 <div className="flex h-5 items-center">
                                                     <input
                                                         id={type}

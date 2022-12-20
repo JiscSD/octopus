@@ -14,7 +14,7 @@ export const validateJWT = (token: string) => {
         const decodedJWT = JWT.verify(token, SECRET);
         return decodedJWT as I.User;
     } catch (e) {
-        console.log(e)
+        console.log(e);
         return null;
     }
 };

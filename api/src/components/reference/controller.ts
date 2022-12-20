@@ -26,7 +26,7 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
 
         // Skip this check if the user is octopus, to allow for seed data
         // to update live publications
-        if(event.user.id !== 'octopus') {
+        if (event.user.id !== 'octopus') {
             //check that the publication is live
             if (publication.currentStatus !== 'DRAFT') {
                 return response.json(403, {
