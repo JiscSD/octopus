@@ -19,20 +19,10 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
         where: {
             orcid
         },
-        update: {
-            firstName: updateUserInformation.firstName,
-            lastName: updateUserInformation.lastName,
-            employment: updateUserInformation.employment,
-            education: updateUserInformation.education,
-            works: updateUserInformation.works
-        },
+        update: { ...updateUserInformation },
         create: {
-            firstName: updateUserInformation.firstName,
-            lastName: updateUserInformation.lastName,
-            employment: updateUserInformation.employment,
-            education: updateUserInformation.education,
-            works: updateUserInformation.works,
-            orcid
+            orcid,
+            ...updateUserInformation
         }
     });
 

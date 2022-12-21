@@ -12,6 +12,7 @@ datasource db {
 model User {
     id                   String                 @id @default(cuid())
     orcid                String                 @unique
+    orcidAccessToken     String?
     firstName            String
     lastName             String?
     email                String?

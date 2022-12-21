@@ -8,6 +8,9 @@ const endpoints = {
     verification: `${api.baseURL}/verification`,
     flag: `${api.baseURL}/flag`,
     bookmarks: `${api.baseURL}/bookmarks`,
-    decodeUserToken: `${api.baseURL}/decode-user-token`
+    decodeUserToken: `${api.baseURL}/decode-user-token`,
+    verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,
+    revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`
 };
+
 export default endpoints;

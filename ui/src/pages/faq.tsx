@@ -138,6 +138,24 @@ const faqContents = [
         heading: 'If this is only an alpha version, when will Octopus launch?',
         content:
             "<p className='mb-2'>The platform will launch in June 2022.</p><p className='mb-2'>The alpha release has reduced features and functionality for now, but additional features will be added for testing prior to launch. Please note that any content published to the site during the alpha stage will not be retained in the live version.</p><p className='mb-2'>We are currently gathering user feedback to ensure that the platform meets your needs, and that we prioritise the features of most value to you. Consider completing our feedback form, or joining our user community, to help us develop the platform further.</p>"
+    },
+    {
+        title: "How do I revoke Octopus's access to my ORCID record?",
+        href: 'revoke_orcid_access',
+        id: 'revoke_orcid_access',
+        heading: "How do I revoke Octopus's access to my ORCID record?",
+        content: `
+            <p className="mb-2">If you are logged into Octopus you can revoke access by clicking the 'Revoke ORCID Access' button next to your ORCID record on your account.</p>
+            <p className="mb-2">
+                You can also revoke access to your ORCID record, on the ORCID website. To do this go to 'Trusted parties' and delete Octopus from the list of 'Trusted organizations'. 
+            </p>
+            <p className="mb-2">
+                Both of these methods will log you out of Octopus. If you attempt to log in again after revoking access you'll be offered the chance to "Give Octopus Permission To Access Your ORCID Record" again.
+            </p>
+            <p>
+                You will not be able to log into Octopus again without granting permission to access your ORCID record.</p>
+            </p>
+        `
     }
 ];
 
