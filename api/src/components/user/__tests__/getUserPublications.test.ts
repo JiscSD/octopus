@@ -35,7 +35,7 @@ describe('Get a given users publications', () => {
             .query({ apiKey: 987654321 });
 
         expect(publications.body.results).toBe(undefined);
-        expect(publications.body.message).toBe('Invalid user id');
+        expect(publications.body.message).toBe('User not found');
         expect(publications.status).toEqual(400);
     });
 });

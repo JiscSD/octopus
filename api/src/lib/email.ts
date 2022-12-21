@@ -2,8 +2,8 @@ import nodemailer from 'nodemailer';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
 
-const from=process.env.EMAIL_SENDER_ADDRESS;
-const baseURL=process.env.BASE_URL;
+const from = process.env.EMAIL_SENDER_ADDRESS;
+const baseURL = process.env.BASE_URL;
 
 const ses = new aws.SES({
     region: 'eu-west-1'
@@ -14,7 +14,7 @@ let mailConfig;
 switch (process.env.STAGE) {
     case 'local':
         mailConfig = {
-            host: '0.0.0.0',
+            host: process.env.MAIL_SERVER,
             port: 1025
         };
         break;
