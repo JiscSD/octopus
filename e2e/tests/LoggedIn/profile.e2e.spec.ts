@@ -34,18 +34,12 @@ test.describe("My profile", () => {
 
     // check Employment section
     expect(page.locator(PageModel.profilePage.employment)).toBeVisible();
-    const employmentRow = page.locator('tr:has-text("Employer 1")');
-    await expect(employmentRow).toBeVisible();
 
     // check Education section
     expect(page.locator(PageModel.profilePage.education)).toBeVisible();
-    const educationRow = page.locator('tr:has-text("Education 1")');
-    await expect(educationRow).toBeVisible();
 
     // check Works section
     expect(page.locator(PageModel.profilePage.works)).toBeVisible();
-    const worksRow = page.locator('tr:has-text("10.1037/a0040251")');
-    await expect(worksRow).toBeVisible();
 
     // check Octopus publications section
     await expect(
