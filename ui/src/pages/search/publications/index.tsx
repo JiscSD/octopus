@@ -23,7 +23,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: string | string[] | null = null;
+    let searchType: Types.SearchType = 'publications';
     let query: string | string[] | null = null;
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
@@ -32,7 +32,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let dateTo: string | string[] | null = null;
 
     // defaults to results
-    let results: Interfaces.Publication[] | Interfaces.CoreUser[] | [] = [];
+    let results: Interfaces.Publication[] | [] = [];
     let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error
@@ -40,54 +40,46 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // setting params
     if (context.query.query) query = context.query.query;
-    if (context.query.for) searchType = context.query.for;
     if (context.query.type) publicationTypes = context.query.type;
     if (context.query.limit) limit = context.query.limit;
     if (context.query.offset) offset = context.query.offset;
     if (context.query.dateFrom) dateFrom = context.query.dateFrom;
     if (context.query.dateTo) dateTo = context.query.dateTo;
 
-    // only if a search type is provided
-    if (searchType) {
-        // If multiple of the same params are provided, pick the first
-        if (Array.isArray(searchType)) searchType = searchType[0];
-        if (Array.isArray(query)) query = query[0];
-        if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
-        if (Array.isArray(limit)) limit = limit[0];
-        if (Array.isArray(offset)) offset = offset[0];
-        if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
-        if (Array.isArray(dateTo)) dateTo = dateTo[0];
+    if (Array.isArray(query)) query = query[0];
+    if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
+    if (Array.isArray(limit)) limit = limit[0];
+    if (Array.isArray(offset)) offset = offset[0];
+    if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
+    if (Array.isArray(dateTo)) dateTo = dateTo[0];
 
-        // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
-        limit && parseInt(limit, 10) !== NaN ? (limit = parseInt(limit, 10)) : (limit = null);
-        offset && parseInt(offset, 10) !== NaN ? (offset = parseInt(offset, 10)) : (offset = null);
+    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
+    limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
+    offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
 
-        // ensure the value of the seach type is acceptable
-        if (searchType === 'publications' || searchType === 'users') {
-            try {
-                const response = await api.search(
-                    searchType,
-                    encodeURIComponent(query || ''),
-                    publicationTypes,
-                    limit,
-                    offset
-                );
-                results = response.data;
-                metadata = response.metadata;
-                error = null;
-            } catch (err) {
-                const { message } = err as Interfaces.JSONResponseError;
-                error = message;
-            }
-        }
+    // ensure the value of the search type is acceptable
+    try {
+        const response = await api.search<Interfaces.Publication>(
+            searchType,
+            encodeURIComponent(query || ''),
+            limit,
+            offset,
+            publicationTypes
+        );
+        results = response.data;
+        metadata = response.metadata;
+        error = null;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
     }
 
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}${
-        searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(
+        (Array.isArray(query) ? query[0] : query) || ''
+    )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
     }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
 
@@ -109,7 +101,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType: Types.SearchType | string | undefined;
+    searchType?: Types.SearchType;
     query: string | null;
     publicationTypes: string | null;
     limit: string | null;
@@ -119,11 +111,11 @@ type Props = {
     error: string | null;
 };
 
-const Search: Types.NextPage<Props> = (props): React.ReactElement => {
+const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
-    const [searchType, setSearchType] = React.useState(props.searchType ? props.searchType : 'publications');
+    const [searchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
     const [publicationTypes, setPublicationTypes] = React.useState(
         props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
@@ -139,11 +131,11 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}${
-        searchType === 'publications' ? `&type=${publicationTypes}` : ''
-    }&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${publicationTypes}&limit=${
+        limit || '10'
+    }&offset=${offset || '0'}${dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''}${
+        dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''
+    }`;
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
@@ -169,41 +161,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         );
     };
 
-    const handleChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        if (value === 'users') {
-            const paramsListCopy = { ...router.query };
-
-            if (Object.prototype.hasOwnProperty.call(paramsListCopy, 'type')) delete paramsListCopy.type;
-
-            router.push({ query: { ...paramsListCopy, for: value } }, undefined, { shallow: true });
-        }
-        if (value === 'publications') {
-            router.push(
-                {
-                    query: {
-                        ...router.query,
-                        for: value,
-                        type: publicationTypes,
-                        query: searchInputRef.current?.value
-                    }
-                },
-                undefined,
-                { shallow: true }
-            );
-        }
-        setQuery('');
-        searchInputRef.current && (searchInputRef.current.value = '');
-        setSearchType(e.target.value);
-    };
-
     const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
         const uniqueArray = Array.from(uniqueSet).join(',');
 
-        router.push({ pathname: '/search', query: { for: searchType, type: uniqueArray } }, undefined, {
+        router.push({ pathname: '/search/publications', query: { type: uniqueArray } }, undefined, {
             shallow: true
         });
 
@@ -215,16 +179,14 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         searchInputRef.current && (searchInputRef.current.value = '');
         setOffset(0);
         setLimit(10);
-        if (searchType === 'publications') {
-            setPublicationTypes(Config.values.publicationTypes.join(','));
-        }
+        setPublicationTypes(Config.values.publicationTypes.join(','));
         setDateFrom('');
         setDateTo('');
     };
 
     React.useEffect(() => {
         setOffset(0);
-    }, [searchType, query, publicationTypes, limit]);
+    }, [query, publicationTypes, limit]);
 
     return (
         <>
@@ -241,7 +203,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
                 <section
                     id="content"
-                    className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8"
+                    className="container mx-auto grid grid-cols-1 gap-x-6 px-8 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10"
                 >
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
@@ -253,13 +215,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={handleChangeSearchType}
+                                onChange={(e) => router.push(`/search/${e.target.value}`)}
                                 value={searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
                                 <option value="publications">Publications</option>
-                                <option value="users">Authors</option>
+                                <option value="authors">Authors</option>
                             </select>
                         </label>
 
@@ -289,7 +251,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         <form
                             name="query-form"
                             id="query-form"
-                            className="col-span-12 lg:col-span-7"
+                            className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
                             <label htmlFor="search-query" className="relative block w-full">
@@ -333,12 +295,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </legend>
                                     <div className="space-y-3">
                                         {Config.values.publicationTypes.map((type) => (
-                                            <div
-                                                key={type}
-                                                className={`relative flex items-start ${
-                                                    searchType !== 'publications' && 'opacity-50'
-                                                }`}
-                                            >
+                                            <div key={type} className={`relative flex items-start`}>
                                                 <div className="flex h-5 items-center">
                                                     <input
                                                         id={type}
@@ -352,14 +309,14 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                                 : false
                                                         }
                                                         onChange={(e) => collatePublicationTypes(e, type)}
-                                                        disabled={!results || searchType !== 'publications'}
+                                                        disabled={!results}
                                                     />
                                                 </div>
                                                 <div className="ml-3 text-sm">
                                                     <label
                                                         htmlFor={type}
                                                         className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                        aria-disabled={!results || searchType !== 'publications'}
+                                                        aria-disabled={!results}
                                                     >
                                                         {Helpers.formatPublicationType(type)}
                                                     </label>
@@ -367,58 +324,54 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </div>
                                         ))}
                                     </div>
-
-                                    {searchType === 'publications' ? (
-                                        <Framer.motion.form
-                                            name="date-form"
-                                            id="date-form"
-                                            className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                            onSubmit={handlerDateFormSubmit}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                        >
-                                            <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                                Date Range
-                                            </legend>
-                                            <label htmlFor="date-from" className="relative block w-full">
-                                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                    Date From:
-                                                </span>
-                                                <input
-                                                    name="date-from"
-                                                    id="date-from"
-                                                    type="date"
-                                                    placeholder="Date from..."
-                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                    disabled={isValidating}
-                                                    value={dateFrom}
-                                                    onChange={(e) => setDateFrom(e.target.value)}
-                                                />
-                                            </label>
-                                            <label htmlFor="date-to" className="relative block w-full">
-                                                <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                    Date to:
-                                                </span>
-                                                <input
-                                                    name="date-to"
-                                                    id="date-to"
-                                                    type="date"
-                                                    placeholder="Date to..."
-                                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                    disabled={isValidating}
-                                                    value={dateTo}
-                                                    onChange={(e) => setDateTo(e.target.value)}
-                                                />
-                                            </label>
-                                        </Framer.motion.form>
-                                    ) : null}
+                                    <Framer.motion.form
+                                        name="date-form"
+                                        id="date-form"
+                                        className="col-span-12 lg:col-span-3 xl:col-span-4"
+                                        onSubmit={handlerDateFormSubmit}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                            Date Range
+                                        </legend>
+                                        <label htmlFor="date-from" className="relative block w-full">
+                                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                Date From:
+                                            </span>
+                                            <input
+                                                name="date-from"
+                                                id="date-from"
+                                                type="date"
+                                                placeholder="Date from..."
+                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                disabled={isValidating}
+                                                value={dateFrom}
+                                                onChange={(e) => setDateFrom(e.target.value)}
+                                            />
+                                        </label>
+                                        <label htmlFor="date-to" className="relative block w-full">
+                                            <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                                                Date to:
+                                            </span>
+                                            <input
+                                                name="date-to"
+                                                id="date-to"
+                                                type="date"
+                                                placeholder="Date to..."
+                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                                                disabled={isValidating}
+                                                value={dateTo}
+                                                onChange={(e) => setDateTo(e.target.value)}
+                                            />
+                                        </label>
+                                    </Framer.motion.form>
                                 </div>
 
                                 <div className="pt-6">
                                     <button
                                         onClick={resetFilters}
-                                        disabled={searchType !== 'publications'}
                                         className="flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50"
                                     >
                                         <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
@@ -431,7 +384,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         </Framer.AnimatePresence>
                     </aside>
 
-                    <article className="col-span-9 min-h-screen">
+                    <article className="col-span-12 min-h-screen lg:col-span-9">
                         {props.error ? (
                             <Components.Alert
                                 severity="ERROR"
@@ -469,24 +422,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                     ? (classes += '!border-b-transparent !rounded-b')
                                                     : null;
 
-                                                if (searchType === 'publications') {
-                                                    return (
-                                                        <Components.PublicationSearchResult
-                                                            key={`publication-${index}-${result.id}`}
-                                                            publication={result}
-                                                            className={classes}
-                                                        />
-                                                    );
-                                                }
-                                                if (searchType === 'users') {
-                                                    return (
-                                                        <Components.UserSearchResult
-                                                            key={`user-${index}-${result.id}`}
-                                                            user={result}
-                                                            className={classes}
-                                                        />
-                                                    );
-                                                }
+                                                return (
+                                                    <Components.PublicationSearchResult
+                                                        key={`publication-${index}-${result.id}`}
+                                                        publication={result}
+                                                        className={classes}
+                                                    />
+                                                );
                                             })}
                                         </div>
 
@@ -543,4 +485,4 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Search;
+export default PublicationSearch;
