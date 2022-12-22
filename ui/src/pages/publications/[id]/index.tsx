@@ -345,7 +345,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <div className="mb-4 flex flex-wrap items-center gap-2 lg:mb-8">
+                        <div className="mb-4 flex flex-wrap items-center gap-2">
                             <div className="flex w-fit items-center">
                                 <Components.Link
                                     href={`${Config.urls.viewUser.path}/${publicationData.user?.id}`}
@@ -404,8 +404,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </header>
 
                     {/** Full text */}
-                    <Components.PublicationContentSection id="main-text" hasBreak>
-                        <div className="mb-4">
+                    <Components.PublicationContentSection id="main-text" hasBreak isMainText>
+                        <div>
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
                     </Components.PublicationContentSection>

@@ -1,0 +1,43 @@
+name: API-Tests
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+jobs:
+  api-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Note: this step is only required locally when using act since the ubuntu image
+      # does not come with docker-compose installed, however the alternative to the reinstall
+      # here is you'd have to install a custom docker image locally which includes docker-compose
+      # uncomment below locally and change 'docker compose' to 'docker-compose' in the 'run:' line:
+      # - name: Install docker-compose
+      #  run: |
+      #    sudo curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+      #    sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Run docker-compose
+        working-directory: ./api
+        env:
+          DATACITE_USER: ${{ secrets.DATACITE_USER }}
+          DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
+          ORCID_ID: ${{ secrets.ORCID_ID }}
+          ORCID_SECRET: ${{ secrets.ORCID_SECRET }}
+        run: docker compose -f "docker-compose.yml" up -d --build
+
+      - name: Wait for API and DB to be ready
+        run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailhog:8025 -timeout 120s
+
+      - name: Run test suite
+        working-directory: ./api
+        run: docker exec -t api-test npm run test:local
+
+      - name: Stop containers
+        working-directory: ./api
+        run: docker-compose -f docker-compose.yml down
