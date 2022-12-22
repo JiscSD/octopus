@@ -203,7 +203,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                 </section>
                 <section
                     id="content"
-                    className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8"
+                    className="container mx-auto grid grid-cols-1 gap-x-6 px-8 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10"
                 >
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
@@ -384,7 +384,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                         </Framer.AnimatePresence>
                     </aside>
 
-                    <article className="col-span-9 min-h-screen">
+                    <article className="col-span-12 min-h-screen lg:col-span-9">
                         {props.error ? (
                             <Components.Alert
                                 severity="ERROR"
