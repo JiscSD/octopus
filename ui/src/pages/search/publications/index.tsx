@@ -251,7 +251,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                         <form
                             name="query-form"
                             id="query-form"
-                            className="col-span-12 lg:col-span-7"
+                            className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
                             <label htmlFor="search-query" className="relative block w-full">

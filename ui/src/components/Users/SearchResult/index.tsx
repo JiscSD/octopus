@@ -46,8 +46,8 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 ${props.className ? props.className : ''}
                 `}
         >
-            <Components.Avatar user={props.user} className="col-span-1 lg:col-span-2" />
-            <span className="col-span-6 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+            <Components.Avatar user={props.user} className="col-span-1" />
+            <span className="col-span-7 flex h-full items-center font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                 {props.user.firstName} {props.user?.lastName}
             </span>
             <div className="relative z-20 col-span-4 flex h-full items-center font-light text-grey-600 transition-colors duration-500 dark:text-grey-100 lg:col-span-3">

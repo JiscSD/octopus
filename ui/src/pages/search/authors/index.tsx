@@ -107,13 +107,6 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
         setQuery(searchTerm);
     };
 
-    const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
-        setQuery('');
-        searchInputRef.current && (searchInputRef.current.value = '');
-        setOffset(0);
-        setLimit(10);
-    };
-
     React.useEffect(() => {
         setOffset(0);
     }, [query, limit]);
@@ -181,7 +174,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         <form
                             name="query-form"
                             id="query-form"
-                            className="col-span-12 lg:col-span-7"
+                            className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
                             <label htmlFor="search-query" className="relative block w-full">
@@ -211,7 +204,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                         </form>
                     </fieldset>
 
-                    <article className="col-span-9 min-h-screen">
+                    <article className="col-span-12 min-h-screen">
                         {props.error ? (
                             <Components.Alert
                                 severity="ERROR"
