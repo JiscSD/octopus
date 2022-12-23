@@ -14,7 +14,7 @@ test.describe("My profile", () => {
     await expect(page).toHaveTitle("Octopus | Built for Researchers");
 
     // login
-    await Helpers.login(page);
+    await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
       `${Helpers.ORCID_TEST_NAME}`
     );
