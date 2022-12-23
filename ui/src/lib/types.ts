@@ -97,7 +97,9 @@ export type PublicationCreationStoreType = {
 
 export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
 
-export type SearchType = 'publications' | 'users';
+export type SearchType = 'publications' | 'authors';
+
+export type SearchParameter = Interfaces.Publication | Interfaces.User;
 
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 

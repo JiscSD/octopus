@@ -25,8 +25,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let latest: unknown = [];
     let metadata: unknown = {};
     try {
-        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 5, 0);
-        latest = latestResponse.data.reverse() as Interfaces.Publication[];
+        const latestResponse = await api.search<Interfaces.Publication>(
+            'publications',
+            null,
+            5,
+            0,
+            Config.values.publicationTypes.join()
+        );
+        latest = latestResponse.data.reverse();
         metadata = latestResponse.metadata;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -81,7 +87,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <Components.Button
                                     href={`${
                                         Config.urls.search.path
-                                    }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                                    }/publications?type=${Config.values.publicationTypes.join()}`}
                                     title="View all publications"
                                     endIcon={
                                         <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
@@ -89,7 +95,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="w-fit"
                                 />
                                 <Components.Button
-                                    href={`${Config.urls.search.path}?for=users`}
+                                    href={`${Config.urls.search.path}/authors`}
                                     title="View all authors"
                                     endIcon={
                                         <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
@@ -103,7 +109,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                             {Config.values.publicationTypes.map((type) => (
                                 <Components.Link
                                     key={type}
-                                    href={`${Config.urls.search.path}?for=publications&type=${type}`}
+                                    href={`${Config.urls.search.path}/publications?type=${type}`}
                                     className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                 >
                                     <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
