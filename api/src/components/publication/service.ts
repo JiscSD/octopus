@@ -237,12 +237,20 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 };
 
 export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
+    const orderBy = filters.orderBy
+        ? {
+              [filters.orderBy]: {
+                  order: filters.orderDirection || 'asc'
+              }
+          }
+        : null;
+
     const query = {
         index: 'publications',
         body: {
             from: filters.offset,
             size: filters.limit,
-            sort: ['_score'],
+            sort: [orderBy || '_score'],
             query: {
                 bool: {
                     filter: {
@@ -282,14 +290,16 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         });
     }
 
-    must.push({
-        range: {
-            publishedDate: {
-                gte: filters.dateFrom,
-                lte: filters.dateTo
+    if (filters.dateFrom || filters.dateTo) {
+        must.push({
+            range: {
+                publishedDate: {
+                    gte: filters.dateFrom,
+                    lte: filters.dateTo
+                }
             }
-        }
-    });
+        });
+    }
 
     // @ts-ignore
     query.body.query.bool.must = must;
