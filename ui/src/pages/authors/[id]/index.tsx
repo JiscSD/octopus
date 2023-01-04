@@ -37,7 +37,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(userPublicationsUrl, token);
+        const response = await api.get(userPublicationsUrl, undefined);
         firstUserPublicationsPage = response.data;
     } catch (error) {
         console.log(error);
@@ -74,7 +74,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
             return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
         },
         async (url) => {
-            const response = await api.get(url, Helpers.getJWT());
+            const response = await api.get(url, undefined);
             const data = response.data;
             const { offset, limit, total } = data;
 
