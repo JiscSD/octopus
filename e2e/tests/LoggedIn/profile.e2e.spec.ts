@@ -2,7 +2,7 @@ import * as Helpers from "../helpers";
 import { BrowserContext, expect, Page, test } from "@playwright/test";
 import { PageModel } from "../PageModel";
 
-test.describe("My profile", () => {
+test.describe("Live author page", () => {
   let context: BrowserContext;
   let page: Page;
 
@@ -19,16 +19,17 @@ test.describe("My profile", () => {
       `${Helpers.ORCID_TEST_NAME}`
     );
 
-    // go to "My Profile" page
+    // go to "Live author page" page
     await page.locator(PageModel.header.usernameButton).click();
     await page.locator(PageModel.header.myProfileButton).click();
+    await page.locator(PageModel.myPublications.liveAuthorPageButton).click();
   });
 
   test.afterAll(async () => {
     await page.close();
   });
 
-  test("My profile contents", async () => {
+  test("Live author page contents", async () => {
     // check user full name
     await expect(page.locator("h1")).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
 
