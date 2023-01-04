@@ -32,7 +32,9 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
                     <>
                         <Components.Link href={`${Config.urls.viewUser.path}/${props.publication.user.id}`}>
                             <>
-                                {props.publication.user.firstName[0]}. {props.publication.user.lastName}
+                                {props.publication.user.firstName ? `${props.publication.user.firstName[0]}.` : ''}
+                                &nbsp;
+                                {props.publication.user.lastName}
                             </>
                         </Components.Link>{' '}
                         <a href={`https://orcid.org/${props.publication.user.orcid}`} target="_blank" rel="noreferrer">
@@ -46,7 +48,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
                 <time className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    {Helpers.formatDate(props.publication.createdAt)}
+                    {Helpers.formatDate(props.publication.publishedDate)}
                 </time>
             </div>
         </div>

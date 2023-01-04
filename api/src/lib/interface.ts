@@ -136,12 +136,14 @@ export type OrderDirection = 'asc' | 'desc';
 
 export interface PublicationFilters {
     search?: string;
-    limit?: string;
-    offset?: string;
+    limit: number;
+    offset: number;
     type: string;
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
+    orderBy?: PublicationOrderBy;
+    orderDirection?: OrderDirection;
 }
 
 export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
