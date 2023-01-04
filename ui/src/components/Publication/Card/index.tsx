@@ -46,7 +46,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => (
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
                 <time className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    {Helpers.formatDate(props.publication.createdAt)}
+                    {Helpers.formatDate(props.publication.publishedDate)}
                 </time>
             </div>
         </div>
