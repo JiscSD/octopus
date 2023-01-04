@@ -4,44 +4,27 @@ import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
-interface Errors {
-    latest: null | string;
-}
-
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const swrKey = `/publications?search&type=${Config.values.publicationTypes.join()}&limit=5&offset=0`;
-
-    const errors: Errors = {
-        latest: null
-    };
+    const swrKey = `/publications?limit=5&orderBy=publishedDate&orderDirection=desc`;
 
     let latest: unknown = [];
     let metadata: unknown = {};
     try {
-        const latestResponse = await api.search<Interfaces.Publication>(
-            'publications',
-            null,
-            5,
-            0,
-            Config.values.publicationTypes.join()
-        );
-        latest = latestResponse.data.reverse();
-        metadata = latestResponse.metadata;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        errors.latest = message;
+        const latestResponse = await api.get(swrKey, undefined);
+        latest = latestResponse.data.data;
+        metadata = latestResponse.data.metadata;
+    } catch (error) {
+        // couldn't load the latest publications
     }
 
     return {
         props: {
-            errors,
             swrKey,
             fallback: {
                 [swrKey]: {
@@ -56,7 +39,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    errors: Errors;
     swrKey: string;
 };
 
