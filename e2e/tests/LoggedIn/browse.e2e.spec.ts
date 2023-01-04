@@ -18,9 +18,9 @@ test.describe('Browse', () => {
         // Check links
         await expect(page.locator(PageModel.browse.viewAllPublications)).toHaveAttribute(
             'href',
-            '/search?for=publications&type=PROBLEM,HYPOTHESIS,PROTOCOL,DATA,ANALYSIS,INTERPRETATION,REAL_WORLD_APPLICATION,PEER_REVIEW'
+            '/search/publications?type=PROBLEM,HYPOTHESIS,PROTOCOL,DATA,ANALYSIS,INTERPRETATION,REAL_WORLD_APPLICATION,PEER_REVIEW'
         );
-        await expect(page.locator(PageModel.browse.viewAllAuthors)).toHaveAttribute('href', '/search?for=users');
+        await expect(page.locator(PageModel.browse.viewAllAuthors)).toHaveAttribute('href', '/search/authors');
 
         // Expect 5 cards
         await expect(page.locator(PageModel.browse.card).locator('visible=true')).toHaveCount(5);

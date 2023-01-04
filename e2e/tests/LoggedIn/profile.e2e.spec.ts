@@ -35,7 +35,7 @@ test.describe("Live author page", () => {
 
     // check Employment section
     expect(page.locator(PageModel.profilePage.employment)).toBeVisible();
-    const employmentRow = page.locator('tr:has-text("Employer 1")');
+    const employmentRow = page.locator('tr:has-text("Southern Cross QE")');
     await expect(employmentRow).toBeVisible();
 
     // check Education section
