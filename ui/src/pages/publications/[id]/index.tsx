@@ -508,11 +508,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {publicationData.ethicalStatement}
+                                    {parse(publicationData.ethicalStatement)}
                                 </p>
                                 {!!publicationData.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                        {publicationData.ethicalStatementFreeText}
+                                        {parse(publicationData.ethicalStatementFreeText)}
                                     </p>
                                 )}
                             </>
@@ -532,7 +532,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </p>
                                 {publicationData.dataPermissionsStatementProvidedBy?.length && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                        {publicationData.dataPermissionsStatementProvidedBy}
+                                        {parse(publicationData.dataPermissionsStatementProvidedBy)}
                                     </p>
                                 )}
                             </>
@@ -547,7 +547,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             hasBreak
                         >
                             <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                {publicationData.dataAccessStatement}
+                                {parse(publicationData.dataAccessStatement)}
                             </p>
                         </Components.PublicationContentSection>
                     )}
@@ -637,7 +637,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 ) : null}
                                 {publicationData.fundersStatement ? (
                                     <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                        {publicationData.fundersStatement}
+                                        {parse(publicationData.fundersStatement)}
                                     </p>
                                 ) : null}
                             </>
