@@ -19,9 +19,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [emailValidated, setEmailValidated] = useState<Boolean>(true);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmailValidated(true)
-        setCoAuthor(event.target.value)
-    }
+        setEmailValidated(true);
+        setCoAuthor(event.target.value);
+    };
 
     // Validate email for co author regex to use -
     const addCoAuthorToPublication = React.useCallback(async () => {
@@ -29,12 +29,12 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
         const validEmail = Helpers.validateEmail(coAuthor);
 
-        if(!validEmail) {
+        if (!validEmail) {
             setEmailValidated(false);
             setLoading(false);
-            return
+            return;
         }
-        
+
         setCoAuthor('');
         try {
             await api.post(
@@ -49,7 +49,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             updateCoAuthors(response.data.coAuthors);
         } catch (err) {
             console.log(err);
-        }    
+        }
 
         setLoading(false);
     }, [coAuthor, user, publicationId]);
@@ -118,11 +118,13 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         }
                     />
                 </div>
-                {!emailValidated && <Components.Alert
-                    severity="ERROR"
-                    title='Please enter a valid email address'
-                    className="mt-3 w-2/3"
-                /> }
+                {!emailValidated && (
+                    <Components.Alert
+                        severity="ERROR"
+                        title="Please enter a valid email address"
+                        className="mt-3 w-2/3"
+                    />
+                )}
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="overflow-x-auto">
