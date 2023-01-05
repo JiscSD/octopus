@@ -254,6 +254,7 @@ export interface UpdateUserInformation {
         title?: string | null;
         url?: string | null;
     }>;
+    orcidAccessToken: string;
 }
 
 export interface DeletePublicationPathParams {
