@@ -16,16 +16,16 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
 
         const orcidAuthRequest = await axios.post(
             `${orcidAuthUrl}/token`,
-            `client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&redirect_uri=${callbackURL}&code=${code}`
+            `client_id=${clientId}&client_secret=${clientSecret}&grant_type=authorization_code&code=${code}&redirect_uri=${callbackURL}`
         );
 
         const orcidUserId = orcidAuthRequest.data.orcid;
-        const accessToken = orcidAuthRequest.data.access_token;
+        const orcidAccessToken = orcidAuthRequest.data.access_token;
 
         const orcidUserRequest = await axios.get(`${orcidMemberApiUrl}/${orcidUserId}/record`, {
             headers: {
                 Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${orcidAccessToken}`
             }
         });
 
@@ -65,7 +65,6 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 }
             })) || null;
 
-        // eslint-disable-next-line @typescript-eslint/dot-notation
         const works =
             userInformation?.['activities-summary']?.works?.group?.map((work) => ({
                 title: work['work-summary']?.[0]?.title?.title?.value || null,
@@ -81,12 +80,20 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
                 url: work['work-summary']?.[0]?.url?.value || null
             })) || null;
 
+        // always revoke the old access token and keep the new one
+        try {
+            await authorizationService.revokeOrcidAccess(orcidUserId);
+        } catch (error) {
+            console.log(error);
+        }
+
         const user = await userService.upsertUser(orcidUserId, {
             firstName: userInformation?.person?.name?.['given-names']?.value || '',
             lastName: userInformation?.person?.name?.['family-name']?.value || '',
             employment,
             education,
-            works
+            works,
+            orcidAccessToken
         });
 
         const token = authorizationService.createJWT(user);
@@ -100,4 +107,24 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
 
 export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest) => {
     return response.json(200, event.user);
+};
+
+export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest) => {
+    try {
+        await authorizationService.verifyOrcidAccess(event.user.orcid);
+    } catch (error) {
+        return response.json(error.response.status, { message: error.response.data.error_description });
+    }
+
+    return response.json(200, 'OK');
+};
+
+export const revokeOrcidAccess = async (event: I.AuthenticatedAPIRequest) => {
+    try {
+        await authorizationService.revokeOrcidAccess(event.user.orcid);
+    } catch (error) {
+        return response.json(error.response.status, { message: error.response.data.error_description });
+    }
+
+    return response.json(200, 'Successfully revoked access to ORCID');
 };

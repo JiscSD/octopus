@@ -39,7 +39,6 @@ test.describe("Static pages, logged out", () => {
     await page.goBack();
 
     // Check dark/light toggle - TODO, sort out localStorage
-    // await page.locator(PageModel.homepage.darkModeToggle).click();
     await expect(page.locator("h1")).toHaveCSS("color", "rgb(255, 255, 255)");
 
     await page.locator(PageModel.homepage.darkModeToggle).click();

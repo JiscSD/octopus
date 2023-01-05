@@ -1,8 +1,8 @@
-import { expect, Page } from "@playwright/test";
+import { Browser, expect, Page } from "@playwright/test";
 import { PageModel } from "./PageModel";
 
-const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
-const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
+export const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
+export const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
 export const ORCID_TEST_NAME = `${process.env.ORCID_TEST_FIRST_NAME} ${process.env.ORCID_TEST_LAST_NAME}`;
 export const ORCID_TEST_SHORT_NAME = `${process.env.ORCID_TEST_FIRST_NAME?.[0]}. ${process.env.ORCID_TEST_LAST_NAME}`;
 
@@ -11,19 +11,22 @@ export const UI_BASE = process.env.UI_BASE || "https://localhost:3001";
 if (!ORCID_TEST_USER || !ORCID_TEST_PASS || !ORCID_TEST_NAME)
   throw "Environment variables not set";
 
-export const login = async (page: Page) => {
-  await page.click(PageModel.header.loginButton);
+export const login = async (page: Page, browser: Browser) => {
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click(PageModel.header.loginButton),
+  ]);
+
   await page.fill(PageModel.login.username, ORCID_TEST_USER);
   await page.fill(PageModel.login.password, ORCID_TEST_PASS);
-  await page.click(PageModel.login.signInButton);
 
-  // wait to see if authorization is required
-  await page.waitForNavigation();
+  await Promise.all([
+    page.waitForNavigation(), // wait to see if authorization is required
+    page.click(PageModel.login.signInButton),
+  ]);
 
   // check if need to authorize access
-  const needsAuthorization = page
-    .url()
-    .startsWith("https://orcid.org/oauth/authorize");
+  const needsAuthorization = page.url().includes("/oauth/authorize");
 
   if (needsAuthorization) {
     await page.click(PageModel.login.authorizeButton);
@@ -39,14 +42,17 @@ export const login = async (page: Page) => {
   if (needsEmailVerification) {
     await page.fill("#email", ORCID_TEST_USER);
     await page.click('button[title="Send code"]');
-    await page.waitForSelector('button[title="Verify code"]');
+    await page.waitForSelector("#code");
 
     // open new tab
-    const context = page.context();
-    const newPage = await context.newPage();
+    const context = await browser.newContext();
+    const [newPage] = await Promise.all([
+      context.waitForEvent("page"),
+      context.newPage(),
+    ]);
 
     // navigate to MailHog and take the last verification code
-    await newPage.goto(`http://${process.env.MAIL_SERVER}:8025/`);
+    await newPage.goto(`http://localhost:8025/`);
     await newPage.getByText("Verify your Octopus account").first().click();
     const verificationCode = await newPage
       .frameLocator("iframe")
@@ -58,7 +64,7 @@ export const login = async (page: Page) => {
 
     await page.fill("#code", verificationCode);
     await page.click('button[title="Verify code"]');
-    await page.waitForNavigation();
+    await page.waitForNavigation(); // wait for redirect
   }
 };
 

@@ -213,6 +213,21 @@ functions:
                   path: ${self:custom.versions.v1}/decode-user-token
                   method: GET
                   cors: true
+    verifyOrcidAccess:
+        handler: src/components/authorization/routes.verifyOrcidAccess
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/verify-orcid-access
+                  method: GET
+                  cors: true
+    revokeOrcidAccess:
+        handler: src/components/authorization/routes.revokeOrcidAccess
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/revoke-orcid-access
+                  method: DELETE
+                  cors: true
+    # Links
     createLink:
         handler: src/components/link/routes.create
         events:
