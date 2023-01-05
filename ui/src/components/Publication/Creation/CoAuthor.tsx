@@ -1,6 +1,6 @@
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as Framer from 'framer-motion';
-import React, { useState } from 'react';
+import React from 'react';
 
 import * as api from '@api';
 import * as Components from '@components';
@@ -16,7 +16,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
-    const [emailValidated, setEmailValidated] = useState<Boolean>(true);
+    const [emailValidated, setEmailValidated] = React.useState<Boolean>(true);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmailValidated(true);
