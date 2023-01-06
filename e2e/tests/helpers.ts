@@ -86,7 +86,7 @@ export const selectFirstPublication = async (
 export const search = async (
   page: Page,
   searchTerm: string,
-  publicationSearchResult: string
+  publicationSearchResult?: string
 ) => {
   // Navigate to search page
   await page.locator(PageModel.header.searchButton).click();
@@ -98,7 +98,8 @@ export const search = async (
   await expect(page.locator("h1")).toHaveText(
     `Search results for ${searchTerm}`
   );
-  await expect(page.locator(publicationSearchResult)).toBeVisible();
+
+  publicationSearchResult && await expect(page.locator(publicationSearchResult)).toBeVisible();
 };
 
 export const checkLivePublicationLayout = async (

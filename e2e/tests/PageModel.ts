@@ -74,6 +74,7 @@ export const PageModel = {
     publicationSearchResult:
       'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
     noPublicationsFound: '_react=Alert[title = "No results found"]',
+    firstPublication: 'article div div:nth-child(1) > a.rounded',
   },
   livePublication: {
     visibleSections: [

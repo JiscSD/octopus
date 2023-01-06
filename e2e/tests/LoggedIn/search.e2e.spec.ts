@@ -28,3 +28,25 @@ test.describe("Search", () => {
     );
   });
 });
+
+test.describe('Search term is persisted in URL query string', () => {
+    test('Partial search term search', async ({browser}) => {
+        // Start up test
+        const page = await browser.newPage();
+        await page.goto(Helpers.UI_BASE);
+
+        // search and expect URL query string to contain search text
+        await Helpers.search(page, 'evolved');
+        await expect(page).toHaveURL(/.*query=evolved*/)
+
+        // get path of first publication, navigate to first publication, expect URL to contain path
+        const firstPublication = page.locator(PageModel.search.firstPublication);
+        const firstPublicationPath = await firstPublication.getAttribute('href');
+        await firstPublication.click();
+        await expect(page).toHaveURL(`${Helpers.UI_BASE}${firstPublicationPath}`);
+
+        // click browser back btn, expect URL query string to still contain search text
+        await page.goBack();
+        await expect(page).toHaveURL(/.*query=evolved*/)
+    })
+});

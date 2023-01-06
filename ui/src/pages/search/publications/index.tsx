@@ -126,8 +126,6 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    // ugly complex swr key
-
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
@@ -142,13 +140,25 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
+
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    query: searchTerm,
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
+
         setQuery(searchTerm);
     };
 
     const handlerDateFormSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        router.push(
+        await router.push(
             {
                 query: {
                     ...router.query,
@@ -161,15 +171,22 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         );
     };
 
-    const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
         const uniqueArray = Array.from(uniqueSet).join(',');
 
-        router.push({ pathname: '/search/publications', query: { type: uniqueArray } }, undefined, {
-            shallow: true
-        });
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    type: uniqueArray,
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
