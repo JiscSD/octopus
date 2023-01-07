@@ -99,6 +99,7 @@ export const search = async (
     `Search results for ${searchTerm}`
   );
 
+  // if (publicationSearchResult passed in) expect its href anchor to be visible
   publicationSearchResult && await expect(page.locator(publicationSearchResult)).toBeVisible();
 };
 

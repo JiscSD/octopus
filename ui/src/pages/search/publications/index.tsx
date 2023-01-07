@@ -155,20 +155,23 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault();
+    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+        //TODO - check this date is persisted then logic for dateTo & dateFrom
+        const date = e.target.value;
 
         await router.push(
             {
                 query: {
                     ...router.query,
-                    dateTo,
+                    dateTo: date,
                     dateFrom
                 }
             },
             undefined,
-            { shallow: true }
+            {shallow: true}
         );
+
+        setDateTo(date);
     };
 
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -191,7 +194,9 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
 
-    const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const resetFilters = async () => {
+        await router.replace(router.route);
+
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
         setOffset(0);
@@ -201,9 +206,14 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setDateTo('');
     };
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         setOffset(0);
-    }, [query, publicationTypes, limit]);
+    }, [query, publicationTypes, limit, dateTo]);
+
+    //TODO - remove when date set working
+    // React.useEffect((): void => {
+    //     void handlerDateFormSubmit();
+    // }, [dateFrom, dateTo]);
 
     return (
         <>
@@ -345,7 +355,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                         name="date-form"
                                         id="date-form"
                                         className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                        onSubmit={handlerDateFormSubmit}
+                                        // onSubmit={handlerDateFormSubmit}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
@@ -365,7 +375,9 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateFrom}
-                                                onChange={(e) => setDateFrom(e.target.value)}
+                                                onChange={ (e) => {
+                                                    setDateFrom(e.target.value)
+                                                }}
                                             />
                                         </label>
                                         <label htmlFor="date-to" className="relative block w-full">
@@ -380,7 +392,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateTo}
-                                                onChange={(e) => setDateTo(e.target.value)}
+                                                onChange={(e) => handlerDateFormSubmit(e, 'dateTo')}
                                             />
                                         </label>
                                     </Framer.motion.form>
