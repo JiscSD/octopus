@@ -343,3 +343,5 @@ export const validateEmail = (email: string): Boolean => {
     if (regex.test(email)) return true;
     return false;
 };
+
+export const isEmptyContent = (content: string) => !content || /<p>\s*<\/p>/.test(content);

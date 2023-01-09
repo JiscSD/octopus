@@ -1,15 +1,21 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
 
+import * as OutlineIcons from '@heroicons/react/outline';
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
+import * as Helpers from '@helpers';
 
 const CompletedIcon = () => (
     <OutlineIcons.BadgeCheckIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-teal-500 transition-colors duration-500 dark:bg-grey-800" />
 );
+
 const IncompleteIcon = () => (
     <OutlineIcons.ExclamationCircleIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-yellow-600 transition-colors duration-500 dark:bg-grey-800 dark:text-yellow-500" />
+);
+
+const MandatoryIcon = () => (
+    <OutlineIcons.ExclamationCircleIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-red-600 transition-colors duration-500 dark:bg-grey-800 dark:text-red-500" />
 );
 
 /**
@@ -50,7 +56,7 @@ const Review: React.FC = (): React.ReactElement => {
                     <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Title
                     </span>
-                    {title.length ? <CompletedIcon /> : <IncompleteIcon />}
+                    {title.trim() ? <CompletedIcon /> : <MandatoryIcon />}
                 </div>
 
                 <div className="relative">
@@ -86,7 +92,7 @@ const Review: React.FC = (): React.ReactElement => {
                     <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Full text
                     </span>
-                    {content.length > 7 ? <CompletedIcon /> : <IncompleteIcon />}
+                    {!Helpers.isEmptyContent(content) ? <CompletedIcon /> : <MandatoryIcon />}
                 </div>
 
                 {type === Config.values.octopusInformation.publications.DATA.id && (
