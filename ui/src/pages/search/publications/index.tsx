@@ -155,15 +155,20 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
-        //TODO - check this date is persisted then logic for dateTo & dateFrom
-        const date = e.target.value;
+    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const newDate = e.target.value;
+
+        const [dateFrom, dateTo, setDate] =
+            e.target.getAttribute('id') === 'date-from'
+                ? [newDate, router.query.dateTo, setDateFrom]
+                : [router.query.dateFrom, newDate, setDateTo];
 
         await router.push(
             {
                 query: {
                     ...router.query,
-                    dateTo: date,
+                    dateTo,
                     dateFrom
                 }
             },
@@ -171,7 +176,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             {shallow: true}
         );
 
-        setDateTo(date);
+        setDate(newDate);
     };
 
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -375,9 +380,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateFrom}
-                                                onChange={ (e) => {
-                                                    setDateFrom(e.target.value)
-                                                }}
+                                                onChange={(e) => handlerDateFormSubmit(e)}
                                             />
                                         </label>
                                         <label htmlFor="date-to" className="relative block w-full">
@@ -392,7 +395,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateTo}
-                                                onChange={(e) => handlerDateFormSubmit(e, 'dateTo')}
+                                                onChange={(e) => handlerDateFormSubmit(e)}
                                             />
                                         </label>
                                     </Framer.motion.form>
