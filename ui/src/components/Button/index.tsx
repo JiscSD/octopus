@@ -62,7 +62,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
         >
             <>
                 {props.startIcon}
-                <span className={childStyles}>{props.title}</span>
+                <span className={childStyles}>{props.children || props.title}</span>
                 {props.endIcon}
             </>
         </Components.Link>
@@ -77,7 +77,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
         >
             {props.startIcon}
-            <span className={childStyles}>{props.title}</span>
+            <span className={childStyles}>{props.children || props.title}</span>
             {props.endIcon}
         </button>
     );
