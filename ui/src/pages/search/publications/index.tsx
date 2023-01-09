@@ -137,7 +137,9 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e: React.SyntheticEvent<HTMLFormElement, Event>): Promise<void> => {
+    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+        e: React.SyntheticEvent<HTMLFormElement, Event>
+    ): Promise<void> => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
 
@@ -145,7 +147,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             {
                 query: {
                     ...router.query,
-                    query: searchTerm,
+                    query: searchTerm
                 }
             },
             undefined,
@@ -173,7 +175,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                 }
             },
             undefined,
-            {shallow: true}
+            { shallow: true }
         );
 
         setDate(newDate);
@@ -189,7 +191,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             {
                 query: {
                     ...router.query,
-                    type: uniqueArray,
+                    type: uniqueArray
                 }
             },
             undefined,
@@ -213,7 +215,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
 
     React.useEffect((): void => {
         setOffset(0);
-    }, [query, publicationTypes, limit, dateTo]);
+    }, [query, publicationTypes, limit]);
 
     return (
         <>
