@@ -248,7 +248,7 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthor
-                  method: POST
+                  method: PUT
                   cors: true
     deleteCoAuthor:
         handler: src/components/coauthor/routes.remove

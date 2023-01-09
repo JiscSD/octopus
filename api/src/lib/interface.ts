@@ -364,6 +364,20 @@ export interface ORCIDUser {
 /**
  * @description Coauthor
  */
+
+export interface CoAuthor {
+    id: string;
+    linkedUser: null | string;
+    confirmedCoAuthor: boolean;
+    email: string;
+    publicationId: string,
+    user?: {
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
+}
+
 export interface CreateCoAuthorRequestBody {
     email: string;
 }

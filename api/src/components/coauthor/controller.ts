@@ -4,9 +4,8 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
-export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreateCoAuthorRequestBody, undefined, I.CreateCoAuthorPathParams>
-): Promise<I.JSONResponse> => {
+export const updateAll = async (
+    event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -30,28 +29,21 @@ export const create = async (
                 message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
-
-        const isUserAlreadyCoAuthor = await coAuthorService.isUserAlreadyCoAuthor(
-            event.body.email,
-            event.pathParameters.id
-        );
-
-        if (isUserAlreadyCoAuthor) {
-            return response.json(409, { message: 'This email has already been added as a co-author.' });
+        
+        const coAuthors = await coAuthorService.updateAll(event.pathParameters.id, event.body);
+    
+        for(const coAuthor of coAuthors) {
+            await email.notifyCoAuthor({
+                coAuthor: coAuthor.email,
+                userFirstName: event.user.firstName,
+                userLastName: event.user.lastName,
+                code: coAuthor.code,
+                publicationId: event.pathParameters.id,
+                publicationTitle: publication.title || 'No title yet'
+            });
         }
 
-        const coAuthor = await coAuthorService.create(event.body.email, event.pathParameters.id);
-
-        await email.notifyCoAuthor({
-            coAuthor: event.body.email,
-            userFirstName: event.user.firstName,
-            userLastName: event.user.lastName,
-            code: coAuthor.code,
-            publicationId: event.pathParameters.id,
-            publicationTitle: publication.title || 'No title yet'
-        });
-
-        return response.json(201, coAuthor);
+        return response.json(201, coAuthors);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });

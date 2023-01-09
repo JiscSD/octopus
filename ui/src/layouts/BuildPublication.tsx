@@ -125,6 +125,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
+            // update co-authors for this publications - should really be put
+            await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/coauthor`,
+                store.coAuthors,
+                props.token
+            );
+
+
             if (message) {
                 setToast({
                     visible: true,

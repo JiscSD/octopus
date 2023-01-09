@@ -20,6 +20,26 @@ export const create = async (email: string, publicationId: string) => {
     return create;
 };
 
+export const updateAll = async (publicationId, data) => {
+    await client.prisma.coAuthors.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+
+    await client.prisma.coAuthors.createMany({
+        data
+    });
+
+    const authors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationId
+        }
+    })
+    
+    return authors;
+}
+
 export const deleteCoAuthor = async (id: string) => {
     const deleteCoAuthor = await client.prisma.coAuthors.delete({
         where: {

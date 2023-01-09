@@ -6,6 +6,8 @@ import * as api from '@api';
 import * as Components from '@components';
 import * as Stores from '@stores';
 
+import cuid from 'cuid';
+
 const CoAuthor: React.FC = (): React.ReactElement => {
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
@@ -19,29 +21,32 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const addCoAuthorToPublication = React.useCallback(async () => {
         setLoading(true);
         setCoAuthor('');
-        try {
-            await api.post(
-                `/publications/${publicationId}/coauthor`,
-                {
-                    email: coAuthor
-                },
-                user?.token
-            );
 
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
-        } catch (err) {
-            console.log(err);
-        }
+        const authorsArray = coAuthors || [];
+
+        const newAuthor = {
+            id: cuid(),
+            publicationId: publicationId,
+            email: coAuthor,
+            confirmedCoAuthor: false,
+            linkedUser: user?.id || null
+        };
+
+        authorsArray.push(newAuthor);
+
+        updateCoAuthors(authorsArray);
+
         setLoading(false);
     }, [coAuthor, user, publicationId]);
 
     const deleteCoAuthor = React.useCallback(
         async (coAuthorId: string) => {
-            await api.destroy(`/publications/${publicationId}/coauthor/${coAuthorId}`, user?.token);
+            updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
 
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
+            // await api.destroy(`/publications/${publicationId}/coauthor/${coAuthorId}`, user?.token);
+
+            // const response = await api.get(`/publications/${publicationId}`, user?.token);
+            // updateCoAuthors(response.data.coAuthors);
         },
         [user, publicationId]
     );
