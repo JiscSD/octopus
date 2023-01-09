@@ -137,7 +137,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
+    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e: React.SyntheticEvent<HTMLFormElement, Event>): Promise<void> => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
 
@@ -155,7 +155,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         e.preventDefault();
         const newDate = e.target.value;
 
@@ -179,7 +179,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setDate(newDate);
     };
 
-    const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
@@ -199,7 +199,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
 
-    const resetFilters = async () => {
+    const resetFilters = async (): Promise<void> => {
         await router.replace(router.route);
 
         setQuery('');
@@ -214,11 +214,6 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     React.useEffect((): void => {
         setOffset(0);
     }, [query, publicationTypes, limit, dateTo]);
-
-    //TODO - remove when date set working
-    // React.useEffect((): void => {
-    //     void handlerDateFormSubmit();
-    // }, [dateFrom, dateTo]);
 
     return (
         <>
@@ -360,7 +355,6 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                         name="date-form"
                                         id="date-form"
                                         className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                        // onSubmit={handlerDateFormSubmit}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
