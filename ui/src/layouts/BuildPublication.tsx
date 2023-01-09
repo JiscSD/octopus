@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import * as Router from 'next/router';
 import * as ReactIconsFA from 'react-icons/fa';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 import * as Components from '@components';
@@ -211,7 +210,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
     }, [props.publication?.id, router, saveCurrent, store]);
 
-    const isReadyToPreview = useMemo(() => checkRequired(store).ready, [checkRequired, store]);
+    const isReadyToPreview = useMemo(
+        () => Boolean(store.title.trim()) && !Helpers.isEmptyContent(store.content),
+        [store.content, store.title]
+    );
+
+    const isReadyToPublish = useMemo(
+        () => isReadyToPreview && checkRequired(store).ready,
+        [checkRequired, isReadyToPreview, store]
+    );
 
     return (
         <>
@@ -222,7 +229,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Save"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to save your changes?"
-                icon={<OutlineIcons.SaveIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
+                icon={<ReactIconsFA.FaRegSave className="h-8 w-8 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
                     Changes to your publication will be saved and it will be stored as a draft.
@@ -351,19 +358,32 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 <>
                                     <div className="flex gap-4">
                                         <Components.Button
-                                            title="Preview"
+                                            title={
+                                                isReadyToPreview
+                                                    ? 'Preview'
+                                                    : 'Publication must contain a title and main text before previewing'
+                                            }
                                             onClick={handlePreview}
                                             disabled={!isReadyToPreview}
                                             endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        />
+                                        >
+                                            Preview
+                                        </Components.Button>
+
                                         <Components.Button
-                                            title="Publish"
+                                            title={
+                                                isReadyToPublish
+                                                    ? 'Publish'
+                                                    : 'All sections must be completed before publishing'
+                                            }
                                             onClick={() => setPublishModalVisibility(true)}
-                                            disabled={!isReadyToPreview}
+                                            disabled={!isReadyToPublish}
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        />
+                                        >
+                                            Publish
+                                        </Components.Button>
                                         <Components.Button
                                             title="Save"
                                             onClick={() => setSaveModalVisibility(true)}
@@ -401,13 +421,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         <Components.IconButton
                                             icon={<OutlineIcons.EyeIcon className="h-5 w-5" />}
                                             disabled={!isReadyToPreview}
-                                            title="Preview"
+                                            title={
+                                                isReadyToPreview
+                                                    ? 'Preview'
+                                                    : 'Publication must contain a title and main text before previewing'
+                                            }
                                             onClick={handlePreview}
                                         />
                                         <Components.IconButton
-                                            title="Publish"
+                                            title={
+                                                isReadyToPublish
+                                                    ? 'Publish'
+                                                    : 'All sections must be completed before publishing'
+                                            }
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                            disabled={!isReadyToPreview}
+                                            disabled={!isReadyToPublish}
                                             onClick={() => setPublishModalVisibility(true)}
                                         />
                                         <Components.IconButton
@@ -484,34 +512,54 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             xl ? (
                                 <>
                                     <Components.Button
-                                        title="Preview"
+                                        title={
+                                            isReadyToPreview
+                                                ? 'Preview'
+                                                : 'Publication must contain a title and main text before previewing'
+                                        }
                                         disabled={!isReadyToPreview}
                                         endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         onClick={handlePreview}
-                                    />
+                                    >
+                                        Preview
+                                    </Components.Button>
 
                                     <Components.Button
+                                        title={
+                                            isReadyToPublish
+                                                ? 'Publish'
+                                                : 'All sections must be completed before publishing'
+                                        }
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        disabled={!isReadyToPreview}
+                                        disabled={!isReadyToPublish}
                                         endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                        title="Publish"
                                         onClick={() => setPublishModalVisibility(true)}
-                                    />
+                                    >
+                                        Publish
+                                    </Components.Button>
                                 </>
                             ) : (
                                 <>
                                     <Components.IconButton
                                         disabled={!isReadyToPreview}
                                         icon={<OutlineIcons.EyeIcon className="h-5 w-5" />}
-                                        title="Preview"
+                                        title={
+                                            isReadyToPreview
+                                                ? 'Preview'
+                                                : 'Publication must contain a title and main text before previewing'
+                                        }
                                         onClick={handlePreview}
                                     />
 
                                     <Components.IconButton
-                                        disabled={!isReadyToPreview}
+                                        disabled={!isReadyToPublish}
                                         icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                        title="Publish"
+                                        title={
+                                            isReadyToPublish
+                                                ? 'Publish'
+                                                : 'All sections must be completed before publishing'
+                                        }
                                         onClick={() => setPublishModalVisibility(true)}
                                     />
                                 </>
