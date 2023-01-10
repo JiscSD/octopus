@@ -92,9 +92,10 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     only those authors that were directly involved in this stage of the research process.
                 </span>
             </div>
-            <div>
+            <div data-testid='co-author-invite'>
                 <div className="flex items-center space-x-4">
                     <input
+                        data-testid="co-author-email-input"
                         className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
                         autoComplete="off"
                         placeholder="Email of co-author"
@@ -120,6 +121,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 </div>
                 {!emailValidated && (
                     <Components.Alert
+                        data-testid="email-error"
                         severity="ERROR"
                         title="Please enter a valid email address"
                         className="mt-3 w-2/3"

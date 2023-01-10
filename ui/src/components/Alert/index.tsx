@@ -100,7 +100,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                         props.className ? props.className : ''
                     }`}
                 >
-                    <div className="flex items-start">
+                    <div className="flex items-start" data-testid="alert-box">
                         <div className="mr-3 ml-1">{classes.icon}</div>
                         <div className="">
                             {!!props.title && (
