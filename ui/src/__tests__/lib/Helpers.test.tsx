@@ -8,6 +8,7 @@ describe('Validate emails tests', () => {
             'email@subdomain.example.com',
             'email@example-one.com',
             'email@example.name',
+            'email+octopus@gmail.com',
             'email@example.museum',
             'email@example.co.jp',
             'firstname-lastname@example.com'
