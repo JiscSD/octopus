@@ -171,7 +171,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         no longer wish to hold an account. You can update your email address at any time from your user
                         account page.
                     </p>
-                    <form className="flex-column gap-4 space-y-6">
+                    <form className="flex-column gap-4 space-y-6" data-testid="update-email-form">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
@@ -214,6 +214,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     Your{!props.newUser && ' new'} email address
                                 </span>
                                 <input
+                                    data-testid="verify-email-input"
                                     id="email"
                                     type="email"
                                     className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
