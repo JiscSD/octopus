@@ -339,10 +339,8 @@ export const getDOIsFromText = (text: string) => text.match(/(10\.[0-9a-zA-Z]+\/
 export const validateDOI = (value: string) => /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/.test(value);
 
 export const validateEmail = (email: string): Boolean => {
-    // const regex = /^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
     const regex = /^([\w+-]+\.)*[\w+-]+@[a-zA-Z][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
-    if (regex.test(email)) return true;
-    return false;
+    return regex.test(email);
 };
 
 export const isEmptyContent = (content: string) => !content || /<p>\s*<\/p>/.test(content);
