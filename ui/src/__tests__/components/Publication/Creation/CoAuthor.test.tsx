@@ -13,11 +13,11 @@ describe('CoAuthor tests', () => {
         expect(screen.getByTestId('co-author-invite')).toBeInTheDocument();
     });
     
-    it('Send co-author invite is disabled when input field is blank', () => {
+    it('Send CoAuthor invite is disabled when input field is blank', () => {
         expect(screen.getByTitle('Send co-author invite')).toBeDisabled();
     });
     
-    it('Send co-author invite is enabled when input field is has entry', () => {
+    it('Send CoAuthor invite is enabled when input field is has entry', () => {
         const emailInput = screen.getByTestId('co-author-email-input');
         fireEvent.change(emailInput, { target: { value: 'email@example.com'} })
         expect(screen.getByTitle('Send co-author invite')).toBeEnabled();
