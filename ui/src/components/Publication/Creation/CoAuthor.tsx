@@ -18,7 +18,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
         setCoAuthor(event.target.value);
     };

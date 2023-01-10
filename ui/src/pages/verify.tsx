@@ -47,7 +47,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     const [success, setSuccess] = React.useState(false);
     const [emailValidated, setEmailValidated] = React.useState(true);
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
         setEmail(event.target.value);
     };
