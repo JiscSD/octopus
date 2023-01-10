@@ -92,7 +92,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     only those authors that were directly involved in this stage of the research process.
                 </span>
             </div>
-            <div data-testid='co-author-invite'>
+            <div data-testid="co-author-invite">
                 <div className="flex items-center space-x-4">
                     <input
                         data-testid="co-author-email-input"
