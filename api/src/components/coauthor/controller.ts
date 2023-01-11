@@ -212,7 +212,25 @@ export const update = async (
             });
         }
 
+        // update coAuthor confirmation status
         await coAuthorService.updateCoAuthor(event.pathParameters.id, event.user.id, event.body.confirm);
+
+        if (event.body.confirm) {
+            // notify main author
+            await email.notifyCoAuthorConfirmation({
+                coAuthor: {
+                    firstName: event.user.firstName,
+                    lastName: event.user.lastName || ''
+                },
+                publication: {
+                    authorEmail: publication.user.email || '',
+                    title: publication.title || '',
+                    url: `${process.env.BASE_URL}/publications/${publication.id}`
+                },
+                remainingConfirmationsCount:
+                    publication.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
+            });
+        }
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
