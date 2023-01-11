@@ -45,9 +45,24 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const [success, setSuccess] = React.useState(false);
+    const [emailValidated, setEmailValidated] = React.useState(true);
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setEmailValidated(true);
+        setEmail(event.target.value);
+    };
 
     const submitEmail = () => {
         setLoading(true);
+
+        const validEmail = Helpers.validateEmail(email);
+
+        if (!validEmail) {
+            setEmailValidated(false);
+            setLoading(false);
+            return;
+        }
+
         requestCode();
     };
 
@@ -156,7 +171,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         no longer wish to hold an account. You can update your email address at any time from your user
                         account page.
                     </p>
-                    <form className="flex-column gap-4 space-y-6">
+                    <form className="flex-column gap-4 space-y-6" data-testid="update-email-form">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
@@ -199,16 +214,24 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     Your{!props.newUser && ' new'} email address
                                 </span>
                                 <input
+                                    data-testid="verify-email-input"
                                     id="email"
                                     type="email"
                                     className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={handleEmailChange}
                                     disabled={loading}
                                 />
                                 <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                     Please confirm your{!props.newUser && ' new'} email address.
                                 </span>
+                                {!emailValidated && (
+                                    <Components.Alert
+                                        severity="ERROR"
+                                        title="Please enter a valid email address"
+                                        className="mt-3 w-1/2"
+                                    />
+                                )}
                             </label>
                             <span className="flex items-center gap-2">
                                 <Components.Button
