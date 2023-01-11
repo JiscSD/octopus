@@ -19,8 +19,7 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
 }
 
 const api = axios.create({
-    baseURL,
-    timeout: 5000
+    baseURL
 });
 
 export const get = async (url: string, token: string | undefined): Promise<AxiosResponse> => {

@@ -27,7 +27,7 @@ const Modal: React.FC<Props> = (props) => {
                 initialFocus={cancelButtonRef}
                 onClose={props.setOpen} // Ah, this expects a boolean toggle state, so passing the state setter here for the 'onClose' auto sets it to false
             >
-                <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div className="flex min-h-full items-center justify-center text-center">
                     <HeadlessUI.Transition.Child
                         as={React.Fragment}
                         enter="ease-out duration-300"
@@ -52,7 +52,7 @@ const Modal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="xl:max-w-2 relative inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:px-8 sm:py-6 sm:align-middle lg:max-w-xl">
+                        <div className="xl:max-w-2 relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:px-8 sm:py-6 sm:align-middle lg:max-w-xl">
                             <div>
                                 {!!props.icon && (
                                     <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full">

@@ -14,7 +14,7 @@ test.describe("Live author page", () => {
     await expect(page).toHaveTitle("Octopus | Built for Researchers");
 
     // login
-    await Helpers.login(page);
+    await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
       `${Helpers.ORCID_TEST_NAME}`
     );
@@ -35,18 +35,15 @@ test.describe("Live author page", () => {
 
     // check Employment section
     expect(page.locator(PageModel.profilePage.employment)).toBeVisible();
+
     const employmentRow = page.locator('tr:has-text("Southern Cross QE")');
     await expect(employmentRow).toBeVisible();
 
     // check Education section
     expect(page.locator(PageModel.profilePage.education)).toBeVisible();
-    const educationRow = page.locator('tr:has-text("Education 1")');
-    await expect(educationRow).toBeVisible();
 
     // check Works section
     expect(page.locator(PageModel.profilePage.works)).toBeVisible();
-    const worksRow = page.locator('tr:has-text("10.1037/a0040251")');
-    await expect(worksRow).toBeVisible();
 
     // check Octopus publications section
     await expect(

@@ -36,7 +36,7 @@ export const PageModel = {
     quickSearchInput: 'input[placeholder="Search publications"]',
     publicationSearchResult:
       'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-    darkModeToggle: "#headlessui-switch-7",
+    darkModeToggle: 'button[role="switch"]',
   },
   about: {
     faq: 'main > div > div > a[href="/faq"]',
