@@ -5,6 +5,7 @@ import React from 'react';
 import * as api from '@api';
 import * as Components from '@components';
 import * as Stores from '@stores';
+import * as Helpers from '@helpers';
 
 const CoAuthor: React.FC = (): React.ReactElement => {
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
@@ -15,9 +16,25 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
+    const [emailValidated, setEmailValidated] = React.useState(true);
 
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setEmailValidated(true);
+        setCoAuthor(event.target.value);
+    };
+
+    // Validate email for co author regex to use -
     const addCoAuthorToPublication = React.useCallback(async () => {
         setLoading(true);
+
+        const validEmail = Helpers.validateEmail(coAuthor);
+
+        if (!validEmail) {
+            setEmailValidated(false);
+            setLoading(false);
+            return;
+        }
+
         setCoAuthor('');
         try {
             await api.post(
@@ -33,6 +50,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         } catch (err) {
             console.log(err);
         }
+
         setLoading(false);
     }, [coAuthor, user, publicationId]);
 
@@ -74,30 +92,41 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     only those authors that were directly involved in this stage of the research process.
                 </span>
             </div>
-            <div className="flex items-center space-x-4">
-                <input
-                    className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
-                    autoComplete="off"
-                    placeholder="Email of co-author"
-                    value={coAuthor}
-                    type="email"
-                    onChange={(event) => setCoAuthor(event.target.value)}
-                    onKeyDown={(e: React.KeyboardEvent) => {
-                        if (e.key === 'Enter') addCoAuthorToPublication();
-                    }}
-                />
-                <Components.Button
-                    title="Send co-author invite"
-                    disabled={!coAuthor}
-                    onClick={addCoAuthorToPublication}
-                    endIcon={
-                        loading ? (
-                            <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                        ) : (
-                            <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                        )
-                    }
-                />
+            <div data-testid="co-author-invite">
+                <div className="flex items-center space-x-4">
+                    <input
+                        data-testid="co-author-email-input"
+                        className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
+                        autoComplete="off"
+                        placeholder="Email of co-author"
+                        value={coAuthor}
+                        type="email"
+                        onChange={handleEmailChange}
+                        onKeyDown={(e: React.KeyboardEvent) => {
+                            if (e.key === 'Enter') addCoAuthorToPublication();
+                        }}
+                    />
+                    <Components.Button
+                        title="Send co-author invite"
+                        disabled={!coAuthor}
+                        onClick={addCoAuthorToPublication}
+                        endIcon={
+                            loading ? (
+                                <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                            ) : (
+                                <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            )
+                        }
+                    />
+                </div>
+                {!emailValidated && (
+                    <Components.Alert
+                        data-testid="email-error"
+                        severity="ERROR"
+                        title="Please enter a valid email address"
+                        className="mt-3 w-2/3"
+                    />
+                )}
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="overflow-x-auto">
