@@ -365,13 +365,23 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         />
-                                        <Components.Button
-                                            title="Publish"
-                                            onClick={() => setPublishModalVisibility(true)}
-                                            disabled={!isReadyToPreview}
-                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        />
+                                        {store.coAuthors.length ? (
+                                            <Components.Button
+                                                title="Request Approval"
+                                                onClick={() => setPublishModalVisibility(true)}
+                                                disabled={!isReadyToPreview}
+                                                endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            />
+                                        ) : (
+                                            <Components.Button
+                                                title="Publish"
+                                                onClick={() => setPublishModalVisibility(true)}
+                                                disabled={!isReadyToPreview}
+                                                endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            />
+                                        )}
                                         <Components.Button
                                             title="Save"
                                             onClick={() => setSaveModalVisibility(true)}
@@ -412,12 +422,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             title="Preview"
                                             onClick={handlePreview}
                                         />
-                                        <Components.IconButton
-                                            title="Publish"
-                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                            disabled={!isReadyToPreview}
-                                            onClick={() => setPublishModalVisibility(true)}
-                                        />
+                                        {store.coAuthors.length ? (
+                                            <Components.IconButton
+                                                title="Request Approval"
+                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                disabled={!isReadyToPreview}
+                                                onClick={() => setPublishModalVisibility(true)}
+                                            />
+                                        ) : (
+                                            <Components.IconButton
+                                                title="Publish"
+                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                disabled={!isReadyToPreview}
+                                                onClick={() => setPublishModalVisibility(true)}
+                                            />
+                                        )}
                                         <Components.IconButton
                                             title="Save"
                                             icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
@@ -491,6 +510,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         {props.steps.length - 1 === props.currentStep ? (
                             xl ? (
                                 <>
+                                    {console.log(store.coAuthors)}
                                     <Components.Button
                                         title="Preview"
                                         disabled={!isReadyToPreview}
@@ -498,14 +518,23 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                         onClick={handlePreview}
                                     />
+                                    {store.coAuthors.length ? (
+                                        <Components.Button
+                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            disabled={!isReadyToPreview}
+                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            title="Request Approval"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />) : (
+                                        <Components.Button
+                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            disabled={!isReadyToPreview}
+                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            title="Publish"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />
+                                    )}
 
-                                    <Components.Button
-                                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        disabled={!isReadyToPreview}
-                                        endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                        title="Publish"
-                                        onClick={() => setPublishModalVisibility(true)}
-                                    />
                                 </>
                             ) : (
                                 <>
@@ -516,12 +545,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    <Components.IconButton
-                                        disabled={!isReadyToPreview}
-                                        icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                        title="Publish"
-                                        onClick={() => setPublishModalVisibility(true)}
-                                    />
+                                    {store.coAuthors.length ? (
+                                        <Components.IconButton
+                                            disabled={!isReadyToPreview}
+                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            title="Request Approval"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />
+                                    ) : (
+                                        <Components.IconButton
+                                            disabled={!isReadyToPreview}
+                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            title="Publish"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />
+                                    )}
                                 </>
                             )
                         ) : xl ? (
