@@ -129,7 +129,10 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
     <body>
         <div class="wrapper">
             <div class="header">
-                <img src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png">
+                <img 
+                    src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
+                    style = "width: 40px;"
+                >
                 <h3>Octopus</h3>
             </div>
             <div class="content">
@@ -138,10 +141,16 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             <div class="footer">
                 <div class="footer-logo">
                     <a href="${baseURL}" style='text-decoration: none;'>
-                        <img src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png">
+                        <img 
+                            src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
+                            style = "width: 45px;"
+                        >
                     </a>
                     <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
-                        <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
+                        <img 
+                            src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg"
+                            style = "width: 45px;"
+                        >
                     </a>
                 </div>
                 <div class="footer-content">
