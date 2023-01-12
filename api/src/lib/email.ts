@@ -500,3 +500,32 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
         subject: 'All co-authors have approved your Octopus publication'
     });
 };
+
+type NotifyCoAuthorRejection = {
+    coAuthor: {
+        email: string;
+    };
+    publication: {
+        title: string;
+        authorEmail: string;
+    };
+};
+
+export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection) => {
+    const html = `
+                <p>The request that you sent to <strong>${options.coAuthor.email}</strong> to be registered as a co-author of <strong><i>${options.publication.title}</i></strong> has been rejected, and this individual has denied their involvement.</p>
+                <br>
+                <p>If you feel that this may have been a mistake, please check that the email address was spelled correctly, or contact this individual directly to discuss their involvement.</p>
+                <br>
+                <p>This individual’s approval is no longer required before this publication can go live.</p>
+            `;
+
+    const text = `The request that you sent to ${options.coAuthor.email} to be register as a co-author of '${options.publication.title}' has been rejected, and this individual has denied their involvement. If you feel that this may have been a mistake, please check that the email address was spelled correctly, or contact this individual directly to discuss their involvement. This individual’s approval is no longer required before this publication can go live.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('A co-author has denied their involvement', html),
+        text,
+        to: options.publication.authorEmail,
+        subject: 'A co-author has denied their involvement'
+    });
+};

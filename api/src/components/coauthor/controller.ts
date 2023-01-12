@@ -167,6 +167,17 @@ export const link = async (
 
         await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
 
+        // notify main author about rejection
+        await email.notifyCoAuthorRejection({
+            coAuthor: {
+                email: event.body.email
+            },
+            publication: {
+                title: publication.title || '',
+                authorEmail: publication.user.email || ''
+            }
+        });
+
         return response.json(200, 'Removed co-author from publication');
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
