@@ -243,6 +243,13 @@ functions:
                   method: DELETE
                   cors: true
     # CoAuthors
+    getCoAuthors:
+        handler: src/components/coauthor/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthors
+                  method: GET
+                  cors: true
     createCoAuthor:
         handler: src/components/coauthor/routes.create
         events:

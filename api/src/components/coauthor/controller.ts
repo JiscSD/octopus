@@ -1,8 +1,19 @@
 import * as coAuthorService from 'coauthor/service';
-import * as email from 'email';
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+
+
+export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>) => {
+    try {
+        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        
+        return response.json(200, coAuthors);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
 
 export const updateAll = async (
     event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>): Promise<I.JSONResponse> => {
@@ -31,18 +42,7 @@ export const updateAll = async (
         }
         
         const coAuthors = await coAuthorService.updateAll(event.pathParameters.id, event.body);
-    
-        for(const coAuthor of coAuthors) {
-            await email.notifyCoAuthor({
-                coAuthor: coAuthor.email,
-                userFirstName: event.user.firstName,
-                userLastName: event.user.lastName,
-                code: coAuthor.code,
-                publicationId: event.pathParameters.id,
-                publicationTitle: publication.title || 'No title yet'
-            });
-        }
-
+        console.log(coAuthors)
         return response.json(201, coAuthors);
     } catch (err) {
         console.log(err);

@@ -1,6 +1,15 @@
 import * as client from 'lib/client';
 import cuid from 'cuid';
 
+export const getAllByPublication = async (publicationId: string) => {
+    const coAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationId
+        }
+    });
+    return coAuthors;
+};
+
 export const create = async (email: string, publicationId: string) => {
     const create = await client.prisma.coAuthors.create({
         data: {
@@ -21,6 +30,9 @@ export const create = async (email: string, publicationId: string) => {
 };
 
 export const updateAll = async (publicationId, data) => {
+
+    console.log('this', data[0].linkedUser)
+
     await client.prisma.coAuthors.deleteMany({
         where: {
             publicationId
@@ -36,7 +48,7 @@ export const updateAll = async (publicationId, data) => {
             publicationId
         }
     })
-    
+
     return authors;
 }
 
