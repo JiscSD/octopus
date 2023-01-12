@@ -282,6 +282,19 @@ export const updateConfirmation = async (
             });
         }
 
+        if (!event.body.confirm) {
+            // notify main author about rejection
+            await email.notifyCoAuthorRejection({
+                coAuthor: {
+                    email: event.user.email || ''
+                },
+                publication: {
+                    title: publication.title || '',
+                    authorEmail: publication.user.email || ''
+                }
+            });
+        }
+
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
