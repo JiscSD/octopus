@@ -126,7 +126,7 @@ export interface Reference {
 
 export interface CoAuthor {
     id: string;
-    linkedUser: null | string;
+    linkedUser?: null | string;
     confirmedCoAuthor: boolean;
     email: string;
     publicationId: string,

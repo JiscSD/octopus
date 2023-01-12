@@ -116,6 +116,7 @@ export const get = async (id: string) => {
                     id: true,
                     email: true,
                     linkedUser: true,
+                    publicationId: true,
                     confirmedCoAuthor: true,
                     user: {
                         select: {

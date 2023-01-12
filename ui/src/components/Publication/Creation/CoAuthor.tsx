@@ -28,35 +28,25 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             id: cuid(),
             publicationId: publicationId,
             email: coAuthor,
+            linkedUser: null,
             confirmedCoAuthor: false,
-            linkedUser: user?.id || null
         };
 
         authorsArray.push(newAuthor);
-
-        updateCoAuthors(authorsArray);
-
+        updateCoAuthors(authorsArray);        
         setLoading(false);
     }, [coAuthor, user, publicationId]);
 
-    const deleteCoAuthor = React.useCallback(
-        async (coAuthorId: string) => {
+    const deleteCoAuthor = async (coAuthorId: string) => {
             updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
-
-            // await api.destroy(`/publications/${publicationId}/coauthor/${coAuthorId}`, user?.token);
-
-            // const response = await api.get(`/publications/${publicationId}`, user?.token);
-            // updateCoAuthors(response.data.coAuthors);
-        },
-        [user, publicationId]
-    );
+    };
 
     const refreshCoAuthors = React.useCallback(async () => {
         setLoading(true);
 
         try {
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
+            const response = await api.get(`/publications/${publicationId}/coauthors`, user?.token);
+            updateCoAuthors(response.data);
             setLoading(false);
         } catch {
             setLoading(false);
@@ -68,11 +58,8 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Co-authors" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
-                    Add the email addresses of any co-authors involved in this publication. Note that they will
-                    immediately receive an email asking them to confirm their involvement and preview the publication.{' '}
-                    <span className="font-bold">
-                        Only add their emails when you are ready for the draft to be viewed.
-                    </span>
+                    Add the email addresses of any co-authors involved in this publication. Note that they will only receive an email asking them to 
+                    confirm their involvement and preview the publication once you have requested approval from the “Review and Publish” section.
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Please note that in line with the smaller publication types on Octopus, we encourage you to list
@@ -92,7 +79,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     }}
                 />
                 <Components.Button
-                    title="Send co-author invite"
+                    title="Add Co-author"
                     disabled={!coAuthor}
                     onClick={addCoAuthorToPublication}
                     endIcon={
