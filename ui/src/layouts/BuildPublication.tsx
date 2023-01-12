@@ -132,7 +132,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
-
             if (message) {
                 setToast({
                     visible: true,
@@ -370,7 +369,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                 title="Request Approval"
                                                 onClick={() => setPublishModalVisibility(true)}
                                                 disabled={!isReadyToPreview}
-                                                endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                                endIcon={
+                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                }
                                                 className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             />
                                         ) : (
@@ -378,7 +379,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                 title="Publish"
                                                 onClick={() => setPublishModalVisibility(true)}
                                                 disabled={!isReadyToPreview}
-                                                endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                                endIcon={
+                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                }
                                                 className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             />
                                         )}
@@ -525,7 +528,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             title="Request Approval"
                                             onClick={() => setPublishModalVisibility(true)}
-                                        />) : (
+                                        />
+                                    ) : (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyToPreview}
@@ -534,7 +538,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             onClick={() => setPublishModalVisibility(true)}
                                         />
                                     )}
-
                                 </>
                             ) : (
                                 <>

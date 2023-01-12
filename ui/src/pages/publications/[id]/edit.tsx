@@ -209,7 +209,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [props.draftedPublication.id, props.token, updateReferences]);
 
-
     const fetchAndSetAuthors = React.useCallback(async () => {
         if (props.draftedPublication.id) {
             try {
@@ -220,7 +219,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 console.log(err);
             }
         }
-    }, [props.draftedPublication.id, props.token, updateCoAuthors])
+    }, [props.draftedPublication.id, props.token, updateCoAuthors]);
 
     React.useEffect(() => {
         fetchAndSetReferences();

@@ -129,7 +129,7 @@ export interface CoAuthor {
     linkedUser?: null | string;
     confirmedCoAuthor: boolean;
     email: string;
-    publicationId: string,
+    publicationId: string;
     user?: {
         firstName: string;
         lastName: string;

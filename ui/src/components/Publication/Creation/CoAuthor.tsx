@@ -29,16 +29,16 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             publicationId: publicationId,
             email: coAuthor,
             linkedUser: null,
-            confirmedCoAuthor: false,
+            confirmedCoAuthor: false
         };
 
         authorsArray.push(newAuthor);
-        updateCoAuthors(authorsArray);        
+        updateCoAuthors(authorsArray);
         setLoading(false);
     }, [coAuthor, user, publicationId]);
 
     const deleteCoAuthor = async (coAuthorId: string) => {
-            updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
+        updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
     };
 
     const refreshCoAuthors = React.useCallback(async () => {
@@ -58,8 +58,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Co-authors" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
-                    Add the email addresses of any co-authors involved in this publication. Note that they will only receive an email asking them to 
-                    confirm their involvement and preview the publication once you have requested approval from the “Review and Publish” section.
+                    Add the email addresses of any co-authors involved in this publication. Note that they will only
+                    receive an email asking them to confirm their involvement and preview the publication once you have
+                    requested approval from the “Review and Publish” section.
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Please note that in line with the smaller publication types on Octopus, we encourage you to list
