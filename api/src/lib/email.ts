@@ -529,3 +529,27 @@ export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection) 
         subject: 'A co-author has denied their involvement'
     });
 };
+
+type NotifyCoAuthorRemoval = {
+    coAuthor: {
+        email: string;
+    };
+    publication: {
+        title: string;
+    };
+};
+
+export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval) => {
+    const html = `
+                <p>You are no longer listed as a co-author on <strong><i>${options.publication.title}</i></strong> and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.</p>
+            `;
+
+    const text = `You are no longer listed as a co-author on '${options.publication.title}' and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('You are no longer listed as a co-author', html),
+        text,
+        to: options.coAuthor.email,
+        subject: 'You are no longer listed as a co-author'
+    });
+};

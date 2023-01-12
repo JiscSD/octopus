@@ -91,6 +91,17 @@ export const remove = async (
 
         await coAuthorService.deleteCoAuthor(event.pathParameters.coauthor);
 
+        // notify co-author that they've been removed
+        await email.notifyCoAuthorRemoval({
+            coAuthor: {
+                email:
+                    publication.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthor)?.email || ''
+            },
+            publication: {
+                title: publication.title || ''
+            }
+        });
+
         return response.json(200, { message: 'Co-author deleted from this publication' });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
@@ -228,6 +239,19 @@ export const updateConfirmation = async (
                 },
                 remainingConfirmationsCount:
                     publication.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
+            });
+        }
+
+        if (!event.body.confirm) {
+            // notify main author about rejection
+            await email.notifyCoAuthorRejection({
+                coAuthor: {
+                    email: event.user.email || ''
+                },
+                publication: {
+                    title: publication.title || '',
+                    authorEmail: publication.user.email || ''
+                }
             });
         }
 
