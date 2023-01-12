@@ -1,5 +1,5 @@
-import { Browser, expect, Page } from "@playwright/test";
-import { PageModel } from "./PageModel";
+import { Browser, expect, Locator, Page} from '@playwright/test';
+import {PageModel} from './PageModel';
 
 export const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
 export const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
@@ -37,7 +37,7 @@ export const login = async (page: Page, browser: Browser) => {
 
   // check if email verification is required
   const needsEmailVerification =
-    (await page.title()) === "Complete your registration";
+      (await page.title()) === "Complete your registration";
 
   if (needsEmailVerification) {
     await page.fill("#email", ORCID_TEST_USER);
@@ -55,9 +55,9 @@ export const login = async (page: Page, browser: Browser) => {
     await newPage.goto(`http://localhost:8025/`);
     await newPage.getByText("Verify your Octopus account").first().click();
     const verificationCode = await newPage
-      .frameLocator("iframe")
-      .locator("p.code")
-      .textContent();
+        .frameLocator("iframe")
+        .locator("p.code")
+        .textContent();
 
     // close new tab
     await newPage.close();
@@ -76,17 +76,17 @@ export const logout = async (page: Page) => {
 };
 
 export const selectFirstPublication = async (
-  page: Page,
-  type: string = "PROBLEM"
+    page: Page,
+    type: string = "PROBLEM"
 ) => {
   await page.goto(`${UI_BASE}/search?for=publications&type=${type}`);
   await page.locator(`article`).first().click();
 };
 
 export const search = async (
-  page: Page,
-  searchTerm: string,
-  publicationSearchResult: string
+    page: Page,
+    searchTerm: string,
+    publicationSearchResult?: string
 ) => {
   // Navigate to search page
   await page.locator(PageModel.header.searchButton).click();
@@ -96,15 +96,17 @@ export const search = async (
   await page.keyboard.type(searchTerm);
   await page.keyboard.press("Enter");
   await expect(page.locator("h1")).toHaveText(
-    `Search results for ${searchTerm}`
+      `Search results for ${searchTerm}`
   );
-  await expect(page.locator(publicationSearchResult)).toBeVisible();
+
+  // if (publicationSearchResult passed in) expect its href anchor to be visible
+  publicationSearchResult && await expect(page.locator(publicationSearchResult)).toBeVisible();
 };
 
 export const checkLivePublicationLayout = async (
-  page: Page,
-  id: string,
-  loggedIn?: boolean
+    page: Page,
+    id: string,
+    loggedIn?: boolean
 ) => {
   // Go to live publication page
   await page.goto(`${UI_BASE}/publications/${id}`, {
@@ -115,24 +117,41 @@ export const checkLivePublicationLayout = async (
   // Check visualisation, content, linked problems, funders, conflict of interest sections
   for (const visibleSection of PageModel.livePublication.visibleSections) {
     await expect(
-      page.locator(`${visibleSection}`).locator("visible=true")
+        page.locator(`${visibleSection}`).locator("visible=true")
     ).toBeVisible();
   }
 
   // Expect DOI link
   await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
-    "href",
-    `https://doi.org/10.82259/${id}`
+      "href",
+      `https://doi.org/10.82259/${id}`
   );
 
   if (loggedIn) {
     // Confirm review link
     await page
-      .locator(PageModel.livePublication.writeReview)
-      .locator("visible=true")
-      .click();
+        .locator(PageModel.livePublication.writeReview)
+        .locator("visible=true")
+        .click();
     await expect(page).toHaveURL(
-      `${UI_BASE}/create?for=${id}&type=PEER_REVIEW`
+        `${UI_BASE}/create?for=${id}&type=PEER_REVIEW`
     );
   }
 };
+
+export const clickFirstPublication = async (page: Page): Promise<void> => {
+  const firstPublication = page.locator(PageModel.search.firstPublication);
+  const firstPublicationPath = await firstPublication.getAttribute('href');
+  await firstPublication.click();
+
+  // expect URL to contain publication path
+  await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}`);
+}
+
+export const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {
+  await expect(dateFromInput).toHaveAttribute('value', PageModel.search.dateFrom);
+  await expect(dateToInput).toHaveAttribute('value', PageModel.search.dateTo);
+
+  await expect(page).toHaveURL(new RegExp(`dateFrom=${PageModel.search.dateFrom}`));
+  await expect(page).toHaveURL(new RegExp(`dateTo=${PageModel.search.dateTo}`));
+}

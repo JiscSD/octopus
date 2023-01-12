@@ -5,7 +5,10 @@ import * as I from 'interface';
 
 const config = {
     region: 'eu-west-1',
-    endpoint: process.env.STAGE === 'local' ? `http://${process.env.LOCALSTACK_SERVER}:4566` : 'https://s3.eu-west-1.amazonaws.com',
+    endpoint:
+        process.env.STAGE === 'local'
+            ? `http://${process.env.LOCALSTACK_SERVER}:4566`
+            : 'https://s3.eu-west-1.amazonaws.com',
     s3ForcePathStyle: true
 };
 
