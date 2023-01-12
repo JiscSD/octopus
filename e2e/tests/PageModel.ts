@@ -74,6 +74,12 @@ export const PageModel = {
     publicationSearchResult:
       'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
     noPublicationsFound: '_react=Alert[title = "No results found"]',
+    firstPublication: 'article div div:nth-child(1) > a.rounded',
+    searchTerm: 'evolved',
+    dateToInput: 'input#date-to',
+    dateFromInput: 'input#date-from',
+    dateFrom: '2021-01-01',
+    dateTo: '2023-01-01',
   },
   livePublication: {
     visibleSections: [
