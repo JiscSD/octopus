@@ -7,8 +7,8 @@ import * as publicationService from 'publication/service';
 export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>) => {
     try {
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
-        
         return response.json(200, coAuthors);
+        
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
@@ -40,9 +40,13 @@ export const updateAll = async (
                 message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
-        
+
+        // removes user element to allow to save many to database
+        event.body.map((coAuthor) => {
+            delete coAuthor.user
+        })
+
         const coAuthors = await coAuthorService.updateAll(event.pathParameters.id, event.body);
-        console.log(coAuthors)
         return response.json(201, coAuthors);
     } catch (err) {
         console.log(err);

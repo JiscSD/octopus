@@ -5,6 +5,20 @@ export const getAllByPublication = async (publicationId: string) => {
     const coAuthors = await client.prisma.coAuthors.findMany({
         where: {
             publicationId
+        },
+        select: {
+            id: true,
+            email: true,
+            linkedUser: true,
+            publicationId: true,
+            confirmedCoAuthor: true,
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    orcid: true
+                }
+            }
         }
     });
     return coAuthors;

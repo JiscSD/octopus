@@ -23,20 +23,20 @@ const createCoAuthorSchema: I.Schema = {
             linkedUser: {
                 type: ['string','null'],
             },
-            // user: {
-            //     type: ['object', 'null'],
-            //     properties: {
-            //         firstName: {
-            //             type: 'string'
-            //         },
-            //         lastName: {
-            //             type: 'string'
-            //         },
-            //         orcid: {
-            //             type: 'string'
-            //         }
-            //     }
-            // }
+            user: {
+                type: ['object', 'null'],
+                properties: {
+                    firstName: {
+                        type: 'string'
+                    },
+                    lastName: {
+                        type: 'string'
+                    },
+                    orcid: {
+                        type: 'string'
+                    }
+                }
+            }
         },
         required: ['id', 'confirmedCoAuthor', 'email'],
         additionalProperties: false
