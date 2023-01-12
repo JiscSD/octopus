@@ -166,7 +166,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
             await api.patch(
-                `/publications/${publicationData?.id}/coauthor`,
+                `/publications/${publicationData?.id}/coauthor-confirmation`,
                 {
                     confirm
                 },

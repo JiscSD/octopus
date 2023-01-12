@@ -163,29 +163,20 @@ export const link = async (
                 });
             }
 
-            const coAuthorConfirmed = await coAuthorService.confirmCoAuthor(
-                event.user.id,
-                event.pathParameters.id,
-                event.body.email,
-                event.body.code
-            );
+            await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
 
-            return response.json(200, { CoauthorsConfirmed: coAuthorConfirmed });
+            return response.json(200, 'Linked user account');
         }
 
-        const coAuthorDenied = await coAuthorService.denyCoAuthor(
-            event.pathParameters.id,
-            event.body.email,
-            event.body.code
-        );
+        await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
 
-        return response.json(200, { CoauthorsDenied: coAuthorDenied });
+        return response.json(200, 'Removed co-author from publication');
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const update = async (
+export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
@@ -213,7 +204,7 @@ export const update = async (
         }
 
         // update coAuthor confirmation status
-        await coAuthorService.updateCoAuthor(event.pathParameters.id, event.user.id, event.body.confirm);
+        await coAuthorService.updateConfirmation(event.pathParameters.id, event.user.id, event.body.confirm);
 
         if (event.body.confirm) {
             // notify main author
