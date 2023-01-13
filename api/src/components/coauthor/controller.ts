@@ -226,7 +226,7 @@ export const updateConfirmation = async (
         await coAuthorService.updateConfirmation(event.pathParameters.id, event.user.id, event.body.confirm);
 
         if (event.body.confirm) {
-            // notify main author
+            // notify main author about confirmation
             await email.notifyCoAuthorConfirmation({
                 coAuthor: {
                     firstName: event.user.firstName,
@@ -240,9 +240,7 @@ export const updateConfirmation = async (
                 remainingConfirmationsCount:
                     publication.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
             });
-        }
-
-        if (!event.body.confirm) {
+        } else {
             // notify main author about rejection
             await email.notifyCoAuthorRejection({
                 coAuthor: {
