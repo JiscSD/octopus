@@ -1,5 +1,6 @@
 import * as coAuthorService from 'coauthor/service';
 import * as I from 'interface';
+import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
@@ -215,3 +216,36 @@ export const update = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const requestApproval = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+
+        // get all pending co authors
+        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(event.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        // email pending co authors and update their record
+        for(const pendingCoAuthor of pendingCoAuthors) { 
+            await email.notifyCoAuthor({
+                coAuthor: pendingCoAuthor.email,
+                userFirstName: event.user.firstName,
+                userLastName: event.user.lastName,
+                code: pendingCoAuthor.code,
+                publicationId: event.pathParameters.id,
+                publicationTitle: publication?.title || 'No title yet'
+            });
+
+            await coAuthorService.updateRequestApprovalStatus( event.pathParameters.id, pendingCoAuthor.email)
+        }
+        
+
+        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        return response.json(200, coAuthors);
+        
+    }
+    catch(err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+}

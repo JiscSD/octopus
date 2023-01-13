@@ -19,6 +19,9 @@ const createCoAuthorSchema: I.Schema = {
             },
             confirmedCoAuthor: {
                 type: 'boolean',
+            },
+            approvalRequested: {
+                type: 'boolean',
             },            
             linkedUser: {
                 type: ['string','null'],
@@ -38,7 +41,7 @@ const createCoAuthorSchema: I.Schema = {
                 }
             }
         },
-        required: ['id', 'confirmedCoAuthor', 'email'],
+        required: ['id', 'confirmedCoAuthor', 'approvalRequested', 'email'],
         additionalProperties: false
     }
 };

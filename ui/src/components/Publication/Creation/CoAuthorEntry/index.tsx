@@ -32,10 +32,29 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                             <span
                                 title={`${props.coAuthor.email} is yet to give approval for this publication to be published.`}
                             >
-                                <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
+                                <div title="Request to be sent when draft editing is complete">
+                                    <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
+                                </div>
                             </span>
                         )}
                     </p>
+                </div>
+            </td>
+            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <div className="space-y-2">
+                    {props.coAuthor.approvalRequested ? (
+                        <span title="Request sent">
+                            <div title="Request sent">
+                                <OutlineIcons.MailIcon className="h-5 w-5 text-green-400 transition-colors duration-500 dark:text-green-50" />
+                            </div>
+                        </span>
+                    ) : (
+                        <span title="Request to be sent when draft editing is complete">
+                            <div title="Request to be sent when draft editing is complete">
+                                <OutlineIcons.MailOpenIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
+                            </div>
+                        </span>
+                    )}
                 </div>
             </td>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">

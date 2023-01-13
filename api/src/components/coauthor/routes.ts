@@ -32,3 +32,8 @@ export const update = middy(coAuthorController.update)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(coAuthorSchema.update, 'body'));
+
+export const requestApproval = middy(coAuthorController.requestApproval)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())

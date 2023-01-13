@@ -26,11 +26,13 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
+    const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
     const store = Stores.usePublicationCreationStore();
     const [memoizedStore] = useState(store);
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
+    const [requestApprovalModalVisibility, setRequestApprovalModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
     const [showSideBar, setShowSideBar] = useState(false);
     const xl = Hooks.useMediaQuery('(min-width: 1280px)');
@@ -172,6 +174,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setPublishModalVisibility(false);
     }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
 
+    const requestApproval = useCallback(async () => {
+        const response = await api.put(
+            `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+            {},
+            props.token
+        );
+        updateCoAuthors(response.data);
+        setRequestApprovalModalVisibility(false);
+    }, []);
+
     // Option selected from modal
     const save = useCallback(async () => {
         try {
@@ -246,6 +258,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
+            <Components.Modal
+                open={requestApprovalModalVisibility}
+                setOpen={setRequestApprovalModalVisibility}
+                positiveActionCallback={requestApproval}
+                positiveButtonText="Finalise Draft and Send Request"
+                cancelButtonText="Cancel"
+                title="Are you sure you want to finalise your publication?"
+                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
+            ></Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
@@ -367,7 +388,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         {store.coAuthors.length ? (
                                             <Components.Button
                                                 title="Request Approval"
-                                                onClick={() => setPublishModalVisibility(true)}
+                                                onClick={() => setRequestApprovalModalVisibility(true)}
                                                 disabled={!isReadyToPreview}
                                                 endIcon={
                                                     <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
@@ -430,7 +451,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
                                                 disabled={!isReadyToPreview}
-                                                onClick={() => setPublishModalVisibility(true)}
+                                                onClick={() => setRequestApprovalModalVisibility(true)}
                                             />
                                         ) : (
                                             <Components.IconButton
@@ -527,7 +548,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             disabled={!isReadyToPreview}
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             title="Request Approval"
-                                            onClick={() => setPublishModalVisibility(true)}
+                                            onClick={() => setRequestApprovalModalVisibility(true)}
                                         />
                                     ) : (
                                         <Components.Button
@@ -553,7 +574,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             disabled={!isReadyToPreview}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
                                             title="Request Approval"
-                                            onClick={() => setPublishModalVisibility(true)}
+                                            onClick={() => setRequestApprovalModalVisibility(true)}
                                         />
                                     ) : (
                                         <Components.IconButton

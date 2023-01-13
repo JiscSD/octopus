@@ -29,6 +29,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             publicationId: publicationId,
             email: coAuthor,
             linkedUser: null,
+            approvalRequested: false,
             confirmedCoAuthor: false
         };
 
@@ -102,7 +103,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Status
                                         </th>
-
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Approval Requested
+                                        </th>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Email
                                         </th>

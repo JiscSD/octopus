@@ -128,6 +128,7 @@ export interface CoAuthor {
     id: string;
     linkedUser?: null | string;
     confirmedCoAuthor: boolean;
+    approvalRequested: boolean;
     email: string;
     publicationId: string;
     user?: {
