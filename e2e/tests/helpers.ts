@@ -1,24 +1,70 @@
 import { Browser, expect, Locator, Page} from '@playwright/test';
 import {PageModel} from './PageModel';
 
-export const ORCID_TEST_USER = process.env.ORCID_TEST_USER;
-export const ORCID_TEST_PASS = process.env.ORCID_TEST_PASS;
-export const ORCID_TEST_NAME = `${process.env.ORCID_TEST_FIRST_NAME} ${process.env.ORCID_TEST_LAST_NAME}`;
-export const ORCID_TEST_SHORT_NAME = `${process.env.ORCID_TEST_FIRST_NAME?.[0]}. ${process.env.ORCID_TEST_LAST_NAME}`;
-
 export const UI_BASE = process.env.UI_BASE || "https://localhost:3001";
 
-if (!ORCID_TEST_USER || !ORCID_TEST_PASS || !ORCID_TEST_NAME)
-  throw "Environment variables not set";
+const requiredEnvVariables = [
+  "ORCID_TEST_USER",
+  "ORCID_TEST_PASS",
+  "ORCID_TEST_FIRST_NAME",
+  "ORCID_TEST_LAST_NAME",
+  "ORCID_TEST_USER2",
+  "ORCID_TEST_PASS2",
+  "ORCID_TEST_FIRST_NAME2",
+  "ORCID_TEST_LAST_NAME2",
+  "ORCID_TEST_USER3",
+  "ORCID_TEST_PASS3",
+  "ORCID_TEST_FIRST_NAME3",
+  "ORCID_TEST_LAST_NAME3",
+];
 
-export const login = async (page: Page, browser: Browser) => {
+function checkEnvVariable(variableName: string) {
+  if (process.env[variableName] === undefined) {
+    throw new Error(`Environment Variable '${variableName}' is undefined.`);
+  }
+}
+
+requiredEnvVariables.forEach(checkEnvVariable);
+
+export type TestUser = {
+  email: string;
+  password: string;
+  shortName: string;
+  fullName: string;
+};
+
+// test user 1
+export const user1: TestUser = {
+  email: process.env.ORCID_TEST_USER,
+  password: process.env.ORCID_TEST_PASS,
+  shortName: `${process.env.ORCID_TEST_FIRST_NAME?.[0]}. ${process.env.ORCID_TEST_LAST_NAME}`,
+  fullName: `${process.env.ORCID_TEST_FIRST_NAME} ${process.env.ORCID_TEST_LAST_NAME}`,
+};
+
+// test user 2
+export const user2: TestUser = {
+  email: process.env.ORCID_TEST_USER2,
+  password: process.env.ORCID_TEST_PASS2,
+  shortName: `${process.env.ORCID_TEST_FIRST_NAME2?.[0]}. ${process.env.ORCID_TEST_LAST_NAME2}`,
+  fullName: `${process.env.ORCID_TEST_FIRST_NAME2} ${process.env.ORCID_TEST_LAST_NAME2}`,
+};
+
+// test user 3
+export const user3: TestUser = {
+  email: process.env.ORCID_TEST_USER3,
+  password: process.env.ORCID_TEST_PASS3,
+  shortName: `${process.env.ORCID_TEST_FIRST_NAME3?.[0]}. ${process.env.ORCID_TEST_LAST_NAME3}`,
+  fullName: `${process.env.ORCID_TEST_FIRST_NAME3} ${process.env.ORCID_TEST_LAST_NAME3}`,
+};
+
+export const login = async (page: Page, browser: Browser, user = user1) => {
   await Promise.all([
     page.waitForNavigation(),
     page.click(PageModel.header.loginButton),
   ]);
 
-  await page.fill(PageModel.login.username, ORCID_TEST_USER);
-  await page.fill(PageModel.login.password, ORCID_TEST_PASS);
+  await page.fill(PageModel.login.username, user.email);
+  await page.fill(PageModel.login.password, user.password);
 
   await Promise.all([
     page.waitForNavigation(), // wait to see if authorization is required
@@ -40,7 +86,7 @@ export const login = async (page: Page, browser: Browser) => {
       (await page.title()) === "Complete your registration";
 
   if (needsEmailVerification) {
-    await page.fill("#email", ORCID_TEST_USER);
+    await page.fill("#email", user.email);
     await page.click('button[title="Send code"]');
     await page.waitForSelector("#code");
 

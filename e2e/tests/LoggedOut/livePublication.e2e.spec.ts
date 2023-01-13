@@ -63,7 +63,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     await page.locator(PageModel.header.searchButton).click();

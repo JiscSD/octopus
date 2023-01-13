@@ -22,8 +22,8 @@ export const link = middy(coAuthorController.link)
     .use(middleware.authentication(true))
     .use(middleware.validator(coAuthorSchema.link, 'body'));
 
-export const update = middy(coAuthorController.update)
+export const updateConfirmation = middy(coAuthorController.updateConfirmation)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(coAuthorSchema.update, 'body'));
+    .use(middleware.validator(coAuthorSchema.updateConfirmation, 'body'));

@@ -11,7 +11,7 @@ test.describe("Browse", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     // Navigate to browse page

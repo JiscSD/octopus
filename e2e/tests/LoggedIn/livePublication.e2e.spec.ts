@@ -102,7 +102,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     await Helpers.checkLivePublicationLayout(
@@ -120,7 +120,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     testBookmarking(page, "cl3fz14dr0001es6i5ji51rq4");
@@ -134,7 +134,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     testFlagging(
@@ -152,7 +152,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
     await page.goto(
       `${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`,
@@ -185,7 +185,7 @@ test.describe("Live Publication", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
     await page.goto(
       `${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`,

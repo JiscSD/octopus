@@ -163,29 +163,20 @@ export const link = async (
                 });
             }
 
-            const coAuthorConfirmed = await coAuthorService.confirmCoAuthor(
-                event.user.id,
-                event.pathParameters.id,
-                event.body.email,
-                event.body.code
-            );
+            await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
 
-            return response.json(200, { CoauthorsConfirmed: coAuthorConfirmed });
+            return response.json(200, 'Linked user account');
         }
 
-        const coAuthorDenied = await coAuthorService.denyCoAuthor(
-            event.pathParameters.id,
-            event.body.email,
-            event.body.code
-        );
+        await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
 
-        return response.json(200, { CoauthorsDenied: coAuthorDenied });
+        return response.json(200, 'Removed co-author from publication');
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const update = async (
+export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
@@ -212,7 +203,25 @@ export const update = async (
             });
         }
 
-        await coAuthorService.updateCoAuthor(event.pathParameters.id, event.user.id, event.body.confirm);
+        // update coAuthor confirmation status
+        await coAuthorService.updateConfirmation(event.pathParameters.id, event.user.id, event.body.confirm);
+
+        if (event.body.confirm) {
+            // notify main author
+            await email.notifyCoAuthorConfirmation({
+                coAuthor: {
+                    firstName: event.user.firstName,
+                    lastName: event.user.lastName || ''
+                },
+                publication: {
+                    authorEmail: publication.user.email || '',
+                    title: publication.title || '',
+                    url: `${process.env.BASE_URL}/publications/${publication.id}`
+                },
+                remainingConfirmationsCount:
+                    publication.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
+            });
+        }
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
