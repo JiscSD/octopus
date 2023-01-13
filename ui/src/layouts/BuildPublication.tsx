@@ -86,6 +86,17 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         []
     );
 
+    const checkRequiredApproval = useCallback(
+        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            let ready = { ready: true, message: '' };
+            if (!store.coAuthors.every((coAuthor) => coAuthor.approvalRequested)) {
+                ready = { ready: false, message: 'CoAuthors pending approval request' };
+            }
+            return ready;
+        },
+        []
+    );
+
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = useCallback(
         async (message?: string) => {
@@ -231,6 +242,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     }, [props.publication?.id, router, saveCurrent, store]);
 
     const isReadyToPreview = useMemo(() => checkRequired(store).ready, [checkRequired, store]);
+    const isReadyRequestApproval = useMemo(() => checkRequiredApproval(store).ready, [checkRequiredApproval, store]);
 
     return (
         <>
@@ -389,7 +401,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
-                                                disabled={!isReadyToPreview}
+                                                disabled={isReadyRequestApproval}
                                                 endIcon={
                                                     <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
                                                 }
@@ -450,7 +462,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                                disabled={!isReadyToPreview}
+                                                disabled={isReadyRequestApproval}
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
                                             />
                                         ) : (
@@ -545,7 +557,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     {store.coAuthors.length ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            disabled={!isReadyToPreview}
+                                            disabled={isReadyRequestApproval}
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
@@ -571,7 +583,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
                                     {store.coAuthors.length ? (
                                         <Components.IconButton
-                                            disabled={!isReadyToPreview}
+                                            disabled={isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
