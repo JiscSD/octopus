@@ -13,13 +13,13 @@ describe('CoAuthor tests', () => {
     });
 
     it('Send CoAuthor invite is disabled when input field is blank', () => {
-        expect(screen.getByTitle('Send co-author invite')).toBeDisabled();
+        expect(screen.getByTitle('Add Co-author')).toBeDisabled();
     });
 
     it('Send CoAuthor invite is enabled when input field is has entry', () => {
         const emailInput = screen.getByTestId('co-author-email-input');
         fireEvent.change(emailInput, { target: { value: 'email@example.com' } });
-        expect(screen.getByTitle('Send co-author invite')).toBeEnabled();
+        expect(screen.getByTitle('Add Co-author')).toBeEnabled();
     });
 
     it('Error alert is not rendered initially', () => {
@@ -28,7 +28,7 @@ describe('CoAuthor tests', () => {
 
     it('Error alert appears when invalid email is entered into input field', () => {
         const emailInput = screen.getByTestId('co-author-email-input');
-        const sendInviteButton = screen.getByTitle('Send co-author invite');
+        const sendInviteButton = screen.getByTitle('Add Co-author');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
         expect(screen.getByTestId('alert-box')).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('CoAuthor tests', () => {
 
     it('Alert is removed on invalid email when input is changed', () => {
         const emailInput = screen.getByTestId('co-author-email-input');
-        const sendInviteButton = screen.getByTitle('Send co-author invite');
+        const sendInviteButton = screen.getByTitle('Add Co-author');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
         expect(screen.getByTestId('alert-box')).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe('CoAuthor tests', () => {
 
     it('Input field is empty on valid email submission', () => {
         const emailInput = screen.getByTestId('co-author-email-input');
-        const sendInviteButton = screen.getByTitle('Send co-author invite');
+        const sendInviteButton = screen.getByTitle('Add Co-author');
         fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
         fireEvent.click(sendInviteButton);
         expect(emailInput.textContent).toBe('');

@@ -235,7 +235,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(message);
         }
-        
+
         setRequestApprovalModalVisibility(false);
     }, [saveCurrent, store]);
 
@@ -296,10 +296,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     );
 
     const isReadyRequestApproval = useMemo(
-        () => isReadyToPreview && checkRequiredApproval(store).ready, 
+        () => isReadyToPreview && checkRequiredApproval(store).ready,
         [checkRequiredApproval, isReadyToPreview, store]
     );
-    
+
     const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
 
     return (
@@ -624,7 +624,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         disabled={!isReadyToPreview}
                                         endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        onClick={handlePreview} >
+                                        onClick={handlePreview}
+                                    >
                                         Preview
                                     </Components.Button>
                                     {!coAuthorsToApprove ? (

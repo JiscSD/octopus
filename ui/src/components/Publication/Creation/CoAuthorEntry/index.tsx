@@ -22,9 +22,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     {props.coAuthor.confirmedCoAuthor ? (
-                        <span
-                            title={`${props.coAuthor.email} has given approval for this publication to published.`}
-                        >
+                        <span title={`${props.coAuthor.email} has given approval for this publication to published.`}>
                             <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
                         </span>
                     ) : (
