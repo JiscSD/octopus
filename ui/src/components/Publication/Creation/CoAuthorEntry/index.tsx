@@ -21,23 +21,21 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
         <tr key={props.coAuthor.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.coAuthor.confirmedCoAuthor ? (
-                            <span
-                                title={`${props.coAuthor.email} has given approval for this publication to published.`}
-                            >
-                                <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
-                            </span>
-                        ) : (
-                            <span
-                                title={`${props.coAuthor.email} is yet to give approval for this publication to be published.`}
-                            >
-                                <div title="Request to be sent when draft editing is complete">
-                                    <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
-                                </div>
-                            </span>
-                        )}
-                    </p>
+                    {props.coAuthor.confirmedCoAuthor ? (
+                        <span
+                            title={`${props.coAuthor.email} has given approval for this publication to published.`}
+                        >
+                            <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
+                        </span>
+                    ) : (
+                        <span
+                            title={`${props.coAuthor.email} is yet to give approval for this publication to be published.`}
+                        >
+                            <div title="Request to be sent when draft editing is complete">
+                                <OutlineIcons.ShieldExclamationIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
+                            </div>
+                        </span>
+                    )}
                 </div>
             </td>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -66,24 +64,22 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
             </td>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.coAuthor.user ? (
-                            <Components.Link
-                                href={`${Config.urls.viewUser.path}/${props.coAuthor.linkedUser}`}
-                                openNew={true}
-                                className="underline"
-                            >
-                                <>
-                                    {props.coAuthor.user.firstName} {props.coAuthor.user.lastName} (
-                                    {props.coAuthor.user.orcid})
-                                </>
-                            </Components.Link>
-                        ) : (
-                            <span title={`${props.coAuthor.email} has not yet confirmed they are a co-author.`}>
-                                <OutlineIcons.MinusCircleIcon className="h-5 w-5 text-grey-600 transition-colors duration-500 dark:text-white-50" />
-                            </span>
-                        )}
-                    </p>
+                    {props.coAuthor.user ? (
+                        <Components.Link
+                            href={`${Config.urls.viewUser.path}/${props.coAuthor.linkedUser}`}
+                            openNew={true}
+                            className="underline"
+                        >
+                            <>
+                                {props.coAuthor.user.firstName} {props.coAuthor.user.lastName} (
+                                {props.coAuthor.user.orcid})
+                            </>
+                        </Components.Link>
+                    ) : (
+                        <span title={`${props.coAuthor.email} has not yet confirmed they are a co-author.`}>
+                            <OutlineIcons.MinusCircleIcon className="h-5 w-5 text-grey-600 transition-colors duration-500 dark:text-white-50" />
+                        </span>
+                    )}
                 </div>
             </td>
             <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
