@@ -45,9 +45,6 @@ export const create = async (email: string, publicationId: string) => {
 };
 
 export const updateAll = async (publicationId, data) => {
-
-    console.log('this', data[0].linkedUser)
-
     await client.prisma.coAuthors.deleteMany({
         where: {
             publicationId

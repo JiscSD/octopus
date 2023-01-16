@@ -240,10 +240,9 @@ export const requestApproval = async (
             await coAuthorService.updateRequestApprovalStatus( event.pathParameters.id, pendingCoAuthor.email)
         }
         
-
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
         return response.json(200, coAuthors);
-        
+    
     }
     catch(err) {
         return response.json(500, { message: 'Unknown server error.' });
