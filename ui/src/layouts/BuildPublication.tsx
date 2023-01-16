@@ -223,14 +223,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
 
     const requestApproval = useCallback(async () => {
-        const response = await api.put(
-            `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
-            {},
-            props.token
-        );
-        updateCoAuthors(response.data);
+        try {
+            await saveCurrent();
+            const response = await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+                {},
+                props.token
+            );
+            updateCoAuthors(response.data);
+        } catch (err) {
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
+        }
+        
         setRequestApprovalModalVisibility(false);
-    }, []);
+    }, [saveCurrent, store]);
 
     // Option selected from modal
     const save = useCallback(async () => {
