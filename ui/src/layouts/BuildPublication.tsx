@@ -88,6 +88,44 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const checkRequiredApproval = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
             let ready = { ready: true, message: '' };
+            if (!store.title) ready = { ready: false, message: 'You must provide a title' };
+            if (!store.content) ready = { ready: false, message: 'You must provide main text' };
+            if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
+            if (!store.linkTo?.length)
+                ready = { ready: false, message: 'You must link this publication to at least one other' };
+
+            if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there is a conflict of interest, please provide a reason.'
+                };
+            }
+            if (typeof store.conflictOfInterestStatus == 'undefined') {
+                ready = { ready: false, message: 'You must select a conflict of interest option' };
+            }
+            if (store.type === Config.values.octopusInformation.publications.DATA.id) {
+                if (store.ethicalStatement === null)
+                    ready = { ready: false, message: 'You must select an ethical statement option' };
+                if (store.dataPermissionsStatement === null)
+                    ready = { ready: false, message: 'You must select a data permissions option' };
+                if (
+                    !store.dataPermissionsStatementProvidedBy &&
+                    store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+                )
+                    ready = {
+                        ready: false,
+                        message: 'You must provide details of who gave permission for the data collection and sharing'
+                    };
+            }
+
+            return ready;
+        },
+        []
+    );
+
+    const CheckCoAuthorsToApprove = useCallback(
+        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            let ready = { ready: true, message: '' };
             if (!store.coAuthors.every((coAuthor) => coAuthor.approvalRequested)) {
                 ready = { ready: false, message: 'CoAuthors pending approval request' };
             }
@@ -240,7 +278,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
     }, [props.publication?.id, router, saveCurrent, store]);
 
-    const isReadyRequestApproval = useMemo(() => checkRequiredApproval(store).ready, [checkRequiredApproval, store]);
     const isReadyToPreview = useMemo(
         () => Boolean(store.title.trim()) && !Helpers.isEmptyContent(store.content),
         [store.content, store.title]
@@ -250,6 +287,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         () => isReadyToPreview && checkRequired(store).ready,
         [checkRequired, isReadyToPreview, store]
     );
+
+    const isReadyRequestApproval = useMemo(
+        () => isReadyToPreview && checkRequiredApproval(store).ready, 
+        [checkRequiredApproval, isReadyToPreview, store]
+    );
+    
+    const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
 
     return (
         <>
@@ -407,12 +451,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             disabled={!isReadyToPreview}
                                             endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        />
-                                        {store.coAuthors.length ? (
+                                        >
+                                            Preview
+                                        </Components.Button>
+                                        {!coAuthorsToApprove ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
-                                                disabled={isReadyRequestApproval}
+                                                disabled={!isReadyRequestApproval}
                                                 endIcon={
                                                     <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
                                                 }
@@ -422,7 +468,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             <Components.Button
                                                 title="Publish"
                                                 onClick={() => setPublishModalVisibility(true)}
-                                                disabled={!isReadyToPreview}
+                                                disabled={!isReadyToPublish}
                                                 endIcon={
                                                     <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
                                                 }
@@ -473,18 +519,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        {store.coAuthors.length ? (
+                                        {!coAuthorsToApprove ? (
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                                disabled={isReadyRequestApproval}
+                                                disabled={!isReadyRequestApproval}
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
                                             />
                                         ) : (
                                             <Components.IconButton
                                                 title="Publish"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                                disabled={!isReadyToPreview}
+                                                disabled={!isReadyToPublish}
                                                 onClick={() => setPublishModalVisibility(true)}
                                             />
                                         )}
@@ -571,12 +617,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         disabled={!isReadyToPreview}
                                         endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
                                         className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        onClick={handlePreview}
-                                    />
-                                    {store.coAuthors.length ? (
+                                        onClick={handlePreview} >
+                                        Preview
+                                    </Components.Button>
+                                    {!coAuthorsToApprove ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            disabled={isReadyRequestApproval}
+                                            disabled={!isReadyRequestApproval}
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
@@ -584,7 +631,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     ) : (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            disabled={!isReadyToPreview}
+                                            disabled={!isReadyToPublish}
                                             endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
                                             title="Publish"
                                             onClick={() => setPublishModalVisibility(true)}
@@ -604,16 +651,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    {store.coAuthors.length ? (
+                                    {!coAuthorsToApprove ? (
                                         <Components.IconButton
-                                            disabled={isReadyRequestApproval}
+                                            disabled={!isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
                                         />
                                     ) : (
                                         <Components.IconButton
-                                            disabled={!isReadyToPreview}
+                                            disabled={!isReadyToPublish}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
                                             title="Publish"
                                             onClick={() => setPublishModalVisibility(true)}
