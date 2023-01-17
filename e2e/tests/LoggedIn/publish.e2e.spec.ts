@@ -1,5 +1,5 @@
 import * as Helpers from "../helpers";
-import { expect, test, Page } from "@playwright/test";
+import { expect, test, Page, Browser } from "@playwright/test";
 import { PageModel } from "../PageModel";
 
 test.describe.configure({ mode: "serial" });
@@ -248,14 +248,6 @@ export const publicationFlowFunders = async (
   await page.locator(PageModel.publish.nextButton).click();
 };
 
-export const publicationFlowCoauthors = async (
-  page: Page,
-  pubType: string,
-  licenceType: string
-) => {
-  // Co authors
-};
-
 export const publicationFlowReview = async (
   page: Page,
   pubType: string,
@@ -269,7 +261,7 @@ const problemPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Research Problem does not have any specified conflicts of interest.",
@@ -282,7 +274,7 @@ const hypothesisPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Rationale / Hypothesis does not have any specified conflicts of interest.",
@@ -295,7 +287,7 @@ const methodPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Method does not have any specified conflicts of interest.",
@@ -308,7 +300,7 @@ const analysisPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Analysis does not have any specified conflicts of interest.",
@@ -321,7 +313,7 @@ const interpretationPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Interpretation does not have any specified conflicts of interest.",
@@ -334,7 +326,7 @@ const realWorldApplicationPublication = {
   language: "Afar",
   licence: "CC BY-NC 4.0",
   title: "test title",
-  author: Helpers.ORCID_TEST_NAME,
+  author: Helpers.user1.fullName,
   text: "main text",
   references: referencesList,
   coi: "This Real World Application does not have any specified conflicts of interest.",
@@ -363,7 +355,7 @@ export const checkPublication = async (
     `aside span:has-text("${publication.pubType}")`,
     `aside span:has-text("${publication.language}")`,
     `aside a:has-text("${publication.licence}")`,
-    `main > section > header > div >> a:has-text("${Helpers.ORCID_TEST_SHORT_NAME}")`,
+    `main > section > header > div >> a:has-text("${Helpers.user1.shortName}")`,
     `h1:has-text("${publication.title}")`,
     `text=${publication.references[1].text}`,
     `text=${publication.references[1].refURL}`,
@@ -388,7 +380,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "PROBLEM");
@@ -425,7 +417,6 @@ test.describe("Publication flow", () => {
     );
 
     // Preview and check preview draft publication
-    await page.locator(PageModel.publish.nextButton).click();
     await page.locator(PageModel.publish.previewButton).click();
     await checkPublication(page, problemPublication);
 
@@ -447,7 +438,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "HYPOTHESIS");
@@ -506,7 +497,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "PROTOCOL");
@@ -565,7 +556,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "ANALYSIS");
@@ -626,7 +617,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "INTERPRETATION");
@@ -687,7 +678,7 @@ test.describe("Publication flow", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      Helpers.ORCID_TEST_NAME
+      Helpers.user1.fullName
     );
 
     await createPublication(page, "test title", "REAL_WORLD_APPLICATION");
@@ -736,5 +727,182 @@ test.describe("Publication flow", () => {
     await page.locator(PageModel.publish.publishButton).click();
     await page.locator(PageModel.publish.confirmPublishButton).click();
     await checkPublication(page, realWorldApplicationPublication);
+  });
+});
+
+const publicationWithCoAuthors = {
+  title: "Test co-authors",
+  content: "Testing co-authors",
+  coAuthors: [Helpers.user2, Helpers.user3],
+  type: "PROBLEM",
+};
+
+const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
+  await page.fill('input[type="email"]', user.email);
+  await Promise.all([
+    page.waitForResponse(
+      (response) => response.url().includes("/coauthor") && response.ok()
+    ),
+    page.keyboard.press("Enter"),
+  ]);
+};
+
+const confirmCoAuthorInvitation = async (
+  browser: Browser,
+  user: Helpers.TestUser
+) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto(Helpers.UI_BASE);
+  await Helpers.login(page, browser, user);
+  const page2 = await context.newPage();
+  await page2.goto(`http://localhost:8025/`);
+  await page2.waitForSelector(".messages > .row");
+
+  // click latest invitation link which was sent to this user and has text: "You’ve been added as a co-author on Octopus"
+  const rows = page2.locator(".messages > .row");
+  const rowsCount = await rows.count();
+
+  for (let i = 0; i < rowsCount; i++) {
+    const currentRow = rows.nth(i);
+    const textContent = await currentRow.textContent();
+    if (
+      textContent.includes(user.email) &&
+      textContent.includes("You’ve been added as a co-author on Octopus")
+    ) {
+      await currentRow.click();
+      break;
+    }
+  }
+
+  // clicking 'I am an author' link is blocked by cors
+  const invitationLink = await page2
+    .frameLocator("iframe")
+    .locator("a.button:has-text('I am an author')")
+    .getAttribute("href");
+
+  // navigate to that link instead
+  const page3 = await context.newPage();
+  await page3.goto(invitationLink);
+  await (await page3.waitForSelector('button:has-text("approve")')).click();
+
+  await (
+    await page3.waitForSelector('button[title="Yes, this is ready to publish"]')
+  ).click();
+
+  await context.close();
+};
+
+const verifyLastEmailNotification = async (
+  browser: Browser,
+  emailSubject: string
+) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto("http://localhost:8025/");
+  await expect(page.locator(".msglist-message").first()).toContainText(
+    emailSubject
+  );
+  await context.close();
+};
+
+test.describe("Publication flow + co-authors", () => {
+  test("Create a PROBLEM publication with co-authors", async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto(Helpers.UI_BASE);
+    await Helpers.login(page, browser);
+    await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
+      Helpers.user1.fullName
+    );
+
+    // create new publication
+    await createPublication(
+      page,
+      publicationWithCoAuthors.title,
+      publicationWithCoAuthors.type
+    );
+
+    // add linked publication
+    await (
+      await page.waitForSelector("aside button:has-text('Linked publications')")
+    ).click();
+    await publicationFlowLinkedPublication(
+      page,
+      "living organisms",
+      "How do living organisms function, survive, reproduce and evolve?"
+    );
+
+    // add main text
+    await (
+      await page.waitForSelector("aside button:has-text('Main text')")
+    ).click();
+    await page.locator(PageModel.publish.text.editor).click();
+    await page.keyboard.type(publicationWithCoAuthors.content);
+
+    // verify 'Publish' button is enabled
+    const publishButton = page.locator(PageModel.publish.publishButton);
+    await expect(publishButton).toBeEnabled();
+
+    // add co-authors
+    await page.locator('aside button:has-text("Co-authors")').click();
+    await addCoAuthor(page, Helpers.user2);
+    await addCoAuthor(page, Helpers.user3);
+
+    // verify 'Publish' button is now disabled
+    await expect(publishButton).toBeDisabled();
+
+    // first co-author confirmation
+    await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+    // verify notification triggered after first confirmation
+    await verifyLastEmailNotification(
+      browser,
+      "A co-author has approved your Octopus publication"
+    );
+
+    // second co-author confirmation
+    await confirmCoAuthorInvitation(browser, Helpers.user3);
+
+    // verify notification triggered after last confirmation
+    await verifyLastEmailNotification(
+      browser,
+      "All co-authors have approved your Octopus publication"
+    );
+
+    // save the publication
+    await page.click('button[title="Save"]:first-of-type');
+
+    await Promise.all([
+      page.click('div[role="dialog"] button[title="Save"]'),
+      page.waitForResponse(
+        (response) =>
+          response.url().includes("/publications") &&
+          response.request().method() === "PATCH" &&
+          response.ok()
+      ),
+    ]);
+
+    // refresh corresponding author page
+    await page.reload();
+
+    // verify publish button is now enabled
+    await page.waitForSelector(PageModel.publish.publishButton);
+    await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+    // publish the new publication
+    page.locator(PageModel.publish.publishButton).click();
+    await Promise.all([
+      page.waitForNavigation(),
+      page.locator(PageModel.publish.confirmPublishButton).click(),
+    ]);
+
+    // check publication title and authors
+    await expect(
+      page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)
+    ).toBeVisible();
+    await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
+    await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
+    await expect(page.getByText(Helpers.user3.shortName)).toBeVisible();
   });
 });

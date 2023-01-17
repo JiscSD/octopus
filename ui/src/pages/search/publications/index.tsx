@@ -126,8 +126,6 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    // ugly complex swr key
-
     const dateFromFormatted = moment.utc(dateFrom);
     const dateToFormatted = moment.utc(dateTo);
 
@@ -139,16 +137,36 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
 
     const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
 
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
+    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+        e: React.SyntheticEvent<HTMLFormElement, Event>
+    ): Promise<void> => {
         e.preventDefault();
         const searchTerm = searchInputRef.current?.value || '';
+
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    query: searchTerm
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
+
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.SyntheticEvent) => {
+    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         e.preventDefault();
+        const newDate = e.target.value;
 
-        router.push(
+        const [dateFrom, dateTo, setDate] =
+            e.target.getAttribute('id') === 'date-from'
+                ? [newDate, router.query.dateTo, setDateFrom]
+                : [router.query.dateFrom, newDate, setDateTo];
+
+        await router.push(
             {
                 query: {
                     ...router.query,
@@ -159,22 +177,33 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             undefined,
             { shallow: true }
         );
+
+        setDate(newDate);
     };
 
-    const collatePublicationTypes = (e: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
         const uniqueArray = Array.from(uniqueSet).join(',');
 
-        router.push({ pathname: '/search/publications', query: { type: uniqueArray } }, undefined, {
-            shallow: true
-        });
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    type: uniqueArray
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
 
         setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
     };
 
-    const resetFilters = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const resetFilters = async (): Promise<void> => {
+        await router.replace(router.route);
+
         setQuery('');
         searchInputRef.current && (searchInputRef.current.value = '');
         setOffset(0);
@@ -184,7 +213,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         setDateTo('');
     };
 
-    React.useEffect(() => {
+    React.useEffect((): void => {
         setOffset(0);
     }, [query, publicationTypes, limit]);
 
@@ -328,7 +357,6 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                         name="date-form"
                                         id="date-form"
                                         className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                        onSubmit={handlerDateFormSubmit}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
@@ -348,7 +376,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateFrom}
-                                                onChange={(e) => setDateFrom(e.target.value)}
+                                                onChange={(e) => handlerDateFormSubmit(e)}
                                             />
                                         </label>
                                         <label htmlFor="date-to" className="relative block w-full">
@@ -363,7 +391,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateTo}
-                                                onChange={(e) => setDateTo(e.target.value)}
+                                                onChange={(e) => handlerDateFormSubmit(e)}
                                             />
                                         </label>
                                     </Framer.motion.form>

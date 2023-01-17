@@ -271,11 +271,11 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
                   method: PATCH
                   cors: true
-    updateCoAuthor:
-        handler: src/components/coauthor/routes.update
+    updateCoAuthorConfirmation:
+        handler: src/components/coauthor/routes.updateConfirmation
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthor-confirmation
                   method: PATCH
                   cors: true
     requestApproval:

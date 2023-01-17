@@ -76,7 +76,7 @@ test.describe("Revoke ORCID access", () => {
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     await page.click(PageModel.header.usernameButton);
@@ -103,8 +103,8 @@ test.describe("Revoke ORCID access", () => {
     ]);
 
     await page.waitForLoadState("domcontentloaded");
-    await page.fill(PageModel.login.username, Helpers.ORCID_TEST_USER);
-    await page.fill(PageModel.login.password, Helpers.ORCID_TEST_PASS);
+    await page.fill(PageModel.login.username, Helpers.user1.email);
+    await page.fill(PageModel.login.password, Helpers.user1.password);
 
     await Promise.all([
       page.waitForNavigation(), // wait to see if authorization is required

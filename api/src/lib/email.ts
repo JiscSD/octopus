@@ -129,7 +129,10 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
     <body>
         <div class="wrapper">
             <div class="header">
-                <img src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png">
+                <img 
+                    src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
+                    style = "width: 40px;"
+                >
                 <h3>Octopus</h3>
             </div>
             <div class="content">
@@ -138,10 +141,16 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
             <div class="footer">
                 <div class="footer-logo">
                     <a href="${baseURL}" style='text-decoration: none;'>
-                        <img src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png">
+                        <img 
+                            src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
+                            style = "width: 45px;"
+                        >
                     </a>
                     <a href="https://www.jisc.ac.uk/" style='text-decoration: none;'>
-                        <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg">
+                        <img 
+                            src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg"
+                            style = "width: 45px;"
+                        >
                     </a>
                 </div>
                 <div class="footer-content">
@@ -416,5 +425,78 @@ export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagC
         text,
         to: options.to,
         subject: 'Red flag resolved'
+    });
+};
+
+type NotifyCoAuthorConfirmation = {
+    coAuthor: {
+        firstName: string;
+        lastName: string;
+    };
+    publication: {
+        title: string;
+        url: string;
+        authorEmail: string;
+    };
+    remainingConfirmationsCount: number;
+};
+
+export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirmation) => {
+    if (options.remainingConfirmationsCount) {
+        // one or more confirmations left
+        const html = `
+           <p><strong>${options.coAuthor.firstName} ${
+            options.coAuthor.lastName
+        }</strong> has confirmed their involvement in <strong><i>${
+            options.publication.title
+        }</i></strong> and has confirmed that the draft is ready to publish.</p>
+            <br>
+            <p style="text-align: center;"><a class="button" href="${
+                options.publication.url
+            }" target="_blank" rel="noreferrer noopener">View publication</a></p>
+            <br>
+            <p><strong>${options.remainingConfirmationsCount}</strong> co-author${
+            options.remainingConfirmationsCount === 1 ? '' : 's'
+        } still need to confirm your draft before this publication can go live.</p> 
+            <br>
+            <p>Note that all co-authors must approve before this publication can go live.</p>
+        `;
+
+        const text = `${options.coAuthor.firstName} ${options.coAuthor.lastName} has confirmed their involvement in '${
+            options.publication.title
+        }' and has confirmed that the draft is ready to publish. You can view the publication here: ${
+            options.publication.url
+        } . ${options.remainingConfirmationsCount} co-author${
+            options.remainingConfirmationsCount === 1 ? '' : 's'
+        } still need to confirm your draft before this publication can go live. Note that all co-authors must approve before this publication can go live`;
+
+        await send({
+            html: standardHTMLEmailTemplate('A co-author has approved your Octopus publication', html),
+            text,
+            to: options.publication.authorEmail,
+            subject: 'A co-author has approved your Octopus publication'
+        });
+
+        return;
+    }
+
+    // last confirmation
+    const html = `
+                <p>All co-authors have confirmed their involvement in <strong><i>${options.publication.title}</i></strong> and have confirmed that the draft is ready to publish.</p>
+                <br>
+                <p>You are now ready to publish!</p>
+                <br>
+                <p style="text-align: center;"><a class="button" href="${options.publication.url}" target="_blank" rel="noreferrer noopener">View publication</a></p>
+                <br>
+                <p>Note that any changes to the draft publication at this stage will require co-authors to reapprove.</p>
+            `;
+
+    const text = `All co-authors have confirmed their involvement in '${options.publication.title}' and have confirmed that the draft is ready to publish. You are now ready to publish! You can view the publication here: ${options.publication.url} . Note that any changes to the draft publication at this stage will require co-authors to reapprove.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('All co-authors have approved your Octopus publication', html),
+        text,
+        to: options.publication.authorEmail,
+        subject: 'All co-authors have approved your Octopus publication'
     });
 };

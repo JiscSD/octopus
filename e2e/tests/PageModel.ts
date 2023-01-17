@@ -74,6 +74,12 @@ export const PageModel = {
     publicationSearchResult:
       'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
     noPublicationsFound: '_react=Alert[title = "No results found"]',
+    firstPublication: 'article div div:nth-child(1) > a.rounded',
+    searchTerm: 'evolved',
+    dateToInput: 'input#date-to',
+    dateFromInput: 'input#date-from',
+    dateFrom: '2021-01-01',
+    dateTo: '2023-01-01',
   },
   livePublication: {
     visibleSections: [
@@ -170,10 +176,9 @@ export const PageModel = {
       deleteAllReferencesModalButton: 'button[aria-label="Delete all"]',
       continueModalButton: 'button[aria-label="Continue"]',
       saveReferenceModalButton: 'div[role=dialog] button[title="Save"]',
-      deleteReferenceModalButton: 'button[title="Delete"]',
-      // using xpath to locate the elements until a better solution is found
-      deleteFirstReferenceButton: 'button[aria-label="Delete"] >> nth=0',
-      addReferenceButton: 'button[aria-label="Add below"] >> nth=0',
+      deleteReferenceModalButton: 'div[role="dialog"] button[title="Delete"]',
+      deleteFirstReferenceButton: 'tr:first-of-type button[title="Delete"]',
+      addReferenceButton: 'tr:first-of-type button[title="Add below"]',
       description:
         "text=Short descriptionInclude a short description of your publication to aid discover >> textarea",
       keywords:

@@ -1,4 +1,4 @@
-const updateCoAuthorSchema = {
+const updateConfirmationSchema = {
     type: 'object',
     properties: {
         confirm: {
@@ -9,4 +9,4 @@ const updateCoAuthorSchema = {
     additionalProperties: false
 };
 
-export default updateCoAuthorSchema;
+export default updateConfirmationSchema;
