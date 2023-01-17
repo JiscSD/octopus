@@ -16,7 +16,7 @@ test.describe("My profile", () => {
     // login
     await Helpers.login(page, browser);
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
-      `${Helpers.ORCID_TEST_NAME}`
+      `${Helpers.user1.fullName}`
     );
 
     // go to "My Profile" page
@@ -30,7 +30,7 @@ test.describe("My profile", () => {
 
   test("My profile contents", async () => {
     // check user full name
-    await expect(page.locator("h1")).toHaveText(`${Helpers.ORCID_TEST_NAME}`);
+    await expect(page.locator("h1")).toHaveText(`${Helpers.user1.fullName}`);
 
     // check Employment section
     expect(page.locator(PageModel.profilePage.employment)).toBeVisible();

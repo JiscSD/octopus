@@ -176,10 +176,9 @@ export const PageModel = {
       deleteAllReferencesModalButton: 'button[aria-label="Delete all"]',
       continueModalButton: 'button[aria-label="Continue"]',
       saveReferenceModalButton: 'div[role=dialog] button[title="Save"]',
-      deleteReferenceModalButton: 'button[title="Delete"]',
-      // using xpath to locate the elements until a better solution is found
-      deleteFirstReferenceButton: 'button[aria-label="Delete"] >> nth=0',
-      addReferenceButton: 'button[aria-label="Add below"] >> nth=0',
+      deleteReferenceModalButton: 'div[role="dialog"] button[title="Delete"]',
+      deleteFirstReferenceButton: 'tr:first-of-type button[title="Delete"]',
+      addReferenceButton: 'tr:first-of-type button[title="Add below"]',
       description:
         "text=Short descriptionInclude a short description of your publication to aid discover >> textarea",
       keywords:
