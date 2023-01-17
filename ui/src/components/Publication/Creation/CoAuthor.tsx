@@ -126,7 +126,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 <div className="overflow-x-auto">
                     <div className="inline-block min-w-full py-2 align-middle">
                         <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                            <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
+                            <table data-testid="coauthor-table" className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
                                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                     <tr>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">

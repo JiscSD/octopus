@@ -1,5 +1,5 @@
 import * as Components from '@components';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 
 describe('CoAuthor tests', () => {
     const component = <Components.PublicationCreationCoAuthor />;
@@ -52,4 +52,13 @@ describe('CoAuthor tests', () => {
         fireEvent.click(sendInviteButton);
         expect(emailInput.textContent).toBe('');
     });
+
+    it('Valid email is added to table', () => {
+        expect(screen.getAllByRole('row')[1]).toHaveTextContent('valid@email.com');
+    })
+
+    it('Delete email from table', () => {
+        fireEvent.click(within(screen.getAllByRole('row')[1]).getByTitle('Delete'))
+        expect(screen.getAllByRole('row')).toHaveLength(1);
+    })
 });
