@@ -150,6 +150,8 @@ export const PageModel = {
     nextButton: 'button:has-text("Next") >> nth=0',
     previewButton: 'button:has-text("Preview") >> nth=0',
     publishButton: 'button:has-text("Publish") >> nth=1',
+    requestApprovalButton: 'button:has-text("Request Approval") >> nth=0',
+    confirmRequestApproval: 'button:has-text("Finalise Draft and Send Request") >> nth=0',
     confirmPublishButton: 'button[aria-label="Yes, save & publish"]',
     draftEditButton:
       'a[role="button"]:has-text("Edit or publish draft publication")',
