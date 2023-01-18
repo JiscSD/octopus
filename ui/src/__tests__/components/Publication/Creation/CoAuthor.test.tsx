@@ -55,10 +55,10 @@ describe('CoAuthor tests', () => {
 
     it('Valid email is added to table', () => {
         expect(screen.getAllByRole('row')[1]).toHaveTextContent('valid@email.com');
-    })
+    });
 
     it('Delete email from table', () => {
-        fireEvent.click(within(screen.getAllByRole('row')[1]).getByTitle('Delete'))
+        fireEvent.click(within(screen.getAllByRole('row')[1]).getByTitle('Delete'));
         expect(screen.getAllByRole('row')).toHaveLength(1);
-    })
+    });
 });
