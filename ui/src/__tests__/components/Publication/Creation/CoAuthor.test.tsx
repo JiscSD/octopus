@@ -53,6 +53,18 @@ describe('CoAuthor tests', () => {
         expect(emailInput.textContent).toBe('');
     });
 
+    it('Prevent duplicate email from being added to co-author table', () => {
+        const emailInput = screen.getByTestId('co-author-email-input');
+        const sendInviteButton = screen.getByTitle('Add Co-author');
+        fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
+        fireEvent.click(sendInviteButton);
+
+        fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
+        fireEvent.click(sendInviteButton);
+
+        expect(screen.getAllByTestId('alert-box')[1]).toBeInTheDocument();
+    });
+
     it('Valid email is added to table', () => {
         expect(screen.getAllByRole('row')[1]).toHaveTextContent('valid@email.com');
     });

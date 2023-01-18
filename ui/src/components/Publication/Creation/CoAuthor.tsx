@@ -19,15 +19,27 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
+    const [emailDuplicated, SetEmailDuplicated] = React.useState(true);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
+        SetEmailDuplicated(true);
         setCoAuthor(event.target.value);
     };
 
     // Validate email for co author regex to use -
     const addCoAuthorToPublication = React.useCallback(async () => {
         setLoading(true);
+
+        const authorsArray = coAuthors || [];
+
+        // check to ensure co-author email is not already in the store/database
+        const emailDuplicate = authorsArray.some((author) => author.email === coAuthor);
+        if (emailDuplicate) {
+            SetEmailDuplicated(false);
+            setLoading(false);
+            return;
+        }
 
         const validEmail = Helpers.validateEmail(coAuthor);
 
@@ -38,8 +50,6 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         }
 
         setCoAuthor('');
-
-        const authorsArray = coAuthors || [];
 
         const newAuthor = {
             id: cuid(),
@@ -118,6 +128,14 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         data-testid="email-error"
                         severity="ERROR"
                         title="Please enter a valid email address"
+                        className="mt-3 w-2/3"
+                    />
+                )}
+                {!emailDuplicated && (
+                    <Components.Alert
+                        data-testid="email-error"
+                        severity="ERROR"
+                        title="This email is already in the Co-Authors table"
                         className="mt-3 w-2/3"
                     />
                 )}
