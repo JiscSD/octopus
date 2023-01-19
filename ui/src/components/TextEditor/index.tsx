@@ -654,6 +654,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     Replace existing
                                 </button>
                             </div>
+                            <div className="mt-6 flex justify-between space-x-4">
+                            <Components.ModalButton
+                                    onClick={() => props.setImportModalVisible(false) }
+                                    disabled={false}
+                                    text="Cancel"
+                                    title="Cancel"
+                                    actionType="NEGATIVE"
+                                />
+                            </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog> 
