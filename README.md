@@ -64,7 +64,7 @@ If a user has not received a code, or has entered the incorrect email address, t
 
 ### Updating email
 
-A previously verified user can also update their email address via their "My publications" page, or by visiting `/verify`.
+A previously verified user can also update their email address via their "My profile" page, or by visiting `/verify`.
 
 A user email address is only updated once successfully verified, so entering a new email here will not reflect on the user account until they have completed the process.
 
