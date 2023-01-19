@@ -138,7 +138,9 @@ export const PageModel = {
     authorizeButton: "#authorize-button",
   },
   confirmEmail: {},
-  myPublications: {},
+  myPublications: {
+    liveAuthorPageButton: 'a:has-text("View live author page")'
+  },
   myBookmarks: {
     bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
   },

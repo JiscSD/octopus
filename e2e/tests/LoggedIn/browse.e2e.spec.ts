@@ -16,7 +16,6 @@ test.describe("Browse", () => {
 
     // Navigate to browse page
     await page.locator(PageModel.header.browseButton).click();
-
     // Check links
     await expect(
       page.locator(PageModel.browse.viewAllPublications)
@@ -28,7 +27,6 @@ test.describe("Browse", () => {
       "href",
       "/search/authors"
     );
-
     // Expect 5 cards
     await expect(
       page.locator(PageModel.browse.card).locator("visible=true")

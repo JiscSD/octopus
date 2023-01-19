@@ -2,7 +2,7 @@ import * as Helpers from "../helpers";
 import { BrowserContext, expect, Page, test } from "@playwright/test";
 import { PageModel } from "../PageModel";
 
-test.describe("My profile", () => {
+test.describe("Live author page", () => {
   let context: BrowserContext;
   let page: Page;
 
@@ -19,21 +19,25 @@ test.describe("My profile", () => {
       `${Helpers.user1.fullName}`
     );
 
-    // go to "My Profile" page
+    // go to "Live author page" page
     await page.locator(PageModel.header.usernameButton).click();
     await page.locator(PageModel.header.myProfileButton).click();
+    await page.locator(PageModel.myPublications.liveAuthorPageButton).click();
   });
 
   test.afterAll(async () => {
     await page.close();
   });
 
-  test("My profile contents", async () => {
+  test("Live author page contents", async () => {
     // check user full name
     await expect(page.locator("h1")).toHaveText(`${Helpers.user1.fullName}`);
 
     // check Employment section
     expect(page.locator(PageModel.profilePage.employment)).toBeVisible();
+
+    const employmentRow = page.locator('tr:has-text("Southern Cross QE")');
+    await expect(employmentRow).toBeVisible();
 
     // check Education section
     expect(page.locator(PageModel.profilePage.education)).toBeVisible();
