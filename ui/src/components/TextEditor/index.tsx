@@ -616,6 +616,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     open={props.importModalVisible}
                     onClose={() => props.setImportModalVisible(false)}
                     className="fixed inset-0 z-10 overflow-y-auto"
+                    title="Document Import"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
@@ -720,6 +721,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
             </span>
             <button
                 onClick={() => setImportModalVisible(true)}
+                title="Import from Microsoft Word (.docx)"
                 className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
             >
                 <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
