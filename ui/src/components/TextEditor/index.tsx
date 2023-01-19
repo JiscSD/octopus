@@ -231,6 +231,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     } else {
                         props.editor.commands.insertContent(result.value);
                     }
+
+                    props.setImportModalVisible(false);
                 } catch (err) {
                     setError('Unable to import .docx file. Please re-save your document and try again.');
                 }
@@ -610,7 +612,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     </div>
                 </HeadlessUi.Dialog>
 
-                {/* Import document modal */}
                 <HeadlessUi.Dialog
                     open={props.importModalVisible}
                     onClose={() => props.setImportModalVisible(false)}
@@ -655,7 +656,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
-                </HeadlessUi.Dialog>
+                </HeadlessUi.Dialog> 
             </>
         )
     );
@@ -709,9 +710,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 imported, your publication can be further edited in the text field.
             </span>
             <button
-                onClick={() => {
-                    setImportModalVisible(true);
-                }}
+                onClick={() => setImportModalVisible(true)}
                 className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
             >
                 <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
