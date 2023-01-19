@@ -656,8 +656,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 </button>
                             </div>
                             <div className="mt-6 flex justify-between space-x-4">
-                            <Components.ModalButton
-                                    onClick={() => props.setImportModalVisible(false) }
+                                <Components.ModalButton
+                                    onClick={() => props.setImportModalVisible(false)}
                                     disabled={false}
                                     text="Cancel"
                                     title="Cancel"
@@ -666,7 +666,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
-                </HeadlessUi.Dialog> 
+                </HeadlessUi.Dialog>
             </>
         )
     );
