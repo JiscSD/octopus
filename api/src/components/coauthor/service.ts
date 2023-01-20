@@ -22,6 +22,7 @@ export const getAllByPublication = async (publicationId: string) => {
             }
         }
     });
+    
     return coAuthors;
 };
 

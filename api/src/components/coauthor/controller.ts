@@ -4,7 +4,9 @@ import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
-export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>) => {
+export const get = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
         return response.json(200, coAuthors);
