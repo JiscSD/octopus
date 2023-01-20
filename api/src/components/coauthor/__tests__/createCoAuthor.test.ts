@@ -11,14 +11,16 @@ describe('create coauthor', () => {
         const coauthor = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '000000005' })
-            .send([{
-                id: cuid(),
-                publicationId: 'publication-problem-draft',
-                email: 'emailtest@emailtest.com',
-                linkedUser: null,
-                approvalRequested: false,
-                confirmedCoAuthor: false
-            }]);
+            .send([
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'emailtest@emailtest.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
 
         expect(coauthor.status).toEqual(201);
     });
@@ -27,14 +29,16 @@ describe('create coauthor', () => {
         const coauthor = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '987654321' })
-            .send([{
-                id: cuid(),
-                publicationId: 'publication-problem-draft',
-                email: 'emailtest@emailtest.com',
-                linkedUser: null,
-                approvalRequested: false,
-                confirmedCoAuthor: false
-            }]);
+            .send([
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'emailtest@emailtest.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
 
         expect(coauthor.status).toEqual(403);
     });
@@ -43,14 +47,16 @@ describe('create coauthor', () => {
         const coauthor = await testUtils.agent
             .put('/publications/non-existent-publication/coauthor')
             .query({ apiKey: '123456789' })
-            .send([{
-                id: cuid(),
-                publicationId: 'non-existent-publication',
-                email: 'emailtest@emailtest.com',
-                linkedUser: null,
-                approvalRequested: false,
-                confirmedCoAuthor: false
-            }]);
+            .send([
+                {
+                    id: cuid(),
+                    publicationId: 'non-existent-publication',
+                    email: 'emailtest@emailtest.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
 
         expect(coauthor.status).toEqual(404);
     });
@@ -59,16 +65,17 @@ describe('create coauthor', () => {
         const coauthor = await testUtils.agent
             .put('/publications/publication-problem-live/coauthor')
             .query({ apiKey: '123456789' })
-            .send([{
-                id: cuid(),
-                publicationId: 'publication-problem-live',
-                email: 'emailtest@emailtest.com',
-                linkedUser: null,
-                approvalRequested: false,
-                confirmedCoAuthor: false
-            }]);
+            .send([
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-live',
+                    email: 'emailtest@emailtest.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
 
         expect(coauthor.status).toEqual(403);
     });
-
 });

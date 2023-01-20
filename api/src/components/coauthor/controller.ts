@@ -4,20 +4,18 @@ import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
-
 export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>) => {
     try {
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
         return response.json(200, coAuthors);
-        
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-
 export const updateAll = async (
-    event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>): Promise<I.JSONResponse> => {
+    event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -44,8 +42,8 @@ export const updateAll = async (
 
         // removes user element to allow to save many to database
         event.body.map((coAuthor) => {
-            delete coAuthor.user
-        })
+            delete coAuthor.user;
+        });
 
         const coAuthors = await coAuthorService.updateAll(event.pathParameters.id, event.body);
         return response.json(201, coAuthors);
@@ -230,13 +228,12 @@ export const requestApproval = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-
         // get all pending co authors
         const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(event.pathParameters.id);
         const publication = await publicationService.get(event.pathParameters.id);
 
         // email pending co authors and update their record
-        for(const pendingCoAuthor of pendingCoAuthors) { 
+        for (const pendingCoAuthor of pendingCoAuthors) {
             await email.notifyCoAuthor({
                 coAuthor: pendingCoAuthor.email,
                 userFirstName: event.user.firstName,
@@ -246,14 +243,12 @@ export const requestApproval = async (
                 publicationTitle: publication?.title || 'No title yet'
             });
 
-            await coAuthorService.updateRequestApprovalStatus( event.pathParameters.id, pendingCoAuthor.email)
+            await coAuthorService.updateRequestApprovalStatus(event.pathParameters.id, pendingCoAuthor.email);
         }
-        
+
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
         return response.json(200, coAuthors);
-    
-    }
-    catch(err) {
+    } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
-}
+};

@@ -59,10 +59,10 @@ export const updateAll = async (publicationId, data) => {
         where: {
             publicationId
         }
-    })
+    });
 
     return authors;
-}
+};
 
 export const deleteCoAuthor = async (id: string) => {
     const deleteCoAuthor = await client.prisma.coAuthors.delete({
@@ -154,7 +154,7 @@ export const getPendingApprovalForPublication = async (publicationId: string) =>
     });
 
     return CoAuthors;
-}
+};
 
 export const updateRequestApprovalStatus = async (publicationId: string, email: string) => {
     const CoAuthors = await client.prisma.coAuthors.updateMany({
@@ -163,10 +163,9 @@ export const updateRequestApprovalStatus = async (publicationId: string, email: 
             email
         },
         data: {
-            approvalRequested: true,
+            approvalRequested: true
         }
-
     });
 
     return CoAuthors;
-}
+};

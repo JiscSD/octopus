@@ -371,7 +371,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string,
+    publicationId: string;
     user?: {
         firstName: string;
         lastName: string;

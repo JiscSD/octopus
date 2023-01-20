@@ -8,7 +8,7 @@ import * as coAuthorSchema from 'coauthor/schema';
 export const get = middy(coAuthorController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication())
+    .use(middleware.authentication());
 
 export const create = middy(coAuthorController.updateAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
@@ -36,4 +36,4 @@ export const updateConfirmation = middy(coAuthorController.updateConfirmation)
 export const requestApproval = middy(coAuthorController.requestApproval)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication())
+    .use(middleware.authentication());

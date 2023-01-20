@@ -18,13 +18,13 @@ const createCoAuthorSchema: I.Schema = {
                 type: 'string'
             },
             confirmedCoAuthor: {
-                type: 'boolean',
+                type: 'boolean'
             },
             approvalRequested: {
-                type: 'boolean',
-            },            
+                type: 'boolean'
+            },
             linkedUser: {
-                type: ['string','null'],
+                type: ['string', 'null']
             },
             user: {
                 type: ['object', 'null'],
