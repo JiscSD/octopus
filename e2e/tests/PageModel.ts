@@ -153,6 +153,11 @@ export const PageModel = {
     previewButton: 'button:has-text("Preview") >> nth=0',
     publishButton: 'button:has-text("Publish") >> nth=1',
     confirmPublishButton: 'button[aria-label="Yes, save & publish"]',
+    fileImportButtonModal: 'button[title="Import from Microsoft Word (.docx)"]',
+    fileImportButton: 'input[name="document-import"]',
+    insertButton: 'button:has-text("Insert")',
+    replaceButton: 'button:has-text("Replace")',
+    importModal: 'div[title="Document Import"]',
     draftEditButton:
       'a[role="button"]:has-text("Edit or publish draft publication")',
     keyInformation: {

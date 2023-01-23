@@ -906,3 +906,81 @@ test.describe("Publication flow + co-authors", () => {
     await expect(page.getByText(Helpers.user3.shortName)).toBeVisible();
   });
 });
+
+test.describe('Publication Flow + File import', () => {
+  test('Create PROBLEM publication where text is filled from document import', async ({ browser }) => {
+    // Start up test
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    // Login
+    await page.goto(Helpers.UI_BASE);
+    await Helpers.login(page, browser);
+    await expect(page.locator(PageModel.header.usernameButton)).toHaveText(
+      Helpers.user1.fullName
+    );
+
+    await createPublication(page, "test publication - file import", "PROBLEM");
+    await publicationFlowKeyInformation(
+      page,
+      "CC_BY_NC",
+      "01rv9gx86",
+      "ror name",
+      "ror city",
+      "https://ror.com",
+      "extra details"
+    );
+    await publicationFlowLinkedPublication(
+      page,
+      "living organisms",
+      "How do living organisms function, survive, reproduce and evolve?"
+    );
+
+    // import initial playwright file
+    await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright.docx')
+    await page.locator(PageModel.publish.insertButton).click();
+    
+    // Ensure modal has closed and file import
+    await expect(page.locator(PageModel.publish.importModal)).not.toBeVisible();
+    await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright');
+
+    // replace playwright file
+    await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright - Replace.docx')
+    await page.locator(PageModel.publish.replaceButton).click();
+
+    // Ensure modal has closed and file import
+    await expect(page.locator(PageModel.publish.importModal)).not.toBeVisible();
+    await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright - Replaced');
+  
+    await page.click('button[title="Save"]:first-of-type');
+    await Promise.all([
+      page.click('div[role="dialog"] button[title="Save"]'),
+      page.waitForResponse(
+        (response) =>
+          response.url().includes("/publications") &&
+          response.request().method() === "PATCH" &&
+          response.ok()
+      ),
+    ]);
+
+    await page.locator(PageModel.publish.nextButton).click();
+   
+    await publicationFlowConflictOfInterest(page, false);
+
+    await publicationFlowFunders(
+      page,
+      "01rv9gx86",
+      "funder name",
+      "funder city",
+      "https://funder.com",
+      "extra details"
+    );
+
+    await page.locator(PageModel.publish.previewButton).click();
+    await page.locator(PageModel.publish.publishButton).click();
+    await page.locator(PageModel.publish.confirmPublishButton).click();
+
+    await expect(page.getByText('File Import – Playwright')).toBeVisible();
+
+  });
+});
