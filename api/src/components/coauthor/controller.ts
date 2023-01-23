@@ -1,11 +1,22 @@
 import * as coAuthorService from 'coauthor/service';
-import * as email from 'email';
 import * as I from 'interface';
+import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
-export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreateCoAuthorRequestBody, undefined, I.CreateCoAuthorPathParams>
+export const get = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        return response.json(200, coAuthors);
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const updateAll = async (
+    event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -31,27 +42,13 @@ export const create = async (
             });
         }
 
-        const isUserAlreadyCoAuthor = await coAuthorService.isUserAlreadyCoAuthor(
-            event.body.email,
-            event.pathParameters.id
-        );
-
-        if (isUserAlreadyCoAuthor) {
-            return response.json(409, { message: 'This email has already been added as a co-author.' });
-        }
-
-        const coAuthor = await coAuthorService.create(event.body.email, event.pathParameters.id);
-
-        await email.notifyCoAuthor({
-            coAuthor: event.body.email,
-            userFirstName: event.user.firstName,
-            userLastName: event.user.lastName,
-            code: coAuthor.code,
-            publicationId: event.pathParameters.id,
-            publicationTitle: publication.title || 'No title yet'
+        // removes user element to allow to save many to database
+        event.body.map((coAuthor) => {
+            delete coAuthor.user;
         });
 
-        return response.json(201, coAuthor);
+        const coAuthors = await coAuthorService.updateAll(event.pathParameters.id, event.body);
+        return response.json(201, coAuthors);
     } catch (err) {
         console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
@@ -224,6 +221,35 @@ export const updateConfirmation = async (
         }
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
+    } catch (err) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const requestApproval = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        // get all pending co authors
+        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(event.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        // email pending co authors and update their record
+        for (const pendingCoAuthor of pendingCoAuthors) {
+            await email.notifyCoAuthor({
+                coAuthor: pendingCoAuthor.email,
+                userFirstName: event.user.firstName,
+                userLastName: event.user.lastName,
+                code: pendingCoAuthor.code,
+                publicationId: event.pathParameters.id,
+                publicationTitle: publication?.title || 'No title yet'
+            });
+
+            await coAuthorService.updateRequestApprovalStatus(event.pathParameters.id, pendingCoAuthor.email);
+        }
+
+        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        return response.json(200, coAuthors);
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }

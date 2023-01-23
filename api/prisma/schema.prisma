@@ -150,6 +150,7 @@ model CoAuthors {
     email             String
     code              String      @default(cuid())
     confirmedCoAuthor Boolean     @default(false)
+    approvalRequested Boolean     @default(false)
     linkedUser        String?
     user              User?       @relation(fields: [linkedUser], references: [id])
     publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
