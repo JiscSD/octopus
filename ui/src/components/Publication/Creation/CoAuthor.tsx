@@ -7,6 +7,8 @@ import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 
+import cuid from 'cuid';
+
 const CoAuthor: React.FC = (): React.ReactElement => {
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
@@ -17,15 +19,27 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
+    const [emailDuplicated, SetEmailDuplicated] = React.useState(true);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
+        SetEmailDuplicated(true);
         setCoAuthor(event.target.value);
     };
 
     // Validate email for co author regex to use -
     const addCoAuthorToPublication = React.useCallback(async () => {
         setLoading(true);
+
+        const authorsArray = coAuthors || [];
+
+        // check to ensure co-author email is not already in the store/database
+        const emailDuplicate = authorsArray.some((author) => author.email === coAuthor);
+        if (emailDuplicate) {
+            SetEmailDuplicated(false);
+            setLoading(false);
+            return;
+        }
 
         const validEmail = Helpers.validateEmail(coAuthor);
 
@@ -36,40 +50,31 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         }
 
         setCoAuthor('');
-        try {
-            await api.post(
-                `/publications/${publicationId}/coauthor`,
-                {
-                    email: coAuthor
-                },
-                user?.token
-            );
 
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
-        } catch (err) {
-            console.log(err);
-        }
+        const newAuthor = {
+            id: cuid(),
+            publicationId: publicationId,
+            email: coAuthor,
+            linkedUser: null,
+            approvalRequested: false,
+            confirmedCoAuthor: false
+        };
 
+        authorsArray.push(newAuthor);
+        updateCoAuthors(authorsArray);
         setLoading(false);
     }, [coAuthor, user, publicationId]);
 
-    const deleteCoAuthor = React.useCallback(
-        async (coAuthorId: string) => {
-            await api.destroy(`/publications/${publicationId}/coauthor/${coAuthorId}`, user?.token);
-
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
-        },
-        [user, publicationId]
-    );
+    const deleteCoAuthor = async (coAuthorId: string) => {
+        updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
+    };
 
     const refreshCoAuthors = React.useCallback(async () => {
         setLoading(true);
 
         try {
-            const response = await api.get(`/publications/${publicationId}`, user?.token);
-            updateCoAuthors(response.data.coAuthors);
+            const response = await api.get(`/publications/${publicationId}/coauthors`, user?.token);
+            updateCoAuthors(response.data);
             setLoading(false);
         } catch {
             setLoading(false);
@@ -81,17 +86,16 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             <div>
                 <Components.PublicationCreationStepTitle text="Co-authors" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
-                    Add the email addresses of any co-authors involved in this publication. Note that they will
-                    immediately receive an email asking them to confirm their involvement and preview the publication.{' '}
-                    <span className="font-bold">
-                        Only add their emails when you are ready for the draft to be viewed.
-                    </span>
+                    Add the email addresses of any co-authors involved in this publication. Note that they will only
+                    receive an email asking them to confirm their involvement and preview the publication once you have
+                    requested approval from the “Review and Publish” section.
                 </span>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Please note that in line with the smaller publication types on Octopus, we encourage you to list
                     only those authors that were directly involved in this stage of the research process.
                 </span>
             </div>
+
             <div data-testid="co-author-invite">
                 <div className="flex items-center space-x-4">
                     <input
@@ -107,7 +111,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         }}
                     />
                     <Components.Button
-                        title="Send co-author invite"
+                        title="Add Co-author"
                         disabled={!coAuthor}
                         onClick={addCoAuthorToPublication}
                         endIcon={
@@ -127,18 +131,31 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         className="mt-3 w-2/3"
                     />
                 )}
+                {!emailDuplicated && (
+                    <Components.Alert
+                        data-testid="email-error"
+                        severity="ERROR"
+                        title="This email is already in the Co-Authors table"
+                        className="mt-3 w-2/3"
+                    />
+                )}
             </div>
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="overflow-x-auto">
                     <div className="inline-block min-w-full py-2 align-middle">
                         <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                            <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
+                            <table
+                                data-testid="coauthor-table"
+                                className="min-w-full divide-y divide-grey-100 dark:divide-teal-300"
+                            >
                                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                     <tr>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Status
                                         </th>
-
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Approval Requested
+                                        </th>
                                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                                             Email
                                         </th>

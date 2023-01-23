@@ -25,11 +25,13 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
+    const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
     const store = Stores.usePublicationCreationStore();
     const [memoizedStore] = useState(store);
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
+    const [requestApprovalModalVisibility, setRequestApprovalModalVisibility] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
     const [showSideBar, setShowSideBar] = useState(false);
     const xl = Hooks.useMediaQuery('(min-width: 1280px)');
@@ -83,6 +85,55 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         []
     );
 
+    const checkRequiredApproval = useCallback(
+        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            let ready = { ready: true, message: '' };
+            if (!store.title) ready = { ready: false, message: 'You must provide a title' };
+            if (!store.content) ready = { ready: false, message: 'You must provide main text' };
+            if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
+            if (!store.linkTo?.length)
+                ready = { ready: false, message: 'You must link this publication to at least one other' };
+
+            if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there is a conflict of interest, please provide a reason.'
+                };
+            }
+            if (typeof store.conflictOfInterestStatus == 'undefined') {
+                ready = { ready: false, message: 'You must select a conflict of interest option' };
+            }
+            if (store.type === Config.values.octopusInformation.publications.DATA.id) {
+                if (store.ethicalStatement === null)
+                    ready = { ready: false, message: 'You must select an ethical statement option' };
+                if (store.dataPermissionsStatement === null)
+                    ready = { ready: false, message: 'You must select a data permissions option' };
+                if (
+                    !store.dataPermissionsStatementProvidedBy &&
+                    store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+                )
+                    ready = {
+                        ready: false,
+                        message: 'You must provide details of who gave permission for the data collection and sharing'
+                    };
+            }
+
+            return ready;
+        },
+        []
+    );
+
+    const CheckCoAuthorsToApprove = useCallback(
+        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            let ready = { ready: true, message: '' };
+            if (!store.coAuthors.every((coAuthor) => coAuthor.approvalRequested)) {
+                ready = { ready: false, message: 'CoAuthors pending approval request' };
+            }
+            return ready;
+        },
+        []
+    );
+
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = useCallback(
         async (message?: string) => {
@@ -121,6 +172,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             await api.put(
                 `${Config.endpoints.publications}/${props.publication.id}/reference`,
                 store.references,
+                props.token
+            );
+
+            // update co-authors for this publications - should really be put
+            await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/coauthor`,
+                store.coAuthors,
                 props.token
             );
 
@@ -163,6 +221,23 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
         setPublishModalVisibility(false);
     }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
+
+    const requestApproval = useCallback(async () => {
+        try {
+            await saveCurrent();
+            const response = await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+                {},
+                props.token
+            );
+            updateCoAuthors(response.data);
+        } catch (err) {
+            const { message } = err as Interfaces.JSONResponseError;
+            store.setError(message);
+        }
+
+        setRequestApprovalModalVisibility(false);
+    }, [saveCurrent, store]);
 
     // Option selected from modal
     const save = useCallback(async () => {
@@ -220,6 +295,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequired, isReadyToPreview, store]
     );
 
+    const isReadyRequestApproval = useMemo(
+        () => isReadyToPreview && checkRequiredApproval(store).ready,
+        [checkRequiredApproval, isReadyToPreview, store]
+    );
+
+    const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
+
     return (
         <>
             <Components.Modal
@@ -246,6 +328,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             >
                 <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
+            <Components.Modal
+                open={requestApprovalModalVisibility}
+                setOpen={setRequestApprovalModalVisibility}
+                positiveActionCallback={requestApproval}
+                positiveButtonText="Finalise Draft and Send Request"
+                cancelButtonText="Cancel"
+                title="Are you sure you want to finalise your publication?"
+                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
+            ></Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
@@ -370,20 +461,27 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-
-                                        <Components.Button
-                                            title={
-                                                isReadyToPublish
-                                                    ? 'Publish'
-                                                    : 'All sections must be completed before publishing'
-                                            }
-                                            onClick={() => setPublishModalVisibility(true)}
-                                            disabled={!isReadyToPublish}
-                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        >
-                                            Publish
-                                        </Components.Button>
+                                        {!coAuthorsToApprove ? (
+                                            <Components.Button
+                                                title="Request Approval"
+                                                onClick={() => setRequestApprovalModalVisibility(true)}
+                                                disabled={!isReadyRequestApproval}
+                                                endIcon={
+                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                }
+                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            />
+                                        ) : (
+                                            <Components.Button
+                                                title="Publish"
+                                                onClick={() => setPublishModalVisibility(true)}
+                                                disabled={!isReadyToPublish}
+                                                endIcon={
+                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                }
+                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            />
+                                        )}
                                         <Components.Button
                                             title="Save"
                                             onClick={() => setSaveModalVisibility(true)}
@@ -428,16 +526,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        <Components.IconButton
-                                            title={
-                                                isReadyToPublish
-                                                    ? 'Publish'
-                                                    : 'All sections must be completed before publishing'
-                                            }
-                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                            disabled={!isReadyToPublish}
-                                            onClick={() => setPublishModalVisibility(true)}
-                                        />
+                                        {!coAuthorsToApprove ? (
+                                            <Components.IconButton
+                                                title="Request Approval"
+                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                disabled={!isReadyRequestApproval}
+                                                onClick={() => setRequestApprovalModalVisibility(true)}
+                                            />
+                                        ) : (
+                                            <Components.IconButton
+                                                title="Publish"
+                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                disabled={!isReadyToPublish}
+                                                onClick={() => setPublishModalVisibility(true)}
+                                            />
+                                        )}
                                         <Components.IconButton
                                             title="Save"
                                             icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
@@ -511,6 +614,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         {props.steps.length - 1 === props.currentStep ? (
                             xl ? (
                                 <>
+                                    {console.log(store.coAuthors)}
                                     <Components.Button
                                         title={
                                             isReadyToPreview
@@ -524,20 +628,23 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     >
                                         Preview
                                     </Components.Button>
-
-                                    <Components.Button
-                                        title={
-                                            isReadyToPublish
-                                                ? 'Publish'
-                                                : 'All sections must be completed before publishing'
-                                        }
-                                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        disabled={!isReadyToPublish}
-                                        endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
-                                        onClick={() => setPublishModalVisibility(true)}
-                                    >
-                                        Publish
-                                    </Components.Button>
+                                    {!coAuthorsToApprove ? (
+                                        <Components.Button
+                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            disabled={!isReadyRequestApproval}
+                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            title="Request Approval"
+                                            onClick={() => setRequestApprovalModalVisibility(true)}
+                                        />
+                                    ) : (
+                                        <Components.Button
+                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            disabled={!isReadyToPublish}
+                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            title="Publish"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />
+                                    )}
                                 </>
                             ) : (
                                 <>
@@ -552,16 +659,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    <Components.IconButton
-                                        disabled={!isReadyToPublish}
-                                        icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
-                                        title={
-                                            isReadyToPublish
-                                                ? 'Publish'
-                                                : 'All sections must be completed before publishing'
-                                        }
-                                        onClick={() => setPublishModalVisibility(true)}
-                                    />
+                                    {!coAuthorsToApprove ? (
+                                        <Components.IconButton
+                                            disabled={!isReadyRequestApproval}
+                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            title="Request Approval"
+                                            onClick={() => setRequestApprovalModalVisibility(true)}
+                                        />
+                                    ) : (
+                                        <Components.IconButton
+                                            disabled={!isReadyToPublish}
+                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            title="Publish"
+                                            onClick={() => setPublishModalVisibility(true)}
+                                        />
+                                    )}
                                 </>
                             )
                         ) : xl ? (

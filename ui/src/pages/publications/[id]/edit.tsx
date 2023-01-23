@@ -131,7 +131,7 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const { updateReferences, ...store } = Stores.usePublicationCreationStore();
+    const { updateReferences, updateCoAuthors, ...store } = Stores.usePublicationCreationStore();
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
@@ -209,9 +209,22 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [props.draftedPublication.id, props.token, updateReferences]);
 
+    const fetchAndSetAuthors = React.useCallback(async () => {
+        if (props.draftedPublication.id) {
+            try {
+                const response = await api.get(`/publications/${props.draftedPublication.id}/coauthors`, props.token);
+                updateCoAuthors(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftedPublication.id, props.token, updateCoAuthors]);
+
     React.useEffect(() => {
         fetchAndSetReferences();
-    }, [fetchAndSetReferences]);
+        fetchAndSetAuthors();
+    }, [fetchAndSetReferences, fetchAndSetAuthors]);
 
     React.useEffect(() => {
         if (props.draftedPublication.id) {
@@ -276,7 +289,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
 
         store.updateLinkTo(props.draftedPublication.linkedTo);
-        store.updateCoAuthors(props.draftedPublication.coAuthors);
         store.updateFunders(props.draftedPublication.funders);
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
         store.updateAffiliations(props.draftedPublication.affiliations);

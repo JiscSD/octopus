@@ -1,6 +1,31 @@
 import * as client from 'lib/client';
 import cuid from 'cuid';
 
+export const getAllByPublication = async (publicationId: string) => {
+    const coAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationId
+        },
+        select: {
+            id: true,
+            email: true,
+            linkedUser: true,
+            publicationId: true,
+            confirmedCoAuthor: true,
+            approvalRequested: true,
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    orcid: true
+                }
+            }
+        }
+    });
+
+    return coAuthors;
+};
+
 export const create = async (email: string, publicationId: string) => {
     const create = await client.prisma.coAuthors.create({
         data: {
@@ -18,6 +43,26 @@ export const create = async (email: string, publicationId: string) => {
     });
 
     return create;
+};
+
+export const updateAll = async (publicationId, data) => {
+    await client.prisma.coAuthors.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+
+    await client.prisma.coAuthors.createMany({
+        data
+    });
+
+    const authors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationId
+        }
+    });
+
+    return authors;
 };
 
 export const deleteCoAuthor = async (id: string) => {
@@ -99,4 +144,29 @@ export const isUserAlreadyCoAuthor = async (email: string, publicationId: string
     });
 
     return Boolean(publication);
+};
+
+export const getPendingApprovalForPublication = async (publicationId: string) => {
+    const CoAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            approvalRequested: false,
+            publicationId
+        }
+    });
+
+    return CoAuthors;
+};
+
+export const updateRequestApprovalStatus = async (publicationId: string, email: string) => {
+    const CoAuthors = await client.prisma.coAuthors.updateMany({
+        where: {
+            publicationId,
+            email
+        },
+        data: {
+            approvalRequested: true
+        }
+    });
+
+    return CoAuthors;
 };

@@ -731,7 +731,7 @@ test.describe("Publication flow", () => {
 });
 
 const publicationWithCoAuthors = {
-  title: "Test co-authors",
+  title: "Test co-authors 3",
   content: "Testing co-authors",
   coAuthors: [Helpers.user2, Helpers.user3],
   type: "PROBLEM",
@@ -739,12 +739,7 @@ const publicationWithCoAuthors = {
 
 const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
   await page.fill('input[type="email"]', user.email);
-  await Promise.all([
-    page.waitForResponse(
-      (response) => response.url().includes("/coauthor") && response.ok()
-    ),
-    page.keyboard.press("Enter"),
-  ]);
+  page.keyboard.press("Enter");
 };
 
 const confirmCoAuthorInvitation = async (
@@ -785,11 +780,12 @@ const confirmCoAuthorInvitation = async (
   const page3 = await context.newPage();
   await page3.goto(invitationLink);
   await (await page3.waitForSelector('button:has-text("approve")')).click();
-
+  
   await (
-    await page3.waitForSelector('button[title="Yes, this is ready to publish"]')
+    await (await page3.waitForSelector('button[title="Yes, this is ready to publish"]'))
   ).click();
 
+  await page3.waitForSelector('button:has-text("change your mind")')
   await context.close();
 };
 
@@ -849,8 +845,13 @@ test.describe("Publication flow + co-authors", () => {
     await addCoAuthor(page, Helpers.user2);
     await addCoAuthor(page, Helpers.user3);
 
-    // verify 'Publish' button is now disabled
-    await expect(publishButton).toBeDisabled();
+    // verify 'Publish' button is now request approval button
+    const requestApprovalButton = page.locator(PageModel.publish.requestApprovalButton);
+    await expect(requestApprovalButton).toBeEnabled();
+
+    // Request approval from co authors
+    await page.locator(PageModel.publish.requestApprovalButton).click();
+    await page.locator(PageModel.publish.confirmRequestApproval).click();
 
     // first co-author confirmation
     await confirmCoAuthorInvitation(browser, Helpers.user2);
@@ -864,6 +865,8 @@ test.describe("Publication flow + co-authors", () => {
     // second co-author confirmation
     await confirmCoAuthorInvitation(browser, Helpers.user3);
 
+    await page.reload();
+    
     // verify notification triggered after last confirmation
     await verifyLastEmailNotification(
       browser,
@@ -882,9 +885,6 @@ test.describe("Publication flow + co-authors", () => {
           response.ok()
       ),
     ]);
-
-    // refresh corresponding author page
-    await page.reload();
 
     // verify publish button is now enabled
     await page.waitForSelector(PageModel.publish.publishButton);
