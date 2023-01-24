@@ -47,7 +47,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     ) : (
                         <span title="Request to be sent when draft editing is complete">
                             <div title="Request to be sent when draft editing is complete">
-                                <OutlineIcons.MailOpenIcon className="h-5 w-5 text-red-700 transition-colors duration-500 dark:text-white-50" />
+                                <OutlineIcons.MailOpenIcon className="h-5 w-5 text-yellow-600 transition-colors duration-500 dark:text-yellow-500" />
                             </div>
                         </span>
                     )}
