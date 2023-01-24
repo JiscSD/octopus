@@ -181,7 +181,7 @@ export const link = async (
             // User is already linked as a co-author
             if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
                 return response.json(404, {
-                    message: 'You are already linked as another co-author'
+                    message: 'You are already linked as an author on this draft'
                 });
             }
 
@@ -190,7 +190,7 @@ export const link = async (
 
             if (!coAuthorByEmail) {
                 return response.json(404, {
-                    message: 'Email not found as a co-author.'
+                    message: 'You are not currently listed as an author on this draft'
                 });
             }
 
