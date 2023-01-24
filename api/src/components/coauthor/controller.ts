@@ -44,12 +44,14 @@ export const updateAll = async (
         }
 
         // Check if duplicate coAuthors in array
-        const valueArr = event.body.map(function(coAuthor){ return coAuthor.email });
-        const isDuplicate = valueArr.some(function(coAuthor, idx){ 
-            return valueArr.indexOf(coAuthor) != idx 
+        const valueArr = event.body.map(function (coAuthor) {
+            return coAuthor.email;
+        });
+        const isDuplicate = valueArr.some(function (coAuthor, idx) {
+            return valueArr.indexOf(coAuthor) != idx;
         });
 
-        if(isDuplicate) {
+        if (isDuplicate) {
             return response.json(400, { message: 'Duplicate coAuthors' });
         }
 
