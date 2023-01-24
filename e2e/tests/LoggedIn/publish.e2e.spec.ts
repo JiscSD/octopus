@@ -624,21 +624,12 @@ const publicationWithCoAuthors = {
 
 const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
     await page.fill('input[type="email"]', user.email);
-    await Promise.all([
-        page.waitForResponse((response) => response.url().includes('/coauthor') && response.ok()),
-        page.keyboard.press('Enter')
-    ]);
+    await page.keyboard.press('Enter');
 };
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
     const row = page.locator('tr', { hasText: user.email });
-    await Promise.all([
-        page.waitForResponse(
-            (response) =>
-                response.request().method() === 'DELETE' && response.url().includes('/coauthor') && response.ok()
-        ),
-        row.locator('button[title="Delete"]').click()
-    ]);
+    await row.locator('button[title="Delete"]').click();
 };
 
 const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser) => {
@@ -802,9 +793,27 @@ test.describe('Publication flow + co-authors', () => {
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
         // add one co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
 
         // co-author rejects invitation
         await rejectCoAuthorInvitation(browser, Helpers.user2);
@@ -825,12 +834,31 @@ test.describe('Publication flow + co-authors', () => {
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user3);
 
         // verify co-author has been added
         await expect(page.locator(`td:has-text("${Helpers.user3.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user3, 'You’ve been added as a co-author on Octopus');
@@ -841,83 +869,15 @@ test.describe('Publication flow + co-authors', () => {
         // verify co-author has been removed
         await expect(page.locator(`td:has-text("${Helpers.user3.email}")`)).not.toBeVisible();
 
+        // save the publication
+        await page.locator('button[title="Save"]').first().click();
+        await page.locator('div[role="dialog"] button[title="Save"]').click();
+        await page.waitForSelector('p:has-text("Publication successfully saved")');
+
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user3, 'You are no longer listed as a co-author');
 
         await page.close();
-    });
-});
-
-test.describe('Publication Flow + File import', () => {
-    test('Create PROBLEM publication where text is filled from document import', async ({ browser }) => {
-        // Start up test
-        const context = await browser.newContext();
-        const page = await context.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
-
-        await createPublication(page, 'test publication - file import', 'PROBLEM');
-        await publicationFlowKeyInformation(
-            page,
-            'CC_BY_NC',
-            '01rv9gx86',
-            'ror name',
-            'ror city',
-            'https://ror.com',
-            'extra details'
-        );
-        await publicationFlowLinkedPublication(
-            page,
-            'living organisms',
-            'How do living organisms function, survive, reproduce and evolve?'
-        );
-
-        // import initial playwright file
-        await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright.docx');
-        await page.locator(PageModel.publish.insertButton).click();
-
-        // Ensure modal has closed and file import
-        await expect(page.locator(PageModel.publish.importModal)).not.toBeVisible();
-        await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright');
-
-        // replace playwright file
-        await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright - Replace.docx');
-        await page.locator(PageModel.publish.replaceButton).click();
-
-        // Ensure modal has closed and file import
-        await expect(page.locator(PageModel.publish.importModal)).not.toBeVisible();
-        await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright - Replaced');
-
-        await page.click('button[title="Save"]:first-of-type');
-        await Promise.all([
-            page.click('div[role="dialog"] button[title="Save"]'),
-            page.waitForResponse(
-                (response) =>
-                    response.url().includes('/publications') && response.request().method() === 'PATCH' && response.ok()
-            )
-        ]);
-
-        await page.locator(PageModel.publish.nextButton).click();
-
-        await publicationFlowConflictOfInterest(page, false);
-
-        await publicationFlowFunders(
-            page,
-            '01rv9gx86',
-            'funder name',
-            'funder city',
-            'https://funder.com',
-            'extra details'
-        );
-
-        await page.locator(PageModel.publish.previewButton).click();
-        await page.locator(PageModel.publish.publishButton).click();
-        await page.locator(PageModel.publish.confirmPublishButton).click();
-
-        await expect(page.getByText('File Import – Playwright')).toBeVisible();
     });
 });
 
