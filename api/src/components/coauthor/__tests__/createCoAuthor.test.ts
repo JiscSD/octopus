@@ -7,7 +7,7 @@ describe('create coauthor', () => {
         await testUtils.testSeed();
     });
 
-    test('Create a co-author', async () => {
+    test('Update co-authors for a specific publication', async () => {
         const coauthor = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthor')
             .query({ apiKey: '000000005' })
@@ -22,7 +22,7 @@ describe('create coauthor', () => {
                 }
             ]);
 
-        expect(coauthor.status).toEqual(201);
+        expect(coauthor.status).toEqual(200);
     });
 
     test('Cannot create a co-author record if the user is not the author of a publication', async () => {
