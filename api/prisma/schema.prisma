@@ -195,6 +195,10 @@ enum ImageExtension {
     png
     jpg
     jpeg
+    apng
+    avif
+    gif
+    webp
 }
 
 enum Role {

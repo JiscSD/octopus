@@ -83,7 +83,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         [props.editor]
     );
 
-    const [activeImageUploadType, setActiveImageUploadType] = React.useState<Types.ImageUploadTypes>('FILE_UPLOAD');
+    const [uploadImageErrors, setUploadImageErrors] = React.useState<string[]>([]);
     const [selected, setSelected] = React.useState(headingOptions[0]);
     const [linkModalVisible, setLinkModalVisible] = React.useState(false);
     const [imageModalVisible, setImageModalVisible] = React.useState(false);
@@ -128,6 +128,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
     // For File upload
     const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
+        setUploadImageErrors([]);
         setLoading(true);
 
         const syncFiles = await Promise.allSettled(
@@ -143,6 +144,10 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             )
         );
 
+        console.log(syncFiles);
+
+        const uploadErrors: string[] = [];
+
         syncFiles.forEach((file) => {
             // check status, only do it for fulfilled
             if (file.status === 'fulfilled') {
@@ -152,9 +157,18 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     title: file.value.data.name
                 });
             }
+
+            if (file.status === 'rejected') {
+                uploadErrors.push(file.reason?.response?.data?.message);
+            }
         });
 
-        setImageModalVisible(false);
+        if (uploadErrors.length) {
+            setUploadImageErrors(uploadErrors);
+        } else {
+            setImageModalVisible(false);
+        }
+
         setLoading(false);
     };
 
@@ -180,6 +194,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             width: '',
             libraryUrl: null
         });
+        setUploadImageErrors([]);
     };
 
     // Array buffer helper
@@ -583,12 +598,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 {/* Image upload modal */}
                 <HeadlessUi.Dialog
                     open={imageModalVisible}
-                    onClose={() => setImageModalVisible(false)}
-                    className="fixed inset-0 z-10 overflow-y-auto"
+                    onClose={() => {
+                        setImageModalVisible(false);
+                        setUploadImageErrors([]);
+                    }}
+                    className="fixed inset-0 z-10 grid place-items-center overflow-y-auto py-20"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
+                    <div className="relative w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
                         <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
                         <HeadlessUi.Dialog.Description>
                             <Components.Tabs
@@ -599,6 +617,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                         positiveActionCallback={handleUploadImage}
                                         negativeActionCallback={clearImageAndCloseModal}
                                         loading={loading}
+                                        uploadErrors={uploadImageErrors}
                                     />,
                                     <Components.URLSourceUpload
                                         key="url-source-upload"
