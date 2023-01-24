@@ -1,23 +1,23 @@
 {
-  "name": "e2e",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
-  "scripts": {
-    "test": "npx playwright test",
-    "test-trace": "npx playwright test --trace on"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.28.1",
-    "@types/node": "^18.11.9"
-  },
-  "dependencies": {
-    "dotenv": "^16.0.3"
-  }
+    "name": "e2e",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "engines": {
+        "node": "14.x"
+    },
+    "scripts": {
+        "test": "npx playwright test",
+        "test:trace": "npx playwright test --trace on"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.28.1",
+        "@types/node": "^18.11.9"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.3"
+    }
 }
