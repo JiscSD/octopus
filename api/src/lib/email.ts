@@ -500,3 +500,56 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
         subject: 'All co-authors have approved your Octopus publication'
     });
 };
+
+type NotifyCoAuthorRejection = {
+    coAuthor: {
+        email: string;
+    };
+    publication: {
+        title: string;
+        authorEmail: string;
+    };
+};
+
+export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection) => {
+    const html = `
+                <p>The request that you sent to <strong>${options.coAuthor.email}</strong> to be registered as a co-author of <strong><i>${options.publication.title}</i></strong> has been rejected, and this individual has denied their involvement.</p>
+                <br>
+                <p>If you feel that this may have been a mistake, please check that the email address was spelled correctly, or contact this individual directly to discuss their involvement.</p>
+                <br>
+                <p>This individual’s approval is no longer required before this publication can go live.</p>
+            `;
+
+    const text = `The request that you sent to ${options.coAuthor.email} to be register as a co-author of '${options.publication.title}' has been rejected, and this individual has denied their involvement. If you feel that this may have been a mistake, please check that the email address was spelled correctly, or contact this individual directly to discuss their involvement. This individual’s approval is no longer required before this publication can go live.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('A co-author has denied their involvement', html),
+        text,
+        to: options.publication.authorEmail,
+        subject: 'A co-author has denied their involvement'
+    });
+};
+
+type NotifyCoAuthorRemoval = {
+    coAuthor: {
+        email: string;
+    };
+    publication: {
+        title: string;
+    };
+};
+
+export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval) => {
+    const html = `
+                <p>You are no longer listed as a co-author on <strong><i>${options.publication.title}</i></strong> and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.</p>
+            `;
+
+    const text = `You are no longer listed as a co-author on '${options.publication.title}' and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('You are no longer listed as a co-author', html),
+        text,
+        to: options.coAuthor.email,
+        subject: 'You are no longer listed as a co-author'
+    });
+};

@@ -55,14 +55,6 @@ export const updateAll = async (publicationId, data) => {
     await client.prisma.coAuthors.createMany({
         data
     });
-
-    const authors = await client.prisma.coAuthors.findMany({
-        where: {
-            publicationId
-        }
-    });
-
-    return authors;
 };
 
 export const deleteCoAuthor = async (id: string) => {
