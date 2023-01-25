@@ -142,14 +142,14 @@ export const link = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
-
+        
         // Does the publication exist?
         if (!publication) {
             return response.json(404, {
                 message: 'This publication does not exist.'
             });
         }
-
+        
         // Is the publication in draft?
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
@@ -203,6 +203,21 @@ export const link = async (
             await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
 
             return response.json(200, 'Linked user account');
+        }
+
+        // email has already been linked
+        const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
+
+        if (!coAuthorByEmail) {
+            return response.json(404, {
+                message: 'You are not currently listed as an author on this draft'
+            });
+        }
+
+        if (coAuthorByEmail.linkedUser) {
+            return response.json(404, {
+                message: 'You have previously verified your involvement. Please contact the submitting author to be removed from this publication.'
+            });
         }
 
         await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
