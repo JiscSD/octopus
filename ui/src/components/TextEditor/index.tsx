@@ -144,8 +144,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             )
         );
 
-        console.log(syncFiles);
-
         const uploadErrors: string[] = [];
 
         syncFiles.forEach((file) => {
