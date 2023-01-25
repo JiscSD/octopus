@@ -88,10 +88,22 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                 statusCode: 200
             }
         };
-    } catch (err) {
+    } catch (err: unknown | Types.AxiosError) {
+
+        if (axios.isAxiosError(err)) {
+            return {
+                props: {
+                    title: 'There was an error denying this request.',
+                    statusCode: err.response?.status,
+                    message: err.response?.data.message
+                }
+            };
+        }
+
         return {
             props: {
-                message: 'There was an error denying this request.'
+                status: 500,
+                message: 'Unknown server error'
             }
         };
     }
