@@ -882,16 +882,20 @@ test.describe('Publication flow + co-authors', () => {
 });
 
 test.describe('Publication Flow + File import', () => {
-    test('Create PROBLEM publication where text is filled from document import', async ({ browser }) => {
-        // Start up test
-        const context = await browser.newContext();
-        const page = await context.newPage();
+    let page: Page;
 
-        // Login
+    test.beforeAll(async ({ browser }) => {
+        page = await browser.newPage();
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+    });
 
+    test.afterAll(async () => {
+        page.close();
+    });
+
+    test('Create PROBLEM publication where text is filled from document import', async () => {
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
         await createPublication(page, 'test publication - file import', 'PROBLEM');
         await publicationFlowKeyInformation(
             page,
@@ -909,7 +913,7 @@ test.describe('Publication Flow + File import', () => {
         );
 
         // import initial playwright file
-        await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright.docx');
+        await Helpers.openFileImportModal(page, 'assets/Playwright.docx');
         await page.locator(PageModel.publish.insertButton).click();
 
         // Ensure modal has closed and file import
@@ -917,7 +921,7 @@ test.describe('Publication Flow + File import', () => {
         await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright');
 
         // replace playwright file
-        await Helpers.openFileImportModal(page, './tests/LoggedIn/assets/Playwright - Replace.docx');
+        await Helpers.openFileImportModal(page, 'assets/Playwright - Replace.docx');
         await page.locator(PageModel.publish.replaceButton).click();
 
         // Ensure modal has closed and file import
@@ -951,5 +955,62 @@ test.describe('Publication Flow + File import', () => {
         await page.locator(PageModel.publish.confirmPublishButton).click();
 
         await expect(page.getByText('File Import – Playwright')).toBeVisible();
+    });
+
+    test('Upload images to "Main text" only allows specific formats: png, jpg, jpeg, apng, avif, gif, webp', async () => {
+        await createPublication(page, 'test publication - image upload', 'PROBLEM');
+        await page.waitForSelector('button:has-text("Main text")');
+        await page.click('button:has-text("Main text")');
+
+        const uploadImageButton = page.locator('button[title="Image"]');
+        await expect(uploadImageButton).toBeVisible();
+        await uploadImageButton.click();
+
+        const [fileChooser] = await Promise.all([
+            page.waitForEvent('filechooser'),
+            page.click('label[for="file-upload"]')
+        ]);
+
+        const validImageFiles = [
+            'assets/apng-image-test.png',
+            'assets/avif-image-test.avif',
+            'assets/gif-image-test.gif',
+            'assets/jpeg-image-test.jpeg',
+            'assets/jpg-image-test.jpg',
+            'assets/webp-image-test.webp'
+        ];
+
+        // import correct file formats
+        await fileChooser.setFiles(validImageFiles);
+
+        // verify image previews
+        await page.waitForSelector('img[alt="preview"]');
+        await page.waitForTimeout(1000); // wait for images to load
+
+        expect(await page.locator('img[alt="preview"]').count()).toEqual(6);
+
+        // verify 'Upload images' button is now enabled
+        await expect(page.locator('button[title="Upload image"]')).toBeEnabled();
+
+        // upload images
+        await page.click('button[title="Upload image"]');
+
+        // verify images appear in the 'Main text'
+        await expect(page.locator('button[title="Upload image"]')).not.toBeVisible();
+        for (const image of validImageFiles) {
+            await expect(
+                page.locator(`div[contenteditable="true"] img[title="${image.split('assets/').pop()}"]`)
+            ).toBeVisible();
+        }
+
+        // try do upload a wrong file format
+        await uploadImageButton.click();
+        const [fileChooser2] = await Promise.all([
+            page.waitForEvent('filechooser'),
+            page.click('label[for="file-upload"]')
+        ]);
+        await fileChooser2.setFiles(['assets/Playwright.docx']);
+        await page.click('button[title="Upload image"]');
+        await expect(page.getByText('Failed to upload "Playwright.docx". The format is not supported.')).toBeVisible();
     });
 });
