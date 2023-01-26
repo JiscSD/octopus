@@ -16,8 +16,7 @@
         "jest.config.ts"
     ],
     "plugins": [
-        "@typescript-eslint",
-        "prettier"
+        "@typescript-eslint"
     ],
     "extends": [
         "eslint:recommended",
@@ -25,101 +24,6 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "airbnb-typescript/base"
     ],
-    "rules": {
-        // TODO: OCT-533 remove prettier when eslint configured
-        // Prettier
-        //        "prettier/prettier": [
-        //            "error",
-        //            {},
-        //            {
-        //                "usePrettierrc": true
-        //            }
-        //        ],
-        // Base rules
-        "object-curly-newline": "off",
-        "no-restricted-syntax": "off",
-        "no-underscore-dangle": "off",
-        "consistent-return": "off",
-        "no-useless-return": "off",
-        "no-await-in-loop": "off",
-        "no-extra-semi": "off",
-        "comma-dangle": "off",
-        "no-console": "off",
-        "semi": "off",
-        "arrow-spacing": "error",
-        "no-multi-spaces": "error",
-        "no-multiple-empty-lines": [
-            "error",
-            {
-                "max": 1
-            }
-        ],
-        // imports
-        "import/no-extraneous-dependencies": "off",
-        "import/prefer-default-export": "off",
-        "import/extensions": "off",
-        // TS
-        "@typescript-eslint/restrict-template-expressions": "off", // accessing possible undefined in template lit, e.g `https://${process.env.STAGE}.example.com` - process.env.stage could be undefined
-        "@typescript-eslint/no-unsafe-member-access": "off", // accessing a value from type any
-        "@typescript-eslint/no-unsafe-assignment": "off", // assigning a value from an any
-        "@typescript-eslint/no-empty-interface": "error", // no empty interfaces
-        "@typescript-eslint/no-unsafe-argument": "off", // For use of any as a param
-        "@typescript-eslint/no-extra-semi": "error", // prettier handles removing this, but error anyway
-        "@typescript-eslint/ban-ts-comment": "off", // For use of ts-ignore & other ts- comments
-        "@typescript-eslint/no-unsafe-call": "off", // For calls on type `any`
-        "@typescript-eslint/no-shadow": "off", // out of module scope func names
-        "@typescript-eslint/semi": "warn", // preitter says always huse semis
-
-        // TODO: OCT-533 edits below - discuss with team
-        "@typescript-eslint/no-explicit-any": "error", // For use of `any`
-        "@typescript-eslint/no-unsafe-return": "error", // warn if returning un typed values
-
-        // enforcing trailing comma improves clarity of diffs when editing arrays etc.
-        "@typescript-eslint/comma-dangle": ["error",
-            {
-                "arrays": "only-multiline",
-                "objects": "only-multiline",
-                "imports": "only-multiline"
-            }
-        ],
-
-        // eslint tabbed indent
-        "@typescript-eslint/indent":  ["error", 4],
-        // TODO: check this variable modifier array
-        "@typescript-eslint/naming-convention": [
-            "error",
-            {
-                "selector": "variable",
-                "modifiers": ["exported"],
-                "format": ["camelCase"]
-            }
-        ],
-        // blank line before return statement & around {blocks}
-        "padding-line-between-statements": "off",
-        "@typescript-eslint/padding-line-between-statements": [
-            "error",
-            {
-                "blankLine": "always",
-                "prev": "*",
-                "next": ["return", "block-like"]
-            },
-            {
-                "blankLine": "always",
-                "prev": "block-like",
-                "next": "*"
-            }
-        ],
-        // many rules request base rule is disabled before configuring ts version to avoid odd behaviour
-        "require-await": "off",
-        "@typescript-eslint/require-await": "error",
-        "no-return-await": "off",
-        "@typescript-eslint/return-await": "off",
-        "space-before-blocks": "off",
-        "@typescript-eslint/space-before-blocks": "error"
-    },
-
-    // TODO: end of main OCT-533 edits
-
     "overrides": [
         {
             "files": [
@@ -133,12 +37,11 @@
             }
         },
         {
-            // TODO: OCT-533 change check if override is necessary!!
-            // enable function return types specifically for ts files
+            // enforce precedence of root .eslintrc.json
             "files": ["*.ts", "*.tsx"],
-            "rules": {
-                "@typescript-eslint/explicit-function-return-type": ["error"]
-            }
+            "extends": [
+                "../.eslintrc.json"
+            ]
         }
     ]
 }

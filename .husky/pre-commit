@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "Husky pre-commit ran"
-#cd api || exit
-#npm run lint
+cd api || exit
+#npm run lint:fix
+echo "eslint pre-commit checks: COMMENTED OUT"

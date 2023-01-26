@@ -1,0 +1,85 @@
+{
+  "rules": {
+    // Base rules
+    "object-curly-newline": "off",
+    "no-restricted-syntax": "off",
+    "no-underscore-dangle": "off",
+    "consistent-return": "off",
+    "no-useless-return": "off",
+    "no-await-in-loop": "off",
+    "no-extra-semi": "off",
+    "no-console": "off",
+    "semi": "off",
+    // imports
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "import/extensions": "off",
+    // TS
+    "@typescript-eslint/restrict-template-expressions": "off", // accessing possible undefined in template lit, e.g `https://${process.env.STAGE}.example.com` - process.env.stage could be undefined
+    "@typescript-eslint/no-unsafe-member-access": "off", // accessing a value from type any
+    "@typescript-eslint/no-unsafe-assignment": "off", // assigning a value from an any
+    "@typescript-eslint/no-empty-interface": "error", // no empty interfaces
+    "@typescript-eslint/no-unsafe-argument": "off", // For use of any as a param
+    "@typescript-eslint/no-extra-semi": "error",
+    "@typescript-eslint/ban-ts-comment": "off", // For use of ts-ignore & other ts- comments
+    "@typescript-eslint/no-unsafe-call": "off", // For calls on type `any`
+    "@typescript-eslint/no-shadow": "off", // out of module scope func names
+    "require-await": "off",
+    "@typescript-eslint/require-await": "error",
+    "@typescript-eslint/indent":  ["error", 4],
+    "padding-line-between-statements": "off",
+    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-unsafe-return": "warn",
+    "comma-dangle": "off",
+    "arrow-spacing": "error",
+    "no-multi-spaces": "error",
+    "no-return-await": "off",
+    "@typescript-eslint/return-await": "off",
+    "space-before-blocks": "off",
+    "@typescript-eslint/space-before-blocks": "error",
+    "@typescript-eslint/explicit-function-return-type": ["error"],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1
+      }
+    ],
+    "@typescript-eslint/comma-dangle": ["error",
+      {
+        "arrays": "only-multiline",
+        "objects": "only-multiline",
+        "imports": "only-multiline"
+      }
+    ],
+    "@typescript-eslint/padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["return", "block-like"]
+      },
+      {
+        "blankLine": "always",
+        "prev": "block-like",
+        "next": "*"
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "default",
+        "format": ["camelCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow"
+      },
+      {
+        "selector": ["objectLiteralProperty", "typeProperty"],
+        "format": null
+      },
+      {
+        "selector": ["enum", "enumMember", "interface", "typeAlias", "typeParameter"],
+        "format": ["PascalCase"]
+      }
+    ]
+  }
+}

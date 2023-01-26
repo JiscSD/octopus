@@ -23,7 +23,8 @@
         "reindex": "ts-node prisma/reindex.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
-        "lint": "eslint src/"
+        "lint:check": "eslint src/",
+        "lint:fix": "eslint --fix src/"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.76.0",
