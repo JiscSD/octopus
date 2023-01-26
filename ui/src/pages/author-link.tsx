@@ -89,7 +89,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             }
         };
     } catch (err: unknown | Types.AxiosError) {
-
         if (axios.isAxiosError(err)) {
             return {
                 props: {
