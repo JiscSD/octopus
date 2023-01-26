@@ -25,6 +25,47 @@ describe('create coauthor', () => {
         expect(coauthor.status).toEqual(200);
     });
 
+    test('Cannot create a co-author with duplicate email', async () => {
+        const coauthor = await testUtils.agent
+            .put('/publications/publication-problem-draft/coauthor')
+            .query({ apiKey: '000000005' })
+            .send([
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'email@test.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                },
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'email@test.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                },
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'fake-email@domain.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                },
+                {
+                    id: cuid(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'fake-email@test.com',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
+        expect(coauthor.status).toEqual(400);
+    });
+
     test('Cannot create a co-author record if the user is not the author of a publication', async () => {
         const coauthor = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthor')
