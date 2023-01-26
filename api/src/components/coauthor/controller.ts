@@ -157,6 +157,11 @@ export const link = async (
             });
         }
 
+        // check if this user is part of co-authors list
+        if (!publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email)) {
+            return response.json(403, { message: 'You are not listed as a co-author for this publication.' });
+        }
+
         if (event.body.approve) {
             if (!event.user) {
                 return response.json(403, {
