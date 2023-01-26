@@ -157,24 +157,24 @@ export const link = async (
             });
         }
 
-        const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
-
         if (!event.body.approve) {
+            const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
+
             if (!coAuthorByEmail) {
                 return response.json(404, {
                     message: 'You are not currently listed as an author on this draft'
                 });
             }
-    
+
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
                     message:
                         'You have previously verified your involvement. Please contact the submitting author to be removed from this publication.'
                 });
             }
-    
+
             await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
-    
+
             // notify main author about rejection
             await email.notifyCoAuthorRejection({
                 coAuthor: {
@@ -185,7 +185,7 @@ export const link = async (
                     authorEmail: publication.user.email || ''
                 }
             });
-    
+
             return response.json(200, 'Removed co-author from publication');
         }
 
@@ -216,6 +216,8 @@ export const link = async (
             });
         }
 
+        const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
+
         // User is no longer linked
         if (!coAuthorByEmail) {
             return response.json(404, {
@@ -233,7 +235,6 @@ export const link = async (
         await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
 
         return response.json(200, 'Linked user account');
-      
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
