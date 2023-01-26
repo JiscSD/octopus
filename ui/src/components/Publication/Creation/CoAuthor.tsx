@@ -135,7 +135,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                     <Components.Alert
                         data-testid="email-error"
                         severity="ERROR"
-                        title="This email is already in the Co-Authors table"
+                        title="Email already added as an author"
                         className="mt-3 w-2/3"
                     />
                 )}

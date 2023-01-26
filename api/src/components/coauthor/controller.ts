@@ -43,6 +43,15 @@ export const updateAll = async (
             });
         }
 
+        // Check if duplicate coAuthors in array
+        const authorEmails = event.body.map((coAuthor) => coAuthor.email);
+        const isDuplicate = authorEmails.some((coAuthor, index) => authorEmails.indexOf(coAuthor) != index);
+
+        if (isDuplicate) {
+            return response.json(400, { message: 'Duplicate coAuthors' });
+        }
+
+        // removes user element to allow to save many to database
         const newCoAuthorsArray = event.body.map((coAuthor) => {
             // removes user element to allow to save many to database
             delete coAuthor.user;
