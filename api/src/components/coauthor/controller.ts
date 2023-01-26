@@ -157,15 +157,14 @@ export const link = async (
             });
         }
 
+        const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email)
+        // check if this user is part of co-authors list
+        if (!coAuthorByEmail) {
+            return response.json(403, { message: 'You are not currently listed as an author on this draft' });
+        }
+
         if (!event.body.approve) {
-            const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
-
-            if (!coAuthorByEmail) {
-                return response.json(404, {
-                    message: 'You are not currently listed as an author on this draft'
-                });
-            }
-
+            // email has already been linked
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
                     message:
@@ -213,15 +212,6 @@ export const link = async (
         if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
             return response.json(404, {
                 message: 'You are already linked as an author on this draft'
-            });
-        }
-
-        const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
-
-        // User is no longer linked
-        if (!coAuthorByEmail) {
-            return response.json(404, {
-                message: 'You are not currently listed as an author on this draft'
             });
         }
 
