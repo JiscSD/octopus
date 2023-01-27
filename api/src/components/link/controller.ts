@@ -60,6 +60,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         return response.json(200, link);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -88,6 +89,7 @@ export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, und
         return response.json(200, { message: 'Link deleted' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

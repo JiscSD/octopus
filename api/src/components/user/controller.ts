@@ -9,6 +9,7 @@ export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>) => {
         return response.json(200, users);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -27,6 +28,7 @@ export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, un
         return response.json(200, user);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -52,6 +54,7 @@ export const getPublications = async (
         return response.json(200, userPublications);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

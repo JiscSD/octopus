@@ -24,6 +24,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.ImageSentBody>):
         return response.json(201, imageReference);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: `Failed to upload "${event.body.name}". Unknown server error.` });
     }
 };

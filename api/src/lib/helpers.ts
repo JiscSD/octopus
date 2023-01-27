@@ -13,6 +13,7 @@ export const isHTMLSafe = (content: string) => {
 
         if (classes || style) {
             error = true;
+
             return false;
         }
     });
@@ -121,15 +122,15 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                 relatedIdentifiers: publication?.linkedTo.map((relatedIdentifier) =>
                     relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
                         ? {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Reviews'
-                          }
+                            relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                            relatedIdentifierType: 'DOI',
+                            relationType: 'Reviews'
+                        }
                         : {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Continues'
-                          }
+                            relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                            relatedIdentifierType: 'DOI',
+                            relationType: 'Continues'
+                        }
                 ),
                 fundingReferences: publication?.funders.map((funder) => ({
                     funderName: funder.name,

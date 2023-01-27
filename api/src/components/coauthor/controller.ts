@@ -9,6 +9,7 @@ export const get = async (
 ): Promise<I.JSONResponse> => {
     try {
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+
         return response.json(200, coAuthors);
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
@@ -90,6 +91,7 @@ export const updateAll = async (
         return response.json(200, 'Successfully updated publication authors');
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

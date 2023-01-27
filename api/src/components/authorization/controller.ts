@@ -101,6 +101,7 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
         return response.json(200, token);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

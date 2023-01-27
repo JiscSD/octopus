@@ -48,6 +48,7 @@ export const updateEmail = async (orcid: string, email: string) => {
             orcid
         }
     });
+
     return user;
 };
 
@@ -184,8 +185,8 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         orderBy:
             orderBy && orderDirection
                 ? {
-                      [orderBy]: orderDirection
-                  }
+                    [orderBy]: orderDirection
+                }
                 : undefined
     });
 

@@ -32,6 +32,7 @@ export const requestCode = async (
         return response.json(200, { message: 'OK' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -52,6 +53,7 @@ export const confirmCode = async (
             Number(process.env.VALIDATION_CODE_EXPIRY)
         ) {
             await verificationService.deleteVerification(verification.orcid);
+
             return response.json(404, { message: 'Not found' });
         }
 
@@ -74,12 +76,14 @@ export const confirmCode = async (
         // Expire code on repeated failures to enter correct value
         if (increment.attempts >= Number(process.env.VALIDATION_CODE_ATTEMPTS)) {
             await verificationService.deleteVerification(verification.orcid);
+
             return response.json(404, { message: 'Not found' });
         }
 
         return response.json(422, { message: 'Incorrect code' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

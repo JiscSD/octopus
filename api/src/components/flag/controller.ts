@@ -10,9 +10,11 @@ import * as email from 'lib/email';
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
     try {
         const flag = await flagService.get(event.pathParameters.id);
+
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -20,9 +22,11 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
 export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>) => {
     try {
         const flags = await flagService.getByPublicationID(event.pathParameters.id);
+
         return response.json(200, flags);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -30,9 +34,11 @@ export const getPublicationFlags = async (event: I.APIRequest<undefined, undefin
 export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>) => {
     try {
         const flags = await flagService.getByUserID(event.pathParameters.id);
+
         return response.json(200, flags);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -76,6 +82,7 @@ export const createFlag = async (
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user?.email) {
             emailPromises.push(
                 email.newRedFlagAuthorNotification({
@@ -108,6 +115,7 @@ export const createFlag = async (
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -160,6 +168,7 @@ export const createFlagComment = async (
 
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user.email) {
             emailPromises.push(
                 email.updateRedFlagNotification({
@@ -192,6 +201,7 @@ export const createFlagComment = async (
         return response.json(200, flagComment);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -224,6 +234,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user?.email) {
             emailPromises.push(
                 email.resolveRedFlagAuthorNotification({
@@ -254,6 +265,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         return response.json(200, resolveFlag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

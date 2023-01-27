@@ -47,6 +47,7 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
         return response.json(200, reference);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

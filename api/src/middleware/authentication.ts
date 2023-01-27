@@ -27,9 +27,11 @@ const authentication = (optional = false): middy.MiddlewareObj => {
             Object.assign(request.event, { user });
         } catch (err) {
             console.log(err);
+
             return response.json(401, { message: 'Unknown authentication error, please contact help@jisc.ac.uk.' });
         }
     };
+
     return {
         before
     };

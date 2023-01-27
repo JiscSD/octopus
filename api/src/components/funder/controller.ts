@@ -34,6 +34,7 @@ export const create = async (
         return response.json(200, funder);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -69,6 +70,7 @@ export const destroy = async (
         return response.json(200, funder);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

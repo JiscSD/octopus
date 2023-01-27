@@ -139,6 +139,7 @@ export const updateConfirmation = async (publicationId: string, userId: string, 
             confirmedCoAuthor: confirm
         }
     });
+
     return updateCoAuthor;
 };
 
@@ -152,6 +153,7 @@ export const resetCoAuthors = async (publicationId: string) => {
             code: cuid()
         }
     });
+
     return resetCoAuthors;
 };
 

@@ -80,5 +80,6 @@ export const getEmails = async (query: string): Promise<any> => {
             query
         }
     });
+
     return emails?.data;
 };
