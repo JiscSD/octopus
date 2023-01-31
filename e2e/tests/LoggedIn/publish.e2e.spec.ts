@@ -160,6 +160,11 @@ const deleteFirstReference = async (page: Page) => {
     await page.waitForTimeout(300); // wait for modal to close
 };
 
+const deletePublication = async (page: Page) => {
+    await page.locator(PageModel.publish.deletePublicationButton).click();
+    await page.locator(PageModel.publish.confirmDeletePublicationButton).click();
+};
+
 export const publicationFlowConflictOfInterest = async (
     page: Page,
     conflictOfInterest: boolean,
@@ -666,7 +671,12 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     await context.close();
 };
 
-const rejectCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser) => {
+const rejectCoAuthorInvitation = async (
+    browser: Browser,
+    user: Helpers.TestUser,
+    checkErrorMessage: boolean = false,
+    errorMessage?: string
+) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(Helpers.UI_BASE);
@@ -693,6 +703,11 @@ const rejectCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser
     const page3 = await context.newPage();
     await page3.goto(invitationLink);
     await page3.waitForLoadState('load');
+
+    if (checkErrorMessage) {
+        await expect(page3.locator(`h2.error-message-e2e`)).toHaveText(errorMessage);
+    }
+
     await context.close();
 };
 
@@ -876,6 +891,241 @@ test.describe('Publication flow + co-authors', () => {
 
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user3, 'You are no longer listed as a co-author');
+
+        await page.close();
+    });
+
+    test('Co Author shown publication does not exist when denying an invite from a deleted publication', async ({
+        browser
+    }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // verify notification sent to co-author
+        await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        // remove co-author from the publication
+        await removeCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been removed
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).not.toBeVisible();
+
+        // save the publication
+        await page.locator('button[title="Save"]').first().click();
+        await page.locator('div[role="dialog"] button[title="Save"]').click();
+        await page.waitForSelector('p:has-text("Publication successfully saved")');
+
+        // verify notification sent to co-author
+        await verifyLastEmailNotification(browser, Helpers.user2, 'You are no longer listed as a co-author');
+
+        // delete publication
+        await deletePublication(page);
+
+        // reject co-author invite
+        await rejectCoAuthorInvitation(browser, Helpers.user2, true, 'This publication does not exist.');
+
+        await page.close();
+    });
+
+    test('Co Author deny message informs them publication has gone live', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // verify notification sent to co-author
+        await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        // remove co-author from the publication
+        await removeCoAuthor(page, Helpers.user2);
+
+        // publish the new publication
+        page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+
+        await rejectCoAuthorInvitation(
+            browser,
+            Helpers.user2,
+            true,
+            'This publication is LIVE and therefore cannot be edited.'
+        );
+
+        await page.close();
+    });
+
+    test('Co Author who is no longer listed is presented with the correct error message', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // verify notification sent to co-author
+        await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        // remove co-author from the publication
+        await removeCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been removed
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).not.toBeVisible();
+
+        // save the publication
+        await page.locator('button[title="Save"]').first().click();
+        await page.locator('div[role="dialog"] button[title="Save"]').click();
+        await page.waitForSelector('p:has-text("Publication successfully saved")');
+
+        // reject co-author invite
+        await rejectCoAuthorInvitation(
+            browser,
+            Helpers.user2,
+            true,
+            'You are not currently listed as an author on this draft'
+        );
+
+        await page.close();
+    });
+
+    test('Co Author who denys after accepting the invite is presented with the correct error message', async ({
+        browser
+    }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // verify notification sent to co-author
+        await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        // reject co-author invite
+        await rejectCoAuthorInvitation(
+            browser,
+            Helpers.user2,
+            true,
+            'You have previously verified your involvement. Please contact the submitting author to be removed from this publication.'
+        );
 
         await page.close();
     });
