@@ -155,6 +155,8 @@ export const PageModel = {
     requestApprovalButton: 'button:has-text("Request Approval") >> nth=0',
     confirmRequestApproval: 'button:has-text("Finalise Draft and Send Request") >> nth=0',
     confirmPublishButton: 'button[aria-label="Yes, save & publish"]',
+    deletePublicationButton: 'button:has-text("Delete Draft") >> nth=0',
+    confirmDeletePublicationButton: 'button:has-text("Yes, Delete this draft") >> nth=0',
     fileImportButtonModal: 'button[title="Import from Microsoft Word (.docx)"]',
     fileImportButton: 'input[name="document-import"]',
     insertButton: 'button:has-text("Insert")',
