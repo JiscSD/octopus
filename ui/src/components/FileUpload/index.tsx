@@ -10,6 +10,7 @@ type Props = {
     positiveActionCallback: (files: Interfaces.ImagePreview[]) => void;
     negativeActionCallback: () => void;
     loading: boolean;
+    uploadErrors?: string[];
 };
 
 const FileUpload: React.FC<Props> = (props): React.ReactElement => {
@@ -73,6 +74,16 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 )}
             </label>
 
+            {Boolean(props.uploadErrors?.length) && (
+                <Components.Alert
+                    data-testid="upload-error"
+                    severity="ERROR"
+                    title="File upload error"
+                    details={props.uploadErrors}
+                    className="mt-4 w-full"
+                />
+            )}
+
             <div className="mt-6 flex justify-between space-x-4">
                 <Components.ModalButton
                     text="Cancel"
@@ -85,7 +96,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                     text="Upload image"
                     title="Upload image"
                     onClick={() => props.positiveActionCallback(previewBase64)}
-                    disabled={props.loading}
+                    disabled={props.loading || !previewBase64.length}
                     loading={props.loading}
                     actionType="POSITIVE"
                 />
