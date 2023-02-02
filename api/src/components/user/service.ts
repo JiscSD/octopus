@@ -130,17 +130,39 @@ export const get = async (id: string, isAccountOwner = false) => {
     return user;
 };
 
+export const getCoAuthoredPublications = async (id: string) => {
+    const coAuthoredPublications = await client.prisma.coAuthors.findMany({
+        select: {
+            publicationId: true,
+            linkedUser: true
+        },
+        where: {
+            linkedUser: id
+        }
+    })
+
+    return coAuthoredPublications;
+}
+
 export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
     const { offset, limit, orderBy, orderDirection } = params;
 
     // Account owners can retrieve their DRAFT publications also
     const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
 
+    // Get id's of publications the user is co author of
+    const coAuthoredPublications = await getCoAuthoredPublications(id);
+    
     const where: Prisma.PublicationWhereInput = {
-        createdBy: id,
+        OR: [
+            { createdBy: id },
+            { id: {
+                in: coAuthoredPublications.map((coAuthoredPublication) => coAuthoredPublication.publicationId)
+            }}
+        ],
         currentStatus: {
             in: statuses
-        }
+        }   
     };
 
     const userPublications = await client.prisma.publication.findMany({
@@ -152,6 +174,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             title: true,
             type: true,
             doi: true,
+            createdBy: true,
             createdAt: true,
             updatedAt: true,
             publishedDate: true,

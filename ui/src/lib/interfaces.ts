@@ -380,6 +380,7 @@ export interface UserPublication {
     id: string;
     createdAt: string;
     updatedAt: string;
+    createdBy: string;
     publishedDate: string | null;
     doi: string;
     title: string | null;
