@@ -207,7 +207,10 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
                                                 className="mb-5 flex "
                                             >
-                                                <Components.PublicationSimpleResult publication={publication} user={props.user} />
+                                                <Components.PublicationSimpleResult
+                                                    publication={publication}
+                                                    user={props.user}
+                                                />
                                             </Components.Link>
                                         ) : (
                                             <Components.Link
@@ -215,11 +218,14 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 href={`${Config.urls.viewPublication.path}/${publication.id}/`}
                                                 className="mb-5 flex "
                                             >
-                                                <Components.PublicationSimpleResult publication={publication} user={props.user} />
+                                                <Components.PublicationSimpleResult
+                                                    publication={publication}
+                                                    user={props.user}
+                                                />
                                             </Components.Link>
                                         )}
                                     </>
-                                )
+                                );
                             })}
                         </div>
                     ) : (

@@ -27,11 +27,9 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
                 >
                     {Helpers.formatStatus(props.publication.currentStatus)}
                 </span>
-                {props.user.id === props.publication.createdBy &&    
-                    <span className="mr-2 leading-3 text-green-700 dark:text-green-300">
-                        ( Corresponding Author )
-                    </span>
-                }
+                {props.user.id === props.publication.createdBy && (
+                    <span className="mr-2 leading-3 text-green-700 dark:text-green-300">( Corresponding Author )</span>
+                )}
                 <span className="mr-2 leading-3 text-pink-500 ">
                     {Helpers.formatPublicationType(props.publication.type)}
                 </span>
