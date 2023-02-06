@@ -968,7 +968,6 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.close();
     });
-});
 
     test('Co Author shown publication does not exist when denying an invite from a deleted publication', async ({
         browser
