@@ -51,18 +51,18 @@ export const updateAll = async (
             return response.json(400, { message: 'Duplicate coAuthors' });
         }
 
-        // check if corresponding author is trying to remove himself
-        if (!event.body.find((author) => author.linkedUser === event.user.id)) {
-            return response.json(403, {
-                message: 'You are not allowed to remove yourself from the publication.'
-            });
-        }
-
         const newCoAuthorsArray = event.body;
         const oldCoAuthorsArray = publication.coAuthors;
         const removedCoAuthors = oldCoAuthorsArray.filter(
             (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.email === newCoAuthor.email)
         );
+
+        // check if corresponding author is trying to remove himself
+        if (removedCoAuthors.some((author) => author.linkedUser === event.user.id)) {
+            return response.json(403, {
+                message: 'You are not allowed to remove yourself from the publication.'
+            });
+        }
 
         // verify if any of the previously added co-authors have been removed
         if (removedCoAuthors.length) {
