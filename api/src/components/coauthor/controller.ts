@@ -166,73 +166,74 @@ export const link = async (
             });
         }
 
+        const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email)
         // check if this user is part of co-authors list
-        if (!publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email)) {
-            return response.json(403, { message: 'You are not listed as a co-author for this publication.' });
+        if (!coAuthorByEmail) {
+            return response.json(403, { message: 'You are not currently listed as an author on this draft' });
         }
 
-        if (event.body.approve) {
-            if (!event.user) {
-                return response.json(403, {
-                    message: 'To link yourself as a co-author, you must be logged in.'
-                });
-            }
-
-            // Cannot link user without a verified email address
-            if (!event.user.email) {
-                return response.json(403, {
-                    message: 'To link yourself as a co-author, you must have a verified email address.'
-                });
-            }
-
-            // Cannot link user to co-author if it is the owner
-            if (publication.user.id === event.user.id) {
-                return response.json(404, {
-                    message: 'You cannot link yourself as the co-author, if you are the creator.'
-                });
-            }
-
-            // User is already linked as a co-author
-            if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
-                return response.json(404, {
-                    message: 'You are already linked as another co-author'
-                });
-            }
-
+        if (!event.body.approve) {
             // email has already been linked
-            const coAuthorByEmail = publication.coAuthors.find((author) => author.email === event.body.email);
-
-            if (!coAuthorByEmail) {
-                return response.json(404, {
-                    message: 'Email not found as a co-author.'
-                });
-            }
-
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
-                    message: 'User has already been linked to this publication.'
+                    message:
+                        'You have previously verified your involvement. Please contact the submitting author to be removed from this publication.'
                 });
             }
 
-            await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
+            await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
 
-            return response.json(200, 'Linked user account');
+            // notify main author about rejection
+            await email.notifyCoAuthorRejection({
+                coAuthor: {
+                    email: event.body.email
+                },
+                publication: {
+                    title: publication.title || '',
+                    authorEmail: publication.user.email || ''
+                }
+            });
+
+            return response.json(200, 'Removed co-author from publication');
         }
 
-        await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
+        if (!event.user) {
+            return response.json(403, {
+                message: 'To link yourself as a co-author, you must be logged in.'
+            });
+        }
 
-        // notify main author about rejection
-        await email.notifyCoAuthorRejection({
-            coAuthor: {
-                email: event.body.email
-            },
-            publication: {
-                title: publication.title || '',
-                authorEmail: publication.user.email || ''
-            }
-        });
+        // Cannot link user without a verified email address
+        if (!event.user.email) {
+            return response.json(403, {
+                message: 'To link yourself as a co-author, you must have a verified email address.'
+            });
+        }
 
-        return response.json(200, 'Removed co-author from publication');
+        // Cannot link user to co-author if it is the owner
+        if (publication.user.id === event.user.id) {
+            return response.json(404, {
+                message: 'You cannot link yourself as the co-author, if you are the creator.'
+            });
+        }
+
+        // User is already linked as a co-author
+        if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
+            return response.json(404, {
+                message: 'You are already linked as an author on this draft'
+            });
+        }
+
+        // email has already been linked
+        if (coAuthorByEmail.linkedUser) {
+            return response.json(404, {
+                message: 'User has already been linked to this publication.'
+            });
+        }
+
+        await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
+
+        return response.json(200, 'Linked user account');
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }

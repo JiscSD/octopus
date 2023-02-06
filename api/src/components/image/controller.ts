@@ -7,18 +7,24 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.ImageSentBody>):
     try {
         const imageType = event.body.image.split(';')[0].split('/')[1];
 
-        if (imageType !== 'png' && imageType !== 'jpeg' && imageType !== 'jpg') {
-            return response.json(422, { message: 'Invalid' });
+        if (!I.ImageExtension[imageType]) {
+            return response.json(422, {
+                message: `Failed to upload "${event.body.name}". The format is not supported.`
+            });
         }
 
-        const imageReference = await imageService.createDBReference(event.body.name, imageType, event.user.id);
+        const imageReference = await imageService.createDBReference(
+            event.body.name,
+            imageType as I.ImageExtension,
+            event.user.id
+        );
 
-        await imageService.uploadToS3(imageReference.id, event.body.image, imageType);
+        await imageService.uploadToS3(imageReference.id, event.body.image, imageType as I.ImageExtension);
 
         return response.json(201, imageReference);
     } catch (err) {
         console.log(err);
-        return response.json(500, { message: 'Unknown server error.' });
+        return response.json(500, { message: `Failed to upload "${event.body.name}". Unknown server error.` });
     }
 };
 
