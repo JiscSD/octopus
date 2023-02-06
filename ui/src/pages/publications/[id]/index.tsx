@@ -13,6 +13,7 @@ import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as Assets from '@assets';
+import ApprovalsTracker from 'src/components/ApprovalsTracker';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -243,58 +244,62 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
-                        <Components.Alert
-                            className="mb-4"
-                            severity={alertSeverity}
-                            title="This is a draft publication only visible to authors. "
-                        >
-                            {publicationData.user.id === user?.id ? (
-                                <Components.Link
-                                    openNew={false}
-                                    title="Edit publication"
-                                    href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
-                                    className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
-                                >
-                                    <OutlineIcons.PencilAltIcon className="h-4 w-4" />
-                                    <span>Edit or publish draft publication</span>
-                                </Components.Link>
-                            ) : (
-                                <>
-                                    {currentCoAuthor?.confirmedCoAuthor ? (
-                                        <p className="mt-2 text-sm text-white-50">
-                                            You have approved this publication. Would you like to{' '}
-                                            <button
-                                                onClick={() => {
-                                                    setCoAuthorModalState(true);
-                                                }}
-                                                className="inline-block font-bold underline"
-                                            >
-                                                change your mind
-                                            </button>
-                                            ?
-                                        </p>
-                                    ) : (
-                                        <>
-                                            <p className="mt-2 text-sm text-grey-800">
-                                                You have not yet approved this publication. Would you like to{' '}
+                        <>
+                            <Components.Alert
+                                className="mb-4"
+                                severity={alertSeverity}
+                                title="This is a draft publication only visible to authors. "
+                            >
+                                {publicationData.user.id === user?.id ? (
+                                    <Components.Link
+                                        openNew={false}
+                                        title="Edit publication"
+                                        href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
+                                        className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                    >
+                                        <OutlineIcons.PencilAltIcon className="h-4 w-4" />
+                                        <span>Edit or publish draft publication</span>
+                                    </Components.Link>
+                                ) : (
+                                    <>
+                                        {currentCoAuthor?.confirmedCoAuthor ? (
+                                            <p className="mt-2 text-sm text-white-50">
+                                                You have approved this publication. Would you like to{' '}
                                                 <button
                                                     onClick={() => {
                                                         setCoAuthorModalState(true);
                                                     }}
                                                     className="inline-block font-bold underline"
                                                 >
-                                                    approve
+                                                    change your mind
                                                 </button>
                                                 ?
                                             </p>
-                                            <p className="mt-2 text-sm text-grey-800">
-                                                If any changes are required, please discuss with the submitting author.
-                                            </p>
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </Components.Alert>
+                                        ) : (
+                                            <>
+                                                <p className="mt-2 text-sm text-grey-800">
+                                                    You have not yet approved this publication. Would you like to{' '}
+                                                    <button
+                                                        onClick={() => {
+                                                            setCoAuthorModalState(true);
+                                                        }}
+                                                        className="inline-block font-bold underline"
+                                                    >
+                                                        approve
+                                                    </button>
+                                                    ?
+                                                </p>
+                                                <p className="mt-2 text-sm text-grey-800">
+                                                    If any changes are required, please discuss with the submitting
+                                                    author.
+                                                </p>
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </Components.Alert>
+                            <ApprovalsTracker />
+                        </>
                     )}
                     {!!uniqueRedFlagCategoryList.length && (
                         <Components.Alert
