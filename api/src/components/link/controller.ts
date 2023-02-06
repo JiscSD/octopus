@@ -4,7 +4,7 @@ import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
-export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>) => {
+export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>): Promise<I.JSONResponse> => {
     try {
         // function checks if the user has permission to see it in DRAFT mode
         const fromPublication = await publicationService.get(event.body.from);
@@ -65,7 +65,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
     }
 };
 
-export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>) => {
+export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>): Promise<I.JSONResponse> => {
     try {
         const link = await linkService.get(event.pathParameters.id);
 

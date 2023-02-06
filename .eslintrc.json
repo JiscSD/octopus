@@ -81,5 +81,19 @@
         "format": ["PascalCase"]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["./src/components/**/service.ts"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
+      "files": ["./src/components/**/controller.ts", "./src/middleware/validator.ts"],
+      "rules": {
+        "@typescript-eslint/require-await": "off"
+      }
+    }
+  ]
 }

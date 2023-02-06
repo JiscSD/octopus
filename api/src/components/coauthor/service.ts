@@ -169,7 +169,7 @@ export const isUserAlreadyCoAuthor = async (email: string, publicationId: string
 };
 
 export const getPendingApprovalForPublication = async (publicationId: string) => {
-    const CoAuthors = await client.prisma.coAuthors.findMany({
+    const coAuthors = await client.prisma.coAuthors.findMany({
         where: {
             confirmedCoAuthor: false,
             approvalRequested: false,
@@ -180,11 +180,11 @@ export const getPendingApprovalForPublication = async (publicationId: string) =>
         }
     });
 
-    return CoAuthors;
+    return coAuthors;
 };
 
 export const updateRequestApprovalStatus = async (publicationId: string, email: string) => {
-    const CoAuthors = await client.prisma.coAuthors.updateMany({
+    const coAuthors = await client.prisma.coAuthors.updateMany({
         where: {
             publicationId,
             email
@@ -194,5 +194,5 @@ export const updateRequestApprovalStatus = async (publicationId: string, email: 
         }
     });
 
-    return CoAuthors;
+    return coAuthors;
 };

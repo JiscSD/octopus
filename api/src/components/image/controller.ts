@@ -51,7 +51,7 @@ export const destroy = async (
     }
 };
 
-export const getAll = async (event: I.AuthenticatedAPIRequest) => {
+export const getAll = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
     try {
         const images = await imageService.getAll(event.user.id);
 

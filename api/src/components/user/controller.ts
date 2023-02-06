@@ -2,7 +2,7 @@ import * as response from 'lib/response';
 import * as userService from 'user/service';
 import * as I from 'interface';
 
-export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>) => {
+export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>): Promise<I.JSONResponse> => {
     try {
         const users = await userService.getAll(event.queryStringParameters);
 
@@ -14,7 +14,7 @@ export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>) => {
     }
 };
 
-export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>) => {
+export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>): Promise<I.JSONResponse> => {
     try {
         // Authenticated account owners can retrieve private fields (such as email)
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
@@ -35,7 +35,7 @@ export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, un
 
 export const getPublications = async (
     event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
 

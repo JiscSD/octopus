@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
 
@@ -27,7 +28,7 @@ switch (process.env.STAGE) {
 
 const transporter = nodemailer.createTransport(mailConfig);
 
-export const standardHTMLEmailTemplate = (subject: string, html: string) => {
+export const standardHTMLEmailTemplate = (subject: string, html: string): string => {
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -175,7 +176,7 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
     `;
 };
 
-export const send = async (options: I.EmailSendOptions) => {
+export const send = async (options: I.EmailSendOptions): Promise<SMTPTransport.SentMessageInfo> => {
     const emailResponse = await transporter.sendMail({
         from,
         to: options.to,
@@ -198,7 +199,7 @@ type NotifyCoAuthor = {
     code: string;
 };
 
-export const notifyCoAuthor = async (options: NotifyCoAuthor) => {
+export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => {
     const html = `
     <p>${options.userFirstName} ${options?.userLastName} has added you as an author of the following publication on Octopus:</p>
     <br>
@@ -234,7 +235,7 @@ type VerificationCode = {
     userLastName: string | null;
 };
 
-export const verificationCode = async (options: VerificationCode) => {
+export const verificationCode = async (options: VerificationCode): Promise<void> => {
     const html = `
     <p>Hi ${options.userFirstName} ${options?.userLastName},</p>
     <br>
@@ -274,7 +275,7 @@ type NewRedFlagAuthorNotification = {
     flagReason: string;
 };
 
-export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNotification) => {
+export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNotification): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A potential concern has been flagged with your publication, <strong><i>${options.publicationName}</i></strong>. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
     <br>
@@ -310,7 +311,7 @@ type NewRedFlagCreatorNotification = {
     flagId: string;
 };
 
-export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNotification) => {
+export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNotification): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for flagging a potential concern with <strong><i>${options.publicationName}</i></strong>. The submitting author has been notified, and has the option to respond to your message.</p>
     <br>
@@ -342,7 +343,7 @@ type UpdateRedFlagNotification = {
     submitter: string;
 };
 
-export const updateRedFlagNotification = async (options: UpdateRedFlagNotification) => {
+export const updateRedFlagNotification = async (options: UpdateRedFlagNotification): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A new comment has been received against the following red flag.</p>
     <br>
@@ -379,7 +380,7 @@ type ResolveRedFlagAuthorNotification = {
     type: string;
 };
 
-export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAuthorNotification) => {
+export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAuthorNotification): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A red flag for <strong>${options.type}</strong> has been resolved for <strong><i>${options.publicationName}</i></strong>. The red flag 
     warning banner is no longer prominently displayed on the publication page.</p>
@@ -407,7 +408,7 @@ type ResolveRedFlagCreatorNotification = {
     flagId: string;
 };
 
-export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagCreatorNotification) => {
+export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagCreatorNotification): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for resolving the red flag you created for <strong><i>${options.publicationName}</i></strong>. The submitting 
     author has been notified, and the warning banner is no longer prominently displayed on the publication page.</p>
@@ -441,7 +442,7 @@ type NotifyCoAuthorConfirmation = {
     remainingConfirmationsCount: number;
 };
 
-export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirmation) => {
+export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirmation): Promise<void> => {
     if (options.remainingConfirmationsCount) {
         // one or more confirmations left
         const html = `

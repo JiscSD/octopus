@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 
 import * as I from 'interface';
 
-export const isHTMLSafe = (content: string) => {
+export const isHTMLSafe = (content: string): boolean => {
     const $ = cheerio.load(content);
     let error = false;
 
@@ -21,7 +21,7 @@ export const isHTMLSafe = (content: string) => {
     return !error;
 };
 
-export const getSafeHTML = (content: string) => {
+export const getSafeHTML = (content: string): string => {
     const $ = cheerio.load(content, null, false);
 
     $('*').map((_, element) => {
@@ -51,7 +51,7 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
     return doi.data;
 };
 
-export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata) => {
+export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata): Promise<I.DOIResponse> => {
     // Get creator
     const creator = {
         name: `${publication?.user.firstName} ${publication?.user.lastName}`,
@@ -151,7 +151,7 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
     return doiRes.data;
 };
 
-export const OctopusInformation: I.OctopusInformation = {
+export const octopusInformation: I.OctopusInformation = {
     publications: [
         'PROBLEM',
         'HYPOTHESIS',
@@ -350,7 +350,7 @@ export const OctopusInformation: I.OctopusInformation = {
     ]
 };
 
-export const formatFlagType = (flagType: I.FlagCategory) => {
+export const formatFlagType = (flagType: I.FlagCategory): string => {
     const types = {
         PLAGIARISM: 'Plagiarism',
         ETHICAL_ISSUES: 'Ethical issues',
@@ -363,7 +363,7 @@ export const formatFlagType = (flagType: I.FlagCategory) => {
     return types[flagType];
 };
 
-export function sanitizeSearchQuery(searchQuery: string) {
+export function sanitizeSearchQuery(searchQuery: string): string {
     return searchQuery
         .trim()
         .replace(/[^a-z0-9\s]/g, (match) => '\\' + match) // escape all the non-alphanumeric characters which may break the search

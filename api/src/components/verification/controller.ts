@@ -9,7 +9,7 @@ import * as verificationService from 'verification/service';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         // generate code
         const code = cryptoRandomString({ length: 7, type: 'distinguishable' });
@@ -39,7 +39,7 @@ export const requestCode = async (
 
 export const confirmCode = async (
     event: I.AuthenticatedAPIRequest<I.ConfirmVerificationCodeBody, undefined, I.GetUserParameters>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const verification = await verificationService.find(event.pathParameters.id);
 

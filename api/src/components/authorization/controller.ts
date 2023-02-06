@@ -106,11 +106,11 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
     }
 };
 
-export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest) => {
+export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
     return response.json(200, event.user);
 };
 
-export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest) => {
+export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
     try {
         await authorizationService.verifyOrcidAccess(event.user.orcid);
     } catch (error) {
@@ -120,7 +120,7 @@ export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest) => {
     return response.json(200, 'OK');
 };
 
-export const revokeOrcidAccess = async (event: I.AuthenticatedAPIRequest) => {
+export const revokeOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
     try {
         await authorizationService.revokeOrcidAccess(event.user.orcid);
     } catch (error) {

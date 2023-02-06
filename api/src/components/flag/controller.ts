@@ -7,7 +7,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as email from 'lib/email';
 
-export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.get(event.pathParameters.id);
 
@@ -19,7 +19,7 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
     }
 };
 
-export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>) => {
+export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByPublicationID(event.pathParameters.id);
 
@@ -31,7 +31,7 @@ export const getPublicationFlags = async (event: I.APIRequest<undefined, undefin
     }
 };
 
-export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>) => {
+export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByUserID(event.pathParameters.id);
 
@@ -45,7 +45,7 @@ export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.G
 
 export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -122,7 +122,7 @@ export const createFlag = async (
 
 export const createFlagComment = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         if (event.body.comment) {
             const isHTMLSafe = helpers.isHTMLSafe(event.body.comment);
@@ -206,7 +206,7 @@ export const createFlagComment = async (
     }
 };
 
-export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>) => {
+export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.getFlag(event.pathParameters.id);
 
