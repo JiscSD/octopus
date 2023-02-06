@@ -152,6 +152,7 @@ model CoAuthors {
     confirmedCoAuthor Boolean     @default(false)
     approvalRequested Boolean     @default(false)
     linkedUser        String?
+    position          Int         @default(0)
     user              User?       @relation(fields: [linkedUser], references: [id])
     publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 

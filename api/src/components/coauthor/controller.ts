@@ -51,26 +51,27 @@ export const updateAll = async (
             return response.json(400, { message: 'Duplicate coAuthors' });
         }
 
-        // removes user element to allow to save many to database
-        const newCoAuthorsArray = event.body.map((coAuthor) => {
-            // removes user element to allow to save many to database
-            delete coAuthor.user;
-            return coAuthor;
-        });
+        // check if corresponding author is trying to remove himself
+        if (!event.body.find((author) => author.linkedUser === event.user.id)) {
+            return response.json(403, {
+                message: 'You are not allowed to remove yourself from the publication.'
+            });
+        }
 
-        // verify if any of the previously added co-authors have been removed
-        const oldCoAuthorsArray = await coAuthorService.getAllByPublication(publicationId);
+        const newCoAuthorsArray = event.body;
+        const oldCoAuthorsArray = publication.coAuthors;
         const removedCoAuthors = oldCoAuthorsArray.filter(
-            (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.id === newCoAuthor.id)
+            (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.email === newCoAuthor.email)
         );
 
+        // verify if any of the previously added co-authors have been removed
         if (removedCoAuthors.length) {
             // notify co-authors that they've been removed (if their approval has been requested)
             for (const coAuthor of removedCoAuthors) {
-                if (coAuthor.approvalRequested) {
-                    // remove co-author from this publication
-                    await coAuthorService.deleteCoAuthor(coAuthor.id);
+                // remove co-author from this publication
+                await coAuthorService.deleteCoAuthorByEmail(coAuthor.publicationId, coAuthor.email);
 
+                if (coAuthor.approvalRequested) {
                     // notify co-author that they've been removed
                     await email.notifyCoAuthorRemoval({
                         coAuthor: {
@@ -166,7 +167,7 @@ export const link = async (
             });
         }
 
-        const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email)
+        const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email);
         // check if this user is part of co-authors list
         if (!coAuthorByEmail) {
             return response.json(403, { message: 'You are not currently listed as an author on this draft' });
@@ -307,9 +308,15 @@ export const requestApproval = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
+        const publicationId = event.pathParameters.id;
+        const publication = await publicationService.get(publicationId);
+
+        if (!publication) {
+            return response.json(404, { message: 'Publication not found' });
+        }
+
         // get all pending co authors
-        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(event.pathParameters.id);
-        const publication = await publicationService.get(event.pathParameters.id);
+        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);
 
         // email pending co authors and update their record
         for (const pendingCoAuthor of pendingCoAuthors) {
@@ -318,14 +325,15 @@ export const requestApproval = async (
                 userFirstName: event.user.firstName,
                 userLastName: event.user.lastName,
                 code: pendingCoAuthor.code,
-                publicationId: event.pathParameters.id,
+                publicationId,
                 publicationTitle: publication?.title || 'No title yet'
             });
 
-            await coAuthorService.updateRequestApprovalStatus(event.pathParameters.id, pendingCoAuthor.email);
+            await coAuthorService.updateRequestApprovalStatus(publicationId, pendingCoAuthor.email);
         }
 
-        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        const coAuthors = await coAuthorService.getAllByPublication(publicationId);
+
         return response.json(200, coAuthors);
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });

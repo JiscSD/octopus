@@ -1,5 +1,6 @@
 import * as I from 'interface';
 import * as client from 'lib/client';
+import { Links } from '@prisma/client';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -15,6 +16,27 @@ export const getAllByIds = async (ids: Array<string>) => {
                     lastName: true,
                     id: true,
                     orcid: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    approvalRequested: true,
+                    confirmedCoAuthor: true,
+                    code: true,
+                    linkedUser: true,
+                    email: true,
+                    publicationId: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             }
         }
@@ -118,6 +140,7 @@ export const get = async (id: string) => {
                     linkedUser: true,
                     publicationId: true,
                     confirmedCoAuthor: true,
+                    approvalRequested: true,
                     user: {
                         select: {
                             firstName: true,
@@ -125,6 +148,9 @@ export const get = async (id: string) => {
                             orcid: true
                         }
                     }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             },
             linkedTo: {
@@ -348,6 +374,15 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                 create: {
                     status: 'DRAFT'
                 }
+            },
+            coAuthors: {
+                // add main author to authors list
+                create: {
+                    linkedUser: user.id,
+                    email: user.email || '',
+                    confirmedCoAuthor: true,
+                    approvalRequested: false
+                }
             }
         },
         include: {
@@ -477,13 +512,13 @@ export const isPublicationReadyToPublish = (publication: I.PublicationWithMetada
 };
 
 export const getLinksForPublication = async (id: string) => {
-    const rootPublication = await get(id);
+    const publication = await get(id);
 
     /*
      * This set of queries provides two result sets:
      *
-     * "linkedToPublications" refers to publications to the left of the publication chain.
-     * "linkedFromPublications" refers to publications that follow to the right of the publication chain.
+     * "linkedTo" refers to publications to the left of the publication chain.
+     * "linkedFrom" refers to publications that follow to the right of the publication chain.
      *
      * The basic function of each query is to recursively select linked publications in each individual direction of the chain.
      * This can then be used to generate a tree representation branching from a root publication.
@@ -494,17 +529,18 @@ export const getLinksForPublication = async (id: string) => {
      * 2. To limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
      */
 
-    const linkedToPublications = await client.prisma.$queryRaw`
+    const linkedTo: Links[] = await client.prisma.$queryRaw`
         WITH RECURSIVE to_left AS (
-            SELECT "Links"."publicationFrom",
-                   "Links"."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pto".title "publicationToTitle",
-                   "pto"."publishedDate" "publicationToPublishedDate",
-                   "pto"."currentStatus" "publicationToCurrentStatus",
-                   "pto_user"."firstName" "publicationToFirstName",
-                   "pto_user"."lastName" "publicationToLastName"
+            SELECT "Links"."publicationFrom" "childPublication",
+                   "Links"."publicationTo" "id",
+                   "pfrom".type "childPublicationType",
+                   "pto".type,
+                   "pto".title,
+                   "pto"."createdBy",
+                   "pto"."publishedDate",
+                   "pto"."currentStatus",
+                   "pto_user"."firstName" "authorFirstName",
+                   "pto_user"."lastName" "authorLastName"
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
@@ -520,18 +556,20 @@ export const getLinksForPublication = async (id: string) => {
 
             UNION ALL
 
-            SELECT l."publicationFrom",
-                   l."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pto".title "publicationToTitle",
-                   "pto"."publishedDate" "publicationToPublishedDate",
-                   "pto"."currentStatus" "publicationToCurrentStatus",
-                   "pto_user"."firstName" "publicationToFirstName",
-                   "pto_user"."lastName" "publicationToLastName"
+            SELECT l."publicationFrom" "childPublication",
+                   l."publicationTo" "id",
+                   "pfrom".type "childPublicationType",
+                   "pto".type,
+                   "pto".title,
+                   "pto"."createdBy",
+                   "pto"."publishedDate",
+                   "pto"."currentStatus",
+                   "pto_user"."firstName" "authorFirstName",
+                   "pto_user"."lastName" "authorLastName"
+
               FROM "Links" l
               JOIN to_left
-              ON to_left."publicationTo" = l."publicationFrom"
+              ON to_left."id" = l."publicationFrom"
 
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
@@ -542,24 +580,25 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "User" AS pto_user
               ON "pto"."createdBy" = "pto_user"."id"
         )
-        SELECT *
-          FROM to_left
-         WHERE "publicationToType" != "publicationFromType"
-           AND "publicationToType" != ${rootPublication?.type}
-           AND "publicationToCurrentStatus" = 'LIVE';
+        
+        SELECT * FROM to_left
+        WHERE "type" != "childPublicationType"
+            AND "type" != ${publication?.type}
+            AND "currentStatus" = 'LIVE';
     `;
 
-    const linkedFromPublications = await client.prisma.$queryRaw`
+    const linkedFrom: Links[] = await client.prisma.$queryRaw`
         WITH RECURSIVE to_right AS (
-            SELECT "Links"."publicationFrom",
-                   "Links"."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pfrom".title "publicationFromTitle",
-                   "pfrom"."publishedDate" "publicationFromPublishedDate",
-                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
-                   "pfrom_user"."firstName" "publicationFromFirstName",
-                   "pfrom_user"."lastName" "publicationFromLastName"
+            SELECT "Links"."publicationFrom" "id",
+                   "Links"."publicationTo" "parentPublication",
+                   "pfrom".type,
+                   "pto".type "parentPublicationType",
+                   "pfrom"."title",
+                   "pfrom"."createdBy",
+                   "pfrom"."publishedDate",
+                   "pfrom"."currentStatus",
+                   "pfrom_user"."firstName" "authorFirstName",
+                   "pfrom_user"."lastName" "authorLastName"
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
@@ -575,18 +614,19 @@ export const getLinksForPublication = async (id: string) => {
 
             UNION ALL
 
-            SELECT l."publicationFrom",
-                   l."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pfrom".title "publicationFromTitle",
-                   "pfrom"."publishedDate" "publicationFromPublishedDate",
-                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
-                   "pfrom_user"."firstName" "publicationFromFirstName",
-                   "pfrom_user"."lastName" "publicationFromLastName"
+            SELECT l."publicationFrom" "id",
+                   l."publicationTo" "parentPublication",
+                   "pfrom".type,
+                   "pto".type "parentPublicationType",
+                   "pfrom"."title",
+                   "pfrom"."createdBy",
+                   "pfrom"."publishedDate",
+                   "pfrom"."currentStatus",
+                   "pfrom_user"."firstName" "authorFirstName",
+                   "pfrom_user"."lastName" "authorLastName"
               FROM "Links" l
               JOIN to_right
-              ON to_right."publicationFrom" = l."publicationTo"
+              ON to_right."id" = l."publicationTo"
 
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
@@ -601,14 +641,59 @@ export const getLinksForPublication = async (id: string) => {
         )
         SELECT *
           FROM to_right
-         WHERE "publicationToType" != "publicationFromType"
-           AND "publicationFromType" != 'PROBLEM'
-           AND "publicationFromCurrentStatus" = 'LIVE';
+         WHERE "type" != "parentPublicationType"
+           AND "type" != 'PROBLEM'
+           AND "currentStatus" = 'LIVE';
     `;
 
+    const linkedPublications = await client.prisma.publication.findMany({
+        where: {
+            id: {
+                in: linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id))
+            }
+        },
+        select: {
+            id: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    publicationId: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
+        },
+        orderBy: {
+            type: 'asc'
+        }
+    });
+
+    // add authors to 'linkedTo' publications
+    linkedTo.forEach((link) => {
+        Object.assign(link, {
+            authors: linkedPublications.find((publication) => publication.id === link.id)?.coAuthors || []
+        });
+    });
+
+    // add authors to 'linkedFrom' publications
+    linkedFrom.forEach((link) => {
+        Object.assign(link, {
+            authors: linkedPublications.find((publication) => publication.id === link.id)?.coAuthors || []
+        });
+    });
+
     return {
-        rootPublication,
-        linkedFromPublications,
-        linkedToPublications
+        publication,
+        linkedTo,
+        linkedFrom
     };
 };
