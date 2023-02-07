@@ -7,7 +7,7 @@ import CoAuthor from '../Publication/Creation/CoAuthor';
 
 type Props = {
     publicationData: Interfaces.Publication;
-    user: Interfaces.User;
+    user: Types.UserType;
 };
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
