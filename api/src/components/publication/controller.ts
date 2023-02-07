@@ -287,7 +287,7 @@ export const getLinksForPublication = async (
     try {
         const data = await publicationService.getLinksForPublication(event.pathParameters.id);
 
-        if (!data.rootPublication || data.rootPublication.currentStatus !== 'LIVE') {
+        if (!data.publication || data.publication.currentStatus !== 'LIVE') {
             return response.json(404, { message: 'Not found.' });
         }
 
