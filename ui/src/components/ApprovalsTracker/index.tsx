@@ -61,13 +61,25 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     </div>
                                 </td>
                                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                                    <div className="space-y-2">
-                                        {!CoAuthor.linkedUser ? (
-                                            <p> Unconfirmed </p>
-                                        ) : (
-                                            <p> {CoAuthor.confirmedCoAuthor ? 'Approved' : 'Approval Pending'} </p>
-                                        )}
-                                    </div>
+                                    {props.publicationData.createdBy === CoAuthor.linkedUser ? (
+                                        <div className="space-y-2">
+                                            <p> Corrosponding Author </p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {!CoAuthor.linkedUser ? (
+                                                <p> Unconfirmed </p>
+                                            ) : (
+                                                <>
+                                                    {CoAuthor.confirmedCoAuthor ? (
+                                                        <p className="text-green-700 dark:text-green-300"> Approved </p>
+                                                    ) : (
+                                                        <p> Approval Pending </p>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}
