@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import cuid from 'cuid';
+import { CoAuthor } from 'lib/interface';
 
 export const getAllByPublication = async (publicationId: string) => {
     const coAuthors = await client.prisma.coAuthors.findMany({
@@ -20,6 +21,9 @@ export const getAllByPublication = async (publicationId: string) => {
                     orcid: true
                 }
             }
+        },
+        orderBy: {
+            position: 'asc'
         }
     });
 
@@ -45,17 +49,34 @@ export const create = async (email: string, publicationId: string) => {
     return create;
 };
 
-export const updateAll = async (publicationId, data) => {
-    await client.prisma.coAuthors.deleteMany({
-        where: {
-            publicationId
-        }
-    });
-
-    await client.prisma.coAuthors.createMany({
-        data
-    });
-};
+/**
+ *
+ * @Important
+ *
+ * onUpdate - only update the 'position' of authors, don't take any other user input
+ * onCreate - don't take user input for fields like: confirmedCoAuthor, approvalRequested or linkedUser
+ *
+ */
+export const updateAll = (publicationId: string, authors: CoAuthor[]) =>
+    client.prisma.$transaction(
+        authors.map((author, index) =>
+            client.prisma.coAuthors.upsert({
+                where: {
+                    publicationId_email: { publicationId, email: author.email }
+                },
+                create: {
+                    email: author.email,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false,
+                    publicationId,
+                    position: index
+                },
+                update: {
+                    position: index // don't update anything else
+                }
+            })
+        )
+    );
 
 export const deleteCoAuthor = async (id: string) => {
     const deleteCoAuthor = await client.prisma.coAuthors.delete({
@@ -66,6 +87,13 @@ export const deleteCoAuthor = async (id: string) => {
 
     return deleteCoAuthor;
 };
+
+export const deleteCoAuthorByEmail = (publicationId: string, email: string) =>
+    client.prisma.coAuthors.delete({
+        where: {
+            publicationId_email: { publicationId, email }
+        }
+    });
 
 export const resendCoAuthor = async (id: string) => {
     const resendCoAuthor = await client.prisma.coAuthors.update({
@@ -141,8 +169,12 @@ export const isUserAlreadyCoAuthor = async (email: string, publicationId: string
 export const getPendingApprovalForPublication = async (publicationId: string) => {
     const CoAuthors = await client.prisma.coAuthors.findMany({
         where: {
+            confirmedCoAuthor: false,
             approvalRequested: false,
             publicationId
+        },
+        orderBy: {
+            position: 'asc'
         }
     });
 

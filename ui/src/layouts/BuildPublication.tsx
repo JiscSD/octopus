@@ -126,12 +126,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const CheckCoAuthorsToApprove = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
             let ready = { ready: true, message: '' };
-            if (!store.coAuthors.every((coAuthor) => coAuthor.approvalRequested)) {
+            if (
+                !store.coAuthors
+                    .filter((coAuthor) => coAuthor.linkedUser !== props.publication.createdBy)
+                    .every((coAuthor) => coAuthor.approvalRequested)
+            ) {
                 ready = { ready: false, message: 'CoAuthors pending approval request' };
             }
             return ready;
         },
-        []
+        [props.publication.createdBy]
     );
 
     // Function called before action is taken, save, exit, preview, publish etc...
