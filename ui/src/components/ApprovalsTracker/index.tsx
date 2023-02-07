@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
-import * as Components from '@components';
 import * as Types from '@types';
 import * as Interfaces from '@interfaces';
-import { Publication } from '@layouts';
-import CoAuthor from '../Publication/Creation/CoAuthor';
 
 type Props = {
     publicationData: Interfaces.Publication;
@@ -37,26 +34,21 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                             <tr key={CoAuthor.id}>
                                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                     <div className="space-y-2">
-                                        {props.publicationData.createdBy === props.user.id ? (
-                                            <div>
-                                                {CoAuthor.linkedUser ? (
-                                                    <p>{`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>
-                                                ) : (
-                                                    <p>{CoAuthor.email} </p>
-                                                )}
-                                            </div>
+                                        {CoAuthor.linkedUser ? (
+                                            <p>
+                                                {props.publicationData.createdBy === CoAuthor.linkedUser
+                                                    ? `${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName} (Corrosponding Author)`
+                                                    : `${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName} `}
+                                            </p>
                                         ) : (
-                                            <div>
-                                                {CoAuthor.linkedUser ? (
-                                                    <p>{`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>
-                                                ) : (
-                                                    <p> Unconfirmed Author </p>
-                                                )}
-                                            </div>
+                                            <p>
+                                                {props.publicationData.createdBy === props.user.id
+                                                    ? `${CoAuthor.email}`
+                                                    : 'Unconfirmed Author'}
+                                            </p>
                                         )}
-
                                         {props.publicationData.createdBy === CoAuthor.linkedUser && (
-                                            <p> Corrosponding Author </p>
+                                            <p> {CoAuthor.email}</p>
                                         )}
                                     </div>
                                 </td>
