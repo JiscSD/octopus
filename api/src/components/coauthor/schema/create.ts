@@ -41,7 +41,7 @@ const createCoAuthorSchema: I.Schema = {
                 }
             }
         },
-        required: ['id', 'confirmedCoAuthor', 'approvalRequested', 'email'],
+        required: ['id', 'email'],
         additionalProperties: false
     }
 };

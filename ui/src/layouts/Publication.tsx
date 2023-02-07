@@ -13,7 +13,7 @@ const Publication: React.FC<Props> = (props): React.ReactElement => (
         <Components.JumpToContent />
         <Components.SurveyWidget />
         <Components.Header fixed={props.fixedHeader} />
-        {props.publicationId && <Components.PublicationVisulization id={props.publicationId} />}
+        {props.publicationId && <Components.PublicationVisualization publicationId={props.publicationId} />}
         <main className="container mx-auto px-8 pb-6 pt-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-8 2xl:gap-16">
             {props.children}
         </main>
