@@ -33,12 +33,17 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         <tr key={CoAuthor.id}>
                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                 <div className="space-y-2">
-                                    {props.user.id === CoAuthor.linkedUser && <p> Corrosponding Author </p>} 
+                                    {CoAuthor.linkedUser && 
+                                        <p>  {`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>}
+                                    
+                                    {props.publicationData.createdBy === CoAuthor.linkedUser && <p> Corrosponding Author </p>} 
                                 </div>
                             </td>
                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                 <div className="space-y-2">
-                                    {CoAuthor.confirmedCoAuthor ? 'Approved' : 'Unconfirmed'}
+                                    {!CoAuthor.linkedUser ? 
+                                        (<p> Unconfirmed </p>) : 
+                                        (<p> {CoAuthor.confirmedCoAuthor ? 'Approved' : 'Approval Pending' } </p>)}
                                 </div>
                             </td>
                         </tr>
