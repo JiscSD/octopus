@@ -318,7 +318,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                                     ?
                                                 </p>
                                                 <p className="mt-2 text-sm text-grey-800">
-                                                    If any changes are required, please discuss with the submitting
+                                                    If any changes are required, please discuss with the corresponding
                                                     author.
                                                 </p>
                                             </>
