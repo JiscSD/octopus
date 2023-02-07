@@ -1,22 +1,21 @@
 import React, { useEffect } from 'react';
 import * as Components from '@components';
 import * as Types from '@types';
-import * as Interfaces from '@interfaces'
+import * as Interfaces from '@interfaces';
 import { Publication } from '@layouts';
 import CoAuthor from '../Publication/Creation/CoAuthor';
 
 type Props = {
-    publicationData: Interfaces.Publication
-    user: Interfaces.User
+    publicationData: Interfaces.Publication;
+    user: Interfaces.User;
 };
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
-
     return (
         <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
             <table
                 data-testid="approval-tracket-table"
-                className="min-w-full divide-y divide-grey-100 dark:divide-teal-300"
+                className="mb- min-w-full divide-y divide-grey-100 dark:divide-teal-300"
             >
                 <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                     <tr>
@@ -33,17 +32,34 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         <tr key={CoAuthor.id}>
                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                 <div className="space-y-2">
-                                    {CoAuthor.linkedUser && 
-                                        <p>  {`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>}
-                                    
-                                    {props.publicationData.createdBy === CoAuthor.linkedUser && <p> Corrosponding Author </p>} 
+                                    {props.publicationData.createdBy === props.user.id ? (
+                                        <div>
+                                            {CoAuthor.linkedUser ? (
+                                                <p>{`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>
+                                            ) : (
+                                                <p>{CoAuthor.email} </p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            {CoAuthor.linkedUser && (
+                                                <p>{`${CoAuthor.user?.firstName} ${CoAuthor.user?.lastName}`} </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {props.publicationData.createdBy === CoAuthor.linkedUser && (
+                                        <p> Corrosponding Author </p>
+                                    )}
                                 </div>
                             </td>
                             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                 <div className="space-y-2">
-                                    {!CoAuthor.linkedUser ? 
-                                        (<p> Unconfirmed </p>) : 
-                                        (<p> {CoAuthor.confirmedCoAuthor ? 'Approved' : 'Approval Pending' } </p>)}
+                                    {!CoAuthor.linkedUser ? (
+                                        <p> Unconfirmed </p>
+                                    ) : (
+                                        <p> {CoAuthor.confirmedCoAuthor ? 'Approved' : 'Approval Pending'} </p>
+                                    )}
                                 </div>
                             </td>
                         </tr>
@@ -51,7 +67,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 </tbody>
             </table>
         </div>
-    )
+    );
 };
 
 export default ApprovalsTracker;
