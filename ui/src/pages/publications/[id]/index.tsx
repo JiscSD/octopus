@@ -326,7 +326,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </>
                                 )}
                             </Components.Alert>
-                            <ApprovalsTracker />
+                            <ApprovalsTracker publicationData={publicationData} user={user}/>
                         </>
                     )}
                     {!!uniqueRedFlagCategoryList.length && (
