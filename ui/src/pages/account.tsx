@@ -198,35 +198,19 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
                     {draftPublications.length ? (
                         <div className="rouned-md relative space-y-4 lg:w-2/3">
-                            {draftPublications.map((publication: Interfaces.UserPublication) => {
-                                return (
-                                    <>
-                                        {props.user.id === publication.createdBy ? (
-                                            <Components.Link
-                                                key={publication.id}
-                                                href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
-                                                className="mb-5 flex "
-                                            >
-                                                <Components.PublicationSimpleResult
-                                                    publication={publication}
-                                                    user={props.user}
-                                                />
-                                            </Components.Link>
-                                        ) : (
-                                            <Components.Link
-                                                key={publication.id}
-                                                href={`${Config.urls.viewPublication.path}/${publication.id}/`}
-                                                className="mb-5 flex "
-                                            >
-                                                <Components.PublicationSimpleResult
-                                                    publication={publication}
-                                                    user={props.user}
-                                                />
-                                            </Components.Link>
-                                        )}
-                                    </>
-                                );
-                            })}
+                            {draftPublications.map((publication: Interfaces.UserPublication) => (
+                                <Components.Link
+                                    key={publication.id}
+                                    href={
+                                        props.user.id === publication.createdBy
+                                            ? `${Config.urls.viewPublication.path}/${publication.id}/edit`
+                                            : `${Config.urls.viewPublication.path}/${publication.id}/`
+                                    }
+                                    className="mb-5 flex "
+                                >
+                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
+                                </Components.Link>
+                            ))}
                         </div>
                     ) : (
                         <Components.Alert
