@@ -124,7 +124,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showChildProblems = Boolean(childProblems?.length);
     const showParentProblems = Boolean(parentProblems?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
-    const showEthicalStatement = publicationData?.type === 'DATA';
+    const showEthicalStatement = publicationData?.type === 'DATA' && Boolean(publicationData.ethicalStatement);
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
@@ -210,6 +210,34 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         () => Array.from(new Set(activeFlags?.map((flag) => flag.category))),
         [activeFlags]
     );
+
+    const authors = React.useMemo(() => {
+        if (!publicationData) {
+            return [];
+        }
+
+        const authors = publicationData.coAuthors.filter((author) => author.confirmedCoAuthor && author.user);
+
+        // make sure authors list include the corresponding author
+        const correspondingUser = publicationData.user;
+        if (!authors.find((author) => author.linkedUser === correspondingUser.id)) {
+            authors.unshift({
+                id: correspondingUser.id,
+                approvalRequested: false,
+                confirmedCoAuthor: true,
+                email: correspondingUser.email || '',
+                publicationId: publicationData.id,
+                linkedUser: correspondingUser.id,
+                user: {
+                    orcid: correspondingUser.orcid,
+                    firstName: correspondingUser.firstName,
+                    lastName: correspondingUser.lastName
+                }
+            });
+        }
+
+        return authors;
+    }, [publicationData]);
 
     return publicationData ? (
         <>
@@ -346,56 +374,32 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
 
                         <div className="mb-4 flex flex-wrap items-center gap-2">
-                            <div className="flex w-fit items-center">
-                                <Components.Link
-                                    href={`${Config.urls.viewUser.path}/${publicationData.user?.id}`}
-                                    className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                                >
-                                    <>
-                                        {publicationData.user?.firstName[0]}. {publicationData.user?.lastName}
-                                    </>
-                                </Components.Link>
-                                {publicationData.user.id !== 'octopus' && (
+                            {authors.map((author, index) => (
+                                <div key={author.id} className="flex w-fit items-center">
+                                    <Components.Link
+                                        href={`${Config.urls.viewUser.path}/${author.linkedUser}`}
+                                        className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                    >
+                                        <span className="author-name">
+                                            {author.user?.firstName[0]}. {author.user?.lastName}
+                                        </span>
+                                    </Components.Link>
                                     <Components.Link
                                         className="ml-2 flex w-fit items-center"
-                                        href={`https://orcid.org/${publicationData?.user?.orcid}`}
+                                        href={`https://${
+                                            process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
+                                        }orcid.org/${author.user?.orcid}`}
                                         openNew={true}
                                     >
                                         <Assets.OrcidLogoIcon width={24} />
                                     </Components.Link>
-                                )}
-                                {publicationData.coAuthors?.length > 0 && (
-                                    <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                                        ,
-                                    </span>
-                                )}
-                            </div>
-                            {publicationData.coAuthors
-                                ?.filter((coAuthor) => coAuthor?.user)
-                                .map((coAuthor, index) => (
-                                    <div key={coAuthor.id} className="flex w-fit items-center">
-                                        <Components.Link
-                                            href={`${Config.urls.viewUser.path}/${coAuthor?.linkedUser}`}
-                                            className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                                        >
-                                            <>
-                                                {coAuthor?.user?.firstName[0]}. {coAuthor?.user?.lastName}
-                                            </>
-                                        </Components.Link>
-                                        <Components.Link
-                                            className="ml-2 flex w-fit items-center"
-                                            href={`https://orcid.org/${coAuthor?.user?.orcid}`}
-                                            openNew={true}
-                                        >
-                                            <Assets.OrcidLogoIcon width={24} />
-                                        </Components.Link>
-                                        {index < publicationData.coAuthors?.length - 1 && (
-                                            <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                                                ,
-                                            </span>
-                                        )}
-                                    </div>
-                                ))}
+                                    {index < authors.length - 1 && (
+                                        <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
+                                            ,
+                                        </span>
+                                    )}
+                                </div>
+                            ))}
                         </div>
 
                         <div className="block lg:hidden">
@@ -504,7 +508,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
 
                     {/* Ethical statement */}
-                    {!!showEthicalStatement && (
+                    {showEthicalStatement && (
                         <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">

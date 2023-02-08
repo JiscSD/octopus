@@ -37,13 +37,11 @@ export interface PublicationRef {
 }
 
 export interface LinkTo {
-    linkedTo: any;
     id: string;
     publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
-    linkedFrom: any;
     id: string;
     publicationFromRef: PublicationRef;
 }
@@ -88,30 +86,38 @@ export interface Publication extends CorePublication {
     references: Reference[];
 }
 
+export interface LinkedToPublication {
+    id: string;
+    childPublication: string;
+    childPublicationType: Types.PublicationType;
+    type: Types.PublicationType;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+}
+
+export interface LinkedFromPublication {
+    id: string;
+    parentPublication: string;
+    type: Types.PublicationType;
+    parentPublicationType: Types.PublicationType;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+}
+
 export interface PublicationWithLinks {
-    rootPublication: Publication;
-    linkedToPublications: {
-        publicationFrom: string;
-        publicationTo: string;
-        publicationFromType: Types.PublicationType;
-        publicationToType: Types.PublicationType;
-        publicationToTitle: string;
-        publicationToPublishedDate: string;
-        publicationToCurrentStatus: Types.PublicationStatuses;
-        publicationToFirstName: string;
-        publicationToLastName: string;
-    }[];
-    linkedFromPublications: {
-        publicationFrom: string;
-        publicationTo: string;
-        publicationFromType: Types.PublicationType;
-        publicationToType: Types.PublicationType;
-        publicationFromTitle: string;
-        publicationFromPublishedDate: string;
-        publicationFromCurrentStatus: Types.PublicationStatuses;
-        publicationFromFirstName: string;
-        publicationFromLastName: string;
-    }[];
+    publication: Publication;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
 }
 
 export type ReferenceType = 'URL' | 'DOI' | 'TEXT';

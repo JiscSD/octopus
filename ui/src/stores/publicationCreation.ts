@@ -5,6 +5,17 @@ import * as Config from '@config';
 import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
+/**
+ *
+ * @TODO
+ * - refactor this store as per Zustand docs `store = { publication, updatePublication, etc...}`
+ * - remove "error" and "setError" from the store and use component state to display errors
+ * - remove redundant actions like: reset, updateId, updateType, etc...
+ * - Also update Publication Interfaces to reflect the actual data coming from "/publication/[id]" endpoint, not just partial data
+ * - Replace any type with well defined types
+ *
+ */
+
 let store: any = (set: (params: any) => void) => ({
     // Errors whilst editing
     error: null,

@@ -168,7 +168,28 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             currentStatus: true,
             url_slug: true,
             licence: true,
-            content: true
+            content: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    approvalRequested: true,
+                    confirmedCoAuthor: true,
+                    code: true,
+                    email: true,
+                    publicationId: true,
+                    linkedUser: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
         },
         orderBy:
             orderBy && orderDirection

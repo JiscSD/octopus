@@ -947,6 +947,80 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
+    test('Authors order can be changed', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-authors
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify authors order into the table
+        await expect(page.locator('table > tbody > tr').first()).toContainText(Helpers.user1.email);
+        await expect(page.locator('table > tbody > tr').nth(1)).toContainText(Helpers.user2.email);
+
+        // change the order of authors using the keyboard
+        await page.locator('span[title="Drag to reorder authors"]').first().focus();
+        await page.keyboard.press('Space'); // select first row
+        await page.keyboard.press('ArrowDown'); // move it down
+        await page.keyboard.press('Space'); // confirm position
+
+        // verify authors order again
+        await expect(page.locator('table > tbody > tr').first()).toContainText(Helpers.user2.email);
+        await expect(page.locator('table > tbody > tr').nth(1)).toContainText(Helpers.user1.email);
+
+        // Request approval from co author
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+
+        // handle co-author confirmation
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        // reload the page to see co-author confirmation
+        await page.reload();
+        await expect(
+            page.locator(`[title="${Helpers.user2.email} has given approval for this publication to published."]`)
+        ).toBeVisible();
+
+        // verify publish button is now enabled
+        await page.waitForSelector(PageModel.publish.publishButton);
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+        // publish
+        page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+
+        // check publication title and authors
+        await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
+        await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
+        await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
+
+        // check authors order on the publication page
+        await expect(page.locator('.author-name').first()).toContainText(Helpers.user2.shortName);
+        await expect(page.locator('.author-name').nth(1)).toContainText(Helpers.user1.shortName);
+
+        await page.close();
+    });
+
     test('Co Author shown publication does not exist when denying an invite from a deleted publication', async ({
         browser
     }) => {
