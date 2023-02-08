@@ -12,7 +12,7 @@ type Props = {
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
     <div className="w-full rounded border border-transparent bg-white-50 p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
         <div className="lg: flex justify-between">
-            <div className=" flex items-end text-sm">
+            <div className="flex flex-col items-start gap-y-1.5 text-sm sm:flex-row sm:items-end">
                 {props.publication.currentStatus === 'LIVE' ? (
                     <OutlineIcons.ExternalLinkIcon className="mr-2 inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
                 ) : (
@@ -28,7 +28,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
                     {Helpers.formatStatus(props.publication.currentStatus)}
                 </span>
                 {props.user.id === props.publication.createdBy && (
-                    <span className="mr-2 leading-3 text-green-700 dark:text-green-300">( Corresponding Author )</span>
+                    <span className="mr-2 leading-3 text-green-700 dark:text-green-300">(Corresponding Author)</span>
                 )}
                 <span className="mr-2 leading-3 text-pink-500 ">
                     {Helpers.formatPublicationType(props.publication.type)}
