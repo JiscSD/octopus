@@ -947,66 +947,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    test('Coauthored publications show on your own profile', async ({ browser }) => {
-        const context = await browser.newContext();
-        const page = await context.newPage();
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
-
-        // create new publication
-        const publicationTitle = publicationWithCoAuthors.uniqueTitle;
-        await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
-
-        // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
-        await publicationFlowLinkedPublication(
-            page,
-            'living organisms',
-            'How do living organisms function, survive, reproduce and evolve?'
-        );
-
-        // add main text
-        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
-        await page.locator(PageModel.publish.text.editor).click();
-        await page.keyboard.type(publicationWithCoAuthors.content);
-
-        // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
-        await addCoAuthor(page, Helpers.user2);
-
-        // verify co-author has been added
-        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
-
-        // Request approval from co author
-        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
-        await page.locator(PageModel.publish.requestApprovalButton).click();
-        await page.locator(PageModel.publish.confirmRequestApproval).click();
-        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
-
-        await confirmCoAuthorInvitation(browser, Helpers.user2);
-
-        // verify the publication is displayed as draft on co-author profile
-        await verifyPublicationIsDisplayedAsDraftForCoAuthor(browser, Helpers.user2, publicationTitle);
-
-        // refresh corresponding author page
-        await page.reload();
-        await page.locator('button:has-text("Refresh")').click();
-
-        // verify publish button is now enabled
-        await page.waitForSelector(PageModel.publish.publishButton);
-        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
-
-        // publish the new publication
-        page.locator(PageModel.publish.publishButton).click();
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-
-        // veryify publication is displayed as live on co-author profile
-        await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
-
-        await page.close();
-    });
-    
     test('Co Author shown publication does not exist when denying an invite from a deleted publication', async ({
         browser
     }) => {
@@ -1238,6 +1178,66 @@ test.describe('Publication flow + co-authors', () => {
             true,
             'You have previously verified your involvement. Please contact the submitting author to be removed from this publication.'
         );
+
+        await page.close();
+    });
+
+    test('Coauthored publications show on your own profile', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        const publicationTitle = publicationWithCoAuthors.uniqueTitle;
+        await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        // verify the publication is displayed as draft on co-author profile
+        await verifyPublicationIsDisplayedAsDraftForCoAuthor(browser, Helpers.user2, publicationTitle);
+
+        // refresh corresponding author page
+        await page.reload();
+        await page.locator('button:has-text("Refresh")').click();
+
+        // verify publish button is now enabled
+        await page.waitForSelector(PageModel.publish.publishButton);
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+        // publish the new publication
+        page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+
+        // veryify publication is displayed as live on co-author profile
+        await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
 
         await page.close();
     });
