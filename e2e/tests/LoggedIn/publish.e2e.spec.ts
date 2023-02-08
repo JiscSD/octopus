@@ -739,8 +739,6 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 
     await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
 
-    console.log(await page.locator(`a:has-text("${publicationTitle}")`).textContent());
-
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
     await expect(page.locator('button:has-text("change your mind")')).toBeVisible();
