@@ -249,7 +249,7 @@ export const verificationCode = async (options: VerificationCode) => {
     <br/>
     <p>To start publishing your research and reviewing the work of others, please verify your email address below.</p>
     <br/>
-    <p style="${styles.code}">${options.code}</p>
+    <p id="verification-code" style="${styles.code}">${options.code}</p>
     <br/>
     <p>This email address will be used to deliver the Octopus service, as described in our <a href="${baseURL}/privacy">privacy policy</a>. You can update your 
     email at any time via your account page on the Octopus platform. If you no longer wish to have an account on Octopus, notify 
