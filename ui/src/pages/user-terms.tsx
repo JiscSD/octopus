@@ -291,7 +291,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <span className="font-bold">All Users shall:</span>
                         </StandardText>
-                        <div>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">only access and use the Service on these Terms</li>
                             </ul>
@@ -494,7 +494,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 User Content licensing arrangements.
                             </>
                         </StandardText>
-                        <Components.PageSubTitle text="SECTION 12: LIABILITY" className="mt-8" />
+                        <Components.PageSubTitle text="SECTION 13: ACCESSIBILITY" className="mt-8" />
                         <StandardText>
                             <>
                                 <span className="font-bold">

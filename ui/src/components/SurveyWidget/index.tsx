@@ -45,7 +45,7 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
             </span>
             <span className="mb-2 block text-sm">
                 We need your{' '}
-                <Components.Link href="https://forms.office.com/r/DhYd8AdHkx" openNew={true}>
+                <Components.Link href="https://forms.office.com/e/80g02emciH" openNew={true}>
                     <span className="underline">feedback</span>
                 </Components.Link>{' '}
                 to help make it better.
