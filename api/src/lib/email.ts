@@ -512,7 +512,7 @@ type NotifyCoAuthorRejection = {
     };
 };
 
-export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection) => {
+export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection):Promise<void> => {
     const html = `
                 <p>The request that you sent to <strong>${options.coAuthor.email}</strong> to be registered as a co-author of <strong><i>${options.publication.title}</i></strong> has been rejected, and this individual has denied their involvement.</p>
                 <br>
@@ -540,7 +540,7 @@ type NotifyCoAuthorRemoval = {
     };
 };
 
-export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval) => {
+export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval): Promise<void> => {
     const html = `
                 <p>You are no longer listed as a co-author on <strong><i>${options.publication.title}</i></strong> and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.</p>
             `;

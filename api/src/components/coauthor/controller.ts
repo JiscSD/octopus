@@ -170,6 +170,7 @@ export const link = async (
         }
 
         const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email);
+
         // check if this user is part of co-authors list
         if (!coAuthorByEmail) {
             return response.json(403, { message: 'You are not currently listed as an author on this draft' });
