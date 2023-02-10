@@ -52,21 +52,11 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
 };
 
 export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata): Promise<I.DOIResponse> => {
-    // Get creator
-    const creator = {
-        name: `${publication?.user.firstName} ${publication?.user.lastName}`,
-        nameType: 'Personal',
-        nameIdentifiers: [
-            {
-                nameIdentifier: publication?.user.orcid,
-                nameIdentifierScheme: 'orcid',
-                schemeUri: 'orcid.org'
-            }
-        ]
-    };
+    if (!publication) {
+        throw Error('Publication not found');
+    }
 
-    // Get co-authors
-    const coAuthors = publication?.coAuthors.map((coAuthor) => ({
+    const authors = publication.coAuthors.map((coAuthor) => ({
         name:
             coAuthor.user?.firstName && coAuthor.user?.firstName
                 ? `${coAuthor.user?.firstName} ${coAuthor.user?.lastName}`
@@ -81,6 +71,22 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
         ]
     }));
 
+    // check if the creator of the publication is not listed as an author
+    if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
+        // add creator to authors list as first author
+        authors?.unshift({
+            name: `${publication?.user.firstName} ${publication?.user.lastName}`,
+            nameType: 'Personal',
+            nameIdentifiers: [
+                {
+                    nameIdentifier: publication?.user.orcid,
+                    nameIdentifierScheme: 'orcid',
+                    schemeUri: 'orcid.org'
+                }
+            ]
+        });
+    }
+
     const payload = {
         data: {
             types: 'doi',
@@ -94,7 +100,7 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                         identifierType: 'DOI'
                     }
                 ],
-                creators: coAuthors ? [...coAuthors, creator] : [creator],
+                creators: authors,
                 titles: [
                     {
                         title: publication?.title,

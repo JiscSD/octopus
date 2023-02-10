@@ -73,8 +73,7 @@ const faqContents = [
         href: 'how_doi_octopus',
         id: 'how_doi_octopus',
         heading: 'Does each publication get a DOI?',
-        content:
-            "<p className='mb-2'>When fully launched, Octopus will mint a DOI for each new publication via DataCite.</p><p className='mb-2'>During this testing phase, we are using our own unique IDs. Note that any content published to the site now will not be retained post-launch.</p>"
+        content: "<p className='mb-2'>Yes, Octopus mints a DataCite DOI for each new publication.</p>"
     },
     {
         title: 'Is everything on Octopus open access?',

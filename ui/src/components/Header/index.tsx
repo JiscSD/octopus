@@ -24,7 +24,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                 <>
                     This is a beta release under active development. Help us improve by providing{' '}
                     <Components.Link
-                        href="https://forms.office.com/pages/responsepage.aspx?id=TTn5SBSKJ02CpvNfEjYSBdQdk25FM49NmnYND3Z_nExUNE5TNzVQNTdXNTY0UFdOT05CNkZUVDBZSy4u"
+                        href="https://forms.office.com/e/80g02emciH"
                         className="w-fit underline  underline-offset-4"
                         openNew
                     >
