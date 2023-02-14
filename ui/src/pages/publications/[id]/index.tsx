@@ -13,7 +13,6 @@ import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as Assets from '@assets';
-import ApprovalsTracker from 'src/components/ApprovalsTracker';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
