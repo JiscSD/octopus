@@ -276,7 +276,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.Alert
                                 className="mb-4"
                                 severity={alertSeverity}
-                                title="This is a draft publication only visible to authors. "
+                                title="This is a draft publication only visible to authors. All authors must approve this draft before it can be published."
                             >
                                 {publicationData.user.id === user?.id ? (
                                     <Components.Link
@@ -326,7 +326,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </>
                                 )}
                             </Components.Alert>
-                            {user && <ApprovalsTracker publicationData={publicationData} user={user} />}
+                            {user && (
+                                <div className="pb-16">
+                                    <Components.ApprovalsTracker publication={publicationData} />
+                                </div>
+                            )}
                         </>
                     )}
                     {!!uniqueRedFlagCategoryList.length && (
