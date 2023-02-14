@@ -657,7 +657,7 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     // clicking 'I am an author' link is blocked by cors
     const invitationLink = await page2
         .frameLocator('iframe')
-        .locator("a.button:has-text('I am an author')")
+        .locator("a:has-text('I am an author')")
         .getAttribute('href');
 
     // navigate to that link instead
@@ -1255,7 +1255,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.getByText(Helpers.user3.email)).toBeVisible();
         await expect(page.getByText('Approved')).toBeVisible();
         await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
-        await expect(page.getByText('Octopus User (Corrosponding Author)')).toBeVisible();
+        await expect(page.getByText('Octopus User (You)')).toBeVisible();
 
         await page.close();
     });
