@@ -134,6 +134,10 @@ export const PageModel = {
         authorizeButton: '#authorize-button'
     },
     confirmEmail: {},
+    myProfile: {
+        liveAuthorPageButton: 'a:has-text("View live author page")',
+        draftPublicationHeader: 'h2:has-text("Draft publications")'
+    },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View live author page")'
     },

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import axios from 'axios';
@@ -197,14 +197,18 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         Draft publications
                     </h2>
                     {draftPublications.length ? (
-                        <div className="rouned-md relative space-y-4 lg:w-2/3">
+                        <div className="relative space-y-4 xl:w-2/3">
                             {draftPublications.map((publication: Interfaces.UserPublication) => (
                                 <Components.Link
                                     key={publication.id}
-                                    href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
+                                    href={
+                                        props.user.id === publication.createdBy
+                                            ? `${Config.urls.viewPublication.path}/${publication.id}/edit`
+                                            : `${Config.urls.viewPublication.path}/${publication.id}/`
+                                    }
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} />
+                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
                                 </Components.Link>
                             ))}
                         </div>
@@ -222,14 +226,14 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         Live publications
                     </h2>
                     {livePublications.length ? (
-                        <div className="rouned-md relative lg:w-2/3">
+                        <div className="relative space-y-4 xl:w-2/3">
                             {livePublications.map((publication: Interfaces.UserPublication) => (
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}`}
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} />
+                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
                                 </Components.Link>
                             ))}
                         </div>
