@@ -25,7 +25,22 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => (
                     ) : (
                         <OutlineIcons.PencilAltIcon className="inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
                     )}
-                    {Helpers.formatStatus(props.publication.currentStatus)}
+
+                    {props.publication.coAuthors.length === 1 ? (
+                        <>{Helpers.formatStatus(props.publication.currentStatus)}</>
+                    ) : (
+                        <>
+                            {props.publication.coAuthors.map((coAuthor) => {
+                                if (coAuthor.linkedUser === props.user.id) {
+                                    if (coAuthor.confirmedCoAuthor) {
+                                        return 'Under Review';
+                                    }
+
+                                    return 'Pending your review';
+                                }
+                            })}
+                        </>
+                    )}
                 </span>
                 {props.user.id === props.publication.createdBy && (
                     <span className="leading-tight text-green-700 dark:text-green-300">(Corresponding Author)</span>
