@@ -137,7 +137,16 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
     const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
 
     const where: Prisma.PublicationWhereInput = {
-        createdBy: id,
+        OR: [
+            { createdBy: id },
+            {
+                coAuthors: {
+                    some: {
+                        linkedUser: id
+                    }
+                }
+            }
+        ],
         currentStatus: {
             in: statuses
         }
@@ -152,6 +161,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             title: true,
             type: true,
             doi: true,
+            createdBy: true,
             createdAt: true,
             updatedAt: true,
             publishedDate: true,
