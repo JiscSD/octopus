@@ -20,7 +20,7 @@ test.describe('Live author page', () => {
         // go to "Live author page" page
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myProfileButton).click();
-        await page.locator(PageModel.myPublications.liveAuthorPageButton).click();
+        await page.locator(PageModel.myProfile.liveAuthorPageButton).click();
     });
 
     test.afterAll(async () => {

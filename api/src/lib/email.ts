@@ -137,6 +137,7 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
                         <img
                             src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
                             style="${styles.headerImg}"
+                            width="40"
                         />
                         <h3 style="${styles.headerH3}">Octopus</h3>
                     </div>
@@ -148,12 +149,14 @@ export const standardHTMLEmailTemplate = (subject: string, html: string) => {
                                     <img
                                     src="https://science-octopus-publishing-images-prod.s3.eu-west-1.amazonaws.com/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.png"
                                     style="${styles.footerImg}"
+                                    width="45"
                                     />
                                 </a>
                                 <a href="https://www.jisc.ac.uk/" style="${styles.footerImgLink}">
                                     <img
                                     src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg"
                                     style="${styles.footerImg}"
+                                    width="45"
                                     />
                                 </a>
                             </p>
