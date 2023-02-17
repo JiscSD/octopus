@@ -10,7 +10,7 @@ type Props = {
     scroll?: boolean;
     openNew?: boolean;
     ariaLabel?: string;
-    children: React.ReactChildren | React.ReactChild | React.ReactElement[];
+    children: React.ReactNode;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 };
 

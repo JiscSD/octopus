@@ -395,6 +395,7 @@ export interface UserPublication {
     url_slug: string;
     licence: Types.LicenceType;
     content: string | null;
+    coAuthors: CoAuthor[];
 }
 
 export interface UserPublicationsPage {

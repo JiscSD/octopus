@@ -243,7 +243,7 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
 
     return (
         <section className="container mb-8 px-8 pt-8 lg:pt-16">
-            <div className="overflow-hidden bg-teal-50 dark:bg-grey-800" ref={visualizationHeaderRef}>
+            <div className="overflow-hidden" ref={visualizationHeaderRef}>
                 <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
                     {filteredPublicationTypes.map((type) => (
                         <div key={type}>
