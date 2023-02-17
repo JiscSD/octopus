@@ -205,7 +205,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const handlePublish = React.useCallback(async () => {
         const confirmed = await confirmation(
-            '',
+            'It is not possible to make any changes post-publication.',
             'Are you sure you want to publish?',
             <OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Yes',

@@ -108,7 +108,7 @@ export const login = async (page: Page, browser: Browser, user = user1) => {
             .locator(`.msglist-message:has-text("${user.email}")`, { hasText: 'Verify your Octopus account' })
             .first()
             .click();
-        const verificationCode = await newPage.frameLocator('iframe').locator('p.code').textContent();
+        const verificationCode = await newPage.frameLocator('iframe').locator('#verification-code').textContent();
 
         // close new tab
         await newPage.close();

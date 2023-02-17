@@ -53,7 +53,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             >
                                                 {author.user?.firstName} {author.user?.lastName}
                                             </Components.Link>{' '}
-                                            {author.linkedUser === user?.id && <span className="text-xs">(you)</span>}
+                                            {author.linkedUser === user?.id && <span className="text-xs">(You)</span>}
                                         </>
                                     ) : (
                                         <>Unconfirmed Author</>
