@@ -52,7 +52,10 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             <OutlineIcons.PencilAltIcon className="inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
                         )}
 
-                        {publicationStatus(props.publication, props.user)}
+                        {React.useMemo(
+                            () => publicationStatus(props.publication, props.user),
+                            [props.publication, props.user]
+                        )}
                     </span>
                     {props.user.id === props.publication.createdBy && (
                         <span className="leading-tight text-green-700 dark:text-green-300">(Corresponding Author)</span>
