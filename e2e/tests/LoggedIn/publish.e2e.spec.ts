@@ -659,7 +659,7 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     // clicking 'I am an author' link is blocked by cors
     const invitationLink = await page2
         .frameLocator('iframe')
-        .locator("a.button:has-text('I am an author')")
+        .locator("a:has-text('I am an author')")
         .getAttribute('href');
 
     // navigate to that link instead
@@ -738,6 +738,9 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
     await page.locator(PageModel.header.myProfileButton).click();
 
     await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
+
+    // Confirm publication states under review
+    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Under Review');
 
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
@@ -1254,7 +1257,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    test('Coauthored publications show on your own profile', async ({ browser }) => {
+    test('Coauthored publications show on your own profile with correct publication status', async ({ browser }) => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto(Helpers.UI_BASE);
@@ -1304,8 +1307,15 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForSelector(PageModel.publish.publishButton);
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
+        // verify the status is set to 'ready to publish' for this publication
+        await page.locator(PageModel.header.usernameButton).click();
+        await page.locator(PageModel.header.myProfileButton).click();
+        await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
+        // go back to publication
+        await page.locator(`a:has-text("${publicationTitle}")`).click();
+
         // publish the new publication
-        page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
 
         // veryify publication is displayed as live on co-author profile
