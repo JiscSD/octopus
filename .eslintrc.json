@@ -26,7 +26,7 @@
     "@typescript-eslint/no-shadow": "off", // out of module scope func names
     "require-await": "off",
     "@typescript-eslint/require-await": "error",
-    "@typescript-eslint/indent":  ["error", 4],
+    //"@typescript-eslint/indent":  ["error", 4],
     "padding-line-between-statements": "off",
     "@typescript-eslint/semi": "error",
     "@typescript-eslint/no-explicit-any": "warn",
