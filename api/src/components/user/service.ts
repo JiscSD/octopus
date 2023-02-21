@@ -134,7 +134,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
     const { offset, limit, orderBy, orderDirection } = params;
 
     // Account owners can retrieve their DRAFT publications also
-    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
+    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
 
     const where: Prisma.PublicationWhereInput = {
         OR: [

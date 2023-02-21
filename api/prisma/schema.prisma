@@ -212,6 +212,7 @@ enum PublicationStatusEnum {
     DRAFT
     LIVE
     HIDDEN
+    LOCKED
 }
 
 enum PublicationType {
