@@ -65,7 +65,9 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
     }
 };
 
-export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>): Promise<I.JSONResponse> => {
+export const deleteLink = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const link = await linkService.get(event.pathParameters.id);
 

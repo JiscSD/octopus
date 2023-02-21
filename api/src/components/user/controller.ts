@@ -14,7 +14,9 @@ export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>): Pro
     }
 };
 
-export const get = async (event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>): Promise<I.JSONResponse> => {
+export const get = async (
+    event: I.OptionalAuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
+): Promise<I.JSONResponse> => {
     try {
         // Authenticated account owners can retrieve private fields (such as email)
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);

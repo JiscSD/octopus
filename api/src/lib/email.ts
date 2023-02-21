@@ -275,7 +275,9 @@ type NewRedFlagAuthorNotification = {
     flagReason: string;
 };
 
-export const newRedFlagAuthorNotification = async (options: NewRedFlagAuthorNotification): Promise<SMTPTransport.SentMessageInfo> => {
+export const newRedFlagAuthorNotification = async (
+    options: NewRedFlagAuthorNotification
+): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A potential concern has been flagged with your publication, <strong><i>${options.publicationName}</i></strong>. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
     <br>
@@ -311,7 +313,9 @@ type NewRedFlagCreatorNotification = {
     flagId: string;
 };
 
-export const newRedFlagCreatorNotification = async (options: NewRedFlagCreatorNotification): Promise<SMTPTransport.SentMessageInfo> => {
+export const newRedFlagCreatorNotification = async (
+    options: NewRedFlagCreatorNotification
+): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for flagging a potential concern with <strong><i>${options.publicationName}</i></strong>. The submitting author has been notified, and has the option to respond to your message.</p>
     <br>
@@ -343,7 +347,9 @@ type UpdateRedFlagNotification = {
     submitter: string;
 };
 
-export const updateRedFlagNotification = async (options: UpdateRedFlagNotification): Promise<SMTPTransport.SentMessageInfo> => {
+export const updateRedFlagNotification = async (
+    options: UpdateRedFlagNotification
+): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A new comment has been received against the following red flag.</p>
     <br>
@@ -380,7 +386,9 @@ type ResolveRedFlagAuthorNotification = {
     type: string;
 };
 
-export const resolveRedFlagAuthorNotification = async (options: ResolveRedFlagAuthorNotification): Promise<SMTPTransport.SentMessageInfo> => {
+export const resolveRedFlagAuthorNotification = async (
+    options: ResolveRedFlagAuthorNotification
+): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A red flag for <strong>${options.type}</strong> has been resolved for <strong><i>${options.publicationName}</i></strong>. The red flag 
     warning banner is no longer prominently displayed on the publication page.</p>
@@ -408,7 +416,9 @@ type ResolveRedFlagCreatorNotification = {
     flagId: string;
 };
 
-export const resolveRedFlagCreatorNotification = async (options: ResolveRedFlagCreatorNotification): Promise<SMTPTransport.SentMessageInfo> => {
+export const resolveRedFlagCreatorNotification = async (
+    options: ResolveRedFlagCreatorNotification
+): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for resolving the red flag you created for <strong><i>${options.publicationName}</i></strong>. The submitting 
     author has been notified, and the warning banner is no longer prominently displayed on the publication page.</p>
@@ -447,18 +457,18 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
         // one or more confirmations left
         const html = `
            <p><strong>${options.coAuthor.firstName} ${
-    options.coAuthor.lastName
-}</strong> has confirmed their involvement in <strong><i>${
-    options.publication.title
-}</i></strong> and has confirmed that the draft is ready to publish.</p>
+            options.coAuthor.lastName
+        }</strong> has confirmed their involvement in <strong><i>${
+            options.publication.title
+        }</i></strong> and has confirmed that the draft is ready to publish.</p>
             <br>
             <p style="text-align: center;"><a class="button" href="${
-    options.publication.url
-}" target="_blank" rel="noreferrer noopener">View publication</a></p>
+                options.publication.url
+            }" target="_blank" rel="noreferrer noopener">View publication</a></p>
             <br>
             <p><strong>${options.remainingConfirmationsCount}</strong> co-author${
-    options.remainingConfirmationsCount === 1 ? '' : 's'
-} still need to confirm your draft before this publication can go live.</p> 
+            options.remainingConfirmationsCount === 1 ? '' : 's'
+        } still need to confirm your draft before this publication can go live.</p> 
             <br>
             <p>Note that all co-authors must approve before this publication can go live.</p>
         `;
@@ -512,7 +522,7 @@ type NotifyCoAuthorRejection = {
     };
 };
 
-export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection):Promise<void> => {
+export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection): Promise<void> => {
     const html = `
                 <p>The request that you sent to <strong>${options.coAuthor.email}</strong> to be registered as a co-author of <strong><i>${options.publication.title}</i></strong> has been rejected, and this individual has denied their involvement.</p>
                 <br>

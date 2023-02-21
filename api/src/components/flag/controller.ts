@@ -19,7 +19,9 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
     }
 };
 
-export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>): Promise<I.JSONResponse> => {
+export const getPublicationFlags = async (
+    event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>
+): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByPublicationID(event.pathParameters.id);
 
@@ -31,7 +33,9 @@ export const getPublicationFlags = async (event: I.APIRequest<undefined, undefin
     }
 };
 
-export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>): Promise<I.JSONResponse> => {
+export const getUserFlags = async (
+    event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>
+): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByUserID(event.pathParameters.id);
 
@@ -206,7 +210,9 @@ export const createFlagComment = async (
     }
 };
 
-export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>): Promise<I.JSONResponse> => {
+export const resolveFlag = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.getFlag(event.pathParameters.id);
 
