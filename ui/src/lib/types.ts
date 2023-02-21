@@ -121,7 +121,7 @@ export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
 export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_NC' | 'CC_BY_NC_SA';
 
-export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN';
+export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN' | 'LOCKED';
 
 export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';
 

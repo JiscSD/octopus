@@ -63,7 +63,8 @@ export const formatStatus = (status: Types.PublicationStatuses): string => {
     const statuses = {
         DRAFT: 'Draft',
         LIVE: 'Live',
-        HIDDEN: 'Hidden'
+        HIDDEN: 'Hidden',
+        LOCKED: 'Draft'
     };
 
     return statuses[status];

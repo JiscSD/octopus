@@ -341,7 +341,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to finalise your publication?"
                 icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm"> This action will lock your publication and notify other authors that they must approve it in its current state before publishing.</p>
+                <p className="text-gray-500 text-sm">
+                    This action will lock your publication and notify other authors that they must approve it in its
+                    current state before publishing.
+                </p>
             </Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}

@@ -161,6 +161,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         if (publicationData?.user?.id === user?.id) {
             return 'INFO';
         }
+        if (publicationData?.currentStatus === 'DRAFT') {
+            return 'WARNING';
+        }
         if (currentCoAuthor?.confirmedCoAuthor) {
             return 'SUCCESS';
         }
@@ -281,7 +284,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const showApprovalsTracker = useMemo(
-        () => publicationData?.currentStatus === 'DRAFT' && authors.some((author) => author.approvalRequested),
+        () => publicationData?.currentStatus === 'LOCKED' && authors.some((author) => author.approvalRequested),
         [authors, publicationData?.currentStatus]
     );
 
@@ -327,6 +330,22 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {publicationData.currentStatus === 'DRAFT' && (
+                        <>
+                            {!isCorrespondingUser && (
+                                <Components.Alert
+                                    className="mb-4"
+                                    severity={alertSeverity}
+                                    title="This publication is currently being edited."
+                                >
+                                    <p className="mt-2 text-sm text-grey-800">
+                                        Once the corresponding author has made their changes, you will be notified to
+                                        approve the draft before it is published.
+                                    </p>
+                                </Components.Alert>
+                            )}
+                        </>
+                    )}
+                    {publicationData.currentStatus === 'LOCKED' && (
                         <>
                             <Components.Alert
                                 className="mb-4"
