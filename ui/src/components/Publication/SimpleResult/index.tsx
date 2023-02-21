@@ -22,11 +22,11 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             return 'Draft';
         }
 
-        const coAuthor = publication.coAuthors.find(
+        const hasCoAuthorApproved = publication.coAuthors.find(
             (author) => author.linkedUser === user.id && author.confirmedCoAuthor
         );
 
-        if (coAuthor) {
+        if (hasCoAuthorApproved) {
             return 'Under Review';
         }
 
