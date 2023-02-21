@@ -16,6 +16,7 @@
         "seed": "ts-node prisma/seed.ts"
     },
     "scripts": {
+        "prepare": "cd .. && husky install",
         "start:local": "nodemon --config nodemon.json",
         "seed:local": "STAGE=local npx prisma migrate reset --force",
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
@@ -68,6 +69,7 @@
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-prettier": "^4.0.0",
+        "husky": "^8.0.3",
         "jest": "^27.4.7",
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
