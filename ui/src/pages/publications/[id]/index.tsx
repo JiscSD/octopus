@@ -16,6 +16,7 @@ import * as Assets from '@assets';
 import * as Contexts from '@contexts';
 
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -88,6 +89,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [publishError, setPublishError] = React.useState('');
+    const [approvalError, setApprovalError] = React.useState('');
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -175,13 +177,23 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
-            await api.patch(
-                `/publications/${publicationData?.id}/coauthor-confirmation`,
-                {
-                    confirm
-                },
-                user?.token
-            );
+            try {
+                await api.patch(
+                    `/publications/${publicationData?.id}/coauthor-confirmation`,
+                    {
+                        confirm
+                    },
+                    user?.token
+                );
+            } catch (err: unknown | Types.AxiosError) {
+                if (axios.isAxiosError(err)) {
+                    setApprovalError(err.response?.data.message);
+                    return;
+                }
+
+                setApprovalError('Uknown server error');
+                return;
+            }
         },
         [publicationData?.id, user?.token]
     );
@@ -329,6 +341,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
+                    {approvalError && <Components.Alert className="mb-4" severity="ERROR" title={approvalError} />}
                     {publicationData.currentStatus === 'DRAFT' && (
                         <>
                             {!isCorrespondingUser && (

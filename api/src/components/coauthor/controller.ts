@@ -253,10 +253,16 @@ export const updateConfirmation = async (
             });
         }
 
-        // Is the publication in draft?
+        // Is the publication in locked mode?
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
+            });
+        }
+
+        if (publication.currentStatus === 'DRAFT') {
+            return response.json(403, {
+                message: `You can't approve right now as this publication is currently being edited`
             });
         }
 
