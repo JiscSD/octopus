@@ -12,6 +12,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
+      - name: Run prettier check
+        working-directory: ./api
+        run: npm run format:check
+
+      - name: Run eslint check
+        working-directory: ./api
+        run: npm run lint:check
+
 
       # Note: this step is only required locally when using act since the ubuntu image
       # does not come with docker-compose installed, however the alternative to the reinstall
