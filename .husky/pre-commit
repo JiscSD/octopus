@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 cd api || exit
-npm run lint:fix || exit
-npm run format:write
+npm run format:write || exit
+npm run lint:fix
 echo "eslint pre-commit checks: SUCCESSFUL"
