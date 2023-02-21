@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
 
 import * as Interfaces from '@interfaces';
@@ -22,18 +22,22 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             return 'Draft';
         }
 
-        const status = publication.coAuthors.map((coAuthor) => {
-            if (coAuthor.linkedUser === props.user.id) {
+        let status = '';
+        publication.coAuthors.forEach((coAuthor) => {
+            if (coAuthor.linkedUser === user.id) {
                 if (coAuthor.confirmedCoAuthor) {
-                    return 'Under Review';
+                    status = 'Under Review';
+                    return;
                 }
-
-                return 'Pending your review';
+                status = 'Pending your review';
+                return;
             }
         });
 
         return status;
     };
+
+    const status = useMemo(() => publicationStatus(props.publication, props.user), [props.publication, props.user]);
 
     return (
         <div className="w-full rounded border border-transparent bg-white-50 p-3 text-sm shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none sm:text-base">
@@ -52,10 +56,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             <OutlineIcons.PencilAltIcon className="inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
                         )}
 
-                        {React.useMemo(
-                            () => publicationStatus(props.publication, props.user),
-                            [props.publication, props.user]
-                        )}
+                        {status}
                     </span>
                     {props.user.id === props.publication.createdBy && (
                         <span className="leading-tight text-green-700 dark:text-green-300">(Corresponding Author)</span>
