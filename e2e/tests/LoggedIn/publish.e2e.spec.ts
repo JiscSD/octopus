@@ -698,7 +698,7 @@ const rejectCoAuthorInvitation = async (
     // clicking 'I am not an author' link is blocked by cors
     const invitationLink = await page2
         .frameLocator('iframe')
-        .locator("a.button:has-text('I am not an author')")
+        .locator("a:has-text('I am not an author')")
         .getAttribute('href');
 
     // navigating to 'I am not an author link' will remove this co-author from the publication
@@ -840,7 +840,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // publish the new publication
-        page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
 
         // check publication title and authors
@@ -1007,7 +1007,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // publish
-        page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
 
         // check publication title and authors
@@ -1129,7 +1129,7 @@ test.describe('Publication flow + co-authors', () => {
         await removeCoAuthor(page, Helpers.user2);
 
         // publish the new publication
-        page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
 
         await rejectCoAuthorInvitation(
@@ -1323,6 +1323,149 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.close();
     });
+
+    test('Co Authors appear properly in the Approvals Tracker', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user3);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user3.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+        await confirmCoAuthorInvitation(browser, Helpers.user3);
+
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.waitForNavigation();
+
+        await expect(page.getByText(Helpers.user2.fullName)).toBeVisible();
+        await expect(page.getByText(Helpers.user2.email)).toBeVisible();
+        await expect(page.getByText(Helpers.user3.fullName)).toBeVisible();
+        await expect(page.getByText(Helpers.user3.email)).toBeVisible();
+        await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+        await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
+        await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
+
+        await page.close();
+    });
+
+    test('Corresponding author can publish from Approvals Tracker', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user3);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user3.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // preview publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.waitForNavigation();
+
+        // check preview page
+        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
+        await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
+        await expect(page.getByText('2 more author approvals are required before publishing')).toBeVisible();
+
+        // handle co-authors confirmations
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+        await confirmCoAuthorInvitation(browser, Helpers.user3);
+
+        // refresh corresponding author page
+        await page.reload();
+        await expect(page.getByText(Helpers.user2.fullName)).toBeVisible();
+        await expect(page.getByText(Helpers.user3.fullName)).toBeVisible();
+
+        await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+        await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
+
+        // publish
+        const publishButton = page.locator('button[title="Publish"]');
+        await expect(publishButton).toBeVisible();
+        await publishButton.click();
+
+        // confirm and publish
+        await expect(page.getByText('Are you sure you want to publish?')).toBeVisible();
+        await page.locator('button[title="Yes"]').click();
+        await page.waitForResponse((response) => response.url().includes('/status/LIVE') && response.ok());
+        await page.waitForLoadState();
+
+        // check draft publication controls are not available anymore
+        await expect(page.getByText('This is a draft publication')).not.toBeVisible();
+        await expect(page.locator('table[data-testid="approval-tracker-table"]')).not.toBeVisible();
+
+        await page.close();
+    });
 });
 
 test.describe('Publication Flow + File import', () => {
@@ -1394,7 +1537,6 @@ test.describe('Publication Flow + File import', () => {
             'extra details'
         );
 
-        await page.locator(PageModel.publish.previewButton).click();
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
 
