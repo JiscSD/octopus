@@ -22,19 +22,15 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             return 'Draft';
         }
 
-        let status = '';
-        publication.coAuthors.forEach((coAuthor) => {
-            if (coAuthor.linkedUser === user.id) {
-                if (coAuthor.confirmedCoAuthor) {
-                    status = 'Under Review';
-                    return;
-                }
-                status = 'Pending your review';
-                return;
-            }
-        });
+        const coAuthor = publication.coAuthors.find(
+            (author) => author.linkedUser === user.id && author.confirmedCoAuthor
+        );
 
-        return status;
+        if (coAuthor) {
+            return 'Under Review';
+        }
+
+        return 'Pending your review';
     };
 
     const status = useMemo(() => publicationStatus(props.publication, props.user), [props.publication, props.user]);
