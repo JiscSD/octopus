@@ -17,11 +17,11 @@ jobs:
           node-version: "14.x"
 
       - name: Install dependencies
-        working-directory: ./ui
+        working-directory: ./api
         run: npm ci
 
       - name: Run prettier check
-        working-directory: ./ui
+        working-directory: ./api
         run: npm run format:check
 
   eslint:
