@@ -195,8 +195,8 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         orderBy:
             orderBy && orderDirection
                 ? {
-                      [orderBy]: orderDirection
-                  }
+                    [orderBy]: orderDirection
+                }
                 : undefined
     });
 

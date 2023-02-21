@@ -266,10 +266,10 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
     const orderBy = filters.orderBy
         ? {
-              [filters.orderBy]: {
-                  order: filters.orderDirection || 'asc'
-              }
-          }
+            [filters.orderBy]: {
+                order: filters.orderDirection || 'asc'
+            }
+        }
         : null;
 
     const query = {

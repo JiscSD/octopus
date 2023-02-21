@@ -122,7 +122,7 @@ const styles = {
     `
 };
 
-export const standardHTMLEmailTemplate = (subject: string, html: string) => {
+export const standardHTMLEmailTemplate = (subject: string, html: string): string => {
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -467,18 +467,18 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
         // one or more confirmations left
         const html = `
            <p><strong>${options.coAuthor.firstName} ${
-            options.coAuthor.lastName
-        }</strong> has confirmed their involvement in <strong><i>${
-            options.publication.title
-        }</i></strong> and has confirmed that the draft is ready to publish.</p>
+    options.coAuthor.lastName
+}</strong> has confirmed their involvement in <strong><i>${
+    options.publication.title
+}</i></strong> and has confirmed that the draft is ready to publish.</p>
             <br>
             <p style="text-align: center;"><a style="${styles.button}" href="${
-            options.publication.url
-        }" target="_blank" rel="noreferrer noopener">View publication</a></p>
+    options.publication.url
+}" target="_blank" rel="noreferrer noopener">View publication</a></p>
             <br>
             <p><strong>${options.remainingConfirmationsCount}</strong> co-author${
-            options.remainingConfirmationsCount === 1 ? '' : 's'
-        } still need to confirm your draft before this publication can go live.</p> 
+    options.remainingConfirmationsCount === 1 ? '' : 's'
+} still need to confirm your draft before this publication can go live.</p> 
             <br>
             <p>Note that all co-authors must approve before this publication can go live.</p>
         `;
