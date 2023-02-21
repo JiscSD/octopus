@@ -386,6 +386,7 @@ export interface UserPublication {
     id: string;
     createdAt: string;
     updatedAt: string;
+    createdBy: string;
     publishedDate: string | null;
     doi: string;
     title: string | null;
@@ -394,6 +395,7 @@ export interface UserPublication {
     url_slug: string;
     licence: Types.LicenceType;
     content: string | null;
+    coAuthors: CoAuthor[];
 }
 
 export interface UserPublicationsPage {

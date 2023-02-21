@@ -134,6 +134,10 @@ export const PageModel = {
         authorizeButton: '#authorize-button'
     },
     confirmEmail: {},
+    myProfile: {
+        liveAuthorPageButton: 'a:has-text("View live author page")',
+        draftPublicationHeader: 'h2:has-text("Draft publications")'
+    },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View live author page")'
     },
@@ -158,7 +162,7 @@ export const PageModel = {
         insertButton: 'button:has-text("Insert")',
         replaceButton: 'button:has-text("Replace")',
         importModal: 'div[title="Document Import"]',
-        draftEditButton: 'a[role="button"]:has-text("Edit or publish draft publication")',
+        draftEditButton: 'a[role="button"]:has-text("Edit draft publication")',
         keyInformation: {
             licence: 'select#licence',
             rorID: 'input[name=ror]',
