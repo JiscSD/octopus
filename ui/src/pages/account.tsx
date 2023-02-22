@@ -82,8 +82,8 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const handleRevokeAccess = useCallback(async () => {
         const confirmed = await confirmation(
-            "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
             'Are you sure?',
+            "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
             <OutlineIcons.UserRemoveIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
             'Yes',
             'No'

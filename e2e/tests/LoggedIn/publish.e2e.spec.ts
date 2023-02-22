@@ -1456,6 +1456,74 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.close();
     });
+
+    test("Corresponding author can change unconfirmed author's email from Approvals Tracker table", async ({
+        browser
+    }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // preview publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.waitForNavigation();
+
+        // check preview page
+        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
+        await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
+        await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
+        await expect(page.getByText('1 more author approval is required before publishing')).toBeVisible();
+
+        // check invited author is visible
+        await expect(page.getByText(Helpers.user2.email)).toBeVisible();
+        await expect(page.locator('table button[title="Edit"]')).toBeVisible();
+
+        // change author's email
+        await page.locator('table button[title="Edit"]').click();
+        await page.locator('input[name="authorEmail"]').click();
+        await page.fill('input[name="authorEmail"]', '');
+        await page.fill('input[name="authorEmail"]', Helpers.user3.email);
+
+        // confirm email change
+        await page.locator('button[title="Change Email"]').click();
+        await expect(page.getByText("Are you sure you want to change this author's email?")).toBeVisible();
+        await page.locator('button[title="Yes, change email"]').click();
+        await expect(page.getByText(Helpers.user3.email)).toBeVisible();
+
+        await page.close();
+    });
 });
 
 test.describe('Publication Flow + File import', () => {

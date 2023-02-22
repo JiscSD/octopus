@@ -64,9 +64,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            fallback: {
-                [`${Config.endpoints.publications}/${requestedId}`]: publication
-            },
+            publication,
             userToken: token || '',
             bookmark,
             publicationId: publication.id
@@ -87,16 +85,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
-    const [publishError, setPublishError] = React.useState('');
+    const [serverError, setServerError] = React.useState('');
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
-        (url) => api.get(url, props.userToken || '').then((data) => data.data)
+        (url) => api.get(url, props.userToken).then((data) => data.data),
+        { fallbackData: props.publication }
     );
 
     const { data: references = [] } = useSWR<Interfaces.Reference[]>(
         `${Config.endpoints.publications}/${props.publicationId}/reference`,
-        (url) => api.get(url, props.userToken).then(({ data }) => data)
+        (url) => api.get(url, props.userToken).then(({ data }) => data),
+        {
+            fallbackData: []
+        }
     );
 
     const peerReviews =
@@ -205,15 +207,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const handlePublish = React.useCallback(async () => {
         const confirmed = await confirmation(
-            'It is not possible to make any changes post-publication.',
             'Are you sure you want to publish?',
+            'It is not possible to make any changes post-publication.',
             <OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Yes',
             'No'
         );
 
         if (confirmed) {
-            setPublishError('');
+            setServerError('');
             setPublishing(true);
 
             try {
@@ -226,7 +228,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 router.reload();
             } catch (err) {
                 const publishError = err as Interfaces.JSONResponseError;
-                setPublishError(publishError.message);
+                setServerError(publishError.message);
                 setPublishing(false);
             }
         }
@@ -409,7 +411,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 )}
                             </Components.Alert>
 
-                            {publishError && <Components.Alert severity="ERROR" title={publishError} />}
+                            {serverError && <Components.Alert severity="ERROR" title={serverError} />}
 
                             {showApprovalsTracker && (
                                 <div className="pb-16">
@@ -417,6 +419,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         publication={publicationData}
                                         isPublishing={isPublishing}
                                         onPublish={handlePublish}
+                                        onError={setServerError}
+                                        refreshPublicationData={mutate}
                                     />
                                 </div>
                             )}

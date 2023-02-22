@@ -255,8 +255,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         }
                                                         onClick={async () => {
                                                             const confirmed = await confirmation(
-                                                                'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
                                                                 'Are you sure you want to add this reference?',
+                                                                'Adding a reference may affect the accuracy of your reference numbering and in-text references.',
                                                                 <FAIcons.FaPlus
                                                                     className="h-8 w-8 text-grey-600"
                                                                     aria-hidden="true"
@@ -306,8 +306,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                         }
                                                         onClick={async () => {
                                                             const confirmed = await confirmation(
-                                                                'Deleting a reference may affect the accuracy of your reference numbering and in-text references. This action cannot be undone. ',
                                                                 'Are you sure you want to delete this reference?',
+                                                                'Deleting a reference may affect the accuracy of your reference numbering and in-text references. This action cannot be undone. ',
                                                                 <OutlineIcons.TrashIcon
                                                                     className="h-10 w-10 text-grey-600"
                                                                     aria-hidden="true"
@@ -330,8 +330,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                     title="Delete all references"
                                     onClick={async () => {
                                         const confirmed = await confirmation(
-                                            'This action cannot be undone.',
                                             'Are you sure you want to delete all references from this publication?',
+                                            'This action cannot be undone.',
                                             <OutlineIcons.TrashIcon className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
                                             'Delete all'
                                         );
