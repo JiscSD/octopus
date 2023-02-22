@@ -12,6 +12,7 @@ import * as api from '@api';
 import * as Hooks from '@hooks';
 
 import ClickAwayListener from 'react-click-away-listener';
+import { readSync } from 'fs';
 
 type BuildPublicationProps = {
     steps: Interfaces.CreationStep[];
@@ -123,19 +124,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         []
     );
 
-    const CheckCoAuthorsToApprove = useCallback(
+    const publicationHasCoAuthors = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            let ready = { ready: true, message: '' };
-            if (
-                !store.coAuthors
-                    .filter((coAuthor) => coAuthor.linkedUser !== props.publication.createdBy)
-                    .every((coAuthor) => coAuthor.approvalRequested)
-            ) {
-                ready = { ready: false, message: 'CoAuthors pending approval request' };
+            let ready = { ready: false, message: '' };
+
+            if (store.coAuthors.length > 1) {
+                ready = { ready: true, message: 'This publication has more than one author.' };
             }
             return ready;
         },
-        [props.publication.createdBy]
+        []
     );
 
     // Function called before action is taken, save, exit, preview, publish etc...
@@ -235,6 +233,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
             updateCoAuthors(response.data);
+
+            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(message);
@@ -304,7 +304,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
+    const coAuthorsToApprove = useMemo(() => publicationHasCoAuthors(store).ready, [publicationHasCoAuthors, store]);
 
     return (
         <>
@@ -470,7 +470,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-                                        {!coAuthorsToApprove ? (
+                                        {coAuthorsToApprove ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}

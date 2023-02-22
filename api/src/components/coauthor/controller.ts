@@ -321,6 +321,9 @@ export const requestApproval = async (
             return response.json(404, { message: 'Publication not found' });
         }
 
+        // Lock publication from editing
+        await publicationService.updateStatus(publication.id, 'LOCKED', false);
+
         // get all pending co authors
         const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);
 
