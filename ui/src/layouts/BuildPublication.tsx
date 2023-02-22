@@ -317,7 +317,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to save your changes?"
                 icon={<ReactIconsFA.FaRegSave className="h-8 w-8 text-grey-600" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm">
+                <p className="text-sm text-grey-700">
                     Changes to your publication will be saved and it will be stored as a draft.
                 </p>
             </Components.Modal>
@@ -330,7 +330,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to publish?"
                 icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm">It is not possible to make any changes post-publication.</p>
+                <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
             <Components.Modal
                 open={requestApprovalModalVisibility}
@@ -350,7 +350,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 title="Are you sure you want to delete this publication?"
                 icon={<OutlineIcons.TrashIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
-                <p className="text-gray-500 text-sm">All content will be deleted and cannot be restored.</p>
+                <p className="text-sm text-grey-700">All content will be deleted and cannot be restored.</p>
             </Components.Modal>
             <Components.Header fixed={false} hasBorder={false} />
             <div className="w-full border-t border-grey-100 dark:border-grey-400"></div>
