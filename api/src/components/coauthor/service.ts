@@ -142,10 +142,11 @@ export const updateConfirmation = async (publicationId: string, userId: string, 
     return updateCoAuthor;
 };
 
-export const resetCoAuthors = async (publicationId: string) => {
+export const resetCoAuthors = async (publicationId: string, correspondingAuthor: string) => {
     const resetCoAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId
+            publicationId,
+            NOT: { linkedUser: correspondingAuthor }
         },
         data: {
             confirmedCoAuthor: false,

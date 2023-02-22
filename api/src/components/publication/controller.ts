@@ -3,6 +3,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as coAuthorService from 'coauthor/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -235,8 +236,26 @@ export const updateStatus = async (
         }
 
         // TODO, eventually a service in LIVE can be HIDDEN and a service HIDDEN can become LIVE
-        if (publication?.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
+        if (publication?.currentStatus === 'LIVE') {
+            return response.json(404, {
+                message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
+            });
+        }
+
+        if (publication?.currentStatus === 'LOCKED') {
+            // Update status to 'DRAFT'
+            const updatedPublication = await publicationService.updateStatus(
+                event.pathParameters.id,
+                event.pathParameters.status,
+                false
+            );
+
+            // Cancel co author approvals
+            await coAuthorService.resetCoAuthors(publication?.id, publication?.createdBy);
+
+            return response.json(200, {
+                updatedPublication
+            });
         }
 
         const isReadyToPublish = publicationService.isPublicationReadyToPublish(

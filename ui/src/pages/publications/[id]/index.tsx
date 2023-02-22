@@ -247,6 +247,30 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [confirmation, publicationData?.id, router]);
 
+    const handleUnlock = async () => {
+        const confirmed = await confirmation(
+            'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
+            'Are you sure you want to cancel and unlock?',
+            <OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
+            'Unlock',
+            'Cancel'
+        );
+
+        if (confirmed) {
+            try {
+                await api.put(
+                    `${Config.endpoints.publications}/${publicationData?.id}/status/DRAFT`,
+                    {},
+                    Helpers.getJWT()
+                );
+
+                router.push(`${Config.urls.viewPublication.path}/${publicationData?.id}/edit?step=4`);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
+
     const activeFlags = React.useMemo(
         () => publicationData?.publicationFlags?.filter((flag) => !flag.resolved),
         [publicationData]
@@ -356,6 +380,29 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 </Components.Alert>
                             )}
+                            {isCorrespondingUser && (
+                                <Components.Alert
+                                    className="mb-4"
+                                    severity={alertSeverity}
+                                    title={`This is a draft publication only visible to authors. ${
+                                        showApprovalsTracker
+                                            ? isReadyForPublish
+                                                ? 'All authors have approved this publication.'
+                                                : 'All authors must approve this draft before it can be published.'
+                                            : ''
+                                    }`}
+                                >
+                                    <Components.Link
+                                        openNew={false}
+                                        title="Edit publication"
+                                        href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
+                                        className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                    >
+                                        <OutlineIcons.PencilAltIcon className="w-4" />
+                                        <span>Edit Draft Publication</span>
+                                    </Components.Link>
+                                </Components.Alert>
+                            )}
                         </>
                     )}
                     {publicationData.currentStatus === 'LOCKED' && (
@@ -397,9 +444,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             title="Edit publication"
                                             href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
                                             className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                            onClick={async (e) => {
+                                                e.preventDefault();
+                                                await handleUnlock();
+                                            }}
                                         >
                                             <OutlineIcons.PencilAltIcon className="w-4" />
-                                            <span>Edit draft publication</span>
+                                            <span>Cancel Requests and Unlock for Editing</span>
                                         </Components.Link>
                                     )
                                 ) : (

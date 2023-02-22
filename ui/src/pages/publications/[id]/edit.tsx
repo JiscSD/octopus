@@ -13,6 +13,8 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import path from 'path';
+import { config } from 'process';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
@@ -100,6 +102,15 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     } else {
         return {
             notFound: true
+        };
+    }
+
+    if (draftedPublication?.currentStatus === 'LOCKED') {
+        return {
+            redirect: {
+                destination: `${Config.urls.viewPublication.path}/${draftedPublication.id}`,
+                permanent: false
+            }
         };
     }
 
