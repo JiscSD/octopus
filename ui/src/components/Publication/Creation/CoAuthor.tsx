@@ -94,7 +94,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
         SetEmailDuplicated(true);
-        setCoAuthor(event.target.value);
+        setCoAuthor(event.target.value?.trim());
     };
 
     // Validate email for co author regex to use -
@@ -104,7 +104,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         const authorsArray = coAuthors || [];
 
         // check to ensure co-author email is not already in the store/database
-        const emailDuplicate = authorsArray.some((author) => author.email === coAuthor);
+        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthor.toLowerCase());
         if (emailDuplicate) {
             SetEmailDuplicated(false);
             setLoading(false);
