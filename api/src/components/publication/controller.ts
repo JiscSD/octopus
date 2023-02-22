@@ -244,17 +244,13 @@ export const updateStatus = async (
 
         if (publication?.currentStatus === 'LOCKED') {
             // Update status to 'DRAFT'
-            const updatedPublication = await publicationService.updateStatus(
-                event.pathParameters.id,
-                event.pathParameters.status,
-                false
-            );
+            await publicationService.updateStatus(event.pathParameters.id, event.pathParameters.status, false);
 
             // Cancel co author approvals
             await coAuthorService.resetCoAuthors(publication?.id, publication?.createdBy);
 
             return response.json(200, {
-                updatedPublication
+                message: 'Publication unlocked for editing'
             });
         }
 

@@ -89,6 +89,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [publishError, setPublishError] = React.useState('');
+    const [unlockError, setUnlockError] = React.useState('');
     const [approvalError, setApprovalError] = React.useState('');
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
@@ -266,7 +267,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 router.push(`${Config.urls.viewPublication.path}/${publicationData?.id}/edit?step=4`);
             } catch (err) {
-                console.log(err);
+                const unlockError = err as Interfaces.JSONResponseError;
+                setUnlockError(unlockError.message);
             }
         }
     };
@@ -493,6 +495,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.Alert>
 
                             {publishError && <Components.Alert severity="ERROR" title={publishError} />}
+                            {unlockError && <Components.Alert severity="ERROR" title={unlockError} />}
 
                             {showApprovalsTracker && (
                                 <div className="pb-16">
