@@ -55,7 +55,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         setTimeout(async () => {
             // open confirmation modal
             const confirmed = await confirmation(
-                "Are you sure you want to change this co-author's email?",
+                "Are you sure you want to change this author's email?",
                 <p>
                     A new invitation email will be dispatched to <span className="font-semibold">{email}</span>.
                 </p>,
@@ -241,14 +241,14 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     negativeActionCallback={handleCloseModal}
                     positiveButtonText="Change Email"
                     cancelButtonText="Cancel"
-                    title="Change co-author email"
+                    title="Change author's email"
                 >
                     <input
                         autoComplete="off"
                         className="my-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
                         defaultValue={selectedAuthor?.email}
                         name="authorEmail"
-                        placeholder="Email of co-author"
+                        placeholder="Email of author"
                         ref={authorEmailRef}
                     />
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
