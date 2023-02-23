@@ -739,6 +739,9 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 
     await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
 
+    // Confirm publication states under review
+    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Under Review');
+
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
     await expect(page.locator('button:has-text("change your mind")')).toBeVisible();
@@ -1254,7 +1257,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    test('Coauthored publications show on your own profile', async ({ browser }) => {
+    test('Coauthored publications show on your own profile with correct publication status', async ({ browser }) => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto(Helpers.UI_BASE);
@@ -1303,6 +1306,13 @@ test.describe('Publication flow + co-authors', () => {
         // verify publish button is now enabled
         await page.waitForSelector(PageModel.publish.publishButton);
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+        // verify the status is set to 'ready to publish' for this publication
+        await page.locator(PageModel.header.usernameButton).click();
+        await page.locator(PageModel.header.myProfileButton).click();
+        await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
+        // go back to publication
+        await page.locator(`a:has-text("${publicationTitle}")`).click();
 
         // publish the new publication
         await page.locator(PageModel.publish.publishButton).click();
