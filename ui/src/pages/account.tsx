@@ -117,10 +117,6 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const verticalDivider = <span className="hidden border-r border-teal-500 py-4 md:block" />;
 
-    useEffect(() => {
-        console.log(draftPublications);
-    });
-
     return (
         <>
             <Head>

@@ -16,7 +16,6 @@ import * as Assets from '@assets';
 import * as Contexts from '@contexts';
 
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
 type SidebarCardProps = {
     publication: Interfaces.Publication;
@@ -187,14 +186,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     },
                     user?.token
                 );
-            } catch (err: unknown | Types.AxiosError) {
-                if (axios.isAxiosError(err)) {
-                    setApprovalError(err.response?.data.message);
-                    return;
-                }
-
-                setApprovalError('Uknown server error');
-                return;
+            } catch (err) {
+                const approvalError = err as Interfaces.JSONResponseError;
+                setApprovalError(approvalError.response?.data.message);
             }
         },
         [publicationData?.id, user?.token]

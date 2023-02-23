@@ -12,7 +12,6 @@ import * as api from '@api';
 import * as Hooks from '@hooks';
 
 import ClickAwayListener from 'react-click-away-listener';
-import { readSync } from 'fs';
 
 type BuildPublicationProps = {
     steps: Interfaces.CreationStep[];
@@ -304,7 +303,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const coAuthorsToApprove = useMemo(() => publicationHasCoAuthors(store).ready, [publicationHasCoAuthors, store]);
+    const hasCoAuthors = useMemo(() => publicationHasCoAuthors(store).ready, [publicationHasCoAuthors, store]);
 
     return (
         <>
@@ -470,7 +469,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-                                        {coAuthorsToApprove ? (
+                                        {hasCoAuthors ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
@@ -535,7 +534,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        {!coAuthorsToApprove ? (
+                                        {hasCoAuthors ? (
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
@@ -637,7 +636,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     >
                                         Preview
                                     </Components.Button>
-                                    {!coAuthorsToApprove ? (
+                                    {hasCoAuthors ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyRequestApproval}
@@ -668,7 +667,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    {!coAuthorsToApprove ? (
+                                    {hasCoAuthors ? (
                                         <Components.IconButton
                                             disabled={!isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
