@@ -422,26 +422,27 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 }`}
                             >
                                 {isCorrespondingUser ? (
-                                    isReadyForPublish ? (
-                                        <Components.Link
-                                            className={`mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline ${
-                                                isPublishing ? 'hover:cursor-not-allowed' : ''
-                                            }`}
-                                            href="#"
-                                            title="Publish"
-                                            onClick={
-                                                isPublishing
-                                                    ? undefined
-                                                    : async (e) => {
-                                                          e.preventDefault();
-                                                          await handlePublish();
-                                                      }
-                                            }
-                                        >
-                                            <OutlineIcons.CloudUploadIcon className="w-4" />
-                                            <span>Click here to publish</span>
-                                        </Components.Link>
-                                    ) : (
+                                    <>
+                                        {isReadyForPublish && (
+                                            <Components.Link
+                                                className={`mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline ${
+                                                    isPublishing ? 'hover:cursor-not-allowed' : ''
+                                                }`}
+                                                href="#"
+                                                title="Publish"
+                                                onClick={
+                                                    isPublishing
+                                                        ? undefined
+                                                        : async (e) => {
+                                                              e.preventDefault();
+                                                              await handlePublish();
+                                                          }
+                                                }
+                                            >
+                                                <OutlineIcons.CloudUploadIcon className="w-4" />
+                                                <span>Click here to publish</span>
+                                            </Components.Link>
+                                        )}
                                         <Components.Link
                                             openNew={false}
                                             title="Edit publication"
@@ -455,7 +456,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             <OutlineIcons.PencilAltIcon className="w-4" />
                                             <span>Cancel Requests and Unlock for Editing</span>
                                         </Components.Link>
-                                    )
+                                    </>
                                 ) : (
                                     <>
                                         {currentCoAuthor?.confirmedCoAuthor ? (

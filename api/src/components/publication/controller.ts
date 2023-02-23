@@ -105,10 +105,10 @@ export const deletePublication = async (
         // has only ever been draft
         if (
             publication.currentStatus !== 'DRAFT' ||
-            !publication.publicationStatus.every((status) => status.status === 'DRAFT')
+            !publication.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
             return response.json(403, {
-                message: 'A publication can only be deleted if has only ever been DRAFT.'
+                message: 'A publication can only be deleted if is currently a draft and has never been LIVE.'
             });
         }
 

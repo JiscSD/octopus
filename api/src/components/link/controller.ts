@@ -73,10 +73,12 @@ export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, und
         }
 
         if (
-            link.publicationFromRef.currentStatus === 'LIVE' ||
-            link.publicationFromRef.publicationStatus.every((status) => status.status === 'LIVE')
+            link.publicationFromRef.currentStatus !== 'DRAFT' ||
+            !link.publicationFromRef.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
-            return response.json(404, { message: 'Cannot delete a link where the publicationFrom is LIVE ' });
+            return response.json(404, {
+                message: 'A link can only be deleted if is currently a draft and has never been LIVE.'
+            });
         }
 
         if (link.publicationFromRef.user.id !== event.user.id) {
