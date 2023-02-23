@@ -44,7 +44,7 @@ export const updateAll = async (
         }
 
         // Check if duplicate coAuthors in array
-        const authorEmails = event.body.map((coAuthor) => coAuthor.email);
+        const authorEmails = event.body.map((coAuthor) => coAuthor.email.toLowerCase());
         const isDuplicate = authorEmails.some((coAuthor, index) => authorEmails.indexOf(coAuthor) != index);
 
         if (isDuplicate) {

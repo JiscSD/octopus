@@ -2,8 +2,8 @@ import React, { createContext, PropsWithChildren, useCallback, useContext, useSt
 import * as Components from '@components';
 
 type ConfirmationModalContextType = (
-    description: string,
-    title?: string,
+    title: string,
+    description: string | React.ReactNode,
     icon?: React.ReactNode,
     positiveButtonText?: string,
     cancelButtonText?: string
@@ -17,7 +17,7 @@ export const useConfirmationModal = () => useContext(ConfirmationModalContext);
 const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState<string>('Are you sure?');
-    const [description, setDescription] = useState<string | null>(null);
+    const [description, setDescription] = useState<string | React.ReactNode>(null);
     const [icon, setIcon] = useState<React.ReactNode>(null);
     const [positiveButtonText, setPositiveButtonText] = useState('Save');
     const [cancelButtonText, setCancelButtonText] = useState('Cancel');
@@ -26,17 +26,11 @@ const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
         reject: (reason: boolean) => void;
     } | null>(null);
 
-    const confirmation = useCallback(
-        (
-            description: string,
-            title?: string,
-            icon?: React.ReactNode,
-            positiveButtonText?: string,
-            cancelButtonText?: string
-        ): Promise<boolean> =>
+    const confirmation = useCallback<ConfirmationModalContextType>(
+        (title, description, icon, positiveButtonText, cancelButtonText): Promise<boolean> =>
             new Promise((resolve, reject) => {
                 setDescription(description);
-                setTitle(title ? title : 'Are you sure?');
+                setTitle(title);
                 setIcon(icon ? icon : null);
                 setPositiveButtonText(positiveButtonText ? positiveButtonText : 'Save');
                 setCancelButtonText(cancelButtonText ? cancelButtonText : 'Cancel');
@@ -77,7 +71,7 @@ const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
                 positiveActionCallback={handlePositiveAction}
                 negativeActionCallback={handleCancelAction}
             >
-                <p className="text-gray-500 text-sm">{description}</p>
+                <div className="text-sm text-grey-700">{description}</div>
             </Components.Modal>
         </ConfirmationModalContext.Provider>
     );
