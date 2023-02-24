@@ -26,12 +26,10 @@
         "prettier"
     ],
     "overrides": [
-        {
+        { // in theory we have no .js files but just in case..
             "files": [
-                "src/*.js",
-                "src/*.ts"
+                "src/*.js"
             ],
-            "excludedFiles": "*.test.js",
             "rules": {
                 "require-jsdoc": "off",
                 "func-names": "off"

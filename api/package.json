@@ -71,6 +71,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "husky": "^8.0.3",
         "jest": "^27.4.7",
+        "lint-staged": "^13.1.2",
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",

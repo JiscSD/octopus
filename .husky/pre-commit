@@ -3,5 +3,5 @@
 
 cd api || exit
 npm run format:write || exit
-npm run lint:fix
+npx lint-staged
 echo "eslint pre-commit checks: SUCCESSFUL"
