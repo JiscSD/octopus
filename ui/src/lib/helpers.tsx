@@ -30,6 +30,21 @@ export const formatDate = (value: string, formatType?: 'short' | 'long'): string
 };
 
 /**
+ * @description Formats a string ISO from the DB to datetime
+ */
+export const formatDateTime = (value: string, formatType?: 'short' | 'long'): string => {
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
+        day: 'numeric',
+        month: formatType || 'long',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    });
+
+    return date === 'Invalid DateTime' ? 'N/A' : date;
+};
+
+/**
  * @description Formats a ISO string date to a relative to now string
  */
 export const relativeDate = (value: string): string | null => {

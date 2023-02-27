@@ -141,6 +141,8 @@ export const get = async (id: string) => {
                     publicationId: true,
                     confirmedCoAuthor: true,
                     approvalRequested: true,
+                    createdAt: true,
+                    reminderDate: true,
                     user: {
                         select: {
                             firstName: true,

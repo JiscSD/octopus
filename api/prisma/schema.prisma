@@ -153,6 +153,8 @@ model CoAuthors {
     approvalRequested Boolean     @default(false)
     linkedUser        String?
     position          Int         @default(0)
+    createdAt         DateTime    @default(now())
+    reminderDate      DateTime?
     user              User?       @relation(fields: [linkedUser], references: [id])
     publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 

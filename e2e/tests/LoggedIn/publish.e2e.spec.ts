@@ -1534,6 +1534,82 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.close();
     });
+
+    test('Corresponding author can send reminders', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        // preview publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.waitForNavigation();
+
+        // check preview page
+        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
+        await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
+        await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
+        await expect(page.getByText('1 more author approval is required before publishing')).toBeVisible();
+
+        // check invited author is visible
+        await expect(page.getByText(Helpers.user2.email)).toBeVisible();
+
+        // re-send invitation to 'Unconfirmed Author'
+        await expect(page.getByText('Unconfirmed Author')).toBeVisible();
+        await page.locator('table button[title="Resend Email"]').click();
+        await expect(page.getByText('Re-Send author invite')).toBeVisible();
+        await page.locator('button[title="Confirm"]').click();
+
+        // check status
+        await expect(page.locator('table button[title="Resend Email"]')).not.toBeVisible();
+        await expect(page.getByText('Reminder sent at')).toBeVisible();
+
+        // check email
+        await page.goto('http://localhost:8025/');
+        await page
+            .locator(`.msglist-message:has-text("${Helpers.user2.email}")`, {
+                hasText: 'You’ve been added as a co-author on Octopus'
+            })
+            .first()
+            .click();
+
+        await expect(
+            page.frameLocator('iframe').getByText(`${Helpers.user1.fullName} has sent you a reminder`)
+        ).toBeVisible();
+
+        await page.close();
+    });
 });
 
 test.describe('Publication Flow + File import', () => {

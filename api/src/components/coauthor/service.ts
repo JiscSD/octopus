@@ -1,6 +1,14 @@
 import * as client from 'lib/client';
 import cuid from 'cuid';
 import { CoAuthor } from 'lib/interface';
+import { Prisma } from '@prisma/client';
+
+export const get = (id: string) =>
+    client.prisma.coAuthors.findUnique({
+        where: {
+            id
+        }
+    });
 
 export const getAllByPublication = async (publicationId: string) => {
     const coAuthors = await client.prisma.coAuthors.findMany({
@@ -49,6 +57,14 @@ export const create = async (email: string, publicationId: string) => {
     return create;
 };
 
+export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
+    client.prisma.coAuthors.update({
+        where: {
+            id
+        },
+        data
+    });
+
 /**
  *
  * @Important
@@ -94,19 +110,6 @@ export const deleteCoAuthorByEmail = (publicationId: string, email: string) =>
             publicationId_email: { publicationId, email }
         }
     });
-
-export const resendCoAuthor = async (id: string) => {
-    const resendCoAuthor = await client.prisma.coAuthors.update({
-        where: {
-            id
-        },
-        data: {
-            code: cuid()
-        }
-    });
-
-    return resendCoAuthor;
-};
 
 export const linkUser = (userId: string, publicationId: string, email: string, code: string) =>
     client.prisma.coAuthors.updateMany({
