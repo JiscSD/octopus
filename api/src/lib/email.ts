@@ -579,24 +579,22 @@ type SendApprovalReminder = {
 
 export const sendApprovalReminder = async (options: SendApprovalReminder) => {
     const html = `
-    <p>${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus:</p>
-    <br>
-    <p style="text-align: center;"><strong><i>${options.publication.title}</i></strong></p>
-    <br>
-    <p>To <strong>confirm your involvement</strong>, and see a preview of the publication, click the button below:</p> 
-    <br>
-    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true'>I am an author</a></p>
-    <br>
-    <p>If you are <strong>not</strong> an author of this publication, please click the button below:</p>
-    <br>
-    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false'>I am not an author</a></p>
-    </br>
-    <p>An Octopus user has provided this email address so that you can receive this message. We’ll use your contact details for this author validation process only, as described in our 
-    <a href="${baseURL}/privacy">privacy policy</a>. If you select that you are not involved with the publication named above, your data will be deleted immediately. If you are involved, your data will not be retained 
-    after the publication date.</p>
+        <p>${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus:</p>
+        <br>
+        <p style="text-align: center;"><strong><i>${options.publication.title}</i></strong></p>
+        <br>
+        <p>To <strong>confirm your involvement</strong>, and see a preview of the publication, click the button below:</p> 
+        <br>
+        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true'>I am an author</a></p>
+        <br>
+        <p>If you are <strong>not</strong> an author of this publication, please click the button below:</p>
+        <br>
+        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false'>I am not an author</a></p>
+        </br>
+        <p>An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.</p>
     `;
 
-    const text = `${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus: ${options.publication.title}. To approve that you are the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false.`;
+    const text = `${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus: ${options.publication.title}. To confirm your involvement, and see a preview of the publication, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false. An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
         html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),

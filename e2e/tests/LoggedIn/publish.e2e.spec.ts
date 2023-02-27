@@ -645,7 +645,7 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser, user);
     const page2 = await context.newPage();
-    await page2.goto(`http://localhost:8025/`);
+    await page2.goto(Helpers.MAIL_HOG);
     await page2.waitForSelector('.messages > .row');
 
     // click latest invitation link which was sent to this user and has text: "You’ve been added as a co-author on Octopus"
@@ -684,7 +684,7 @@ const rejectCoAuthorInvitation = async (
     await page.goto(Helpers.UI_BASE);
     await Helpers.login(page, browser, user);
     const page2 = await context.newPage();
-    await page2.goto(`http://localhost:8025/`);
+    await page2.goto(Helpers.MAIL_HOG);
     await page2.waitForSelector('.messages > .row');
 
     // click latest invitation link which was sent to this user and has text: "You’ve been added as a co-author on Octopus"
@@ -716,7 +716,7 @@ const rejectCoAuthorInvitation = async (
 const verifyLastEmailNotification = async (browser: Browser, user: Helpers.TestUser, emailSubject: string) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto('http://localhost:8025/');
+    await page.goto(Helpers.MAIL_HOG);
     // verify last notification sent to this email
     await expect(page.locator(`.msglist-message:has-text("${user.email}")`).first()).toContainText(emailSubject);
     await context.close();
@@ -1596,7 +1596,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.getByText('Reminder sent at')).toBeVisible();
 
         // check email
-        await page.goto('http://localhost:8025/');
+        await page.goto(Helpers.MAIL_HOG);
         await page
             .locator(`.msglist-message:has-text("${Helpers.user2.email}")`, {
                 hasText: 'You’ve been added as a co-author on Octopus'

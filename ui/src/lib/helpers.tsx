@@ -20,7 +20,7 @@ export const truncateString = (value: string, length: number): string => {
  * @description Formats a string ISO from the DB
  */
 export const formatDate = (value: string, formatType?: 'short' | 'long'): string => {
-    const date = luxon.DateTime.fromISO(value).toLocaleString({
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
         month: formatType || 'long',
         year: 'numeric'
@@ -33,13 +33,12 @@ export const formatDate = (value: string, formatType?: 'short' | 'long'): string
  * @description Formats a string ISO from the DB to datetime
  */
 export const formatDateTime = (value: string, formatType?: 'short' | 'long'): string => {
-    const date = luxon.DateTime.fromISO(value).toLocaleString({
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
         month: formatType || 'long',
         year: 'numeric',
         hour: 'numeric',
-        minute: 'numeric',
-        timeZoneName: 'short'
+        minute: 'numeric'
     });
 
     return date === 'Invalid DateTime' ? 'N/A' : date;
@@ -49,7 +48,7 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
  * @description Formats a ISO string date to a relative to now string
  */
 export const relativeDate = (value: string): string | null => {
-    const date = luxon.DateTime.fromISO(value).toRelativeCalendar();
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
 
     return date === 'Invalid DateTime' ? 'N/A' : date;
 };
