@@ -237,7 +237,7 @@ export const updateStatus = async (
 
         // TODO, eventually a service in LIVE can be HIDDEN and a service HIDDEN can become LIVE
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(404, {
+            return response.json(403, {
                 message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
             });
         }
