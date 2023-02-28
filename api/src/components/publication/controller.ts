@@ -242,7 +242,7 @@ export const updateStatus = async (
             });
         }
 
-        if (publication?.currentStatus === 'LOCKED') {
+        if (publication?.currentStatus === 'LOCKED' && event.pathParameters.status !== 'LIVE') {
             // Update status to 'DRAFT'
             await publicationService.updateStatus(event.pathParameters.id, event.pathParameters.status, false);
 
