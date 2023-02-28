@@ -44,7 +44,7 @@ const createPublicationSchema: I.Schema = {
         },
         language: {
             type: 'string',
-            enum: H.OctopusInformation.languages
+            enum: H.octopusInformation.languages
         },
         ethicalStatement: {
             type: 'string'

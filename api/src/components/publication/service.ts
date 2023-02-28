@@ -302,7 +302,7 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         }
     };
 
-    const must: any[] = [];
+    const must: unknown[] = [];
 
     if (filters.search) {
         // @ts-ignore

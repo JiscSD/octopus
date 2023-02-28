@@ -48,6 +48,7 @@ export const updateEmail = async (orcid: string, email: string) => {
             orcid
         }
     });
+
     return user;
 };
 
