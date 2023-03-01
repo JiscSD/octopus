@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const createCoAuthorSchema: I.Schema = {
+const updateAll: I.Schema = {
     type: 'array',
     items: {
         type: 'object',
@@ -26,6 +26,12 @@ const createCoAuthorSchema: I.Schema = {
             linkedUser: {
                 type: ['string', 'null']
             },
+            createdAt: {
+                type: 'string'
+            },
+            reminderDate: {
+                type: ['string', 'null']
+            },
             user: {
                 type: ['object', 'null'],
                 properties: {
@@ -46,4 +52,4 @@ const createCoAuthorSchema: I.Schema = {
     }
 };
 
-export default createCoAuthorSchema;
+export default updateAll;
