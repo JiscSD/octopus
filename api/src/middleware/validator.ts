@@ -4,8 +4,8 @@ import addFormats from 'ajv-formats';
 import * as I from 'interface';
 import * as response from 'lib/response';
 
-export default (schema: I.Schema, requestType: I.RequestType): any => ({
-    before: async (
+export default (schema: I.Schema, requestType: I.RequestType): middy.MiddlewareObject<I.APIGatewayProxyEventV2, I.APIGatewayProxyResultV2> => {
+    const before: middy.MiddlewareFunction<I.APIGatewayProxyEventV2, I.APIGatewayProxyResultV2> = async (
         request: I.HandlerLambda<I.APIGatewayProxyEventV2, I.APIGatewayProxyResultV2>
     ): Promise<undefined | I.JSONResponse> => {
         const ajv = new Ajv({ allErrors: true, useDefaults: true, coerceTypes: true });
@@ -24,5 +24,9 @@ export default (schema: I.Schema, requestType: I.RequestType): any => ({
         }
 
         return;
-    }
-});
+    };
+
+    return { 
+        before
+    };
+};
