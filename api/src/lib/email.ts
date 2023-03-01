@@ -588,7 +588,7 @@ type SendApprovalReminder = {
     };
 };
 
-export const sendApprovalReminder = async (options: SendApprovalReminder) => {
+export const sendApprovalReminder = async (options: SendApprovalReminder): Promise<void> => {
     const html = `
         <p>${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus:</p>
         <br>
