@@ -228,11 +228,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             )}
                                         </td>
                                         <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                            {!author.confirmedCoAuthor && !author.reminderDate && (
+                                            {!author.linkedUser && !author.reminderDate && (
                                                 <Components.IconButton
                                                     className="p-2"
                                                     disabled={isSendingReminder}
-                                                    title="Resend Email"
+                                                    title={`Resend email to ${author.email}`}
                                                     icon={
                                                         <IoIcons.IoReload
                                                             className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
