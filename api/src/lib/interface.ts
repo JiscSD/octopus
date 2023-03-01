@@ -558,6 +558,6 @@ export interface UserPublicationsFilters {
 }
 
 export interface SendApprovalReminderPathParams {
-    publicationId: string;
-    authorId: string;
+    id: string;
+    coauthor: string;
 }
