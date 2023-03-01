@@ -258,8 +258,8 @@ export const updateConfirmation = async (
             return response.json(403, {
                 message:
                     publication.currentStatus === 'LIVE'
-                        ? 'This publication is LIVE and therefore cannot be edited.'
-                        : 'This publication is in DRAFT and therefore cannot be edited.'
+                        ? 'You cannot approve a LIVE publication'
+                        : 'This publication is not ready for review yet'
             });
         }
 

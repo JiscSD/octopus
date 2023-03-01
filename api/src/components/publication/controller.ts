@@ -247,7 +247,7 @@ export const updateStatus = async (
             await publicationService.updateStatus(event.pathParameters.id, event.pathParameters.status, false);
 
             // Cancel co author approvals
-            await coAuthorService.resetCoAuthors(publication?.id, publication?.createdBy);
+            await coAuthorService.resetCoAuthors(publication?.id);
 
             return response.json(200, {
                 message: 'Publication unlocked for editing'
@@ -292,7 +292,7 @@ export const updateStatus = async (
         return response.json(200, updatedPublication);
     } catch (err) {
         console.log(err);
-        return response.json(500, { message: 'Unknown server error.' });
+        return response.json(500, { message: err });
     }
 };
 

@@ -123,18 +123,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         []
     );
 
-    const publicationHasCoAuthors = useCallback(
-        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            let ready = { ready: false, message: '' };
-
-            if (store.coAuthors.length > 1) {
-                ready = { ready: true, message: 'This publication has more than one author.' };
-            }
-            return ready;
-        },
-        []
-    );
-
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = useCallback(
         async (message?: string) => {
@@ -303,7 +291,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const hasCoAuthors = useMemo(() => publicationHasCoAuthors(store).ready, [publicationHasCoAuthors, store]);
+    const hasCoAuthors = store.coAuthors.length > 1 ? true : false;
 
     return (
         <>

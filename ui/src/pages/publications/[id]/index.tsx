@@ -247,7 +247,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation(
             'Are you sure you want to cancel and unlock?',
             'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
-            <OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
+            <OutlineIcons.LockOpenIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Unlock',
             'Cancel'
         );
