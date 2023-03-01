@@ -9,7 +9,7 @@ describe('create coauthor', () => {
 
     test('Update co-authors for a specific publication', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthor')
+            .put('/publications/publication-problem-draft/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
@@ -27,7 +27,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author with duplicate email', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthor')
+            .put('/publications/publication-problem-draft/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
@@ -68,7 +68,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record if the user is not the author of a publication', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthor')
+            .put('/publications/publication-problem-draft/coauthors')
             .query({ apiKey: '987654321' })
             .send([
                 {
@@ -86,7 +86,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication that does not exist', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/non-existent-publication/coauthor')
+            .put('/publications/non-existent-publication/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -104,7 +104,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication that is live', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-live/coauthor')
+            .put('/publications/publication-problem-live/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {

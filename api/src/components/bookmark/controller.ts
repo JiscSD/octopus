@@ -46,6 +46,7 @@ export const create = async (
         return response.json(200, { message: 'You have bookmarked this publication.' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

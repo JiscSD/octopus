@@ -9,8 +9,10 @@ export const get = async (
 ): Promise<I.JSONResponse> => {
     try {
         const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+
         return response.json(200, coAuthors);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -90,6 +92,7 @@ export const updateAll = async (
         return response.json(200, 'Successfully updated publication authors');
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -143,6 +146,7 @@ export const remove = async (
 
         return response.json(200, { message: 'Co-author deleted from this publication' });
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -168,6 +172,7 @@ export const link = async (
         }
 
         const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email);
+
         // check if this user is part of co-authors list
         if (!coAuthorByEmail) {
             return response.json(403, { message: 'You are not currently listed as an author on this draft' });
@@ -236,6 +241,7 @@ export const link = async (
 
         return response.json(200, 'Linked user account');
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -300,6 +306,7 @@ export const updateConfirmation = async (
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -336,6 +343,84 @@ export const requestApproval = async (
 
         return response.json(200, coAuthors);
     } catch (err) {
+        console.log(err);
         return response.json(500, { message: 'Unknown server error.' });
     }
+};
+
+export const sendApprovalReminder = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
+): Promise<I.JSONResponse> => {
+    const { authorId, publicationId } = event.pathParameters;
+
+    const publication = await publicationService.get(publicationId);
+    const author = await coAuthorService.get(authorId);
+
+    if (!publication) {
+        return response.json(404, {
+            message: 'This publication does not exist.'
+        });
+    }
+
+    if (publication.currentStatus !== 'DRAFT') {
+        return response.json(403, {
+            message: 'This publication cannot be edited.'
+        });
+    }
+
+    if (event.user.id !== publication.createdBy) {
+        return response.json(403, {
+            message: 'You do not have the right permissions for this action.'
+        });
+    }
+
+    if (!author || author.publicationId !== publicationId) {
+        return response.json(404, {
+            message: 'This author does not exist on this publication'
+        });
+    }
+
+    /**
+     * @TODO - discuss with the team changing from 'confirmedCoAuthor' to 'approved' because it's really confusing
+     * confirmed means they confirmed their involvement but they didn't approve the publication to go live yet
+     * approved means they approved the publication after confirming their involvement
+     */
+    if (author.confirmedCoAuthor) {
+        return response.json(400, {
+            message: 'This author has already approved this publication'
+        });
+    }
+
+    if (author.linkedUser) {
+        // the co-author accepted the invitation but he didn't approve yet
+        return response.json(400, {
+            message: 'This author has already accepted your invitation'
+        });
+    }
+
+    if (author.reminderDate) {
+        return response.json(400, {
+            message: 'You have already sent a reminder to this author'
+        });
+    }
+
+    try {
+        // send reminder
+        await email.sendApprovalReminder({
+            coAuthor: { email: author.email, code: author.code },
+            publication: {
+                id: publicationId,
+                title: publication.title || '',
+                creator: `${publication.user.firstName} ${publication.user.lastName}`
+            }
+        });
+
+        // update co-author reminderDate
+        await coAuthorService.update(authorId, { reminderDate: new Date() });
+    } catch (error) {
+        console.log(error);
+        return response.json(500, { message: 'Unknown server error' });
+    }
+
+    return response.json(200, { message: `Reminder sent to ${author.email}` });
 };

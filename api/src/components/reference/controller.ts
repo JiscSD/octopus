@@ -3,7 +3,9 @@ import * as response from 'lib/response';
 import * as referenceService from 'reference/service';
 import * as publicationService from 'publication/service';
 
-export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePath>) => {
+export const get = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePath>
+): Promise<I.JSONResponse> => {
     try {
         const references = await referenceService.getAllByPublication(event.pathParameters.id);
 
@@ -13,7 +15,9 @@ export const get = async (event: I.AuthenticatedAPIRequest<undefined, undefined,
     }
 };
 
-export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>) => {
+export const updateAll = async (
+    event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -47,6 +51,7 @@ export const updateAll = async (event: I.AuthenticatedAPIRequest<I.Reference[], 
         return response.json(200, reference);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

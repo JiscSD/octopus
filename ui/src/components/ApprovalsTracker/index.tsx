@@ -5,6 +5,7 @@ import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as FaIcons from 'react-icons/fa';
+import * as IoIcons from 'react-icons/io5';
 import * as Components from '@components';
 import * as Contexts from '@contexts';
 import * as Helpers from '@helpers';
@@ -25,6 +26,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     const { user } = Stores.useAuthStore();
     const [selectedAuthor, setSelectedAuthor] = React.useState<null | Interfaces.CoAuthor>(null);
     const [authorEmailError, setAuthorEmailError] = React.useState('');
+    const [isSendingReminder, setSendingReminder] = React.useState(false);
     const confirmation = Contexts.useConfirmationModal();
     const authorEmailRef = React.useRef<null | HTMLInputElement>(null);
 
@@ -80,7 +82,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 try {
                     // update publication authors
                     await api.put(
-                        `${Config.endpoints.publications}/${props.publication.id}/coauthor`,
+                        `${Config.endpoints.publications}/${props.publication.id}/coauthors`,
                         newAuthorsArray,
                         Helpers.getJWT()
                     );
@@ -105,6 +107,34 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             }
         }, 300); // wait for the other modal to close
     }, [confirmation, props, selectedAuthor]);
+
+    const handleApprovalReminder = async (author: Interfaces.CoAuthor) => {
+        const confirmed = await confirmation(
+            'Re-Send author invite',
+            <p>
+                Are you sure you want to re-send the invitation email to{' '}
+                <span className="font-semibold">{author.email}</span>?
+            </p>,
+            <IoIcons.IoReload className="h-8 w-8 text-grey-600" aria-hidden="true" />,
+            'Confirm'
+        );
+
+        if (confirmed) {
+            props.onError(''); // clear shown error if any
+            setSendingReminder(true);
+            try {
+                await api.post(
+                    `${Config.endpoints.publications}/${props.publication.id}/coauthors/${author.id}/approval-reminder`,
+                    {},
+                    Helpers.getJWT()
+                );
+                await props.refreshPublicationData();
+            } catch (error) {
+                props.onError((error as Interfaces.JSONResponseError).response?.data?.message);
+            }
+            setSendingReminder(false);
+        }
+    };
 
     const remainingApprovalsCount = useMemo(
         () => props.publication.coAuthors.filter((author) => !author.confirmedCoAuthor).length,
@@ -133,9 +163,14 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                 Status
                             </th>
                             {user?.id === props.publication.createdBy && (
-                                <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
-                                    Edit
-                                </th>
+                                <>
+                                    <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                        Edit
+                                    </th>
+                                    <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                        Email
+                                    </th>
+                                </>
                             )}
                         </tr>
                     </thead>
@@ -161,7 +196,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     )}
                                 </td>
                                 <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                    {author.linkedUser === props.publication.createdBy ? (
+                                    {user?.id === props.publication.createdBy &&
+                                    !author.linkedUser &&
+                                    author.reminderDate ? (
+                                        <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
+                                    ) : author.linkedUser === props.publication.createdBy ? (
                                         <>Corresponding author</>
                                     ) : author.confirmedCoAuthor ? (
                                         <span className="text-green-500 dark:text-green-300">Approved</span>
@@ -172,21 +211,39 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     )}
                                 </td>
                                 {user?.id === props.publication.createdBy && (
-                                    <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                        {!author.linkedUser && (
-                                            <Components.IconButton
-                                                className="p-2"
-                                                title="Edit"
-                                                icon={
-                                                    <FaIcons.FaEdit
-                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                }
-                                                onClick={() => setSelectedAuthor(author)}
-                                            />
-                                        )}
-                                    </td>
+                                    <>
+                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                            {!author.linkedUser && (
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Edit"
+                                                    icon={
+                                                        <FaIcons.FaEdit
+                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                            aria-hidden="true"
+                                                        />
+                                                    }
+                                                    onClick={() => setSelectedAuthor(author)}
+                                                />
+                                            )}
+                                        </td>
+                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                            {!author.confirmedCoAuthor && !author.reminderDate && (
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    disabled={isSendingReminder}
+                                                    title="Resend Email"
+                                                    icon={
+                                                        <IoIcons.IoReload
+                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                            aria-hidden="true"
+                                                        />
+                                                    }
+                                                    onClick={() => handleApprovalReminder(author)}
+                                                />
+                                            )}
+                                        </td>
+                                    </>
                                 )}
                             </tr>
                         ))}
@@ -195,7 +252,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         <tfoot className="bg-grey-50 duration-500 dark:bg-grey-700">
                             <tr>
                                 <td
-                                    colSpan={3}
+                                    colSpan={4}
                                     className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50"
                                 >
                                     {remainingApprovalsCount > 0 ? (

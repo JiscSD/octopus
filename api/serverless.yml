@@ -250,18 +250,18 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthors
                   method: GET
                   cors: true
-    createCoAuthor:
-        handler: src/components/coauthor/routes.create
+    updateAll:
+        handler: src/components/coauthor/routes.updateAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthors
                   method: PUT
                   cors: true
     deleteCoAuthor:
         handler: src/components/coauthor/routes.remove
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor/{coauthor}
+                  path: ${self:custom.versions.v1}/publications/{id}/coauthors/{coauthor}
                   method: DELETE
                   cors: true
     linkCoAuthor:
@@ -284,6 +284,13 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/coauthors/request-approval
                   method: PUT
+                  cors: true
+    sendApprovalReminder:
+        handler: src/components/coauthor/routes.sendApprovalReminder
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/coauthors/{authorId}/approval-reminder
+                  method: POST
                   cors: true
     getFlag:
         handler: src/components/flag/routes.get

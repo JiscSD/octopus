@@ -137,6 +137,8 @@ export interface CoAuthor {
     approvalRequested: boolean;
     email: string;
     publicationId: string;
+    createdAt?: string;
+    reminderDate?: string | null;
     user?: {
         firstName: string;
         lastName: string;

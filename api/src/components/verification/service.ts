@@ -31,6 +31,7 @@ export const upsert = async (request: I.UpdateVerificationInformation) => {
 
 export const find = async (orcid: string) => {
     const verification = await client.prisma.verification.findUnique({ where: { orcid } });
+
     return verification;
 };
 
@@ -47,5 +48,6 @@ export const incrementAttempts = async (orcid: string) => {
             }
         }
     });
+
     return verification;
 };

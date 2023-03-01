@@ -141,6 +141,8 @@ export const get = async (id: string) => {
                     publicationId: true,
                     confirmedCoAuthor: true,
                     approvalRequested: true,
+                    createdAt: true,
+                    reminderDate: true,
                     user: {
                         select: {
                             firstName: true,
@@ -302,7 +304,7 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         }
     };
 
-    const must: any[] = [];
+    const must: unknown[] = [];
 
     if (filters.search) {
         // @ts-ignore

@@ -2,6 +2,7 @@ import { Browser, expect, Locator, Page } from '@playwright/test';
 import { PageModel } from './PageModel';
 
 export const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
+export const MAIL_HOG = process.env.MAIL_HOG;
 
 const requiredEnvVariables = [
     'ORCID_TEST_USER',
@@ -19,7 +20,8 @@ const requiredEnvVariables = [
     'ORCID_TEST_USER4',
     'ORCID_TEST_PASS4',
     'ORCID_TEST_FIRST_NAME4',
-    'ORCID_TEST_LAST_NAME4'
+    'ORCID_TEST_LAST_NAME4',
+    'MAIL_HOG'
 ];
 
 function checkEnvVariable(variableName: string) {
@@ -103,7 +105,7 @@ export const login = async (page: Page, browser: Browser, user = user1) => {
         const [newPage] = await Promise.all([context.waitForEvent('page'), context.newPage()]);
 
         // navigate to MailHog and take the last verification code sent to this user
-        await newPage.goto(`http://localhost:8025/`);
+        await newPage.goto(MAIL_HOG);
         await newPage
             .locator(`.msglist-message:has-text("${user.email}")`, { hasText: 'Verify your Octopus account' })
             .first()
