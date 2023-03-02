@@ -372,6 +372,8 @@ export interface CoAuthor {
     approvalRequested: boolean;
     email: string;
     publicationId: string;
+    createdAt?: string;
+    reminderDate?: string | null;
     user?: {
         firstName: string;
         lastName: string;
@@ -553,4 +555,9 @@ export interface UserPublicationsFilters {
     limit: number;
     orderBy?: UserPublicationsOrderBy;
     orderDirection?: OrderDirection;
+}
+
+export interface SendApprovalReminderPathParams {
+    publicationId: string;
+    authorId: string;
 }

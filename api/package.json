@@ -16,6 +16,7 @@
         "seed": "ts-node prisma/seed.ts"
     },
     "scripts": {
+        "prepare": "cd .. && husky install",
         "start:local": "nodemon --config nodemon.json",
         "seed:local": "STAGE=local npx prisma migrate reset --force",
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
@@ -23,7 +24,8 @@
         "reindex": "ts-node prisma/reindex.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
-        "lint": "eslint src/"
+        "lint:check": "eslint src/",
+        "lint:fix": "eslint --fix src/"
     },
     "dependencies": {
         "@aws-sdk/client-ses": "^3.76.0",
@@ -64,9 +66,12 @@
         "aws-lambda": "^1.0.7",
         "eslint": "^8.6.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
+        "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-prettier": "^4.0.0",
+        "husky": "^8.0.3",
         "jest": "^27.4.7",
+        "lint-staged": "^13.1.2",
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",

@@ -33,7 +33,7 @@ export const testSeed = async (): Promise<void> => {
     });
 };
 
-export const openSearchSeed = async () => {
+export const openSearchSeed = async (): Promise<void> => {
     for (const publication of seeds.publicationsDevSeedData) {
         // only seed in live publications
         if (publication.currentStatus === 'LIVE') {
@@ -80,5 +80,6 @@ export const getEmails = async (query: string): Promise<any> => {
             query
         }
     });
+
     return emails?.data;
 };

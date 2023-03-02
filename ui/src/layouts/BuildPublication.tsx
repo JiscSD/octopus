@@ -166,7 +166,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             // update co-authors for this publications - should really be put
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/coauthor`,
+                `${Config.endpoints.publications}/${props.publication.id}/coauthors`,
                 store.coAuthors,
                 props.token
             );
@@ -610,7 +610,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         {props.steps.length - 1 === props.currentStep ? (
                             xl ? (
                                 <>
-                                    {console.log(store.coAuthors)}
                                     <Components.Button
                                         title={
                                             isReadyToPreview

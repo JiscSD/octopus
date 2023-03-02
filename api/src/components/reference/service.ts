@@ -6,6 +6,7 @@ export const getAllByPublication = async (publicationId: string) => {
             publicationId
         }
     });
+
     return references;
 };
 
@@ -19,5 +20,6 @@ export const updateAll = async (publicationId, data) => {
     const created = await client.prisma.references.createMany({
         data
     });
+
     return created;
 };

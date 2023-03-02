@@ -29,6 +29,7 @@ export const getAll = async (
         });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -64,6 +65,7 @@ export const get = async (
         });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -73,11 +75,13 @@ export const getSeedDataPublications = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publications = await publicationService.getSeedDataPublications(event.queryStringParameters.title);
+
         return response.json(200, {
             publications
         });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -117,6 +121,7 @@ export const deletePublication = async (
         return response.json(200, { message: `Publication ${event.pathParameters.id} deleted` });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -154,13 +159,14 @@ export const create = async (
         return response.json(201, publication);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
 export const update = async (
     event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -219,6 +225,7 @@ export const update = async (
         return response.json(200, updatedPublication);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -292,6 +299,7 @@ export const updateStatus = async (
         return response.json(200, updatedPublication);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -309,6 +317,7 @@ export const getLinksForPublication = async (
         return response.json(200, data);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
