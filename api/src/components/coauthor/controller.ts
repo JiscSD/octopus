@@ -13,6 +13,7 @@ export const get = async (
         return response.json(200, coAuthors);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -147,6 +148,7 @@ export const remove = async (
         return response.json(200, { message: 'Co-author deleted from this publication' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -242,6 +244,7 @@ export const link = async (
         return response.json(200, 'Linked user account');
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -350,6 +353,7 @@ export const requestApproval = async (
         return response.json(200, coAuthors);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -425,6 +429,7 @@ export const sendApprovalReminder = async (
         await coAuthorService.update(authorId, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
+
         return response.json(500, { message: 'Unknown server error' });
     }
 
