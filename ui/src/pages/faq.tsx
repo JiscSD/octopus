@@ -131,14 +131,6 @@ const faqContents = [
             "<p className='mb-2'>If you suspect plagiarism, copyright issues, ethical or scientific misconduct then you can use the Red Flag system to raise your concerns. Select which issue to highlight from a list of predefined criteria and add explanatory comments to explain your concerns to the authors and other readers. You can submit red flags for multiple criteria if you need to.</p><p className='mb-2'>The red flag will immediately appear on the publication page to highlight your concern to other readers. Each red flag will also generate an automated email to all the publication’s authors, who will be able to respond to the issues raised through the platform. All comments will be available to be read alongside red flag.</p><p className='mb-2'>The user who raised the red flag can also remove it, once they feel the issue has been resolved</p>"
     },
     {
-        title: 'If this is only an alpha version, when will Octopus launch?',
-        href: 'launch_octopus',
-        id: 'launch_octopus',
-        heading: 'If this is only an alpha version, when will Octopus launch?',
-        content:
-            "<p className='mb-2'>The platform will launch in June 2022.</p><p className='mb-2'>The alpha release has reduced features and functionality for now, but additional features will be added for testing prior to launch. Please note that any content published to the site during the alpha stage will not be retained in the live version.</p><p className='mb-2'>We are currently gathering user feedback to ensure that the platform meets your needs, and that we prioritise the features of most value to you. Consider completing our feedback form, or joining our user community, to help us develop the platform further.</p>"
-    },
-    {
         title: "How do I revoke Octopus's access to my ORCID record?",
         href: 'revoke_orcid_access',
         id: 'revoke_orcid_access',
