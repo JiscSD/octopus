@@ -313,6 +313,7 @@ export const updateConfirmation = async (
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
