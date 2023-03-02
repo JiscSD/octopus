@@ -74,14 +74,14 @@ export const clearDB = async (): Promise<void> => {
 };
 
 interface Inbox {
-    items: { 
+    items: {
         Content: {
-            Headers : {
-                Subject: string
-            },
-            Body: string
-        }
-    }
+            Headers: {
+                Subject: string;
+            };
+            Body: string;
+        };
+    };
 }
 
 export const getEmails = async (query: string): Promise<Inbox> => {
