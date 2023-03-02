@@ -5,10 +5,7 @@ import middy from '@middy/core';
 import * as I from 'interface';
 import * as response from 'lib/response';
 
-export default (
-    schema: I.Schema,
-    requestType: I.RequestType
-): middy.MiddlewareObj => {
+export default (schema: I.Schema, requestType: I.RequestType): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (
         request
     ): Promise<undefined | I.JSONResponse> => {
