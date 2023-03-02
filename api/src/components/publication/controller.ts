@@ -292,7 +292,7 @@ export const updateStatus = async (
         return response.json(200, updatedPublication);
     } catch (err) {
         console.log(err);
-        return response.json(500, { message: err });
+        return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
