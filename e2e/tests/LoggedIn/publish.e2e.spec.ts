@@ -794,14 +794,24 @@ test.describe('Publication flow + co-authors', () => {
             'How do living organisms function, survive, reproduce and evolve?'
         );
 
+        // verify 'Publish' button is disabled
+        await expect(page.locator(PageModel.publish.publishButton)).toBeDisabled();
+
         // add main text
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
-        // verify 'Publish' button is enabled
-        const publishButton = page.locator(PageModel.publish.publishButton);
-        await expect(publishButton).toBeEnabled();
+        // verify 'Publish' button is now enabled
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+        // add new line and white space in the Main Text
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.press('Enter');
+        await page.keyboard.press('Space');
+
+        // verify 'Publish' button is still enabled
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // add co-authors
         await page.locator('aside button:has-text("Co-authors")').click();
