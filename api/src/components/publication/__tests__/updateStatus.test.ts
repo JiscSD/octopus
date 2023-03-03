@@ -52,7 +52,7 @@ describe('Update publication status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(422);
+        expect(updatedPublication.status).toEqual(403);
     });
 
     test('User without permissions cannot update their publication to LIVE from DRAFT', async () => {
