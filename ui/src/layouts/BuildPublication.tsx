@@ -123,21 +123,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         []
     );
 
-    const CheckCoAuthorsToApprove = useCallback(
-        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            let ready = { ready: true, message: '' };
-            if (
-                !store.coAuthors
-                    .filter((coAuthor) => coAuthor.linkedUser !== props.publication.createdBy)
-                    .every((coAuthor) => coAuthor.approvalRequested)
-            ) {
-                ready = { ready: false, message: 'CoAuthors pending approval request' };
-            }
-            return ready;
-        },
-        [props.publication.createdBy]
-    );
-
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = useCallback(
         async (message?: string) => {
@@ -235,6 +220,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
             updateCoAuthors(response.data);
+
+            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(message);
@@ -304,7 +291,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
+    const hasCoAuthors = store.coAuthors.length > 1 ? true : false;
 
     return (
         <>
@@ -340,7 +327,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 cancelButtonText="Cancel"
                 title="Are you sure you want to finalise your publication?"
                 icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
-            ></Components.Modal>
+            >
+                <p className="text-gray-500 text-sm">
+                    This action will lock your publication and notify other authors that they must approve it in its
+                    current state before publishing.
+                </p>
+            </Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
@@ -465,7 +457,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-                                        {!coAuthorsToApprove ? (
+                                        {hasCoAuthors ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
@@ -530,7 +522,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        {!coAuthorsToApprove ? (
+                                        {hasCoAuthors ? (
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
@@ -631,7 +623,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     >
                                         Preview
                                     </Components.Button>
-                                    {!coAuthorsToApprove ? (
+                                    {hasCoAuthors ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyRequestApproval}
@@ -662,7 +654,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    {!coAuthorsToApprove ? (
+                                    {hasCoAuthors ? (
                                         <Components.IconButton
                                             disabled={!isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}

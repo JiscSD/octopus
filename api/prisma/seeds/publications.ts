@@ -157,6 +157,70 @@ const publicationSeeds = [
             ]
         }
     },
+    {
+        id: 'publication-problem-locked',
+        title: 'Publication PROBLEM-LOCKED',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        content: 'Publication PROBLEM-LOCKED',
+        currentStatus: 'LOCKED',
+        conflictOfInterestStatus: false,
+        doi: '10.82259/cty5-2g04',
+        user: {
+            connect: {
+                id: 'test-user-5'
+            }
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        keywords: ['science', 'technology'],
+        funders: {
+            create: {
+                id: 'publication-problem-locked-funder',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
+        affiliations: {
+            create: {
+                id: 'publication-problem-locked-affiliation',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
+        coAuthors: {
+            create: [
+                {
+                    id: 'coauthor-test-user-6-problem-locked',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6'
+                },
+                {
+                    id: 'coauthor-test-user-7-problem-locked',
+                    email: 'test-user-7@jisc.ac.uk',
+                    code: 'test-code-user-7',
+                    confirmedCoAuthor: false
+                }
+            ]
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        }
+    },
 
     // HYPOTHESIS
     {

@@ -773,6 +773,11 @@ export const verifyPublicationIsDisplayedAsLiveForCoAuthor = async (
     await context.close();
 };
 
+export const unlockPublication = async (page: Page) => {
+    await page.locator(PageModel.publish.unlockButton).click();
+    await page.locator(PageModel.publish.confirmUnlockButton).click();
+};
+
 test.describe('Publication flow + co-authors', () => {
     test.describe.configure({ mode: 'serial' });
 
@@ -846,12 +851,15 @@ test.describe('Publication flow + co-authors', () => {
         await page.reload();
 
         // verify publish button is now enabled
-        await page.waitForSelector(PageModel.publish.publishButton);
-        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+        await page.waitForSelector(PageModel.publish.publishButtonTracker);
+        await expect(page.locator(PageModel.publish.publishButtonTracker)).toBeEnabled();
 
         // publish the new publication
-        await page.locator(PageModel.publish.publishButton).click();
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await Promise.all([
+            page.waitForNavigation(),
+            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+        ]);
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
@@ -941,6 +949,10 @@ test.describe('Publication flow + co-authors', () => {
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user3, 'You’ve been added as a co-author on Octopus');
 
+        // Unlock publication
+        await unlockPublication(page);
+        await page.locator('aside button:has-text("Co-authors")').click();
+
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user3);
 
@@ -1008,17 +1020,13 @@ test.describe('Publication flow + co-authors', () => {
 
         // reload the page to see co-author confirmation
         await page.reload();
-        await expect(
-            page.locator(`[title="${Helpers.user2.email} has given approval for this publication to published."]`)
-        ).toBeVisible();
-
-        // verify publish button is now enabled
-        await page.waitForSelector(PageModel.publish.publishButton);
-        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // publish
-        await page.locator(PageModel.publish.publishButton).click();
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await Promise.all([
+            page.waitForNavigation(),
+            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+        ]);
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
@@ -1072,6 +1080,10 @@ test.describe('Publication flow + co-authors', () => {
 
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        // Unlock publication
+        await unlockPublication(page);
+        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1135,6 +1147,10 @@ test.describe('Publication flow + co-authors', () => {
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
 
+        // Unlock publication
+        await unlockPublication(page);
+        await page.locator('aside button:has-text("Co-authors")').click();
+
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
 
@@ -1190,6 +1206,10 @@ test.describe('Publication flow + co-authors', () => {
 
         // verify notification sent to co-author
         await verifyLastEmailNotification(browser, Helpers.user2, 'You’ve been added as a co-author on Octopus');
+
+        // Unlock publication
+        await unlockPublication(page);
+        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1311,22 +1331,21 @@ test.describe('Publication flow + co-authors', () => {
 
         // refresh corresponding author page
         await page.reload();
-        await page.locator('button:has-text("Refresh")').click();
-
-        // verify publish button is now enabled
-        await page.waitForSelector(PageModel.publish.publishButton);
-        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // verify the status is set to 'ready to publish' for this publication
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myProfileButton).click();
         await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
+
         // go back to publication
         await page.locator(`a:has-text("${publicationTitle}")`).click();
 
         // publish the new publication
-        await page.locator(PageModel.publish.publishButton).click();
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await Promise.all([
+            page.waitForNavigation(),
+            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+        ]);
 
         // veryify publication is displayed as live on co-author profile
         await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
@@ -1380,8 +1399,8 @@ test.describe('Publication flow + co-authors', () => {
         await confirmCoAuthorInvitation(browser, Helpers.user2);
         await confirmCoAuthorInvitation(browser, Helpers.user3);
 
-        await page.locator(PageModel.publish.previewButton).click();
-        await page.waitForNavigation();
+        // refresh corresponding author page
+        await page.reload();
 
         await expect(page.getByText(Helpers.user2.fullName)).toBeVisible();
         await expect(page.getByText(Helpers.user2.email)).toBeVisible();
@@ -1460,15 +1479,11 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
 
         // publish
-        const publishButton = page.locator('button[title="Publish"]');
-        await expect(publishButton).toBeVisible();
-        await publishButton.click();
-
-        // confirm and publish
-        await expect(page.getByText('Are you sure you want to publish?')).toBeVisible();
-        await page.locator('button[title="Yes"]').click();
-        await page.waitForResponse((response) => response.url().includes('/status/LIVE') && response.ok());
-        await page.waitForLoadState();
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await Promise.all([
+            page.waitForNavigation(),
+            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+        ]);
 
         // check draft publication controls are not available anymore
         await expect(page.getByText('This is a draft publication')).not.toBeVisible();
@@ -1514,10 +1529,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.requestApprovalButton).click();
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
-
-        // preview publication
-        await page.locator(PageModel.publish.previewButton).click();
-        await page.waitForNavigation();
 
         // check preview page
         await expect(page.getByText('This is a draft publication')).toBeVisible();
@@ -1617,6 +1628,60 @@ test.describe('Publication flow + co-authors', () => {
         await expect(
             page.frameLocator('iframe').getByText(`${Helpers.user1.fullName} has sent you a reminder`)
         ).toBeVisible();
+
+        await page.close();
+    });
+
+    test('Editing a publication removes existing approvals', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        await page.reload();
+        await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+
+        await unlockPublication(page);
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        await expect(page.getByText('Approval Pending')).toBeVisible();
 
         await page.close();
     });

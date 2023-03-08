@@ -265,7 +265,7 @@ export interface DeleteLinkPathParams {
     id: string;
 }
 
-export type ValidStatuses = 'DRAFT' | 'LIVE';
+export type ValidStatuses = 'DRAFT' | 'LIVE' | 'LOCKED';
 /**
  * ORCID
  */

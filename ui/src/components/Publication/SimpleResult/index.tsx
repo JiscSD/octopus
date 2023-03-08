@@ -14,12 +14,12 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
         if (publication.currentStatus === 'LIVE') return 'Live';
 
         if (publication.createdBy === user.id) {
-            if (publication.coAuthors.length === 1) return 'Draft';
+            if (publication.coAuthors.length === 1 || publication.currentStatus === 'DRAFT') return 'Draft';
 
             if (publication.coAuthors.every((coAuthors) => coAuthors.confirmedCoAuthor === true))
                 return 'Ready to publish';
 
-            return 'Draft';
+            return 'Under Review';
         }
 
         const hasCoAuthorApproved = publication.coAuthors.find(

@@ -3,6 +3,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as coAuthorService from 'coauthor/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -108,10 +109,10 @@ export const deletePublication = async (
         // has only ever been draft
         if (
             publication.currentStatus !== 'DRAFT' ||
-            !publication.publicationStatus.every((status) => status.status === 'DRAFT')
+            !publication.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
             return response.json(403, {
-                message: 'A publication can only be deleted if has only ever been DRAFT.'
+                message: 'A publication can only be deleted if is currently a draft and has never been LIVE.'
             });
         }
 
@@ -242,8 +243,22 @@ export const updateStatus = async (
         }
 
         // TODO, eventually a service in LIVE can be HIDDEN and a service HIDDEN can become LIVE
-        if (publication?.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
+        if (publication?.currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
+            });
+        }
+
+        if (publication?.currentStatus === 'LOCKED' && event.pathParameters.status !== 'LIVE') {
+            // Update status to 'DRAFT'
+            await publicationService.updateStatus(event.pathParameters.id, event.pathParameters.status, false);
+
+            // Cancel co author approvals
+            await coAuthorService.resetCoAuthors(publication?.id);
+
+            return response.json(200, {
+                message: 'Publication unlocked for editing'
+            });
         }
 
         const isReadyToPublish = publicationService.isPublicationReadyToPublish(

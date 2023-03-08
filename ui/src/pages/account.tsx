@@ -76,7 +76,10 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const draftPublications = React.useMemo(
-        () => props.userPublications.filter((publication) => publication.currentStatus === 'DRAFT'),
+        () =>
+            props.userPublications.filter(
+                (publication) => publication.currentStatus === 'DRAFT' || publication.currentStatus === 'LOCKED'
+            ),
         [props.userPublications]
     );
 
