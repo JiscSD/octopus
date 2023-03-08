@@ -262,10 +262,13 @@ export const updateConfirmation = async (
             });
         }
 
-        // Is the publication in draft?
-        if (publication.currentStatus === 'LIVE') {
+        // Is the publication in locked mode?
+        if (publication.currentStatus !== 'LOCKED') {
             return response.json(403, {
-                message: 'This publication is LIVE and therefore cannot be edited.'
+                message:
+                    publication.currentStatus === 'LIVE'
+                        ? 'You cannot approve a LIVE publication'
+                        : 'This publication is not ready for review yet'
             });
         }
 
@@ -325,6 +328,9 @@ export const requestApproval = async (
         if (!publication) {
             return response.json(404, { message: 'Publication not found' });
         }
+
+        // Lock publication from editing
+        await publicationService.updateStatus(publication.id, 'LOCKED', false);
 
         // get all pending co authors
         const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);

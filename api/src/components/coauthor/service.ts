@@ -147,9 +147,18 @@ export const updateConfirmation = async (publicationId: string, userId: string, 
 };
 
 export const resetCoAuthors = async (publicationId: string) => {
+    const publication = await client.prisma.publication.findFirst({
+        where: {
+            id: publicationId
+        }
+    });
+
     const resetCoAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId
+            publicationId,
+            NOT: {
+                linkedUser: publication?.createdBy
+            }
         },
         data: {
             confirmedCoAuthor: false,
