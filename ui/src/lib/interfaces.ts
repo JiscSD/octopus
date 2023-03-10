@@ -366,6 +366,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
+    affiliationsStatus: boolean | undefined;
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string;
     ethicalStatement?: string | null;

@@ -13,6 +13,15 @@ import * as Types from '@types';
 const KeyInformation: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
+
+    const affiliationsStatus = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.affiliationsStatus
+    );
+
+    const updateAffiliationsStatus = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateAffiliationsStatus
+    );
+
     const licence: Types.LicenceType = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.licence
     );
@@ -107,19 +116,27 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     </div>
                     <div className="mt-12">
                         <div className="mb-10">
-                            <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
+                            <Components.PublicationCreationStepTitle text="Affiliated Organisations" required />
                             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                Does this publication have any affiliations?
+                            </span>
+                            <Components.RadioConfirm
+                                status={affiliationsStatus}
+                                updateStatus={updateAffiliationsStatus}
+                            />
+
+                            {/* <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                                 Please enter the details for any organisations this publication is associated with.
                                 Please note that funding sources are added later in the publication form.
-                            </span>
-                            <Components.Button
+                            </span> */}
+                            {/* <Components.Button
                                 title="Search for your organisation's ROR"
                                 href="https://ror.org/"
                                 openNew
                                 endIcon={
                                     <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 }
-                            />
+                            /> */}
                         </div>
                         <Components.RORForm type="affiliations" />
                     </div>

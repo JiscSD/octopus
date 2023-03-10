@@ -89,3 +89,4 @@ export { default as Tooltip } from './Tooltip';
 export { default as AddReferences } from './References/AddReferences';
 export { default as EditReferenceModal } from './References/EditReferenceModal';
 export { default as ApprovalsTracker } from './ApprovalsTracker';
+export { default as RadioConfirm } from './RadioConfirm';

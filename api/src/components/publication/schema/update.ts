@@ -26,6 +26,9 @@ const updatePublicationSchema: I.Schema = {
         id: {
             type: 'string'
         },
+        affiliationsStatus: {
+            type: 'boolean'
+        },
         conflictOfInterestStatus: {
             type: 'boolean'
         },

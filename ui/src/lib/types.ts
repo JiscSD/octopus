@@ -86,6 +86,8 @@ export type PublicationCreationStoreType = {
     funders: Interfaces.Funder[];
     updateFunders: (funders: Interfaces.Funder[]) => void;
     affiliations: Interfaces.Affiliations[];
+    affiliationsStatus: boolean | undefined;
+    updateAffiliationsStatus: (updateAffiliationsStatus: boolean | undefined) => void;
     updateAffiliations: (affiliations: Interfaces.Affiliations[]) => void;
     affiliationsStatement: string | null;
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
