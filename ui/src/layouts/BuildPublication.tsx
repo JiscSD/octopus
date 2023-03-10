@@ -291,7 +291,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const hasCoAuthors = store.coAuthors.length > 1 ? true : false;
+    const hasCoAuthors = !store.coAuthors
+        .filter((coAuthor) => coAuthor.linkedUser !== props.publication.createdBy)
+        .every((coAuthor) => coAuthor.approvalRequested);
 
     return (
         <>
