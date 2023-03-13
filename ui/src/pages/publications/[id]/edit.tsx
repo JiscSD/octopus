@@ -304,6 +304,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
         store.updateAffiliationsStatus(props.draftedPublication.affiliationsStatus);
+        store.updateConfirmNoAffliations(props.draftedPublication.confirmNoAffliations);
     }, []);
 
     React.useEffect(() => {

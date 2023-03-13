@@ -31,6 +31,7 @@ let store: any = (set: (params: any) => void) => ({
                 description: '',
                 funderStatement: '',
                 funders: [],
+                confirmNoAffliations: undefined,
                 affiliationsStatus: undefined,
                 affiliationsStatement: '',
                 affiliations: [],
@@ -123,6 +124,8 @@ let store: any = (set: (params: any) => void) => ({
     // Affiliations
     affiliations: [],
     updateAffiliations: (affiliations: Interfaces.Affiliations[]) => set(() => ({ affiliations })),
+    confirmNoAffliations: undefined,
+    updateConfirmNoAffliations: (confirmNoAffliations: boolean) => set(() => ({ confirmNoAffliations })),
     affiliationsStatus: undefined,
     updateAffiliationsStatus: (affiliationsStatus: boolean) => set(() => ({ affiliationsStatus })),
     affiliationsStatement: '',

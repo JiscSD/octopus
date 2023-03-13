@@ -18,6 +18,14 @@ const KeyInformation: React.FC = (): React.ReactElement => {
         (state: Types.PublicationCreationStoreType) => state.affiliationsStatus
     );
 
+    const confirmNoAffliations = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.confirmNoAffliations
+    );
+
+    const updateConfirmNoAffliations = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => state.updateConfirmNoAffliations
+    );
+
     const updateAffiliationsStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateAffiliationsStatus
     );
@@ -124,25 +132,42 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                 status={affiliationsStatus}
                                 updateStatus={updateAffiliationsStatus}
                             />
+                            {affiliationsStatus && (
+                                <div className="mb-10">
+                                    <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                        Please enter the details for any organisations this publication is associated
+                                        with. Please note that funding sources are added later in the publication form.
+                                    </span>
+                                    <Components.Button
+                                        className="mb-10"
+                                        title="Search for your organisation's ROR"
+                                        href="https://ror.org/"
+                                        openNew
+                                        endIcon={
+                                            <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                        }
+                                    />
+                                    <Components.RORForm type="affiliations" />
+                                </div>
+                            )}
+                            {affiliationsStatus === false && (
+                                <label htmlFor="confirm" className="mb-2 flex items-center">
+                                    <input
+                                        required
+                                        id="confirm"
+                                        name="confirm"
+                                        type="checkbox"
+                                        checked={confirmNoAffliations}
+                                        disabled={affiliationsStatus}
+                                        onChange={() => updateConfirmNoAffliations(!confirmNoAffliations)}
+                                        className="rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
+                                    />
+                                    <span className="dark:text-grey-200' ml-2 block text-grey-500 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        Please confirm that this research was conducted independently
+                                    </span>
+                                </label>
+                            )}
                         </div>
-                        {affiliationsStatus && (
-                            <div className="mb-10">
-                                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                    Please enter the details for any organisations this publication is associated with.
-                                    Please note that funding sources are added later in the publication form.
-                                </span>
-                                <Components.Button
-                                    className="mb-10"
-                                    title="Search for your organisation's ROR"
-                                    href="https://ror.org/"
-                                    openNew
-                                    endIcon={
-                                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                    }
-                                />
-                                <Components.RORForm type="affiliations" />
-                            </div>
-                        )}
                     </div>
                 </Framer.motion.div>
             </div>

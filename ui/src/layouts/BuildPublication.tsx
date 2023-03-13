@@ -137,6 +137,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 keywords: Helpers.formatKeywords(store.keywords),
                 licence: store.licence,
                 language: store.language,
+                confirmNoAffliations: store.confirmNoAffliations,
                 affiliationsStatus: store.affiliationsStatus,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,

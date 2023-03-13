@@ -26,6 +26,9 @@ const updatePublicationSchema: I.Schema = {
         id: {
             type: 'string'
         },
+        confirmNoAffliations: {
+            type: 'boolean'
+        },
         affiliationsStatus: {
             type: 'boolean'
         },

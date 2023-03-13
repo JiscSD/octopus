@@ -71,6 +71,7 @@ export interface Publication extends CorePublication {
     user: User;
     linkedFrom: LinkFrom[];
     linkedTo: LinkTo[];
+    confirmNoAffliations: boolean | undefined;
     affiliationsStatus: boolean | undefined;
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
@@ -367,6 +368,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
+    confirmNoAffliations: boolean | undefined;
     affiliationsStatus: boolean | undefined;
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string;
