@@ -291,7 +291,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const hasCoAuthors = store.coAuthors.length > 1 ? true : false;
+    const hasUnconfirmedCoAuthors = !store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
     return (
         <>
@@ -457,7 +457,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-                                        {hasCoAuthors ? (
+                                        {hasUnconfirmedCoAuthors ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
@@ -522,7 +522,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        {hasCoAuthors ? (
+                                        {hasUnconfirmedCoAuthors ? (
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
@@ -623,7 +623,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     >
                                         Preview
                                     </Components.Button>
-                                    {hasCoAuthors ? (
+                                    {hasUnconfirmedCoAuthors ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyRequestApproval}
@@ -654,7 +654,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    {hasCoAuthors ? (
+                                    {hasUnconfirmedCoAuthors ? (
                                         <Components.IconButton
                                             disabled={!isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
