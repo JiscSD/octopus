@@ -124,21 +124,25 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                 status={affiliationsStatus}
                                 updateStatus={updateAffiliationsStatus}
                             />
-
-                            {/* <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                Please enter the details for any organisations this publication is associated with.
-                                Please note that funding sources are added later in the publication form.
-                            </span> */}
-                            {/* <Components.Button
-                                title="Search for your organisation's ROR"
-                                href="https://ror.org/"
-                                openNew
-                                endIcon={
-                                    <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                            /> */}
                         </div>
-                        <Components.RORForm type="affiliations" />
+                        {affiliationsStatus && (
+                            <div className="mb-10">
+                                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                    Please enter the details for any organisations this publication is associated with.
+                                    Please note that funding sources are added later in the publication form.
+                                </span>
+                                <Components.Button
+                                    className="mb-10"
+                                    title="Search for your organisation's ROR"
+                                    href="https://ror.org/"
+                                    openNew
+                                    endIcon={
+                                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    }
+                                />
+                                <Components.RORForm type="affiliations" />
+                            </div>
+                        )}
                     </div>
                 </Framer.motion.div>
             </div>

@@ -71,6 +71,7 @@ export interface Publication extends CorePublication {
     user: User;
     linkedFrom: LinkFrom[];
     linkedTo: LinkTo[];
+    affiliationsStatus: boolean | undefined;
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
