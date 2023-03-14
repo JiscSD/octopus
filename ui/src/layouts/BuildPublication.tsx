@@ -60,9 +60,29 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
-            if (typeof store.conflictOfInterestStatus == 'undefined') {
+
+            if (typeof store.conflictOfInterestStatus === 'undefined') {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
+
+            if (store.affiliationsStatus && !store.affiliations.length) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there are affiliations, please provide them'
+                };
+            }
+
+            if (!store.affiliationsStatus && !store.confirmNoAffliations) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there are affiliations, please provide them'
+                };
+            }
+
+            if (typeof store.affiliationsStatus === 'undefined') {
+                ready = { ready: false, message: 'You must declare if you have affiliations' };
+            }
+
             if (store.type === Config.values.octopusInformation.publications.DATA.id) {
                 if (store.ethicalStatement === null)
                     ready = { ready: false, message: 'You must select an ethical statement option' };
