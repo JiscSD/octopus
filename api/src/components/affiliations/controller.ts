@@ -53,7 +53,7 @@ export const destroy = async (
         }
 
         //check that the publication is live
-        if (publication.currentStatus !== 'DRAFT') {
+        if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'You cannot delete an affiliation from a publication that is not a draft.'
             });
@@ -71,6 +71,40 @@ export const destroy = async (
     } catch (err) {
         console.log(err);
 
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const destroyAll = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteAffiliationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        //check that the publication exists
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        //check that the publication is live
+        if (publication.currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: 'You cannot delete the affiliations from a publication that is not a draft.'
+            });
+        }
+
+        if (event.user.id !== publication.user.id) {
+            return response.json(403, {
+                message: 'You do not have permissions to delete an affiliation for this publication.'
+            });
+        }
+
+        await affiliationService.destroyAll(event.pathParameters.id);
+
+        return response.json(200, { message: 'Affliations removed.' });
+    } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

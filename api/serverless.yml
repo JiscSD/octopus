@@ -448,3 +448,10 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
                   method: DELETE
                   cors: true
+    deleteAllAffiliations:
+        handler: src/components/affiliations/routes.destroyAll
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliations/
+                  method: DELETE
+                  cors: true

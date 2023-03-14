@@ -168,7 +168,6 @@ export const update = async (
     event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        console.log(event.body);
         const publication = await publicationService.get(event.pathParameters.id);
 
         if (!publication) {

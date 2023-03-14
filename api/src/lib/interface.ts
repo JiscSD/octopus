@@ -122,6 +122,8 @@ export interface UpdatePublicationRequestBody {
     keywords?: string[];
     id?: string;
     language?: Languages;
+    confirmNoAffliations: boolean;
+    affiliationsStatus: boolean;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;

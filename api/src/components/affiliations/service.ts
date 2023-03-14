@@ -26,3 +26,13 @@ export const destroy = async (publicationId: string, affiliationId: string) => {
 
     return affiliation;
 };
+
+export const destroyAll = async (publicationId: string) => {
+    const affiliation = await client.prisma.affiliations.deleteMany({
+        where: {
+            publicationId
+        }
+    });
+
+    return affiliation;
+};
