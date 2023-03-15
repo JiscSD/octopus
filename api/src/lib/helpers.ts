@@ -383,6 +383,10 @@ export const createPublicationHTMLTemplate = (
     const { title, content, coAuthors, funders, conflictOfInterestText, affiliations, type, language, licence, doi } =
         publication;
 
+    // cheerio uses htmlparser2
+    // parsing the publication content can sometimes help with unpaired opening/closing tags
+    const mainText = content ? cheerio.load(content).html() : '';
+
     const htmlTemplate = `
     <!DOCTYPE html>
     <html>
@@ -402,6 +406,7 @@ export const createPublicationHTMLTemplate = (
 
                 body {
                     font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+                    line-height: 1.5;
                 }
 
                 img {
@@ -447,9 +452,13 @@ export const createPublicationHTMLTemplate = (
                     margin-top: 4rem;
                 }
 
-                .funders-list {
-                    list-style: inside;
-                    text-indent: 1rem;
+                ul, ol {
+                    padding-left: 2rem;
+                    margin: 1rem 0rem;
+                }
+
+                li {
+                    margin: 0.5rem 0rem;
                 }
 
                 p {
@@ -460,10 +469,14 @@ export const createPublicationHTMLTemplate = (
         <body>
         <h1 id="title">${title}</h1>
             <p>
-                <strong>Authors:</strong> ${coAuthors
-                    .filter((author) => author.confirmedCoAuthor && author.user)
-                    .map((author) => `${author.user?.firstName} ${author.user?.lastName}`)
-                    .join(', ')}
+                <strong>Authors:</strong> ${
+                    coAuthors[0]?.user
+                        ? coAuthors
+                              .filter((author) => author.confirmedCoAuthor && author.user)
+                              .map((author) => `${author.user?.firstName} ${author.user?.lastName}`)
+                              .join(', ')
+                        : `${publication.user.firstName} ${publication.user.lastName}`
+                }
             </p>
             <p>
                 <strong>Affiliations:</strong> ${affiliations
@@ -499,7 +512,7 @@ export const createPublicationHTMLTemplate = (
                 })}
             </p>
             <div id="main-text">
-                ${content}
+                ${mainText}
             </div>
             
             <h2 class="section-title">References</h2>
@@ -533,9 +546,7 @@ export const createPublicationHTMLTemplate = (
                     : '<p>This publication does not have any specified conflicts of interest.</p>'
             }
         </body>
-    </html>
-
-`
+    </html>`
         .split('\n')
         .join('');
 
@@ -579,10 +590,18 @@ export const createPublicationFooterTemplate = (publication: I.Publication): str
             .footer {
                 width: 100%;
                 padding: 0.5cm 1.1cm !important;
-                display: flex;
-                justify-content: space-between;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
                 font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
                 font-size: 12px;
+            }
+
+            .footer > div:nth-of-type(2) {
+                text-align: center;
+            }
+
+            .footer > div:nth-of-type(3) {
+                text-align: right;
             }
     </style>
     <div class="footer">            
