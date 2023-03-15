@@ -506,11 +506,6 @@ export const createPublicationHTMLTemplate = (
             <p>
                 <strong>DOI:</strong> ${doi}
             </p>
-            <p>
-                <strong>Date of PDF creation:</strong> ${new Date().toLocaleDateString('en-GB', {
-                    dateStyle: 'medium'
-                })}
-            </p>
             <div id="main-text">
                 ${mainText}
             </div>
