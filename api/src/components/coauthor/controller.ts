@@ -373,9 +373,10 @@ export const sendApprovalReminder = async (
         });
     }
 
-    if (publication.currentStatus !== 'DRAFT') {
+    // Can only send reminder on publications that have been locked for review
+    if (publication.currentStatus !== 'LOCKED') {
         return response.json(403, {
-            message: 'This publication cannot be edited.'
+            message: 'A reminder is not able to be sent unless approval is being requested'
         });
     }
 
