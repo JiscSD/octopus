@@ -124,7 +124,11 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     </div>
                     <div className="mt-12">
                         <div className="mb-10">
-                            <Components.PublicationCreationStepTitle text="Affiliated Organisations" required />
+                            <Components.PublicationCreationStepTitle
+                                text="Affiliated Organisations"
+                                id="affiliations-header"
+                                required
+                            />
                             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                                 Does this publication have any affiliations?
                             </span>

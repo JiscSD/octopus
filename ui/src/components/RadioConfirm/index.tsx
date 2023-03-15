@@ -16,7 +16,12 @@ const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
                     value="true"
                     id="coi-true"
                     checked={props.status}
-                    onChange={() => props.updateStatus(true)}
+                    onChange={() => {
+                        props.updateStatus(true);
+                        setTimeout(() => {
+                            document.getElementById('affiliations-header')?.scrollIntoView({ behavior: 'smooth' });
+                        }, 0);
+                    }}
                 />
                 <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">Yes</span>
             </label>
