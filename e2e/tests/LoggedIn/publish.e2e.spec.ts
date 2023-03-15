@@ -790,6 +790,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -878,6 +888,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -919,6 +939,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -979,6 +1009,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1051,6 +1091,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1117,6 +1167,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1177,6 +1237,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1244,6 +1314,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1297,6 +1377,16 @@ test.describe('Publication flow + co-authors', () => {
         // create new publication
         const publicationTitle = publicationWithCoAuthors.uniqueTitle;
         await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1362,6 +1452,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1422,6 +1522,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1503,6 +1613,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1565,6 +1685,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1608,7 +1738,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // re-send invitation to 'Unconfirmed Author'
         await expect(page.getByText('Unconfirmed Author')).toBeVisible();
-        await page.locator('table button[title="Resend Email"]').click();
+        await page.locator(`table button[title="Resend email to ${Helpers.user2.email}"]`).click();
         await expect(page.getByText('Re-Send author invite')).toBeVisible();
         await page.locator('button[title="Confirm"]').click();
 
@@ -1641,6 +1771,16 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+        await publicationFlowKeyInformation(
+            page,
+            'CC_BY_NC',
+            '01rv9gx86',
+            'ror name',
+            'ror city',
+            'https://ror.com',
+            'extra details'
+        );
+
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
