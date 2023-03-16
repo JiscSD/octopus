@@ -148,8 +148,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         async (message?: string) => {
             store.setError(null);
 
-            console.log(store.affiliationsStatus);
-
             const body: Interfaces.PublicationUpdateRequestBody = {
                 title: store.title,
                 content: store.content,

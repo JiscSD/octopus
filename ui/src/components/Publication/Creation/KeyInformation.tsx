@@ -154,7 +154,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                     <Components.RORForm type="affiliations" />
                                 </div>
                             )}
-                            {affiliationsStatus === false && (
+                            {!affiliationsStatus && (
                                 <label htmlFor="confirm" className="mb-2 flex items-center">
                                     <input
                                         required
