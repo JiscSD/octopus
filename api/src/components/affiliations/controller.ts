@@ -52,10 +52,9 @@ export const destroy = async (
             });
         }
 
-        //check that the publication is live
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
-                message: 'You cannot delete an affiliation from a publication that is not a draft.'
+                message: 'You cannot delete an affiliation from a publication that is not in a draft state.'
             });
         }
 
@@ -88,10 +87,9 @@ export const destroyAll = async (
             });
         }
 
-        //check that the publication is live
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
-                message: 'You cannot delete the affiliations from a publication that is not a draft.'
+                message: 'You cannot delete the affiliations from a publication that is not in a draft state.'
             });
         }
 
@@ -103,7 +101,7 @@ export const destroyAll = async (
 
         await affiliationService.destroyAll(event.pathParameters.id);
 
-        return response.json(200, { message: 'Affliations removed.' });
+        return response.json(200, { message: `Affliations removed for publication ${event.pathParameters.id}.` });
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
     }
