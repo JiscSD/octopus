@@ -715,10 +715,7 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
     try {
         browser = await chromium.puppeteer.launch({
             args: chromium.args,
-            executablePath:
-                process.env.STAGE && ['int', 'prod'].includes(process.env.STAGE)
-                    ? await chromium.executablePath
-                    : undefined
+            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
         });
 
         const page = await browser.newPage();
