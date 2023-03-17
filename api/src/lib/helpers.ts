@@ -375,3 +375,238 @@ export function sanitizeSearchQuery(searchQuery: string): string {
         .replace(/[^a-z0-9\s]/g, (match) => '\\' + match) // escape all the non-alphanumeric characters which may break the search
         .replace(/\s+/g, '|'); // replace whitespace with single OR
 }
+
+export const createPublicationHTMLTemplate = (
+    publication: I.Publication & I.PublicationWithMetadata,
+    references: I.Reference[]
+): string => {
+    const { title, content, coAuthors, funders, conflictOfInterestText, affiliations, type, language, licence, doi } =
+        publication;
+
+    // cheerio uses htmlparser2
+    // parsing the publication content can sometimes help with unpaired opening/closing tags
+    const mainText = content ? cheerio.load(content).html() : '';
+
+    const htmlTemplate = `
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+                
+                @page {
+                    margin: 3cm 1.5cm;
+                }
+
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+
+                body {
+                    font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+                    line-height: 1.5;
+                }
+
+                img {
+                    max-width: 100%;
+                }
+
+                table, th, td {
+                    border: 1px solid #000;
+                }
+
+                table {
+                    table-layout: fixed;
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 2rem 0rem;
+                }
+
+                th {
+                    text-align: unset;
+                    background-color: #eee;
+                    font-weight: bold;
+                }
+
+                th, td {
+                    padding: 5px;
+                    word-wrap: break-word;
+                }
+
+                .section-title {
+                    margin-top: 5rem;
+                    margin-bottom: 1rem;
+                }
+
+                #title {
+                    font-size: 1.7rem;
+                    text-align: center;
+                    max-width: 90%;
+                    margin: 0 auto;
+                    padding-bottom: 1rem;
+                }
+
+                #main-text {
+                    margin-top: 4rem;
+                }
+
+                ul, ol {
+                    padding-left: 2rem;
+                    margin: 1rem 0rem;
+                }
+
+                li {
+                    margin: 0.5rem 0rem;
+                }
+
+                p {
+                    margin: 0.5rem 0rem;
+                }
+            </style>
+        </head>
+        <body>
+        <h1 id="title">${title}</h1>
+            <p>
+                <strong>Authors:</strong> ${
+                    coAuthors[0]?.user
+                        ? coAuthors
+                              .filter((author) => author.confirmedCoAuthor && author.user)
+                              .map((author) => `${author.user?.firstName} ${author.user?.lastName}`)
+                              .join(', ')
+                        : `${publication.user.firstName} ${publication.user.lastName}`
+                }
+            </p>
+            <p>
+                <strong>Affiliations:</strong> ${affiliations
+                    .map((affiliation) => `<a href="${affiliation.link}">${affiliation.name}</a>`)
+                    .join(', ')}
+            </p>
+            <p>
+                <strong>Publication Type:</strong> ${type}
+            </p>
+            <p>
+                <strong>Publication Date:</strong> ${
+                    publication.publishedDate
+                        ? publication.publishedDate?.toLocaleDateString('en-GB', {
+                              dateStyle: 'long'
+                          })
+                        : new Date().toLocaleDateString('en-GB', {
+                              dateStyle: 'long'
+                          })
+                }
+            </p>
+            <p>
+                <strong>Language:</strong> ${language.toUpperCase()}
+            </p>
+            <p>
+                <strong>License Type:</strong> ${licence}
+            </p>
+            <p>
+                <strong>DOI:</strong> ${doi}
+            </p>
+            <div id="main-text">
+                ${mainText}
+            </div>
+            
+            <h2 class="section-title">References</h2>
+            ${
+                references.length
+                    ? references.map((reference) => reference.text).join('')
+                    : '<p>No references have been specified for this publication.</p>'
+            }
+            
+            <h2 class="section-title">Funders</h2>
+            ${
+                funders.length
+                    ? ` <div>
+                            <p>This Research Problem has the following sources of funding:</p>
+                            <ul class="funders-list">
+                                ${funders
+                                    .map(
+                                        (funder) =>
+                                            `<li><a href="${funder.link}">${funder.name}</a> - ${funder.city}, ${funder.country}</li>`
+                                    )
+                                    .join('')}
+                            </ul>
+                        </div>`
+                    : '<p>No sources of funding have been specified for this publication.</p>'
+            }
+
+            <h2 class="section-title">Conflict of interest</h2>
+            ${
+                conflictOfInterestText
+                    ? `<p>${conflictOfInterestText}</p>`
+                    : '<p>This publication does not have any specified conflicts of interest.</p>'
+            }
+        </body>
+    </html>`
+        .split('\n')
+        .join('');
+
+    return htmlTemplate;
+};
+
+export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string =>
+    `<style>
+        .header {
+            width: 100%;
+            padding: 0.5cm 1.1cm !important;
+            display: flex;
+            justify-content: space-between;
+            font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+        }
+    </style>
+    <div class="header">
+        <span>
+            ${
+                publication.coAuthors[0]?.user
+                    ? `${publication.coAuthors[0].user?.firstName} ${publication.coAuthors[0].user?.lastName}`
+                    : `${publication.user?.firstName} ${publication.user?.lastName}`
+            }
+        </span>
+        <span>
+            Published ${
+                publication.publishedDate
+                    ? publication.publishedDate?.toLocaleDateString('en-GB', {
+                          dateStyle: 'long'
+                      })
+                    : new Date().toLocaleDateString('en-GB', {
+                          dateStyle: 'long'
+                      })
+            }
+        </span>
+    </div>`;
+
+export const createPublicationFooterTemplate = (publication: I.Publication): string =>
+    `<style>
+            .footer {
+                width: 100%;
+                padding: 0.5cm 1.1cm !important;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+                font-size: 12px;
+            }
+
+            .footer > div:nth-of-type(2) {
+                text-align: center;
+            }
+
+            .footer > div:nth-of-type(3) {
+                text-align: right;
+            }
+    </style>
+    <div class="footer">            
+        <div>
+            <span>${publication.doi}</span>
+        </div>
+        <div>
+            Page <span class="pageNumber"></span> of <span class="totalPages"></span>
+        </div>        
+        <div>
+            <span>Published on <a href="${process.env.BASE_URL}">Octopus.ac</a></span>
+        </div>
+    </div>`;
