@@ -1,11 +1,10 @@
 import htmlToText from 'html-to-text';
-import AWS from 'aws-sdk';
+import s3 from '../src/lib/s3';
 
 import * as SeedData from './seeds';
 import * as client from '../src/lib/client';
 
 export const initialDevSeed = async (): Promise<void> => {
-
     // Create users
     await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
 
@@ -74,17 +73,8 @@ export const initialDevSeed = async (): Promise<void> => {
         }
     }
 
-    // create S3 bucket locally for image uploads
     if (process.env.STAGE === 'local') {
-        const s3 = new AWS.S3({
-            credentials: {
-                accessKeyId: 'dummy-key',
-                secretAccessKey: 'dummy-secret'
-            },
-            region: 'eu-west-1',
-            endpoint: `http://${process.env.LOCALSTACK_SERVER}:4566`,
-            s3ForcePathStyle: true
-        });
+        // create S3 bucket locally for image uploads
 
         try {
             await s3
@@ -98,6 +88,24 @@ export const initialDevSeed = async (): Promise<void> => {
             await s3
                 .createBucket({
                     Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
+                })
+                .promise();
+            console.log('Bucket created');
+        }
+
+        // create S3 bucket locally for PDF uploads
+        try {
+            await s3
+                .getBucketAcl({
+                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
+                })
+                .promise();
+            console.log('Bucket already exists');
+        } catch (err) {
+            // Bucket does not exist, therefor create
+            await s3
+                .createBucket({
+                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
                 })
                 .promise();
             console.log('Bucket created');
@@ -148,6 +156,8 @@ export const initialProdSeed = async (): Promise<void> => {
     }
 };
 
+const disconnect = (): Promise<void> => client.prisma.$disconnect();
+
 switch (process.env.STAGE) {
     case 'prod':
         initialProdSeed()
@@ -155,8 +165,8 @@ switch (process.env.STAGE) {
                 console.error(e);
                 // process.exit(1);
             })
-            .finally(async () => {
-                await client.prisma.$disconnect();
+            .finally(() => {
+                disconnect().catch((error) => console.log(error));
             });
 
         break;
@@ -166,7 +176,7 @@ switch (process.env.STAGE) {
                 console.error(e);
                 // process.exit(1);
             })
-            .finally(async () => {
-                await client.prisma.$disconnect();
+            .finally(() => {
+                disconnect().catch((error) => console.log(error));
             });
 }

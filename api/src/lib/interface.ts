@@ -445,7 +445,7 @@ export interface Reference {
     publicationId: string;
     type: ReferenceType;
     text: string;
-    location?: string;
+    location?: string | null;
 }
 
 export interface CreateReferencePath {
@@ -560,4 +560,8 @@ export interface UserPublicationsFilters {
 export interface SendApprovalReminderPathParams {
     id: string;
     coauthor: string;
+}
+
+export interface GeneratePDFPathParams {
+    id: string;
 }
