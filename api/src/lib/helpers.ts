@@ -70,6 +70,24 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
         ]
     }));
 
+    // check if the creator of the publication is not listed as an author
+    if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
+        // add creator to authors list as first author
+        authors?.unshift({
+            name: `${publication.user?.lastName}, ${publication.user?.firstName}`,
+            givenName: publication.user?.firstName,
+            familyName: publication.user?.lastName,
+            nameType: 'Personal',
+            nameIdentifiers: [
+                {
+                    nameIdentifier: publication?.user.orcid,
+                    nameIdentifierScheme: 'orcid',
+                    schemeUri: 'orcid.org'
+                }
+            ]
+        });
+    }
+
     const payload = {
         data: {
             types: 'doi',
