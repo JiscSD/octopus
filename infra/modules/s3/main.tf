@@ -28,5 +28,5 @@ data "aws_iam_policy_document" "allow_public_access" {
 
 resource "aws_s3_bucket_policy" "allow_public_access" {
   bucket = aws_s3_bucket.image_bucket.id
-  policy = data.aws_iam_policy_document.allow_public_access.json
+  policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
