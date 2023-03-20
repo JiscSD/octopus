@@ -321,3 +321,30 @@ export const getLinksForPublication = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getPDF = async (
+    event: I.APIRequest<undefined, undefined, I.GeneratePDFPathParams>
+): Promise<I.JSONResponse> => {
+    const publicationId = event.pathParameters.id;
+    const publication = await publicationService.get(publicationId);
+
+    if (!publication) {
+        return response.json(404, {
+            message: 'This publication does not exist.'
+        });
+    }
+
+    try {
+        const pdfUrl = await publicationService.generatePDF(publication);
+
+        if (!pdfUrl) {
+            return response.json(500, { message: 'Failed to generate PDF for this publication' });
+        }
+
+        return response.json(200, { pdfUrl });
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, 'Unknown server error');
+    }
+};
