@@ -57,10 +57,9 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
     }
 
     const authors = publication.coAuthors.map((coAuthor) => ({
-        name:
-            coAuthor.user?.firstName && coAuthor.user?.firstName
-                ? `${coAuthor.user?.firstName} ${coAuthor.user?.lastName}`
-                : `${coAuthor.email}`,
+        name: `${coAuthor.user?.lastName}, ${coAuthor.user?.firstName}`,
+        givenName: coAuthor.user?.firstName,
+        familyName: coAuthor.user?.lastName,
         nameType: 'Personal',
         nameIdentifiers: [
             {
@@ -70,22 +69,6 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
             }
         ]
     }));
-
-    // check if the creator of the publication is not listed as an author
-    if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
-        // add creator to authors list as first author
-        authors?.unshift({
-            name: `${publication?.user.firstName} ${publication?.user.lastName}`,
-            nameType: 'Personal',
-            nameIdentifiers: [
-                {
-                    nameIdentifier: publication?.user.orcid,
-                    nameIdentifierScheme: 'orcid',
-                    schemeUri: 'orcid.org'
-                }
-            ]
-        });
-    }
 
     const payload = {
         data: {
