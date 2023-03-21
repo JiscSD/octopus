@@ -626,6 +626,12 @@ export const createPublicationHTMLTemplate = (
                 sup {
                     font-size: 10px;
                 }
+
+                .reference-location {
+                    position: relative;
+                    top: -0.5rem;
+                    margin-bottom: 1rem;
+                }
             </style>
         </head>
         <body>
@@ -668,11 +674,20 @@ export const createPublicationHTMLTemplate = (
                 ${mainText}
             </div>
 
-            <div class="section">
+            <div class="section references">
                 <h5 class="section-title">References</h5>
                 ${
                     references.length
-                        ? references.map((reference) => reference.text).join('')
+                        ? references
+                              .map(
+                                  (reference) =>
+                                      `${reference.text}${
+                                          reference.location
+                                              ? `<p class="reference-location"><a href="${reference.location}">${reference.location}</a></p>`
+                                              : ''
+                                      }`
+                              )
+                              .join('')
                         : '<p>No references have been specified for this publication.</p>'
                 }
             </div>
