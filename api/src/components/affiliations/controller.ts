@@ -52,7 +52,7 @@ export const destroy = async (
             });
         }
 
-        if (publication.currentStatus === 'LIVE') {
+        if (publication.currentStatus !== 'DRAFT') {
             return response.json(403, {
                 message: 'You cannot delete an affiliation from a publication that is not in a draft state.'
             });
@@ -87,7 +87,7 @@ export const destroyAll = async (
             });
         }
 
-        if (publication.currentStatus === 'LIVE') {
+        if (publication.currentStatus !== 'DRAFT') {
             return response.json(403, {
                 message: 'You cannot delete the affiliations from a publication that is not in a draft state.'
             });
