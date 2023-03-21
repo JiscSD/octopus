@@ -1,7 +1,8 @@
 import axios from 'axios';
+import fs from 'fs';
 import * as cheerio from 'cheerio';
-
 import * as I from 'interface';
+import { licences } from './enum';
 
 export const isHTMLSafe = (content: string): boolean => {
     const $ = cheerio.load(content);
@@ -376,26 +377,118 @@ export function sanitizeSearchQuery(searchQuery: string): string {
         .replace(/\s+/g, '|'); // replace whitespace with single OR
 }
 
+/**
+ * @description Format a publication type returned from the DB
+ */
+export const formatPublicationType = (publicationType: I.PublicationType): string => {
+    const types = {
+        PROBLEM: 'Research Problem',
+        HYPOTHESIS: 'Rationale / Hypothesis',
+        PROTOCOL: 'Method',
+        DATA: 'Results',
+        ANALYSIS: 'Analysis',
+        INTERPRETATION: 'Interpretation',
+        REAL_WORLD_APPLICATION: 'Real World Application',
+        PEER_REVIEW: 'Peer Review'
+    };
+
+    return types[publicationType];
+};
+
+const formatPDFDate = (date: Date): string => {
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+
+    const nthNumber = day > 0 ? ['th', 'st', 'nd', 'rd'][(day > 3 && day < 21) || day % 10 > 3 ? 0 : day % 10] : '';
+
+    return `${day}<sup>${nthNumber}</sup> ${month} ${year}`;
+};
+
 export const createPublicationHTMLTemplate = (
     publication: I.Publication & I.PublicationWithMetadata,
     references: I.Reference[]
 ): string => {
-    const { title, content, coAuthors, funders, conflictOfInterestText, affiliations, type, language, licence, doi } =
-        publication;
+    const {
+        title,
+        content,
+        coAuthors,
+        funders,
+        conflictOfInterestText,
+        affiliations,
+        type,
+        language,
+        licence,
+        doi,
+        ethicalStatement,
+        ethicalStatementFreeText,
+        dataPermissionsStatement,
+        dataPermissionsStatementProvidedBy,
+        dataAccessStatement,
+        selfDeclaration,
+        linkedTo
+    } = publication;
 
     // cheerio uses htmlparser2
     // parsing the publication content can sometimes help with unpaired opening/closing tags
     const mainText = content ? cheerio.load(content).html() : '';
+
+    const authors = coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
+
+    if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
+        authors.unshift({
+            id: publication.createdBy,
+            approvalRequested: false,
+            confirmedCoAuthor: true,
+            createdAt: new Date(),
+            email: publication.user.email || '',
+            linkedUser: publication.createdBy,
+            publicationId: publication.id,
+            user: publication.user,
+            reminderDate: null
+        });
+    }
+
+    const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
+    const base64InterSemiBold = fs.readFileSync('assets/fonts/Inter-SemiBold.ttf', { encoding: 'base64' });
+    const base64InterBold = fs.readFileSync('assets/fonts/Inter-Bold.ttf', { encoding: 'base64' });
+    const base64MontserratMedium = fs.readFileSync('assets/fonts/Montserrat-Medium.ttf', { encoding: 'base64' });
 
     const htmlTemplate = `
     <!DOCTYPE html>
     <html>
         <head>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+                @font-face {
+                    font-family: 'Montserrat';
+                    src: url(data:font/ttf;base64,${base64MontserratMedium});
+                    font-weight: 500;
+                    font-style: normal;
+                }
                 
+                @font-face {
+                    font-family: 'Inter';
+                    src: url(data:font/ttf;base64,${base64InterRegular});
+                    font-weight: normal;
+                    font-style: normal;
+                }
+
+                @font-face {
+                    font-family: 'Inter';
+                    src: url(data:font/ttf;base64,${base64InterSemiBold});
+                    font-weight: 600;
+                    font-style: normal;
+                }
+            
+                @font-face {
+                    font-family: 'Inter';
+                    src: url(data:font/ttf;base64,${base64InterBold});
+                    font-weight: 700;
+                    font-style: normal;
+                }
+
                 @page {
-                    margin: 3cm 1.5cm;
+                    margin: 2.5cm 2.5cm 3cm 2.5cm;
                 }
 
                 * {
@@ -404,9 +497,14 @@ export const createPublicationHTMLTemplate = (
                     box-sizing: border-box;
                 }
 
+                html {
+                    font-size: 10pt;
+                }
+
                 body {
-                    font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
-                    line-height: 1.5;
+                    font-family: "Inter", Arial, sans-serif;
+                    line-height: 1.6;
+                    overflow: hidden;
                 }
 
                 img, svg, video, canvas, audio, iframe, embed, object {
@@ -437,21 +535,56 @@ export const createPublicationHTMLTemplate = (
                     word-wrap: break-word;
                 }
 
+                tr {
+                    break-inside: avoid;
+                }
+
+                .section {
+                    break-inside: avoid;
+                }
+
                 .section-title {
                     margin-top: 5rem;
                     margin-bottom: 1rem;
+                    font-weight: 600;
                 }
 
                 #title {
-                    font-size: 1.7rem;
+                    font-family: 'Montserrat', sans-serif;
                     text-align: center;
                     max-width: 90%;
                     margin: 0 auto;
-                    padding-bottom: 1rem;
+                    padding-bottom: 2rem;
+                    font-weight: 500;
+                }
+
+                h1 {
+                    font-size: 20pt;
+                }
+
+                h2 {
+                    font-size: 18pt;
+                }
+
+                h3 {
+                    font-size: 16pt;
+                }
+
+                h4 {
+                    font-size: 14pt;
+                }
+
+                h5 {
+                    font-size: 12pt;
+                }
+
+                h6 {
+                    font-size: 10pt;
                 }
 
                 #main-text {
                     margin-top: 4rem;
+                    text-align: justify;
                 }
 
                 ul, ol {
@@ -466,82 +599,166 @@ export const createPublicationHTMLTemplate = (
                 p {
                     margin: 0.5rem 0rem;
                 }
+
+                a {
+                    color: #296D89;
+                    text-decoration-color: #296D89;
+                    text-underline-offset: 2px;
+                }
+
+                .metadata {
+                    font-size: 11pt;
+                    margin-bottom: 10px;
+                }
+
+                pre {
+                    margin: 1rem 0rem;
+                    border: 1px solid #121212;
+                    background-color: #eee;
+                    padding: 1rem;
+                    border-radius: 5px;
+                }
+                
+                code {
+                    white-space: pre-wrap;
+                }
+
+                sup {
+                    font-size: 10px;
+                }
             </style>
         </head>
         <body>
         <h1 id="title">${title}</h1>
-            <p>
-                <strong>Authors:</strong> ${
-                    coAuthors[0]?.user
-                        ? coAuthors
-                              .filter((author) => author.confirmedCoAuthor && author.user)
-                              .map((author) => `${author.user?.firstName} ${author.user?.lastName}`)
-                              .join(', ')
-                        : `${publication.user.firstName} ${publication.user.lastName}`
-                }
+            <p class="metadata">
+                <strong>Authors:</strong> ${authors
+                    .map(
+                        (author) =>
+                            `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${author.user?.firstName} ${author.user?.lastName}</a>`
+                    )
+                    .join(', ')}
             </p>
-            <p>
+            <p class="metadata">
                 <strong>Affiliations:</strong> ${affiliations
                     .map((affiliation) => `<a href="${affiliation.link}">${affiliation.name}</a>`)
                     .join(', ')}
             </p>
-            <p>
-                <strong>Publication Type:</strong> ${type}
+            <p class="metadata">
+                <strong>Publication Type:</strong> ${formatPublicationType(type)}
             </p>
-            <p>
+            <p class="metadata">
                 <strong>Publication Date:</strong> ${
-                    publication.publishedDate
-                        ? publication.publishedDate?.toLocaleDateString('en-GB', {
-                              dateStyle: 'long'
-                          })
-                        : new Date().toLocaleDateString('en-GB', {
-                              dateStyle: 'long'
-                          })
+                    publication.publishedDate ? formatPDFDate(publication.publishedDate) : formatPDFDate(new Date())
                 }
             </p>
-            <p>
+            <p class="metadata">
                 <strong>Language:</strong> ${language.toUpperCase()}
             </p>
-            <p>
-                <strong>License Type:</strong> ${licence}
+            <p class="metadata">
+                <strong>License Type:</strong> ${licences[licence]?.niceName}
             </p>
-            <p>
-                <strong>DOI:</strong> ${doi}
+            <p class="metadata">
+                <strong>DOI:</strong> 
+                <a href="${process.env.BASE_URL}/publications/${publication.id}">
+                    ${doi}
+                </a>
             </p>
+
             <div id="main-text">
                 ${mainText}
             </div>
-            
-            <h2 class="section-title">References</h2>
+
+            <div class="section">
+                <h5 class="section-title">References</h5>
+                ${
+                    references.length
+                        ? references.map((reference) => reference.text).join('')
+                        : '<p>No references have been specified for this publication.</p>'
+                }
+            </div>
+
             ${
-                references.length
-                    ? references.map((reference) => reference.text).join('')
-                    : '<p>No references have been specified for this publication.</p>'
-            }
-            
-            <h2 class="section-title">Funders</h2>
-            ${
-                funders.length
-                    ? ` <div>
-                            <p>This Research Problem has the following sources of funding:</p>
-                            <ul class="funders-list">
-                                ${funders
-                                    .map(
-                                        (funder) =>
-                                            `<li><a href="${funder.link}">${funder.name}</a> - ${funder.city}, ${funder.country}</li>`
-                                    )
-                                    .join('')}
-                            </ul>
+                linkedTo.length
+                    ? ` <div class="section">
+                            <h5 class="section-title">Parent publications</h5>
+                            ${linkedTo
+                                .map(
+                                    (link) =>
+                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.title}</a></p>`
+                                )
+                                .join('')}
                         </div>`
-                    : '<p>No sources of funding have been specified for this publication.</p>'
+                    : ''
             }
 
-            <h2 class="section-title">Conflict of interest</h2>
             ${
-                conflictOfInterestText
-                    ? `<p>${conflictOfInterestText}</p>`
-                    : '<p>This publication does not have any specified conflicts of interest.</p>'
+                selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(type)
+                    ? ` <div class="section">
+                            <h5 class="section-title">Data access statement</h5>
+                            ${
+                                type === 'PROTOCOL'
+                                    ? '<p>Data has not yet been collected according to this method/protocol.</p>'
+                                    : '<p>Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)</p>'
+                            }
+                        </div>`
+                    : ''
             }
+            
+            ${
+                ethicalStatement
+                    ? ` <div class="section">
+                            <h5 class="section-title">Ethical statement</h5>
+                            <p>${ethicalStatement}</p>
+                            ${ethicalStatementFreeText ? `<p>${ethicalStatementFreeText}</p>` : ''}
+                        </div>`
+                    : ''
+            }
+
+            ${
+                dataPermissionsStatement
+                    ? ` <div class="section">
+                            <h5 class="section-title">Data permissions statement</h5>
+                            <p>${dataPermissionsStatement}</p>
+                            ${dataPermissionsStatementProvidedBy ? `<p>${dataPermissionsStatementProvidedBy}</p>` : ''}
+                        </div>`
+                    : ''
+            }
+           
+            ${
+                dataAccessStatement
+                    ? ` <div class="section">
+                            <h5 class="section-title">Data access statement</h5>
+                            <p>${dataAccessStatement}</p>
+                        </div>`
+                    : ''
+            }
+
+            <div class="section">
+                <h5 class="section-title">Funders</h5>
+                ${
+                    funders.length
+                        ? ` <div>
+                    <p>This Research Problem has the following sources of funding:</p>
+                    <ul class="funders-list">
+                    ${funders
+                        .map(
+                            (funder) =>
+                                `<li><a href="${funder.link}">${funder.name}</a> - ${funder.city}, ${funder.country}</li>`
+                        )
+                        .join('')}
+                            </ul>
+                            </div>`
+                        : '<p>No sources of funding have been specified for this publication.</p>'
+                }
+            </div>
+            <div class="section">
+                <h5 class="section-title">Conflict of interest</h5>
+                ${
+                    conflictOfInterestText
+                        ? `<p>${conflictOfInterestText}</p>`
+                        : '<p>This publication does not have any specified conflicts of interest.</p>'
+                }
+            </div>   
         </body>
     </html>`
         .split('\n')
@@ -550,65 +767,127 @@ export const createPublicationHTMLTemplate = (
     return htmlTemplate;
 };
 
-export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string =>
-    `<style>
+export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string => {
+    const authors = publication.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
+
+    if (!authors.find((author) => author.id === publication.createdBy)) {
+        authors.unshift({
+            id: publication.createdBy,
+            approvalRequested: false,
+            confirmedCoAuthor: true,
+            createdAt: new Date(),
+            email: publication.user.email || '',
+            linkedUser: publication.createdBy,
+            publicationId: publication.id,
+            user: publication.user,
+            reminderDate: null
+        });
+    }
+
+    const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
+
+    return `
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            src: url(data:font/ttf;base64,${base64InterRegular});
+            font-weight: normal;
+            font-style: normal;
+        }
+
         .header {
             width: 100%;
-            padding: 0.5cm 1.1cm !important;
+            padding: 0.5cm 1.86cm;
             display: flex;
             justify-content: space-between;
-            font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
-            font-size: 12px;
+            font-family: "Inter", Arial, sans-serif;
+            font-size: 8pt;
+        }
+
+        .header a {
+            color: #296D89;
+            text-decoration-color: #296D89;
+            text-underline-offset: 2px;
+        }
+
+        .header sup {
+            font-size: 7px;
         }
     </style>
     <div class="header">
         <span>
-            ${
-                publication.coAuthors[0]?.user
-                    ? `${publication.coAuthors[0].user?.firstName} ${publication.coAuthors[0].user?.lastName}`
-                    : `${publication.user?.firstName} ${publication.user?.lastName}`
-            }
+            ${`${authors[0]?.user?.firstName} ${authors[0]?.user?.lastName} ${authors.length > 1 ? 'et al.' : ''}`}
         </span>
         <span>
             Published ${
-                publication.publishedDate
-                    ? publication.publishedDate?.toLocaleDateString('en-GB', {
-                          dateStyle: 'long'
-                      })
-                    : new Date().toLocaleDateString('en-GB', {
-                          dateStyle: 'long'
-                      })
+                publication.publishedDate ? formatPDFDate(publication.publishedDate) : formatPDFDate(new Date())
             }
         </span>
     </div>`;
+};
 
-export const createPublicationFooterTemplate = (publication: I.Publication): string =>
-    `<style>
-            .footer {
-                width: 100%;
-                padding: 0.5cm 1.1cm !important;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
-                font-size: 12px;
-            }
+export const createPublicationFooterTemplate = (publication: I.Publication): string => {
+    const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
+    const base64OctopusLogo = fs.readFileSync('assets/img/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.svg', {
+        encoding: 'base64'
+    });
 
-            .footer > div:nth-of-type(2) {
-                text-align: center;
-            }
+    return `
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            src: url(data:font/ttf;base64,${base64InterRegular});
+            font-weight: normal;
+            font-style: normal;
+        }
 
-            .footer > div:nth-of-type(3) {
-                text-align: right;
-            }
+        .footer {
+            width: 100%;
+            padding: 0.5cm 1.86cm;
+            display: grid;
+            grid-template-columns: 1fr 0.7fr 1fr;
+            align-items: start;
+            font-family: "Inter", Arial, sans-serif;
+            font-size: 8pt;
+            line-height: 1.5;
+        }
+
+        .footer > div:nth-of-type(2) {
+            text-align: center;
+        }
+
+        .footer > div:nth-of-type(3) {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            gap: 3px;
+        }
+
+        .footer a {
+            color: #296D89;
+            text-decoration-color: #296D89;
+            text-underline-offset: 1px;
+            word-break: break-all;
+        }
+
+        #octopus-logo {
+            width: 24px;
+            vertical-align: middle;
+            position: relative;
+            bottom: 6px;
+            text-decoration: none;
+        }
     </style>
     <div class="footer">            
         <div>
-            <span>${publication.doi}</span>
+            <span>DOI: <a href="${process.env.BASE_URL}/publications/${publication.id}">${publication.doi}</a></span>
         </div>
         <div>
             Page <span class="pageNumber"></span> of <span class="totalPages"></span>
         </div>        
         <div>
-            <span>Published on <a href="${process.env.BASE_URL}">Octopus.ac</a></span>
+            Published on <a href="${process.env.BASE_URL}">Octopus.ac</a>
+            <a href="${process.env.BASE_URL}"><img id="octopus-logo" src="data:image/svg+xml;base64,${base64OctopusLogo}"/></a>
         </div>
     </div>`;
+};
