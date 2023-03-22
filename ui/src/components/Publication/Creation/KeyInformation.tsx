@@ -14,12 +14,12 @@ import shallow from 'zustand/shallow';
  * @description Edit title
  */
 const KeyInformation: React.FC = (): React.ReactElement => {
-    const title = Stores.usePublicationCreationStore((state) => state.title);
-    const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
     const token = Helpers.getJWT();
 
     const {
         id,
+        title,
+        updateTitle,
         affiliationsStatus,
         affiliations,
         updateAffiliations,
@@ -31,6 +31,8 @@ const KeyInformation: React.FC = (): React.ReactElement => {
     } = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => ({
             id: state.id,
+            title: state.title,
+            updateTitle: state.updateTitle,
             affiliationsStatus: state.affiliationsStatus,
             affiliations: state.affiliations,
             updateAffiliations: state.updateAffiliations,

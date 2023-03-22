@@ -155,7 +155,6 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
 
     const affiliations = Stores.usePublicationCreationStore((state) => state.affiliations);
     const updateAffiliations = Stores.usePublicationCreationStore((state) => state.updateAffiliations);
-    const updateConfirmNoAffliations = Stores.usePublicationCreationStore((state) => state.updateConfirmNoAffliations);
 
     const affiliationsStatement = Stores.usePublicationCreationStore((state) => state.affiliationsStatement);
     const updateAffiliationsStatement = Stores.usePublicationCreationStore(
