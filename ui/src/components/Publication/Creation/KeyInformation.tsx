@@ -6,6 +6,8 @@ import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as Helpers from '@helpers';
+import * as api from '@api';
 import shallow from 'zustand/shallow';
 
 /**
@@ -14,9 +16,13 @@ import shallow from 'zustand/shallow';
 const KeyInformation: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
+    const token = Helpers.getJWT();
 
     const {
+        id,
         affiliationsStatus,
+        affiliations,
+        updateAffiliations,
         updateAffiliationsStatus,
         confirmNoAffliations,
         updateConfirmNoAffliations,
@@ -24,7 +30,10 @@ const KeyInformation: React.FC = (): React.ReactElement => {
         updateLicence
     } = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => ({
+            id: state.id,
             affiliationsStatus: state.affiliationsStatus,
+            affiliations: state.affiliations,
+            updateAffiliations: state.updateAffiliations,
             updateAffiliationsStatus: state.updateAffiliationsStatus,
             confirmNoAffliations: state.confirmNoAffliations,
             updateConfirmNoAffliations: state.updateConfirmNoAffliations,
@@ -131,7 +140,22 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                             </span>
                             <Components.RadioConfirm
                                 status={affiliationsStatus}
-                                updateStatus={updateAffiliationsStatus}
+                                updateStatusTrue={() => {
+                                    updateAffiliationsStatus(true);
+                                    updateConfirmNoAffliations(false);
+                                    setTimeout(() => {
+                                        document
+                                            .getElementById('affiliations-header')
+                                            ?.scrollIntoView({ behavior: 'smooth' });
+                                    }, 0);
+                                }}
+                                updateStatusFalse={async () => {
+                                    updateAffiliationsStatus(false);
+                                    if (affiliations.length) {
+                                        await api.destroy(`${Config.endpoints.publications}/${id}/affiliations`, token);
+                                        updateAffiliations([]);
+                                    }
+                                }}
                             />
                             {affiliationsStatus && (
                                 <div className="mb-10">

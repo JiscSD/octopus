@@ -193,11 +193,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
-            // remove any added affiliations if they have confirmed they don't need any.
-            if (store.confirmNoAffliations) {
-                await api.destroy(`${Config.endpoints.publications}/${props.publication.id}/affiliations`, props.token);
-            }
-
             if (message) {
                 setToast({
                     visible: true,

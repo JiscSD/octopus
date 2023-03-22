@@ -234,10 +234,6 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                 ? updateFunders([...funders, createdRorRecord])
                 : updateAffiliations([...affiliations, createdRorRecord]);
 
-            if (props.type === 'affiliations') {
-                updateConfirmNoAffliations(false);
-            }
-
             setSubmitLoading(false);
             setName('');
             setCountry('');

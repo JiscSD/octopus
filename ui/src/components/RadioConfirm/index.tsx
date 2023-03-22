@@ -3,7 +3,8 @@ import * as Stores from '@stores';
 
 type Props = {
     status: boolean | undefined;
-    updateStatus: (status: boolean) => void;
+    updateStatusTrue: () => void;
+    updateStatusFalse: () => void;
 };
 
 const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
@@ -16,12 +17,7 @@ const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
                     value="true"
                     id="coi-true"
                     checked={props.status}
-                    onChange={() => {
-                        props.updateStatus(true);
-                        setTimeout(() => {
-                            document.getElementById('affiliations-header')?.scrollIntoView({ behavior: 'smooth' });
-                        }, 0);
-                    }}
+                    onChange={() => props.updateStatusTrue()}
                 />
                 <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">Yes</span>
             </label>
@@ -32,9 +28,7 @@ const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
                     value="false"
                     id="coi-false"
                     checked={props.status === false}
-                    onChange={() => {
-                        props.updateStatus(false);
-                    }}
+                    onChange={() => props.updateStatusFalse()}
                 />
                 <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
             </label>
