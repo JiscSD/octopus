@@ -6,6 +6,7 @@ import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
+import shallow from 'zustand/shallow';
 
 /**
  * @description Edit title
@@ -14,27 +15,23 @@ const KeyInformation: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
 
-    const affiliationsStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.affiliationsStatus
-    );
-
-    const confirmNoAffliations = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.confirmNoAffliations
-    );
-
-    const updateConfirmNoAffliations = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateConfirmNoAffliations
-    );
-
-    const updateAffiliationsStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateAffiliationsStatus
-    );
-
-    const licence: Types.LicenceType = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.licence
-    );
-    const updateLicence = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateLicence
+    const {
+        affiliationsStatus,
+        updateAffiliationsStatus,
+        confirmNoAffliations,
+        updateConfirmNoAffliations,
+        licence,
+        updateLicence
+    } = Stores.usePublicationCreationStore(
+        (state: Types.PublicationCreationStoreType) => ({
+            affiliationsStatus: state.affiliationsStatus,
+            updateAffiliationsStatus: state.updateAffiliationsStatus,
+            confirmNoAffliations: state.confirmNoAffliations,
+            updateConfirmNoAffliations: state.updateConfirmNoAffliations,
+            licence: state.licence,
+            updateLicence: state.updateLicence
+        }),
+        shallow
     );
 
     return (
