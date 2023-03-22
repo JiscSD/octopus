@@ -561,3 +561,24 @@ export interface SendApprovalReminderPathParams {
     id: string;
     coauthor: string;
 }
+
+type NameType = 'Personal' | 'Organizational';
+export interface DataCiteCreator {
+    name: string;
+    givenName: string | undefined;
+    familyName: string | null;
+    nameType: NameType;
+    nameIdentifiers: DataCiteCreatorNameIdentifiers[];
+}
+
+export interface DataCiteCreatorNameIdentifiers {
+    nameIdentifier: string;
+    nameIdentifierScheme: string;
+    schemeUri: string;
+}
+
+export interface DataCiteUser {
+    firstName: string | undefined;
+    lastName: string | null;
+    orcid: string;
+}
