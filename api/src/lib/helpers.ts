@@ -785,7 +785,7 @@ export const createPublicationHTMLTemplate = (
 export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string => {
     const authors = publication.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
 
-    if (!authors.find((author) => author.id === publication.createdBy)) {
+    if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
         authors.unshift({
             id: publication.createdBy,
             approvalRequested: false,
