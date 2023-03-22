@@ -86,7 +86,7 @@ model Publication {
     funders                            Funders[]
     fundersStatement                   String?
     affiliations                       Affiliations[]
-    confirmNoAffliations               Boolean                @default(false)
+    hasNoAffiliations                  Boolean                @default(false)
     affiliationsStatus                 Boolean                @default(true)
     affiliationStatement               String?
 }

@@ -452,6 +452,6 @@ functions:
         handler: src/components/affiliations/routes.destroyAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/affiliations/
+                  path: ${self:custom.versions.v1}/publications/{id}/affiliations
                   method: DELETE
                   cors: true

@@ -26,7 +26,7 @@ const updatePublicationSchema: I.Schema = {
         id: {
             type: 'string'
         },
-        confirmNoAffliations: {
+        hasNoAffiliations: {
             type: 'boolean'
         },
         affiliationsStatus: {
