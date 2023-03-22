@@ -8,7 +8,6 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as Helpers from '@helpers';
 import * as api from '@api';
-import shallow from 'zustand/shallow';
 
 /**
  * @description Edit title
