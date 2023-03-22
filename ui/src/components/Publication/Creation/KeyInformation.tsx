@@ -24,26 +24,11 @@ const KeyInformation: React.FC = (): React.ReactElement => {
         affiliations,
         updateAffiliations,
         updateAffiliationsStatus,
-        confirmNoAffliations,
-        updateConfirmNoAffliations,
+        hasNoAffiliations,
+        updateHasNoAffiliations,
         licence,
         updateLicence
-    } = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => ({
-            id: state.id,
-            title: state.title,
-            updateTitle: state.updateTitle,
-            affiliationsStatus: state.affiliationsStatus,
-            affiliations: state.affiliations,
-            updateAffiliations: state.updateAffiliations,
-            updateAffiliationsStatus: state.updateAffiliationsStatus,
-            confirmNoAffliations: state.confirmNoAffliations,
-            updateConfirmNoAffliations: state.updateConfirmNoAffliations,
-            licence: state.licence,
-            updateLicence: state.updateLicence
-        }),
-        shallow
-    );
+    } = Stores.usePublicationCreationStore();
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -144,7 +129,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                 status={affiliationsStatus}
                                 updateStatusTrue={() => {
                                     updateAffiliationsStatus(true);
-                                    updateConfirmNoAffliations(false);
+                                    updateHasNoAffiliations(false);
                                     setTimeout(() => {
                                         document
                                             .getElementById('affiliations-header')
@@ -184,12 +169,12 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                         id="confirm"
                                         name="confirm"
                                         type="checkbox"
-                                        checked={confirmNoAffliations}
+                                        checked={hasNoAffiliations}
                                         disabled={affiliationsStatus}
-                                        onChange={() => updateConfirmNoAffliations(!confirmNoAffliations)}
+                                        onChange={() => updateHasNoAffiliations(!hasNoAffiliations)}
                                         className="rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                                     />
-                                    <span className="dark:text-grey-200' ml-2 block text-grey-500 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    <span className="dark:text-grey-200' ml-2 block text-grey-500 transition-colors duration-500 dark:text-white-50">
                                         Please confirm that this research was conducted independently
                                     </span>
                                 </label>

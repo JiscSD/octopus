@@ -25,7 +25,7 @@ const Review: React.FC = (): React.ReactElement => {
     const title = Stores.usePublicationCreationStore((state) => state.title);
     const type = Stores.usePublicationCreationStore((state) => state.type);
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
-    const confirmNoAffliations = Stores.usePublicationCreationStore((state) => state.confirmNoAffliations);
+    const hasNoAffiliations = Stores.usePublicationCreationStore((state) => state.hasNoAffiliations);
     const affiliations = Stores.usePublicationCreationStore((state) => state.affiliations);
     const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
     const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
@@ -72,7 +72,7 @@ const Review: React.FC = (): React.ReactElement => {
                     <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
                         Affiliations
                     </span>
-                    {affiliations.length || confirmNoAffliations ? <CompletedIcon /> : <IncompleteIcon />}
+                    {affiliations.length || hasNoAffiliations ? <CompletedIcon /> : <IncompleteIcon />}
                 </div>
 
                 <div className="relative">
