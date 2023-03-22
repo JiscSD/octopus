@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "Publication" ADD COLUMN     "confirmNoAffliations" BOOLEAN;
+ALTER TABLE "Publication" ADD COLUMN     "confirmNoAffliations" BOOLEAN DEFAULT FALSE;

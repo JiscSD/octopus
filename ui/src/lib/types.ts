@@ -86,10 +86,10 @@ export type PublicationCreationStoreType = {
     funders: Interfaces.Funder[];
     updateFunders: (funders: Interfaces.Funder[]) => void;
     affiliations: Interfaces.Affiliations[];
-    confirmNoAffliations: boolean | undefined;
-    updateConfirmNoAffliations: (updateConfirmNoAffliations: boolean | undefined) => void;
-    affiliationsStatus: boolean | undefined;
-    updateAffiliationsStatus: (updateAffiliationsStatus: boolean | undefined) => void;
+    confirmNoAffliations: boolean;
+    updateConfirmNoAffliations: (updateConfirmNoAffliations: boolean) => void;
+    affiliationsStatus: boolean;
+    updateAffiliationsStatus: (updateAffiliationsStatus: boolean) => void;
     updateAffiliations: (affiliations: Interfaces.Affiliations[]) => void;
     affiliationsStatement: string | null;
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;

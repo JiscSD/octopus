@@ -2,7 +2,7 @@ import React from 'react';
 import * as Stores from '@stores';
 
 type Props = {
-    status: boolean | undefined;
+    status: boolean;
     updateStatusTrue: () => void;
     updateStatusFalse: () => void;
 };
