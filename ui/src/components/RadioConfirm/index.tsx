@@ -3,8 +3,7 @@ import * as Stores from '@stores';
 
 type Props = {
     status: boolean;
-    updateStatusTrue: () => void;
-    updateStatusFalse: () => void;
+    updateStatus: (status: boolean) => void;
 };
 
 const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
@@ -17,7 +16,7 @@ const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
                     value="true"
                     id="coi-true"
                     checked={props.status}
-                    onChange={() => props.updateStatusTrue()}
+                    onChange={() => props.updateStatus(true)}
                 />
                 <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">Yes</span>
             </label>
@@ -28,7 +27,7 @@ const RadioConfirm: React.FC<Props> = (props): React.ReactElement => {
                     value="false"
                     id="coi-false"
                     checked={props.status === false}
-                    onChange={() => props.updateStatusFalse()}
+                    onChange={() => props.updateStatus(false)}
                 />
                 <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
             </label>

@@ -61,25 +61,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 };
             }
 
-            if (typeof store.conflictOfInterestStatus === 'undefined') {
-                ready = { ready: false, message: 'You must select a conflict of interest option' };
-            }
-
-            if (store.affiliationsStatus && !store.affiliations.length) {
+            if (store.hasAffiliations && !store.affiliations.length) {
                 ready = {
                     ready: false,
                     message: 'You have selected there are affiliations, please provide them'
                 };
             }
 
-            if (!store.affiliationsStatus && !store.hasNoAffiliations) {
+            if (!store.hasAffiliations && !store.hasNoAffiliations) {
                 ready = {
                     ready: false,
                     message: 'You have selected there are affiliations, please provide them'
                 };
             }
 
-            if (typeof store.affiliationsStatus === 'undefined') {
+            if (typeof store.hasAffiliations === 'undefined') {
                 ready = { ready: false, message: 'You must declare if you have affiliations' };
             }
 
@@ -156,7 +152,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 licence: store.licence,
                 language: store.language,
                 hasNoAffiliations: store.hasNoAffiliations,
-                affiliationsStatus: store.affiliationsStatus,
+                hasAffiliations: store.hasAffiliations,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,
                 affiliationStatement: store.affiliationsStatement,

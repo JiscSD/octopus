@@ -19,15 +19,34 @@ const KeyInformation: React.FC = (): React.ReactElement => {
         id,
         title,
         updateTitle,
-        affiliationsStatus,
+        hasAffiliations,
         affiliations,
         updateAffiliations,
-        updateAffiliationsStatus,
+        updateHasAffiliations,
         hasNoAffiliations,
         updateHasNoAffiliations,
         licence,
         updateLicence
     } = Stores.usePublicationCreationStore();
+
+    const handleStatusUpdate = async (status: boolean): Promise<void> => {
+        if (status) {
+            updateHasAffiliations(true);
+            updateHasNoAffiliations(false);
+            setTimeout(() => {
+                document.getElementById('affiliations-header')?.scrollIntoView({ behavior: 'smooth' });
+            }, 0);
+            return;
+        }
+
+        updateHasAffiliations(false);
+        if (affiliations.length) {
+            await api.destroy(`${Config.endpoints.publications}/${id}/affiliations`, token);
+            updateAffiliations([]);
+        }
+
+        return;
+    };
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -124,26 +143,8 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                                 Does this publication have any affiliations?
                             </span>
-                            <Components.RadioConfirm
-                                status={affiliationsStatus}
-                                updateStatusTrue={() => {
-                                    updateAffiliationsStatus(true);
-                                    updateHasNoAffiliations(false);
-                                    setTimeout(() => {
-                                        document
-                                            .getElementById('affiliations-header')
-                                            ?.scrollIntoView({ behavior: 'smooth' });
-                                    }, 0);
-                                }}
-                                updateStatusFalse={async () => {
-                                    updateAffiliationsStatus(false);
-                                    if (affiliations.length) {
-                                        await api.destroy(`${Config.endpoints.publications}/${id}/affiliations`, token);
-                                        updateAffiliations([]);
-                                    }
-                                }}
-                            />
-                            {affiliationsStatus && (
+                            <Components.RadioConfirm status={hasAffiliations} updateStatus={handleStatusUpdate} />
+                            {hasAffiliations && (
                                 <div className="mb-10">
                                     <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                                         Please enter the details for any organisations this publication is associated
@@ -161,7 +162,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                     <Components.RORForm type="affiliations" />
                                 </div>
                             )}
-                            {!affiliationsStatus && (
+                            {!hasAffiliations && (
                                 <label htmlFor="confirm" className="mb-2 flex items-center">
                                     <input
                                         required
@@ -169,7 +170,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                                         name="confirm"
                                         type="checkbox"
                                         checked={hasNoAffiliations}
-                                        disabled={affiliationsStatus}
+                                        disabled={hasAffiliations}
                                         onChange={() => updateHasNoAffiliations(!hasNoAffiliations)}
                                         className="rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                                     />

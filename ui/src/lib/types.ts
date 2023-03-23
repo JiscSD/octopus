@@ -88,8 +88,8 @@ export type PublicationCreationStoreType = {
     affiliations: Interfaces.Affiliations[];
     hasNoAffiliations: boolean;
     updateHasNoAffiliations: (updateHasNoAffiliations: boolean) => void;
-    affiliationsStatus: boolean;
-    updateAffiliationsStatus: (updateAffiliationsStatus: boolean) => void;
+    hasAffiliations: boolean;
+    updateHasAffiliations: (updateHasAffiliations: boolean) => void;
     updateAffiliations: (affiliations: Interfaces.Affiliations[]) => void;
     affiliationsStatement: string | null;
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;

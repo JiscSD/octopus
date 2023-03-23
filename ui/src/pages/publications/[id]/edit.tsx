@@ -303,7 +303,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateAffiliations(props.draftedPublication.affiliations);
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        store.updateAffiliationsStatus(props.draftedPublication.affiliationsStatus);
+        store.updateHasAffiliations(props.draftedPublication.hasAffiliations);
         store.updateHasNoAffiliations(props.draftedPublication.hasNoAffiliations);
     }, []);
 

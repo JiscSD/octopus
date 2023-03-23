@@ -494,6 +494,10 @@ export const isPublicationReadyToPublish = (publication: I.PublicationWithMetada
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
     const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
+    const hasDeclaredAffiliations =
+        (publication.hasAffiliations && publication.affiliations.length) ||
+        (!publication.hasAffiliations && publication.hasNoAffiliations);
+
     const isAttemptToLive = status === 'LIVE';
 
     // More external checks can be chained here for the future
@@ -505,6 +509,7 @@ export const isPublicationReadyToPublish = (publication: I.PublicationWithMetada
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
         coAuthorsAreVerified &&
+        hasDeclaredAffiliations &&
         isAttemptToLive
     ) {
         isReady = true;

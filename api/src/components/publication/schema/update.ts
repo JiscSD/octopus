@@ -29,7 +29,7 @@ const updatePublicationSchema: I.Schema = {
         hasNoAffiliations: {
             type: 'boolean'
         },
-        affiliationsStatus: {
+        hasAffiliations: {
             type: 'boolean'
         },
         conflictOfInterestStatus: {

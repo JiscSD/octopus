@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "Publication" ADD COLUMN     "affiliationsStatus" BOOLEAN DEFAULT TRUE;
+ALTER TABLE "Publication" ADD COLUMN     "hasAffiliations" BOOLEAN DEFAULT TRUE;
