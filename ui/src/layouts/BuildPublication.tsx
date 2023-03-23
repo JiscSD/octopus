@@ -71,7 +71,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (!store.hasAffiliations && !store.hasNoAffiliations) {
                 ready = {
                     ready: false,
-                    message: 'You have selected there are affiliations, please provide them'
+                    message: 'You have selected there are no affiliations, please confirm this.'
                 };
             }
 
@@ -116,6 +116,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
+
+            if (store.hasAffiliations && !store.affiliations.length) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there are affiliations, please provide them'
+                };
+            }
+
+            if (!store.hasAffiliations && !store.hasNoAffiliations) {
+                ready = {
+                    ready: false,
+                    message: 'You have selected there are no affiliations, please confirm this.'
+                };
+            }
+
             if (typeof store.conflictOfInterestStatus == 'undefined') {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
