@@ -559,26 +559,32 @@ export const createPublicationHTMLTemplate = (
                 }
 
                 h1 {
+                    margin-top: 3rem;
                     font-size: 20pt;
                 }
 
                 h2 {
+                    margin-top: 3rem;
                     font-size: 18pt;
                 }
 
                 h3 {
+                    margin-top: 2rem;
                     font-size: 16pt;
                 }
 
                 h4 {
+                    margin-top: 2rem;
                     font-size: 14pt;
                 }
 
                 h5 {
+                    margin-top: 1rem;
                     font-size: 12pt;
                 }
 
                 h6 {
+                    margin-top: 1rem;
                     font-size: 10pt;
                 }
 

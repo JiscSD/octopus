@@ -1,11 +1,8 @@
 import React from 'react';
-import useSWR, * as SWR from 'swr';
 import Image from 'next/image';
+import * as SWR from 'swr';
 import * as Router from 'next/router';
-import * as ReactRange from 'react-range';
-import * as SolidIcons from '@heroicons/react/solid';
 import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -42,7 +39,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         setSubmitting(true);
         try {
             if (redFlagComment.length) {
-                const response = await api.post(
+                await api.post(
                     `${Config.endpoints.publications}/${props.publication.id}/flag`,
                     {
                         category: redFlagReason,
@@ -150,32 +147,39 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             <Components.SectioBreak name="Actions" />
 
             {/** Download options */}
-            <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                    Download:
-                </span>
-                <button
-                    aria-label="Print"
-                    onClick={() => window.print()}
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                >
-                    <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
-                    <span className="ml-1">pdf</span>
-                </button>
-                <button
-                    aria-label="Download JSON"
-                    onClick={() =>
-                        Helpers.blobFileDownload(
-                            `${Config.endpoints.publications}/${props.publication.id}`,
-                            `${props.publication.id}.json`
-                        )
-                    }
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                >
-                    <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
-                    <span className="ml-1">json</span>
-                </button>
-            </div>
+            {props.publication.currentStatus === 'LIVE' && (
+                <div className="flex">
+                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                        Download:
+                    </span>
+                    <button
+                        aria-label="Print"
+                        onClick={() => {
+                            window.open(
+                                `${Config.endpoints.publications}/${props.publication.id}/pdf?redirectToPreview=true`,
+                                '_blank'
+                            );
+                        }}
+                        className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                    >
+                        <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
+                        <span className="ml-1">pdf</span>
+                    </button>
+                    <button
+                        aria-label="Download JSON"
+                        onClick={() =>
+                            Helpers.blobFileDownload(
+                                `${Config.endpoints.publications}/${props.publication.id}`,
+                                `${props.publication.id}.json`
+                            )
+                        }
+                        className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                    >
+                        <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
+                        <span className="ml-1">json</span>
+                    </button>
+                </div>
+            )}
             {user && user.email ? (
                 <>
                     {/* if the publication is a peer review, no options shall be given to write a linked publication */}

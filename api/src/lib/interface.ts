@@ -55,7 +55,7 @@ export interface OptionalAuthenticatedAPIRequest<
 }
 
 export interface JSONResponse {
-    body: string;
+    body?: string;
     headers: any;
     statusCode: number;
 }
@@ -564,4 +564,9 @@ export interface SendApprovalReminderPathParams {
 
 export interface GeneratePDFPathParams {
     id: string;
+}
+
+export interface GeneratePDFQueryParams {
+    redirectToPreview?: string;
+    generateNewPDF?: string;
 }
