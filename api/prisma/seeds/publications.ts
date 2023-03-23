@@ -100,6 +100,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROBLEM-DRAFT',
         currentStatus: 'DRAFT',
+        hasAffiliations: true,
         conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g04',
         user: {
@@ -164,6 +165,7 @@ const publicationSeeds = [
         licence: 'CC_BY',
         content: 'Publication PROBLEM-LOCKED',
         currentStatus: 'LOCKED',
+        hasAffiliations: true,
         conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g04',
         user: {
@@ -344,6 +346,8 @@ const publicationSeeds = [
         type: 'PROTOCOL',
         licence: 'CC_BY',
         content: 'Publication PROTOCOL-DRAFT',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g08',
@@ -462,6 +466,8 @@ const publicationSeeds = [
         type: 'ANALYSIS',
         licence: 'CC_BY',
         content: 'Publication ANALYSIS-DRAFT',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g12',
@@ -587,6 +593,8 @@ const publicationSeeds = [
         type: 'HYPOTHESIS',
         licence: 'CC_BY',
         content: 'Publication HYPOTHESIS-DRAFT',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g17',
         user: {
@@ -703,6 +711,8 @@ const publicationSeeds = [
         content: '<p>This is the content</p>',
         type: 'PROBLEM',
         licence: 'CC_BY',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g20',
         user: {
@@ -732,6 +742,8 @@ const publicationSeeds = [
         content: '<p>This is the content</p>',
         type: 'PROBLEM',
         licence: 'CC_BY',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g21',
         user: {
@@ -761,6 +773,8 @@ const publicationSeeds = [
         content: '<p>This is the content</p>',
         type: 'PROBLEM',
         licence: 'CC_BY',
+        hasAffiliations: false,
+        hasNoAffiliations: true,
         currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g22',
         user: {
