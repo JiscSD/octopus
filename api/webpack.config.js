@@ -2,6 +2,7 @@ const path = require('path');
 const slsw = require('serverless-webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -21,8 +22,15 @@ module.exports = {
             {
                 test: /\.(tsx?)$/,
                 loader: 'ts-loader',
-                exclude: [[path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, '.serverless'), path.resolve(__dirname, '.webpack')]]
+                exclude: [
+                    [
+                        path.resolve(__dirname, 'node_modules'),
+                        path.resolve(__dirname, '.serverless'),
+                        path.resolve(__dirname, '.webpack')
+                    ]
+                ]
             }
         ]
-    }
+    },
+    plugins: [new CopyPlugin({ patterns: [{ from: 'assets', to: 'assets' }] })]
 };
