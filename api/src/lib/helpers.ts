@@ -510,7 +510,6 @@ export const createPublicationHTMLTemplate = (
                 img, svg, video, canvas, audio, iframe, embed, object {
                     display: block;
                     max-width: 100%;
-                    vertical-align: middle;
                 }
 
                 table, th, td {
