@@ -1539,10 +1539,10 @@ test.describe('Publication flow + co-authors', () => {
 
         // check invited author is visible
         await expect(page.getByText(Helpers.user2.email)).toBeVisible();
-        await expect(page.locator('table button[title="Edit"]')).toBeVisible();
+        await expect(page.locator(`table button[title="Edit email for ${Helpers.user2.email}"]`)).toBeVisible();
 
         // change author's email
-        await page.locator('table button[title="Edit"]').click();
+        await page.locator(`table button[title="Edit email for ${Helpers.user2.email}"]`).click();
         await page.locator('input[name="authorEmail"]').click();
         await page.fill('input[name="authorEmail"]', '');
         await page.fill('input[name="authorEmail"]', Helpers.user3.email);
@@ -1608,7 +1608,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // re-send invitation to 'Unconfirmed Author'
         await expect(page.getByText('Unconfirmed Author')).toBeVisible();
-        await page.locator('table button[title="Resend Email"]').click();
+        await page.locator(`table button[title="Resend email to ${Helpers.user2.email}"]`).click();
         await expect(page.getByText('Re-Send author invite')).toBeVisible();
         await page.locator('button[title="Confirm"]').click();
 
