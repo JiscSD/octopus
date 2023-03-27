@@ -165,10 +165,10 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                             {user?.id === props.publication.createdBy && (
                                 <>
                                     <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
-                                        Edit
+                                        Edit email
                                     </th>
                                     <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
-                                        Email
+                                        Send Remainder
                                     </th>
                                 </>
                             )}
@@ -216,7 +216,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             {!author.linkedUser && (
                                                 <Components.IconButton
                                                     className="p-2"
-                                                    title="Edit"
+                                                    title={`Edit email for ${author.email}`}
                                                     icon={
                                                         <FaIcons.FaEdit
                                                             className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
