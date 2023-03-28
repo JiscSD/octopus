@@ -739,8 +739,8 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 
     await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
 
-    // Confirm publication states under review
-    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Under Review');
+    // Confirm publication states: Ready to publish
+    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
 
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
@@ -1347,7 +1347,7 @@ test.describe('Publication flow + co-authors', () => {
             page.locator(PageModel.publish.confirmPublishButtonTracker).click()
         ]);
 
-        // veryify publication is displayed as live on co-author profile
+        // verify publication is displayed as live on co-author profile
         await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
 
         await page.close();

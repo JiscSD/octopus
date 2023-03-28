@@ -13,24 +13,24 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     const publicationStatus = (publication: Interfaces.UserPublication, user: Interfaces.User) => {
         if (publication.currentStatus === 'LIVE') return 'Live';
 
-        if (publication.createdBy === user.id) {
-            if (publication.coAuthors.length === 1 || publication.currentStatus === 'DRAFT') return 'Draft';
+        if (publication.currentStatus === 'DRAFT') {
+            return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+        }
 
-            if (publication.coAuthors.every((coAuthors) => coAuthors.confirmedCoAuthor === true))
+        if (publication.coAuthors.length > 1) {
+            if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
                 return 'Ready to publish';
+            }
 
-            return 'Under Review';
+            if (
+                user.id !== publication.createdBy &&
+                publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+            ) {
+                return 'Pending your approval';
+            }
         }
 
-        const hasCoAuthorApproved = publication.coAuthors.find(
-            (author) => author.linkedUser === user.id && author.confirmedCoAuthor
-        );
-
-        if (hasCoAuthorApproved) {
-            return 'Under Review';
-        }
-
-        return 'Pending your review';
+        return 'Pending author approval';
     };
 
     const status = useMemo(() => publicationStatus(props.publication, props.user), [props.publication, props.user]);
@@ -47,9 +47,9 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                         } flex items-center gap-2 font-semibold leading-3 transition-colors duration-500`}
                     >
                         {props.publication.currentStatus === 'LIVE' ? (
-                            <OutlineIcons.ExternalLinkIcon className="inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
+                            <OutlineIcons.ExternalLinkIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
                         ) : (
-                            <OutlineIcons.PencilAltIcon className="inline h-4 w-4 leading-3 text-grey-600 dark:text-teal-500" />
+                            <OutlineIcons.PencilAltIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
                         )}
 
                         {status}
@@ -70,9 +70,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                         </span>
                     )}
                 </div>
-                <span className="absolute right-4 text-xs text-teal-500 empty:hidden sm:relative sm:right-0">
-                    {props.publication.doi}
-                </span>
+                <span className="right-4 text-xs text-teal-500 empty:hidden">{props.publication.doi}</span>
             </div>
             <span className="mt-2 block font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
                 {props.publication.title}
