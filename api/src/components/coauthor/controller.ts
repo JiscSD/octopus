@@ -329,6 +329,32 @@ export const requestApproval = async (
             return response.json(404, { message: 'Publication not found' });
         }
 
+        if (
+            publication.currentStatus === 'DRAFT' &&
+            publication.publicationStatus.some(({ status }) => status === 'LOCKED')
+        ) {
+            // notify linked co-authors about changes
+            const linkedCoAuthors = publication.coAuthors.filter(
+                (author) => author.linkedUser && author.linkedUser !== publication.createdBy
+            );
+
+            for (const linkedCoAuthor of linkedCoAuthors) {
+                await email.notifyCoAuthorsAboutChanges({
+                    coAuthor: { email: linkedCoAuthor.email },
+                    publication: {
+                        title: publication.title || '',
+                        url: `${process.env.BASE_URL}/publications/${publication.id}`
+                    }
+                });
+            }
+        }
+
+        /**
+         * @TODO
+         * - fix bug - publication going into LOCKED mode without title, linked publications, main text, etc...
+         * - find a better way to handle publication transition from one state to another
+         */
+
         // Lock publication from editing
         await publicationService.updateStatus(publication.id, 'LOCKED', false);
 
