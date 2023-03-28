@@ -168,7 +168,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         Edit email
                                     </th>
                                     <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
-                                        Send Remainder
+                                        Send Reminder
                                     </th>
                                 </>
                             )}
