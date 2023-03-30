@@ -61,6 +61,9 @@ provider:
         - Effect: 'Allow'
           Resource: 'arn:aws:s3:::science-octopus-publishing-images-${self:provider.stage}/*'
           Action: 's3:PutObject'
+        - Effect: 'Allow'
+          Resource: 'arn:aws:s3:::science-octopus-publishing-pdfs-${self:provider.stage}/*'
+          Action: 's3:PutObject'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
@@ -174,6 +177,14 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/links
+                  method: GET
+                  cors: true
+    getPDF:
+        handler: src/components/publication/routes.getPDF
+        memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
     # Users

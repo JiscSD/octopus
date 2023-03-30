@@ -1,4 +1,6 @@
 import htmlToText from 'html-to-text';
+import axios from 'axios';
+import s3 from 'lib/s3';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
@@ -320,4 +322,67 @@ export const getLinksForPublication = async (
 
         return response.json(500, { message: 'Unknown server error.' });
     }
+};
+
+export const getPDF = async (
+    event: I.APIRequest<undefined, I.GeneratePDFQueryParams, I.GeneratePDFPathParams>
+): Promise<I.JSONResponse> => {
+    const generateNewPDF = event.queryStringParameters?.generateNewPDF === 'true';
+    const redirectToPreview = event.queryStringParameters?.redirectToPreview === 'true';
+    const publicationId = event.pathParameters.id;
+    const publication = await publicationService.get(publicationId);
+
+    if (!publication) {
+        return response.json(404, {
+            message: 'This publication does not exist.'
+        });
+    }
+
+    if (publication.currentStatus !== 'LIVE') {
+        return response.json(403, {
+            message: 'Publication needs to be LIVE in order to generate a PDF version of it.'
+        });
+    }
+
+    let pdfUrl: string | null = null;
+
+    if (!generateNewPDF) {
+        // check if there's a generated PDF for this publication
+        try {
+            const currentPdfUrl = `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
+            const result = await axios.get(currentPdfUrl);
+
+            if (result.status === 200) {
+                pdfUrl = currentPdfUrl;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (!pdfUrl) {
+        // generate new PDF
+        try {
+            const newPDFUrl = await publicationService.generatePDF(publication);
+
+            if (!newPDFUrl) {
+                throw Error('Failed to generate PDF');
+            }
+
+            pdfUrl = newPDFUrl;
+        } catch (error) {
+            console.log(error);
+
+            return response.json(500, 'The PDF version of this publication has failed to generate');
+        }
+    }
+
+    return redirectToPreview
+        ? {
+              statusCode: 302,
+              headers: {
+                  Location: pdfUrl
+              }
+          }
+        : response.json(200, { pdfUrl });
 };

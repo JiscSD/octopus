@@ -1,6 +1,11 @@
+import s3 from 'lib/s3';
+import chromium from 'chrome-aws-lambda';
 import * as I from 'interface';
 import * as client from 'lib/client';
+import * as referenceService from 'reference/service';
+import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
+import { Browser } from 'puppeteer-core';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -698,4 +703,54 @@ export const getLinksForPublication = async (id: string) => {
         linkedTo,
         linkedFrom
     };
+};
+
+// AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
+export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
+    const references = await referenceService.getAllByPublication(publication.id);
+    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+
+    let browser: Browser | null = null;
+
+    try {
+        browser = await chromium.puppeteer.launch({
+            args: [...chromium.args, '--font-render-hinting=none'],
+            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
+        });
+
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+        await page.setContent(htmlTemplate, {
+            waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
+        });
+
+        const pdf = await page.pdf({
+            format: 'a4',
+            preferCSSPageSize: true,
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: Helpers.createPublicationHeaderTemplate(publication),
+            footerTemplate: Helpers.createPublicationFooterTemplate(publication)
+        });
+
+        // upload pdf to S3
+        await s3
+            .putObject({
+                Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
+                Key: `${publication.id}.pdf`,
+                ContentType: 'application/pdf',
+                Body: pdf
+            })
+            .promise();
+
+        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+    } catch (err) {
+        console.error(err);
+
+        return null;
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 };

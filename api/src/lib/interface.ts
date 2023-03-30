@@ -55,7 +55,7 @@ export interface OptionalAuthenticatedAPIRequest<
 }
 
 export interface JSONResponse {
-    body: string;
+    body?: string;
     headers: any;
     statusCode: number;
 }
@@ -445,7 +445,7 @@ export interface Reference {
     publicationId: string;
     type: ReferenceType;
     text: string;
-    location?: string;
+    location?: string | null;
 }
 
 export interface CreateReferencePath {
@@ -581,4 +581,12 @@ export interface DataCiteUser {
     firstName: string | undefined;
     lastName: string | null;
     orcid: string;
+}
+export interface GeneratePDFPathParams {
+    id: string;
+}
+
+export interface GeneratePDFQueryParams {
+    redirectToPreview?: string;
+    generateNewPDF?: string;
 }

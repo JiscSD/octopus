@@ -9,7 +9,17 @@ resource "aws_s3_bucket_public_access_block" "image_bucket" {
   block_public_policy = true
 }
 
+resource "aws_s3_bucket" "pdf_bucket" {
+  bucket = "science-octopus-publishing-pdfs-${var.environment}"
+}
+
+locals {
+  buckets = [aws_s3_bucket.pdf_bucket, aws_s3_bucket.image_bucket]
+}
+
 data "aws_iam_policy_document" "allow_public_access" {
+  
+  for_each = {for idx, bucket in local.buckets: idx => bucket}
   statement {
     principals {
       type        = "*"
@@ -21,12 +31,13 @@ data "aws_iam_policy_document" "allow_public_access" {
     ]
 
     resources = [
-      "${aws_s3_bucket.image_bucket.arn}/*"
+      "${each.value.arn}/*",
     ]
   }
 }
 
 resource "aws_s3_bucket_policy" "allow_public_access" {
-  bucket = aws_s3_bucket.image_bucket.id
-  policy = data.aws_iam_policy_document.allow_public_access.json
+  for_each = {for idx, bucket in local.buckets: idx => bucket}
+  bucket = each.value.id
+  policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
