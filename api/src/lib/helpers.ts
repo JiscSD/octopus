@@ -52,40 +52,41 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
     return doi.data;
 };
 
+const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
+    return {
+        name: `${user?.lastName}, ${user?.firstName}`, // datacite expects full name in lastname, firstname order
+        givenName: user?.firstName,
+        familyName: user?.lastName,
+        nameType: 'Personal',
+        nameIdentifiers: [
+            {
+                nameIdentifier: user?.orcid ? user?.orcid : 'ORCID iD not provided',
+                nameIdentifierScheme: 'orcid',
+                schemeUri: 'orcid.org'
+            }
+        ]
+    };
+};
+
 export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata): Promise<I.DOIResponse> => {
     if (!publication) {
         throw Error('Publication not found');
     }
 
-    const authors = publication.coAuthors.map((coAuthor) => ({
-        name:
-            coAuthor.user?.firstName && coAuthor.user?.firstName
-                ? `${coAuthor.user?.firstName} ${coAuthor.user?.lastName}`
-                : `${coAuthor.email}`,
-        nameType: 'Personal',
-        nameIdentifiers: [
-            {
-                nameIdentifier: coAuthor.user?.orcid ? coAuthor.user?.orcid : 'ORCID iD not provided',
-                nameIdentifierScheme: 'orcid',
-                schemeUri: 'orcid.org'
-            }
-        ]
-    }));
+    const authors = publication.coAuthors.map((coAuthor) => {
+        if (coAuthor.user !== null) return createCreatorObject(coAuthor.user);
+    });
 
     // check if the creator of the publication is not listed as an author
     if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
         // add creator to authors list as first author
-        authors?.unshift({
-            name: `${publication?.user.firstName} ${publication?.user.lastName}`,
-            nameType: 'Personal',
-            nameIdentifiers: [
-                {
-                    nameIdentifier: publication?.user.orcid,
-                    nameIdentifierScheme: 'orcid',
-                    schemeUri: 'orcid.org'
-                }
-            ]
-        });
+        authors?.unshift(
+            createCreatorObject({
+                firstName: publication.user.firstName,
+                lastName: publication.user.lastName,
+                orcid: publication.user.orcid
+            })
+        );
     }
 
     const payload = {
