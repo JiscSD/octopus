@@ -24,7 +24,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             redirectTo,
-            newUser: !decodedToken.email, // new users don't have an email yet
+            newUser: !decodedToken?.email, // new users don't have an email yet
             protectedPage: true
         }
     };
