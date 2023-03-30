@@ -2,7 +2,6 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as SolidIcons from '@heroicons/react/solid';
 import * as Framer from 'framer-motion';
-
 import * as Components from '@components';
 import * as Types from '@types';
 
@@ -21,72 +20,64 @@ type Props = {
 };
 
 const Alert: React.FC<Props> = (props): React.ReactElement => {
-    const [show, setShow] = React.useState(false);
-    const [classes, setClasses] = React.useState({
-        title: '',
-        details: '',
-        icon: <></>,
-        background: ''
-    });
+    const [show, setShow] = React.useState(true);
 
-    React.useEffect(() => {
-        let classesCopy = classes;
+    const classes = React.useMemo(() => {
+        let title = '';
+        let details = '';
+        let icon = <></>;
+        let background = '';
 
         switch (props.severity) {
             case 'WARNING':
-                classesCopy.title = 'text-grey-800';
-                classesCopy.details = 'text-grey-700';
-                classesCopy.icon = (
+                title = 'text-grey-800';
+                details = 'text-grey-700';
+                icon = (
                     <OutlineIcons.ExclamationIcon
-                        className={`text h-5 w-5 text-grey-800 transition-colors duration-500 ${classes.icon}`}
+                        className="text h-5 w-5 text-grey-800 transition-colors duration-500"
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-yellow-200 dark:bg-yellow-500';
+                background = 'bg-yellow-200 dark:bg-yellow-500';
                 break;
             case 'ERROR':
-                classesCopy.title = 'text-white-50';
-                classesCopy.details = 'text-white-100';
-                classesCopy.icon = (
-                    <OutlineIcons.XCircleIcon className={`h-5 w-5 text-white-50 ${classes.icon}`} aria-hidden="true" />
-                );
-                classesCopy.background = 'bg-red-500';
+                title = 'text-white-50';
+                details = 'text-white-100';
+                icon = <OutlineIcons.XCircleIcon className="h-5 w-5 text-white-50" aria-hidden="true" />;
+                background = 'bg-red-500';
                 break;
             case 'SUCCESS':
-                classesCopy.title = 'text-grey-800 dark:text-white-50';
-                classesCopy.details = 'text-grey-700 dark:text-white-50';
-                classesCopy.icon = (
+                title = 'text-grey-800 dark:text-white-50';
+                details = 'text-grey-700 dark:text-white-50';
+                icon = (
                     <OutlineIcons.CheckCircleIcon
-                        className={`h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
+                        className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50"
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-green-300 dark:bg-green-500';
+                background = 'bg-green-300 dark:bg-green-500';
                 break;
             case 'RED_FLAG':
-                classesCopy.title = 'text-red-800';
-                classesCopy.details = 'text-red-700';
-                classesCopy.icon = (
-                    <SolidIcons.FlagIcon className={`h-5 w-5 text-red-800 ${classes.icon}`} aria-hidden="true" />
-                );
-                classesCopy.background = 'bg-red-50';
+                title = 'text-red-800';
+                details = 'text-red-700';
+                icon = <SolidIcons.FlagIcon className="h-5 w-5 text-red-800" aria-hidden="true" />;
+                background = 'bg-red-50';
                 break;
             default:
                 // Info
-                classesCopy.title = 'text-white-100 dark:text-white-50';
-                classesCopy.details = 'text-white-100 dark:text-grey-50';
-                classesCopy.icon = (
+                title = 'text-white-100 dark:text-white-50';
+                details = 'text-white-100 dark:text-grey-50';
+                icon = (
                     <OutlineIcons.InformationCircleIcon
-                        className={`h-5 w-5 text-white-100 transition-colors duration-500 dark:text-white-50 ${classes.icon}`}
+                        className="h-5 w-5 text-white-100 transition-colors duration-500 dark:text-white-50"
                         aria-hidden="true"
                     />
                 );
-                classesCopy.background = 'bg-teal-700 dark:bg-teal-700';
+                background = 'bg-teal-700 dark:bg-teal-700';
         }
 
-        setClasses(classesCopy);
-        setShow(true);
-    }, [props.severity, classes]);
+        return { title, details, icon, background };
+    }, [props.severity]);
 
     return (
         <Framer.AnimatePresence>
