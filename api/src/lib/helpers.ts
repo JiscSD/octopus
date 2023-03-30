@@ -54,7 +54,7 @@ export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
 
 const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     return {
-        name: `${user?.lastName}, ${user?.firstName}`,
+        name: `${user?.lastName}, ${user?.firstName}`, // datacite expects full name in lastname, firstname order
         givenName: user?.firstName,
         familyName: user?.lastName,
         nameType: 'Personal',
