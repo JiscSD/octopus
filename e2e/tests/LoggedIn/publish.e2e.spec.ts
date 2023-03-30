@@ -739,8 +739,8 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 
     await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
 
-    // Confirm publication states under review
-    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Under Review');
+    // Confirm publication states: Ready to publish
+    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
 
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
@@ -1347,7 +1347,7 @@ test.describe('Publication flow + co-authors', () => {
             page.locator(PageModel.publish.confirmPublishButtonTracker).click()
         ]);
 
-        // veryify publication is displayed as live on co-author profile
+        // verify publication is displayed as live on co-author profile
         await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
 
         await page.close();
@@ -1539,10 +1539,10 @@ test.describe('Publication flow + co-authors', () => {
 
         // check invited author is visible
         await expect(page.getByText(Helpers.user2.email)).toBeVisible();
-        await expect(page.locator('table button[title="Edit"]')).toBeVisible();
+        await expect(page.locator(`table button[title="Edit email for ${Helpers.user2.email}"]`)).toBeVisible();
 
         // change author's email
-        await page.locator('table button[title="Edit"]').click();
+        await page.locator(`table button[title="Edit email for ${Helpers.user2.email}"]`).click();
         await page.locator('input[name="authorEmail"]').click();
         await page.fill('input[name="authorEmail"]', '');
         await page.fill('input[name="authorEmail"]', Helpers.user3.email);
@@ -1608,7 +1608,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // re-send invitation to 'Unconfirmed Author'
         await expect(page.getByText('Unconfirmed Author')).toBeVisible();
-        await page.locator('table button[title="Resend Email"]').click();
+        await page.locator(`table button[title="Resend email to ${Helpers.user2.email}"]`).click();
         await expect(page.getByText('Re-Send author invite')).toBeVisible();
         await page.locator('button[title="Confirm"]').click();
 

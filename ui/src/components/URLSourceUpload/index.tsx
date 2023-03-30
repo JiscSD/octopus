@@ -32,12 +32,6 @@ const URLSourceUpload: React.FC<Props> = (props): React.ReactElement => {
 
             <div className="mt-6 flex justify-between space-x-4">
                 <Components.ModalButton
-                    text="Cancel"
-                    title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
-                    actionType="NEGATIVE"
-                />
-                <Components.ModalButton
                     text="Upload image"
                     title="Upload image"
                     disabled={!url}
@@ -45,6 +39,12 @@ const URLSourceUpload: React.FC<Props> = (props): React.ReactElement => {
                         url && props.positiveActionCallback(url);
                     }}
                     actionType="POSITIVE"
+                />
+                <Components.ModalButton
+                    text="Cancel"
+                    title="Cancel"
+                    onClick={() => props.negativeActionCallback()}
+                    actionType="NEGATIVE"
                 />
             </div>
         </section>

@@ -82,7 +82,6 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
@@ -339,23 +338,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publicationData.id}`} />
                 <title>{`${publicationData.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>
-            <Components.Modal
-                open={coAuthorModalState}
-                setOpen={setCoAuthorModalState}
-                positiveActionCallback={async () => {
-                    await updateCoAuthor(true);
-                    await mutate();
-                    setCoAuthorModalState(false);
-                }}
-                negativeActionCallback={async () => {
-                    await updateCoAuthor(false);
-                    await mutate();
-                    setCoAuthorModalState(false);
-                }}
-                positiveButtonText="Yes, this is ready to publish"
-                cancelButtonText="No, changes are needed"
-                title="Do you approve this publication?"
-            />
 
             <Layouts.Publication
                 fixedHeader={false}
@@ -457,8 +439,18 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             <p className="mt-2 text-sm text-white-50">
                                                 You have approved this publication. Would you like to{' '}
                                                 <button
-                                                    onClick={() => {
-                                                        setCoAuthorModalState(true);
+                                                    onClick={async () => {
+                                                        const confirmed = await confirmation(
+                                                            'Change your mind?',
+                                                            undefined,
+                                                            undefined,
+                                                            'Yes, changes are needed'
+                                                        );
+
+                                                        if (confirmed) {
+                                                            await updateCoAuthor(false);
+                                                            await mutate();
+                                                        }
                                                     }}
                                                     className="inline-block font-bold underline"
                                                 >
@@ -471,8 +463,18 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 <p className="mt-2 text-sm text-grey-800">
                                                     You have not yet approved this publication. Would you like to{' '}
                                                     <button
-                                                        onClick={() => {
-                                                            setCoAuthorModalState(true);
+                                                        onClick={async () => {
+                                                            const confirmed = await confirmation(
+                                                                'Do you approve this publication?',
+                                                                undefined,
+                                                                undefined,
+                                                                'Yes, this is ready to publish'
+                                                            );
+
+                                                            if (confirmed) {
+                                                                await updateCoAuthor(true);
+                                                                await mutate();
+                                                            }
                                                         }}
                                                         className="inline-block font-bold underline"
                                                     >
