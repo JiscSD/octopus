@@ -614,3 +614,32 @@ export const sendApprovalReminder = async (options: SendApprovalReminder): Promi
         subject: 'You’ve been added as a co-author on Octopus'
     });
 };
+
+type NotifyCoAuthorsAboutChanges = {
+    coAuthor: {
+        email: string;
+    };
+    publication: {
+        title: string;
+        url: string;
+    };
+};
+
+export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutChanges): Promise<void> => {
+    const html = `
+        <p>The corresponding author has made changes to a publication you are involved with. Please use the link below to review the draft publication to ensure you are happy with the changes:</p> 
+        <br>
+        <p style="text-align: center;"><strong><i><a href="${options.publication.url}">${options.publication.title}</a></i></strong></p>
+        <br>
+        <p>Your approval is required before the corresponding author can publish. If you have any concerns with the publication, please contact the corresponding author directly to discuss them.</p>
+    `;
+
+    const text = `The corresponding author has made changes to a publication you are involved with. Please use the link below to review the draft publication to ensure you are happy with the changes: ${options.publication.url} . Your approval is required before the corresponding author can publish. If you have any concerns with the publication, please contact the corresponding author directly to discuss them.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('Changes have been made to a publication that you are an author on', html),
+        text,
+        to: options.coAuthor.email,
+        subject: 'Changes have been made to a publication that you are an author on'
+    });
+};
