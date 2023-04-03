@@ -78,6 +78,14 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                                     Learn more
                                 </span>
                             </Components.Link>
+                            <Components.Link
+                                href={Config.urls.authorGuide.path}
+                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
+                            >
+                                <span className="text-center font-montserrat text-sm leading-none tracking-wide">
+                                    Author Guide
+                                </span>
+                            </Components.Link>
                             <button
                                 aria-label="Open search"
                                 className="flex w-52 items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
