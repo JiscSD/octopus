@@ -15,7 +15,7 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
             {props.items.map((item) => (
                 <li key={item.value} className="first:ml-0 last:mr-0 md:mx-1 lg:mx-2">
                     {item.subItems?.length ? (
-                        <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
+                        <HeadlessUI.Menu as="div" className="relative inline-block text-left">
                             <HeadlessUI.Menu.Button
                                 data-testid="username-button"
                                 className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
