@@ -10,30 +10,10 @@ type Props = {
 };
 
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
-    const publicationStatus = (publication: Interfaces.UserPublication, user: Interfaces.User) => {
-        if (publication.currentStatus === 'LIVE') return 'Live';
-
-        if (publication.currentStatus === 'DRAFT') {
-            return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
-        }
-
-        if (publication.coAuthors.length > 1) {
-            if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
-                return 'Ready to publish';
-            }
-
-            if (
-                user.id !== publication.createdBy &&
-                publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
-            ) {
-                return 'Pending your approval';
-            }
-        }
-
-        return 'Pending author approval';
-    };
-
-    const status = useMemo(() => publicationStatus(props.publication, props.user), [props.publication, props.user]);
+    const status = useMemo(
+        () => Helpers.getPublicationStatusByAuthor(props.publication, props.user),
+        [props.publication, props.user]
+    );
 
     return (
         <div className="w-full rounded border border-transparent bg-white-50 p-3 text-sm shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none sm:text-base">

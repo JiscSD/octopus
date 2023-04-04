@@ -264,23 +264,12 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             </h4>
                                         </div>
                                     ) : (
-                                        <div className="flex items-center justify-between gap-4">
-                                            <div className="flex items-center gap-4">
-                                                <OutlineIcons.BadgeCheckIcon className="w-6 text-green-500 duration-500 dark:text-green-300" />
-                                                <h4 className="text-lg dark:text-white-50">
-                                                    All authors have <span className="font-semibold">approved</span>{' '}
-                                                    this publication
-                                                </h4>
-                                            </div>
-                                            <Components.Button
-                                                disabled={props.isPublishing}
-                                                className="inline-flex items-center rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
-                                                endIcon={<OutlineIcons.CloudUploadIcon className="w-5 text-white-50" />}
-                                                title="Publish"
-                                                onClick={props.onPublish}
-                                            >
-                                                Publish
-                                            </Components.Button>
+                                        <div className="flex items-center justify-center gap-4">
+                                            <OutlineIcons.BadgeCheckIcon className="w-6 text-green-500 duration-500 dark:text-green-300" />
+                                            <h4 className="text-lg dark:text-white-50">
+                                                All authors have <span className="font-semibold">approved</span> this
+                                                publication
+                                            </h4>
                                         </div>
                                     )}
                                 </td>
