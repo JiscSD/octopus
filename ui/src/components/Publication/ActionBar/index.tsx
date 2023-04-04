@@ -90,7 +90,7 @@ const ActionBar: React.FC<Props> = (props) => {
                                             await props.onUnlockPublication();
                                         }}
                                     >
-                                        Cancel all authorship requests and unlock for editing.
+                                        Cancel all authorship requests and unlock for editing
                                     </Components.Link>
                                 )}
                             </div>
