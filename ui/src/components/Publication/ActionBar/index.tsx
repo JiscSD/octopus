@@ -80,19 +80,17 @@ const ActionBar: React.FC<Props> = (props) => {
                             <OutlineIcons.LockClosedIcon className="mr-2 inline max-w-[20px]" />
                             <div>
                                 <p className="pb-1">This publication is locked for approval.</p>
-                                {user?.id === props.publication.createdBy && (
-                                    <Components.Link
-                                        className="inline w-fit rounded text-teal-600 underline outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-teal-200 dark:decoration-teal-200"
-                                        href={`${Config.urls.viewPublication.path}/${props.publication.id}/edit?step=4`}
-                                        title="Edit publication"
-                                        onClick={async (e) => {
-                                            e.preventDefault();
-                                            await props.onUnlockPublication();
-                                        }}
-                                    >
-                                        Cancel all authorship requests and unlock for editing
-                                    </Components.Link>
-                                )}
+                                <Components.Link
+                                    className="inline w-fit rounded text-teal-600 underline outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-teal-200 dark:decoration-teal-200"
+                                    href={`${Config.urls.viewPublication.path}/${props.publication.id}/edit?step=4`}
+                                    title="Edit publication"
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        await props.onUnlockPublication();
+                                    }}
+                                >
+                                    Cancel all authorship requests and unlock for editing
+                                </Components.Link>
                             </div>
                         </div>
                     )}
