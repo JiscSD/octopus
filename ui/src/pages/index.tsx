@@ -69,10 +69,10 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             upon the latest work.
                         </p>
 
-                        <div className="mx-auto flex w-fit space-x-6">
+                        <div className="mx-auto flex w-fit flex-wrap justify-around gap-y-5 space-x-6">
                             <Components.Link
                                 href={Config.urls.about.path}
-                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
+                                className="flex items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:px-4"
                             >
                                 <span className="text-center font-montserrat text-sm leading-none tracking-wide">
                                     Learn more
@@ -80,7 +80,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.Link>
                             <Components.Link
                                 href={Config.urls.authorGuide.path}
-                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
+                                className="flex items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:px-4"
                             >
                                 <span className="text-center font-montserrat text-sm leading-none tracking-wide">
                                     Author Guide

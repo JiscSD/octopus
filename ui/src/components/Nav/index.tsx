@@ -45,6 +45,7 @@ const Nav: React.FC = (): React.ReactElement => {
             menuItems.push({
                 label: `${user?.firstName} ${user?.lastName}`,
                 value: `${Config.urls.viewUser.path}/${user.id}`,
+                dataTestId: 'username-button',
                 subItems: [
                     {
                         label: 'My Profile',
@@ -62,7 +63,7 @@ const Nav: React.FC = (): React.ReactElement => {
         return menuItems;
     }, [user]);
 
-    return isDesktop ? <Components.NavDesktop user={user} items={items} /> : <Components.NavMobile items={items} />;
+    return isDesktop ? <Components.NavDesktop items={items} /> : <Components.NavMobile items={items} />;
 };
 
 export default Nav;
