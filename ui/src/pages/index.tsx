@@ -68,31 +68,30 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             enabling peer review and quality assessment and allowing the academic community to build
                             upon the latest work.
                         </p>
-
-                        <div className="mx-auto flex w-fit flex-wrap justify-between gap-y-5 lg:justify-evenly lg:space-x-6">
+                        <div className="mx-auto flex w-full flex-wrap gap-6 sm:w-fit sm:justify-between">
                             <Components.Link
                                 href={Config.urls.about.path}
-                                className="flex w-2/5 items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:px-4 lg:w-auto"
+                                className="flex flex-1 items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
                             >
-                                <span className="mx-auto text-center font-montserrat text-sm leading-none tracking-wide">
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
                                     Learn more
                                 </span>
                             </Components.Link>
                             <Components.Link
                                 href={Config.urls.authorGuide.path}
-                                className="flex w-2/5 items-center space-x-4 rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:px-4 lg:w-auto"
+                                className="flex flex-1 items-center space-x-4 rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
                             >
-                                <span className="mx-auto text-center font-montserrat text-sm leading-none tracking-wide">
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
                                     Author Guide
                                 </span>
                             </Components.Link>
                             <button
                                 aria-label="Open search"
-                                className="flex w-full items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 lg:w-52"
+                                className="flex w-full items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 sm:w-52"
                                 onClick={(e) => toggleCmdPalette()}
                             >
-                                <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="mx-auto font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
+                                <OutlineIcons.SearchIcon className="h-6 w-6 flex-shrink-0 text-white-50 transition-colors duration-500 dark:text-teal-500" />
+                                <span className="w-full text-center font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
                                     Quick search...
                                 </span>
                             </button>
