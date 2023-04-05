@@ -1,4 +1,0 @@
-bucket  = "octopus-app-prod-tfstate"
-key     = "terraform.tfstate"
-region  = "eu-west-2"
-profile = "octopus"
