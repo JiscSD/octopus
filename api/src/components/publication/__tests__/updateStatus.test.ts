@@ -156,7 +156,7 @@ describe('Update publication status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updatePublication.status).toEqual(404);
+        expect(updatePublication.status).toEqual(403);
         expect(updatePublication.body.message).toEqual(
             'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
         );
