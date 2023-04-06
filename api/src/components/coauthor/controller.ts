@@ -349,7 +349,7 @@ export const requestApproval = async (
             // check if publication is ready to be LOCKED
             if (!publicationService.isReadyToLock(publication)) {
                 return response.json(403, {
-                    message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                    message: 'Please make sure all required fields are filled in before requesting approval.'
                 });
             }
 
