@@ -267,6 +267,29 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    const handleCancelApproval = async () => {
+        const confirmed = await confirmation('Change your mind?', undefined, undefined, 'Yes, changes are needed');
+
+        if (confirmed) {
+            await updateCoAuthor(false);
+            await mutate();
+        }
+    };
+
+    const handleApproval = async () => {
+        const confirmed = await confirmation(
+            'Do you approve this publication?',
+            undefined,
+            undefined,
+            'Yes, this is ready to publish'
+        );
+
+        if (confirmed) {
+            await updateCoAuthor(true);
+            await mutate();
+        }
+    };
+
     const activeFlags = React.useMemo(
         () => publicationData?.publicationFlags?.filter((flag) => !flag.resolved),
         [publicationData]
@@ -384,129 +407,34 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </>
                     )}
-                    {publicationData.currentStatus === 'LOCKED' && (
-                        <>
-                            <Components.Alert
-                                className="mb-4"
-                                severity={alertSeverity}
-                                title={`This is a draft publication only visible to authors. ${
-                                    showApprovalsTracker
-                                        ? isReadyForPublish
-                                            ? 'All authors have approved this publication.'
-                                            : 'All authors must approve this draft before it can be published.'
-                                        : ''
-                                }`}
-                            >
-                                {isCorrespondingUser ? (
-                                    <>
-                                        {isReadyForPublish && (
-                                            <Components.Link
-                                                className={`mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline ${
-                                                    isPublishing ? 'hover:cursor-not-allowed' : ''
-                                                }`}
-                                                href="#"
-                                                title="Publish"
-                                                onClick={
-                                                    isPublishing
-                                                        ? undefined
-                                                        : async (e) => {
-                                                              e.preventDefault();
-                                                              await handlePublish();
-                                                          }
-                                                }
-                                            >
-                                                <OutlineIcons.CloudUploadIcon className="w-4" />
-                                                <span>Click here to publish</span>
-                                            </Components.Link>
-                                        )}
-                                        <Components.Link
-                                            openNew={false}
-                                            title="Edit publication"
-                                            href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
-                                            className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
-                                            onClick={async (e) => {
-                                                e.preventDefault();
-                                                await handleUnlock();
-                                            }}
-                                        >
-                                            <OutlineIcons.PencilAltIcon className="w-4" />
-                                            <span>Cancel Requests and Unlock for Editing</span>
-                                        </Components.Link>
-                                    </>
-                                ) : (
-                                    <>
-                                        {currentCoAuthor?.confirmedCoAuthor ? (
-                                            <p className="mt-2 text-sm text-white-50">
-                                                You have approved this publication. Would you like to{' '}
-                                                <button
-                                                    onClick={async () => {
-                                                        const confirmed = await confirmation(
-                                                            'Change your mind?',
-                                                            undefined,
-                                                            undefined,
-                                                            'Yes, changes are needed'
-                                                        );
 
-                                                        if (confirmed) {
-                                                            await updateCoAuthor(false);
-                                                            await mutate();
-                                                        }
-                                                    }}
-                                                    className="inline-block font-bold underline"
-                                                >
-                                                    change your mind
-                                                </button>
-                                                ?
-                                            </p>
-                                        ) : (
-                                            <>
-                                                <p className="mt-2 text-sm text-grey-800">
-                                                    You have not yet approved this publication. Would you like to{' '}
-                                                    <button
-                                                        onClick={async () => {
-                                                            const confirmed = await confirmation(
-                                                                'Do you approve this publication?',
-                                                                undefined,
-                                                                undefined,
-                                                                'Yes, this is ready to publish'
-                                                            );
-
-                                                            if (confirmed) {
-                                                                await updateCoAuthor(true);
-                                                                await mutate();
-                                                            }
-                                                        }}
-                                                        className="inline-block font-bold underline"
-                                                    >
-                                                        approve
-                                                    </button>
-                                                    ?
-                                                </p>
-                                                <p className="mt-2 text-sm text-grey-800">
-                                                    If any changes are required, please discuss with the corresponding
-                                                    author.
-                                                </p>
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </Components.Alert>
-
-                            {serverError && <Components.Alert severity="ERROR" title={serverError} />}
-
-                            {showApprovalsTracker && (
-                                <div className="pb-16">
-                                    <Components.ApprovalsTracker
-                                        publication={publicationData}
-                                        isPublishing={isPublishing}
-                                        onPublish={handlePublish}
-                                        onError={setServerError}
-                                        refreshPublicationData={mutate}
-                                    />
-                                </div>
-                            )}
-                        </>
+                    {showApprovalsTracker && (
+                        <Components.ActionBar
+                            publication={publicationData}
+                            isCorrespondingUser={isCorrespondingUser}
+                            isReadyForPublish={isReadyForPublish}
+                            isPublishing={isPublishing}
+                            onUnlockPublication={handleUnlock}
+                            onApprove={handleApproval}
+                            onCancelApproval={handleCancelApproval}
+                            onPublish={handlePublish}
+                        />
                     )}
+
+                    {serverError && <Components.Alert severity="ERROR" title={serverError} />}
+
+                    {showApprovalsTracker && (
+                        <div className="pb-16">
+                            <Components.ApprovalsTracker
+                                publication={publicationData}
+                                isPublishing={isPublishing}
+                                onPublish={handlePublish}
+                                onError={setServerError}
+                                refreshPublicationData={mutate}
+                            />
+                        </div>
+                    )}
+
                     {!!uniqueRedFlagCategoryList.length && (
                         <Components.Alert
                             title="This publication has active red flags for:"

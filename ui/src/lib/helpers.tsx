@@ -8,6 +8,7 @@ import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Interfaces from '@interfaces';
 
 /**
  * @description Truncates a string
@@ -79,7 +80,7 @@ export const formatStatus = (status: Types.PublicationStatuses): string => {
         DRAFT: 'Draft',
         LIVE: 'Live',
         HIDDEN: 'Hidden',
-        LOCKED: 'Draft'
+        LOCKED: 'Locked'
     };
 
     return statuses[status];
@@ -360,3 +361,29 @@ export const validateEmail = (email: string): Boolean => {
 };
 
 export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
+
+export const getPublicationStatusByAuthor = (
+    publication: Interfaces.Publication | Interfaces.UserPublication,
+    user: Types.UserType | Interfaces.User
+) => {
+    if (publication.currentStatus === 'LIVE') return 'Live';
+
+    if (publication.currentStatus === 'DRAFT') {
+        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    }
+
+    if (publication.coAuthors.length > 1) {
+        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+            return 'Ready to publish';
+        }
+
+        if (
+            user.id !== publication.createdBy &&
+            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+        ) {
+            return 'Pending your approval';
+        }
+    }
+
+    return 'Pending author approval';
+};

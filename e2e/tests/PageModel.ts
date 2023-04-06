@@ -165,7 +165,7 @@ export const PageModel = {
         replaceButton: 'button:has-text("Replace")',
         importModal: 'div[title="Document Import"]',
         draftEditButton: 'a[role="button"]:has-text("Edit draft publication")',
-        unlockButton: 'a:has-text("Cancel Requests and Unlock for Editing")',
+        unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
             licence: 'select#licence',
