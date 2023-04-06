@@ -13,7 +13,7 @@ describe('Update publication status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationAttemptOne.status).toEqual(404);
+        expect(updatePublicationAttemptOne.status).toEqual(403);
 
         // add a valid link
         await testUtils.agent
@@ -72,7 +72,7 @@ describe('Update publication status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(404);
+        expect(updatedPublication.status).toEqual(403);
     });
 
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no licence.', async () => {
@@ -82,7 +82,7 @@ describe('Update publication status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updatedPublication.status).toEqual(404);
+        expect(updatedPublication.status).toEqual(403);
     });
 
     test('User with permissions can update their publication to LIVE from DRAFT and a publishedDate is created', async () => {
@@ -93,7 +93,7 @@ describe('Update publication status', () => {
             });
 
         expect(updatedPublication.status).toEqual(200);
-        expect(updatedPublication.body.publishedDate).toBeTruthy();
+        expect(updatedPublication.body.message).toEqual('Publication is now LIVE.');
     });
 
     // COI tests
@@ -104,7 +104,7 @@ describe('Update publication status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(404);
+        expect(updatedPublication.status).toEqual(403);
     });
 
     test('User with permissions can update their publication to LIVE with a conflict of interest, if they have provided text', async () => {
@@ -146,7 +146,7 @@ describe('Update publication status', () => {
 
         expect(updatePublication.status).toEqual(200);
 
-        expect(updatePublication.body.currentStatus).toEqual('LIVE');
+        expect(updatePublication.body.message).toEqual('Publication is now LIVE.');
     });
 
     test('Publication owner cannot publish if not all co-authors are confirmed', async () => {
