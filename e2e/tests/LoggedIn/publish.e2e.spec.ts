@@ -669,7 +669,7 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
 
     await (await page3.waitForSelector('button[title="Yes, this is ready to publish"]')).click();
 
-    await page3.waitForSelector('button:has-text("change your mind")');
+    await page3.waitForSelector('button[title="Cancel your approval"]');
     await context.close();
 };
 
@@ -744,7 +744,7 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 
     // // Confirm publication is showed as draft
     await page.locator(`a:has-text("${publicationTitle}")`).click();
-    await expect(page.locator('button:has-text("change your mind")')).toBeVisible();
+    await expect(page.locator('button[title="Cancel your approval"]')).toBeVisible();
     await expect(page.locator(`h1:has-text("${publicationTitle}")`)).toHaveText(publicationTitle);
 
     await context.close();
@@ -767,7 +767,7 @@ export const verifyPublicationIsDisplayedAsLiveForCoAuthor = async (
 
     // Confirm publication is showed as live
     await page.locator(`a:has-text("${publicationTitle}")`).click();
-    await expect(page.locator('button:has-text("change your mind")')).not.toBeVisible();
+    await expect(page.locator('button[title="Cancel your approval"]')).not.toBeVisible();
     await expect(page.locator(`h1:has-text("${publicationTitle}")`)).toHaveText(publicationTitle);
 
     await context.close();
@@ -1461,7 +1461,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForNavigation();
 
         // check preview page
-        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.getByText('This publication is locked for approval')).toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
         await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
         await expect(page.getByText('2 more author approvals are required before publishing')).toBeVisible();
@@ -1486,7 +1486,7 @@ test.describe('Publication flow + co-authors', () => {
         ]);
 
         // check draft publication controls are not available anymore
-        await expect(page.getByText('This is a draft publication')).not.toBeVisible();
+        await expect(page.getByText('This publication is locked for approval')).not.toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).not.toBeVisible();
 
         await page.close();
@@ -1531,7 +1531,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
         // check preview page
-        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.getByText('This publication is locked for approval')).toBeVisible();
         await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
         await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
@@ -1597,7 +1597,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForNavigation();
 
         // check preview page
-        await expect(page.getByText('This is a draft publication')).toBeVisible();
+        await expect(page.getByText('This publication is locked for approval')).toBeVisible();
         await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
         await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
