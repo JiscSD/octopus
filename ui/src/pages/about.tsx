@@ -124,37 +124,20 @@ const About: NextPage = (): React.ReactElement => (
             </PageSection>
 
             <PageSection>
-                <div className="mx-10 grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
-                    <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
-                        <div className="text-center lg:mt-5">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Do you feel like these principles align with your own?
-                            </h2>
-                            <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
-                                You can help to support Octopus by joining our user community.
-                            </p>
-                            <Components.Button
-                                title="Learn more about getting involved."
-                                href={Config.urls.getInvolved.path}
-                                endIcon={
-                                    <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                            />
-                        </div>
-                    </div>
-                    <div className="container col-span-2 mx-auto mb-10 gap-6 transition-all duration-500 lg:mb-24">
-                        <h2 className="mx-auto mb-8 block w-5/6 text-center font-montserrat text-2xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100">
-                            A quick introduction to Octopus from its creator, Alex Freeman
+                <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
+                    <div className="text-center lg:mt-5">
+                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Do you feel like these principles align with your own?
                         </h2>
-                        <Components.HTMLVideo
-                            srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
-                            srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
-                            title="A quick introduction to Octopus: the new primary research record for science"
-                            showCaption={false}
-                            controls={true}
-                            poster="/images/jpg/poster.jpg"
-                            width={1080}
-                            className="mx-auto !w-full"
+                        <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
+                            You can help to support Octopus by joining our user community.
+                        </p>
+                        <Components.Button
+                            title="Learn more about getting involved."
+                            href={Config.urls.getInvolved.path}
+                            endIcon={
+                                <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            }
                         />
                     </div>
                 </div>
