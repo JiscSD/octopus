@@ -18,6 +18,24 @@ const Nav: React.FC = (): React.ReactElement => {
                 value: Config.urls.browsePublications.path
             },
             {
+                label: 'How To',
+                value: '',
+                subItems: [
+                    {
+                        label: 'FAQ',
+                        value: Config.urls.faq.path
+                    },
+                    {
+                        label: 'Author Guide',
+                        value: Config.urls.authorGuide.path
+                    },
+                    {
+                        label: 'Our Aims',
+                        value: Config.urls.octopusAims.path
+                    }
+                ]
+            },
+            {
                 label: 'Publish',
                 value: Config.urls.createPublication.path
             }
@@ -27,6 +45,7 @@ const Nav: React.FC = (): React.ReactElement => {
             menuItems.push({
                 label: `${user?.firstName} ${user?.lastName}`,
                 value: `${Config.urls.viewUser.path}/${user.id}`,
+                dataTestId: 'username-button',
                 subItems: [
                     {
                         label: 'My Profile',

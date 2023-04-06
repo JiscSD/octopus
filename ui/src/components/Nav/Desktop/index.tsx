@@ -4,6 +4,7 @@ import * as HeadlessUI from '@headlessui/react';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
+import * as Types from '@types';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
@@ -17,7 +18,7 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                     {item.subItems?.length ? (
                         <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
                             <HeadlessUI.Menu.Button
-                                data-testid="username-button"
+                                data-testid={item.dataTestId}
                                 className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
                             >
                                 <span className="flex items-center">

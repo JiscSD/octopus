@@ -11,6 +11,7 @@ export interface JSONResponseError extends Axios.AxiosError {}
 export interface NavMenuItem {
     label: string;
     value: string;
+    dataTestId?: string;
     subItems?: NavMenuItem[] | React.ReactNode[] | any[];
 }
 
