@@ -159,14 +159,12 @@ export const link = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        // Does the publication exist?
         if (!publication) {
             return response.json(404, {
                 message: 'This publication does not exist.'
             });
         }
 
-        // Is the publication in draft?
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
@@ -201,6 +199,13 @@ export const link = async (
                     authorEmail: publication.user.email || ''
                 }
             });
+
+            // check if this was the last co-author who denied their involvement
+            if (publication.coAuthors.length === 2) {
+                // this means only the creator remained and we can safely update publication status back to DRAFT
+                // to avoid publication being LOCKED without co-authors
+                await publicationService.updateStatus(publication.id, 'DRAFT', false);
+            }
 
             return response.json(200, 'Removed co-author from publication');
         }
