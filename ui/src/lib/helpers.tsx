@@ -39,11 +39,10 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
         month: formatType || 'long',
         year: 'numeric',
         hour: 'numeric',
-        minute: 'numeric',
-        timeZoneName: 'shortGeneric'
+        minute: 'numeric'
     });
 
-    return date === 'Invalid DateTime' ? 'N/A' : date;
+    return date === 'Invalid DateTime' ? 'N/A' : `${date} GMT`;
 };
 
 /**
