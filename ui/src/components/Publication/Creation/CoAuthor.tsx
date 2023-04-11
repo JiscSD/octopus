@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import cuid from 'cuid';
 
 import * as OutlineIcons from '@heroicons/react/outline';
@@ -9,7 +9,7 @@ import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 import * as I from '@interfaces';
 
-import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult, DragStart, DroppableProps } from 'react-beautiful-dnd';
 
 // reorder the result
 const reorder = (list: I.CoAuthor[], startIndex: number, endIndex: number) => {
@@ -78,6 +78,11 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
     const [emailDuplicated, SetEmailDuplicated] = React.useState(true);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) {
@@ -250,46 +255,48 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                                 </thead>
 
                                 <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onBeforeDragStart}>
-                                    <Droppable droppableId="droppable">
-                                        {(provided, snapshot) => (
-                                            <tbody
-                                                className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600"
-                                                {...provided.droppableProps}
-                                                ref={provided.innerRef}
-                                                style={getListStyle(snapshot.isDraggingOver)}
-                                            >
-                                                {coAuthors.map((coAuthor, index) => (
-                                                    <Draggable
-                                                        key={coAuthor.id}
-                                                        draggableId={coAuthor.id}
-                                                        index={index}
-                                                    >
-                                                        {(provided, snapshot) => (
-                                                            <Components.PublicationCreationCoAuthorEntry
-                                                                key={coAuthor.id}
-                                                                coAuthor={coAuthor}
-                                                                deleteCoAuthor={deleteCoAuthor}
-                                                                dragHandleProps={provided.dragHandleProps}
-                                                                isMainAuthor={coAuthor.linkedUser === user?.id} // only main author can access 'edit draft' screen atm
-                                                                entryProps={{
-                                                                    id: coAuthor.id,
-                                                                    className:
-                                                                        'box-border w-full h-full bg-white-50 outline-0 ring-offset-1 focus:ring-2 focus:ring-inset focus:ring-yellow-400 last-of-type:focus:rounded-b-lg dark:bg-grey-600',
-                                                                    ref: provided.innerRef,
-                                                                    ...provided.draggableProps,
-                                                                    style: getItemStyle(
-                                                                        snapshot.isDragging,
-                                                                        provided.draggableProps.style
-                                                                    )
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </tbody>
-                                        )}
-                                    </Droppable>
+                                    {isMounted && (
+                                        <Droppable droppableId="droppable">
+                                            {(provided, snapshot) => (
+                                                <tbody
+                                                    className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600"
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}
+                                                    style={getListStyle(snapshot.isDraggingOver)}
+                                                >
+                                                    {coAuthors.map((coAuthor, index) => (
+                                                        <Draggable
+                                                            key={coAuthor.id}
+                                                            draggableId={coAuthor.id}
+                                                            index={index}
+                                                        >
+                                                            {(provided, snapshot) => (
+                                                                <Components.PublicationCreationCoAuthorEntry
+                                                                    key={coAuthor.id}
+                                                                    coAuthor={coAuthor}
+                                                                    deleteCoAuthor={deleteCoAuthor}
+                                                                    dragHandleProps={provided.dragHandleProps}
+                                                                    isMainAuthor={coAuthor.linkedUser === user?.id} // only main author can access 'edit draft' screen atm
+                                                                    entryProps={{
+                                                                        id: coAuthor.id,
+                                                                        className:
+                                                                            'box-border w-full h-full bg-white-50 outline-0 ring-offset-1 focus:ring-2 focus:ring-inset focus:ring-yellow-400 last-of-type:focus:rounded-b-lg dark:bg-grey-600',
+                                                                        ref: provided.innerRef,
+                                                                        ...provided.draggableProps,
+                                                                        style: getItemStyle(
+                                                                            snapshot.isDragging,
+                                                                            provided.draggableProps.style
+                                                                        )
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </tbody>
+                                            )}
+                                        </Droppable>
+                                    )}
                                 </DragDropContext>
                             </table>
                         </div>

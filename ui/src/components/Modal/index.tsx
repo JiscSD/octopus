@@ -84,7 +84,6 @@ const Modal: React.FC<Props> = (props) => {
                                             : props.setOpen(false)
                                     }
                                     disabled={props.disableButtons}
-                                    ref={cancelButtonRef}
                                     text={props.cancelButtonText}
                                     title={props.cancelButtonText}
                                     actionType="NEGATIVE"

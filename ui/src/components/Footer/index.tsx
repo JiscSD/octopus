@@ -97,7 +97,13 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     </h4>
                     <div className="flex">
                         <Components.Link href="https://www.ukri.org/" openNew={true} className="flex w-fit">
-                            <Image src="/images/logo-ukri.png" alt="UKRI" width={200} height={64} />
+                            <Image
+                                src="/images/logo-ukri.png"
+                                alt="UKRI"
+                                width={200}
+                                height={64}
+                                style={{ width: 200, height: 64 }} // it seems there are some issues with Image component in next 13 - https://github.com/vercel/next.js/issues/40762
+                            />
                         </Components.Link>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ import * as Types from '@types';
  */
 const ConflictOfInterest: React.FC = (): React.ReactElement => {
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
+        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus || false
     );
     const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
         (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestStatus

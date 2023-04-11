@@ -559,22 +559,21 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                     <div className="relative top-[30%] mx-auto max-w-sm rounded bg-white-50 p-4 shadow-sm">
                         <HeadlessUi.Dialog.Title className="sr-only">Add your link</HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                            <label htmlFor="link" className="mt-4 block text-sm font-medium text-grey-700">
-                                Enter your link
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    value={linkUrl}
-                                    onChange={(e) => setLinkUrl(e.target.value)}
-                                    type="text"
-                                    name="link"
-                                    id="link"
-                                    accept="image/png, image/jpeg, image/jpg"
-                                    className="block w-full rounded-md border-grey-300 shadow-sm placeholder:font-light focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
-                                />
-                            </div>
-                        </HeadlessUi.Dialog.Description>
+
+                        <label htmlFor="link" className="mt-4 block text-sm font-medium text-grey-700">
+                            Enter your link
+                        </label>
+                        <div className="mt-2">
+                            <input
+                                value={linkUrl}
+                                onChange={(e) => setLinkUrl(e.target.value)}
+                                type="text"
+                                name="link"
+                                id="link"
+                                accept="image/png, image/jpeg, image/jpg"
+                                className="block w-full rounded-md border-grey-300 shadow-sm placeholder:font-light focus:border-yellow-500 focus:outline-none focus:ring-yellow-500 sm:text-sm"
+                            />
+                        </div>
 
                         <div className="mt-6 flex justify-between">
                             <button
@@ -606,26 +605,25 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
                     <div className="relative w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
                         <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                            <Components.Tabs
-                                tabHead={['File upload', 'URL source']}
-                                tabBody={[
-                                    <Components.FileUpload
-                                        key="file-upload"
-                                        positiveActionCallback={handleUploadImage}
-                                        negativeActionCallback={clearImageAndCloseModal}
-                                        loading={loading}
-                                        uploadErrors={uploadImageErrors}
-                                    />,
-                                    <Components.URLSourceUpload
-                                        key="url-source-upload"
-                                        image={image}
-                                        positiveActionCallback={handleURLSourceUpload}
-                                        negativeActionCallback={clearImageAndCloseModal}
-                                    />
-                                ]}
-                            />
-                        </HeadlessUi.Dialog.Description>
+
+                        <Components.Tabs
+                            tabHead={['File upload', 'URL source']}
+                            tabBody={[
+                                <Components.FileUpload
+                                    key="file-upload"
+                                    positiveActionCallback={handleUploadImage}
+                                    negativeActionCallback={clearImageAndCloseModal}
+                                    loading={loading}
+                                    uploadErrors={uploadImageErrors}
+                                />,
+                                <Components.URLSourceUpload
+                                    key="url-source-upload"
+                                    image={image}
+                                    positiveActionCallback={handleURLSourceUpload}
+                                    negativeActionCallback={clearImageAndCloseModal}
+                                />
+                            ]}
+                        />
                     </div>
                 </HeadlessUi.Dialog>
 
@@ -641,47 +639,46 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <HeadlessUi.Dialog.Title className="sr-only">
                             Import a Word document (.docx only)
                         </HeadlessUi.Dialog.Title>
-                        <HeadlessUi.Dialog.Description>
-                            <label htmlFor="document-import">
-                                <input
-                                    name="document-import"
-                                    ref={importDocumentInput}
-                                    type="file"
-                                    aria-label="Choose a Word document"
-                                    accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                                />
-                                <span className="sr-only">Choose a Word document</span>
-                            </label>
-                            <div className="mt-6 flex justify-between space-x-4">
-                                <button
-                                    type="submit"
-                                    name="insert"
-                                    onClick={(e) => handleImportDocument(e, false)}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
-                                >
-                                    Insert
-                                </button>
-                                <button
-                                    type="submit"
-                                    name="replace"
-                                    onClick={(e) => handleImportDocument(e, true)}
-                                    disabled={props.editor.isEmpty}
-                                    className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
-                                >
-                                    Replace existing
-                                </button>
-                            </div>
-                            <div className="mt-6 flex justify-between space-x-4">
-                                <Components.ModalButton
-                                    onClick={() => props.setImportModalVisible(false)}
-                                    disabled={false}
-                                    text="Cancel"
-                                    title="Cancel"
-                                    actionType="NEGATIVE"
-                                />
-                            </div>
-                        </HeadlessUi.Dialog.Description>
+
+                        <label htmlFor="document-import">
+                            <input
+                                name="document-import"
+                                ref={importDocumentInput}
+                                type="file"
+                                aria-label="Choose a Word document"
+                                accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                            />
+                            <span className="sr-only">Choose a Word document</span>
+                        </label>
+                        <div className="mt-6 flex justify-between space-x-4">
+                            <button
+                                type="submit"
+                                name="insert"
+                                onClick={(e) => handleImportDocument(e, false)}
+                                className="mt-3 inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                            >
+                                Insert
+                            </button>
+                            <button
+                                type="submit"
+                                name="replace"
+                                onClick={(e) => handleImportDocument(e, true)}
+                                disabled={props.editor.isEmpty}
+                                className="mt-3 inline-flex w-full justify-center rounded-md border bg-teal-600 px-4 py-2 text-base font-medium text-white-50 shadow-sm hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 disabled:opacity-50 disabled:hover:bg-teal-600 sm:col-start-1 sm:mt-0 sm:text-sm"
+                            >
+                                Replace existing
+                            </button>
+                        </div>
+                        <div className="mt-6 flex justify-between space-x-4">
+                            <Components.ModalButton
+                                onClick={() => props.setImportModalVisible(false)}
+                                disabled={false}
+                                text="Cancel"
+                                title="Cancel"
+                                actionType="NEGATIVE"
+                            />
+                        </div>
                     </div>
                 </HeadlessUi.Dialog>
             </>

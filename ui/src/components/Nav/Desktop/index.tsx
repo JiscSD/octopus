@@ -1,10 +1,8 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
-
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
-import * as Types from '@types';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
