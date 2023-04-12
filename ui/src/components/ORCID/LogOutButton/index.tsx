@@ -18,14 +18,7 @@ const LogOutButton: React.FC = (): React.ReactElement => {
         setUser(null);
     };
 
-    return (
-        <button
-            onClick={handleLogOut}
-            className="block w-full rounded border-transparent text-left outline-0 focus:ring-2 focus:ring-yellow-400"
-        >
-            Log out
-        </button>
-    );
+    return <button onClick={handleLogOut}>Log out</button>;
 };
 
 export default LogOutButton;
