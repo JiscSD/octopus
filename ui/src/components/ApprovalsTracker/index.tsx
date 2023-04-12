@@ -141,15 +141,22 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         [props.publication.coAuthors]
     );
 
+    const isCorrespondingUser = useMemo(
+        () => props.publication.createdBy === user?.id,
+        [props.publication.createdBy, user?.id]
+    );
+
     return (
         <div className="children:transition-colors">
             <h4 className="mt-8 text-lg dark:text-white-50">
                 Your role on this publication:{' '}
-                <span className="font-semibold">
-                    {props.publication.createdBy === user?.id ? 'Corresponding author' : 'Author'}
-                </span>
+                <span className="font-semibold">{isCorrespondingUser ? 'Corresponding author' : 'Author'}</span>
             </h4>
-            <div className="my-2 overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
+            <div
+                className={`mt-2 overflow-x-auto ${
+                    isCorrespondingUser ? 'rounded-t-lg' : 'rounded-lg'
+                } shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent`}
+            >
                 <table
                     data-testid="approval-tracker-table"
                     className="min-w-full divide-y divide-grey-100 dark:divide-teal-300"
@@ -162,7 +169,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                             <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                 Status
                             </th>
-                            {user?.id === props.publication.createdBy && (
+                            {isCorrespondingUser && (
                                 <>
                                     <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                         Edit email
@@ -191,14 +198,10 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     ) : (
                                         <>Unconfirmed Author</>
                                     )}
-                                    {user?.id === props.publication.createdBy && (
-                                        <p className="mt-1 text-xs">{author.email}</p>
-                                    )}
+                                    {isCorrespondingUser && <p className="mt-1 text-xs">{author.email}</p>}
                                 </td>
                                 <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                    {user?.id === props.publication.createdBy &&
-                                    !author.linkedUser &&
-                                    author.reminderDate ? (
+                                    {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
                                         <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
                                     ) : author.linkedUser === props.publication.createdBy ? (
                                         <>Corresponding author</>
@@ -210,7 +213,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         <>Unconfirmed</>
                                     )}
                                 </td>
-                                {user?.id === props.publication.createdBy && (
+                                {isCorrespondingUser && (
                                     <>
                                         <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
                                             {!author.linkedUser && (
@@ -248,37 +251,26 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                             </tr>
                         ))}
                     </tbody>
-                    {user?.id === props.publication.createdBy && (
-                        <tfoot className="bg-grey-50 duration-500 dark:bg-grey-700">
-                            <tr>
-                                <td
-                                    colSpan={4}
-                                    className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50"
-                                >
-                                    {remainingApprovalsCount > 0 ? (
-                                        <div className="text-center">
-                                            <h4 className="text-lg dark:text-white-50">
-                                                <span className="font-semibold">{remainingApprovalsCount}</span> more
-                                                author {remainingApprovalsCount === 1 ? 'approval is' : 'approvals are'}{' '}
-                                                required before publishing
-                                            </h4>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center justify-center gap-4">
-                                            <OutlineIcons.BadgeCheckIcon className="w-6 text-green-500 duration-500 dark:text-green-300" />
-                                            <h4 className="text-lg dark:text-white-50">
-                                                All authors have <span className="font-semibold">approved</span> this
-                                                publication
-                                            </h4>
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    )}
                 </table>
             </div>
-            {user?.id === props.publication.createdBy && (
+            {isCorrespondingUser && (
+                <div className="rounded-b-lg bg-grey-50 py-4 px-6 text-left text-sm text-grey-900 dark:bg-grey-700 dark:text-white-50 sm:text-center">
+                    {remainingApprovalsCount > 0 ? (
+                        <h4 className="text-lg dark:text-white-50">
+                            <span className="font-semibold">{remainingApprovalsCount}</span> more author{' '}
+                            {remainingApprovalsCount === 1 ? 'approval is' : 'approvals are'} required before publishing
+                        </h4>
+                    ) : (
+                        <div className="flex items-center gap-4 sm:justify-center">
+                            <OutlineIcons.BadgeCheckIcon className="w-6 flex-shrink-0 text-green-500 dark:text-green-300" />
+                            <h4 className="text-lg dark:text-white-50">
+                                All authors have <span className="font-semibold">approved</span> this publication
+                            </h4>
+                        </div>
+                    )}
+                </div>
+            )}
+            {isCorrespondingUser && (
                 <Components.Modal
                     open={Boolean(selectedAuthor)}
                     icon={<FaIcons.FaEdit className="h-8 w-8 text-grey-600" />}
