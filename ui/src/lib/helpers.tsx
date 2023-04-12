@@ -42,7 +42,7 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
         minute: 'numeric'
     });
 
-    return date === 'Invalid DateTime' ? 'N/A' : date;
+    return date === 'Invalid DateTime' ? 'N/A' : `${date} GMT`;
 };
 
 /**
