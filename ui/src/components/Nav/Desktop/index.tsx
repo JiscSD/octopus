@@ -39,27 +39,43 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                     as="ul"
                                     className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                 >
-                                    {item.subItems.map((subItem, index) => (
-                                        <li
-                                            key={index}
-                                            className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
-                                        >
-                                            <HeadlessUI.Menu.Item>
-                                                <div>
-                                                    {subItem?.label && subItem.value ? (
-                                                        <Components.Link
-                                                            href={subItem.value}
-                                                            className="block w-full rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                        >
-                                                            <span className="">{subItem.label}</span>
-                                                        </Components.Link>
-                                                    ) : (
-                                                        subItem
+                                    {item.subItems.map((subItem, index) => {
+                                        return subItem?.label && subItem.value ? (
+                                            <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
+                                                <HeadlessUI.Menu.Item as="a" key={index} href={subItem.value}>
+                                                    {({ active }) => (
+                                                        <>
+                                                            <span
+                                                                className={`${
+                                                                    active ? 'border-yellow-400' : 'border-transparent'
+                                                                } text-white m-0 block w-full rounded-md border-2`}
+                                                            >
+                                                                {subItem.label}
+                                                            </span>
+                                                        </>
                                                     )}
-                                                </div>
+                                                </HeadlessUI.Menu.Item>
+                                            </li>
+                                        ) : (
+                                            <HeadlessUI.Menu.Item
+                                                as="li"
+                                                key={index}
+                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                            >
+                                                {({ active }) => (
+                                                    <>
+                                                        <span
+                                                            className={`${
+                                                                active ? 'border-yellow-400' : 'border-transparent'
+                                                            } text-white m-0 block w-full rounded-md border-2`}
+                                                        >
+                                                            {subItem}
+                                                        </span>
+                                                    </>
+                                                )}
                                             </HeadlessUI.Menu.Item>
-                                        </li>
-                                    ))}
+                                        );
+                                    })}
                                 </HeadlessUI.Menu.Items>
                             </HeadlessUI.Transition>
                         </HeadlessUI.Menu>
