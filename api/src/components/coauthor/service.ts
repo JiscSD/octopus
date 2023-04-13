@@ -1,6 +1,6 @@
 import * as client from 'lib/client';
+import * as I from 'lib/interface';
 import cuid from 'cuid';
-import { CoAuthor } from 'lib/interface';
 import { Prisma } from '@prisma/client';
 
 export const get = (id: string) =>
@@ -73,7 +73,7 @@ export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
  * onCreate - don't take user input for fields like: confirmedCoAuthor, approvalRequested or linkedUser
  *
  */
-export const updateAll = (publicationId: string, authors: CoAuthor[]) =>
+export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
     client.prisma.$transaction(
         authors.map((author, index) =>
             client.prisma.coAuthors.upsert({

@@ -341,18 +341,11 @@ export const requestApproval = async (
         }
 
         // check if publication actually has co-authors
-        if (publication.coAuthors.length === 1) {
+        if (publication.coAuthors.length < 2) {
             return response.json(403, { message: 'There is no co-author to request approval from.' });
         }
 
         if (publication.currentStatus === 'DRAFT') {
-            // check if publication is ready to be LOCKED
-            if (!publicationService.isReadyToLock(publication)) {
-                return response.json(403, {
-                    message: 'Please make sure all required fields are filled in before requesting approval.'
-                });
-            }
-
             // check if publication was LOCKED before
             if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
                 // notify linked co-authors about changes
@@ -370,9 +363,6 @@ export const requestApproval = async (
                     });
                 }
             }
-
-            // Lock publication from editing
-            await publicationService.updateStatus(publication.id, 'LOCKED');
         }
 
         // get all pending co authors

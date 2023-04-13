@@ -238,14 +238,21 @@ export const updateStatus = async (
     try {
         const publicationId = event.pathParameters?.id;
         const publication = await publicationService.get(publicationId);
-        const newStatus = event.pathParameters?.status;
-        const currentStatus = publication?.currentStatus;
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
 
         if (publication?.createdBy !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify the status of this publication.'
             });
         }
+
+        const newStatus = event.pathParameters?.status;
+        const currentStatus = publication.currentStatus;
 
         if (currentStatus === 'LIVE') {
             return response.json(403, {
@@ -257,24 +264,59 @@ export const updateStatus = async (
             return response.json(403, { message: `Publication status is already ${newStatus}.` });
         }
 
-        if (newStatus === 'DRAFT') {
-            // Update status to 'DRAFT'
-            await publicationService.updateStatus(publicationId, newStatus);
+        if (currentStatus === 'DRAFT') {
+            if (newStatus === 'LOCKED') {
+                // check if publication actually has co-authors
+                if (publication.coAuthors.length === 1) {
+                    return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
+                }
 
-            // Cancel co author approvals
-            await coAuthorService.resetCoAuthors(publication?.id);
+                // check if publication is ready to be LOCKED
+                if (!publicationService.isReadyToLock(publication)) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                    });
+                }
 
-            return response.json(200, {
-                message: 'Publication unlocked for editing'
-            });
+                // Lock publication from editing
+                await publicationService.updateStatus(publication.id, 'LOCKED');
+
+                return response.json(200, { message: 'Publication status updated to LOCKED.' });
+            }
+
+            if (newStatus === 'LIVE') {
+                const isReadyToPublish = publicationService.isReadyToPublish(publication);
+
+                if (!isReadyToPublish) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                    });
+                }
+            }
         }
 
-        const isReadyToPublish = publicationService.isReadyToPublish(publication);
+        if (currentStatus === 'LOCKED') {
+            if (newStatus === 'DRAFT') {
+                // Update status to 'DRAFT'
+                await publicationService.updateStatus(publicationId, newStatus);
 
-        if (!isReadyToPublish) {
-            return response.json(403, {
-                message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
-            });
+                // Cancel co author approvals
+                await coAuthorService.resetCoAuthors(publication?.id);
+
+                return response.json(200, {
+                    message: 'Publication unlocked for editing'
+                });
+            }
+
+            if (newStatus === 'LIVE') {
+                const isReadyToPublish = publicationService.isReadyToPublish(publication);
+
+                if (!isReadyToPublish) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                    });
+                }
+            }
         }
 
         const updatedPublication = await publicationService.updateStatus(publicationId, newStatus);

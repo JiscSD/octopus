@@ -186,4 +186,68 @@ describe('Update publication status', () => {
 
         expect(getPublicationStatus.body.currentStatus).toEqual('DRAFT');
     });
+
+    test('Publication owner cannot update publication status to LOCKED if there are no co-authors', async () => {
+        const response = await testUtils.agent.put('/publications/publication-2/status/LOCKED').query({
+            apiKey: '987654321'
+        });
+
+        expect(response.status).toEqual(403);
+        expect(response.body.message).toEqual(
+            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+        );
+    });
+
+    test('Throws an error if trying to update publication status to the same status', async () => {
+        const response = await testUtils.agent.put('/publications/publication-2/status/DRAFT').query({
+            apiKey: '987654321'
+        });
+
+        expect(response.status).toEqual(403);
+        expect(response.body.message).toEqual('Publication status is already DRAFT.');
+    });
+
+    test('Publication status can be updated from DRAFT to LOCKED only after requesting approvals', async () => {
+        // try to update status to LOCKED
+        const updateStatusResponse1 = await testUtils.agent
+            .put('/publications/publication-problem-draft/status/LOCKED')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(updateStatusResponse1.status).toEqual(403);
+        expect(updateStatusResponse1.body.message).toEqual(
+            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+        );
+
+        // request co-authors approvals
+        const requestApprovalsResponse = await testUtils.agent
+            .put('/publications/publication-problem-draft/coauthors/request-approval')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(requestApprovalsResponse.status).toEqual(200);
+
+        // try to update status to LOCKED again
+        const updateStatusResponse2 = await testUtils.agent
+            .put('/publications/publication-problem-draft/status/LOCKED')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(updateStatusResponse2.status).toEqual(200);
+        expect(updateStatusResponse2.body.message).toEqual('Publication status updated to LOCKED.');
+    });
+
+    test('Publication status can be updated from LOCKED to LIVE after all co-authors approved', async () => {
+        const response = await testUtils.agent
+            .put('/publications/locked-publication-problem-confirmed-co-authors/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(response.status).toEqual(200);
+        expect(response.body.message).toEqual('Publication is now LIVE.');
+    });
 });
