@@ -45,17 +45,19 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                 key={index}
                                                 className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                             >
-                                                <HeadlessUI.Menu.Item as="a" href={subItem.value}>
-                                                    {({ active }) => (
-                                                        <span
-                                                            className={`${
-                                                                active ? 'border-yellow-400' : 'border-transparent'
-                                                            } text-white m-0 block w-full rounded-md border-2 p-0.5`}
-                                                        >
-                                                            {subItem.label}
-                                                        </span>
-                                                    )}
-                                                </HeadlessUI.Menu.Item>
+                                                <Components.Link href={subItem.value}>
+                                                    <HeadlessUI.Menu.Item>
+                                                        {({ active }) => (
+                                                            <span
+                                                                className={`${
+                                                                    active ? 'border-yellow-400' : 'border-transparent'
+                                                                } text-white m-0 block w-full rounded-md border-2 p-0.5`}
+                                                            >
+                                                                {subItem.label}
+                                                            </span>
+                                                        )}
+                                                    </HeadlessUI.Menu.Item>
+                                                </Components.Link>
                                             </li>
                                         ) : (
                                             <li
