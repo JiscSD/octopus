@@ -3,12 +3,7 @@ import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
 
 import * as Components from '@components';
-import * as Stores from '@stores';
 import * as Interfaces from '@interfaces';
-import * as Router from 'next/router';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Types from '@types';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
@@ -63,15 +58,14 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                             <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
                                                 <HeadlessUI.Menu.Item key={index}>
                                                     {({ active }) => (
-                                                        <a
+                                                        <button
                                                             onClick={props.handleLogout}
-                                                            href="#"
                                                             className={`${
                                                                 active ? 'border-yellow-400' : 'border-transparent'
-                                                            } text-white m-0 block w-full cursor-pointer rounded-md border-2`}
+                                                            } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
                                                         >
                                                             Logout
-                                                        </a>
+                                                        </button>
                                                     )}
                                                 </HeadlessUI.Menu.Item>
                                             </li>
