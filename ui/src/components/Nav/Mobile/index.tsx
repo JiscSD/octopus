@@ -9,6 +9,7 @@ import * as Interfaces from '@interfaces';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
+    handleLogout: () => void;
 };
 
 const Mobile: React.FC<Props> = (props): React.ReactElement => {
@@ -88,9 +89,9 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                                                         ) : (
                                                                             <Components.Link
                                                                                 href="#"
-                                                                                onClick={handleClose}
+                                                                                onClick={props.handleLogout}
                                                                             >
-                                                                                {subItem}
+                                                                                {subItem.label}
                                                                             </Components.Link>
                                                                         )}
                                                                     </div>

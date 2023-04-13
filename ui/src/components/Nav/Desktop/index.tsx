@@ -3,11 +3,16 @@ import * as OutlineIcons from '@heroicons/react/outline';
 import * as HeadlessUI from '@headlessui/react';
 
 import * as Components from '@components';
+import * as Stores from '@stores';
 import * as Interfaces from '@interfaces';
+import * as Router from 'next/router';
+import * as Config from '@config';
+import * as Helpers from '@helpers';
 import * as Types from '@types';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
+    handleLogout: () => void;
 };
 
 const Desktop: React.FC<Props> = (props): React.ReactElement => (
@@ -44,36 +49,31 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                             <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
                                                 <HeadlessUI.Menu.Item as="a" key={index} href={subItem.value}>
                                                     {({ active }) => (
-                                                        <>
-                                                            <span
-                                                                className={`${
-                                                                    active ? 'border-yellow-400' : 'border-transparent'
-                                                                } text-white m-0 block w-full rounded-md border-2`}
-                                                            >
-                                                                {subItem.label}
-                                                            </span>
-                                                        </>
+                                                        <span
+                                                            className={`${
+                                                                active ? 'border-yellow-400' : 'border-transparent'
+                                                            } text-white m-0 block w-full rounded-md border-2 p-0.5`}
+                                                        >
+                                                            {subItem.label}
+                                                        </span>
                                                     )}
                                                 </HeadlessUI.Menu.Item>
                                             </li>
                                         ) : (
-                                            <HeadlessUI.Menu.Item
-                                                as="li"
-                                                key={index}
-                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
-                                            >
-                                                {({ active }) => (
-                                                    <>
+                                            <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
+                                                <HeadlessUI.Menu.Item key={index}>
+                                                    {({ active }) => (
                                                         <span
+                                                            onClick={props.handleLogout}
                                                             className={`${
                                                                 active ? 'border-yellow-400' : 'border-transparent'
-                                                            } text-white m-0 block w-full rounded-md border-2`}
+                                                            } text-white m-0 block w-full cursor-pointer rounded-md border-2`}
                                                         >
-                                                            {subItem}
+                                                            Logout
                                                         </span>
-                                                    </>
-                                                )}
-                                            </HeadlessUI.Menu.Item>
+                                                    )}
+                                                </HeadlessUI.Menu.Item>
+                                            </li>
                                         );
                                     })}
                                 </HeadlessUI.Menu.Items>
