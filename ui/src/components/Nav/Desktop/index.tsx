@@ -41,8 +41,11 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                 >
                                     {item.subItems.map((subItem, index) => {
                                         return subItem?.label && subItem.value ? (
-                                            <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
-                                                <HeadlessUI.Menu.Item as="a" key={index} href={subItem.value}>
+                                            <li
+                                                key={index}
+                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                            >
+                                                <HeadlessUI.Menu.Item as="a" href={subItem.value}>
                                                     {({ active }) => (
                                                         <span
                                                             className={`${
@@ -55,8 +58,11 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                 </HeadlessUI.Menu.Item>
                                             </li>
                                         ) : (
-                                            <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
-                                                <HeadlessUI.Menu.Item key={index}>
+                                            <li
+                                                key={index}
+                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                            >
+                                                <HeadlessUI.Menu.Item>
                                                     {({ active }) => (
                                                         <button
                                                             aria-label={subItem.label}
