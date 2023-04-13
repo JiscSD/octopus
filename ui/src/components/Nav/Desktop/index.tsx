@@ -63,14 +63,15 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                             <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
                                                 <HeadlessUI.Menu.Item key={index}>
                                                     {({ active }) => (
-                                                        <span
+                                                        <a
                                                             onClick={props.handleLogout}
+                                                            href="#"
                                                             className={`${
                                                                 active ? 'border-yellow-400' : 'border-transparent'
                                                             } text-white m-0 block w-full cursor-pointer rounded-md border-2`}
                                                         >
                                                             Logout
-                                                        </span>
+                                                        </a>
                                                     )}
                                                 </HeadlessUI.Menu.Item>
                                             </li>
