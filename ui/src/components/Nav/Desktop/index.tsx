@@ -59,12 +59,13 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                 <HeadlessUI.Menu.Item key={index}>
                                                     {({ active }) => (
                                                         <button
-                                                            onClick={props.handleLogout}
+                                                            aria-label={subItem.label}
+                                                            {...subItem}
                                                             className={`${
                                                                 active ? 'border-yellow-400' : 'border-transparent'
                                                             } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
                                                         >
-                                                            Logout
+                                                            {subItem.label}
                                                         </button>
                                                     )}
                                                 </HeadlessUI.Menu.Item>

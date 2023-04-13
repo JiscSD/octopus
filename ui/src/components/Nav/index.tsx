@@ -67,7 +67,8 @@ const Nav: React.FC = (): React.ReactElement => {
                         value: Config.urls.myBookmarks.path
                     },
                     {
-                        label: 'Logout'
+                        label: 'Logout',
+                        onClick: () => handleLogOut()
                     }
                 ]
             });
