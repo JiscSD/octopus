@@ -69,35 +69,46 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                                         as="ul"
                                                         className="focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                                     >
-                                                        {item.subItems.map((subItem, index) => (
-                                                            <li
-                                                                key={index}
-                                                                className="py-2 pl-4 text-teal-600 transition-colors duration-500 dark:text-white-50"
-                                                            >
-                                                                <HeadlessUI.Menu.Item>
-                                                                    <div>
-                                                                        {subItem?.label && subItem.value ? (
-                                                                            <Components.Link
-                                                                                href={subItem.value}
-                                                                                className="block w-full rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                                                onClick={handleClose}
-                                                                            >
-                                                                                <span className="">
-                                                                                    {subItem.label}
-                                                                                </span>
-                                                                            </Components.Link>
-                                                                        ) : (
-                                                                            <Components.Link
-                                                                                href="#"
-                                                                                onClick={props.handleLogout}
+                                                        {item.subItems.map((subItem, index) => {
+                                                            return subItem?.label && subItem.value ? (
+                                                                <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
+                                                                    <HeadlessUI.Menu.Item
+                                                                        as="a"
+                                                                        key={index}
+                                                                        href={subItem.value}
+                                                                    >
+                                                                        {({ active }) => (
+                                                                            <span
+                                                                                className={`${
+                                                                                    active
+                                                                                        ? 'border-yellow-400'
+                                                                                        : 'border-transparent'
+                                                                                } text-white m-0 block w-full rounded-md border-2 p-0.5`}
                                                                             >
                                                                                 {subItem.label}
-                                                                            </Components.Link>
+                                                                            </span>
                                                                         )}
-                                                                    </div>
-                                                                </HeadlessUI.Menu.Item>
-                                                            </li>
-                                                        ))}
+                                                                    </HeadlessUI.Menu.Item>
+                                                                </li>
+                                                            ) : (
+                                                                <li className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50">
+                                                                    <HeadlessUI.Menu.Item key={index}>
+                                                                        {({ active }) => (
+                                                                            <button
+                                                                                onClick={props.handleLogout}
+                                                                                className={`${
+                                                                                    active
+                                                                                        ? 'border-yellow-400'
+                                                                                        : 'border-transparent'
+                                                                                } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
+                                                                            >
+                                                                                Logout
+                                                                            </button>
+                                                                        )}
+                                                                    </HeadlessUI.Menu.Item>
+                                                                </li>
+                                                            );
+                                                        })}
                                                     </HeadlessUI.Menu.Items>
                                                 </HeadlessUI.Transition>
                                             </HeadlessUI.Menu>
