@@ -50,7 +50,9 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                         {({ active }) => (
                                                             <span
                                                                 className={`${
-                                                                    active ? 'border-yellow-400' : 'border-transparent'
+                                                                    active
+                                                                        ? 'border-yellow-400 hover:border-transparent active:border-yellow-400 '
+                                                                        : 'border-transparent'
                                                                 } text-white m-0 block w-full rounded-md border-2 p-0.5`}
                                                             >
                                                                 {subItem.label}
@@ -70,7 +72,9 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                             aria-label={subItem.label}
                                                             {...subItem}
                                                             className={`${
-                                                                active ? 'border-yellow-400' : 'border-transparent'
+                                                                active
+                                                                    ? 'border-yellow-400 hover:border-transparent active:border-yellow-400 '
+                                                                    : 'border-transparent'
                                                             } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
                                                         >
                                                             {subItem.label}
