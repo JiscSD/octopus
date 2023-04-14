@@ -329,34 +329,41 @@ export const requestApproval = async (
             return response.json(404, { message: 'Publication not found' });
         }
 
-        if (
-            publication.currentStatus === 'DRAFT' &&
-            publication.publicationStatus.some(({ status }) => status === 'LOCKED')
-        ) {
-            // notify linked co-authors about changes
-            const linkedCoAuthors = publication.coAuthors.filter(
-                (author) => author.linkedUser && author.linkedUser !== publication.createdBy
-            );
-
-            for (const linkedCoAuthor of linkedCoAuthors) {
-                await email.notifyCoAuthorsAboutChanges({
-                    coAuthor: { email: linkedCoAuthor.email },
-                    publication: {
-                        title: publication.title || '',
-                        url: `${process.env.BASE_URL}/publications/${publication.id}`
-                    }
-                });
-            }
+        if (publication.currentStatus === 'LIVE') {
+            return response.json(403, { message: 'Cannot request approvals for a LIVE publication.' });
         }
 
-        /**
-         * @TODO
-         * - fix bug - publication going into LOCKED mode without title, linked publications, main text, etc...
-         * - find a better way to handle publication transition from one state to another
-         */
+        // check if user is not the corresponding author
+        if (event.user.id !== publication.createdBy) {
+            return response.json(403, {
+                message: 'You are not allowed to request approvals for this publication.'
+            });
+        }
 
-        // Lock publication from editing
-        await publicationService.updateStatus(publication.id, 'LOCKED', false);
+        // check if publication actually has co-authors
+        if (publication.coAuthors.length < 2) {
+            return response.json(403, { message: 'There is no co-author to request approval from.' });
+        }
+
+        if (publication.currentStatus === 'DRAFT') {
+            // check if publication was LOCKED before
+            if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
+                // notify linked co-authors about changes
+                const linkedCoAuthors = publication.coAuthors.filter(
+                    (author) => author.linkedUser && author.linkedUser !== publication.createdBy
+                );
+
+                for (const linkedCoAuthor of linkedCoAuthors) {
+                    await email.notifyCoAuthorsAboutChanges({
+                        coAuthor: { email: linkedCoAuthor.email },
+                        publication: {
+                            title: publication.title || '',
+                            url: `${process.env.BASE_URL}/publications/${publication.id}`
+                        }
+                    });
+                }
+            }
+        }
 
         // get all pending co authors
         const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);
