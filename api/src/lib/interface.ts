@@ -111,7 +111,7 @@ export interface UpdatePublicationPathParams {
 
 export interface UpdateStatusPathParams {
     id: string;
-    status: 'LIVE';
+    status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
 export interface UpdatePublicationRequestBody {

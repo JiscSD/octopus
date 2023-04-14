@@ -912,3 +912,5 @@ export const createPublicationFooterTemplate = (publication: I.Publication): str
         </div>
     </div>`;
 };
+
+export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);

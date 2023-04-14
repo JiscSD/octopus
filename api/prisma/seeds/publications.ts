@@ -94,6 +94,47 @@ const publicationSeeds = [
         }
     },
     {
+        id: 'locked-publication-problem-confirmed-co-authors',
+        title: 'LOCKED Publication PROBLEM confirmed co-authors',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        content: 'LOCKED Publication PROBLEM confirmed co-authors',
+        conflictOfInterestStatus: false,
+        currentStatus: 'LOCKED',
+        doi: '10.82259/cty5-2g03',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        coAuthors: {
+            create: {
+                id: 'test-user-2',
+                email: 'test-user-2@jisc.ac.uk',
+                code: 'test-user-2',
+                confirmedCoAuthor: true,
+                linkedUser: 'test-user-2'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                },
+                {
+                    status: 'LOCKED',
+                    createdAt: '2022-01-22T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        }
+    },
+    {
         id: 'publication-problem-draft',
         title: 'Publication PROBLEM-DRAFT',
         type: 'PROBLEM',

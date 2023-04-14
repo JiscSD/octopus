@@ -213,14 +213,20 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const requestApproval = useCallback(async () => {
         try {
+            // save publication
             await saveCurrent();
-            const response = await api.put(
+
+            // request co-authors approvals
+            await api.put(
                 `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
                 {},
                 props.token
             );
-            updateCoAuthors(response.data);
 
+            // update publication status to LOCKED
+            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LOCKED`, {}, props.token);
+
+            // redirect to publication page
             router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
@@ -386,7 +392,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             >
                                 <Components.IconButton
                                     title="Toggle side bar"
-                                    className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-t border-r border-b border-grey-400 bg-teal-700"
+                                    className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-b border-r border-t border-grey-400 bg-teal-700"
                                     icon={
                                         showSideBar ? (
                                             <OutlineIcons.ArrowLeftIcon className="h-6 w-6 text-white-50" />

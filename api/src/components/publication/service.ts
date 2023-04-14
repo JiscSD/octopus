@@ -416,7 +416,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum, isReadyToPublish: boolean) => {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
     const query = {
         where: {
             id
@@ -450,7 +450,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
         }
     };
 
-    if (isReadyToPublish) {
+    if (status === 'LIVE') {
         // @ts-ignore
         query.data.publishedDate = new Date().toISOString();
     }
@@ -482,16 +482,14 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolean => {
     if (!publication) {
         return false;
     }
 
-    let isReady = false;
-
-    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
-    const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
     const conflictOfInterest = validateConflictOfInterest(publication);
     const hasPublishDate = Boolean(publication.publishedDate);
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
@@ -499,23 +497,39 @@ export const isPublicationReadyToPublish = (publication: I.PublicationWithMetada
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
     const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
-    const isAttemptToLive = status === 'LIVE';
-
-    // More external checks can be chained here for the future
-    if (
+    return (
         hasAtLeastOneLinkTo &&
-        hasAllFields &&
+        hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        coAuthorsAreVerified &&
-        isAttemptToLive
-    ) {
-        isReady = true;
+        coAuthorsAreVerified
+    );
+};
+
+export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
     }
 
-    return isReady;
+    const hasAtLeastOneLinkTo = publication.linkedTo.length > 0;
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
+    const conflictOfInterest = validateConflictOfInterest(publication);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+    const isDataAndHasPermissionsStatement =
+        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+
+    return (
+        hasAtLeastOneLinkTo &&
+        hasFilledRequiredFields &&
+        conflictOfInterest &&
+        isDataAndHasEthicalStatement &&
+        isDataAndHasPermissionsStatement &&
+        hasRequestedApprovals
+    );
 };
 
 export const getLinksForPublication = async (id: string) => {
