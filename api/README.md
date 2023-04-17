@@ -18,29 +18,8 @@ Create a `.env` file inside `~/api` using `cp .env.example .env`.
 
 Make sure to update the values within to match your environment.
 
-```bash
-DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
-ORCID_SECRET=ORCID_SECRET_FROM_APP
-ORCID_ID=APP-ORCID_APP_ID_FROM_APP
-JWT_SECRET=abcdefghijklmnopqrstuvwxyz
-STAGE=local
-EMAIL_SENDER_ADDRESS=no-reply@local.ac
-BASE_URL=https://localhost:3001
-AUTHORISATION_CALLBACK_URL=${BASE_URL}/login
-ELASTICSEARCH_PROTOCOL=http
-ELASTICSEARCH_USER=admin
-ELASTICSEARCH_PASSWORD=admin
-ELASTICSEARCH_ENDPOINT=localhost:9200
-VALIDATION_CODE_EXPIRY=10
-VALIDATION_CODE_ATTEMPTS=3
-
-DOI_PREFIX=DATACITE_DOI_PREFIX
-DATACITE_ENDPOINT=https://api.test.datacite.org/dois
-DATACITE_USER=DATACITE_API_USER
-DATACITE_PASSWORD=DATACITE_API_PASSWORD
-```
-
 ### AWS Credentials File
+
 You will need a octopus credential profile to run locally, this can be populated with dummy data presented below:
 
 ```bash
