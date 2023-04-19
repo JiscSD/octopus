@@ -204,7 +204,7 @@ export const link = async (
             if (publication.coAuthors.length === 2) {
                 // this means only the creator remained and we can safely update publication status back to DRAFT
                 // to avoid publication being LOCKED without co-authors
-                await publicationService.updateStatus(publication.id, 'DRAFT', false);
+                await publicationService.updateStatus(publication.id, 'DRAFT');
             }
 
             return response.json(200, 'Removed co-author from publication');
