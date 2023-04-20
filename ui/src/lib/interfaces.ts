@@ -12,7 +12,8 @@ export interface NavMenuItem {
     label: string;
     value: string;
     dataTestId?: string;
-    subItems?: NavMenuItem[] | React.ReactNode[] | any[];
+    onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
+    subItems?: NavMenuItem[];
 }
 
 export interface PublicationStatus {
