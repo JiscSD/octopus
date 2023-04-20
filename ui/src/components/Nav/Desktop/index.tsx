@@ -7,7 +7,6 @@ import * as Interfaces from '@interfaces';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
-    handleLogout: () => void;
 };
 
 const Desktop: React.FC<Props> = (props): React.ReactElement => (
@@ -39,32 +38,31 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                     as="ul"
                                     className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                 >
-                                    {item.subItems.map((subItem, index) => {
-                                        return subItem?.label && subItem.value ? (
+                                    {item.subItems.map((subItem, index) =>
+                                        subItem?.label && subItem.value ? (
                                             <li
                                                 key={index}
-                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                                className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                             >
-                                                <Components.Link href={subItem.value}>
-                                                    <HeadlessUI.Menu.Item>
-                                                        {({ active }) => (
-                                                            <span
-                                                                className={`${
-                                                                    active
-                                                                        ? 'border-yellow-400 hover:border-transparent active:border-yellow-400 '
-                                                                        : 'border-transparent'
-                                                                } text-white m-0 block w-full rounded-md border-2 p-0.5`}
-                                                            >
-                                                                {subItem.label}
-                                                            </span>
-                                                        )}
-                                                    </HeadlessUI.Menu.Item>
-                                                </Components.Link>
+                                                <HeadlessUI.Menu.Item>
+                                                    {({ active }) => (
+                                                        <Components.Link
+                                                            href={subItem.value}
+                                                            className={`${
+                                                                active
+                                                                    ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                    : 'ring-transparent'
+                                                            } text-white m-0 block w-full rounded-md p-1 ring-2`}
+                                                        >
+                                                            {subItem.label}
+                                                        </Components.Link>
+                                                    )}
+                                                </HeadlessUI.Menu.Item>
                                             </li>
                                         ) : (
                                             <li
                                                 key={index}
-                                                className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                                className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                             >
                                                 <HeadlessUI.Menu.Item>
                                                     {({ active }) => (
@@ -73,22 +71,22 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                                             {...subItem}
                                                             className={`${
                                                                 active
-                                                                    ? 'border-yellow-400 hover:border-transparent active:border-yellow-400 '
-                                                                    : 'border-transparent'
-                                                            } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
+                                                                    ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                    : 'ring-transparent'
+                                                            } text-white m-0 block w-full cursor-pointer rounded p-1 text-left ring-2`}
                                                         >
                                                             {subItem.label}
                                                         </button>
                                                     )}
                                                 </HeadlessUI.Menu.Item>
                                             </li>
-                                        );
-                                    })}
+                                        )
+                                    )}
                                 </HeadlessUI.Menu.Items>
                             </HeadlessUI.Transition>
                         </HeadlessUI.Menu>
                     ) : (
-                        <Components.Link href={item.value} className=" p-2 ">
+                        <Components.Link href={item.value} className="p-2">
                             <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 {item.label}
                             </span>
