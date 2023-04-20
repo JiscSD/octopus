@@ -9,7 +9,6 @@ import * as Interfaces from '@interfaces';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
-    handleLogout: () => void;
 };
 
 const Mobile: React.FC<Props> = (props): React.ReactElement => {
@@ -23,7 +22,21 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
         <div className="relative h-8 w-8">
             <button
                 aria-label="Mobile Navigation Menu"
-                onClick={(e) => setOpen((prevState) => !prevState)}
+                onClick={(e) => {
+                    setOpen((prevState) => !prevState);
+                }}
+                onKeyDown={(e) => {
+                    const key = e.code;
+
+                    // if using keyboard navigation, focus first link in the dropdown for easier access
+                    if (['Space', 'Enter'].includes(key)) {
+                        e.preventDefault();
+                        setOpen((prevState) => !prevState);
+                        setTimeout(() => {
+                            (document.querySelector('ul > li > a') as HTMLAnchorElement)?.focus();
+                        }, 0);
+                    }
+                }}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 <OutlineIcons.MenuIcon
@@ -40,7 +53,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.25 }}
                             exit={{ opacity: 0 }}
-                            className="absolute top-10 right-0 z-20 w-max rounded bg-white-50 px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
+                            className="absolute right-0 top-10 z-20 w-max rounded bg-white-50 px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
                         >
                             <ul>
                                 {props.items.map((item) => (
@@ -69,32 +82,31 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                                         as="ul"
                                                         className="focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                                     >
-                                                        {item.subItems.map((subItem, index) => {
-                                                            return subItem?.label && subItem.value ? (
+                                                        {item.subItems.map((subItem, index) =>
+                                                            subItem?.label && subItem.value ? (
                                                                 <li
                                                                     key={index}
-                                                                    className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                                                    className="py-2 pl-4 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                                                 >
-                                                                    <Components.Link href={subItem.value}>
-                                                                        <HeadlessUI.Menu.Item>
-                                                                            {({ active }) => (
-                                                                                <span
-                                                                                    className={`${
-                                                                                        active
-                                                                                            ? 'border-yellow-400'
-                                                                                            : 'border-transparent'
-                                                                                    } text-white m-0 block w-full rounded-md border-2 p-0.5`}
-                                                                                >
-                                                                                    {subItem.label}
-                                                                                </span>
-                                                                            )}
-                                                                        </HeadlessUI.Menu.Item>
-                                                                    </Components.Link>
+                                                                    <HeadlessUI.Menu.Item>
+                                                                        {({ active }) => (
+                                                                            <Components.Link
+                                                                                href={subItem.value}
+                                                                                className={`${
+                                                                                    active
+                                                                                        ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                                        : 'ring-transparent'
+                                                                                } text-white m-0 block w-full rounded-md p-1 ring-2`}
+                                                                            >
+                                                                                {subItem.label}
+                                                                            </Components.Link>
+                                                                        )}
+                                                                    </HeadlessUI.Menu.Item>
                                                                 </li>
                                                             ) : (
                                                                 <li
                                                                     key={index}
-                                                                    className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                                                    className="py-2 pl-4 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                                                 >
                                                                     <HeadlessUI.Menu.Item>
                                                                         {({ active }) => (
@@ -103,22 +115,35 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                                                                 {...subItem}
                                                                                 className={`${
                                                                                     active
-                                                                                        ? 'border-yellow-400'
-                                                                                        : 'border-transparent'
-                                                                                } text-white m-0 block w-full cursor-pointer rounded-md border-2 text-left`}
+                                                                                        ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                                        : 'ring-transparent'
+                                                                                } text-white m-0 block w-full cursor-pointer rounded p-1 text-left ring-2`}
                                                                             >
                                                                                 {subItem.label}
                                                                             </button>
                                                                         )}
                                                                     </HeadlessUI.Menu.Item>
                                                                 </li>
-                                                            );
-                                                        })}
+                                                            )
+                                                        )}
                                                     </HeadlessUI.Menu.Items>
                                                 </HeadlessUI.Transition>
                                             </HeadlessUI.Menu>
                                         ) : (
-                                            <Components.Link href={item.value} className="p-2" onClick={handleClose}>
+                                            <Components.Link
+                                                href={item.value}
+                                                onKeyDown={(e) => {
+                                                    const key = e.code;
+
+                                                    if (key === 'Space') {
+                                                        // prevent scroll and fire click event
+                                                        e.preventDefault();
+                                                        e.currentTarget.click();
+                                                    }
+                                                }}
+                                                className="p-2"
+                                                onClick={handleClose}
+                                            >
                                                 <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                                     {item.label}
                                                 </span>

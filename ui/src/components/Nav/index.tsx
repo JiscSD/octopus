@@ -77,11 +77,7 @@ const Nav: React.FC = (): React.ReactElement => {
         return menuItems;
     }, [user]);
 
-    return isDesktop ? (
-        <Components.NavDesktop handleLogout={handleLogOut} items={items} />
-    ) : (
-        <Components.NavMobile handleLogout={handleLogOut} items={items} />
-    );
+    return isDesktop ? <Components.NavDesktop items={items} /> : <Components.NavMobile items={items} />;
 };
 
 export default Nav;
