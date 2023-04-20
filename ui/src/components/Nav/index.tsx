@@ -68,6 +68,7 @@ const Nav: React.FC = (): React.ReactElement => {
                     },
                     {
                         label: 'Logout',
+                        value: '#',
                         onClick: () => handleLogOut()
                     }
                 ]

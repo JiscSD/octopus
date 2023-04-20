@@ -38,50 +38,28 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                     as="ul"
                                     className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                 >
-                                    {item.subItems.map((subItem, index) =>
-                                        subItem?.label && subItem.value ? (
-                                            <li
-                                                key={index}
-                                                className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
-                                            >
-                                                <HeadlessUI.Menu.Item>
-                                                    {({ active }) => (
-                                                        <Components.Link
-                                                            href={subItem.value}
-                                                            className={`${
-                                                                active
-                                                                    ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
-                                                                    : 'ring-transparent'
-                                                            } text-white m-0 block w-full rounded-md p-1 ring-2`}
-                                                        >
-                                                            {subItem.label}
-                                                        </Components.Link>
-                                                    )}
-                                                </HeadlessUI.Menu.Item>
-                                            </li>
-                                        ) : (
-                                            <li
-                                                key={index}
-                                                className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
-                                            >
-                                                <HeadlessUI.Menu.Item>
-                                                    {({ active }) => (
-                                                        <button
-                                                            aria-label={subItem.label}
-                                                            {...subItem}
-                                                            className={`${
-                                                                active
-                                                                    ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
-                                                                    : 'ring-transparent'
-                                                            } text-white m-0 block w-full cursor-pointer rounded p-1 text-left ring-2`}
-                                                        >
-                                                            {subItem.label}
-                                                        </button>
-                                                    )}
-                                                </HeadlessUI.Menu.Item>
-                                            </li>
-                                        )
-                                    )}
+                                    {item.subItems.map((subItem, index) => (
+                                        <li
+                                            key={index}
+                                            className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                        >
+                                            <HeadlessUI.Menu.Item>
+                                                {({ active }) => (
+                                                    <Components.Link
+                                                        href={subItem.value}
+                                                        onClick={subItem.onClick}
+                                                        className={`${
+                                                            active
+                                                                ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                : 'ring-transparent'
+                                                        } text-white m-0 block w-full rounded-md p-1 ring-2`}
+                                                    >
+                                                        {subItem.label}
+                                                    </Components.Link>
+                                                )}
+                                            </HeadlessUI.Menu.Item>
+                                        </li>
+                                    ))}
                                 </HeadlessUI.Menu.Items>
                             </HeadlessUI.Transition>
                         </HeadlessUI.Menu>
