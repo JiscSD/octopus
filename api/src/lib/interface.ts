@@ -572,6 +572,12 @@ export interface DataCiteCreator {
     affiliation: DataCiteAffiliation[];
 }
 
+export interface DataCiteDoiReferences {
+    relatedIdentifier: [] | RegExpMatchArray;
+    relatedIdentifierType: string;
+    relationType: string;
+}
+
 export interface DataCiteCreatorNameIdentifiers {
     nameIdentifier: string;
     nameIdentifierScheme: string;

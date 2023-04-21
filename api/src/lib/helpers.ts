@@ -76,7 +76,28 @@ const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     };
 };
 
-export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata): Promise<I.DOIResponse> => {
+export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
+    text.match(
+        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi //eslint-disable-line
+    ) || [];
+
+const createDoiReferenceObject = (references: I.Reference[]): I.DataCiteDoiReferences[] => {
+    const dataCiteDoiReferences = references.map((reference) => {
+        return {
+            relatedIdentifier: getFullDOIsStrings(reference.location!),
+            relatedIdentifierType: 'DOI',
+            relationType: 'References'
+        };
+    });
+
+    return dataCiteDoiReferences;
+};
+
+export const updateDOI = async (
+    doi: string,
+    publication: I.PublicationWithMetadata,
+    references: I.Reference[]
+): Promise<I.DOIResponse> => {
     if (!publication) {
         throw Error('Publication not found');
     }
@@ -95,6 +116,11 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
             );
         }
     });
+
+    const doiReferences = createDoiReferenceObject(references.filter((reference) => reference.type === 'DOI'));
+
+    console.log(doiReferences);
+    // const nonDoiReferences = references.filter((reference) => reference.type !== 'DOI');
 
     // check if the creator of the publication is not listed as an author
     if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
@@ -173,6 +199,8 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
             }
         }
     };
+
+    console.log(payload.data.attributes.relatedIdentifiers);
 
     const doiRes = await axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT as string}/${doi}`, payload, {
         auth: {
