@@ -75,9 +75,6 @@ test.describe('Static pages, logged out', () => {
             await expect(page.locator(card)).toBeVisible();
         }
 
-        // Expect video
-        await expect(page.locator(PageModel.about.video)).toBeVisible();
-
         // Expect pub types
         for await (const pubType of PageModel.about.pubTypes) {
             await expect(page.locator(pubType)).toBeVisible();

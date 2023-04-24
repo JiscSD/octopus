@@ -37,6 +37,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
         >
             <Components.Link
                 href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                role="button"
                 className={`
             grid
             min-h-[4rem]
