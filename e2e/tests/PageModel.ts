@@ -3,9 +3,9 @@ export const PageModel = {
         searchButton: 'header > div > div > div > button:text("Search")',
         loginButton: 'role=button[name="Sign in with ORCID"]',
         usernameButton: 'button[data-testid="username-button"]',
-        logoutButton: 'button:text("Log out")',
-        browseButton: 'ul a[role="button"]:has-text("Browse")',
-        publishButton: 'ul a[role="button"]:has-text("Publish")',
+        logoutButton: 'a:text("Log out")',
+        browseButton: 'ul a:has-text("Browse")',
+        publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
         myProfileButton: 'a:has-text("My profile")'
@@ -82,7 +82,7 @@ export const PageModel = {
     livePublication: {
         visibleSections: [
             // visualisation
-            'a[role="button"]:has-text("How has life on earth evolved?")',
+            'a:has-text("How has life on earth evolved?")',
             // content
             '#main-text >> text=How has life on earth evolved?',
             // problems above this
@@ -112,7 +112,7 @@ export const PageModel = {
     },
     authorInfo: {
         name: 'text=Science Octopus',
-        orcid: 'a[role="button"]:has-text("XXXX-XXXX-XXXX-XXXX")',
+        orcid: 'a:has-text("XXXX-XXXX-XXXX-XXXX")',
         orcidData: [
             'section > h2:has-text("Employment")',
             'section > h2:has-text("Education")',
@@ -164,7 +164,7 @@ export const PageModel = {
         insertButton: 'button:has-text("Insert")',
         replaceButton: 'button:has-text("Replace")',
         importModal: 'div[title="Document Import"]',
-        draftEditButton: 'a[role="button"]:has-text("Edit draft publication")',
+        draftEditButton: 'a:has-text("Edit draft publication")',
         unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
