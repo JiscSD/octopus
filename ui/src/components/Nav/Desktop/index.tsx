@@ -4,7 +4,6 @@ import * as HeadlessUI from '@headlessui/react';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
-import * as Types from '@types';
 
 type Props = {
     items: Interfaces.NavMenuItem[];
@@ -42,21 +41,22 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                                     {item.subItems.map((subItem, index) => (
                                         <li
                                             key={index}
-                                            className="py-2 px-3 text-teal-600 transition-colors duration-500 dark:text-white-50"
+                                            className="p-2 text-teal-600 transition-colors duration-500 dark:text-white-50"
                                         >
                                             <HeadlessUI.Menu.Item>
-                                                <div>
-                                                    {subItem?.label && subItem.value ? (
-                                                        <Components.Link
-                                                            href={subItem.value}
-                                                            className="block w-full rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
-                                                        >
-                                                            <span className="">{subItem.label}</span>
-                                                        </Components.Link>
-                                                    ) : (
-                                                        subItem
-                                                    )}
-                                                </div>
+                                                {({ active }) => (
+                                                    <Components.Link
+                                                        href={subItem.value}
+                                                        onClick={subItem.onClick}
+                                                        className={`${
+                                                            active
+                                                                ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
+                                                                : 'ring-transparent'
+                                                        } text-white m-0 block w-full rounded-md p-1 ring-2`}
+                                                    >
+                                                        {subItem.label}
+                                                    </Components.Link>
+                                                )}
                                             </HeadlessUI.Menu.Item>
                                         </li>
                                     ))}
@@ -64,7 +64,7 @@ const Desktop: React.FC<Props> = (props): React.ReactElement => (
                             </HeadlessUI.Transition>
                         </HeadlessUI.Menu>
                     ) : (
-                        <Components.Link href={item.value} className=" p-2 ">
+                        <Components.Link href={item.value} className="p-2">
                             <span className="font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 {item.label}
                             </span>
