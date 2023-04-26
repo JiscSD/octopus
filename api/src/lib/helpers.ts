@@ -81,18 +81,6 @@ export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
         /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi //eslint-disable-line
     ) || [];
 
-const createDoiReferenceObject = (references: I.Reference[]): I.DataCiteDoiReferences[] => {
-    const dataCiteDoiReferences = references.map((reference) => {
-        return {
-            relatedIdentifier: getFullDOIsStrings(reference.location!),
-            relatedIdentifierType: 'DOI',
-            relationType: 'References'
-        };
-    });
-
-    return dataCiteDoiReferences;
-};
-
 export const updateDOI = async (
     doi: string,
     publication: I.PublicationWithMetadata,
@@ -117,10 +105,43 @@ export const updateDOI = async (
         }
     });
 
-    const doiReferences = createDoiReferenceObject(references.filter((reference) => reference.type === 'DOI'));
+    const linkedPublications = publication?.linkedTo.map((relatedIdentifier) =>
+        relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
+            ? {
+                  relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                  relatedIdentifierType: 'DOI',
+                  relationType: 'Reviews'
+              }
+            : {
+                  relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+                  relatedIdentifierType: 'DOI',
+                  relationType: 'Continues'
+              }
+    );
 
-    console.log(doiReferences);
-    // const nonDoiReferences = references.filter((reference) => reference.type !== 'DOI');
+    const doiReferences = references.map((reference) => {
+        if (reference.type !== 'DOI' || !reference.location) return;
+
+        const doi: any = getFullDOIsStrings(reference.location);
+
+        return {
+            relatedIdentifier: doi,
+            relatedIdentifierType: 'DOI',
+            relationType: 'References'
+        };
+    });
+
+    const allReferencesWithDOI = doiReferences.concat(linkedPublications);
+
+    const otherReferences = references.map((reference) => {
+        if (reference.type === 'DOI') return;
+
+        return {
+            relatedItem: reference.location!,
+            referenceText: reference.text,
+            relationType: 'References'
+        };
+    });
 
     // check if the creator of the publication is not listed as an author
     if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
@@ -178,19 +199,8 @@ export const updateDOI = async (
                     resourceTypeGeneral: 'Other',
                     resourceType: publication?.type
                 },
-                relatedIdentifiers: publication?.linkedTo.map((relatedIdentifier) =>
-                    relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
-                        ? {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Reviews'
-                          }
-                        : {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Continues'
-                          }
-                ),
+                relatedIdentifiers: allReferencesWithDOI,
+                relatedItems: otherReferences,
                 fundingReferences: publication?.funders.map((funder) => ({
                     funderName: funder.name,
                     funderReference: funder.ror || funder.link,
