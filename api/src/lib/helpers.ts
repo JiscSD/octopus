@@ -137,9 +137,12 @@ export const updateDOI = async (
         if (reference.type === 'DOI') return;
 
         return {
-            relatedItem: reference.location!,
-            referenceText: reference.text,
-            relationType: 'References'
+            relationType: 'References',
+            relatedItemIdentifier: reference.location,
+            relatedItemIdentifierType: "URL",
+            titles: {
+                title: reference.text
+            },
         };
     });
 
@@ -200,7 +203,7 @@ export const updateDOI = async (
                     resourceType: publication?.type
                 },
                 relatedIdentifiers: allReferencesWithDOI,
-                relatedItems: otherReferences,
+                relatedItem: otherReferences,
                 fundingReferences: publication?.funders.map((funder) => ({
                     funderName: funder.name,
                     funderReference: funder.ror || funder.link,
@@ -209,8 +212,6 @@ export const updateDOI = async (
             }
         }
     };
-
-    console.log(payload.data.attributes.relatedIdentifiers);
 
     const doiRes = await axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT as string}/${doi}`, payload, {
         auth: {
