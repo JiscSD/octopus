@@ -68,6 +68,15 @@ const updateDoiNames = async (): Promise<void> => {
                     ror: true
                 }
             },
+            References: {
+                select: {
+                    id: true, 
+                    type: true,
+                    text: true,
+                    location: true,
+                    publicationId: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
@@ -156,7 +165,7 @@ const updateDoiNames = async (): Promise<void> => {
     let index = 1;
 
     for (const publication of publications) {
-        await helpers.updateDOI(publication.doi, publication).catch((err) => console.log(err));
+        await helpers.updateDOI(publication.doi, publication, publication.References).catch((err) => console.log(err));
         console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
         index++;
     }
