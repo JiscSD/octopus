@@ -106,7 +106,7 @@ export const updateDOI = async (
         const doi: any = getFullDOIsStrings(reference.location);
 
         return {
-            relatedIdentifier: doi,
+            relatedIdentifier: doi[0],
             relatedIdentifierType: 'DOI',
             relationType: 'References'
         };
@@ -117,14 +117,25 @@ export const updateDOI = async (
     const otherReferences = references.map((reference) => {
         if (reference.type === 'DOI') return;
 
-        return {
+        const mutatedReference = {
+            titles: [
+                {
+                    title: reference.text.replace(/(<([^>]+)>)/gi, '')
+                }
+            ],
             relationType: 'References',
-            relatedItemIdentifier: reference.location,
-            relatedItemIdentifierType: "URL",
-            titles: {
-                title: reference.text
-            },
+            relatedItemType: 'Other'
         };
+
+        return reference.location
+            ? {
+                  ...mutatedReference,
+                  relatedItemIdentifier: {
+                      relatedItemIdentifier: reference.location,
+                      relatedItemIdentifierType: 'URL'
+                  }
+              }
+            : mutatedReference;
     });
 
     // check if the creator of the publication is not listed as an author
@@ -178,7 +189,7 @@ export const updateDOI = async (
                     resourceType: publication?.type
                 },
                 relatedIdentifiers: allReferencesWithDOI,
-                relatedItem: otherReferences,
+                relatedItems: otherReferences,
                 fundingReferences: publication?.funders.map((funder) => ({
                     funderName: funder.name,
                     funderReference: funder.ror || funder.link,
