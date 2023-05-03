@@ -105,24 +105,16 @@ export const updateDOI = async (
         }
     });
 
-    const linkedPublications = publication?.linkedTo.map((relatedIdentifier) =>
-        relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
-            ? {
-                  relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                  relatedIdentifierType: 'DOI',
-                  relationType: 'Reviews'
-              }
-            : {
-                  relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                  relatedIdentifierType: 'DOI',
-                  relationType: 'Continues'
-              }
-    );
+    const linkedPublications = publication?.linkedTo.map((relatedIdentifier) => ({
+        relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+        relatedIdentifierType: 'DOI',
+        relationType: relatedIdentifier.publicationToRef.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
+    }));
 
     const doiReferences = references.map((reference) => {
         if (reference.type !== 'DOI' || !reference.location) return;
 
-        const doi: any = getFullDOIsStrings(reference.location);
+        const doi = getFullDOIsStrings(reference.location);
 
         return {
             relatedIdentifier: doi[0],
