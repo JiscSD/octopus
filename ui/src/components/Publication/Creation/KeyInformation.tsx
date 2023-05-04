@@ -143,6 +143,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                         </span>
                     </div>
                     <div className="mt-12">
+                        {/* <Components.RORForm type="affiliations" /> */}
                         <div className="mb-10">
                             <Components.PublicationCreationStepTitle text="Add your affiliations" required />
                             <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
