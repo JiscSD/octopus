@@ -13,6 +13,13 @@ describe('create coauthor', () => {
             .query({ apiKey: '000000005' })
             .send([
                 {
+                    id: 'coauthor-test-user-5-problem-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5'
+                },
+                {
                     id: cuid(),
                     publicationId: 'publication-problem-draft',
                     email: 'emailtest@emailtest.com',

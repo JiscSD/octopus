@@ -70,18 +70,9 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
             {mounted && (
                 <SWR.SWRConfig
                     value={{
-                        fetcher: (resource) => api.get(resource, user?.token),
-                        fallback: pageProps.fallback,
-                        errorRetryCount: 3,
-                        refreshInterval: 600000000, // for dev
-                        onError: (error, key) => {
-                            if (error.status === 403) {
-                                console.log('403 error');
-                            }
-
-                            if (error.status === 401) {
-                                console.log('401 error');
-                            }
+                        fetcher: (resource) => api.get(resource, user?.token).then((res) => res.data),
+                        onError: (error) => {
+                            console.error(error);
                         }
                     }}
                 >

@@ -43,10 +43,7 @@ type Props = {
 };
 
 const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
-    const {
-        data: { data },
-        error
-    } = useSWR(props.swrKey);
+    const { data, error } = useSWR(props.swrKey);
 
     return (
         <>

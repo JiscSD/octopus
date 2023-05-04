@@ -444,18 +444,20 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
                   method: put
                   cors: true
+
     # Affiliations
-    createAffiliation:
-        handler: src/components/affiliations/routes.create
+    updateAffiliations:
+        handler: src/components/affiliations/routes.updateAffiliations
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/affiliation
-                  method: POST
+                  path: ${self:custom.versions.v1}/publications/{id}/my-affiliations
+                  method: PUT
                   cors: true
-    deleteAffiliation:
-        handler: src/components/affiliations/routes.destroy
+
+    getORCIDAffiliations:
+        handler: src/components/affiliations/routes.getORCIDAffiliations
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/affiliation/{affiliation}
-                  method: DELETE
+                  path: ${self:custom.versions.v1}/orcid-affiliations
+                  method: GET
                   cors: true

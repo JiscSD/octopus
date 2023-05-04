@@ -37,7 +37,10 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
     }&exclude=${excludedIds.join(',')}`;
 
     const {
-        data: { data: results = { data: [], metadata: { limit: 10, offset: 0, total: 0 } } } = {},
+        data: results = {
+            data: [],
+            metadata: { limit: 10, offset: 0, total: 0 }
+        },
         error,
         isValidating
     } = useSWR(swrKey, null, {
