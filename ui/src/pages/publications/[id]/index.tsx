@@ -322,6 +322,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 email: correspondingUser.email || '',
                 publicationId: publicationData.id,
                 linkedUser: correspondingUser.id,
+                isIndependent: true,
+                affiliations: [],
                 user: {
                     orcid: correspondingUser.orcid,
                     firstName: correspondingUser.firstName,
