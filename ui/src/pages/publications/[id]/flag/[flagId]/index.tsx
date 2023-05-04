@@ -60,9 +60,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             isResolvable,
             flagUrl,
             fallback: {
-                [flagUrl]: {
-                    data: flag
-                }
+                [flagUrl]: flag
             }
         }
     };
@@ -82,12 +80,11 @@ type Props = {
 
 const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
-    const { data, isValidating, error, mutate } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(
-        props.flagUrl,
-        {
-            fallback: props.fallback
-        }
-    );
+    const { data, isValidating, error, mutate } = useSWR<Interfaces.FlagWithComments>(props.flagUrl, {
+        fallback: props.fallback
+    });
+
+    console.log(data);
 
     const user = Stores.useAuthStore((state) => state.user);
     const setToast = Stores.useToastStore((state) => state.setToast);
@@ -186,7 +183,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                         </section>
                     </>
                 )}
-                {!!data?.data && (
+                {!!data && (
                     <>
                         {props.isResolvable && (
                             <Components.Modal
@@ -207,7 +204,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                         )}
                         <section className="container mx-auto px-8 pt-10 lg:gap-4 lg:pb-10 lg:pt-20 xl:px-44">
                             <div className="mb-4 grid grid-cols-12 items-start">
-                                {data.data.resolved ? (
+                                {data.resolved ? (
                                     <OutlineIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
                                 ) : (
                                     <SolidIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
@@ -215,8 +212,8 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                 <div className="col-span-11 space-y-2">
                                     <Components.PageTitle
                                         text={`${
-                                            Config.values.octopusInformation.redFlagReasons[data.data.category].nicename
-                                        }${data.data.resolved ? ' - (Resolved)' : ''}`}
+                                            Config.values.octopusInformation.redFlagReasons[data.category].nicename
+                                        }${data.resolved ? ' - (Resolved)' : ''}`}
                                         className="!mb-0"
                                     />
                                     <h2>
@@ -230,13 +227,13 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
 
                                     <p className="text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                         This publication was red flagged on{' '}
-                                        <span className="italic">{Helpers.formatDate(data.data.createdAt)}</span>, by{' '}
+                                        <span className="italic">{Helpers.formatDate(data.createdAt)}</span>, by{' '}
                                         <Components.Link
-                                            href={`${Config.urls.viewUser.path}/${data.data.user.id}`}
+                                            href={`${Config.urls.viewUser.path}/${data.user.id}`}
                                             className="text-teal-500 underline"
                                         >
                                             <>
-                                                {data.data.user.firstName} {data.data.user.lastName}
+                                                {data.user.firstName} {data.user.lastName}
                                             </>
                                         </Components.Link>
                                     </p>
@@ -248,19 +245,19 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                             </div>
                         </section>
 
-                        {!!data.data.flagComments.length && (
+                        {!!data.flagComments.length && (
                             <section
                                 className={`container mx-auto px-8 lg:space-y-6 xl:px-44 ${
-                                    data.data.resolved ? 'opacity-75' : ''
+                                    data.resolved ? 'opacity-75' : ''
                                 }`}
                             >
-                                {data.data.flagComments.map((flagComment) => (
+                                {data.flagComments.map((flagComment) => (
                                     <Components.FlagComment key={flagComment.id} flagComment={flagComment} />
                                 ))}
                             </section>
                         )}
 
-                        {!!user && props.isCommentable && !data.data.resolved && (
+                        {!!user && props.isCommentable && !data.resolved && (
                             <section className="container mx-auto mt-12 px-8 xl:px-44">
                                 <div className="grid grid-cols-12">
                                     <div className="col-span-12 mb-2 lg:col-span-2 lg:mb-0">

@@ -300,7 +300,14 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateLinkTo(props.draftedPublication.linkedTo);
         store.updateFunders(props.draftedPublication.funders);
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
-        store.updateAffiliations(props.draftedPublication.affiliations);
+
+        const correspondingAuthor = props.draftedPublication?.coAuthors.find(
+            (author) => author.linkedUser === props.draftedPublication.createdBy
+        );
+
+        store.updateAuthorAffiliations(correspondingAuthor?.affiliations || []);
+        store.updateIsIndependentAuthor(correspondingAuthor?.isIndependent || false);
+
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
     }, []);

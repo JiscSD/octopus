@@ -22,6 +22,8 @@ export const getAllByPublication = async (publicationId: string) => {
             publicationId: true,
             confirmedCoAuthor: true,
             approvalRequested: true,
+            isIndependent: true,
+            affiliations: true,
             user: {
                 select: {
                     firstName: true,

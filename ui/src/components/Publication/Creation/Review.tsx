@@ -22,19 +22,21 @@ const MandatoryIcon = () => (
  * @description Content review
  */
 const Review: React.FC = (): React.ReactElement => {
-    const title = Stores.usePublicationCreationStore((state) => state.title);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
-    const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore((state) => state.conflictOfInterestStatus);
-    const conflictOfInterestText = Stores.usePublicationCreationStore((state) => state.conflictOfInterestText);
-    const licence = Stores.usePublicationCreationStore((state) => state.licence);
-    const content = Stores.usePublicationCreationStore((state) => state.content);
-    const linkedTo = Stores.usePublicationCreationStore((state) => state.linkTo);
-    const ethicalStatement = Stores.usePublicationCreationStore((state) => state.ethicalStatement);
-    const dataPermissionsStatement = Stores.usePublicationCreationStore((state) => state.dataPermissionsStatement);
-    const dataPermissionsStatementProvidedBy = Stores.usePublicationCreationStore(
-        (state) => state.dataPermissionsStatementProvidedBy
-    );
+    const {
+        title,
+        type,
+        coAuthors,
+        conflictOfInterestStatus,
+        conflictOfInterestText,
+        licence,
+        content,
+        linkTo: linkedTo,
+        ethicalStatement,
+        dataPermissionsStatement,
+        dataPermissionsStatementProvidedBy,
+        authorAffiliations,
+        isIndependentAuthor
+    } = Stores.usePublicationCreationStore();
 
     return (
         <>
@@ -64,6 +66,13 @@ const Review: React.FC = (): React.ReactElement => {
                         Creative commons licence
                     </span>
                     {licence ? <CompletedIcon /> : <IncompleteIcon />}
+                </div>
+
+                <div className="relative">
+                    <span className="block font-montserrat text-xl text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        Affiliations
+                    </span>
+                    {authorAffiliations.length || isIndependentAuthor ? <CompletedIcon /> : <IncompleteIcon />}
                 </div>
 
                 <div className="relative">

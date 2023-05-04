@@ -78,6 +78,8 @@ const updateDoiNames = async (): Promise<void> => {
                     approvalRequested: true,
                     createdAt: true,
                     reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
                     user: {
                         select: {
                             firstName: true,

@@ -21,7 +21,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
     const [searchType, setSearchType] = React.useState<Types.SearchType>('publications');
 
     const {
-        data: { data: results = [] } = {},
+        data: results = [],
         error,
         isValidating
     } = useSWR(`/${searchType}?search=${encodeURIComponent(query)}&limit=10`, null, {
@@ -34,7 +34,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
     });
 
     const toggleSearchType = () =>
-        searchType === 'publications' ? setSearchType('authors') : setSearchType('publications');
+        searchType === 'publications' ? setSearchType('users') : setSearchType('publications');
 
     const handleGoToSearchResults = () => {
         toggleCmdPalette();
@@ -70,7 +70,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
                             </span>
                             <HeadlessUI.Switch
                                 checked={true}
-                                onChange={(e) => toggleSearchType()}
+                                onChange={() => toggleSearchType()}
                                 onKeyDown={(e: React.KeyboardEvent) => {
                                     if (e.key === 'Enter') toggleSearchType();
                                 }}
@@ -152,7 +152,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
                                             );
                                         }
 
-                                        if (searchType === 'authors') {
+                                        if (searchType === 'users') {
                                             return (
                                                 <Components.CommandPaletteResult
                                                     key={result.id}
@@ -189,7 +189,7 @@ const CommandPalette: React.FC = (): React.ReactElement | null => {
                                     className="flex justify-center px-6 pb-4 pt-4"
                                 >
                                     <span className="text-sm text-pink-500 dark:text-pink-300">
-                                        There was a problem fetching publications.
+                                        There was a problem fetching {searchType}.
                                     </span>
                                 </Framer.motion.div>
                             )}

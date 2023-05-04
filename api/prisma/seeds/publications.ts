@@ -59,13 +59,22 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'coauthor-test-user-6-problem-live',
-                email: 'test-user-6@jisc.ac.uk',
-                code: 'test-code-user-6',
-                confirmedCoAuthor: true,
-                linkedUser: 'test-user-6'
-            }
+            create: [
+                {
+                    id: 'coauthor-test-user-1-problem-live',
+                    email: 'test-user-1@jisc.ac.uk',
+                    code: 'test-code-user-1',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1'
+                },
+                {
+                    id: 'coauthor-test-user-6-problem-live',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6'
+                }
+            ]
         },
         publicationFlags: {
             create: {
@@ -174,6 +183,13 @@ const publicationSeeds = [
         },
         coAuthors: {
             create: [
+                {
+                    id: 'coauthor-test-user-5-problem-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5'
+                },
                 {
                     id: 'coauthor-test-user-6-problem-draft',
                     email: 'test-user-6@jisc.ac.uk',

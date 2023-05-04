@@ -148,6 +148,8 @@ export const get = async (id: string) => {
                     approvalRequested: true,
                     createdAt: true,
                     reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
                     user: {
                         select: {
                             firstName: true,
