@@ -5,6 +5,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as referenceService from 'reference/service';
 import * as coAuthorService from 'coauthor/service';
 
 export const getAll = async (
@@ -334,8 +335,10 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
 
+        const references = await referenceService.getAllByPublication(publicationId);
+
         // Publication is live, so update the DOI
-        await helpers.updateDOI(publication.doi, publication);
+        await helpers.updateDOI(publication.doi, publication, references);
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {

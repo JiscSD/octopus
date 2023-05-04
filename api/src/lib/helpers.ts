@@ -68,13 +68,66 @@ const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     };
 };
 
-export const updateDOI = async (doi: string, publication: I.PublicationWithMetadata): Promise<I.DOIResponse> => {
+export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
+    text.match(
+        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi //eslint-disable-line
+    ) || [];
+
+export const updateDOI = async (
+    doi: string,
+    publication: I.PublicationWithMetadata,
+    references: I.Reference[]
+): Promise<I.DOIResponse> => {
     if (!publication) {
         throw Error('Publication not found');
     }
 
     const authors = publication.coAuthors.map((coAuthor) => {
         if (coAuthor.user !== null) return createCreatorObject(coAuthor.user);
+    });
+
+    const linkedPublications = publication?.linkedTo.map((relatedIdentifier) => ({
+        relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+        relatedIdentifierType: 'DOI',
+        relationType: relatedIdentifier.publicationToRef.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
+    }));
+
+    const doiReferences = references.map((reference) => {
+        if (reference.type !== 'DOI' || !reference.location) return;
+
+        const doi = getFullDOIsStrings(reference.location);
+
+        return {
+            relatedIdentifier: doi[0],
+            relatedIdentifierType: 'DOI',
+            relationType: 'References'
+        };
+    });
+
+    const allReferencesWithDOI = doiReferences.concat(linkedPublications);
+
+    const otherReferences = references.map((reference) => {
+        if (reference.type === 'DOI') return;
+
+        const mutatedReference = {
+            titles: [
+                {
+                    title: reference.text.replace(/(<([^>]+)>)/gi, '')
+                }
+            ],
+            relationType: 'References',
+            relatedItemType: 'Other'
+        };
+
+        return reference.location
+            ? {
+                  ...mutatedReference,
+                  relatedItemIdentifier: {
+                      relatedItemIdentifier: reference.location,
+                      relatedItemIdentifierType: 'URL'
+                  }
+              }
+            : mutatedReference;
     });
 
     // check if the creator of the publication is not listed as an author
@@ -127,19 +180,8 @@ export const updateDOI = async (doi: string, publication: I.PublicationWithMetad
                     resourceTypeGeneral: 'Other',
                     resourceType: publication?.type
                 },
-                relatedIdentifiers: publication?.linkedTo.map((relatedIdentifier) =>
-                    relatedIdentifier.publicationToRef.type === 'PEER_REVIEW'
-                        ? {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Reviews'
-                          }
-                        : {
-                              relatedIdentifier: relatedIdentifier.publicationToRef.doi,
-                              relatedIdentifierType: 'DOI',
-                              relationType: 'Continues'
-                          }
-                ),
+                relatedIdentifiers: allReferencesWithDOI,
+                relatedItems: otherReferences,
                 fundingReferences: publication?.funders.map((funder) => ({
                     funderName: funder.name,
                     funderReference: funder.ror || funder.link,

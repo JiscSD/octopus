@@ -1,7 +1,7 @@
 import * as client from '../lib/client';
 import * as helpers from '../lib/helpers';
 
-const updateDoiNames = async (): Promise<void> => {
+const updateDoi = async (): Promise<void> => {
     const publications = await client.prisma.publication.findMany({
         where: {
             currentStatus: 'LIVE'
@@ -66,6 +66,15 @@ const updateDoiNames = async (): Promise<void> => {
                     name: true,
                     link: true,
                     ror: true
+                }
+            },
+            References: {
+                select: {
+                    id: true,
+                    type: true,
+                    text: true,
+                    location: true,
+                    publicationId: true
                 }
             },
             coAuthors: {
@@ -156,10 +165,10 @@ const updateDoiNames = async (): Promise<void> => {
     let index = 1;
 
     for (const publication of publications) {
-        await helpers.updateDOI(publication.doi, publication).catch((err) => console.log(err));
+        await helpers.updateDOI(publication.doi, publication, publication.References).catch((err) => console.log(err));
         console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
         index++;
     }
 };
 
-updateDoiNames().catch((err) => console.log(err));
+updateDoi().catch((err) => console.log(err));
