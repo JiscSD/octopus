@@ -84,8 +84,6 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
         fallback: props.fallback
     });
 
-    console.log(data);
-
     const user = Stores.useAuthStore((state) => state.user);
     const setToast = Stores.useToastStore((state) => state.setToast);
 
