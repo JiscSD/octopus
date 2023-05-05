@@ -128,8 +128,8 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             linkedUser: null,
             approvalRequested: false,
             confirmedCoAuthor: false,
-            affiliations: [],
-            isIndependentAuthor: false
+            isIndependent: false,
+            affiliations: []
         };
 
         authorsArray.push(newAuthor);

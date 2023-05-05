@@ -27,6 +27,8 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 email: correspondingUser.email || '',
                 publicationId: props.publication.id,
                 linkedUser: correspondingUser.id,
+                isIndependent: true,
+                affiliations: [],
                 user: {
                     orcid: correspondingUser.orcid,
                     firstName: correspondingUser.firstName,
