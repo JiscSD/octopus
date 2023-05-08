@@ -689,3 +689,19 @@ export interface MappedOrcidAffiliation {
     source: { name: string; orcid: string };
     url: string | null;
 }
+
+export interface UserEmployment {
+    role: string | null;
+    endDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    startDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    department: string | null;
+    organisation: string;
+}
