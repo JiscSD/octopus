@@ -80,7 +80,7 @@ describe('update coAuthor affiliations per publication', () => {
         expect(updateAffiliationsResponse.body.message).toEqual('Successfully updated affiliations.');
     });
 
-    test('Author needs to add affiliations if not independent', async () => {
+    test('Corresponding author needs to add affiliations if not independent before locking the publication', async () => {
         const updateAffiliationsResponse = await testUtils.agent
             .put('/publications/publication-problem-draft/my-affiliations')
             .query({ apiKey: '000000005' })
@@ -89,10 +89,30 @@ describe('update coAuthor affiliations per publication', () => {
                 isIndependent: false
             });
 
-        expect(updateAffiliationsResponse.status).toEqual(403);
-        expect(updateAffiliationsResponse.body.message).toEqual(
-            'Please add your affiliations if your research was not conducted independently.'
+        expect(updateAffiliationsResponse.status).toEqual(200);
+
+        const updateStatusResponse = await testUtils.agent
+            .put('/publications/publication-problem-draft/status/LOCKED')
+            .query({ apiKey: '000000005' })
+            .send();
+
+        expect(updateStatusResponse.status).toEqual(403);
+        expect(updateStatusResponse.body.message).toEqual(
+            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
         );
+    });
+
+    test('Author needs to fill out affiliations if the publication is LOCKED', async () => {
+        const updateAffiliationsResponse = await testUtils.agent
+            .put('/publications/publication-problem-locked/my-affiliations')
+            .query({ apiKey: '000000005' })
+            .send({
+                affiliations: [],
+                isIndependent: false
+            });
+
+        expect(updateAffiliationsResponse.status).toEqual(403);
+        expect(updateAffiliationsResponse.body.message).toEqual('Please fill out your affiliation information.');
     });
 
     test('User cannot add affiliations if they are not part of the publication', async () => {
