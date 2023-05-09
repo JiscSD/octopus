@@ -497,7 +497,18 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
+
+    /**
+     * @TODO - update 'coAuthorsAreVerified' when implementing OCT-580
+     * - all co-authors must confirm their affiliations before publishing but until we implement OCT-580, only the creator can add his affiliations
+     */
+    const coAuthorsAreVerified = publication.coAuthors.every(
+        (coAuthor) =>
+            coAuthor.confirmedCoAuthor &&
+            (coAuthor.linkedUser === publication.createdBy
+                ? coAuthor.isIndependent || coAuthor.affiliations.length
+                : true)
+    );
 
     return (
         hasAtLeastOneLinkTo &&
@@ -523,6 +534,9 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
     const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+    const hasConfirmedAffiliations = publication.coAuthors.some(
+        (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
+    );
 
     return (
         hasAtLeastOneLinkTo &&
@@ -530,7 +544,8 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        hasRequestedApprovals
+        hasRequestedApprovals &&
+        hasConfirmedAffiliations
     );
 };
 

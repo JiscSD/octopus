@@ -48,7 +48,7 @@ export const updateAffiliations = async (
         }
 
         // enforce adding affiliations if co-author is not independent
-        if (!isIndependent && !affiliations.length) {
+        if (publication.currentStatus === 'LOCKED' && !isIndependent && !affiliations.length) {
             return response.json(403, {
                 message: 'Please add your affiliations if your research was not conducted independently.'
             });
