@@ -1,6 +1,7 @@
 import htmlToText from 'html-to-text';
 import axios from 'axios';
 import s3 from 'lib/s3';
+import { sendMessage } from 'lib/sqs';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
@@ -336,6 +337,9 @@ export const updateStatus = async (
 
         // Publication is live, so update the DOI
         await helpers.updateDOI(publication.doi, publication);
+
+        // send message to the pdf generation queue
+        await sendMessage(publicationId);
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
