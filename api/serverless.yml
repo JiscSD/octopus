@@ -11,6 +11,7 @@ plugins:
     - serverless-webpack
     - serverless-webpack-prisma
     - serverless-prune-plugin
+    - serverless-offline-sqs-external
 
 provider:
     name: aws
@@ -64,6 +65,15 @@ provider:
         - Effect: 'Allow'
           Resource: 'arn:aws:s3:::science-octopus-publishing-pdfs-${self:provider.stage}/*'
           Action: 's3:PutObject'
+        - Effect: 'Allow'
+          Resource: 'arn:aws:sqs:eu-west-1:000000000000:science-octopus-local-pdf-queue'
+          Action:
+              - 'lambda:CreateEventSourceMapping'
+              - 'lambda:ListEventSourceMappings'
+              - 'lambda:ListFunctions'
+              - 'sqs:DeleteMessage'
+              - 'sqs:GetQueueAttributes'
+              - 'sqs:ReceiveMessage'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
@@ -83,6 +93,13 @@ custom:
     warmup:
         default:
             enabled: true
+    serverless-offline-sqs-external:
+        autoCreate: true,
+        apiVersion: '2012-11-05'
+        endpoint: 'http://localhost:4566'
+        region: eu-west-1
+        accessKeyId: 'dummy'
+        secretAccessKey: 'dummy'
     serverless-offline-ssm:
         stages:
             - local
@@ -113,6 +130,10 @@ custom:
         number: 3
 functions:
     # App
+    generatePDFsFromQueue:
+        handler: src/components/sqs/handler.generatePDFs
+        events:
+            - sqs: arn:aws:sqs:eu-west-1:000000000000:science-octopus-local-pdf-queue
     healthcheck:
         handler: src/components/application/routes.healthcheck
         events:

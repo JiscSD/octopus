@@ -116,6 +116,7 @@ export const initialDevSeed = async (): Promise<void> => {
             console.log('Queue already exists');
         } catch (err) {
             await createQueue();
+            console.log('Queue created');
         }
     }
 };

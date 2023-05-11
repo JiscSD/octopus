@@ -20,29 +20,20 @@ if (process.env.STAGE === 'local') {
 
 const sqs = new AWS.SQS(config);
 
-export const createQueue = async (): Promise<void> => {
+export const createQueue = async (): Promise<AWS.SQS.CreateQueueResult> => {
     // create SQS locally for PDF message queue
-    await sqs
-        .createQueue(
-            {
-                QueueName: 'science-octopus-local-pdf-queue',
-                Attributes: {
-                    DelaySeconds: '60',
-                    MessageRetentionPeriod: '86400'
-                }
-            },
-            function (err, data) {
-                if (err) {
-                    console.log('Error', err);
-                } else {
-                    console.log('Queue Created', data.QueueUrl);
-                }
+    return sqs
+        .createQueue({
+            QueueName: 'science-octopus-local-pdf-queue',
+            Attributes: {
+                DelaySeconds: '60',
+                MessageRetentionPeriod: '86400'
             }
-        )
+        })
         .promise();
 };
 
-export const sendMessage = async (message: string): Promise<void> => {
+export const sendMessage = async (message: string): Promise<AWS.SQS.SendMessageResult> => {
     // send message to AWS SQS queue
     const params = {
         DelaySeconds: 10,
@@ -50,15 +41,7 @@ export const sendMessage = async (message: string): Promise<void> => {
         QueueUrl: queueUrl
     };
 
-    await sqs
-        .sendMessage(params, function (err, data) {
-            if (err) {
-                console.log('Error', err);
-            } else {
-                console.log('Queue created:', data.MessageId);
-            }
-        })
-        .promise();
+    return sqs.sendMessage(params).promise();
 };
 
 export const getQueue = async (queueName: string): Promise<void> => {
