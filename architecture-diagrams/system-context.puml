@@ -11,10 +11,15 @@ Person(octopusUser, "Octopus User")
 System(octopus, "Octopus", "Allows researchers to publish and browse publications", $tags="internal system")
 System(orcid, "ORCID", "Distinguishes researchers by providing them with a unique ID", $sprite="orcid")
 System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)")
+System(doiOrg, "doi.org", "Governs the Digital Object Identifier (DOI) system")
+System(rorOrg, "ror.org", "Registry of identifiers for research organizations")
 
 Rel(octopusUser, octopus, "Manages and browses publications using")
 Rel(octopusUser, orcid, "Logs in via")
 Rel_R(octopus, orcid, "Gets user details from")
 Rel(octopus, datacite, "Mints a DOI per publication using")
+Rel(octopus, rorOrg, "Pulls funder details from")
+Rel(octopus, doiOrg, "Pulls reference data from")
+Rel_D(datacite, doiOrg, "Registers octopus publication DOIs with")
 
 @enduml
