@@ -1,0 +1,31 @@
+@startuml container-diagram
+!include <C4/C4_Container>
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/orcid.puml
+
+Person(octopusUser, "Octopus User")
+
+System_Boundary(octopusBoundary, "Octopus") {
+    Container(webServer, "Web server", "AWS Amplify", "Delivers the front end application")
+    Container(ui, "Front end application", "React", "Interface for researchers to manage and explore publications")
+    Container(api, "API", "TypeScript / AWS Lambda", "API for publication management")
+    ContainerDb(db, "Database", "PostgreSQL", "Stores publication data")
+    Container(opensearch, "Opensearch", "", "Searchable index of publication records")
+}
+
+System(orcid, "ORCID", "Distinguishes researchers by providing them with a unique ID", $sprite="orcid")
+System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)")
+
+Rel(octopusUser, webServer, "Visits octopus.ac using", "HTTPS")
+Rel(octopusUser, ui, "Manages and browses publications using")
+Rel(octopusUser, orcid, "Logs in via")
+Rel_R(webServer, ui, "Delivers to the user's web browser")
+Rel_D(ui, api, "Makes API requests to", "JSON/HTTPS")
+Rel_L(api, db, "Reads / writes to", "Prisma/SQL")
+Rel_D(api, opensearch, "Reads / writes from index", "Opensearch JS client")
+Rel_R(api, orcid, "Gets user data from", "OAuth")
+Rel(api, datacite, "Mints a DOI per publication using")
+
+' SHOW_LEGEND(false)
+@enduml
