@@ -30,6 +30,8 @@ To run this application locally you will need:
 - [API instructions](./api/README.md)
 - [UI instructions](./ui/README.md)
 
+You might also find it useful to get an overview of Octopus's architecture by reading our [system context](./architecture-diagrams/system-context-diagram.png) and [container](./architecture-diagrams/container-diagram.png) diagrams. These are based on the [C4 Model](https://c4model.com/).
+
 ## Authentication
 
 Octopus makes use of [ORCID](https://orcid.org) as a means of authenticating end users.
