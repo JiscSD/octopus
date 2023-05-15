@@ -85,9 +85,11 @@ export type PublicationCreationStoreType = {
     updateFunderStatement: (funderStatement: string | null) => void;
     funders: Interfaces.Funder[];
     updateFunders: (funders: Interfaces.Funder[]) => void;
-    affiliations: Interfaces.Affiliations[];
-    updateAffiliations: (affiliations: Interfaces.Affiliations[]) => void;
-    affiliationsStatement: string | null;
+    authorAffiliations: Interfaces.MappedOrcidAffiliation[];
+    updateAuthorAffiliations: (authorAffiliations: Interfaces.MappedOrcidAffiliation[]) => void;
+    isIndependentAuthor: boolean;
+    updateIsIndependentAuthor: (isIndependentAuthor: boolean) => void;
+    affiliationsStatement: string | null; // need discussion if this is needed anymore
     updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
     selfDeclaration: boolean;
     updateSelfDeclaration: (selfDeclaration: boolean) => void;
@@ -95,9 +97,9 @@ export type PublicationCreationStoreType = {
     updateReferences: (references: Interfaces.Reference[]) => void;
 };
 
-export type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue> | null | undefined;
+export type JSONValue = unknown;
 
-export type SearchType = 'publications' | 'authors';
+export type SearchType = 'publications' | 'users';
 
 export type SearchParameter = Interfaces.Publication | Interfaces.User;
 

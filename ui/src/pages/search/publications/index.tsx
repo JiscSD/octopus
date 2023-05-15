@@ -135,7 +135,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''
     }`;
 
-    const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
+    const { data: results = [], error, isValidating } = useSWR(swrKey);
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>

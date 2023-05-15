@@ -1,24 +1,61 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import useSWR from 'swr';
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
-
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as Interfaces from '@interfaces';
+import * as api from '@api';
 
 /**
  * @description Edit title
  */
 const KeyInformation: React.FC = (): React.ReactElement => {
-    const title = Stores.usePublicationCreationStore((state) => state.title);
-    const updateTitle = Stores.usePublicationCreationStore((state) => state.updateTitle);
-    const licence: Types.LicenceType = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.licence
-    );
-    const updateLicence = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateLicence
-    );
+    const {
+        id,
+        title,
+        updateTitle,
+        licence,
+        updateLicence,
+        authorAffiliations,
+        updateAuthorAffiliations,
+        isIndependentAuthor,
+        updateIsIndependentAuthor
+    } = Stores.usePublicationCreationStore();
+    const { user } = Stores.useAuthStore();
+
+    const {
+        data: orcidAffiliations = [],
+        isValidating,
+        error
+    } = useSWR<Interfaces.MappedOrcidAffiliation[]>('/orcid-affiliations');
+
+    useSWR(isValidating || error ? null : `${Config.endpoints.publications}/${id}/my-affiliations`, (url) => {
+        const updatedAuthorAffiliations = orcidAffiliations.filter((affiliation) =>
+            authorAffiliations.some(({ id }) => affiliation.id === id)
+        );
+
+        try {
+            if (JSON.stringify(authorAffiliations) === JSON.stringify(updatedAuthorAffiliations)) {
+                // there's no need for update
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        updateAuthorAffiliations(updatedAuthorAffiliations);
+
+        // also update author affiliations in DB
+        api.put(
+            url,
+            { affiliations: updatedAuthorAffiliations, isIndependent: isIndependentAuthor },
+            user?.token
+        ).catch((err) => {
+            console.log(err);
+        });
+    });
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -107,21 +144,52 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     </div>
                     <div className="mt-12">
                         <div className="mb-10">
-                            <Components.PublicationCreationStepTitle text="Affiliated Organisations" />
-                            <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                Please enter the details for any organisations this publication is associated with.
-                                Please note that funding sources are added later in the publication form.
-                            </span>
-                            <Components.Button
-                                title="Search for your organisation's ROR"
-                                href="https://ror.org/"
-                                openNew
-                                endIcon={
-                                    <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                            />
+                            <Components.PublicationCreationStepTitle text="Add your affiliations" required />
+                            <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                The following affiliations are present on{' '}
+                                <Components.Link
+                                    href={`https://orcid.org/my-orcid?orcid=${user?.orcid}`}
+                                    openNew
+                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                >
+                                    your ORCID® profile
+                                </Components.Link>
+                                . To add a new affiliation, please enter it on{' '}
+                                <Components.Link
+                                    href={`https://orcid.org/my-orcid?orcid=${user?.orcid}`}
+                                    openNew
+                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                >
+                                    your ORCID profile
+                                </Components.Link>
+                                .
+                            </p>
+
+                            <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                <Components.Link
+                                    href="https://support.orcid.org/hc/en-us/sections/360002054993-Assert-your-affiliations"
+                                    openNew
+                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                >
+                                    Click here
+                                </Components.Link>{' '}
+                                to learn more about adding affiliations to ORCID.
+                            </p>
+
+                            <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                Please note that any other authors will be given the opportunity to add their own
+                                affiliations later.
+                            </p>
                         </div>
-                        <Components.RORForm type="affiliations" />
+
+                        <Components.AuthorAffiliations
+                            scrollHeight={700}
+                            isIndependentAuthor={isIndependentAuthor}
+                            availableAffiliations={orcidAffiliations}
+                            selectedAffiliations={authorAffiliations}
+                            onSelectionChange={updateAuthorAffiliations}
+                            onIndependentAuthorChange={updateIsIndependentAuthor}
+                        />
                     </div>
                 </Framer.motion.div>
             </div>

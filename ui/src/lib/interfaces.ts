@@ -141,6 +141,8 @@ export interface CoAuthor {
     publicationId: string;
     createdAt?: string;
     reminderDate?: string | null;
+    affiliations: MappedOrcidAffiliation[];
+    isIndependent: boolean;
     user?: {
         firstName: string;
         lastName: string;
@@ -407,4 +409,44 @@ export interface UserPublicationsPage {
     limit: number;
     total: number;
     results: UserPublication[];
+}
+
+export interface OrcidAffiliationDate {
+    year: string | null;
+    month: string | null;
+    day: string | null;
+}
+
+export interface OrcidOrganization {
+    name: string;
+    address: {
+        city: string;
+        region: string | null;
+        country: string;
+    };
+    'disambiguated-organization': {
+        'disambiguated-organization-identifier': string;
+        'disambiguation-source': string;
+    } | null;
+}
+
+export interface MappedOrcidAffiliation {
+    id: number;
+    affiliationType:
+        | 'membership'
+        | 'service'
+        | 'invited-position'
+        | 'distinction'
+        | 'employment'
+        | 'education'
+        | 'qualification';
+    title: string | null;
+    departmentName: string | null;
+    startDate: OrcidAffiliationDate | null;
+    endDate: OrcidAffiliationDate | null;
+    organization: OrcidOrganization;
+    createdAt: number;
+    updatedAt: number;
+    source: { name: string; orcid: string };
+    url: string | null;
 }

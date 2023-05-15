@@ -47,8 +47,7 @@ const updateAll: I.Schema = {
                 }
             }
         },
-        required: ['id', 'email'],
-        additionalProperties: false
+        required: ['id', 'email']
     }
 };
 

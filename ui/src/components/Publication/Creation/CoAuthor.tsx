@@ -127,7 +127,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             email: coAuthor,
             linkedUser: null,
             approvalRequested: false,
-            confirmedCoAuthor: false
+            confirmedCoAuthor: false,
+            isIndependent: false,
+            affiliations: []
         };
 
         authorsArray.push(newAuthor);

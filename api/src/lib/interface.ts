@@ -374,6 +374,7 @@ export interface CoAuthor {
     publicationId: string;
     createdAt?: string;
     reminderDate?: string | null;
+    affiliations: MappedOrcidAffiliation[];
     user?: {
         firstName: string;
         lastName: string;
@@ -531,21 +532,13 @@ export interface DOIResponse {
 
 //affiliations
 
-export interface CreateAffiliationPathParams {
+export interface UpdateAffiliationsPathParams {
     id: string;
 }
 
-export interface DeleteAffiliationPathParams {
-    id: string;
-    affiliation: string;
-}
-
-export interface CreateAffiliationRequestBody {
-    name: string;
-    ror?: string;
-    city: string;
-    country: string;
-    link: string;
+export interface UpdateAffiliationsBody {
+    affiliations: MappedOrcidAffiliation[];
+    isIndependent: boolean;
 }
 
 export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
@@ -563,12 +556,20 @@ export interface SendApprovalReminderPathParams {
 }
 
 type NameType = 'Personal' | 'Organizational';
+
+type DataCiteAffiliation = {
+    name: string;
+    nameType: NameType;
+    affiliationIdentifier: string;
+    affiliationIdentifierScheme: string;
+};
 export interface DataCiteCreator {
     name: string;
+    nameType: NameType;
     givenName: string | undefined;
     familyName: string | null;
-    nameType: NameType;
     nameIdentifiers: DataCiteCreatorNameIdentifiers[];
+    affiliation: DataCiteAffiliation[];
 }
 
 export interface DataCiteCreatorNameIdentifiers {
@@ -581,6 +582,7 @@ export interface DataCiteUser {
     firstName: string | undefined;
     lastName: string | null;
     orcid: string;
+    affiliations: MappedOrcidAffiliation[];
 }
 export interface GeneratePDFPathParams {
     id: string;
@@ -589,4 +591,101 @@ export interface GeneratePDFPathParams {
 export interface GeneratePDFQueryParams {
     redirectToPreview?: string;
     generateNewPDF?: string;
+}
+
+export interface OrcidAffiliationSummaryDate {
+    year: {
+        value: string | null;
+    };
+    month: {
+        value: string | null;
+    };
+    day: {
+        value: string | null;
+    };
+}
+
+export interface OrcidOrganization {
+    name: string;
+    address: {
+        city: string;
+        region: string | null;
+        country: string;
+    };
+    'disambiguated-organization': {
+        'disambiguated-organization-identifier': string;
+        'disambiguation-source': string;
+    } | null;
+}
+
+export interface OrcidAffiliationSummary {
+    'created-date': {
+        value: number;
+    };
+    'last-modified-date': {
+        value: number;
+    };
+    source: {
+        'source-orcid': {
+            uri: string;
+            path: string;
+            host: string;
+        };
+        'source-client-id'?: string;
+        'source-name': {
+            value: string;
+        };
+        'assertion-origin-orcid'?: string;
+        'assertion-origin-client-id'?: string;
+        'assertion-origin-name'?: string;
+    };
+    'put-code': number;
+    'department-name': string | null;
+    'role-title': string | null;
+    'start-date': OrcidAffiliationSummaryDate | null;
+    'end-date': OrcidAffiliationSummaryDate | null;
+    organization: OrcidOrganization;
+    url: { value: string } | null;
+    'external-ids': string[] | null;
+    'display-index': string;
+    visibility: string;
+    path: string;
+}
+
+export interface OrcidAffiliationDate {
+    year: string | null;
+    month: string | null;
+    day: string | null;
+}
+
+/**
+ *
+ * Relevant affiliation types for Octopus are:
+ * - Memberships
+ * - Services
+ * - Invited Positions
+ * - Distinctions
+ * - Employments
+ * - Educations
+ * - Qualifications
+ */
+export interface MappedOrcidAffiliation {
+    id: number;
+    affiliationType:
+        | 'membership'
+        | 'service'
+        | 'invited-position'
+        | 'distinction'
+        | 'employment'
+        | 'education'
+        | 'qualification';
+    title: string | null;
+    departmentName: string | null;
+    startDate: OrcidAffiliationDate | null;
+    endDate: OrcidAffiliationDate | null;
+    organization: OrcidOrganization;
+    createdAt: number;
+    updatedAt: number;
+    source: { name: string; orcid: string };
+    url: string | null;
 }

@@ -61,10 +61,18 @@ const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
         nameIdentifiers: [
             {
                 nameIdentifier: user?.orcid ? user?.orcid : 'ORCID iD not provided',
-                nameIdentifierScheme: 'orcid',
-                schemeUri: 'orcid.org'
+                nameIdentifierScheme: 'ORCID',
+                schemeUri: 'https://orcid.org/'
             }
-        ]
+        ],
+        affiliation: user.affiliations.map((affiliation) => ({
+            name: affiliation.organization.name,
+            nameType: 'Organizational',
+            affiliationIdentifier:
+                affiliation.organization['disambiguated-organization']?.['disambiguated-organization-identifier'] || '',
+            affiliationIdentifierScheme:
+                affiliation.organization['disambiguated-organization']?.['disambiguation-source'] || ''
+        }))
     };
 };
 
@@ -82,8 +90,19 @@ export const updateDOI = async (
         throw Error('Publication not found');
     }
 
-    const authors = publication.coAuthors.map((coAuthor) => {
-        if (coAuthor.user !== null) return createCreatorObject(coAuthor.user);
+    const creators: I.DataCiteCreator[] = [];
+
+    publication.coAuthors.forEach((author) => {
+        if (author.user) {
+            creators.push(
+                createCreatorObject({
+                    firstName: author.user.firstName,
+                    lastName: author.user.lastName,
+                    orcid: author.user.orcid,
+                    affiliations: author.affiliations as unknown as I.MappedOrcidAffiliation[]
+                })
+            );
+        }
     });
 
     const linkedPublications = publication?.linkedTo.map((relatedIdentifier) => ({
@@ -133,11 +152,12 @@ export const updateDOI = async (
     // check if the creator of the publication is not listed as an author
     if (!publication.coAuthors.find((author) => author.linkedUser === publication.createdBy)) {
         // add creator to authors list as first author
-        authors?.unshift(
+        creators?.unshift(
             createCreatorObject({
                 firstName: publication.user.firstName,
                 lastName: publication.user.lastName,
-                orcid: publication.user.orcid
+                orcid: publication.user.orcid,
+                affiliations: []
             })
         );
     }
@@ -155,7 +175,7 @@ export const updateDOI = async (
                         identifierType: 'DOI'
                     }
                 ],
-                creators: authors,
+                creators,
                 titles: [
                     {
                         title: publication?.title,
@@ -164,17 +184,22 @@ export const updateDOI = async (
                 ],
                 publisher: 'Octopus',
                 publicationYear: publication?.createdAt.getFullYear(),
-                contributors: publication?.affiliations.map((affiliation) => ({
-                    contributorType: 'Other',
-                    nameType: 'Organizational',
-                    name: affiliation.name,
-                    nameIdentifiers: [
-                        {
-                            nameIdentifier: affiliation.ror || affiliation.link,
-                            nameIdentifierScheme: affiliation.ror ? 'ROR' : 'Other'
-                        }
-                    ]
-                })),
+                contributors: [
+                    {
+                        name: `${publication.user.lastName} ${publication.user.firstName}`,
+                        contributorType: 'ContactPerson',
+                        nameType: 'Personal',
+                        givenName: publication.user.firstName,
+                        familyName: publication.user.lastName,
+                        nameIdentifiers: [
+                            {
+                                nameIdentifier: publication.user.orcid,
+                                nameIdentifierScheme: 'ORCID',
+                                schemeUri: 'https://orcid.org/'
+                            }
+                        ]
+                    }
+                ],
                 language: 'en',
                 types: {
                     resourceTypeGeneral: 'Other',
@@ -476,7 +501,7 @@ export const createPublicationHTMLTemplate = (
     // parsing the publication content can sometimes help with unpaired opening/closing tags
     const mainText = content ? cheerio.load(content).html() : '';
 
-    const authors = coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
+    const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
 
     if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
         authors.unshift({
@@ -488,7 +513,9 @@ export const createPublicationHTMLTemplate = (
             linkedUser: publication.createdBy,
             publicationId: publication.id,
             user: publication.user,
-            reminderDate: null
+            reminderDate: null,
+            isIndependent: true,
+            affiliations: []
         });
     }
 
@@ -843,7 +870,9 @@ export const createPublicationHeaderTemplate = (publication: I.Publication & I.P
             linkedUser: publication.createdBy,
             publicationId: publication.id,
             user: publication.user,
-            reminderDate: null
+            reminderDate: null,
+            isIndependent: true,
+            affiliations: []
         });
     }
 
@@ -956,3 +985,32 @@ export const createPublicationFooterTemplate = (publication: I.Publication): str
 };
 
 export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
+
+export const mapOrcidAffiliationSummary = (
+    summary: I.OrcidAffiliationSummary,
+    affiliationType: I.MappedOrcidAffiliation['affiliationType']
+): I.MappedOrcidAffiliation => ({
+    id: summary['put-code'],
+    affiliationType,
+    title: summary['role-title'],
+    departmentName: summary['department-name'],
+    startDate: summary['start-date']
+        ? {
+              year: summary['start-date'].year?.value || null,
+              month: summary['start-date'].month?.value || null,
+              day: summary['start-date'].day?.value || null
+          }
+        : null,
+    endDate: summary['end-date']
+        ? {
+              year: summary['end-date'].year?.value || null,
+              month: summary['end-date'].month?.value || null,
+              day: summary['end-date'].day?.value || null
+          }
+        : null,
+    organization: summary.organization,
+    createdAt: summary['created-date'].value,
+    updatedAt: summary['last-modified-date'].value,
+    source: { name: summary.source['source-name'].value, orcid: summary.source['source-orcid'].path },
+    url: summary.url ? summary.url.value : null
+});

@@ -124,7 +124,8 @@ export const get = async (id: string, isAccountOwner = false) => {
             updatedAt: true,
             employment: true,
             education: true,
-            works: true
+            works: true,
+            orcidAccessToken: isAccountOwner ? true : false
         }
     });
 
