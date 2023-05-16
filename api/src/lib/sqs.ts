@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 
 const queueUrl =
     process.env.STAGE === 'local'
-        ? 'http://localhost:4566/000000000000/science-octopus-local-pdf-queue'
-        : 'https://sqs.eu-west-1.amazonaws.com/some/queue';
+        ? 'http://localhost:4566/000000000000/science-octopus-pdf-queue-local'
+        : `https://sqs.eu-west-1.amazonaws.com/948306873545/science-octopus-pdf-queue-${process.env.STAGE}`;
 
 const config = {
     region: 'eu-west-1',
@@ -14,7 +14,8 @@ if (process.env.STAGE === 'local') {
     // @ts-ignore
     config.credentials = {
         accessKeyId: 'dummy',
-        secretAccessKey: 'dummy'
+        secretAccessKey: 'dummy',
+        sessionToken: 'dummy'
     };
 }
 
@@ -24,7 +25,7 @@ export const createQueue = async (): Promise<AWS.SQS.CreateQueueResult> => {
     // create SQS locally for PDF message queue
     return sqs
         .createQueue({
-            QueueName: 'science-octopus-local-pdf-queue',
+            QueueName: `science-octopus-pdf-queue-${process.env.STAGE}`,
             Attributes: {
                 DelaySeconds: '60',
                 MessageRetentionPeriod: '86400'
