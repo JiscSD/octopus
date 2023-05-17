@@ -43,6 +43,7 @@ const Button = React.forwardRef<ButtonRef, Props>((props, ref) => (
             sm:text-sm
             ${props.actionType === 'POSITIVE' && 'bg-teal-600 hover:bg-teal-700 disabled:hover:bg-teal-600'}
             ${props.actionType === 'NEGATIVE' && 'bg-red-600 hover:bg-red-700 disabled:hover:bg-red-600 '}
+            ${props.className}
             `}
         onClick={(e) => props.onClick(e)}
         disabled={props.disabled}

@@ -91,3 +91,4 @@ export { default as ApprovalsTracker } from './ApprovalsTracker';
 export { default as ActionBar } from './Publication/ActionBar';
 export { default as AuthorAffiliations } from './Publication/AuthorAffiliations';
 export { default as AffiliationCard } from './Publication/AffiliationCard';
+export { default as EditAffiliationsModal } from './EditAffiliationsModal';

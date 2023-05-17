@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import cuid from 'cuid';
 
 import * as Interfaces from '@interfaces';
@@ -27,10 +27,21 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     const [authorEmail, setAuthorEmail] = React.useState<null | string>(null);
     const [authorEmailError, setAuthorEmailError] = React.useState('');
     const [isSendingReminder, setSendingReminder] = React.useState(false);
+    const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
     const confirmation = Contexts.useConfirmationModal();
     const authorEmailRef = React.useRef<null | HTMLInputElement>(null);
 
-    const handleCloseModal = React.useCallback(() => {
+    const handleCloseEditAffiliationsModal = React.useCallback(
+        (revalidate?: boolean) => {
+            if (revalidate) {
+                props.refreshPublicationData();
+            }
+            setIsEditingAffiliations(false);
+        },
+        [props]
+    );
+
+    const handleCloseChangeEmailModal = React.useCallback(() => {
         setAuthorEmail(null);
         setAuthorEmailError('');
     }, []);
@@ -146,6 +157,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         [props.publication.createdBy, user?.id]
     );
 
+    const author = useMemo(
+        () => props.publication.coAuthors.find((author) => author.linkedUser === user?.id),
+        [props.publication.coAuthors, user?.id]
+    );
+
     return (
         <div className="children:transition-colors">
             <h4 className="mt-8 text-lg dark:text-white-50">
@@ -186,7 +202,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     </thead>
                     <tbody className="divide-y divide-grey-100 bg-white-50 duration-500 dark:divide-teal-300 dark:bg-grey-600">
                         {props.publication.coAuthors.map((author) => {
-                            const affiliations = author.affiliations.map(
+                            const affiliations = Helpers.getSortedAffiliations(author.affiliations).map(
                                 (affiliation) => affiliation.organization.name
                             );
 
@@ -259,8 +275,12 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         </>
                                     )}
                                     <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
-                                        {!author.isIndependent && affiliations.length ? (
-                                            <div className="flex cursor-default items-center gap-4">
+                                        <div className="flex cursor-default items-center gap-4">
+                                            {author.isIndependent ? (
+                                                <p>Unaffiliated</p>
+                                            ) : !author.isIndependent && !affiliations.length ? (
+                                                <p>Affiliations not entered</p>
+                                            ) : (
                                                 <div title={affiliations.join(', ')}>
                                                     {affiliations.length > 3
                                                         ? affiliations
@@ -275,26 +295,29 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                         : affiliations.map((affiliationName, index) => (
                                                               <p key={`affiliation-${index}`}>
                                                                   {affiliationName}
-                                                                  {index < affiliations.length - 1 ? ',' : ''}
+                                                                  {index < affiliations.length - 1
+                                                                      ? ','
+                                                                      : index > 0
+                                                                      ? '.'
+                                                                      : ''}
                                                               </p>
                                                           ))}
                                                 </div>
-                                                {author.linkedUser === user?.id && (
-                                                    <Components.IconButton
-                                                        className="p-2"
-                                                        title="Edit affiliations"
-                                                        icon={
-                                                            <FaIcons.FaEdit
-                                                                className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                                aria-hidden="true"
-                                                            />
-                                                        }
-                                                    />
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <p>Affiliations not entered</p>
-                                        )}
+                                            )}
+                                            {author.linkedUser === user?.id && (
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Edit affiliations"
+                                                    icon={
+                                                        <FaIcons.FaEdit
+                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                            aria-hidden="true"
+                                                        />
+                                                    }
+                                                    onClick={() => setIsEditingAffiliations(true)}
+                                                />
+                                            )}
+                                        </div>
                                     </td>
                                 </tr>
                             );
@@ -323,9 +346,9 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 <Components.Modal
                     open={Boolean(authorEmail)}
                     icon={<FaIcons.FaEdit className="h-8 w-8 text-grey-600" />}
-                    setOpen={handleCloseModal}
+                    setOpen={handleCloseChangeEmailModal}
                     positiveActionCallback={handleAuthorEmailChange}
-                    negativeActionCallback={handleCloseModal}
+                    negativeActionCallback={handleCloseChangeEmailModal}
                     positiveButtonText="Change Email"
                     cancelButtonText="Cancel"
                     title="Change author's email"
@@ -340,6 +363,13 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     />
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
                 </Components.Modal>
+            )}
+            {author && (
+                <Components.EditAffiliationsModal
+                    open={isEditingAffiliations}
+                    author={author}
+                    onClose={handleCloseEditAffiliationsModal}
+                />
             )}
         </div>
     );
