@@ -85,7 +85,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.Link>
 
                             <Components.Link
-                                href={Config.urls.search.path}
+                                href={`${Config.urls.search.path}/publications`}
                                 className="flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto"
                             >
                                 <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
