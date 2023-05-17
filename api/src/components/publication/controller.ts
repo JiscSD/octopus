@@ -339,7 +339,8 @@ export const updateStatus = async (
         await helpers.updateDOI(publication.doi, publication);
 
         // send message to the pdf generation queue
-        await sendMessage(publicationId);
+        // currently only on deployed instances while a local solution is developed
+        if (process.env.STAGE !== 'local') await sendMessage(publicationId);
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
