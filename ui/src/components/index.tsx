@@ -3,8 +3,6 @@ export { default as Alert } from './Alert';
 export { default as Avatar } from './Avatar';
 export { default as Banner } from './Banner';
 export { default as Button } from './Button';
-export { default as CommandPalette } from './CommandPalette';
-export { default as CommandPaletteResult } from './CommandPalette/Result';
 export { default as Delay } from './Delay';
 export { default as DocumentationSection } from './Documentation/Section';
 export { default as EnableDarkMode } from './EnableDarkMode';

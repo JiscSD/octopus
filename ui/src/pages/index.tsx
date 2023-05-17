@@ -4,7 +4,6 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 
@@ -46,7 +45,6 @@ type Props = {
 };
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
@@ -88,7 +86,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             <button
                                 aria-label="Open search"
                                 className="flex w-full items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 sm:w-52"
-                                onClick={(e) => toggleCmdPalette()}
+                                onClick={() => console.log('asd')}
                             >
                                 <OutlineIcons.SearchIcon className="h-6 w-6 flex-shrink-0 text-white-50 transition-colors duration-500 dark:text-teal-500" />
                                 <span className="w-full text-center font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
