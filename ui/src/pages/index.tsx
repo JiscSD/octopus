@@ -83,16 +83,15 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                                     Author Guide
                                 </span>
                             </Components.Link>
-                            <button
-                                aria-label="Open search"
-                                className="flex w-full items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 sm:w-52"
-                                onClick={() => console.log('asd')}
+
+                            <Components.Link
+                                href={Config.urls.search.path}
+                                className="flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto"
                             >
-                                <OutlineIcons.SearchIcon className="h-6 w-6 flex-shrink-0 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="w-full text-center font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
-                                    Quick search...
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
+                                    Find Publications
                                 </span>
-                            </button>
+                            </Components.Link>
                         </div>
                     </div>
                 </section>
