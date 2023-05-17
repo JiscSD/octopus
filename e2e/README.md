@@ -26,11 +26,10 @@ You can use the playwright command line tools to run specific tests, or use othe
 
 #### Further dependencies
 
-If it is your first time using playwright, you might need to install some further dependencies so that it can do things such as launch browsers correctly. You can attempt to run the tests and playwright will suggest what you need to install in the output of failed tests, or you can install what you need in advance.
+If it is your first time using playwright, you might need to install some further dependencies so that it can do things such as launch browsers correctly. You can attempt to run the tests and playwright will suggest what you need to install in the output of failed tests, or you can install what you need in advance:
 
-For example, on WSL/Ubuntu, it would be necessary to run:
 - `npx playwright install`
-- `sudo apt-get install libxkbcommon0 libxdamage1 libgbm1 libgtk-3-0 libcairo-gobject2 libgdk-pixbuf-2.0-0 libdbus-glib-1-2 libxcursor1`
+- `npx playwright install-deps`
 
 ### Running via VSCode
 
