@@ -216,11 +216,11 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => 
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
-    <p>To <strong>confirm your involvement</strong>, and see a preview of the publication, click the button below:</p> 
+    <p>Please use the button below to confirm that you are involved with the publication and review the draft to ensure you are happy with it:</p> 
     <br>
-    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>I am an author</a></p>
+    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>Confirm & Review Publication</a></p>
     <br>
-    <p>If you are <strong>not</strong> an author of this publication, please click the button below:</p>
+    <p>If you are not an author of this publication, please click the button below:</p>
     <br>
     <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not an author</a></p>
     </br>
@@ -592,11 +592,11 @@ export const sendApprovalReminder = async (options: SendApprovalReminder): Promi
         <br>
         <p style="text-align: center;"><strong><i>${options.publication.title}</i></strong></p>
         <br>
-        <p>To <strong>confirm your involvement</strong>, and see a preview of the publication, click the button below:</p> 
+        <p>Please use the button below to confirm that you are involved with the publication and review the draft to ensure you are happy with it:</p> 
         <br>
-        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true'>I am an author</a></p>
+        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true'>Confirm & Review Publication</a></p>
         <br>
-        <p>If you are <strong>not</strong> an author of this publication, please click the button below:</p>
+        <p>If you are not an author of this publication, please click the button below:</p>
         <br>
         <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false'>I am not an author</a></p>
         </br>
@@ -625,9 +625,13 @@ type NotifyCoAuthorsAboutChanges = {
 
 export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutChanges): Promise<void> => {
     const html = `
-        <p>The corresponding author has made changes to a publication you are involved with. Please use the link below to review the draft publication to ensure you are happy with the changes:</p> 
+        <p>The corresponding author has made changes to a publication you are involved with:</p>
         <br>
-        <p style="text-align: center;"><strong><i><a href="${options.publication.url}">${options.publication.title}</a></i></strong></p>
+        <p style="text-align: center"><strong><i>${options.publication.title}</i></strong></p>
+        <br>
+        <p>Please use the button below to review the draft publication to ensure you are happy with the changes:</p> 
+        <br>
+        <p style="text-align: center;"><a style="${styles.button}" href="${options.publication.url}">View publication</a></p>
         <br>
         <p>Your approval is required before the corresponding author can publish. If you have any concerns with the publication, please contact the corresponding author directly to discuss them.</p>
     `;
