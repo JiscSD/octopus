@@ -95,8 +95,8 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                     ) : (
                         <li className="flex h-full flex-col justify-center gap-8 py-8 pl-2 md:-mt-6">
                             <p className="flex items-center gap-2">
-                                <Outline.ExclamationCircleIcon className="mr-1 inline w-5 flex-shrink-0" /> No
-                                affiliations have been added
+                                <Outline.ExclamationCircleIcon className="mr-1 inline w-5 flex-shrink-0" />
+                                No affiliations have been added
                             </p>
                             <label
                                 htmlFor="confirm-independent-author"

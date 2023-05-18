@@ -1698,6 +1698,132 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.close();
     });
+
+    test('Co Authors can edit their affiliations using Approvals Tracker table', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create new publication
+        await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+
+        // fill 'Key information' tab
+        await publicationFlowKeyInformation(page, 'CC_BY_NC', true);
+
+        // add linked publication
+        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+
+        // add main text
+        await (await page.waitForSelector("aside button:has-text('Main text')")).click();
+        await page.locator(PageModel.publish.text.editor).click();
+        await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
+
+        // add co-author
+        await page.locator('aside button:has-text("Co-authors")').click();
+        await addCoAuthor(page, Helpers.user3);
+
+        // verify co-author has been added
+        await expect(page.locator(`td:has-text("${Helpers.user3.email}")`)).toBeVisible();
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+
+        await expect(page.getByText('Unaffiliated')).toBeVisible();
+        await expect(page.locator('button[title="Edit affiliations"]')).toBeVisible();
+        await page.locator('button[title="Edit affiliations"]').click();
+
+        await page.waitForSelector('input#confirm-independent-author[type="checkbox"]');
+        await expect(page.getByText('No affiliations have been added')).toBeVisible();
+        await expect(
+            page.getByText('I am an independent author and do not need to enter any affiliations')
+        ).toBeVisible();
+
+        await expect(page.locator('button[title="Add affiliation"]').first()).toBeDisabled();
+        await expect(page.locator('button[title="Remove affiliation"]')).not.toBeVisible();
+
+        // uncheck 'I am an independent author and do not need to enter any affiliations' checkbox
+        await page.click('label:has-text("I am an independent author and do not need to enter any affiliations")');
+
+        // check 'Confirm Affiliations' button is now disabled because user didn't select any affiliations yet
+        await expect(page.locator('button[title="Confirm Affiliations"]')).toBeDisabled();
+
+        // check user can now select affiliations
+        await expect(page.locator('button[title="Add affiliation"]').first()).toBeEnabled();
+
+        // get first item title in the available affiliations list
+        const firstAvailableAffiliationTitle = await page
+            .locator('ul#available-affiliations-list > li')
+            .first()
+            .locator('h4')
+            .first()
+            .innerText();
+
+        // get available affiliations count
+        const availableAffiliationsCount = await page.locator('ul#available-affiliations-list > li').count();
+
+        await page.locator('button[title="Add affiliation"]').first().click();
+
+        await expect(page.locator('button[title="Remove affiliation"]')).toBeVisible();
+
+        // get first item title in the selected affiliations list
+        const firstSelectedAffiliationTitle = await page
+            .locator('ul#selected-affiliations-list > li')
+            .first()
+            .locator('h4')
+            .first()
+            .innerText();
+
+        // check that affiliation has been selected
+        expect(firstAvailableAffiliationTitle).toEqual(firstSelectedAffiliationTitle);
+
+        // check that selected affiliation is removed from the available affiliations list
+        expect(
+            await page.locator('ul#available-affiliations-list > li').first().locator('h4').first().innerText()
+        ).not.toEqual(firstSelectedAffiliationTitle);
+
+        const newAvailableAffiliationsCount = await page.locator('ul#available-affiliations-list > li').count();
+
+        expect(newAvailableAffiliationsCount).toBeLessThan(availableAffiliationsCount);
+
+        // check 'Confirm Affiliations' button is now enabled
+        await expect(page.locator('button[title="Confirm Affiliations"]')).toBeEnabled();
+
+        // confirm selected affiliations
+        await page.locator('button[title="Confirm Affiliations"]').click();
+
+        const publicationId = page.url().split('/').pop();
+
+        await page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' &&
+                response.url().includes(`/publications/${publicationId}`) &&
+                response.ok()
+        );
+
+        // check approval's tracker table first row includes the selected affiliation title
+        expect(
+            await page.locator('table[data-testid="approval-tracker-table"] > tbody > tr').first().innerText()
+        ).toContain(firstSelectedAffiliationTitle.split(':')[0]);
+
+        await page.close();
+    });
 });
 
 test.describe('Publication Flow + File import', () => {
