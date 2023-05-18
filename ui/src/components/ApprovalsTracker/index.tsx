@@ -24,19 +24,22 @@ type Props = {
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     const { user } = Stores.useAuthStore();
-    const [selectedAuthor, setSelectedAuthor] = React.useState<null | Interfaces.CoAuthor>(null);
+    const [selectedAuthorEmail, setSelectedAuthorEmail] = React.useState<null | Interfaces.CoAuthor>(null);
+    const [selectedAuthorAffiliations, setSelectedAuthorAffiliations] = React.useState<null | Interfaces.CoAuthor>(
+        null
+    );
     const [authorEmailError, setAuthorEmailError] = React.useState('');
     const [isSendingReminder, setSendingReminder] = React.useState(false);
     const confirmation = Contexts.useConfirmationModal();
     const authorEmailRef = React.useRef<null | HTMLInputElement>(null);
 
-    const handleCloseModal = React.useCallback(() => {
-        setSelectedAuthor(null);
+    const handleCloseAuthorEmailModal = React.useCallback(() => {
+        setSelectedAuthorEmail(null);
         setAuthorEmailError('');
     }, []);
 
     const handleAuthorEmailChange = React.useCallback(async () => {
-        if (!selectedAuthor) {
+        if (!selectedAuthorEmail) {
             return;
         }
 
@@ -52,7 +55,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         }
 
         // close author email edit modal
-        setSelectedAuthor(null);
+        setSelectedAuthorEmail(null);
 
         setTimeout(async () => {
             // open confirmation modal
@@ -76,7 +79,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 };
 
                 const newAuthorsArray = props.publication.coAuthors.map((author) => {
-                    return author.email === selectedAuthor.email ? newAuthor : author;
+                    return author.email === selectedAuthorEmail.email ? newAuthor : author;
                 });
 
                 try {
@@ -106,7 +109,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 }
             }
         }, 300); // wait for the other modal to close
-    }, [confirmation, props, selectedAuthor]);
+    }, [confirmation, props, selectedAuthorEmail]);
 
     const handleApprovalReminder = async (author: Interfaces.CoAuthor) => {
         const confirmed = await confirmation(
@@ -146,6 +149,19 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         [props.publication.createdBy, user?.id]
     );
 
+    const displayArrayOfAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+        if (affiliations.length <= 2) {
+            const names = affiliations.map((affiliation) => affiliation.organization.name);
+            return names.join(', ');
+        } else {
+            const firstTwo = affiliations
+                .map((affiliation) => affiliation.organization.name)
+                .slice(0, 2)
+                .join(', ');
+            return firstTwo + ', + ' + (affiliations.length - 2) + ' more';
+        }
+    };
+
     return (
         <div className="children:transition-colors">
             <h4 className="mt-8 text-lg dark:text-white-50">
@@ -179,9 +195,12 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     </th>
                                 </>
                             )}
+                            <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                Affiliations
+                            </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-grey-100 bg-white-50 duration-500 dark:divide-teal-300 dark:bg-grey-600">
+                    <tbody className="divide-y divide-grey-100 bg-white-50 duration-500 dark:divide-teal-300 dark:bg-grey-600 ">
                         {props.publication.coAuthors.map((author) => (
                             <tr key={author.id}>
                                 <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
@@ -215,7 +234,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                 </td>
                                 {isCorrespondingUser && (
                                     <>
-                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        <td className=" whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
                                             {!author.linkedUser && (
                                                 <Components.IconButton
                                                     className="p-2"
@@ -226,11 +245,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                             aria-hidden="true"
                                                         />
                                                     }
-                                                    onClick={() => setSelectedAuthor(author)}
+                                                    onClick={() => setSelectedAuthorEmail(author)}
                                                 />
                                             )}
                                         </td>
-                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
                                             {!author.linkedUser && !author.reminderDate && (
                                                 <Components.IconButton
                                                     className="p-2"
@@ -248,6 +267,41 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         </td>
                                     </>
                                 )}
+                                <td className=" flex py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                    <div className="w-5/6 py-4">
+                                        {author.isIndependent
+                                            ? 'Independent'
+                                            : displayArrayOfAffiliations(author.affiliations)}
+                                    </div>
+                                    {author.linkedUser === user?.id ? (
+                                        <Components.IconButton
+                                            className="p-2"
+                                            title="Edit your selected affiliations"
+                                            icon={
+                                                <FaIcons.FaEdit
+                                                    className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                    aria-hidden="true"
+                                                />
+                                            }
+                                            onClick={() => {}}
+                                        />
+                                    ) : (
+                                        !author.isIndependent &&
+                                        author.affiliations.length > 0 && (
+                                            <Components.IconButton
+                                                className="p-2"
+                                                title="Display all affiliations"
+                                                icon={
+                                                    <FaIcons.FaRegEye
+                                                        className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                        aria-hidden="true"
+                                                    />
+                                                }
+                                                onClick={() => setSelectedAuthorAffiliations(author)}
+                                            />
+                                        )
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -272,11 +326,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             )}
             {isCorrespondingUser && (
                 <Components.Modal
-                    open={Boolean(selectedAuthor)}
+                    open={Boolean(selectedAuthorEmail)}
                     icon={<FaIcons.FaEdit className="h-8 w-8 text-grey-600" />}
-                    setOpen={handleCloseModal}
+                    setOpen={handleCloseAuthorEmailModal}
                     positiveActionCallback={handleAuthorEmailChange}
-                    negativeActionCallback={handleCloseModal}
+                    negativeActionCallback={handleCloseAuthorEmailModal}
                     positiveButtonText="Change Email"
                     cancelButtonText="Cancel"
                     title="Change author's email"
@@ -284,7 +338,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     <input
                         autoComplete="off"
                         className="my-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
-                        defaultValue={selectedAuthor?.email}
+                        defaultValue={selectedAuthorEmail?.email}
                         name="authorEmail"
                         placeholder="Email of author"
                         ref={authorEmailRef}
@@ -292,6 +346,19 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
                 </Components.Modal>
             )}
+            <Components.SimpleModal
+                open={Boolean(selectedAuthorAffiliations)}
+                negativeActionCallback={() => setSelectedAuthorAffiliations(null)}
+                cancelButtonText="Close"
+                title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s Affiliation(s) for this publication`}
+                subTitle="Selected Affiliations"
+            >
+                {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
+                    <div className="my-6">
+                        <Components.AffiliationCard affiliation={affiliation} disableSelection={true} />
+                    </div>
+                ))}
+            </Components.SimpleModal>
         </div>
     );
 };
