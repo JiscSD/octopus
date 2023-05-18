@@ -91,10 +91,17 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
         props.onClose();
         // wait for modal transition and reset selection
         setTimeout(() => {
-            setAuthorAffiliations(props.author.affiliations);
+            setAuthorAffiliations(
+                props.author.affiliations.map((affiliation) => {
+                    // reset with the updated version from ORCID to prevent out of sync states
+                    const updatedAffiliation = orcidAffiliations.find(({ id }) => affiliation.id === id);
+
+                    return updatedAffiliation ? updatedAffiliation : affiliation;
+                })
+            );
             setIsIndependentAuthor(props.author.isIndependent);
         }, 200);
-    }, [props]);
+    }, [orcidAffiliations, props]);
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
