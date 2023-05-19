@@ -353,11 +353,13 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s Affiliation(s) for this publication`}
                 subTitle="Selected Affiliations"
             >
-                {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
-                    <div className="my-6">
-                        <Components.AffiliationCard affiliation={affiliation} disableSelection={true} />
-                    </div>
-                ))}
+                <ul>
+                    {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
+                        <li className="my-6" key={affiliation.id}>
+                            <Components.AffiliationCard affiliation={affiliation} disableSelection={true} />
+                        </li>
+                    ))}
+                </ul>
             </Components.SimpleModal>
         </div>
     );
