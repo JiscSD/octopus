@@ -1,6 +1,6 @@
 import htmlToText from 'html-to-text';
 import s3 from '../src/lib/s3';
-import { createQueue, getQueue } from '../src/lib/sqs';
+import * as sqs from '../src/lib/sqs';
 import * as SeedData from './seeds';
 import * as client from '../src/lib/client';
 
@@ -112,10 +112,10 @@ export const initialDevSeed = async (): Promise<void> => {
         }
 
         try {
-            await getQueue('science-octopus-pdf-queue-local');
+            await sqs.getQueue('science-octopus-pdf-queue-local');
             console.log('Queue already exists');
         } catch (err) {
-            await createQueue();
+            await sqs.createQueue();
             console.log('Queue created');
         }
     }
