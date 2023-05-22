@@ -29,7 +29,6 @@ jobs:
           DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
           ORCID_ID: ${{ secrets.ORCID_ID }}
           ORCID_SECRET: ${{ secrets.ORCID_SECRET }}
-          LIST_USERS_API_KEY: ${{ secrets.LIST_USERS_API_KEY }}
         run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for API and DB to be ready
