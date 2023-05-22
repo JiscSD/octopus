@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
+import axios from 'axios';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as HeadlessUI from '@headlessui/react';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as api from '@api';
-import axios from 'axios';
 
 type Props = {
     open: boolean;
@@ -174,13 +174,13 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
 
                             <div className="pt-8">
                                 <Components.AuthorAffiliations
+                                    scrollHeight={400}
+                                    loading={!orcidAffiliations.length && isValidating}
                                     availableAffiliations={orcidAffiliations}
                                     selectedAffiliations={authorAffiliations}
                                     isIndependentAuthor={isIndependentAuthor}
-                                    scrollHeight={400}
                                     onIndependentAuthorChange={setIsIndependentAuthor}
                                     onSelectionChange={setAuthorAffiliations}
-                                    loading={!orcidAffiliations.length && isValidating}
                                 />
                             </div>
 
