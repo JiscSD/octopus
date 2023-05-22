@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const generatePDFs = async (event): Promise<object> => {
+export const generatePDFs = async (event): Promise<void> => {
     for (const record of event.Records) {
         const { body } = record;
 
@@ -10,6 +10,4 @@ export const generatePDFs = async (event): Promise<object> => {
             console.log(err);
         }
     }
-
-    return {};
 };
