@@ -572,10 +572,10 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
         .first()
         .click();
 
-    // clicking 'I am an author' link is blocked by cors
+    // clicking 'Confirm & Review Publication' link is blocked by cors
     const invitationLink = await page2
         .frameLocator('iframe')
-        .locator("a:has-text('I am an author')")
+        .locator("a:has-text('Confirm & Review Publication')")
         .getAttribute('href');
 
     // navigate to that link instead
