@@ -234,7 +234,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                 </td>
                                 {isCorrespondingUser && (
                                     <>
-                                        <td className=" whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
                                             {!author.linkedUser && (
                                                 <Components.IconButton
                                                     className="p-2"
@@ -267,7 +267,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         </td>
                                     </>
                                 )}
-                                <td className=" flex py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                <td className="flex py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
                                     <div className="w-5/6 py-4">
                                         {author.isIndependent
                                             ? 'Independent'
