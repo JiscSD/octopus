@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const generatePDFs = async (event): Promise<object> => {
-    const promises = event.Records.forEach(async (record) => {
+    for (const record of event.Records) {
         const { body } = record;
 
         try {
@@ -9,9 +9,7 @@ export const generatePDFs = async (event): Promise<object> => {
         } catch (err) {
             console.log(err);
         }
-    });
-
-    await Promise.all(promises);
+    }
 
     return {};
 };

@@ -1,13 +1,9 @@
 import AWS from 'aws-sdk';
 
-const queueUrl =
-    process.env.STAGE === 'local'
-        ? 'http://localhost:4566/000000000000/science-octopus-pdf-queue-local'
-        : `https://sqs.eu-west-1.amazonaws.com/948306873545/science-octopus-pdf-queue-${process.env.STAGE}`;
+const queueUrl = process.env.SQS_ENDPOINT!;
 
 const config = {
-    region: 'eu-west-1',
-    endpoint: process.env.STAGE === 'local' ? process.env.LOCALSTACK_SERVER : 'https://sqs.eu-west-1.amazonaws.com'
+    region: 'eu-west-1'
 };
 
 if (process.env.STAGE === 'local') {
