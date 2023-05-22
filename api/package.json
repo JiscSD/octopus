@@ -57,7 +57,7 @@
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
         "prisma": "^3.14.0",
-        "puppeteer-core": "10.1.0",
+        "puppeteer-core": "^20.3.0",
         "string-strip-html": "^9.1.6",
         "supertest": "^6.2.3"
     },
@@ -79,7 +79,7 @@
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
-        "puppeteer": "10.1.0",
+        "puppeteer": "^20.3.0",
         "serverless-domain-manager": "^5.2.0",
         "serverless-middleware": "0.0.15",
         "serverless-offline": "^8.8.1",
