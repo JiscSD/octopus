@@ -533,7 +533,6 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
     const hasConfirmedAffiliations = publication.coAuthors.some(
         (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
     );
@@ -544,7 +543,6 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        hasRequestedApprovals &&
         hasConfirmedAffiliations
     );
 };
