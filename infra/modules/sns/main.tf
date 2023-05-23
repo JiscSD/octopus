@@ -1,5 +1,5 @@
-resource "aws_sns_topic" "science-octopus-dlq-messages-topic" {
-  name            = "science-octopus-dlq-messages-topic-${var.environment}"
+resource "aws_sns_topic" "pdf-queue-dlq-messages-topic" {
+  name            = "pfd-queue-dlq-messages-topic-${var.environment}"
   delivery_policy = <<EOF
 {
   "http": {
