@@ -917,7 +917,7 @@ export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*
 
 export const checkEnvVariable = (variable: string | undefined): string => {
     if (variable === undefined) {
-        throw new Error(`Environment Variable ${variable} is undefined.`);
+        throw new Error(`Environment Variable is undefined.`);
     } else {
         return variable;
     }

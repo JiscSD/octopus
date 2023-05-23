@@ -1,10 +1,6 @@
 import AWS from 'aws-sdk';
 import * as helpers from './helpers';
 
-if (process.env.QUEUE_URL === undefined) {
-    throw new Error(`Environment Variable 'Queue URL' is undefined.`);
-}
-
 const queueUrl = helpers.checkEnvVariable(process.env.QUEUE_URL);
 const endpoint = helpers.checkEnvVariable(process.env.SQS_ENDPOINT);
 
