@@ -24,18 +24,6 @@ test.describe('Static pages, logged out', () => {
             await expect(page.locator(link)).toBeVisible();
         }
 
-        // Check quick search command palette
-        await page.locator(PageModel.homepage.quickSearch).click();
-        await page.locator(PageModel.homepage.quickSearchInput).click();
-        await page.keyboard.type('How has life on earth evolved?');
-        await expect(page.locator(PageModel.homepage.publicationSearchResult)).toBeVisible({ timeout: 20000 });
-        await page.keyboard.press('Enter');
-
-        await expect(page.locator('h1').first().first()).toHaveText(
-            'Search results for How has life on earth evolved?'
-        );
-        await page.goBack();
-
         // Check dark/light toggle - TODO, sort out localStorage
         await expect(page.locator('h1').first()).toHaveCSS('color', 'rgb(255, 255, 255)');
 

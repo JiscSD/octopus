@@ -12,6 +12,7 @@ import * as api from '@api';
 import * as Hooks from '@hooks';
 
 import ClickAwayListener from 'react-click-away-listener';
+import axios from 'axios';
 
 type BuildPublicationProps = {
     steps: Interfaces.CreationStep[];
@@ -25,7 +26,6 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
-    const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
     const store = Stores.usePublicationCreationStore();
     const [memoizedStore] = useState(store);
     const setToast = Stores.useToastStore((state) => state.setToast);
@@ -44,6 +44,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             memoizedStore.reset();
         };
     }, [memoizedStore]);
+
+    React.useEffect(() => {
+        if (store.error) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [store.error]);
 
     const checkRequired = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
@@ -77,9 +83,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         message: 'You must provide details of who gave permission for the data collection and sharing'
                     };
             }
+
             if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
                 ready = { ready: false, message: 'All co-authors must be verified.' };
             }
+
+            if (!(store.authorAffiliations.length || store.isIndependentAuthor)) {
+                ready = {
+                    ready: false,
+                    message: 'You must add your affiliations or confirm if you are an independent author.'
+                };
+            }
+
             return ready;
         },
         []
@@ -171,6 +186,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
+            // update author affiliations
+            await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/my-affiliations`,
+                { affiliations: store.authorAffiliations, isIndependent: store.isIndependentAuthor },
+                props.token
+            );
+
             if (message) {
                 setToast({
                     visible: true,
@@ -203,7 +225,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 });
             } catch (err) {
                 const { message } = err as Interfaces.JSONResponseError;
-                store.setError(message);
+                store.setError(
+                    axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                        ? err.response.data.message
+                        : message
+                );
             }
         } else {
             store.setError(check.message);
@@ -230,7 +256,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setRequestApprovalModalVisibility(false);
@@ -242,7 +272,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             await saveCurrent('Publication successfully saved');
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setSaveModalVisibility(false);
@@ -264,7 +298,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setDeleteModalVisibility(false);
@@ -278,7 +316,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
     }, [props.publication?.id, router, saveCurrent, store]);
 

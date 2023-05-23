@@ -20,7 +20,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: Types.SearchType = 'authors';
+    let searchType: Types.SearchType = 'users';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
@@ -99,7 +99,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
-    const { data: { data: results = [] } = {}, error, isValidating } = useSWR(swrKey);
+    const { data: results = [], error, isValidating } = useSWR(swrKey);
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();

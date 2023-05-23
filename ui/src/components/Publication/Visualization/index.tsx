@@ -208,7 +208,7 @@ type VisualizationProps = {
 };
 
 const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement => {
-    const { data } = useSWR<Axios.AxiosResponse<Interfaces.PublicationWithLinks>>(
+    const { data } = useSWR<Interfaces.PublicationWithLinks>(
         `${Config.endpoints.publications}/${props.publicationId}/links`,
         null,
         {
@@ -263,7 +263,7 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                         {data &&
                             filteredPublicationTypes.map((type) => (
                                 <div key={type} className="space-y-4 p-1">
-                                    {getPublicationsByType(data.data, type).map((publication) => (
+                                    {getPublicationsByType(data, type).map((publication) => (
                                         <Box
                                             isSelected={props.publicationId == publication.id}
                                             key={publication.id}
