@@ -137,6 +137,16 @@ describe('Update publication status', () => {
         expect(updatedPublication.status).toEqual(200);
     });
 
+    test('User with permissions cannot update their publication to LIVE if no conflict of interest value is provided', async () => {
+        const updatedPublication = await testUtils.agent
+            .put('/publications/publication-problem-draft-with-blank-coi/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(updatedPublication.status).toEqual(403);
+    });
+
     test('Publication owner can publish if all co-authors are confirmed', async () => {
         const updatePublication = await testUtils.agent
             .put('/publications/publication-protocol-draft/status/LIVE')
@@ -207,37 +217,34 @@ describe('Update publication status', () => {
         expect(response.body.message).toEqual('Publication status is already DRAFT.');
     });
 
-    test('Publication status can be updated from DRAFT to LOCKED only after requesting approvals', async () => {
-        // try to update status to LOCKED
-        const updateStatusResponse1 = await testUtils.agent
-            .put('/publications/publication-problem-draft/status/LOCKED')
-            .query({
-                apiKey: '000000005'
-            });
-
-        expect(updateStatusResponse1.status).toEqual(403);
-        expect(updateStatusResponse1.body.message).toEqual(
-            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
-        );
-
-        // request co-authors approvals
-        const requestApprovalsResponse = await testUtils.agent
+    test('Approvals can be requested only after publication status is LOCKED', async () => {
+        // attempt to send approval emails
+        const requestApprovalsResponse1 = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthors/request-approval')
             .query({
                 apiKey: '000000005'
             });
 
-        expect(requestApprovalsResponse.status).toEqual(200);
+        expect(requestApprovalsResponse1.status).toEqual(403);
 
-        // try to update status to LOCKED again
-        const updateStatusResponse2 = await testUtils.agent
+        // update status to LOCKED
+        const updateStatusResponse = await testUtils.agent
             .put('/publications/publication-problem-draft/status/LOCKED')
             .query({
                 apiKey: '000000005'
             });
 
-        expect(updateStatusResponse2.status).toEqual(200);
-        expect(updateStatusResponse2.body.message).toEqual('Publication status updated to LOCKED.');
+        expect(updateStatusResponse.status).toEqual(200);
+        expect(updateStatusResponse.body.message).toEqual('Publication status updated to LOCKED.');
+
+        // try to send emails again
+        const requestApprovalsResponse2 = await testUtils.agent
+            .put('/publications/publication-problem-draft/coauthors/request-approval')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(requestApprovalsResponse2.status).toEqual(200);
     });
 
     test('Publication status can be updated from LOCKED to LIVE after all co-authors approved', async () => {

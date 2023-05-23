@@ -12,7 +12,7 @@ describe('Get a given users publications', () => {
             .query({ apiKey: 123456789, offset: 0, limit: 100 });
 
         expect(publications.status).toEqual(200);
-        expect(publications.body.results.length).toEqual(20);
+        expect(publications.body.results.length).toEqual(21);
     });
 
     test('Unauthenticated user can only view live publications', async () => {

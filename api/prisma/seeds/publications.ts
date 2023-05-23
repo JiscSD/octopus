@@ -685,7 +685,8 @@ const publicationSeeds = [
             create: {
                 publicationTo: 'publication-problem-live'
             }
-        }
+        },
+        conflictOfInterestStatus: false
     },
     {
         // This is listed as problem but is a hypothesis
@@ -862,6 +863,34 @@ const publicationSeeds = [
         },
         conflictOfInterestStatus: false,
         conflictOfInterestText: 'This is text text'
+    },
+    {
+        id: 'publication-problem-draft-with-blank-coi',
+        title: 'Publication PROBLEM-DRAFT COI',
+        content: '<p>This is the content</p>',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'DRAFT',
+        doi: '10.82259/cty5-2g24',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: null,
     }
 ];
 
