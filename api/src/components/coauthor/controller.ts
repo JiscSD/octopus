@@ -337,7 +337,7 @@ export const requestApproval = async (
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, { message: 'Cannot request approvals for a LIVE publication.' });
         } else if (publication.currentStatus !== 'LOCKED') {
-            return response.json(403, { message: 'The publication must be LOCKED to request approvals.'});
+            return response.json(403, { message: 'The publication must be LOCKED to request approvals.' });
         }
 
         // check if user is not the corresponding author
@@ -353,7 +353,7 @@ export const requestApproval = async (
         }
 
         // check if publication was LOCKED before this time
-        if (publication.publicationStatus.filter(status => status.status === 'LOCKED').length > 1) {
+        if (publication.publicationStatus.filter((status) => status.status === 'LOCKED').length > 1) {
             // notify linked co-authors about changes
             const linkedCoAuthors = publication.coAuthors.filter(
                 (author) => author.linkedUser && author.linkedUser !== publication.createdBy
