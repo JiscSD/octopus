@@ -84,5 +84,6 @@ module "sqs" {
 module "sns" {
   source = "../modules/sns" 
   environment = local.environment
+  slack_channel_email = var.slack_channel_email
 }
 

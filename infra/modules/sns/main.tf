@@ -25,5 +25,5 @@ EOF
 resource "aws_sns_topic_subscription" "notify-slack-dlq" {
   topic_arn = aws_sns_topic.dlq_messages_topic.arn
   protocol  = "email"
-  endpoint  = var.environment == "int" ? "" : "octopus-testing-notif-aaaajiuyoqzwooajd4oh7taijy@jiscinnovate.slack.com"
+  endpoint  = var.slack_channel_email
 }
