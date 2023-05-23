@@ -466,6 +466,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
         if (!publication.conflictOfInterestText?.length) return false;
+    } else if (publication.conflictOfInterestStatus === null) {
+        return false;
     }
 
     return true;
