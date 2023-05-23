@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import * as helpers from './helpers';
 
-const queueUrl = helpers.checkEnvVariable(process.env.QUEUE_URL);
-const endpoint = helpers.checkEnvVariable(process.env.SQS_ENDPOINT);
+const queueUrl = helpers.checkEnvVariable(process.env.QUEUE_URL, 'QUEUE_URL');
+const endpoint = helpers.checkEnvVariable(process.env.SQS_ENDPOINT, 'SQS_ENDPOINT');
 
 const config = {
     region: 'eu-west-1'
