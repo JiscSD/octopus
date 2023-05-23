@@ -914,3 +914,11 @@ export const createPublicationFooterTemplate = (publication: I.Publication): str
 };
 
 export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
+
+export const checkEnvVariable = (variable: string | undefined): string => {
+    if (variable === undefined) {
+        throw new Error(`Environment Variable ${variable} is undefined.`);
+    } else {
+        return variable;
+    }
+};

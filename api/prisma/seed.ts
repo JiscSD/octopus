@@ -112,7 +112,7 @@ export const initialDevSeed = async (): Promise<void> => {
         }
 
         try {
-            await sqs.getQueue('science-octopus-pdf-queue-local');
+            await sqs.getQueue(`science-octopus-pdf-queue-${process.env.STAGE}`);
             console.log('Queue already exists');
         } catch (err) {
             await sqs.createQueue();

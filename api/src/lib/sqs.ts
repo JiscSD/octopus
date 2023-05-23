@@ -1,6 +1,12 @@
 import AWS from 'aws-sdk';
+import * as helpers from './helpers';
 
-const queueUrl = process.env.SQS_ENDPOINT!;
+if (process.env.QUEUE_URL === undefined) {
+    throw new Error(`Environment Variable 'Queue URL' is undefined.`);
+}
+
+const queueUrl = helpers.checkEnvVariable(process.env.QUEUE_URL);
+const endpoint = helpers.checkEnvVariable(process.env.SQS_ENDPOINT);
 
 const config = {
     region: 'eu-west-1'
@@ -10,9 +16,11 @@ if (process.env.STAGE === 'local') {
     // @ts-ignore
     config.credentials = {
         accessKeyId: 'dummy',
-        secretAccessKey: 'dummy',
-        sessionToken: 'dummy'
+        secretAccessKey: 'dummy'
     };
+
+    // @ts-ignore
+    config.endpoint = endpoint;
 }
 
 const sqs = new AWS.SQS(config);
@@ -21,7 +29,7 @@ export const createQueue = async (): Promise<AWS.SQS.CreateQueueResult> => {
     // create SQS locally for PDF message queue
     return sqs
         .createQueue({
-            QueueName: 'science-octopus-pdf-queue-local',
+            QueueName: `science-octopus-pdf-queue-${process.env.STAGE}`,
             Attributes: {
                 DelaySeconds: '60',
                 MessageRetentionPeriod: '86400'
