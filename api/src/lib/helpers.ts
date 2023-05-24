@@ -986,12 +986,14 @@ export const createPublicationFooterTemplate = (publication: I.Publication): str
 
 export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
 
-export const checkEnvVariable = (variable: string | undefined, variableName: string): string => {
-    if (variable === undefined) {
-        throw new Error(`Environment Variable ${variableName} is undefined.`);
-    } else {
-        return variable;
+export const checkEnvVariable = (variableName: keyof NodeJS.ProcessEnv): string => {
+    const value = process.env[variableName];
+
+    if (value === undefined) {
+        throw new Error(`Environment Variable ${variableName} is undefined`);
     }
+
+    return value;
 };
 
 export const mapOrcidAffiliationSummary = (
