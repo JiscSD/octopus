@@ -277,10 +277,19 @@ export const updateConfirmation = async (
             });
         }
 
+        const coAuthor = publication.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
+
         // Is the coauthor actually a coauthor of this publication
-        if (!publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user.id)) {
+        if (!coAuthor) {
             return response.json(403, {
                 message: 'You are not a co-author of this publication.'
+            });
+        }
+
+        // check if coauthor confirmed his affiliations
+        if (!(coAuthor.isIndependent || coAuthor.affiliations.length)) {
+            return response.json(403, {
+                message: 'Please fill out your affiliation information.'
             });
         }
 
