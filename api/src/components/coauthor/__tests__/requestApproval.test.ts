@@ -6,12 +6,12 @@ describe('Request co-authors approvals', () => {
         await testUtils.testSeed();
     });
 
-    test('Can request approvals only if the publication is LOCKED', async () => {
+    test('Can request approvals only if the publication is DRAFT or LOCKED', async () => {
         const draftPublicationResponse = await testUtils.agent
             .put('/publications/publication-problem-draft/coauthors/request-approval')
             .query({ apiKey: '000000005' });
 
-        expect(draftPublicationResponse.status).toEqual(403);
+        expect(draftPublicationResponse.status).toEqual(200);
 
         const lockedPublicationResponse = await testUtils.agent
             .put('/publications/publication-problem-locked/coauthors/request-approval')
