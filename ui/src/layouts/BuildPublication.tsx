@@ -258,7 +258,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
-
             // redirect to publication page
             router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
