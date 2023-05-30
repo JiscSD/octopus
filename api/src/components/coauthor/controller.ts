@@ -351,6 +351,12 @@ export const requestApproval = async (
         }
 
         if (publication.currentStatus === 'DRAFT') {
+            if (!publicationService.isReadyToLock(publication)) {
+                return response.json(403, {
+                    message: 'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                });
+            }
+
             // check if publication was LOCKED before
             if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
                 // notify linked co-authors about changes
