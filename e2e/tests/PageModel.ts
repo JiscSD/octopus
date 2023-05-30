@@ -32,8 +32,6 @@ export const PageModel = {
             '_react=ActionCard[title = "FAQs"]'
         ],
         learnMoreButton: 'a[href="/about"][tabindex="0"].rounded',
-        quickSearch: 'button[aria-label="Open search"]',
-        quickSearchInput: 'input[placeholder="Search publications"]',
         publicationSearchResult: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
         darkModeToggle: 'button[role="switch"]'
     },

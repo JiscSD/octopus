@@ -11,11 +11,6 @@ export type PreferencesStoreTypes = {
     toggleFeedback: () => void;
 };
 
-export type GlobalsStoreType = {
-    showCmdPalette: boolean;
-    toggleCmdPalette: () => void;
-};
-
 export type UserType = {
     id: string;
     firstName: string;

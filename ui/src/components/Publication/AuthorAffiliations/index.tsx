@@ -10,6 +10,7 @@ type AuthorAffiliationsProps = {
     selectedAffiliations: Interfaces.MappedOrcidAffiliation[];
     isIndependentAuthor: boolean;
     scrollHeight: number;
+    loading?: boolean;
     onSelectionChange: (selectedAffiliations: Interfaces.MappedOrcidAffiliation[]) => void;
     onIndependentAuthorChange: (isIndependent: boolean) => void;
 };
@@ -35,7 +36,7 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
     );
 
     return (
-        <div className={`gap-4 rounded-lg bg-grey-100 p-4 dark:bg-grey-600 md:flex ${props.className}`}>
+        <div className={`gap-4 rounded-lg bg-grey-50 p-4 dark:bg-grey-600 md:flex ${props.className}`}>
             <div className="flex-1">
                 <h2 className="mb-4 flex space-x-1 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100">
                     Available affiliations
@@ -45,7 +46,11 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                     className="sm:scrollbar-vert h-full overflow-y-auto"
                     style={{ maxHeight: props.scrollHeight }}
                 >
-                    {filteredAvailableAffiliations.length ? (
+                    {props.loading ? (
+                        <li className="flex h-full items-center justify-center pb-20 pt-10">
+                            <h4>Loading...</h4>
+                        </li>
+                    ) : filteredAvailableAffiliations.length ? (
                         Helpers.getSortedAffiliations(filteredAvailableAffiliations).map((affiliation) => (
                             <li key={affiliation.id} className="mb-4 last:mb-0">
                                 <Components.AffiliationCard
@@ -56,7 +61,7 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                             </li>
                         ))
                     ) : (
-                        <li className="flex h-full items-center justify-center">
+                        <li className="flex h-full items-center justify-center pb-20 pt-10">
                             <h4>No results</h4>
                         </li>
                     )}
@@ -74,7 +79,11 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                     className="sm:scrollbar-vert h-full overflow-y-auto"
                     style={{ maxHeight: props.scrollHeight }}
                 >
-                    {props.selectedAffiliations.length ? (
+                    {props.loading ? (
+                        <li className="flex h-full items-center justify-center pb-20 pt-10">
+                            <h4>Loading...</h4>
+                        </li>
+                    ) : props.selectedAffiliations.length ? (
                         Helpers.getSortedAffiliations(props.selectedAffiliations).map((affiliation) => (
                             <li key={affiliation.id} className="mb-4 last:mb-0">
                                 <Components.AffiliationCard
@@ -86,8 +95,8 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                     ) : (
                         <li className="flex h-full flex-col justify-center gap-8 py-8 pl-2 md:-mt-6">
                             <p className="flex items-center gap-2">
-                                <Outline.ExclamationCircleIcon className="mr-1 inline w-5 flex-shrink-0" /> No
-                                affiliations have been added
+                                <Outline.ExclamationCircleIcon className="mr-1 inline w-5 flex-shrink-0" />
+                                No affiliations have been added
                             </p>
                             <label
                                 htmlFor="confirm-independent-author"

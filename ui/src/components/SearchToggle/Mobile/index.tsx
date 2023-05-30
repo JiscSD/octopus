@@ -1,16 +1,14 @@
 import React from 'react';
 import * as SolidIcon from '@heroicons/react/solid';
-
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as Router from 'next/router';
+import * as Config from '@config';
 
 const Mobile: React.FC = (): React.ReactElement => {
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
-
+    const router = Router.useRouter();
     return (
         <div className="flex items-center justify-center p-1 lg:hidden">
             <button
-                onClick={(e) => toggleCmdPalette()}
+                onClick={(e) => router.push(`${Config.urls.search.path}/publications`)}
                 aria-label="Search"
                 className="rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400"
             >
