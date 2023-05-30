@@ -685,7 +685,8 @@ const publicationSeeds = [
             create: {
                 publicationTo: 'publication-problem-live'
             }
-        }
+        },
+        conflictOfInterestStatus: false
     },
     {
         // This is listed as problem but is a hypothesis

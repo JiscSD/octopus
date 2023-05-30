@@ -575,7 +575,7 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     // clicking 'I am an author' link is blocked by cors
     const invitationLink = await page2
         .frameLocator('iframe')
-        .locator("a:has-text('I am an author')")
+        .locator("a:has-text('Confirm & Review Publication')")
         .getAttribute('href');
 
     // navigate to that link instead
@@ -717,6 +717,10 @@ test.describe('Publication flow + co-authors', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
+
+        // specify conflict of interest status
+        await (await page.waitForSelector("aside button:has-text('Conflict of interest')")).click();
+        await publicationFlowConflictOfInterest(page, false);
 
         // verify 'Publish' button is disabled
         await expect(page.locator(PageModel.publish.publishButton)).toBeDisabled();
