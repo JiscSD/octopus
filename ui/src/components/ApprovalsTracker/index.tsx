@@ -350,7 +350,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 open={Boolean(selectedAuthorAffiliations)}
                 negativeActionCallback={() => setSelectedAuthorAffiliations(null)}
                 cancelButtonText="Close"
-                title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s Affiliation(s) for this publication`}
+                title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s affiliation(s) for this publication`}
                 subTitle="Selected Affiliations"
             >
                 <ul>

@@ -21,7 +21,7 @@ const AffiliationCard: React.FC<AffiliationCardProps> = (props) => {
                 const isOpen = !prevState;
 
                 if (affiliationDetailsRef.current) {
-                    const maxHeight = affiliationDetailsRef.current?.scrollHeight;
+                    const maxHeight = affiliationDetailsRef.current.scrollHeight;
                     affiliationDetailsRef.current.style.maxHeight = `${isOpen ? maxHeight : 0}px`;
                 }
 
