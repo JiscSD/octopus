@@ -523,7 +523,7 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     );
 };
 
-export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata) => {
     if (!publication || publication.currentStatus !== 'DRAFT') {
         return false;
     }
@@ -547,6 +547,16 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
         isDataAndHasPermissionsStatement &&
         hasConfirmedAffiliations
     );
+};
+
+export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
+    }
+
+    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+
+    return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
 
 export const getLinksForPublication = async (id: string) => {
