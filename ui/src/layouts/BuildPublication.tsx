@@ -248,15 +248,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             // save publication
             await saveCurrent();
 
-            // update publication status to LOCKED
-            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LOCKED`, {}, props.token);
-
             // request co-authors approvals
             await api.put(
                 `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
                 {},
                 props.token
             );
+
+            // update publication status to LOCKED
+            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LOCKED`, {}, props.token);
 
             // redirect to publication page
             router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
