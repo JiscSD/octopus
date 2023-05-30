@@ -150,15 +150,17 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     );
 
     const displayArrayOfAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
-        if (affiliations.length <= 2) {
-            const names = affiliations.map((affiliation) => affiliation.organization.name);
+        const sortedAffiliations = Helpers.getSortedAffiliations(affiliations);
+
+        if (sortedAffiliations.length <= 2) {
+            const names = sortedAffiliations.map((affiliation) => affiliation.organization.name);
             return names.join(', ');
         } else {
-            const firstTwo = affiliations
+            const firstTwo = sortedAffiliations
                 .map((affiliation) => affiliation.organization.name)
                 .slice(0, 2)
                 .join(', ');
-            return firstTwo + ', + ' + (affiliations.length - 2) + ' more';
+            return firstTwo + ', + ' + (sortedAffiliations.length - 2) + ' more';
         }
     };
 
