@@ -555,7 +555,7 @@ const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
     await row.locator('button[title="Delete"]').click();
 };
 
-const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser) => {
+const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser, hasAffiliations?: boolean) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(Helpers.UI_BASE);
@@ -581,6 +581,18 @@ const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUse
     // navigate to that link instead
     const page3 = await context.newPage();
     await page3.goto(invitationLink);
+
+    // confirm affiliations
+    await page3.locator('a[title="Select your affiliations"]').first().click();
+
+    if (hasAffiliations) {
+        await page3.locator('button[title="Add affiliation"]').first().click();
+    } else {
+        await page3.locator('#confirm-independent-author').click();
+    }
+    await page3.locator('button:has-text("Confirm Affiliations")').click();
+
+    // approve
     await (await page3.waitForSelector('button:has-text("approve")')).click();
 
     await (await page3.waitForSelector('button[title="Yes, this is ready to publish"]')).click();
@@ -757,7 +769,7 @@ test.describe('Publication flow + co-authors', () => {
         await verifyLastEmailNotification(browser, Helpers.user1, 'A co-author has approved your Octopus publication');
 
         // second co-author confirmation
-        await confirmCoAuthorInvitation(browser, Helpers.user3);
+        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
 
         // verify notification triggered after last confirmation
         await verifyLastEmailNotification(
@@ -1343,7 +1355,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
         await confirmCoAuthorInvitation(browser, Helpers.user2);
-        await confirmCoAuthorInvitation(browser, Helpers.user3);
+        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
 
         // refresh corresponding author page
         await page.reload();
@@ -1416,7 +1428,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // handle co-authors confirmations
         await confirmCoAuthorInvitation(browser, Helpers.user2);
-        await confirmCoAuthorInvitation(browser, Helpers.user3);
+        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
 
         // refresh corresponding author page
         await page.reload();
@@ -1745,9 +1757,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
-        await expect(page.getByText('Unaffiliated')).toBeVisible();
-        await expect(page.locator('button[title="Edit affiliations"]')).toBeVisible();
-        await page.locator('button[title="Edit affiliations"]').click();
+        await expect(page.getByText('Unaffiliated').first()).toBeVisible();
+        await expect(page.locator('button[title="Edit your affiliations"]')).toBeVisible();
+        await page.locator('button[title="Edit your affiliations"]').click();
 
         await page.waitForSelector('input#confirm-independent-author[type="checkbox"]');
         await expect(page.getByText('No affiliations have been added')).toBeVisible();

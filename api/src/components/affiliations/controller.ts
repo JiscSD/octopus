@@ -31,9 +31,9 @@ export const updateAffiliations = async (
             });
         }
 
-        // check if this user is an author on this publication
         const coAuthor = publication.coAuthors.find((author) => author.linkedUser === event.user.id);
 
+        // check if this user is an author on this publication
         if (!coAuthor) {
             return response.json(403, {
                 message: 'You do not have permissions to add an affiliation to this publication.'
@@ -59,6 +59,13 @@ export const updateAffiliations = async (
 
         if (hasDuplicates) {
             return response.json(403, { message: 'Duplicate affiliations found.' });
+        }
+
+        // check if coauthor (beside the corresponding one) has already approved this publication
+        if (coAuthor.linkedUser !== publication.createdBy && coAuthor.confirmedCoAuthor) {
+            return response.json(403, {
+                message: 'You cannot change your affiliation information while the publication has been approved.'
+            });
         }
 
         // update affiliations for this author
