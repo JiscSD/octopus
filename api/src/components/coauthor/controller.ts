@@ -286,7 +286,7 @@ export const updateConfirmation = async (
             });
         }
 
-        // check if coauthor confirmed his affiliations
+        // check if coauthor confirmed their affiliations
         if (!(coAuthor.isIndependent || coAuthor.affiliations.length)) {
             return response.json(403, {
                 message: 'Please fill out your affiliation information.'
