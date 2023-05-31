@@ -314,8 +314,8 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                     onClick={() => setIsEditingAffiliations(true)}
                                                 />
                                             ) : (
-                                                !author.isIndependent ||
-                                                (author.affiliations.length > 0 && (
+                                                !author.isIndependent &&
+                                                author.affiliations.length > 0 && (
                                                     <Components.IconButton
                                                         className="p-2"
                                                         title="Display all affiliations"
@@ -327,7 +327,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                         }
                                                         onClick={() => setSelectedAuthorAffiliations(author)}
                                                     />
-                                                ))
+                                                )
                                             )}
                                         </div>
                                     </td>
