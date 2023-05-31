@@ -67,7 +67,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publication,
             userToken: token || '',
             bookmark,
-            publicationId: publication.id
+            publicationId: publication.id,
+            protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus)
         }
     };
 };
@@ -86,6 +87,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
+    const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -177,6 +179,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
+            setApprovalError('');
             try {
                 await api.patch(
                     `/publications/${publicationData?.id}/coauthor-confirmation`,
@@ -290,6 +293,18 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    const handleOpenAffiliationsModal = React.useCallback(() => setIsEditingAffiliations(true), []);
+
+    const handleCloseAffiliationsModal = React.useCallback(
+        (revalidate?: boolean) => {
+            if (revalidate) {
+                mutate();
+            }
+            setIsEditingAffiliations(false);
+        },
+        [mutate]
+    );
+
     const activeFlags = React.useMemo(
         () => publicationData?.publicationFlags?.filter((flag) => !flag.resolved),
         [publicationData]
@@ -350,9 +365,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [authors, showApprovalsTracker]
     );
 
-    const isCorrespondingUser = useMemo(
-        () => user?.id === publicationData?.createdBy,
-        [publicationData?.createdBy, user?.id]
+    const author = useMemo(
+        () => publicationData?.coAuthors.find((author) => author.linkedUser === user?.id),
+        [publicationData?.coAuthors, user?.id]
+    );
+
+    const isCorrespondingAuthor = useMemo(
+        () => author?.linkedUser === publicationData?.createdBy,
+        [author?.linkedUser, publicationData?.createdBy]
     );
 
     return publicationData ? (
@@ -372,7 +392,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {approvalError && <Components.Alert className="mb-4" severity="ERROR" title={approvalError} />}
                     {publicationData.currentStatus === 'DRAFT' && (
                         <>
-                            {!isCorrespondingUser && (
+                            {!isCorrespondingAuthor && (
                                 <Components.Alert
                                     className="mb-4"
                                     severity={alertSeverity}
@@ -384,7 +404,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 </Components.Alert>
                             )}
-                            {isCorrespondingUser && (
+                            {isCorrespondingAuthor && (
                                 <Components.Alert
                                     className="mb-4"
                                     severity={alertSeverity}
@@ -413,13 +433,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {showApprovalsTracker && (
                         <Components.ActionBar
                             publication={publicationData}
-                            isCorrespondingUser={isCorrespondingUser}
+                            isCorrespondingAuthor={isCorrespondingAuthor}
                             isReadyForPublish={isReadyForPublish}
                             isPublishing={isPublishing}
                             onUnlockPublication={handleUnlock}
                             onApprove={handleApproval}
                             onCancelApproval={handleCancelApproval}
                             onPublish={handlePublish}
+                            onEditAffiliations={handleOpenAffiliationsModal}
                         />
                     )}
 
@@ -432,9 +453,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 isPublishing={isPublishing}
                                 onPublish={handlePublish}
                                 onError={setServerError}
+                                onEditAffiliations={handleOpenAffiliationsModal}
                                 refreshPublicationData={mutate}
                             />
                         </div>
+                    )}
+
+                    {author && (
+                        <Components.EditAffiliationsModal
+                            author={author}
+                            autoUpdate={isCorrespondingAuthor || !author.confirmedCoAuthor}
+                            open={isEditingAffiliations}
+                            onClose={handleCloseAffiliationsModal}
+                        />
                     )}
 
                     {!!uniqueRedFlagCategoryList.length && (

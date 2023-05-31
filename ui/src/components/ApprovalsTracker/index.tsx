@@ -19,6 +19,7 @@ type Props = {
     isPublishing: boolean;
     onPublish: () => void;
     onError: (message: string) => void;
+    onEditAffiliations: () => void;
     refreshPublicationData: KeyedMutator<Interfaces.Publication>;
 };
 
@@ -30,19 +31,9 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     );
     const [authorEmailError, setAuthorEmailError] = React.useState('');
     const [isSendingReminder, setSendingReminder] = React.useState(false);
-    const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
+
     const confirmation = Contexts.useConfirmationModal();
     const authorEmailRef = React.useRef<null | HTMLInputElement>(null);
-
-    const handleCloseEditAffiliationsModal = React.useCallback(
-        (revalidate?: boolean) => {
-            if (revalidate) {
-                props.refreshPublicationData();
-            }
-            setIsEditingAffiliations(false);
-        },
-        [props]
-    );
 
     const handleCloseChangeEmailModal = React.useCallback(() => {
         setSelectedAuthorEmail(null);
@@ -301,17 +292,22 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             ) : (
                                                 displayArrayOfAffiliations(author.affiliations)
                                             )}
-                                            {author.linkedUser === user?.id ? (
+                                            {(isCorrespondingUser || !author.confirmedCoAuthor) &&
+                                            author.linkedUser === user?.id ? (
                                                 <Components.IconButton
                                                     className="p-2"
-                                                    title="Edit affiliations"
+                                                    title={
+                                                        !(author.isIndependent || author.affiliations.length)
+                                                            ? 'Select your affiliations'
+                                                            : 'Edit your affiliations'
+                                                    }
                                                     icon={
                                                         <FaIcons.FaEdit
                                                             className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
                                                             aria-hidden="true"
                                                         />
                                                     }
-                                                    onClick={() => setIsEditingAffiliations(true)}
+                                                    onClick={props.onEditAffiliations}
                                                 />
                                             ) : (
                                                 !author.isIndependent &&
@@ -375,13 +371,6 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     />
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
                 </Components.Modal>
-            )}
-            {author && (
-                <Components.EditAffiliationsModal
-                    open={isEditingAffiliations}
-                    author={author}
-                    onClose={handleCloseEditAffiliationsModal}
-                />
             )}
             <Components.SimpleModal
                 open={Boolean(selectedAuthorAffiliations)}

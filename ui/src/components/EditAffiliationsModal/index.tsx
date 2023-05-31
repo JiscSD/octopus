@@ -11,6 +11,7 @@ import * as api from '@api';
 type Props = {
     open: boolean;
     author: Interfaces.CoAuthor;
+    autoUpdate: boolean;
     onClose: (revalidate?: boolean) => void;
 };
 
@@ -30,7 +31,9 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
     } = useSWR<Interfaces.MappedOrcidAffiliation[]>('/orcid-affiliations');
 
     useSWR(
-        isValidating || error ? null : `${Config.endpoints.publications}/${props.author.publicationId}/my-affiliations`,
+        !props.autoUpdate || isValidating || error
+            ? null
+            : `${Config.endpoints.publications}/${props.author.publicationId}/my-affiliations`,
         (url) => {
             const updatedAuthorAffiliations = orcidAffiliations.filter((affiliation) =>
                 authorAffiliations.some(({ id }) => affiliation.id === id)
