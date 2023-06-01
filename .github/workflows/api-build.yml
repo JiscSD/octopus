@@ -18,7 +18,7 @@ jobs:
         working-directory: ./api
         run: npm ci
 
-      - name: Run tsc to check for typedcript errors
+      - name: Run tsc to check for typescript errors
         working-directory: ./api
         run: tsc
 
