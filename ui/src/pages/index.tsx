@@ -4,7 +4,6 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 
@@ -46,7 +45,6 @@ type Props = {
 };
 
 const Home: Types.NextPage<Props> = (props): React.ReactElement => {
-    const toggleCmdPalette = Stores.useGlobalsStore((state: Types.GlobalsStoreType) => state.toggleCmdPalette);
     console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
@@ -68,26 +66,32 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                             enabling peer review and quality assessment and allowing the academic community to build
                             upon the latest work.
                         </p>
-
-                        <div className="mx-auto flex w-fit space-x-6">
+                        <div className="mx-auto flex w-full flex-wrap gap-6 sm:w-fit sm:justify-between">
                             <Components.Link
                                 href={Config.urls.about.path}
-                                className="flex items-center rounded-lg bg-grey-700 px-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600"
+                                className="flex flex-1 items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
                             >
-                                <span className="text-center font-montserrat text-sm leading-none tracking-wide">
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
                                     Learn more
                                 </span>
                             </Components.Link>
-                            <button
-                                aria-label="Open search"
-                                className="flex w-52 items-center justify-between rounded-lg bg-teal-600 p-3 text-center outline-0 transition-colors duration-300 hover:bg-teal-700 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600"
-                                onClick={(e) => toggleCmdPalette()}
+                            <Components.Link
+                                href={Config.urls.authorGuide.path}
+                                className="flex flex-1 items-center space-x-4 rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
                             >
-                                <OutlineIcons.SearchIcon className="h-6 w-6 text-white-50 transition-colors duration-500 dark:text-teal-500" />
-                                <span className="mx-auto font-montserrat text-sm text-white-50 transition-colors duration-500 dark:text-grey-50">
-                                    Quick search...
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
+                                    Author Guide
                                 </span>
-                            </button>
+                            </Components.Link>
+
+                            <Components.Link
+                                href={`${Config.urls.search.path}/publications`}
+                                className="flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto"
+                            >
+                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
+                                    Find Publications
+                                </span>
+                            </Components.Link>
                         </div>
                     </div>
                 </section>

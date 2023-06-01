@@ -59,13 +59,22 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'coauthor-test-user-6-problem-live',
-                email: 'test-user-6@jisc.ac.uk',
-                code: 'test-code-user-6',
-                confirmedCoAuthor: true,
-                linkedUser: 'test-user-6'
-            }
+            create: [
+                {
+                    id: 'coauthor-test-user-1-problem-live',
+                    email: 'test-user-1@jisc.ac.uk',
+                    code: 'test-code-user-1',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1'
+                },
+                {
+                    id: 'coauthor-test-user-6-problem-live',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6'
+                }
+            ]
         },
         publicationFlags: {
             create: {
@@ -91,6 +100,60 @@ const publicationSeeds = [
                     createdAt: '2022-01-22T15:51:42.523Z'
                 }
             ]
+        }
+    },
+    {
+        id: 'locked-publication-problem-confirmed-co-authors',
+        title: 'LOCKED Publication PROBLEM confirmed co-authors',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        content: 'LOCKED Publication PROBLEM confirmed co-authors',
+        conflictOfInterestStatus: false,
+        currentStatus: 'LOCKED',
+        doi: '10.82259/cty5-2g03',
+        user: {
+            connect: {
+                id: 'test-user-1'
+            }
+        },
+        coAuthors: {
+            create: [
+                {
+                    id: 'test-user-1',
+                    email: 'test-user-1@jisc.ac.uk',
+                    code: 'test-user-1',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1',
+                    isIndependent: true,
+                    affiliations: []
+                },
+                {
+                    id: 'test-user-2',
+                    email: 'test-user-2@jisc.ac.uk',
+                    code: 'test-user-2',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-2',
+                    isIndependent: true,
+                    affiliations: []
+                }
+            ]
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                },
+                {
+                    status: 'LOCKED',
+                    createdAt: '2022-01-22T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
         }
     },
     {
@@ -134,6 +197,15 @@ const publicationSeeds = [
         coAuthors: {
             create: [
                 {
+                    id: 'coauthor-test-user-5-problem-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5',
+                    isIndependent: true,
+                    affiliations: []
+                },
+                {
                     id: 'coauthor-test-user-6-problem-draft',
                     email: 'test-user-6@jisc.ac.uk',
                     code: 'test-code-user-6',
@@ -145,6 +217,83 @@ const publicationSeeds = [
                     email: 'test-user-7@jisc.ac.uk',
                     code: 'test-code-user-7',
                     confirmedCoAuthor: false
+                }
+            ]
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        }
+    },
+    {
+        id: 'publication-problem-locked',
+        title: 'Publication PROBLEM-LOCKED',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        content: 'Publication PROBLEM-LOCKED',
+        currentStatus: 'LOCKED',
+        conflictOfInterestStatus: false,
+        doi: '10.82259/cty5-2g04',
+        user: {
+            connect: {
+                id: 'test-user-5'
+            }
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        keywords: ['science', 'technology'],
+        funders: {
+            create: {
+                id: 'publication-problem-locked-funder',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
+        affiliations: {
+            create: {
+                id: 'publication-problem-locked-affiliation',
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            }
+        },
+        coAuthors: {
+            create: [
+                {
+                    id: 'coauthor-test-user-5-problem-locked',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5',
+                    isIndependent: true,
+                    affiliations: []
+                },
+                {
+                    id: 'coauthor-test-user-6-problem-locked',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6',
+                    isIndependent: true,
+                    affiliations: []
+                },
+                {
+                    id: 'coauthor-test-user-7-problem-locked',
+                    email: 'test-user-7@jisc.ac.uk',
+                    code: 'test-code-user-7',
+                    confirmedCoAuthor: false,
+                    isIndependent: true,
+                    affiliations: []
                 }
             ]
         },
@@ -294,13 +443,26 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'coauthor-test-user-6-protocol-draft',
-                email: 'test-user-6@jisc.ac.uk',
-                code: 'test-code-user-6',
-                confirmedCoAuthor: true,
-                linkedUser: 'test-user-6'
-            }
+            create: [
+                {
+                    id: 'coauthor-test-user-5-protocol-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5',
+                    affiliations: [],
+                    isIndependent: true
+                },
+                {
+                    id: 'coauthor-test-user-6-protocol-draft',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6',
+                    affiliations: [],
+                    isIndependent: true
+                }
+            ]
         },
         publicationStatus: {
             create: [
@@ -411,6 +573,19 @@ const publicationSeeds = [
                 {
                     status: 'DRAFT',
                     createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        coAuthors: {
+            create: [
+                {
+                    id: 'coauthor-test-user-1-analysis-draft',
+                    email: 'test-user-1@jisc.ac.uk',
+                    code: 'test-code-user-1',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1',
+                    isIndependent: true,
+                    affiliations: []
                 }
             ]
         }

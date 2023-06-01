@@ -155,6 +155,8 @@ model CoAuthors {
     position          Int         @default(0)
     createdAt         DateTime    @default(now())
     reminderDate      DateTime?
+    affiliations      Json[]
+    isIndependent     Boolean     @default(false)
     user              User?       @relation(fields: [linkedUser], references: [id])
     publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 
@@ -214,6 +216,7 @@ enum PublicationStatusEnum {
     DRAFT
     LIVE
     HIDDEN
+    LOCKED
 }
 
 enum PublicationType {

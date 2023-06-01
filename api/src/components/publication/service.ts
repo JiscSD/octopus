@@ -1,6 +1,11 @@
+import s3 from 'lib/s3';
+import chromium from 'chrome-aws-lambda';
 import * as I from 'interface';
 import * as client from 'lib/client';
+import * as referenceService from 'reference/service';
+import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
+import { Browser } from 'puppeteer-core';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -143,6 +148,8 @@ export const get = async (id: string) => {
                     approvalRequested: true,
                     createdAt: true,
                     reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
                     user: {
                         select: {
                             firstName: true,
@@ -411,7 +418,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum, isReadyToPublish: boolean) => {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
     const query = {
         where: {
             id
@@ -445,7 +452,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
         }
     };
 
-    if (isReadyToPublish) {
+    if (status === 'LIVE') {
         // @ts-ignore
         query.data.publishedDate = new Date().toISOString();
     }
@@ -477,40 +484,61 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolean => {
     if (!publication) {
         return false;
     }
 
-    let isReady = false;
-
-    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
-    const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
     const conflictOfInterest = validateConflictOfInterest(publication);
     const hasPublishDate = Boolean(publication.publishedDate);
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
-    const isAttemptToLive = status === 'LIVE';
+    const coAuthorsAreVerified = publication.coAuthors.every(
+        (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
+    );
 
-    // More external checks can be chained here for the future
-    if (
+    return (
         hasAtLeastOneLinkTo &&
-        hasAllFields &&
+        hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        coAuthorsAreVerified &&
-        isAttemptToLive
-    ) {
-        isReady = true;
+        coAuthorsAreVerified
+    );
+};
+
+export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
     }
 
-    return isReady;
+    const hasAtLeastOneLinkTo = publication.linkedTo.length > 0;
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
+    const conflictOfInterest = validateConflictOfInterest(publication);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+    const isDataAndHasPermissionsStatement =
+        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+    const hasConfirmedAffiliations = publication.coAuthors.some(
+        (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
+    );
+
+    return (
+        hasAtLeastOneLinkTo &&
+        hasFilledRequiredFields &&
+        conflictOfInterest &&
+        isDataAndHasEthicalStatement &&
+        isDataAndHasPermissionsStatement &&
+        hasRequestedApprovals &&
+        hasConfirmedAffiliations
+    );
 };
 
 export const getLinksForPublication = async (id: string) => {
@@ -698,4 +726,54 @@ export const getLinksForPublication = async (id: string) => {
         linkedTo,
         linkedFrom
     };
+};
+
+// AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
+export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
+    const references = await referenceService.getAllByPublication(publication.id);
+    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+
+    let browser: Browser | null = null;
+
+    try {
+        browser = await chromium.puppeteer.launch({
+            args: [...chromium.args, '--font-render-hinting=none'],
+            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
+        });
+
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+        await page.setContent(htmlTemplate, {
+            waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
+        });
+
+        const pdf = await page.pdf({
+            format: 'a4',
+            preferCSSPageSize: true,
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: Helpers.createPublicationHeaderTemplate(publication),
+            footerTemplate: Helpers.createPublicationFooterTemplate(publication)
+        });
+
+        // upload pdf to S3
+        await s3
+            .putObject({
+                Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
+                Key: `${publication.id}.pdf`,
+                ContentType: 'application/pdf',
+                Body: pdf
+            })
+            .promise();
+
+        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+    } catch (err) {
+        console.error(err);
+
+        return null;
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 };

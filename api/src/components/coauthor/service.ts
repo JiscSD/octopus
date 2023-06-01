@@ -1,6 +1,6 @@
 import * as client from 'lib/client';
+import * as I from 'lib/interface';
 import cuid from 'cuid';
-import { CoAuthor } from 'lib/interface';
 import { Prisma } from '@prisma/client';
 
 export const get = (id: string) =>
@@ -22,6 +22,8 @@ export const getAllByPublication = async (publicationId: string) => {
             publicationId: true,
             confirmedCoAuthor: true,
             approvalRequested: true,
+            isIndependent: true,
+            affiliations: true,
             user: {
                 select: {
                     firstName: true,
@@ -73,7 +75,7 @@ export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
  * onCreate - don't take user input for fields like: confirmedCoAuthor, approvalRequested or linkedUser
  *
  */
-export const updateAll = (publicationId: string, authors: CoAuthor[]) =>
+export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
     client.prisma.$transaction(
         authors.map((author, index) =>
             client.prisma.coAuthors.upsert({
@@ -147,9 +149,18 @@ export const updateConfirmation = async (publicationId: string, userId: string, 
 };
 
 export const resetCoAuthors = async (publicationId: string) => {
+    const publication = await client.prisma.publication.findFirst({
+        where: {
+            id: publicationId
+        }
+    });
+
     const resetCoAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId
+            publicationId,
+            NOT: {
+                linkedUser: publication?.createdBy
+            }
         },
         data: {
             confirmedCoAuthor: false,

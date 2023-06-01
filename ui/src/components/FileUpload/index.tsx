@@ -86,19 +86,19 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
 
             <div className="mt-6 flex justify-between space-x-4">
                 <Components.ModalButton
-                    text="Cancel"
-                    title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
-                    disabled={props.loading}
-                    actionType="NEGATIVE"
-                />
-                <Components.ModalButton
                     text="Upload image"
                     title="Upload image"
                     onClick={() => props.positiveActionCallback(previewBase64)}
                     disabled={props.loading || !previewBase64.length}
                     loading={props.loading}
                     actionType="POSITIVE"
+                />
+                <Components.ModalButton
+                    text="Cancel"
+                    title="Cancel"
+                    onClick={() => props.negativeActionCallback()}
+                    disabled={props.loading}
+                    actionType="NEGATIVE"
                 />
             </div>
         </section>

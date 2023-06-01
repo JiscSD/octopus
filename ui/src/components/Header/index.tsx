@@ -21,24 +21,18 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     return (
         <>
             <Components.Banner>
-                <>
-                    This is a beta release under active development. Help us improve by providing{' '}
-                    <Components.Link
-                        href="https://forms.office.com/e/80g02emciH"
-                        className="w-fit underline  underline-offset-4"
-                        openNew
-                    >
-                        feedback
-                    </Components.Link>{' '}
-                    or contacting{' '}
-                    <Components.Link
-                        href="mailto:help@jisc.ac.uk"
-                        openNew
-                        className="w-fit underline  underline-offset-4"
-                    >
-                        help@jisc.ac.uk
-                    </Components.Link>
-                </>
+                Help us improve by providing{' '}
+                <Components.Link
+                    href="https://forms.office.com/e/80g02emciH"
+                    className="w-fit underline  underline-offset-4"
+                    openNew
+                >
+                    feedback
+                </Components.Link>{' '}
+                or contacting{' '}
+                <Components.Link href="mailto:help@jisc.ac.uk" openNew className="w-fit underline  underline-offset-4">
+                    help@jisc.ac.uk
+                </Components.Link>
             </Components.Banner>
             {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (

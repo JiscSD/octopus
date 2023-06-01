@@ -13,7 +13,7 @@ import * as Types from '@types';
  * - remove redundant actions like: reset, updateId, updateType, etc...
  * - Also update Publication Interfaces to reflect the actual data coming from "/publication/[id]" endpoint, not just partial data
  * - Replace any type with well defined types
- *
+ * - use proper types within the store
  */
 
 let store: any = (set: (params: any) => void) => ({
@@ -120,8 +120,11 @@ let store: any = (set: (params: any) => void) => ({
     updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
 
     // Affiliations
-    affiliations: [],
-    updateAffiliations: (affiliations: Interfaces.Affiliations[]) => set(() => ({ affiliations })),
+    authorAffiliations: [],
+    updateAuthorAffiliations: (authorAffiliations: Interfaces.MappedOrcidAffiliation[]) =>
+        set(() => ({ authorAffiliations })),
+    isIndependentAuthor: false,
+    updateIsIndependentAuthor: (isIndependentAuthor: boolean) => set(() => ({ isIndependentAuthor })),
     affiliationsStatement: '',
     updateAffiliationsStatement: (affiliationsStatement: string) => set(() => ({ affiliationsStatement })),
 

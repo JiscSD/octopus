@@ -17,7 +17,6 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     const [mounted, setMounted] = useState(false);
     const { user } = Stores.useAuthStore();
     const { darkMode } = Stores.usePreferencesStore();
-    const { showCmdPalette, toggleCmdPalette } = Stores.useGlobalsStore();
 
     // check authentication client side
     Hooks.useAuthCheck(Boolean(pageProps.protectedPage));
@@ -28,28 +27,10 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
     useEffect(() => {
         setMounted(true);
 
-        const setUpCmdPalListeners = (e: KeyboardEvent) => {
-            if (window.navigator.userAgent.indexOf('Mac') !== -1) {
-                if (e.metaKey && e.code === 'KeyK') {
-                    toggleCmdPalette();
-                }
-            } else {
-                if (e.ctrlKey && e.code === 'KeyK') {
-                    toggleCmdPalette();
-                }
-            }
-
-            if (e.key === 'Escape' && showCmdPalette) {
-                toggleCmdPalette();
-            }
-        };
-
-        document.addEventListener('keydown', setUpCmdPalListeners);
         return () => {
             setMounted(false);
-            document.removeEventListener('keydown', setUpCmdPalListeners);
         };
-    }, [showCmdPalette, toggleCmdPalette]);
+    }, []);
 
     return (
         <Contexts.ConfirmationModalProvider>
@@ -70,18 +51,9 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
             {mounted && (
                 <SWR.SWRConfig
                     value={{
-                        fetcher: (resource) => api.get(resource, user?.token),
-                        fallback: pageProps.fallback,
-                        errorRetryCount: 3,
-                        refreshInterval: 600000000, // for dev
-                        onError: (error, key) => {
-                            if (error.status === 403) {
-                                console.log('403 error');
-                            }
-
-                            if (error.status === 401) {
-                                console.log('401 error');
-                            }
+                        fetcher: (resource) => api.get(resource, user?.token).then((res) => res.data),
+                        onError: (error) => {
+                            console.error(error);
                         }
                     }}
                 >
@@ -89,7 +61,6 @@ const App = ({ Component, pageProps }: Types.AppProps) => {
                         <div className={darkMode ? 'dark' : ''}>
                             <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                                 <Components.Toast />
-                                <Components.CommandPalette />
                                 <Component {...pageProps} />
                             </div>
                         </div>

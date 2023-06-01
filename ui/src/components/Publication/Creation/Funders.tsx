@@ -32,7 +32,7 @@ const Funders: React.FC = (): React.ReactElement => {
                     }
                 />
             </div>
-            <Components.RORForm type="funders" />
+            <Components.RORForm />
         </div>
     );
 };

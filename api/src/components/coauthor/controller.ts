@@ -159,14 +159,12 @@ export const link = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        // Does the publication exist?
         if (!publication) {
             return response.json(404, {
                 message: 'This publication does not exist.'
             });
         }
 
-        // Is the publication in draft?
         if (publication.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
@@ -201,6 +199,13 @@ export const link = async (
                     authorEmail: publication.user.email || ''
                 }
             });
+
+            // check if this was the last co-author who denied their involvement
+            if (publication.coAuthors.length === 2) {
+                // this means only the creator remained and we can safely update publication status back to DRAFT
+                // to avoid publication being LOCKED without co-authors
+                await publicationService.updateStatus(publication.id, 'DRAFT');
+            }
 
             return response.json(200, 'Removed co-author from publication');
         }
@@ -262,17 +267,29 @@ export const updateConfirmation = async (
             });
         }
 
-        // Is the publication in draft?
-        if (publication.currentStatus === 'LIVE') {
+        // Is the publication in locked mode?
+        if (publication.currentStatus !== 'LOCKED') {
             return response.json(403, {
-                message: 'This publication is LIVE and therefore cannot be edited.'
+                message:
+                    publication.currentStatus === 'LIVE'
+                        ? 'You cannot approve a LIVE publication'
+                        : 'This publication is not ready for review yet'
             });
         }
 
+        const coAuthor = publication.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
+
         // Is the coauthor actually a coauthor of this publication
-        if (!publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user.id)) {
+        if (!coAuthor) {
             return response.json(403, {
                 message: 'You are not a co-author of this publication.'
+            });
+        }
+
+        // check if coauthor confirmed their affiliations
+        if (!(coAuthor.isIndependent || coAuthor.affiliations.length)) {
+            return response.json(403, {
+                message: 'Please fill out your affiliation information.'
             });
         }
 
@@ -326,6 +343,42 @@ export const requestApproval = async (
             return response.json(404, { message: 'Publication not found' });
         }
 
+        if (publication.currentStatus === 'LIVE') {
+            return response.json(403, { message: 'Cannot request approvals for a LIVE publication.' });
+        }
+
+        // check if user is not the corresponding author
+        if (event.user.id !== publication.createdBy) {
+            return response.json(403, {
+                message: 'You are not allowed to request approvals for this publication.'
+            });
+        }
+
+        // check if publication actually has co-authors
+        if (publication.coAuthors.length < 2) {
+            return response.json(403, { message: 'There is no co-author to request approval from.' });
+        }
+
+        if (publication.currentStatus === 'DRAFT') {
+            // check if publication was LOCKED before
+            if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
+                // notify linked co-authors about changes
+                const linkedCoAuthors = publication.coAuthors.filter(
+                    (author) => author.linkedUser && author.linkedUser !== publication.createdBy
+                );
+
+                for (const linkedCoAuthor of linkedCoAuthors) {
+                    await email.notifyCoAuthorsAboutChanges({
+                        coAuthor: { email: linkedCoAuthor.email },
+                        publication: {
+                            title: publication.title || '',
+                            url: `${process.env.BASE_URL}/publications/${publication.id}`
+                        }
+                    });
+                }
+            }
+        }
+
         // get all pending co authors
         const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);
 
@@ -367,9 +420,10 @@ export const sendApprovalReminder = async (
         });
     }
 
-    if (publication.currentStatus !== 'DRAFT') {
+    // Can only send reminder on publications that have been locked for review
+    if (publication.currentStatus !== 'LOCKED') {
         return response.json(403, {
-            message: 'This publication cannot be edited.'
+            message: 'A reminder is not able to be sent unless approval is being requested'
         });
     }
 

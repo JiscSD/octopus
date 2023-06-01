@@ -12,6 +12,7 @@ import * as api from '@api';
 import * as Hooks from '@hooks';
 
 import ClickAwayListener from 'react-click-away-listener';
+import axios from 'axios';
 
 type BuildPublicationProps = {
     steps: Interfaces.CreationStep[];
@@ -25,7 +26,6 @@ type BuildPublicationProps = {
 const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const router = Router.useRouter();
     const user = Stores.useAuthStore((state) => state.user);
-    const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
     const store = Stores.usePublicationCreationStore();
     const [memoizedStore] = useState(store);
     const setToast = Stores.useToastStore((state) => state.setToast);
@@ -44,6 +44,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             memoizedStore.reset();
         };
     }, [memoizedStore]);
+
+    React.useEffect(() => {
+        if (store.error) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [store.error]);
 
     const checkRequired = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
@@ -77,9 +83,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         message: 'You must provide details of who gave permission for the data collection and sharing'
                     };
             }
+
             if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
                 ready = { ready: false, message: 'All co-authors must be verified.' };
             }
+
+            if (!(store.authorAffiliations.length || store.isIndependentAuthor)) {
+                ready = {
+                    ready: false,
+                    message: 'You must add your affiliations or confirm if you are an independent author.'
+                };
+            }
+
             return ready;
         },
         []
@@ -121,21 +136,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             return ready;
         },
         []
-    );
-
-    const CheckCoAuthorsToApprove = useCallback(
-        (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            let ready = { ready: true, message: '' };
-            if (
-                !store.coAuthors
-                    .filter((coAuthor) => coAuthor.linkedUser !== props.publication.createdBy)
-                    .every((coAuthor) => coAuthor.approvalRequested)
-            ) {
-                ready = { ready: false, message: 'CoAuthors pending approval request' };
-            }
-            return ready;
-        },
-        [props.publication.createdBy]
     );
 
     // Function called before action is taken, save, exit, preview, publish etc...
@@ -186,6 +186,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 props.token
             );
 
+            // update author affiliations
+            await api.put(
+                `${Config.endpoints.publications}/${props.publication.id}/my-affiliations`,
+                { affiliations: store.authorAffiliations, isIndependent: store.isIndependentAuthor },
+                props.token
+            );
+
             if (message) {
                 setToast({
                     visible: true,
@@ -218,7 +225,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 });
             } catch (err) {
                 const { message } = err as Interfaces.JSONResponseError;
-                store.setError(message);
+                store.setError(
+                    axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                        ? err.response.data.message
+                        : message
+                );
             }
         } else {
             store.setError(check.message);
@@ -228,16 +239,28 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const requestApproval = useCallback(async () => {
         try {
+            // save publication
             await saveCurrent();
-            const response = await api.put(
+
+            // request co-authors approvals
+            await api.put(
                 `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
                 {},
                 props.token
             );
-            updateCoAuthors(response.data);
+
+            // update publication status to LOCKED
+            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LOCKED`, {}, props.token);
+
+            // redirect to publication page
+            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setRequestApprovalModalVisibility(false);
@@ -249,7 +272,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             await saveCurrent('Publication successfully saved');
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setSaveModalVisibility(false);
@@ -271,7 +298,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
 
         setDeleteModalVisibility(false);
@@ -285,7 +316,11 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            store.setError(message);
+            store.setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
     }, [props.publication?.id, router, saveCurrent, store]);
 
@@ -304,7 +339,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const coAuthorsToApprove = useMemo(() => CheckCoAuthorsToApprove(store).ready, [CheckCoAuthorsToApprove, store]);
+    const hasUnconfirmedCoAuthors = !store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
     return (
         <>
@@ -340,7 +375,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 cancelButtonText="Cancel"
                 title="Are you sure you want to finalise your publication?"
                 icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
-            ></Components.Modal>
+            >
+                <p className="text-gray-500 text-sm">
+                    This action will lock your publication and notify other authors that they must approve it in its
+                    current state before publishing.
+                </p>
+            </Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}
                 setOpen={setDeleteModalVisibility}
@@ -394,7 +434,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             >
                                 <Components.IconButton
                                     title="Toggle side bar"
-                                    className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-t border-r border-b border-grey-400 bg-teal-700"
+                                    className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-b border-r border-t border-grey-400 bg-teal-700"
                                     icon={
                                         showSideBar ? (
                                             <OutlineIcons.ArrowLeftIcon className="h-6 w-6 text-white-50" />
@@ -465,7 +505,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         >
                                             Preview
                                         </Components.Button>
-                                        {!coAuthorsToApprove ? (
+                                        {hasUnconfirmedCoAuthors ? (
                                             <Components.Button
                                                 title="Request Approval"
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
@@ -530,7 +570,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                             }
                                             onClick={handlePreview}
                                         />
-                                        {!coAuthorsToApprove ? (
+                                        {hasUnconfirmedCoAuthors ? (
                                             <Components.IconButton
                                                 title="Request Approval"
                                                 icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
@@ -631,7 +671,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     >
                                         Preview
                                     </Components.Button>
-                                    {!coAuthorsToApprove ? (
+                                    {hasUnconfirmedCoAuthors ? (
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyRequestApproval}
@@ -662,7 +702,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={handlePreview}
                                     />
 
-                                    {!coAuthorsToApprove ? (
+                                    {hasUnconfirmedCoAuthors ? (
                                         <Components.IconButton
                                             disabled={!isReadyRequestApproval}
                                             icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}

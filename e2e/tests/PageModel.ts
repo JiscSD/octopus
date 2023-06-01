@@ -3,9 +3,9 @@ export const PageModel = {
         searchButton: 'header > div > div > div > button:text("Search")',
         loginButton: 'role=button[name="Sign in with ORCID"]',
         usernameButton: 'button[data-testid="username-button"]',
-        logoutButton: 'button:text("Log out")',
-        browseButton: 'ul a[role="button"]:has-text("Browse")',
-        publishButton: 'ul a[role="button"]:has-text("Publish")',
+        logoutButton: 'a:text("Log out")',
+        browseButton: 'ul a:has-text("Browse")',
+        publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
         myProfileButton: 'a:has-text("My profile")'
@@ -32,8 +32,6 @@ export const PageModel = {
             '_react=ActionCard[title = "FAQs"]'
         ],
         learnMoreButton: 'a[href="/about"][tabindex="0"].rounded',
-        quickSearch: 'button[aria-label="Open search"]',
-        quickSearchInput: 'input[placeholder="Search publications"]',
         publicationSearchResult: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
         darkModeToggle: 'button[role="switch"]'
     },
@@ -82,7 +80,7 @@ export const PageModel = {
     livePublication: {
         visibleSections: [
             // visualisation
-            'a[role="button"]:has-text("How has life on earth evolved?")',
+            'a:has-text("How has life on earth evolved?")',
             // content
             '#main-text >> text=How has life on earth evolved?',
             // problems above this
@@ -112,7 +110,7 @@ export const PageModel = {
     },
     authorInfo: {
         name: 'text=Science Octopus',
-        orcid: 'a[role="button"]:has-text("XXXX-XXXX-XXXX-XXXX")',
+        orcid: 'a:has-text("XXXX-XXXX-XXXX-XXXX")',
         orcidData: [
             'section > h2:has-text("Employment")',
             'section > h2:has-text("Education")',
@@ -152,9 +150,11 @@ export const PageModel = {
         nextButton: 'button:has-text("Next") >> nth=0',
         previewButton: 'button:has-text("Preview") >> nth=0',
         publishButton: 'button:has-text("Publish") >> nth=1',
+        publishButtonTracker: 'button[title="Publish"]',
         requestApprovalButton: 'button:has-text("Request Approval") >> nth=0',
         confirmRequestApproval: 'button:has-text("Finalise Draft and Send Request") >> nth=0',
         confirmPublishButton: 'button[aria-label="Yes, save & publish"]',
+        confirmPublishButtonTracker: 'button[title="Yes"]',
         deletePublicationButton: 'button:has-text("Delete Draft") >> nth=0',
         confirmDeletePublicationButton: 'button:has-text("Yes, Delete this draft") >> nth=0',
         fileImportButtonModal: 'button[title="Import from Microsoft Word (.docx)"]',
@@ -162,7 +162,9 @@ export const PageModel = {
         insertButton: 'button:has-text("Insert")',
         replaceButton: 'button:has-text("Replace")',
         importModal: 'div[title="Document Import"]',
-        draftEditButton: 'a[role="button"]:has-text("Edit draft publication")',
+        draftEditButton: 'a:has-text("Edit draft publication")',
+        unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
+        confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
             licence: 'select#licence',
             rorID: 'input[name=ror]',

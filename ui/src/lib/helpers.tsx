@@ -8,6 +8,7 @@ import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Interfaces from '@interfaces';
 
 /**
  * @description Truncates a string
@@ -41,7 +42,7 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
         minute: 'numeric'
     });
 
-    return date === 'Invalid DateTime' ? 'N/A' : date;
+    return date === 'Invalid DateTime' ? 'N/A' : `${date} GMT`;
 };
 
 /**
@@ -78,7 +79,8 @@ export const formatStatus = (status: Types.PublicationStatuses): string => {
     const statuses = {
         DRAFT: 'Draft',
         LIVE: 'Live',
-        HIDDEN: 'Hidden'
+        HIDDEN: 'Hidden',
+        LOCKED: 'Locked'
     };
 
     return statuses[status];
@@ -116,17 +118,6 @@ export const findNextPublicationType = (type: Types.PublicationType) => {
 export const findPreviousPublicationType = (type: Types.PublicationType) => {
     const index = Config.values.publicationTypes.findIndex((t) => t === type) - 1;
     return Config.values.publicationTypes[index];
-};
-
-/**
- * @description Returns the string of the key for the current os
- */
-export const setOSKey = (): string | React.ReactElement => {
-    if (window.navigator.appVersion.indexOf('Mac')) {
-        return <>&#8984;K</>;
-    } else {
-        return 'Ctrl-K';
-    }
 };
 
 /**
@@ -358,4 +349,59 @@ export const validateEmail = (email: string): Boolean => {
     return regex.test(email);
 };
 
-export const isEmptyContent = (content: string) => !content || /<p>\s*<\/p>/.test(content);
+export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
+
+export const getPublicationStatusByAuthor = (
+    publication: Interfaces.Publication | Interfaces.UserPublication,
+    user: Types.UserType | Interfaces.User
+) => {
+    if (publication.currentStatus === 'LIVE') return 'Live';
+
+    if (publication.currentStatus === 'DRAFT') {
+        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    }
+
+    if (publication.coAuthors.length > 1) {
+        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+            return 'Ready to publish';
+        }
+
+        if (
+            user.id !== publication.createdBy &&
+            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+        ) {
+            return 'Pending your approval';
+        }
+    }
+
+    return 'Pending author approval';
+};
+
+export const getFormattedAffiliationDate = (date: number | Interfaces.OrcidAffiliationDate): string => {
+    if (typeof date === 'number') {
+        const jsDate = new Date(date);
+        const day = jsDate.toLocaleDateString('en-GB', { day: '2-digit' });
+        const month = jsDate.toLocaleDateString('en-GB', { month: '2-digit' });
+        const year = jsDate.toLocaleDateString('en-GB', { year: 'numeric' });
+
+        return `${year}-${month}-${day}`;
+    }
+
+    return Object.values({ year: date.year, month: date.month, day: date.day }) // enforce order yyyy-mm-dd
+        .filter((value) => value)
+        .join('-');
+};
+
+export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+    const affiliationsWithStartDate = affiliations.filter((affiliation) => affiliation.startDate);
+    const affiliationsWithoutStartDate = affiliations.filter((affiliation) => !affiliation.startDate);
+
+    return [
+        ...affiliationsWithStartDate.sort((a1, a2) =>
+            getFormattedAffiliationDate(a2.startDate as Interfaces.OrcidAffiliationDate).localeCompare(
+                getFormattedAffiliationDate(a1.startDate as Interfaces.OrcidAffiliationDate)
+            )
+        ),
+        ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
+    ];
+};

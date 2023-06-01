@@ -124,7 +124,8 @@ export const get = async (id: string, isAccountOwner = false) => {
             updatedAt: true,
             employment: true,
             education: true,
-            works: true
+            works: true,
+            orcidAccessToken: isAccountOwner ? true : false
         }
     });
 
@@ -135,7 +136,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
     const { offset, limit, orderBy, orderDirection } = params;
 
     // Account owners can retrieve their DRAFT publications also
-    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE'] : ['LIVE'];
+    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
 
     const where: Prisma.PublicationWhereInput = {
         OR: [
@@ -203,4 +204,30 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
     const totalUserPublications = await client.prisma.publication.count({ where });
 
     return { offset, limit, total: totalUserPublications, results: userPublications };
+};
+
+export const getUserList = async () => {
+    const users = await client.prisma.user.findMany({
+        select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            createdAt: true,
+            employment: true
+        }
+    });
+
+    return users.map(({ firstName, lastName, email, createdAt, employment }) => ({
+        firstName,
+        lastName,
+        email,
+        createdAt: createdAt.toLocaleDateString('en-GB', { dateStyle: 'short' }),
+        currentEmployer: (employment as unknown as I.UserEmployment[])
+            .filter(
+                (employment) =>
+                    !employment?.endDate || Object.values(employment?.endDate).every((value) => value === null)
+            )
+            .map((employment) => employment?.organisation)
+            .join(', ')
+    }));
 };

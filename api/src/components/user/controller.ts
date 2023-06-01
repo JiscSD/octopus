@@ -60,3 +60,21 @@ export const getPublications = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getUserList = async (event: I.APIRequest): Promise<I.JSONResponse> => {
+    const apiKey = event.queryStringParameters?.apiKey;
+
+    if (apiKey !== process.env.LIST_USERS_API_KEY) {
+        return response.json(401, { message: "Please provide a valid 'apiKey'." });
+    }
+
+    try {
+        const userList = await userService.getUserList();
+
+        return response.json(200, userList);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

@@ -67,7 +67,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             publication,
             userToken: token || '',
             bookmark,
-            publicationId: publication.id
+            publicationId: publication.id,
+            protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus)
         }
     };
 };
@@ -82,10 +83,11 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const [coAuthorModalState, setCoAuthorModalState] = React.useState(false);
     const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
+    const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
+    const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -163,6 +165,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         if (publicationData?.user?.id === user?.id) {
             return 'INFO';
         }
+        if (publicationData?.currentStatus === 'DRAFT') {
+            return 'WARNING';
+        }
         if (currentCoAuthor?.confirmedCoAuthor) {
             return 'SUCCESS';
         }
@@ -174,13 +179,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
-            await api.patch(
-                `/publications/${publicationData?.id}/coauthor-confirmation`,
-                {
-                    confirm
-                },
-                user?.token
-            );
+            setApprovalError('');
+            try {
+                await api.patch(
+                    `/publications/${publicationData?.id}/coauthor-confirmation`,
+                    {
+                        confirm
+                    },
+                    user?.token
+                );
+            } catch (err) {
+                const approvalError = err as Interfaces.JSONResponseError;
+                setApprovalError(approvalError.response?.data.message);
+            }
         },
         [publicationData?.id, user?.token]
     );
@@ -234,6 +245,66 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [confirmation, publicationData?.id, router]);
 
+    const handleUnlock = async () => {
+        const confirmed = await confirmation(
+            'Are you sure you want to cancel and unlock?',
+            'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
+            <OutlineIcons.LockOpenIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
+            'Unlock',
+            'Cancel'
+        );
+
+        if (confirmed) {
+            try {
+                await api.put(
+                    `${Config.endpoints.publications}/${publicationData?.id}/status/DRAFT`,
+                    {},
+                    Helpers.getJWT()
+                );
+
+                router.push(`${Config.urls.viewPublication.path}/${publicationData?.id}/edit?step=4`);
+            } catch (err) {
+                const unlockError = err as Interfaces.JSONResponseError;
+                setServerError(unlockError.message);
+            }
+        }
+    };
+
+    const handleCancelApproval = async () => {
+        const confirmed = await confirmation('Change your mind?', undefined, undefined, 'Yes, changes are needed');
+
+        if (confirmed) {
+            await updateCoAuthor(false);
+            await mutate();
+        }
+    };
+
+    const handleApproval = async () => {
+        const confirmed = await confirmation(
+            'Do you approve this publication?',
+            undefined,
+            undefined,
+            'Yes, this is ready to publish'
+        );
+
+        if (confirmed) {
+            await updateCoAuthor(true);
+            await mutate();
+        }
+    };
+
+    const handleOpenAffiliationsModal = React.useCallback(() => setIsEditingAffiliations(true), []);
+
+    const handleCloseAffiliationsModal = React.useCallback(
+        (revalidate?: boolean) => {
+            if (revalidate) {
+                mutate();
+            }
+            setIsEditingAffiliations(false);
+        },
+        [mutate]
+    );
+
     const activeFlags = React.useMemo(
         () => publicationData?.publicationFlags?.filter((flag) => !flag.resolved),
         [publicationData]
@@ -266,6 +337,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 email: correspondingUser.email || '',
                 publicationId: publicationData.id,
                 linkedUser: correspondingUser.id,
+                isIndependent: true,
+                affiliations: [],
                 user: {
                     orcid: correspondingUser.orcid,
                     firstName: correspondingUser.firstName,
@@ -283,7 +356,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const showApprovalsTracker = useMemo(
-        () => publicationData?.currentStatus === 'DRAFT' && authors.some((author) => author.approvalRequested),
+        () => publicationData?.currentStatus === 'LOCKED' && authors.some((author) => author.approvalRequested),
         [authors, publicationData?.currentStatus]
     );
 
@@ -292,9 +365,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [authors, showApprovalsTracker]
     );
 
-    const isCorrespondingUser = useMemo(
-        () => user?.id === publicationData?.createdBy,
-        [publicationData?.createdBy, user?.id]
+    const author = useMemo(
+        () => publicationData?.coAuthors.find((author) => author.linkedUser === user?.id),
+        [publicationData?.coAuthors, user?.id]
+    );
+
+    const isCorrespondingAuthor = useMemo(
+        () => author?.linkedUser === publicationData?.createdBy,
+        [author?.linkedUser, publicationData?.createdBy]
     );
 
     return publicationData ? (
@@ -305,127 +383,91 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publicationData.id}`} />
                 <title>{`${publicationData.title} - ${Config.urls.viewPublication.title}`}</title>
             </Head>
-            <Components.Modal
-                open={coAuthorModalState}
-                setOpen={setCoAuthorModalState}
-                positiveActionCallback={async () => {
-                    await updateCoAuthor(true);
-                    await mutate();
-                    setCoAuthorModalState(false);
-                }}
-                negativeActionCallback={async () => {
-                    await updateCoAuthor(false);
-                    await mutate();
-                    setCoAuthorModalState(false);
-                }}
-                positiveButtonText="Yes, this is ready to publish"
-                cancelButtonText="No, changes are needed"
-                title="Do you approve this publication?"
-            />
 
             <Layouts.Publication
                 fixedHeader={false}
                 publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
+                    {approvalError && <Components.Alert className="mb-4" severity="ERROR" title={approvalError} />}
                     {publicationData.currentStatus === 'DRAFT' && (
                         <>
-                            <Components.Alert
-                                className="mb-4"
-                                severity={alertSeverity}
-                                title={`This is a draft publication only visible to authors. ${
-                                    showApprovalsTracker
-                                        ? isReadyForPublish
-                                            ? 'All authors have approved this publication.'
-                                            : 'All authors must approve this draft before it can be published.'
-                                        : ''
-                                }`}
-                            >
-                                {isCorrespondingUser ? (
-                                    isReadyForPublish ? (
-                                        <Components.Link
-                                            className={`mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline ${
-                                                isPublishing ? 'hover:cursor-not-allowed' : ''
-                                            }`}
-                                            href="#"
-                                            title="Publish"
-                                            onClick={
-                                                isPublishing
-                                                    ? undefined
-                                                    : async (e) => {
-                                                          e.preventDefault();
-                                                          await handlePublish();
-                                                      }
-                                            }
-                                        >
-                                            <OutlineIcons.CloudUploadIcon className="w-4" />
-                                            <span>Click here to publish</span>
-                                        </Components.Link>
-                                    ) : (
-                                        <Components.Link
-                                            openNew={false}
-                                            title="Edit publication"
-                                            href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
-                                            className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
-                                        >
-                                            <OutlineIcons.PencilAltIcon className="w-4" />
-                                            <span>Edit draft publication</span>
-                                        </Components.Link>
-                                    )
-                                ) : (
-                                    <>
-                                        {currentCoAuthor?.confirmedCoAuthor ? (
-                                            <p className="mt-2 text-sm text-white-50">
-                                                You have approved this publication. Would you like to{' '}
-                                                <button
-                                                    onClick={() => {
-                                                        setCoAuthorModalState(true);
-                                                    }}
-                                                    className="inline-block font-bold underline"
-                                                >
-                                                    change your mind
-                                                </button>
-                                                ?
-                                            </p>
-                                        ) : (
-                                            <>
-                                                <p className="mt-2 text-sm text-grey-800">
-                                                    You have not yet approved this publication. Would you like to{' '}
-                                                    <button
-                                                        onClick={() => {
-                                                            setCoAuthorModalState(true);
-                                                        }}
-                                                        className="inline-block font-bold underline"
-                                                    >
-                                                        approve
-                                                    </button>
-                                                    ?
-                                                </p>
-                                                <p className="mt-2 text-sm text-grey-800">
-                                                    If any changes are required, please discuss with the corresponding
-                                                    author.
-                                                </p>
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </Components.Alert>
-
-                            {serverError && <Components.Alert severity="ERROR" title={serverError} />}
-
-                            {showApprovalsTracker && (
-                                <div className="pb-16">
-                                    <Components.ApprovalsTracker
-                                        publication={publicationData}
-                                        isPublishing={isPublishing}
-                                        onPublish={handlePublish}
-                                        onError={setServerError}
-                                        refreshPublicationData={mutate}
-                                    />
-                                </div>
+                            {!isCorrespondingAuthor && (
+                                <Components.Alert
+                                    className="mb-4"
+                                    severity={alertSeverity}
+                                    title="This publication is currently being edited."
+                                >
+                                    <p className="mt-2 text-sm text-grey-800">
+                                        Once the corresponding author has made their changes, you will be notified to
+                                        approve the draft before it is published.
+                                    </p>
+                                </Components.Alert>
+                            )}
+                            {isCorrespondingAuthor && (
+                                <Components.Alert
+                                    className="mb-4"
+                                    severity={alertSeverity}
+                                    title={`This is a draft publication only visible to authors. ${
+                                        showApprovalsTracker
+                                            ? isReadyForPublish
+                                                ? 'All authors have approved this publication.'
+                                                : 'All authors must approve this draft before it can be published.'
+                                            : ''
+                                    }`}
+                                >
+                                    <Components.Link
+                                        openNew={false}
+                                        title="Edit publication"
+                                        href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
+                                        className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                                    >
+                                        <OutlineIcons.PencilAltIcon className="w-4" />
+                                        <span>Edit Draft Publication</span>
+                                    </Components.Link>
+                                </Components.Alert>
                             )}
                         </>
                     )}
+
+                    {showApprovalsTracker && (
+                        <Components.ActionBar
+                            publication={publicationData}
+                            isCorrespondingAuthor={isCorrespondingAuthor}
+                            isReadyForPublish={isReadyForPublish}
+                            isPublishing={isPublishing}
+                            onUnlockPublication={handleUnlock}
+                            onApprove={handleApproval}
+                            onCancelApproval={handleCancelApproval}
+                            onPublish={handlePublish}
+                            onEditAffiliations={handleOpenAffiliationsModal}
+                        />
+                    )}
+
+                    {serverError && <Components.Alert severity="ERROR" title={serverError} />}
+
+                    {showApprovalsTracker && (
+                        <div className="pb-16">
+                            <Components.ApprovalsTracker
+                                publication={publicationData}
+                                isPublishing={isPublishing}
+                                onPublish={handlePublish}
+                                onError={setServerError}
+                                onEditAffiliations={handleOpenAffiliationsModal}
+                                refreshPublicationData={mutate}
+                            />
+                        </div>
+                    )}
+
+                    {author && (
+                        <Components.EditAffiliationsModal
+                            author={author}
+                            autoUpdate={isCorrespondingAuthor || !author.confirmedCoAuthor}
+                            open={isEditingAffiliations}
+                            onClose={handleCloseAffiliationsModal}
+                        />
+                    )}
+
                     {!!uniqueRedFlagCategoryList.length && (
                         <Components.Alert
                             title="This publication has active red flags for:"

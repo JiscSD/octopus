@@ -17,21 +17,13 @@ type IconProps = {
 };
 
 type RowProps = {
-    type: 'funders' | 'affiliations';
-    item: Interfaces.Funder | Interfaces.Affiliations;
-};
-
-type FormProps = {
-    type: 'funders' | 'affiliations';
+    item: Interfaces.Funder;
 };
 
 const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
     const publicationId = Stores.usePublicationCreationStore((state) => state.id);
     const funders = Stores.usePublicationCreationStore((state) => state.funders);
     const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
-
-    const affiliations = Stores.usePublicationCreationStore((state) => state.affiliations);
-    const updateAffiliations = Stores.usePublicationCreationStore((state) => state.updateAffiliations);
 
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -40,15 +32,9 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
     const onDeleteRowHandler = async (id: string) => {
         setIsLoading(true);
         try {
-            await api.destroy(
-                `${Config.endpoints.publications}/${publicationId}/${
-                    props.type === 'funders' ? 'funders' : 'affiliation'
-                }/${id}`,
-                user?.token
-            );
-            props.type == 'funders'
-                ? updateFunders(funders.filter((funder) => funder.id !== id))
-                : updateAffiliations(affiliations.filter((affiliations) => affiliations.id !== id));
+            await api.destroy(`${Config.endpoints.publications}/${publicationId}/funders/${id}`, user?.token);
+
+            updateFunders(funders.filter((funder) => funder.id !== id));
             setIsLoading(false);
         } catch (err) {
             setIsLoading(false);
@@ -146,22 +132,12 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
 
 let timeout: NodeJS.Timeout;
 
-const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
+const RORForm: React.FC = (props): React.ReactElement => {
     const funders = Stores.usePublicationCreationStore((state) => state.funders);
     const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
 
     const funderStatement = Stores.usePublicationCreationStore((state) => state.funderStatement);
     const updateFunderStatement = Stores.usePublicationCreationStore((state) => state.updateFunderStatement);
-
-    const affiliations = Stores.usePublicationCreationStore((state) => state.affiliations);
-    const updateAffiliations = Stores.usePublicationCreationStore((state) => state.updateAffiliations);
-
-    const affiliationsStatement = Stores.usePublicationCreationStore((state) => state.affiliationsStatement);
-    const updateAffiliationsStatement = Stores.usePublicationCreationStore(
-        (state) => state.updateAffiliationsStatement
-    );
-
-    const specifiedArray = props.type === 'affiliations' ? affiliations : funders;
 
     const publicationId = Stores.usePublicationCreationStore((state) => state.id);
     const user = Stores.useAuthStore((state) => state.user);
@@ -216,9 +192,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
-                `${Config.endpoints.publications}/${publicationId}/${
-                    props.type === 'funders' ? 'funders' : 'affiliation'
-                }`,
+                `${Config.endpoints.publications}/${publicationId}/funders`,
                 {
                     name,
                     country,
@@ -229,9 +203,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                 user?.token
             );
             const createdRorRecord = response.data;
-            props.type == 'funders'
-                ? updateFunders([...funders, createdRorRecord])
-                : updateAffiliations([...affiliations, createdRorRecord]);
+            updateFunders([...funders, createdRorRecord]);
             setSubmitLoading(false);
             setName('');
             setCountry('');
@@ -279,7 +251,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         />
                         <Components.Button
                             className="pl-5"
-                            title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
+                            title="Add funder"
                             disabled={!ror || rorLoading || rorError}
                             onClick={onSubmitHandler}
                             endIcon={
@@ -358,7 +330,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         />
                         <Components.Button
                             className="pl-5"
-                            title={`Add ${props.type === 'affiliations' ? 'affiliation' : 'funder'}`}
+                            title="Add funder"
                             disabled={
                                 method == 'ror' ||
                                 name == '' ||
@@ -389,7 +361,7 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="my-2">
                     <div className="inline-block min-w-full py-2 align-middle">
-                        {specifiedArray.length ? (
+                        {funders.length ? (
                             <div className="mb-6 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
                                 <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
@@ -412,8 +384,8 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                        {specifiedArray.map((item) => (
-                                            <TableRow item={item} key={item.id} type={props.type} />
+                                        {funders.map((item) => (
+                                            <TableRow item={item} key={item.id} />
                                         ))}
                                     </tbody>
                                 </table>
@@ -421,31 +393,28 @@ const RORForm: React.FC<FormProps> = (props): React.ReactElement => {
                         ) : (
                             <Components.Alert
                                 severity="INFO"
-                                title={`This publication does not have any ${props.type}.`}
+                                title="This publication does not have any funders"
                                 className="w-full lg:w-1/2"
                             />
                         )}
 
                         <div className="mb-2 flex flex-col">
                             <label
+                                htmlFor="ror-additional-info"
                                 id="ror-additional-info"
                                 className="text-gray-700 mt-6 block text-sm font-medium dark:text-white-100"
                             >
-                                If needed, provide further information on this publication’s{' '}
-                                {props.type == 'funders' ? 'funding arrangements' : 'affiliations'}.
+                                If needed, provide further information on this publication’s funding arrangements
                             </label>
                             <textarea
+                                id="ror-additional-info"
                                 aria-labelledby="ror-additional-info"
                                 name="free-text"
                                 className="mb-2 mt-3 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
                                 placeholder="Enter any details"
-                                value={props.type == 'funders' ? funderStatement ?? '' : affiliationsStatement ?? ''}
+                                value={funderStatement ?? ''}
                                 rows={5}
-                                onChange={(e) =>
-                                    props.type == 'funders'
-                                        ? updateFunderStatement(e.target.value)
-                                        : updateAffiliationsStatement(e.target.value)
-                                }
+                                onChange={(e) => updateFunderStatement(e.target.value)}
                             />
                         </div>
                     </div>
