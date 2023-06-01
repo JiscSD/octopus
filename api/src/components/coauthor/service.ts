@@ -171,7 +171,6 @@ export const resetCoAuthors = async (publicationId: string) => {
         },
         data: {
             confirmedCoAuthor: false,
-            approvalRequested: false,
             code: cuid()
         }
     });
