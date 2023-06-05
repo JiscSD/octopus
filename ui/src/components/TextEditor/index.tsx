@@ -2,15 +2,14 @@ import React from 'react';
 import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/solid';
 import * as tiptap from '@tiptap/react';
-import * as Mammoth from 'mammoth';
 import * as FAIcons from 'react-icons/fa';
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as Types from '@types';
 
+import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
