@@ -8,7 +8,7 @@ resource "aws_sqs_queue" "science-octopus-pdf-queue" {
   receive_wait_time_seconds     = 0
   
   redrive_policy = jsonencode({
-    deadLetterTargetArn = aws_sqs_queue.terraform_queue_deadletter.arn
+    deadLetterTargetArn = aws_sqs_queue.science-octopus-pdf-queue-dlq.arn
     maxReceiveCount     = 1
   })
 

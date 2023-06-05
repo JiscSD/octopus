@@ -23,7 +23,7 @@ EOF
 
 
 resource "aws_sns_topic_subscription" "notify-slack-dlq" {
-  topic_arn = aws_sns_topic.dlq_messages_topic.arn
+  topic_arn = aws_sns_topic.pdf-queue-dlq-messages-topic.arn
   protocol  = "email"
   endpoint  = var.slack_channel_email
 }
