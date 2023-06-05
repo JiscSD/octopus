@@ -498,16 +498,8 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
 
-    /**
-     * @TODO - update 'coAuthorsAreVerified' when implementing OCT-580
-     * - all co-authors must confirm their affiliations before publishing but until we implement OCT-580, only the creator can add his affiliations
-     */
     const coAuthorsAreVerified = publication.coAuthors.every(
-        (coAuthor) =>
-            coAuthor.confirmedCoAuthor &&
-            (coAuthor.linkedUser === publication.createdBy
-                ? coAuthor.isIndependent || coAuthor.affiliations.length
-                : true)
+        (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
     );
 
     return (

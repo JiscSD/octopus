@@ -118,6 +118,7 @@ services:
             - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
             - QUEUE_URL=http://localhost:4566/000000000000/science-octopus-pdf-queue-local
             - SQS_ENDPOINT=http://localhost:4566
+            - LIST_USERS_API_KEY=123456789
 
 volumes:
     opensearch-data1:
