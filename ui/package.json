@@ -54,7 +54,6 @@
         "next": "^12.0.10",
         "next-nprogress-bar": "^1.2.2",
         "react": "17.0.2",
-        "react-archer": "^4.2.3",
         "react-beautiful-dnd": "^13.1.1",
         "react-click-away-listener": "^2.0.5",
         "react-dom": "17.0.2",
