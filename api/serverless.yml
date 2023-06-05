@@ -76,6 +76,7 @@ provider:
               - 'sqs:DeleteMessage'
               - 'sqs:GetQueueAttributes'
               - 'sqs:ReceiveMessage'
+              - 'sqs:SendMessage'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
