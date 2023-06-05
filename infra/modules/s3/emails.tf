@@ -22,8 +22,6 @@ resource "aws_s3_bucket_acl" "my_bucket" {
         "StringEquals": {
           "aws:Referer": "${var.aws_account_id}"
         }
-      }
-    }
   ]
 }
 EOF
