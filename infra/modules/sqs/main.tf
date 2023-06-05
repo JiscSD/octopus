@@ -6,6 +6,7 @@ resource "aws_sqs_queue" "science-octopus-pdf-queue" {
   max_message_size              = 2048
   message_retention_seconds     = 86400
   receive_wait_time_seconds     = 0
+  sqs_managed_sse_enabled       = false
   
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.science-octopus-pdf-queue-dlq.arn
@@ -16,6 +17,7 @@ resource "aws_sqs_queue" "science-octopus-pdf-queue" {
 
 resource "aws_sqs_queue" "science-octopus-pdf-queue-dlq" {
   name = "science-octopus-pdf-queue-dlq-${var.environment}"
+  sqs_managed_sse_enabled = false
 }
 
 resource "aws_cloudwatch_metric_alarm" "dlq-messages-sent-alarm" {
