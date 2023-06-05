@@ -3,22 +3,13 @@ import '@testing-library/jest-dom';
 import * as Components from '@components';
 import * as OutlineIcons from '@heroicons/react/outline';
 
-import { render, screen } from '@testing-library/react';
-import { shallow } from 'enzyme';
-import { configureEnzymeAdapter } from '../test-utils';
-
-configureEnzymeAdapter();
+import { fireEvent, render, screen } from '@testing-library/react';
 
 describe('Button test suite with enabled button stating "click me"', () => {
+    const handleOnClick = jest.fn();
+
     const button = (
-        <Components.Button
-            className="children:border-0"
-            disabled={false}
-            onClick={() => {
-                return true;
-            }}
-            title={'Click me'}
-        />
+        <Components.Button className="children:border-0" disabled={false} onClick={handleOnClick} title={'Click me'} />
     );
 
     beforeEach(() => {
@@ -42,31 +33,17 @@ describe('Button test suite with enabled button stating "click me"', () => {
     });
 
     it('Button able to be clicked', () => {
-        const mockCallback = jest.fn();
-        const wrapper = shallow(
-            <Components.Button
-                className="children:border-0"
-                disabled={false}
-                onClick={mockCallback}
-                title={'Click me'}
-            />
-        );
+        fireEvent.click(screen.getByText('Click me'));
 
-        wrapper.find('button').simulate('click');
-        expect(mockCallback.mock.calls.length).toEqual(1);
+        expect(handleOnClick).toHaveBeenCalledTimes(1);
     });
 });
 
 describe('Button test suite with disabled button stating "click me"', () => {
+    const handleOnClick = jest.fn();
+
     const button = (
-        <Components.Button
-            className="children:border-0"
-            disabled={true}
-            onClick={() => {
-                return true;
-            }}
-            title={'Click me'}
-        />
+        <Components.Button className="children:border-0" disabled onClick={handleOnClick} title={'Click me'} />
     );
 
     beforeEach(() => {
@@ -75,6 +52,12 @@ describe('Button test suite with disabled button stating "click me"', () => {
 
     it('Button to be disabled', () => {
         expect(screen.getByRole('button')).toBeDisabled();
+    });
+
+    it('Should not fire the callback when clicked', () => {
+        fireEvent.click(screen.getByText('Click me'));
+
+        expect(handleOnClick).toHaveBeenCalledTimes(0);
     });
 });
 
