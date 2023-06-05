@@ -48,6 +48,7 @@ provider:
         AUTHORISATION_CALLBACK_URL: ${ssm:/authorization_callback_url_${self:provider.stage}_octopus}
         LIST_USERS_API_KEY: ${ssm:/list_users_api_key_${self:provider.stage}_octopus}
         QUEUE_URL: ${ssm:/queue_url_${self:provider.stage}}
+        SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -121,6 +122,7 @@ custom:
             /authorization_callback_url_local_octopus: ${env:AUTHORISATION_CALLBACK_URL}
             /list_users_api_key_local_octopus: ${env:LIST_USERS_API_KEY}
             /queue_url_local: ${env:QUEUE_URL}
+            /sqs_endpoint_local: ${env:SQS_ENDPOINT}
     prune:
         automatic: true
         number: 3
