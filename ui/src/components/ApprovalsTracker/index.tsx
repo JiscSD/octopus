@@ -25,7 +25,7 @@ type Props = {
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     const { user } = Stores.useAuthStore();
-    const [selectedAuthorEmail, setSelectedAuthorEmail] = React.useState<null | Interfaces.CoAuthor>(null);
+    const [selectedAuthorEmail, setSelectedAuthorEmail] = React.useState<string | null>(null);
     const [selectedAuthorAffiliations, setSelectedAuthorAffiliations] = React.useState<null | Interfaces.CoAuthor>(
         null
     );
@@ -81,7 +81,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 };
 
                 const newAuthorsArray = props.publication.coAuthors.map((author) =>
-                    author.email === selectedAuthorEmail.email ? newAuthor : author
+                    author.email === selectedAuthorEmail ? newAuthor : author
                 );
 
                 try {
@@ -150,26 +150,6 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         () => props.publication.createdBy === user?.id,
         [props.publication.createdBy, user?.id]
     );
-
-    const author = useMemo(
-        () => props.publication.coAuthors.find((author) => author.linkedUser === user?.id),
-        [props.publication.coAuthors, user?.id]
-    );
-
-    const displayArrayOfAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
-        const sortedAffiliations = Helpers.getSortedAffiliations(affiliations);
-
-        if (sortedAffiliations.length <= 2) {
-            const names = sortedAffiliations.map((affiliation) => affiliation.organization.name);
-            return names.join(', ');
-        } else {
-            const firstTwo = sortedAffiliations
-                .map((affiliation) => affiliation.organization.name)
-                .slice(0, 2)
-                .join(', ');
-            return firstTwo + ', + ' + (sortedAffiliations.length - 2) + ' more';
-        }
-    };
 
     return (
         <div className="children:transition-colors">
@@ -261,7 +241,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                                 aria-hidden="true"
                                                             />
                                                         }
-                                                        onClick={() => setSelectedAuthorEmail(author)}
+                                                        onClick={() => setSelectedAuthorEmail(author.email)}
                                                     />
                                                 )}
                                             </td>
@@ -290,7 +270,28 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             ) : !author.isIndependent && !affiliations.length ? (
                                                 <p>Affiliations not entered</p>
                                             ) : (
-                                                displayArrayOfAffiliations(author.affiliations)
+                                                <div title={affiliations.join(', ')}>
+                                                    {affiliations.length > 3
+                                                        ? affiliations
+                                                              .slice(0, 2)
+                                                              .concat(`+${affiliations.length - 2} more`)
+                                                              .map((affiliationName, index) => (
+                                                                  <p key={`affiliation-${index}`}>
+                                                                      {affiliationName}
+                                                                      {index < 2 ? ',' : ''}
+                                                                  </p>
+                                                              ))
+                                                        : affiliations.map((affiliationName, index) => (
+                                                              <p key={`affiliation-${index}`}>
+                                                                  {affiliationName}
+                                                                  {index < affiliations.length - 1
+                                                                      ? ','
+                                                                      : index > 0
+                                                                      ? '.'
+                                                                      : ''}
+                                                              </p>
+                                                          ))}
+                                                </div>
                                             )}
                                             {(isCorrespondingUser || !author.confirmedCoAuthor) &&
                                             author.linkedUser === user?.id ? (
@@ -364,7 +365,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     <input
                         autoComplete="off"
                         className="my-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
-                        defaultValue={selectedAuthorEmail?.email}
+                        defaultValue={selectedAuthorEmail || ''}
                         name="authorEmail"
                         placeholder="Email of author"
                         ref={authorEmailRef}
