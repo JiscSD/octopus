@@ -8,7 +8,7 @@ resource "aws_s3_bucket_acl" "my_bucket" {
 
   policy = <<EOF
 {  
-    "Version": "2012-10-17",
+  "Version": "2012-10-17",
   "Statement": [
     {
       "Sid": "AllowSESPuts",
@@ -21,7 +21,9 @@ resource "aws_s3_bucket_acl" "my_bucket" {
       "Condition": {
         "StringEquals": {
           "aws:Referer": "${var.aws_account_id}"
-        }
+        }        
+      }
+    }
   ]
 }
 EOF
