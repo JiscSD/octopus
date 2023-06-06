@@ -80,7 +80,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         (Array.isArray(query) ? query[0] : query) || ''
     )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
-    }${dateToFormatted.toString() !== 'Invalid Date'! ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
+    }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
 
     return {
         props: {
