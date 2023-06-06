@@ -730,6 +730,10 @@ test.describe('Publication flow + co-authors', () => {
             'How do living organisms function, survive, reproduce and evolve?'
         );
 
+        // specify conflict of interest status
+        await (await page.waitForSelector("aside button:has-text('Conflict of interest')")).click();
+        await publicationFlowConflictOfInterest(page, false);
+
         // verify 'Publish' button is disabled
         await expect(page.locator(PageModel.publish.publishButton)).toBeDisabled();
 
