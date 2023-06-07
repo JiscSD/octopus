@@ -1,14 +1,6 @@
 import * as I from 'interface';
 
-type Jsonify<T> = T extends { toJSON(): infer U }
-    ? U
-    : T extends object
-    ? {
-          [k in keyof T]: Jsonify<T[k]>;
-      }
-    : T;
-
-export const json = <T>(statusCode: number, body: Jsonify<T>): I.JSONResponse => ({
+export const json = (statusCode: number, body): I.JSONResponse => ({
     body: JSON.stringify(body),
     headers: {
         'Access-Control-Allow-Credentials': true,
