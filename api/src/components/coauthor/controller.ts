@@ -409,10 +409,10 @@ export const requestApproval = async (
 export const sendApprovalReminder = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
 ): Promise<I.JSONResponse> => {
-    const { coauthor: authorId, id: publicationId } = event.pathParameters;
+    const { coAuthor, id } = event.pathParameters;
 
-    const publication = await publicationService.get(publicationId);
-    const author = await coAuthorService.get(authorId);
+    const publication = await publicationService.get(id);
+    const author = await coAuthorService.get(coAuthor);
 
     if (!publication) {
         return response.json(404, {
@@ -433,7 +433,7 @@ export const sendApprovalReminder = async (
         });
     }
 
-    if (!author || author.publicationId !== publicationId) {
+    if (!author || author.publicationId !== id) {
         return response.json(404, {
             message: 'This author does not exist on this publication'
         });
@@ -468,14 +468,14 @@ export const sendApprovalReminder = async (
         await email.sendApprovalReminder({
             coAuthor: { email: author.email, code: author.code },
             publication: {
-                id: publicationId,
+                id: id,
                 title: publication.title || '',
                 creator: `${publication.user.firstName} ${publication.user.lastName}`
             }
         });
 
         // update co-author reminderDate
-        await coAuthorService.update(authorId, { reminderDate: new Date() });
+        await coAuthorService.update(coAuthor, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
 
