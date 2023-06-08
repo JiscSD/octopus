@@ -1,5 +1,5 @@
 import * as authorizationService from 'authorization/service';
-import cryptoRandomString from 'crypto-random-string';
+import otpGenerator from 'otp-generator';
 import * as I from 'interface';
 import * as email from 'lib/email';
 import * as response from 'lib/response';
@@ -12,7 +12,7 @@ export const requestCode = async (
 ): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = cryptoRandomString({ length: 7, type: 'distinguishable' });
+        const code = otpGenerator.generate(7, { lowerCaseAlphabets: false, specialChars: false });
 
         // store code with user orcid and email
         await verificationService.upsert({
