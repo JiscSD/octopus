@@ -74,3 +74,8 @@ module "ses" {
     source = "../modules/ses"
     environment = local.environment
 }
+
+module "emails" {
+    source = "../modules/emails"
+    environment = local.environment
+}
