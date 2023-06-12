@@ -623,7 +623,7 @@ export const getLinksForPublication = async (id: string) => {
         
         SELECT * FROM to_left
         WHERE "type" != "childPublicationType"
-            AND "type" != ${publication?.type}
+            AND CAST("type" AS text) != ${publication?.type}
             AND "currentStatus" = 'LIVE';
     `;
 

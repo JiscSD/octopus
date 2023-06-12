@@ -35,7 +35,7 @@
         "@middy/http-json-body-parser": "^2.5.4",
         "@middy/validator": "^2.5.4",
         "@opensearch-project/opensearch": "^2.1.0",
-        "@prisma/client": "^3.13.0",
+        "@prisma/client": "^4.14.1",
         "@serverless/utils": "^6.11.1",
         "@types/cheerio": "^0.22.30",
         "@types/jest": "^27.4.0",
@@ -59,7 +59,7 @@
         "luxon": "^2.3.0",
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
-        "prisma": "^3.14.0",
+        "prisma": "^4.14.1",
         "puppeteer-core": "10.1.0",
         "string-strip-html": "^9.1.6",
         "supertest": "^6.2.3"
