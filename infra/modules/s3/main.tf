@@ -42,7 +42,7 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
-resource "aws_s3_bucket_acl" "email_forwarding_bucket'" {
+resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
   bucket = "email_forwarding_bucket"
   acl    = "private"
 
