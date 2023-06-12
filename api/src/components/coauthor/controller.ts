@@ -277,10 +277,19 @@ export const updateConfirmation = async (
             });
         }
 
+        const coAuthor = publication.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
+
         // Is the coauthor actually a coauthor of this publication
-        if (!publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user.id)) {
+        if (!coAuthor) {
             return response.json(403, {
                 message: 'You are not a co-author of this publication.'
+            });
+        }
+
+        // check if coauthor confirmed their affiliations
+        if (!(coAuthor.isIndependent || coAuthor.affiliations.length)) {
+            return response.json(403, {
+                message: 'Please fill out your affiliation information.'
             });
         }
 
@@ -351,6 +360,13 @@ export const requestApproval = async (
         }
 
         if (publication.currentStatus === 'DRAFT') {
+            if (!publicationService.isReadyToRequestApproval(publication)) {
+                return response.json(403, {
+                    message:
+                        'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                });
+            }
+
             // check if publication was LOCKED before
             if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
                 // notify linked co-authors about changes

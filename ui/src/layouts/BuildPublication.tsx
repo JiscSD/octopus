@@ -66,7 +66,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
-            if (typeof store.conflictOfInterestStatus == 'undefined') {
+            if (store.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
             if (store.type === Config.values.octopusInformation.publications.DATA.id) {
@@ -115,7 +115,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
-            if (typeof store.conflictOfInterestStatus == 'undefined') {
+            if (store.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
             if (store.type === Config.values.octopusInformation.publications.DATA.id) {
@@ -131,6 +131,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                         ready: false,
                         message: 'You must provide details of who gave permission for the data collection and sharing'
                     };
+            }
+            if (!(store.authorAffiliations.length || store.isIndependentAuthor)) {
+                ready = {
+                    ready: false,
+                    message: 'You must add your affiliations or confirm if you are an independent author.'
+                };
             }
 
             return ready;
