@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import cuid from 'cuid';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 import * as api from '@api';
 import * as Components from '@components';
@@ -190,7 +190,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         onClick={addCoAuthorToPublication}
                         endIcon={
                             loading ? (
-                                <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                             ) : (
                                 <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                             )
@@ -302,7 +302,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         title="Refresh"
                         onClick={refreshCoAuthors}
                         startIcon={
-                            <OutlineIcons.RefreshIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.ArrowPathIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                         textSize="sm"
                         className="py-2 px-1"

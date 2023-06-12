@@ -1,10 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
-
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
@@ -37,7 +36,7 @@ const steps: Types.CreationSteps = {
         title: 'Conflict of interest',
         subTitle: 'Conflict of interest',
         component: <Components.PublicationCreationConflictOfInterest />,
-        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.MagnifyingGlassIcon className="h-5 w-5 text-teal-400" />
     },
     CO_AUTHORS: {
         title: 'Co-authors',
@@ -55,13 +54,13 @@ const steps: Types.CreationSteps = {
         title: 'Data statements',
         subTitle: 'Data statements',
         component: <Components.PublicationCreationDataStatements />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentChartBarIcon className="h-6 w-6 text-teal-400" />
     },
     RESEARCH_PROCESS: {
         title: 'Research process',
         subTitle: 'Research process',
         component: <Components.PublicationCreationResearchProcess />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentChartBarIcon className="h-6 w-6 text-teal-400" />
     },
     REVIEW: {
         title: 'Review & publish',

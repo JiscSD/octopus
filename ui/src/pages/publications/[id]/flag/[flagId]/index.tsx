@@ -1,13 +1,11 @@
 import React from 'react';
 import * as Next from 'next';
 import Head from 'next/head';
-import jwt from 'jsonwebtoken';
 import useSWR from 'swr';
-import * as Axios from 'axios';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as Router from 'next/router';
 
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as Router from 'next/router';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -280,7 +278,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                         onClick={() => setShowResolveModal(true)}
                                                         disabled={isValidating || submitting}
                                                         endIcon={
-                                                            <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 text-teal-400" />
+                                                            <OutlineIcons.ClipboardDocumentCheckIcon className="h-6 w-6 text-teal-400" />
                                                         }
                                                     />
                                                 )}
@@ -289,7 +287,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                     onClick={submitComment}
                                                     disabled={isValidating || submitting}
                                                     endIcon={
-                                                        <OutlineIcons.ChatIcon className="h-6 w-6 text-teal-400" />
+                                                        <OutlineIcons.ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6 text-teal-400" />
                                                     }
                                                 />
                                             </div>

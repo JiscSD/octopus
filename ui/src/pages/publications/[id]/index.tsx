@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
@@ -220,7 +220,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation(
             'Are you sure you want to publish?',
             'It is not possible to make any changes post-publication.',
-            <OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
+            <OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Yes',
             'No'
         );
@@ -422,7 +422,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
                                         className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
                                     >
-                                        <OutlineIcons.PencilAltIcon className="w-4" />
+                                        <OutlineIcons.PencilSquareIcon className="w-4" />
                                         <span>Edit Draft Publication</span>
                                     </Components.Link>
                                 </Components.Alert>

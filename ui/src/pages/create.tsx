@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -214,7 +214,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         disabled={!publicationType || !title.length || !confirmed}
                         onClick={createPublication}
                         endIcon={
-                            <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.ArrowSmallRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />
                 </section>

@@ -14,9 +14,9 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 
 ---
 
--   [Report a bug by creating an issue](#report-a-bug-by-creating-an-issue)
--   [Suggest an enhancement by posting in the ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
--   [Submit changes by creating a PR](#submit-changes-by-creating-a-pr)
+- [Report a bug by creating an issue](#report-a-bug-by-creating-an-issue)
+- [Suggest an enhancement by posting in the ideas section](#suggest-an-enhancement-by-posting-in-the-ideas-section)
+- [Submit changes by creating a PR](#submit-changes-by-creating-a-pr)
 
 ---
 
@@ -28,10 +28,10 @@ If you spot a :bug: bug :bug: then feel free to [open an issue](https://github.c
 
 A helpful bug report should include:
 
--   the exact steps to reproduce the bug
--   the actual behaviour
--   the expected behaviour
--   screenshot of the unexpected behaviour, if possible
+- the exact steps to reproduce the bug
+- the actual behaviour
+- the expected behaviour
+- screenshot of the unexpected behaviour, if possible
 
 ---
 
@@ -64,8 +64,8 @@ Any pull requests from contributors will require a member of the team to review 
 
 **Prerequisites and local setup**
 
--   Install [Node.js](https://github.com/nodejs/node) `v14`
-    -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
+- Install [Node.js](https://github.com/nodejs/node) `v14`
+  - Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
 
 Follow our documentation on locally setting up [the UI](../ui/README.md#local-setup) and [the API](../api/README.md#local-setup).
 
@@ -78,7 +78,7 @@ Both our `UI` and `API` use individual configurations of [ESLint](https://eslint
 1. We have chosen to either use npm packages if they provide a default export, or:
 
 ```
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 ```
 
 ```

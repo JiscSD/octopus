@@ -1,6 +1,6 @@
 import React from 'react';
 import * as DropZone from 'react-dropzone';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -61,12 +61,12 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 />
                 {isDragActive ? (
                     <span>
-                        <OutlineIcons.DownloadIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.ArrowDownTrayIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">Drop here....</span>
                     </span>
                 ) : (
                     <span>
-                        <OutlineIcons.PhotographIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.PhotoIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">
                             Click or drag files here to upload
                         </span>

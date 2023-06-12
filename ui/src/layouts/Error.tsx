@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';

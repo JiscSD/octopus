@@ -1,6 +1,6 @@
 import React from 'react';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -67,7 +67,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 >
                     <div className="flex items-center">
                         {Config.values.octopusInformation.licences[props.publication.licence].nicename}
-                        <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                     </div>
                 </Components.Link>
             </div>
@@ -83,7 +83,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     openNew={true}
                 >
                     <p className="break-words break-all">https://doi.org/{props.publication.doi}</p>
-                    <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>
             {props.publication.type !== 'PEER_REVIEW' && (

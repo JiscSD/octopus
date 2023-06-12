@@ -1,5 +1,5 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
@@ -43,7 +43,7 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
                         className="p-2"
                         title="Refresh"
                         icon={
-                            <OutlineIcons.RefreshIcon
+                            <OutlineIcons.ArrowPathIcon
                                 className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"
                                 aria-hidden="true"
                             />

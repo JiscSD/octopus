@@ -12,7 +12,7 @@ import * as Types from '@types';
 import * as api from '@api';
 import * as Assets from '@assets';
 import * as Contexts from '@contexts';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@stores';
 import * as Framer from 'framer-motion';
 
@@ -87,7 +87,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation(
             'Are you sure?',
             "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
-            <OutlineIcons.UserRemoveIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
+            <OutlineIcons.UserMinusIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
             'Yes',
             'No'
         );
@@ -177,7 +177,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Button
                             disabled={isRevokingAccess}
                             endIcon={
-                                <OutlineIcons.UserRemoveIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
+                                <OutlineIcons.UserMinusIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
                             }
                             title="Revoke ORCID Access"
                             onClick={handleRevokeAccess}

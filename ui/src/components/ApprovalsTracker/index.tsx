@@ -3,7 +3,7 @@ import cuid from 'cuid';
 
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/io5';
 import * as Components from '@components';
@@ -343,7 +343,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         </h4>
                     ) : (
                         <div className="flex items-center gap-4 sm:justify-center">
-                            <OutlineIcons.BadgeCheckIcon className="w-6 flex-shrink-0 text-green-500 dark:text-green-300" />
+                            <OutlineIcons.CheckBadgeIcon className="w-6 flex-shrink-0 text-green-500 dark:text-green-300" />
                             <h4 className="text-lg dark:text-white-50">
                                 All authors have <span className="font-semibold">approved</span> this publication
                             </h4>

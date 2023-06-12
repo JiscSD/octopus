@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as HeadlessUI from '@headlessui/react';
 import * as Framer from 'framer-motion';
 
@@ -151,7 +151,7 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
                             onClick={createLink}
                             endIcon={
                                 createMutateLoading ? (
-                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (
                                     <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 )

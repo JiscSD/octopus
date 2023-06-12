@@ -141,7 +141,7 @@ Any pull requests from contributors will require a member of the team to review 
 1. We have chosen to either use npm packages if they provide a default export, or:
 
 ```
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 ```
 
 ```

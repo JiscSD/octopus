@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
@@ -111,14 +111,14 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.ActionCard
                             title="Read publications"
                             content="Anyone can read anything in Octopus &#8211; it's designed to make primary research openly available to all."
-                            icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
+                            icon={<OutlineIcons.MagnifyingGlassIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.search.path}
                             linkText="Read publications"
                         />
                         <Components.ActionCard
                             title="Browse publications"
                             content="Every publication in Octopus is linked to another, forming branching chains of research. You can navigate these chains from every publication page to browse areas of research and discover something new."
-                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            icon={<OutlineIcons.ComputerDesktopIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.browsePublications.path}
                             linkText="Browse publications"
                         />
