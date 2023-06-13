@@ -22,6 +22,7 @@
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "test:watch": "npm run test:local -- --watch",
         "reindex": "ts-node prisma/reindex.ts",
+        "convertAffiliations": "ts-node prisma/convertAffiliations.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",
