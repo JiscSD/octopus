@@ -190,9 +190,4 @@ const convertAffiliations = async (): Promise<void> => {
     }
 };
 
-// await convertAffiliations().catch(error => console.log(error)).then(() => console.log('Finished'));
-try {
-    await convertAffiliations();
-} catch (error) {
-    console.log(error);
-}
+convertAffiliations().then(() => console.log('Finished.')).catch(error => console.log(error));
