@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a:has-text("My profile")'
+        myProfileButton: 'a:has-text("My Account")'
     },
     footer: {
         links: [
@@ -133,11 +133,11 @@ export const PageModel = {
     },
     confirmEmail: {},
     myProfile: {
-        liveAuthorPageButton: 'a:has-text("View live author page")',
+        liveAuthorPageButton: 'a:has-text("View my public author page")',
         draftPublicationHeader: 'h2:has-text("Draft publications")'
     },
     myPublications: {
-        liveAuthorPageButton: 'a:has-text("View live author page")'
+        liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
         bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'

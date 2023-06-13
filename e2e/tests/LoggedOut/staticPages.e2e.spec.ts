@@ -10,7 +10,7 @@ test.describe('Static pages, logged out', () => {
 
         // Expect elements to be visible
         await expect(page.locator('h1').first()).toHaveText(
-            'Free, fast and fair: the global primary research record where researchers record their work in full detail'
+            'Free, fast and fair: the global primary research record where researchers publish their work in full detail'
         );
         await expect(page.locator(PageModel.header.loginButton)).toBeVisible();
 
