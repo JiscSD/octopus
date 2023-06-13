@@ -4,40 +4,58 @@ import * as I from 'interface';
 
 import { Prisma } from '@prisma/client';
 
-const updateAffiliationFormat = (affiliations: I.LegacyAffiliation[]): I.MappedOrcidAffiliation[] => {
-    const newAffiliations = affiliations.map(affiliation => {
-        const now = Date.now();
-
-        return {
-            id: 'octopus-' + affiliation.id, // previously this was typed as a number but our old affiliations have string IDs
-            affiliationType: "misc." as const,
-            title: affiliation.name,
-            departmentName: null,
-            startDate: null,
-            endDate: null,
-            organization: {
-                name: affiliation.name, // Is this right?
-                address: {
-                    city: affiliation.city,
-                    region: null,
-                    country: affiliation.country
-                },
-                'disambiguated-organization': affiliation.ror ? {
-                    'disambiguated-organization-identifier': affiliation.ror,
-                    'disambiguation-source': 'ROR'
-                } : null,
-            },
-            createdAt: now,
-            updatedAt: now,
-            source: {
-                name: 'placeholder', // TODO
-                orcid: 'placeholder', // TODO
-            },
-            url: affiliation.link
-        };
+const updateAffiliationFormat = async (affiliations: I.LegacyAffiliation[], userId: string): Promise<I.MappedOrcidAffiliation[]> => {
+    // Source fields need the user's name and orcid value
+    const user = await client.prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            firstName: true,
+            lastName: true,
+            orcid: true
+        }
     });
 
-    return newAffiliations;
+    if (user) {
+        const newAffiliations = affiliations.map(affiliation => {
+            const now = Date.now();
+    
+            return {
+                id: 'octopus-' + affiliation.id, // previously this was typed as a number but our old affiliations have string IDs
+                affiliationType: "misc." as const,
+                title: affiliation.name,
+                departmentName: null,
+                startDate: null,
+                endDate: null,
+                organization: {
+                    name: affiliation.name,
+                    address: {
+                        city: affiliation.city,
+                        region: null,
+                        country: affiliation.country
+                    },
+                    'disambiguated-organization': affiliation.ror ? {
+                        'disambiguated-organization-identifier': affiliation.ror,
+                        'disambiguation-source': 'ROR'
+                    } : null,
+                },
+                createdAt: now,
+                updatedAt: now,
+                source: {
+                    name: user.lastName ? user.firstName + ' ' + user.lastName: user.firstName,
+                    orcid: user.orcid
+                },
+                url: affiliation.link
+            };
+        });
+
+        return newAffiliations;
+    } else {
+        console.log('Couldn\'t find a user with the supplied ID');
+
+        return [];
+    }
 };
 
 // Converts old style affiliations (stored against the publication) to
@@ -65,14 +83,21 @@ const convertAffiliations = async (): Promise<void> => {
     const errors: {publicationId: string, message: string}[] = [];
 
     for (const publication of publications) {
-        // Map values to new structure.
-        const newAffiliations = updateAffiliationFormat(publication.affiliations);
         const correspondingAuthor = publication.coAuthors?.find(
             coAuthor => coAuthor.linkedUser === publication.createdBy
         );
 
         // If there is a corresponding author, attach the affiliations to them.
         if (correspondingAuthor) {
+            if (!correspondingAuthor.linkedUser) {
+                errors.push({
+                    publicationId: publication.id,
+                    message: "Corresponding author has no linked user"
+                });
+                continue;
+            }
+
+            const newAffiliations = await updateAffiliationFormat(publication.affiliations, correspondingAuthor.linkedUser);
             const affiliationsToAdd = correspondingAuthor.affiliations.concat(
                 newAffiliations as unknown[] as Prisma.JsonArray
             );
@@ -108,7 +133,7 @@ const convertAffiliations = async (): Promise<void> => {
                         id: publication.createdBy
                     }
                 });
-
+                const newAffiliations = await updateAffiliationFormat(publication.affiliations, publication.createdBy);
                 // Update the publication's coauthors in one transaction. Existing ones will only have their position
                 // changed, and the only author created will be the corresponding author.
                 const newCoAuthors = [{
