@@ -69,8 +69,8 @@ const About: NextPage = (): React.ReactElement => (
                             It sits alongside journals and other dissemination outlets: they can specialise in
                             delivering key findings to their audiences. Octopus, meanwhile, is where researchers can
                             publish everything in full: ideas, hypotheses, full data, analyses, code and reviews of
-                            others&apos; work. It acts like a 'patent office' to record who has done what and when, and
-                            ensure the quality, integrity and accessibility of all primary research, in full.
+                            others&apos; work. It acts like a &apos;patent office&apos; to record who has done what and
+                            when, and ensure the quality, integrity and accessibility of all primary research, in full.
                         </h2>
                     </div>
                     <div className="mx-auto mb-20 mt-10 flex w-fit space-x-6 ">
