@@ -10,7 +10,7 @@
         "url": "https://github.com/JiscSD/octopus/tree/main/api"
     },
     "engines": {
-        "node": "14.x"
+        "node": "18.x"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
@@ -30,7 +30,7 @@
     "dependencies": {
         "@aws-sdk/client-ses": "^3.76.0",
         "@aws-sdk/client-sqs": "^3.326.0",
-        "@middy/core": "^2.5.4",
+        "@middy/core": "^4.5.1",
         "@middy/do-not-wait-for-empty-event-loop": "^2.5.4",
         "@middy/http-json-body-parser": "^2.5.4",
         "@middy/validator": "^2.5.4",
@@ -92,7 +92,6 @@
         "ts-jest": "^29.1.0",
         "ts-loader": "^9.2.6",
         "webpack": "^5.83.1",
-        "ts-node": "^10.4.0",
         "tsconfig-paths-webpack-plugin": "^4.0.1",
         "typescript": "^5.1.3",
         "webpack-node-externals": "^3.0.0"
