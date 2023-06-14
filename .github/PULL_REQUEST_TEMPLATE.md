@@ -6,6 +6,14 @@ The purpose of this PR was...
 
 ---
 
+### Checklist:
+
+- [ ] Local manual testing conducted
+- [ ] Automated tests added
+- [ ] Documentation updated
+
+---
+
 ### Tests:
 
 ---

@@ -183,6 +183,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                         </div>
 
                         <Components.AuthorAffiliations
+                            loading={isValidating && !orcidAffiliations.length}
                             scrollHeight={700}
                             isIndependentAuthor={isIndependentAuthor}
                             availableAffiliations={orcidAffiliations}

@@ -46,6 +46,9 @@ provider:
         EMAIL_SENDER_ADDRESS: ${ssm:/email_sender_address_${self:provider.stage}_octopus}
         BASE_URL: ${ssm:/base_url_${self:provider.stage}_octopus}
         AUTHORISATION_CALLBACK_URL: ${ssm:/authorization_callback_url_${self:provider.stage}_octopus}
+        LIST_USERS_API_KEY: ${ssm:/list_users_api_key_${self:provider.stage}_octopus}
+        QUEUE_URL: ${ssm:/queue_url_${self:provider.stage}_octopus}
+        SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -64,6 +67,16 @@ provider:
         - Effect: 'Allow'
           Resource: 'arn:aws:s3:::science-octopus-publishing-pdfs-${self:provider.stage}/*'
           Action: 's3:PutObject'
+        - Effect: 'Allow'
+          Resource: 'arn:aws:sqs:eu-west-1:948306873545:science-octopus-pdf-queue-${self:provider.stage}'
+          Action:
+              - 'lambda:CreateEventSourceMapping'
+              - 'lambda:ListEventSourceMappings'
+              - 'lambda:ListFunctions'
+              - 'sqs:DeleteMessage'
+              - 'sqs:GetQueueAttributes'
+              - 'sqs:ReceiveMessage'
+              - 'sqs:SendMessage'
 custom:
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
@@ -108,11 +121,18 @@ custom:
             /email_sender_address_local_octopus: ${env:EMAIL_SENDER_ADDRESS}
             /base_url_local_octopus: ${env:BASE_URL}
             /authorization_callback_url_local_octopus: ${env:AUTHORISATION_CALLBACK_URL}
+            /list_users_api_key_local_octopus: ${env:LIST_USERS_API_KEY}
+            /queue_url_local_octopus: ${env:QUEUE_URL}
+            /sqs_endpoint_local_octopus: ${env:SQS_ENDPOINT}
     prune:
         automatic: true
         number: 3
 functions:
     # App
+    generatePDFsFromQueue:
+        handler: src/components/sqs/handler.generatePDFs
+        events:
+            - sqs: 'arn:aws:sqs:eu-west-1:948306873545:science-octopus-pdf-queue-${self:provider.stage}'
     healthcheck:
         handler: src/components/application/routes.healthcheck
         events:
@@ -207,6 +227,14 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/users/{id}/publications
+                  method: GET
+                  cors: true
+
+    getUserList:
+        handler: src/components/user/routes.getUserList
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/user-list
                   method: GET
                   cors: true
     # Auth

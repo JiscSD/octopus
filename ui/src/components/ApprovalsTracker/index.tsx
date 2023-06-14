@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import cuid from 'cuid';
 
 import * as Interfaces from '@interfaces';
@@ -19,24 +19,29 @@ type Props = {
     isPublishing: boolean;
     onPublish: () => void;
     onError: (message: string) => void;
+    onEditAffiliations: () => void;
     refreshPublicationData: KeyedMutator<Interfaces.Publication>;
 };
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     const { user } = Stores.useAuthStore();
-    const [selectedAuthor, setSelectedAuthor] = React.useState<null | Interfaces.CoAuthor>(null);
+    const [selectedAuthorEmail, setSelectedAuthorEmail] = React.useState<null | Interfaces.CoAuthor>(null);
+    const [selectedAuthorAffiliations, setSelectedAuthorAffiliations] = React.useState<null | Interfaces.CoAuthor>(
+        null
+    );
     const [authorEmailError, setAuthorEmailError] = React.useState('');
     const [isSendingReminder, setSendingReminder] = React.useState(false);
+
     const confirmation = Contexts.useConfirmationModal();
     const authorEmailRef = React.useRef<null | HTMLInputElement>(null);
 
-    const handleCloseModal = React.useCallback(() => {
-        setSelectedAuthor(null);
+    const handleCloseChangeEmailModal = React.useCallback(() => {
+        setSelectedAuthorEmail(null);
         setAuthorEmailError('');
     }, []);
 
     const handleAuthorEmailChange = React.useCallback(async () => {
-        if (!selectedAuthor) {
+        if (!selectedAuthorEmail) {
             return;
         }
 
@@ -52,7 +57,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         }
 
         // close author email edit modal
-        setSelectedAuthor(null);
+        setSelectedAuthorEmail(null);
 
         setTimeout(async () => {
             // open confirmation modal
@@ -75,9 +80,9 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     confirmedCoAuthor: false
                 };
 
-                const newAuthorsArray = props.publication.coAuthors.map((author) => {
-                    return author.email === selectedAuthor.email ? newAuthor : author;
-                });
+                const newAuthorsArray = props.publication.coAuthors.map((author) =>
+                    author.email === selectedAuthorEmail.email ? newAuthor : author
+                );
 
                 try {
                     // update publication authors
@@ -106,7 +111,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 }
             }
         }, 300); // wait for the other modal to close
-    }, [confirmation, props, selectedAuthor]);
+    }, [confirmation, props, selectedAuthorEmail]);
 
     const handleApprovalReminder = async (author: Interfaces.CoAuthor) => {
         const confirmed = await confirmation(
@@ -146,6 +151,26 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
         [props.publication.createdBy, user?.id]
     );
 
+    const author = useMemo(
+        () => props.publication.coAuthors.find((author) => author.linkedUser === user?.id),
+        [props.publication.coAuthors, user?.id]
+    );
+
+    const displayArrayOfAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+        const sortedAffiliations = Helpers.getSortedAffiliations(affiliations);
+
+        if (sortedAffiliations.length <= 2) {
+            const names = sortedAffiliations.map((affiliation) => affiliation.organization.name);
+            return names.join(', ');
+        } else {
+            const firstTwo = sortedAffiliations
+                .map((affiliation) => affiliation.organization.name)
+                .slice(0, 2)
+                .join(', ');
+            return firstTwo + ', + ' + (sortedAffiliations.length - 2) + ' more';
+        }
+    };
+
     return (
         <div className="children:transition-colors">
             <h4 className="mt-8 text-lg dark:text-white-50">
@@ -153,7 +178,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 <span className="font-semibold">{isCorrespondingUser ? 'Corresponding author' : 'Author'}</span>
             </h4>
             <div
-                className={`mt-2 overflow-x-auto ${
+                className={`sm:scrollbar mt-2 overflow-x-auto sm:dark:bg-grey-500 ${
                     isCorrespondingUser ? 'rounded-t-lg' : 'rounded-lg'
                 } shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent`}
             >
@@ -179,77 +204,132 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     </th>
                                 </>
                             )}
+                            <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                Affiliations
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-grey-100 bg-white-50 duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                        {props.publication.coAuthors.map((author) => (
-                            <tr key={author.id}>
-                                <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
-                                    {author.linkedUser ? (
+                        {props.publication.coAuthors.map((author) => {
+                            const affiliations = Helpers.getSortedAffiliations(author.affiliations).map(
+                                (affiliation) => affiliation.organization.name
+                            );
+
+                            return (
+                                <tr key={author.id}>
+                                    <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        {author.linkedUser ? (
+                                            <>
+                                                <Components.Link
+                                                    href={`/authors/${author.linkedUser}`}
+                                                    className="rounded border-transparent underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
+                                                >
+                                                    {author.user?.firstName} {author.user?.lastName}
+                                                </Components.Link>{' '}
+                                                {author.linkedUser === user?.id && (
+                                                    <span className="text-xs">(You)</span>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>Unconfirmed Author</>
+                                        )}
+                                        {isCorrespondingUser && <p className="mt-1 text-xs">{author.email}</p>}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
+                                            <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
+                                        ) : author.linkedUser === props.publication.createdBy ? (
+                                            <>Corresponding author</>
+                                        ) : author.confirmedCoAuthor ? (
+                                            <span className="text-green-500 dark:text-green-300">Approved</span>
+                                        ) : author.linkedUser ? (
+                                            <>Approval Pending</>
+                                        ) : (
+                                            <>Unconfirmed</>
+                                        )}
+                                    </td>
+                                    {isCorrespondingUser && (
                                         <>
-                                            <Components.Link
-                                                href={`/authors/${author.linkedUser}`}
-                                                className="rounded border-transparent underline decoration-teal-500 underline-offset-2 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
-                                            >
-                                                {author.user?.firstName} {author.user?.lastName}
-                                            </Components.Link>{' '}
-                                            {author.linkedUser === user?.id && <span className="text-xs">(You)</span>}
+                                            <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                                {!author.linkedUser && (
+                                                    <Components.IconButton
+                                                        className="p-2"
+                                                        title={`Edit email for ${author.email}`}
+                                                        icon={
+                                                            <FaIcons.FaEdit
+                                                                className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                                aria-hidden="true"
+                                                            />
+                                                        }
+                                                        onClick={() => setSelectedAuthorEmail(author)}
+                                                    />
+                                                )}
+                                            </td>
+                                            <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                                {!author.linkedUser && !author.reminderDate && (
+                                                    <Components.IconButton
+                                                        className="p-2"
+                                                        disabled={isSendingReminder}
+                                                        title={`Resend email to ${author.email}`}
+                                                        icon={
+                                                            <IoIcons.IoReload
+                                                                className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                                aria-hidden="true"
+                                                            />
+                                                        }
+                                                        onClick={() => handleApprovalReminder(author)}
+                                                    />
+                                                )}
+                                            </td>
                                         </>
-                                    ) : (
-                                        <>Unconfirmed Author</>
                                     )}
-                                    {isCorrespondingUser && <p className="mt-1 text-xs">{author.email}</p>}
-                                </td>
-                                <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                    {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
-                                        <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
-                                    ) : author.linkedUser === props.publication.createdBy ? (
-                                        <>Corresponding author</>
-                                    ) : author.confirmedCoAuthor ? (
-                                        <span className="text-green-500 dark:text-green-300">Approved</span>
-                                    ) : author.linkedUser ? (
-                                        <>Approval Pending</>
-                                    ) : (
-                                        <>Unconfirmed</>
-                                    )}
-                                </td>
-                                {isCorrespondingUser && (
-                                    <>
-                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                            {!author.linkedUser && (
+                                    <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                        <div className="flex cursor-default items-center gap-4">
+                                            {author.isIndependent ? (
+                                                <p>Unaffiliated</p>
+                                            ) : !author.isIndependent && !affiliations.length ? (
+                                                <p>Affiliations not entered</p>
+                                            ) : (
+                                                displayArrayOfAffiliations(author.affiliations)
+                                            )}
+                                            {(isCorrespondingUser || !author.confirmedCoAuthor) &&
+                                            author.linkedUser === user?.id ? (
                                                 <Components.IconButton
                                                     className="p-2"
-                                                    title={`Edit email for ${author.email}`}
+                                                    title={
+                                                        !(author.isIndependent || author.affiliations.length)
+                                                            ? 'Select your affiliations'
+                                                            : 'Edit your affiliations'
+                                                    }
                                                     icon={
                                                         <FaIcons.FaEdit
                                                             className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
                                                             aria-hidden="true"
                                                         />
                                                     }
-                                                    onClick={() => setSelectedAuthor(author)}
+                                                    onClick={props.onEditAffiliations}
                                                 />
+                                            ) : (
+                                                !author.isIndependent &&
+                                                author.affiliations.length > 0 && (
+                                                    <Components.IconButton
+                                                        className="p-2"
+                                                        title="Display all affiliations"
+                                                        icon={
+                                                            <FaIcons.FaRegEye
+                                                                className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                                                aria-hidden="true"
+                                                            />
+                                                        }
+                                                        onClick={() => setSelectedAuthorAffiliations(author)}
+                                                    />
+                                                )
                                             )}
-                                        </td>
-                                        <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
-                                            {!author.linkedUser && !author.reminderDate && (
-                                                <Components.IconButton
-                                                    className="p-2"
-                                                    disabled={isSendingReminder}
-                                                    title={`Resend email to ${author.email}`}
-                                                    icon={
-                                                        <IoIcons.IoReload
-                                                            className="h-4 w-4 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                                            aria-hidden="true"
-                                                        />
-                                                    }
-                                                    onClick={() => handleApprovalReminder(author)}
-                                                />
-                                            )}
-                                        </td>
-                                    </>
-                                )}
-                            </tr>
-                        ))}
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -272,11 +352,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             )}
             {isCorrespondingUser && (
                 <Components.Modal
-                    open={Boolean(selectedAuthor)}
+                    open={Boolean(selectedAuthorEmail)}
                     icon={<FaIcons.FaEdit className="h-8 w-8 text-grey-600" />}
-                    setOpen={handleCloseModal}
+                    setOpen={handleCloseChangeEmailModal}
                     positiveActionCallback={handleAuthorEmailChange}
-                    negativeActionCallback={handleCloseModal}
+                    negativeActionCallback={handleCloseChangeEmailModal}
                     positiveButtonText="Change Email"
                     cancelButtonText="Cancel"
                     title="Change author's email"
@@ -284,7 +364,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     <input
                         autoComplete="off"
                         className="my-4 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow outline-none focus:ring-2 focus:ring-yellow-400"
-                        defaultValue={selectedAuthor?.email}
+                        defaultValue={selectedAuthorEmail?.email}
                         name="authorEmail"
                         placeholder="Email of author"
                         ref={authorEmailRef}
@@ -292,6 +372,21 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
                 </Components.Modal>
             )}
+            <Components.SimpleModal
+                open={Boolean(selectedAuthorAffiliations)}
+                negativeActionCallback={() => setSelectedAuthorAffiliations(null)}
+                cancelButtonText="Close"
+                title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s affiliation(s) for this publication`}
+                subTitle="Selected Affiliations"
+            >
+                <ul>
+                    {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
+                        <li className="my-6" key={affiliation.id}>
+                            <Components.AffiliationCard affiliation={affiliation} disableSelection={true} />
+                        </li>
+                    ))}
+                </ul>
+            </Components.SimpleModal>
         </div>
     );
 };

@@ -205,3 +205,29 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
 
     return { offset, limit, total: totalUserPublications, results: userPublications };
 };
+
+export const getUserList = async () => {
+    const users = await client.prisma.user.findMany({
+        select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            createdAt: true,
+            employment: true
+        }
+    });
+
+    return users.map(({ firstName, lastName, email, createdAt, employment }) => ({
+        firstName,
+        lastName,
+        email,
+        createdAt: createdAt.toLocaleDateString('en-GB', { dateStyle: 'short' }),
+        currentEmployer: (employment as unknown as I.UserEmployment[])
+            .filter(
+                (employment) =>
+                    !employment?.endDate || Object.values(employment?.endDate).every((value) => value === null)
+            )
+            .map((employment) => employment?.organisation)
+            .join(', ')
+    }));
+};

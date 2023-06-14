@@ -117,13 +117,26 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'test-user-2',
-                email: 'test-user-2@jisc.ac.uk',
-                code: 'test-user-2',
-                confirmedCoAuthor: true,
-                linkedUser: 'test-user-2'
-            }
+            create: [
+                {
+                    id: 'test-user-1',
+                    email: 'test-user-1@jisc.ac.uk',
+                    code: 'test-user-1',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1',
+                    isIndependent: true,
+                    affiliations: []
+                },
+                {
+                    id: 'test-user-2',
+                    email: 'test-user-2@jisc.ac.uk',
+                    code: 'test-user-2',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-2',
+                    isIndependent: true,
+                    affiliations: []
+                }
+            ]
         },
         publicationStatus: {
             create: [
@@ -261,20 +274,26 @@ const publicationSeeds = [
                     email: 'test-user-5@jisc.ac.uk',
                     code: 'test-code-user-5',
                     confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5'
+                    linkedUser: 'test-user-5',
+                    isIndependent: true,
+                    affiliations: []
                 },
                 {
                     id: 'coauthor-test-user-6-problem-locked',
                     email: 'test-user-6@jisc.ac.uk',
                     code: 'test-code-user-6',
                     confirmedCoAuthor: true,
-                    linkedUser: 'test-user-6'
+                    linkedUser: 'test-user-6',
+                    isIndependent: true,
+                    affiliations: []
                 },
                 {
                     id: 'coauthor-test-user-7-problem-locked',
                     email: 'test-user-7@jisc.ac.uk',
                     code: 'test-code-user-7',
-                    confirmedCoAuthor: false
+                    confirmedCoAuthor: false,
+                    isIndependent: true,
+                    affiliations: []
                 }
             ]
         },
@@ -424,13 +443,26 @@ const publicationSeeds = [
             }
         },
         coAuthors: {
-            create: {
-                id: 'coauthor-test-user-6-protocol-draft',
-                email: 'test-user-6@jisc.ac.uk',
-                code: 'test-code-user-6',
-                confirmedCoAuthor: true,
-                linkedUser: 'test-user-6'
-            }
+            create: [
+                {
+                    id: 'coauthor-test-user-5-protocol-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5',
+                    affiliations: [],
+                    isIndependent: true
+                },
+                {
+                    id: 'coauthor-test-user-6-protocol-draft',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6',
+                    affiliations: [],
+                    isIndependent: true
+                }
+            ]
         },
         publicationStatus: {
             create: [
@@ -685,7 +717,8 @@ const publicationSeeds = [
             create: {
                 publicationTo: 'publication-problem-live'
             }
-        }
+        },
+        conflictOfInterestStatus: false
     },
     {
         // This is listed as problem but is a hypothesis

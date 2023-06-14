@@ -376,3 +376,32 @@ export const getPublicationStatusByAuthor = (
 
     return 'Pending author approval';
 };
+
+export const getFormattedAffiliationDate = (date: number | Interfaces.OrcidAffiliationDate): string => {
+    if (typeof date === 'number') {
+        const jsDate = new Date(date);
+        const day = jsDate.toLocaleDateString('en-GB', { day: '2-digit' });
+        const month = jsDate.toLocaleDateString('en-GB', { month: '2-digit' });
+        const year = jsDate.toLocaleDateString('en-GB', { year: 'numeric' });
+
+        return `${year}-${month}-${day}`;
+    }
+
+    return Object.values({ year: date.year, month: date.month, day: date.day }) // enforce order yyyy-mm-dd
+        .filter((value) => value)
+        .join('-');
+};
+
+export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+    const affiliationsWithStartDate = affiliations.filter((affiliation) => affiliation.startDate);
+    const affiliationsWithoutStartDate = affiliations.filter((affiliation) => !affiliation.startDate);
+
+    return [
+        ...affiliationsWithStartDate.sort((a1, a2) =>
+            getFormattedAffiliationDate(a2.startDate as Interfaces.OrcidAffiliationDate).localeCompare(
+                getFormattedAffiliationDate(a1.startDate as Interfaces.OrcidAffiliationDate)
+            )
+        ),
+        ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
+    ];
+};

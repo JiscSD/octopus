@@ -466,6 +466,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
         if (!publication.conflictOfInterestText?.length) return false;
+    } else if (publication.conflictOfInterestStatus === null) {
+        return false;
     }
 
     return true;
@@ -498,16 +500,8 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
 
-    /**
-     * @TODO - update 'coAuthorsAreVerified' when implementing OCT-580
-     * - all co-authors must confirm their affiliations before publishing but until we implement OCT-580, only the creator can add his affiliations
-     */
     const coAuthorsAreVerified = publication.coAuthors.every(
-        (coAuthor) =>
-            coAuthor.confirmedCoAuthor &&
-            (coAuthor.linkedUser === publication.createdBy
-                ? coAuthor.isIndependent || coAuthor.affiliations.length
-                : true)
+        (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
     );
 
     return (
@@ -521,7 +515,7 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     );
 };
 
-export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata) => {
     if (!publication || publication.currentStatus !== 'DRAFT') {
         return false;
     }
@@ -533,7 +527,6 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
     const hasConfirmedAffiliations = publication.coAuthors.some(
         (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
     );
@@ -544,9 +537,18 @@ export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        hasRequestedApprovals &&
         hasConfirmedAffiliations
     );
+};
+
+export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
+    }
+
+    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+
+    return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
 
 export const getLinksForPublication = async (id: string) => {
