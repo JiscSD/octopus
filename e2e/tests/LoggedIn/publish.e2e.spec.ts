@@ -1,7 +1,7 @@
 import * as Helpers from '../helpers';
 import { expect, test, Page, Browser } from '@playwright/test';
 import { PageModel } from '../PageModel';
-import cuid from 'cuid';
+import cuid2 from '@paralleldrive/cuid2';
 
 export const createPublication = async (page: Page, publicationTitle: string, pubType: string) => {
     await page.goto(`${Helpers.UI_BASE}/create`);
@@ -539,7 +539,7 @@ test.describe('Publication flow', () => {
 
 const publicationWithCoAuthors = {
     title: 'Test co-authors',
-    uniqueTitle: 'Test co-author - ' + cuid(),
+    uniqueTitle: 'Test co-author - ' + cuid2.createId(),
     content: 'Testing co-authors',
     coAuthors: [Helpers.user2, Helpers.user3],
     type: 'PROBLEM'
