@@ -26,3 +26,7 @@ variable "domain_name" {
 variable "elasticsearch_instance_size" {
   type = string
 }
+
+variable "email_addresses" {
+  type = map(list(string))
+}

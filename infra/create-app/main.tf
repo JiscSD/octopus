@@ -73,9 +73,5 @@ module "s3" {
 module "ses" {
     source = "../modules/ses"
     environment = local.environment
-}
-
-module "emails" {
-    source = "../modules/emails"
-    environment = local.environment
+    email_addresses = var.email_addresses
 }
