@@ -1,7 +1,5 @@
-import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import fileDownload from 'js-file-download';
 import JWT from 'jsonwebtoken';
 
 import * as luxon from 'luxon';
@@ -280,8 +278,12 @@ export const blobFileDownload = async (url: string, fileName: string) => {
         responseType: 'blob'
     });
 
-    // @ts-ignore
-    fileDownload(res.data, fileName);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(res.data);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
 };
 
 export const getBase64FromFile = async (file: Blob): Promise<string> =>

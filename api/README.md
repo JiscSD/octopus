@@ -18,6 +18,9 @@ Create a `.env` file inside `~/api` using `cp .env.example .env`.
 
 Make sure to update the values within to match your environment.
 
+**Changes to .env file**
+When adding a new item to the .env file, make sure to update the environment variables in the docker-compose.yml file so the API tests can access them.
+
 ### AWS Credentials File
 
 You will need a octopus credential profile to run locally, this can be populated with dummy data presented below:
