@@ -31,7 +31,7 @@
         "@aws-sdk/client-ses": "^3.76.0",
         "@aws-sdk/client-sqs": "^3.326.0",
         "@middy/core": "^4.5.1",
-        "@middy/do-not-wait-for-empty-event-loop": "^2.5.4",
+        "@middy/do-not-wait-for-empty-event-loop": "^4.5.1",
         "@middy/http-json-body-parser": "^2.5.4",
         "@middy/validator": "^2.5.4",
         "@opensearch-project/opensearch": "^2.1.0",
