@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import cuid from 'cuid';
 
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
@@ -13,6 +12,7 @@ import * as Config from '@config';
 import * as api from '@api';
 
 import { KeyedMutator } from 'swr';
+import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
     publication: Interfaces.Publication;
@@ -73,7 +73,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
 
             if (confirmed) {
                 const newAuthor = {
-                    id: cuid(),
+                    id: createId(),
                     email,
                     publicationId: props.publication.id,
                     approvalRequested: false,

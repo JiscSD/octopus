@@ -407,3 +407,33 @@ export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffili
         ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
     ];
 };
+
+export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    fn: F,
+    wait: number,
+    { maxWait }: { maxWait?: number } = {}
+) => {
+    let timeout: NodeJS.Timeout;
+    let maxTimeout: NodeJS.Timeout | null;
+
+    const debounced = (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (maxTimeout) {
+                clearTimeout(maxTimeout);
+                maxTimeout = null;
+            }
+            fn(...args);
+        }, wait);
+
+        if (maxWait && !maxTimeout) {
+            maxTimeout = setTimeout(() => {
+                clearTimeout(timeout);
+                maxTimeout = null;
+                fn(...args);
+            }, maxWait);
+        }
+    };
+
+    return debounced;
+};

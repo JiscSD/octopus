@@ -10,7 +10,7 @@ import * as FAIcons from 'react-icons/fa';
 import * as Config from '@config';
 import * as Contexts from '@contexts';
 
-import cuid from 'cuid';
+import { createId } from '@paralleldrive/cuid2';
 
 const getTransformedReference = (reference: Interfaces.Reference, textContent: string): Interfaces.Reference => {
     const urlMatches = Helpers.getURLsFromText(textContent);
@@ -108,7 +108,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
             const newReference = getTransformedReference(
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId,
                     type: 'TEXT',
                     text: currentParagraph,
@@ -268,7 +268,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                                 setTimeout(() => {
                                                                     setSelectedReferenceIndex(index);
                                                                     setSelectedReference({
-                                                                        id: cuid(), // generate new id
+                                                                        id: createId(), // generate new id
                                                                         publicationId,
                                                                         text: '',
                                                                         type: 'TEXT',

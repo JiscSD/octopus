@@ -7,9 +7,11 @@ type CustomProps = {
     ariaLabel?: string;
 };
 
-const CustomLink: React.FC<LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & CustomProps> = (
-    props
-): React.ReactElement => {
+type Props = LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & CustomProps;
+
+type LinkRef = HTMLAnchorElement;
+
+const CustomLink = React.forwardRef<LinkRef, Props>((props, ref) => {
     const { href, children, className, openNew, ariaLabel, ...rest } = props;
 
     if (openNew) {
@@ -22,7 +24,7 @@ const CustomLink: React.FC<LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElem
     }
 
     return (
-        <Link href={props.href} scroll={props.scroll}>
+        <Link href={props.href} scroll={props.scroll} legacyBehavior>
             <a
                 className={`rounded border-transparent decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
                     className ? className : ''
@@ -33,6 +35,8 @@ const CustomLink: React.FC<LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElem
             </a>
         </Link>
     );
-};
+});
+
+CustomLink.displayName = 'CustomLink';
 
 export default CustomLink;
