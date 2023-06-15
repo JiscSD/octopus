@@ -15,7 +15,7 @@ plugins:
 provider:
     name: aws
     timeout: 30
-    runtime: nodejs14.x
+    runtime: nodejs18.x
     region: eu-west-1
     stage: ${opt:stage, 'local'}
     vpc:
