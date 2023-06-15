@@ -21,6 +21,12 @@ const steps: Types.CreationSteps = {
         component: <Components.PublicationCreationKeyInformation />,
         icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
     },
+    AFFILIATIONS: {
+        title: 'Affiliations',
+        subTitle: 'Affiliations',
+        component: <Components.PublicationCreationAffiliations />,
+        icon: <OutlineIcons.TagIcon className="h-6 w-6 text-teal-400" />
+    },
     LINKED_PUBLICATIONS: {
         title: 'Linked publications',
         subTitle: 'Linked publications',
@@ -62,12 +68,6 @@ const steps: Types.CreationSteps = {
         subTitle: 'Research process',
         component: <Components.PublicationCreationResearchProcess />,
         icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
-    },
-    REVIEW: {
-        title: 'Review & publish',
-        subTitle: 'Review your publications content',
-        component: <Components.PublicationCreationReview />,
-        icon: <OutlineIcons.CloudIcon className="h-5 w-5 text-teal-400" />
     }
 };
 
@@ -144,53 +144,40 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
-        let arr: Interfaces.CreationStep[] = [];
+        let arr: Interfaces.CreationStep[] = [
+            steps.KEY_INFORMATION,
+            steps.AFFILIATIONS,
+            steps.LINKED_PUBLICATIONS,
+            steps.MAIN_TEXT,
+            steps.CONFLICT_OF_INTEREST,
+            steps.FUNDERS
+        ];
         switch (props.draftedPublication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
                 arr = [
-                    steps.KEY_INFORMATION,
-                    steps.LINKED_PUBLICATIONS,
-                    steps.MAIN_TEXT,
-                    steps.CONFLICT_OF_INTEREST,
-                    steps.FUNDERS,
+                    ...arr,
                     steps.DATA_STATEMENT,
-                    steps.CO_AUTHORS,
-                    steps.REVIEW
+                    steps.CO_AUTHORS
                 ];
                 break;
             case Config.values.octopusInformation.publications.PROTOCOL.id:
                 arr = [
-                    steps.KEY_INFORMATION,
-                    steps.LINKED_PUBLICATIONS,
-                    steps.MAIN_TEXT,
-                    steps.CONFLICT_OF_INTEREST,
-                    steps.FUNDERS,
+                    ...arr,
                     steps.RESEARCH_PROCESS,
-                    steps.CO_AUTHORS,
-                    steps.REVIEW
+                    steps.CO_AUTHORS
                 ];
                 break;
             case Config.values.octopusInformation.publications.HYPOTHESIS.id:
                 arr = [
-                    steps.KEY_INFORMATION,
-                    steps.LINKED_PUBLICATIONS,
-                    steps.MAIN_TEXT,
-                    steps.CONFLICT_OF_INTEREST,
-                    steps.FUNDERS,
+                    ...arr,
                     steps.RESEARCH_PROCESS,
-                    steps.CO_AUTHORS,
-                    steps.REVIEW
+                    steps.CO_AUTHORS
                 ];
                 break;
             default:
                 arr = [
-                    steps.KEY_INFORMATION,
-                    steps.LINKED_PUBLICATIONS,
-                    steps.MAIN_TEXT,
-                    steps.CONFLICT_OF_INTEREST,
-                    steps.FUNDERS,
-                    steps.CO_AUTHORS,
-                    steps.REVIEW
+                    ...arr,
+                    steps.CO_AUTHORS
                 ];
         }
         return arr;

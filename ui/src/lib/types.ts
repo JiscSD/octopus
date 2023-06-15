@@ -318,14 +318,14 @@ export type Languages =
 
 export type PublicationCreationSteps =
     | 'KEY_INFORMATION'
+    | 'AFFILIATIONS'
     | 'LINKED_PUBLICATIONS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
     | 'FUNDERS'
     | 'DATA_STATEMENT'
-    | 'RESEARCH_PROCESS'
-    | 'REVIEW';
+    | 'RESEARCH_PROCESS';
 
 export type CreationSteps = {
     [key in PublicationCreationSteps]: Interfaces.CreationStep;
