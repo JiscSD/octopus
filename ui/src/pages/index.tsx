@@ -63,7 +63,7 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
                         </h1>
                         <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
                             Octopus is a new publishing platform for scholarly research funded by UKRI – the UK
-                            government research funder
+                            government research funder.
                         </p>
                         <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
                             Here researchers can publish all their work for free, in full detail, enabling peer review
