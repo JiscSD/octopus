@@ -75,3 +75,16 @@ module "ses" {
     environment = local.environment
     email_addresses = var.email_addresses
 }
+
+module "sqs" {
+  source = "../modules/sqs"
+  sns_arn = module.sns.arn
+  environment = local.environment
+}
+
+module "sns" {
+  source = "../modules/sns" 
+  environment = local.environment
+  slack_channel_email = var.slack_channel_email
+}
+

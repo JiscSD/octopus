@@ -30,3 +30,8 @@ variable "elasticsearch_instance_size" {
 variable "email_addresses" {
   type = map(list(string))
 }
+
+variable "slack_channel_email" {
+  type = string
+  sensitive = true
+}

@@ -70,6 +70,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   advanced_options = {
     "rest.action.multi.allow_explicit_index" = "true"
+    "override_main_response_version"         = "true"
   }
 
   advanced_security_options {
@@ -99,6 +100,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 #   depends_on = [
 #     aws_iam_service_linked_role.elasticsearch
 #   ]
+
 }
 
 // Save password to SSM
