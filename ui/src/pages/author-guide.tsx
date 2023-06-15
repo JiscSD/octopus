@@ -98,29 +98,27 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                                 publication types linked to that one.
                             </>
                         </StandardText>
+                        <StandardText>When you&apos;re ready to publish, you will need to have to hand:</StandardText>
                         <StandardText>
-                            <>
-                                When you&apos;re ready to publish, you will need to have to hand:
-                                <ul className="ml-8 list-disc">
-                                    <li className="mb-8">Your publication title</li>
-                                    <li className="mb-8">Your main publication text and references</li>
-                                    <li className="mb-8">The email addresses of any co-authors</li>
-                                    <li className="mb-8">Information about any funders that should be acknowledged</li>
-                                    <li className="mb-8">
-                                        Details of any conflicts of interest to be declared for all authors
-                                    </li>
-                                    <li className="mb-8">
-                                        Your institutional affiliation(s), to make it easier for your work to be tracked
-                                        and deposited in the correct repositories
-                                    </li>
-                                    <li className="mb-8">
-                                        A publication already on Octopus to link yours to. If you re publishing a
-                                        Research Problem, this could be a generic topic, such as ‘medicine’, but the
-                                        more specific the better as it will help your publication be found and
-                                        assimilated with other research on the topic.
-                                    </li>
-                                </ul>
-                            </>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-8">Your publication title</li>
+                                <li className="mb-8">Your main publication text and references</li>
+                                <li className="mb-8">The email addresses of any co-authors</li>
+                                <li className="mb-8">Information about any funders that should be acknowledged</li>
+                                <li className="mb-8">
+                                    Details of any conflicts of interest to be declared for all authors
+                                </li>
+                                <li className="mb-8">
+                                    Your institutional affiliation(s), to make it easier for your work to be tracked and
+                                    deposited in the correct repositories
+                                </li>
+                                <li className="mb-8">
+                                    A publication already on Octopus to link yours to. If you re publishing a Research
+                                    Problem, this could be a generic topic, such as ‘medicine’, but the more specific
+                                    the better as it will help your publication be found and assimilated with other
+                                    research on the topic.
+                                </li>
+                            </ul>
                         </StandardText>
                         <StandardText>
                             Publishing on Octopus is quick and easy by design. Here&apos;s a step-by-step guide to get
