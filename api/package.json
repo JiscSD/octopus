@@ -10,7 +10,7 @@
         "url": "https://github.com/JiscSD/octopus/tree/main/api"
     },
     "engines": {
-        "node": "18.x"
+        "node": "18.*"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
