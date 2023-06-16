@@ -40,7 +40,6 @@ const preserveColumnsWidth = (draggableId: string) => {
     }
 
     // preserve selected row columns width while dragging
-
     selectedRow.querySelectorAll('td').forEach((cell) => {
         cell.setAttribute('style', `width: ${cell.clientWidth}px;`);
     });
