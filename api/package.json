@@ -60,7 +60,7 @@
         "luxon": "^2.5.2",
         "nodemailer": "^6.7.2",
         "prisma": "^4.14.1",
-        "puppeteer-core": "^20.3.0",
+        "puppeteer-core": "10.1.0",
         "string-strip-html": "^9.1.6",
         "supertest": "^6.2.3"
     },
