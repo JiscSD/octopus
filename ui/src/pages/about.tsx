@@ -66,10 +66,11 @@ const About: NextPage = (): React.ReactElement => (
                             research and research culture.
                         </h2>
                         <h2 className="text-l mx-auto mb-5 block text-center font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
-                            It sits alongside journals and other dissemination outlets, allowing those to specialise in
-                            delivering key findings to their audiences whilst Octopus acts like a &apos;patent
-                            office&apos; to record who has done what and when, and ensure the quality, integrity and
-                            accessibility of all primary research, in full.
+                            It sits alongside journals and other dissemination outlets: they can specialise in
+                            delivering key findings to their audiences. Octopus, meanwhile, is where researchers can
+                            publish everything in full: ideas, hypotheses, full data, analyses, code and reviews of
+                            others&apos; work. It acts like a &apos;patent office&apos; to record who has done what and
+                            when, and ensure the quality, integrity and accessibility of all primary research, in full.
                         </h2>
                     </div>
                     <div className="mx-auto mb-20 mt-10 flex w-fit space-x-6 ">

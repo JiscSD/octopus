@@ -56,14 +56,15 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                         </h1>
                         <StandardText>
                             Octopus publications are not equivalent to journal articles or papers. Instead, there are 8
-                            smaller publication types aligned with the publication process.
+                            smaller publication types aligned with the research process.
                         </StandardText>
                         <StandardText>
                             <>
                                 Think of Octopus like a &apos;patent office&apos; where you can register all your work,
-                                including theories, data, and analyses. Whatever you publish should be the formal
-                                &apos;version of record&apos;, ready to be assessed by others and publicly recorded
-                                against your name and{' '}
+                                including theories, data, and analyses. However, when you start the publication process,
+                                consider it to be like submitting to a journal. Whatever you publish should be the
+                                formal &apos;version of record&apos;, ready to be assessed by others and publicly
+                                recorded against your name and{' '}
                                 <Components.Link
                                     href="https://orcid.org/"
                                     openNew={true}
@@ -74,6 +75,52 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                             </>
                         </StandardText>
                         <StandardText>
+                            <>
+                                You might want to have a look at some example publications of the different types before
+                                writing your own.{' '}
+                                <Components.Link
+                                    href="https://www.octopus.ac/faq#pub_type_octopus"
+                                    openNew={true}
+                                    className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
+                                >
+                                    Here
+                                </Components.Link>{' '}
+                                is a handy guide to the eight types. It is most likely that your first publication will
+                                be of a Research Problem.{' '}
+                                <Components.Link
+                                    href="https://www.octopus.ac/publications/gv8n-ap77"
+                                    openNew={true}
+                                    className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
+                                >
+                                    Here
+                                </Components.Link>{' '}
+                                is an example of what a Research Problem publication might look like. You can see other
+                                publication types linked to that one.
+                            </>
+                        </StandardText>
+                        <StandardText>When you&apos;re ready to publish, you will need to have to hand:</StandardText>
+                        <StandardText>
+                            <ul className="ml-8 list-disc">
+                                <li className="mb-8">Your publication title</li>
+                                <li className="mb-8">Your main publication text and references</li>
+                                <li className="mb-8">The email addresses of any co-authors</li>
+                                <li className="mb-8">Information about any funders that should be acknowledged</li>
+                                <li className="mb-8">
+                                    Details of any conflicts of interest to be declared for all authors
+                                </li>
+                                <li className="mb-8">
+                                    Your institutional affiliation(s), to make it easier for your work to be tracked and
+                                    deposited in the correct repositories
+                                </li>
+                                <li className="mb-8">
+                                    A publication already on Octopus to link yours to. If you re publishing a Research
+                                    Problem, this could be a generic topic, such as ‘medicine’, but the more specific
+                                    the better as it will help your publication be found and assimilated with other
+                                    research on the topic.
+                                </li>
+                            </ul>
+                        </StandardText>
+                        <StandardText>
                             Publishing on Octopus is quick and easy by design. Here&apos;s a step-by-step guide to get
                             you started:
                         </StandardText>
@@ -81,8 +128,8 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                             <ul className="ml-8 list-disc">
                                 <li className="mb-8">
                                     <span className="font-bold">Sign in</span> using your ORCID® credentials (or create
-                                    an ORCID account if you don’t have one). You will also need to provide a verified
-                                    email address so that you can receive essential service notifications.
+                                    an ORCID account if you don&apos;t have one). You will also need to provide a
+                                    verified email address so that you can receive essential service notifications.
                                 </li>
                             </ul>
                         </StandardText>

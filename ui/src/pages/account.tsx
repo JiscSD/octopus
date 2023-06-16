@@ -168,7 +168,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
                         >
                             <span className="block py-2 font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                View live author page
+                                View my public author page
                             </span>
                         </Components.Link>
 
