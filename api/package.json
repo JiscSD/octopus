@@ -82,7 +82,7 @@
         "msw": "^0.36.4",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
-        "puppeteer": "^20.3.0",
+        "puppeteer": "10.1.0",
         "serverless-domain-manager": "^5.2.0",
         "serverless-middleware": "0.0.15",
         "serverless-offline": "^8.8.1",
