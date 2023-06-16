@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
+import axios from 'axios';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -189,8 +190,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     user?.token
                 );
             } catch (err) {
-                const approvalError = err as Interfaces.JSONResponseError;
-                setApprovalError(approvalError.response?.data.message);
+                setApprovalError(axios.isAxiosError(err) ? err.response?.data?.message : (err as Error).message);
             }
         },
         [publicationData?.id, user?.token]

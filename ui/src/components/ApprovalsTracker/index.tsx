@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import axios from 'axios';
 
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
@@ -107,7 +108,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     setAuthorEmailError('');
                     props.onError('');
                 } catch (error) {
-                    props.onError((error as Interfaces.JSONResponseError).response?.data?.message);
+                    props.onError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
                 }
             }
         }, 300); // wait for the other modal to close
@@ -135,7 +136,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 );
                 await props.refreshPublicationData();
             } catch (error) {
-                props.onError((error as Interfaces.JSONResponseError).response?.data?.message);
+                props.onError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
             }
             setSendingReminder(false);
         }
