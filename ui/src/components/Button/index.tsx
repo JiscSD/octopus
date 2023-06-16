@@ -11,7 +11,7 @@ type CommonProps = {
     className?: string;
     textSize?: string;
     padding?: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 };
 
 type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };
