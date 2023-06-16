@@ -27,7 +27,7 @@ const CardItem: React.FC<CardItemProps> = (props): React.ReactElement => (
 );
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {

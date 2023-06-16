@@ -2,7 +2,7 @@ import React from 'react';
 import * as Framer from 'framer-motion';
 
 type Props = {
-    children: React.ReactChild | React.ReactChildren;
+    children: React.ReactNode;
 };
 
 const Overlay: React.FC<Props> = (props): React.ReactElement => (

@@ -13,7 +13,7 @@ type Props = {
     title: string;
     icon?: React.ReactNode;
     disableButtons?: boolean;
-    children?: React.ReactChildren | React.ReactChild[] | React.ReactChild;
+    children?: React.ReactNode;
 };
 
 const Modal: React.FC<Props> = (props) => {
