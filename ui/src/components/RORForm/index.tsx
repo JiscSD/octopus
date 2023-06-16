@@ -153,7 +153,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
     const [rorLoading, setRorLoading] = React.useState(false);
     const [rorError, setRorError] = React.useState(false);
 
-    const getRorData = React.useCallback(async (value) => {
+    const getRorData = React.useCallback(async (value: string) => {
         const actualRor = value.split('/')[value.split('/').length - 1];
         setRor(value);
         setRorLoading(true);
