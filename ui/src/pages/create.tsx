@@ -26,7 +26,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 };
 
-const SupportText: React.FC = (props): React.ReactElement => (
+const SupportText: React.FC<React.PropsWithChildren> = (props): React.ReactElement => (
     <span className="mb-3 block w-full text-sm text-grey-700 transition-colors duration-500 dark:text-white-100 xl:w-1/2">
         {props.children}
     </span>
