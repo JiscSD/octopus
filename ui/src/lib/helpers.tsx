@@ -414,7 +414,7 @@ export const getTabCompleteness = (
     store: Types.PublicationCreationStoreType
 ): Interfaces.CreationStepWithCompletenessStatus[] => {
     const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
-    steps.forEach(step => {
+    steps.forEach((step) => {
         switch (step.id) {
             case 'KEY_INFORMATION':
                 if (store.title) {
@@ -424,34 +424,34 @@ export const getTabCompleteness = (
                         stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                     }
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step});
+                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
                 }
                 break;
             case 'AFFILIATIONS':
                 if (store.authorAffiliations.length || store.isIndependentAuthor) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step});
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'LINKED_PUBLICATIONS':
                 if (store.linkTo?.length) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step});
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'MAIN_TEXT':
                 if (!isEmptyContent(store.content) && store.language) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step});
+                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
                 }
                 break;
             case 'CONFLICT_OF_INTEREST':
                 if (
                     (store.conflictOfInterestStatus && store.conflictOfInterestText.length) ||
-                    (store.conflictOfInterestStatus === false)
+                    store.conflictOfInterestStatus === false
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else if (store.conflictOfInterestStatus === true) {
@@ -482,4 +482,4 @@ export const getTabCompleteness = (
         }
     });
     return stepsWithCompleteness;
-}
+};

@@ -47,7 +47,7 @@ const Affiliations: React.FC = (): React.ReactElement => {
     });
 
     return (
-        <div className="space-y-12 2xl:space-y-16 text-grey-800 dark:text-white-50">
+        <div className="space-y-12 text-grey-800 dark:text-white-50 2xl:space-y-16">
             <div className="mb-10">
                 <Components.PublicationCreationStepTitle text="Add your affiliations" required />
                 <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">

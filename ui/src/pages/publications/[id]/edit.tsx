@@ -163,31 +163,16 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         ];
         switch (props.draftedPublication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
-                arr = [
-                    ...arr,
-                    steps.DATA_STATEMENT,
-                    steps.CO_AUTHORS
-                ];
+                arr = [...arr, steps.DATA_STATEMENT, steps.CO_AUTHORS];
                 break;
             case Config.values.octopusInformation.publications.PROTOCOL.id:
-                arr = [
-                    ...arr,
-                    steps.RESEARCH_PROCESS,
-                    steps.CO_AUTHORS
-                ];
+                arr = [...arr, steps.RESEARCH_PROCESS, steps.CO_AUTHORS];
                 break;
             case Config.values.octopusInformation.publications.HYPOTHESIS.id:
-                arr = [
-                    ...arr,
-                    steps.RESEARCH_PROCESS,
-                    steps.CO_AUTHORS
-                ];
+                arr = [...arr, steps.RESEARCH_PROCESS, steps.CO_AUTHORS];
                 break;
             default:
-                arr = [
-                    ...arr,
-                    steps.CO_AUTHORS
-                ];
+                arr = [...arr, steps.CO_AUTHORS];
         }
         return arr;
     }, [props.draftedPublication.type]);
