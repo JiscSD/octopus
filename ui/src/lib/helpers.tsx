@@ -472,20 +472,17 @@ export const getTabCompleteness = (
                 stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 break;
             case 'DATA_STATEMENT':
-                if (store.ethicalStatement &&
-                    (
-                        store.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
-                        (
-                            store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
-                            store.dataPermissionsStatementProvidedBy
-                        )
-                    )
+                if (
+                    store.ethicalStatement &&
+                    (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
+                        (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
+                            store.dataPermissionsStatementProvidedBy))
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
                 }
-                 
+
                 break;
             case 'RESEARCH_PROCESS':
                 // No mandatory fields
