@@ -407,3 +407,79 @@ export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffili
         ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
     ];
 };
+
+// Determines whether a tab is missing mandatory fields or not.
+export const getTabCompleteness = (
+    steps: Interfaces.CreationStep[],
+    store: Types.PublicationCreationStoreType
+): Interfaces.CreationStepWithCompletenessStatus[] => {
+    const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
+    steps.forEach(step => {
+        switch (step.id) {
+            case 'KEY_INFORMATION':
+                if (store.title) {
+                    if (store.licence) {
+                        stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                    } else {
+                        stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                    }
+                } else {
+                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step});
+                }
+                break;
+            case 'AFFILIATIONS':
+                if (store.authorAffiliations.length || store.isIndependentAuthor) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step});
+                }
+                break;
+            case 'LINKED_PUBLICATIONS':
+                if (store.linkTo.length) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step});
+                }
+                break;
+            case 'MAIN_TEXT':
+                if (!isEmptyContent(store.content) && store.language) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step});
+                }
+                break;
+            case 'CONFLICT_OF_INTEREST':
+                if (
+                    (store.conflictOfInterestStatus && store.conflictOfInterestText.length) ||
+                    (store.conflictOfInterestStatus === false)
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else if (store.conflictOfInterestStatus === true) {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
+                }
+                break;
+            case 'CO_AUTHORS':
+                if (store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'FUNDERS':
+                // TODO
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+            case 'DATA_STATEMENT':
+                // TODO
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+            case 'RESEARCH_PROCESS':
+                // TODO
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+        }
+    });
+    return stepsWithCompleteness;
+}

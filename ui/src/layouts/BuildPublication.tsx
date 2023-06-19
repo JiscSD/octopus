@@ -14,8 +14,14 @@ import * as Hooks from '@hooks';
 import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios';
 
+const completenessIcons: {[key in Types.TabCompletionStatus]: React.ReactElement} = {
+    COMPLETE: <OutlineIcons.BadgeCheckIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
+    INCOMPLETE: <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-yellow-400 transition-colors duration-500" />,
+    MISSING_MANDATORY: <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-red-200 transition-colors duration-500" />
+}
+
 type BuildPublicationProps = {
-    steps: Interfaces.CreationStep[];
+    steps: Interfaces.CreationStepWithCompletenessStatus[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
@@ -415,7 +421,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         }`}
                                     >
                                         {step.icon}
-                                        <span className="-mb-1">{step.title}</span>
+                                        <span className="-mb-1 grow">{step.title}</span>
+                                        {completenessIcons[step.status]}
                                     </button>
                                 </li>
                             ))}

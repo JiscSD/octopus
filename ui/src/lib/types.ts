@@ -316,7 +316,7 @@ export type Languages =
     | 'za'
     | 'zu';
 
-export type PublicationCreationSteps =
+export type PublicationCreationStep =
     | 'KEY_INFORMATION'
     | 'AFFILIATIONS'
     | 'LINKED_PUBLICATIONS'
@@ -328,5 +328,10 @@ export type PublicationCreationSteps =
     | 'RESEARCH_PROCESS';
 
 export type CreationSteps = {
-    [key in PublicationCreationSteps]: Interfaces.CreationStep;
+    [key in PublicationCreationStep]: Interfaces.CreationStep;
 };
+
+export type TabCompletionStatus =
+    | 'COMPLETE'
+    | 'INCOMPLETE'
+    | 'MISSING_MANDATORY'

@@ -16,58 +16,67 @@ import * as Types from '@types';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
+        id: 'KEY_INFORMATION',
         title: 'Key information',
         subTitle: 'Key information',
         component: <Components.PublicationCreationKeyInformation />,
-        icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.FingerPrintIcon className="h-6 w-6 text-teal-300" />
     },
     AFFILIATIONS: {
+        id: 'AFFILIATIONS',
         title: 'Affiliations',
         subTitle: 'Affiliations',
         component: <Components.PublicationCreationAffiliations />,
-        icon: <OutlineIcons.TagIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.TagIcon className="h-6 w-6 text-teal-300" />
     },
     LINKED_PUBLICATIONS: {
+        id: 'LINKED_PUBLICATIONS',
         title: 'Linked publications',
         subTitle: 'Linked publications',
         component: <Components.PublicationCreationLinkedPublications />,
-        icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-300" />
     },
     MAIN_TEXT: {
+        id: 'MAIN_TEXT',
         title: 'Main text',
         subTitle: 'Main text',
         component: <Components.PublicationCreationMainText />,
-        icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.PencilIcon className="h-5 w-5 text-teal-300" />
     },
     CONFLICT_OF_INTEREST: {
+        id: 'CONFLICT_OF_INTEREST',
         title: 'Conflict of interest',
         subTitle: 'Conflict of interest',
         component: <Components.PublicationCreationConflictOfInterest />,
-        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-300" />
     },
     CO_AUTHORS: {
+        id: 'CO_AUTHORS',
         title: 'Co-authors',
         subTitle: 'Co-authors',
         component: <Components.PublicationCreationCoAuthor />,
-        icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.UserGroupIcon className="h-5 w-5 text-teal-300" />
     },
     FUNDERS: {
+        id: 'FUNDERS',
         title: 'Funders',
         subTitle: 'Funders',
         component: <Components.PublicationCreationFunders />,
-        icon: <OutlineIcons.CurrencyPoundIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.CurrencyPoundIcon className="h-5 w-5 text-teal-300" />
     },
     DATA_STATEMENT: {
+        id: 'DATA_STATEMENT',
         title: 'Data statements',
         subTitle: 'Data statements',
         component: <Components.PublicationCreationDataStatements />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-300" />
     },
     RESEARCH_PROCESS: {
+        id: 'RESEARCH_PROCESS',
         title: 'Research process',
         subTitle: 'Research process',
         component: <Components.PublicationCreationResearchProcess />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-300" />
     }
 };
 
@@ -140,10 +149,10 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const { updateReferences, updateCoAuthors, ...store } = Stores.usePublicationCreationStore();
+    const store = Stores.usePublicationCreationStore();
 
     // Choose which flow steps/pages to include based on the publication type
-    const stepsToUse = React.useMemo(() => {
+    const stepsByType = React.useMemo(() => {
         let arr: Interfaces.CreationStep[] = [
             steps.KEY_INFORMATION,
             steps.AFFILIATIONS,
@@ -183,6 +192,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         return arr;
     }, [props.draftedPublication.type]);
 
+    const stepsToUse = Helpers.getTabCompleteness(stepsByType, store);
+
     // Choose which step to land the page on
     let defaultStep = React.useMemo(() => {
         let defaultStep = props.step ? parseInt(props.step) : 0;
@@ -197,25 +208,25 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         if (props.draftedPublication.id) {
             try {
                 const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
-                updateReferences(response.data);
+                store.updateReferences(response.data);
             } catch (err) {
                 // todo: improve error handling
                 console.log(err);
             }
         }
-    }, [props.draftedPublication.id, props.token, updateReferences]);
+    }, [props.draftedPublication.id, props.token, store.updateReferences]);
 
     const fetchAndSetAuthors = React.useCallback(async () => {
         if (props.draftedPublication.id) {
             try {
                 const response = await api.get(`/publications/${props.draftedPublication.id}/coauthors`, props.token);
-                updateCoAuthors(response.data);
+                store.updateCoAuthors(response.data);
             } catch (err) {
                 // todo: improve error handling
                 console.log(err);
             }
         }
-    }, [props.draftedPublication.id, props.token, updateCoAuthors]);
+    }, [props.draftedPublication.id, props.token, store.updateCoAuthors]);
 
     React.useEffect(() => {
         fetchAndSetReferences();
