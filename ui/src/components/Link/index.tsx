@@ -24,16 +24,15 @@ const CustomLink = React.forwardRef<LinkRef, Props>((props, ref) => {
     }
 
     return (
-        <Link
-            ref={ref}
-            href={props.href}
-            scroll={props.scroll}
-            className={`rounded border-transparent decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
-                className ? className : ''
-            }`}
-            {...rest}
-        >
-            {children}
+        <Link href={props.href} scroll={props.scroll}>
+            <a
+                className={`rounded border-transparent decoration-teal-500 underline-offset-2 outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${
+                    className ? className : ''
+                }`}
+                {...rest}
+            >
+                {children}
+            </a>
         </Link>
     );
 });
