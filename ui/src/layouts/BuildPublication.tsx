@@ -472,7 +472,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                     }`}
                                                 >
                                                     {step.icon}
-                                                    <span className="-mb-1">{step.title}</span>
+                                                    <span className="-mb-1 grow">{step.title}</span>
+                                                    {completenessIcons[step.status]}
                                                 </button>
                                             </li>
                                         ))}
