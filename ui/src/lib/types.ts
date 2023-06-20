@@ -331,4 +331,4 @@ export type CreationSteps = {
     [key in PublicationCreationStep]: Interfaces.CreationStep;
 };
 
-export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE' | 'MISSING_MANDATORY';
+export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';

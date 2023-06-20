@@ -18,9 +18,6 @@ const completenessIcons: { [key in Types.TabCompletionStatus]: React.ReactElemen
     COMPLETE: <OutlineIcons.BadgeCheckIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
     INCOMPLETE: (
         <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-yellow-400 transition-colors duration-500" />
-    ),
-    MISSING_MANDATORY: (
-        <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-red-200 transition-colors duration-500" />
     )
 };
 

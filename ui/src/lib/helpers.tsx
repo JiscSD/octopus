@@ -417,14 +417,10 @@ export const getTabCompleteness = (
     steps.forEach((step) => {
         switch (step.id) {
             case 'KEY_INFORMATION':
-                if (store.title) {
-                    if (store.licence) {
-                        stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
-                    } else {
-                        stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
-                    }
+                if (store.title && store.licence) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'AFFILIATIONS':
@@ -445,7 +441,7 @@ export const getTabCompleteness = (
                 if (!isEmptyContent(store.content) && store.language) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'CONFLICT_OF_INTEREST':
@@ -454,10 +450,8 @@ export const getTabCompleteness = (
                     store.conflictOfInterestStatus === false
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
-                } else if (store.conflictOfInterestStatus === true) {
-                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'CO_AUTHORS':
@@ -480,7 +474,7 @@ export const getTabCompleteness = (
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
-                    stepsWithCompleteness.push({ status: 'MISSING_MANDATORY', ...step });
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
 
                 break;
