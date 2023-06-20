@@ -20,9 +20,11 @@ const updateAffiliationFormat = async (affiliations: I.LegacyAffiliation[], user
     if (user) {
         const newAffiliations = affiliations.map(affiliation => {
             const now = Date.now();
-    
+            // This has to be a unique numerical ID that won't clash with Orcid IDs.
+            const id = parseInt(String(now) + String(Math.floor(Math.random() * 10000)));
+
             return {
-                id: 'octopus-' + affiliation.id, // previously this was typed as a number but our old affiliations have string IDs
+                id,
                 affiliationType: "misc." as const,
                 title: affiliation.name,
                 departmentName: null,

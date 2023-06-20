@@ -670,7 +670,7 @@ export interface OrcidAffiliationDate {
  * - Qualifications
  */
 export interface MappedOrcidAffiliation {
-    id: number | string;
+    id: number;
     affiliationType:
         | 'membership'
         | 'service'
