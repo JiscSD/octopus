@@ -16,11 +16,14 @@ export const createPublication = async (page: Page, publicationTitle: string, pu
     await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.createThisPublicationButton).click()]);
 };
 
-export const publicationFlowKeyInformation = async (page: Page, licenceType: string, isIndependentAuthor: boolean) => {
+export const publicationFlowKeyInformation = async (page: Page, licenceType: string) => {
     // Key Information
     // Change licence
     await page.locator(PageModel.publish.keyInformation.licence).selectOption(licenceType);
+    await page.locator(PageModel.publish.nextButton).click();
+};
 
+export const publicationFlowAffiliations = async (page: Page, isIndependentAuthor: boolean) => {
     if (isIndependentAuthor) {
         await page.click('#confirm-independent-author');
     } else {
@@ -29,7 +32,7 @@ export const publicationFlowKeyInformation = async (page: Page, licenceType: str
     }
 
     await page.locator(PageModel.publish.nextButton).click();
-};
+}
 
 export const publicationFlowLinkedPublication = async (
     page: Page,
@@ -310,7 +313,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'PROBLEM');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -350,7 +354,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'HYPOTHESIS');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -368,7 +373,6 @@ test.describe('Publication flow', () => {
         );
 
         // Preview and check preview draft publication
-        await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
         await checkPublication(page, hypothesisPublication);
 
@@ -390,7 +394,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'PROTOCOL');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
             'a',
@@ -408,7 +413,6 @@ test.describe('Publication flow', () => {
         );
 
         // Preview and check preview draft publication
-        await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
         await checkPublication(page, methodPublication);
 
@@ -430,7 +434,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'ANALYSIS');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
             'a',
@@ -448,7 +453,6 @@ test.describe('Publication flow', () => {
         );
 
         // Preview and check preview draft publication
-        await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
         await checkPublication(page, analysisPublication);
 
@@ -470,7 +474,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'INTERPRETATION');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', true);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, true);
         await publicationFlowLinkedPublication(page, 'a', 'Analysis of Improving the quality of life for sustainable');
         await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
         await publicationFlowConflictOfInterest(page, false);
@@ -484,7 +489,6 @@ test.describe('Publication flow', () => {
         );
 
         // Preview and check preview draft publication
-        await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
         await checkPublication(page, interpretationPublication);
 
@@ -506,7 +510,8 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', true);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, true);
         await publicationFlowLinkedPublication(
             page,
             'a',
@@ -524,7 +529,6 @@ test.describe('Publication flow', () => {
         );
 
         // Preview and check preview draft publication
-        await page.locator(PageModel.publish.nextButton).click();
         await page.locator(PageModel.publish.previewButton).click();
         await checkPublication(page, realWorldApplicationPublication);
 
@@ -720,7 +724,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', true);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliation tab
+        await publicationFlowAffiliations(page, true);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -815,7 +822,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -829,6 +839,10 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
 
         // add one co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -859,7 +873,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -874,6 +891,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+        
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user3);
@@ -922,7 +943,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -936,6 +960,10 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-authors
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -997,7 +1025,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1012,6 +1043,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+    
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1066,7 +1101,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1080,6 +1118,10 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -1129,7 +1171,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1144,6 +1189,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1199,7 +1248,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1214,6 +1266,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1255,7 +1311,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1270,6 +1329,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1323,7 +1386,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1338,6 +1404,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1386,7 +1456,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1401,6 +1474,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+    
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1469,7 +1546,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1484,6 +1564,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1534,7 +1618,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1549,6 +1636,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+    
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1612,7 +1703,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1627,6 +1721,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1670,7 +1768,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, false);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1685,6 +1786,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+            
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1726,7 +1831,10 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', true);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+
+        // fill affiliations tab
+        await publicationFlowAffiliations(page, true);
 
         // add linked publication
         await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
@@ -1741,6 +1849,10 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // add conflict of interest
+        await page.locator('aside button:has-text("Conflict of interest")').click();
+        await publicationFlowConflictOfInterest(page, false);
+    
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1858,7 +1970,8 @@ test.describe('Publication Flow + File import', () => {
     test('Create PROBLEM publication where text is filled from document import', async () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
         await createPublication(page, 'test publication - file import', 'PROBLEM');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC', false);
+        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
