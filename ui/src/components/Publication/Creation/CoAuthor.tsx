@@ -160,7 +160,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 <p className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Add the email addresses of any co-authors involved in this publication. Note that they will only
                     receive an email asking them to confirm their involvement and preview the publication once you have
-                    requested approval from the “Review and Publish” section.
+                    requested their approval using the "Request Approval" button.
                 </p>
                 <br />
                 <p className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
