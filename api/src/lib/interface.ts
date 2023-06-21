@@ -608,13 +608,13 @@ export interface OrcidOrganization {
     name: string;
     address: {
         city: string;
-        region: string | null;
+        region?: string;
         country: string;
     };
-    'disambiguated-organization': {
+    'disambiguated-organization'?: {
         'disambiguated-organization-identifier': string;
         'disambiguation-source': string;
-    } | null;
+    };
 }
 
 export interface OrcidAffiliationSummary {
@@ -678,15 +678,15 @@ export interface MappedOrcidAffiliation {
         | 'employment'
         | 'education'
         | 'qualification';
-    title: string | null;
-    departmentName: string | null;
-    startDate: OrcidAffiliationDate | null;
-    endDate: OrcidAffiliationDate | null;
+    title?: string;
+    departmentName?: string;
+    startDate?: OrcidAffiliationDate;
+    endDate?: OrcidAffiliationDate;
     organization: OrcidOrganization;
     createdAt: number;
     updatedAt: number;
     source: { name: string; orcid: string };
-    url: string | null;
+    url?: string;
 }
 
 export interface UserEmployment {
