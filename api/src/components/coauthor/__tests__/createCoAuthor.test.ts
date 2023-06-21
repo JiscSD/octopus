@@ -1,5 +1,5 @@
 import * as testUtils from 'lib/testUtils';
-import cuid from 'cuid';
+import { createId } from '@paralleldrive/cuid2';
 
 describe('create coauthor', () => {
     beforeEach(async () => {
@@ -20,7 +20,7 @@ describe('create coauthor', () => {
                     linkedUser: 'test-user-5'
                 },
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
@@ -38,7 +38,7 @@ describe('create coauthor', () => {
             .query({ apiKey: '000000005' })
             .send([
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'email@test.com',
                     linkedUser: null,
@@ -46,7 +46,7 @@ describe('create coauthor', () => {
                     confirmedCoAuthor: false
                 },
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'email@test.com',
                     linkedUser: null,
@@ -54,7 +54,7 @@ describe('create coauthor', () => {
                     confirmedCoAuthor: false
                 },
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'fake-email@domain.com',
                     linkedUser: null,
@@ -62,7 +62,7 @@ describe('create coauthor', () => {
                     confirmedCoAuthor: false
                 },
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'fake-email@test.com',
                     linkedUser: null,
@@ -79,7 +79,7 @@ describe('create coauthor', () => {
             .query({ apiKey: '987654321' })
             .send([
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-draft',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
@@ -97,7 +97,7 @@ describe('create coauthor', () => {
             .query({ apiKey: '123456789' })
             .send([
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'non-existent-publication',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
@@ -115,7 +115,7 @@ describe('create coauthor', () => {
             .query({ apiKey: '123456789' })
             .send([
                 {
-                    id: cuid(),
+                    id: createId(),
                     publicationId: 'publication-problem-live',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,

@@ -594,13 +594,13 @@ export interface GeneratePDFQueryParams {
 
 export interface OrcidAffiliationSummaryDate {
     year: {
-        value: string | null;
+        value?: string;
     };
     month: {
-        value: string | null;
+        value?: string;
     };
     day: {
-        value: string | null;
+        value?: string;
     };
 }
 
@@ -639,13 +639,13 @@ export interface OrcidAffiliationSummary {
         'assertion-origin-name'?: string;
     };
     'put-code': number;
-    'department-name': string | null;
-    'role-title': string | null;
-    'start-date': OrcidAffiliationSummaryDate | null;
-    'end-date': OrcidAffiliationSummaryDate | null;
+    'department-name'?: string;
+    'role-title'?: string;
+    'start-date'?: OrcidAffiliationSummaryDate;
+    'end-date'?: OrcidAffiliationSummaryDate;
     organization: OrcidOrganization;
-    url: { value: string } | null;
-    'external-ids': string[] | null;
+    url?: { value: string };
+    'external-ids'?: string[];
     'display-index': string;
     visibility: string;
     path: string;

@@ -1010,17 +1010,17 @@ export const mapOrcidAffiliationSummary = (
               month: summary['start-date'].month?.value || null,
               day: summary['start-date'].day?.value || null
           }
-        : null,
+        : undefined,
     endDate: summary['end-date']
         ? {
               year: summary['end-date'].year?.value || null,
               month: summary['end-date'].month?.value || null,
               day: summary['end-date'].day?.value || null
           }
-        : null,
+        : undefined,
     organization: summary.organization,
     createdAt: summary['created-date'].value,
     updatedAt: summary['last-modified-date'].value,
     source: { name: summary.source['source-name'].value, orcid: summary.source['source-orcid'].path },
-    url: summary.url ? summary.url.value : null
+    url: summary.url ? summary.url.value : undefined
 });
