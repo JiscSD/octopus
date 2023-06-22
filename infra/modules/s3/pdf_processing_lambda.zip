@@ -117,14 +117,25 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
     ],
     metadata: {
       journal: {
-        title: publication.title,
+        title: "Octopus",
         publisher: ["Octopus"],
         identifier: [
           {
-            type: "doi",
-            id: publication.doi,
+            type: "",
+            id: "",
           },
         ],
+      },
+      article: {
+        title: publication.title,
+        type: publication.type,
+        version: "",
+        language: publication.language,
+        identifier: {
+          type: "doi",
+          id: publication.doi,
+          subject: publication.keywords,
+        },
       },
       author: publication.coAuthors
         .map((author) => formatAuthor(author, true))
