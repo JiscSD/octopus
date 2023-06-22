@@ -44,9 +44,9 @@ const postToPubrouter = async (pdfMetadata) => {
   return response.json();
 };
 
-const retryPostingPublication = async (pdfUrl) => {
+const retryPostingPublication = async (pdfMetadata) => {
   await new Promise((resolve) => setTimeout(resolve, 5000));
-  return postToPubrouter(pdfUrl);
+  return postToPubrouter(pdfMetadata);
 };
 
 const sendFailureEmail = async (error, event, publicationId) => {
