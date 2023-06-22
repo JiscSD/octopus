@@ -16,10 +16,7 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@stores';
 import * as Framer from 'framer-motion';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const decodedJWT = await Helpers.guardPrivateRoute(context);
-    // If logged in, grab the token from cookies
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
@@ -28,7 +25,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch the current user
     try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}`, token);
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}`, token);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -42,7 +39,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
      */
 
     try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}/publications?limit=999`, token);
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token);
         userPublications = response.data.results;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -56,7 +53,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     user: Interfaces.User;

@@ -70,9 +70,7 @@ const steps: Types.CreationSteps = {
     }
 };
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // prevent unauthenticated users to access this page
-    await Helpers.guardPrivateRoute(context);
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);
 
     let draftedPublicationID: string | string[] | null = null;
@@ -127,7 +125,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     draftedPublication: Interfaces.Publication;

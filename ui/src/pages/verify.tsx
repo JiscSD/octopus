@@ -15,20 +15,13 @@ import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // prevent unauthenticated users to access this page
-    const decodedToken = await Helpers.guardPrivateRoute(context);
-    const homeUrl = encodeURIComponent(Config.urls.home.path);
-    const { state: redirectTo = homeUrl } = context.query;
-
-    return {
-        props: {
-            redirectTo,
-            newUser: !decodedToken?.email, // new users don't have an email yet
-            protectedPage: true
-        }
-    };
-};
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => ({
+    props: {
+        redirectTo: context.query.state || encodeURIComponent(Config.urls.home.path),
+        newUser: !currentUser.email, // new users don't have an email yet
+        protectedPage: true
+    }
+}));
 
 type Props = {
     redirectTo: string;
