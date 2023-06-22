@@ -1,18 +1,18 @@
 import * as authorizationService from 'authorization/service';
-import otpGenerator from 'otp-generator';
 import * as I from 'interface';
 import * as email from 'lib/email';
 import * as response from 'lib/response';
 import * as luxon from 'luxon';
 import * as userService from 'user/service';
 import * as verificationService from 'verification/service';
+import * as helpers from 'lib/helpers';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = otpGenerator.generate(7, { lowerCaseAlphabets: false, specialChars: false });
+        const code = helpers.generateOTP(7);
 
         // store code with user orcid and email
         await verificationService.upsert({

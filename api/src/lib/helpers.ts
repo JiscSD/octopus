@@ -3,6 +3,7 @@ import fs from 'fs';
 import * as cheerio from 'cheerio';
 import * as I from 'interface';
 import { licences } from './enum';
+import { webcrypto } from 'crypto';
 
 export const isHTMLSafe = (content: string): boolean => {
     const $ = cheerio.load(content);
@@ -1024,3 +1025,29 @@ export const mapOrcidAffiliationSummary = (
     source: { name: summary.source['source-name'].value, orcid: summary.source['source-orcid'].path },
     url: summary.url ? summary.url.value : undefined
 });
+
+const generateOTPCharacter = (OTP: string, characterSet: string): string => {
+    const randomNumberArray = webcrypto.getRandomValues(new Uint32Array(1));
+    const randomIndex = Math.floor(randomNumberArray[0] * Math.pow(2, -32) * characterSet.length);
+    const newCharacter = characterSet[randomIndex];
+
+    return OTP.includes(newCharacter) ? generateOTPCharacter(OTP, characterSet) : newCharacter;
+};
+
+export const generateOTP = (length = 10): string => {
+    const allowedCharacters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    if (length > allowedCharacters.length) {
+        throw Error(
+            `OTP length cannot be greater than the alphanumeric character set used for generating it (${allowedCharacters.length})`
+        );
+    }
+
+    let OTP = '';
+
+    while (OTP.length < length) {
+        OTP += generateOTPCharacter(OTP, allowedCharacters);
+    }
+
+    return OTP;
+};
