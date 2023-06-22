@@ -11,6 +11,71 @@ resource "aws_s3_bucket_public_access_block" "image_bucket" {
 
 resource "aws_s3_bucket" "pdf_bucket" {
   bucket = "science-octopus-publishing-pdfs-${var.environment}"
+    acl    = "private"
+}
+
+locals {
+  buckets = [aws_s3_bucket.pdf_bucket, aws_s3_bucket.image_bucket]
+}
+
+data "aws_iam_policy_document" "allow_public_access" {
+  
+  for_each = {for idx, bucket in local.buckets: idx => bucket}
+  statement {
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "${each.value.arn}/*",
+    ]
+  }
+}
+
+resource "aws_s3_bucket_policy" "allow_public_access" {
+  for_each = {for idx, bucket in local.buckets: idx => bucket}
+  bucket = each.value.id
+  policy = data.aws_iam_policy_document.allow_public_access[each.key].json
+}
+
+resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
+  bucket = "email_forwarding_bucket"
+  acl    = "private"
+
+  policy = <<EOF
+{  
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowSESPuts",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ses.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.my_bucket.arn}/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:Referer": "${var.aws_account_id}"
+        }        
+      }
+    }
+  ]
+}
+EOF
+}
+
+provider "aws" {
+  region = "YOUR_AWS_REGION"
+}
+
+resource "aws_s3_bucket" "pdf_bucket" {
+  bucket = "science-octopus-publishing-pdfs-prod"
   acl    = "private"
 }
 
@@ -68,7 +133,7 @@ resource "aws_lambda_permission" "s3_trigger_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.pdf_processing_lambda.arn
   principal     = "s3.amazonaws.com"
-  
+
   source_arn = aws_s3_bucket.pdf_bucket.arn
 }
 
