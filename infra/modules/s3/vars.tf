@@ -2,7 +2,7 @@ variable "environment" {
   type = string
 }
 
-variable "pdf_router_failure_channel" {
+variable "pub_router_failure_channel" {
   type = string
 }
 
