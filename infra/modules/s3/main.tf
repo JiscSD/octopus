@@ -77,15 +77,6 @@ resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
 EOF
 }
 
-provider "aws" {
-  region = "YOUR_AWS_REGION"
-}
-
-resource "aws_s3_bucket" "pdf_bucket" {
-  bucket = "science-octopus-publishing-pdfs-prod"
-  acl    = "private"
-}
-
 resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "pdf_processing_lambda.zip"
   function_name = "pdf_processing_lambda"
