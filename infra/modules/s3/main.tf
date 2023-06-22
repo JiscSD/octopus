@@ -83,7 +83,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
     variables = {
       AWS_REGION             = "eu-west-1"
       EMAIL_RECIPIENT        = var.pub_router_failure_channel
-      PUBROUTER_API_KEY       = var.pubrouter_api_key
+      PUBROUTER_API_KEY       = var.pub_router_api_key
       ENVIRONMENT          = var.environment
     }
   }
