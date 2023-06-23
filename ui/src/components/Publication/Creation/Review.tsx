@@ -1,13 +1,13 @@
 import React from 'react';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 
 const CompletedIcon = () => (
-    <OutlineIcons.BadgeCheckIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-teal-500 transition-colors duration-500 dark:bg-grey-800" />
+    <OutlineIcons.CheckBadgeIcon className="absolute right-1 top-1 z-10 h-6 w-6 bg-teal-50 text-teal-500 transition-colors duration-500 dark:bg-grey-800" />
 );
 
 const IncompleteIcon = () => (

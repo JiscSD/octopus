@@ -4,7 +4,7 @@ import Image from 'next/image';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 type Props = {
     waves: boolean;
@@ -41,7 +41,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         <Assets.Twitter width={25} height={25} className="fill-white-50" />
                     </Components.Link>
                     <Components.Link href="mailto:help@jisc.ac.uk" openNew={true} ariaLabel="Email" className="h-fit">
-                        <SolidIcons.MailIcon width={26} height={26} className="fill-white-50" />
+                        <SolidIcons.EnvelopeIcon width={26} height={26} className="fill-white-50" />
                     </Components.Link>
                 </div>
                 {/* contact us section */}

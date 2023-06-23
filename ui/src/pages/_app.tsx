@@ -13,13 +13,17 @@ import * as Hooks from '@hooks';
 
 import '../styles/globals.css';
 
-const App = ({ Component, pageProps }: Types.AppProps) => {
+type CustomProps = {
+    protectedPage?: boolean;
+};
+
+const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
     const [mounted, setMounted] = useState(false);
     const { user } = Stores.useAuthStore();
     const { darkMode } = Stores.usePreferencesStore();
 
     // check authentication client side
-    Hooks.useAuthCheck(Boolean(pageProps.protectedPage));
+    Hooks.useAuthCheck(pageProps.protectedPage || false);
 
     // matomo tracking
     Hooks.useMatomoNext();

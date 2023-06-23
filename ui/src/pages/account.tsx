@@ -12,14 +12,11 @@ import * as Types from '@types';
 import * as api from '@api';
 import * as Assets from '@assets';
 import * as Contexts from '@contexts';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@stores';
 import * as Framer from 'framer-motion';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const decodedJWT = await Helpers.guardPrivateRoute(context);
-    // If logged in, grab the token from cookies
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
@@ -28,7 +25,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch the current user
     try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}`, token);
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}`, token);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -42,7 +39,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
      */
 
     try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}/publications?limit=999`, token);
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token);
         userPublications = response.data.results;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -56,7 +53,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     user: Interfaces.User;
@@ -87,7 +84,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation(
             'Are you sure?',
             "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
-            <OutlineIcons.UserRemoveIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
+            <OutlineIcons.UserMinusIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
             'Yes',
             'No'
         );
@@ -177,7 +174,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Button
                             disabled={isRevokingAccess}
                             endIcon={
-                                <OutlineIcons.UserRemoveIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
+                                <OutlineIcons.UserMinusIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
                             }
                             title="Revoke ORCID Access"
                             onClick={handleRevokeAccess}

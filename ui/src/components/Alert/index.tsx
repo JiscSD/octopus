@@ -1,6 +1,6 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Types from '@types';
@@ -33,7 +33,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 title = 'text-grey-800';
                 details = 'text-grey-700';
                 icon = (
-                    <OutlineIcons.ExclamationIcon
+                    <OutlineIcons.ExclamationTriangleIcon
                         className="text h-5 w-5 text-grey-800 transition-colors duration-500"
                         aria-hidden="true"
                     />

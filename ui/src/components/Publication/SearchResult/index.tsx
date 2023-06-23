@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';

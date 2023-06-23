@@ -1,8 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
-
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -11,10 +10,7 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // prevent unauthenticated users to access this page
-    await Helpers.guardPrivateRoute(context);
-
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const { for: publicationForID = null, type: publicationType = null } = context.query;
 
     return {
@@ -24,9 +20,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             protectedPage: true
         }
     };
-};
+});
 
-const SupportText: React.FC = (props): React.ReactElement => (
+const SupportText: React.FC<React.PropsWithChildren> = (props): React.ReactElement => (
     <span className="mb-3 block w-full text-sm text-grey-700 transition-colors duration-500 dark:text-white-100 xl:w-1/2">
         {props.children}
     </span>
@@ -214,7 +210,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         disabled={!publicationType || !title.length || !confirmed}
                         onClick={createPublication}
                         endIcon={
-                            <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.ArrowSmallRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />
                 </section>

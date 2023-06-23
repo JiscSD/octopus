@@ -6,3 +6,16 @@
 import '@testing-library/jest-dom/extend-expect';
 // needed for 'fetch'
 import 'next';
+
+import { TextEncoder, TextDecoder } from 'util';
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
+// IntersectionObserver isn't available in test environment
+global.IntersectionObserver = function () {
+    return {
+        observe: () => null,
+        unobserve: () => null,
+        disconnect: () => null
+    };
+};

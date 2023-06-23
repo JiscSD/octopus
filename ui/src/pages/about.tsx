@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
@@ -27,7 +27,7 @@ const CardItem: React.FC<CardItemProps> = (props): React.ReactElement => (
 );
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
@@ -104,7 +104,7 @@ const About: NextPage = (): React.ReactElement => (
                     <CardItem
                         title="Free and fast"
                         content="We believe that new ideas and findings should be shared as quickly and accessibly as possible, and that primary research, including data and code should not be locked behind paywalls. On Octopus, researchers can put their work into the research record quickly, easily and in full. Researchers then have no need to worry about ‘being scooped’ as they can establish priority immediately. Others can use or build on the research quickly. Research of all types can be recorded, without barriers or editorial gatekeepers."
-                        icon={<OutlineIcons.LightningBoltIcon className="h-8 w-8 text-teal-500" />}
+                        icon={<OutlineIcons.BoltIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
                         title="Emphasis on quality"
@@ -119,7 +119,7 @@ const About: NextPage = (): React.ReactElement => (
                     <CardItem
                         title="Find relevant work"
                         content="All publications in Octopus are linked, forming branching chains. You can browse these links from each publication page to discover new content, while authors can identify potential collaborations working on related projects. Institutions and funders can also view all the research recorded by their researchers."
-                        icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
+                        icon={<OutlineIcons.MagnifyingGlassIcon className="h-8 w-8 text-teal-500" />}
                     />
                 </div>
             </PageSection>
@@ -196,7 +196,7 @@ const About: NextPage = (): React.ReactElement => (
                         <Components.ActionCard
                             title="Browse publications"
                             content="Every publication in Octopus is linked to another, forming branching chains of research. You can navigate these chains from every publication page to browse areas of research and discover something new."
-                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            icon={<OutlineIcons.ComputerDesktopIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.browsePublications.path}
                             linkText="Browse publications"
                         />
