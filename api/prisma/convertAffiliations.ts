@@ -27,20 +27,16 @@ const updateAffiliationFormat = async (affiliations: I.LegacyAffiliation[], user
                 id,
                 affiliationType: "misc." as const,
                 title: affiliation.name,
-                departmentName: null,
-                startDate: null,
-                endDate: null,
                 organization: {
                     name: affiliation.name,
                     address: {
                         city: affiliation.city,
-                        region: null,
                         country: affiliation.country
                     },
                     'disambiguated-organization': affiliation.ror ? {
                         'disambiguated-organization-identifier': affiliation.ror,
                         'disambiguation-source': 'ROR'
-                    } : null,
+                    } : undefined,
                 },
                 createdAt: now,
                 updatedAt: now,
