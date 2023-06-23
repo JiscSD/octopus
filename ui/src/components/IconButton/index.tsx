@@ -1,4 +1,4 @@
-import * as Components from '@components';
+import React from 'react';
 
 type IconButtonProps = {
     className?: string;

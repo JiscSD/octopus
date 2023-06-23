@@ -1,5 +1,5 @@
 import React from 'react';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as Components from '@components';
 

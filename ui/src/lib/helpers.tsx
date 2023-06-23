@@ -1,7 +1,5 @@
-import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import fileDownload from 'js-file-download';
 import JWT from 'jsonwebtoken';
 
 import * as luxon from 'luxon';
@@ -180,46 +178,6 @@ export const getDecodedUserToken = async (token: string) => {
 };
 
 /**
- * @description For use in NextJS SSR, check cookies for token & set the response location
- */
-export const guardPrivateRoute = async (context: Types.GetServerSidePropsContext): Promise<Types.UserType> => {
-    const token = getJWT(context);
-    const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
-
-    const redirectToORCIDLogin = () => {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${redirectTo}`
-        });
-
-        context.res.end();
-    };
-
-    if (!token) {
-        redirectToORCIDLogin();
-        return {} as Types.UserType;
-    }
-
-    const decodedToken = await getDecodedUserToken(token);
-
-    if (!decodedToken) {
-        redirectToORCIDLogin();
-    } else {
-        const { email } = decodedToken; // check user email
-        const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
-
-        // Only allow users with a verified email to access guarded routes
-        if (!email && !isVerifyEmailPage) {
-            context.res.writeHead(302, {
-                Location: `${Config.urls.verify.path}?state=${redirectTo}`
-            });
-            context.res.end();
-        }
-    }
-
-    return decodedToken as Types.UserType;
-};
-
-/**
  * @description todo
  */
 export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
@@ -280,8 +238,12 @@ export const blobFileDownload = async (url: string, fileName: string) => {
         responseType: 'blob'
     });
 
-    // @ts-ignore
-    fileDownload(res.data, fileName);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(res.data);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
 };
 
 export const getBase64FromFile = async (file: Blob): Promise<string> =>
@@ -404,4 +366,88 @@ export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffili
         ),
         ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
     ];
+};
+
+export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    fn: F,
+    wait: number,
+    { maxWait }: { maxWait?: number } = {}
+) => {
+    let timeout: NodeJS.Timeout;
+    let maxTimeout: NodeJS.Timeout | null;
+
+    const debounced = (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (maxTimeout) {
+                clearTimeout(maxTimeout);
+                maxTimeout = null;
+            }
+            fn(...args);
+        }, wait);
+
+        if (maxWait && !maxTimeout) {
+            maxTimeout = setTimeout(() => {
+                clearTimeout(timeout);
+                maxTimeout = null;
+                fn(...args);
+            }, maxWait);
+        }
+    };
+
+    return debounced;
+};
+
+/**
+ * @description 'getServerSideProps' wrapper for protected routes
+ */
+
+export const withServerSession = (
+    callback: (
+        context: Types.GetServerSidePropsContext,
+        currentUser: Types.UserType
+    ) => Promise<Types.GetServerSidePropsResult<{}>>
+) => {
+    return async function (context: Types.GetServerSidePropsContext): Promise<Types.GetServerSidePropsResult<{}>> {
+        const token = getJWT(context);
+        const { resolvedUrl } = context;
+
+        if (!token) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const decodedToken = await getDecodedUserToken(token);
+
+        if (!decodedToken) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const { email } = decodedToken;
+        const isVerifyEmailPage = resolvedUrl.startsWith(Config.urls.verify.path);
+
+        // Only allow users with a verified email to access protected routes
+        if (!email && !isVerifyEmailPage) {
+            // redirect to /verify page
+            return {
+                redirect: {
+                    destination: `${Config.urls.verify.path}?state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        return callback(context, decodedToken);
+    };
 };

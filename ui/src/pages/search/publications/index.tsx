@@ -1,11 +1,10 @@
 import React from 'react';
 import useSWR from 'swr';
-import moment from 'moment';
 import Head from 'next/head';
 
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -74,14 +73,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
-    const dateFromFormatted = moment.utc(dateFrom);
-    const dateToFormatted = moment.utc(dateTo);
+    const dateFromFormatted = new Date(dateFrom || '');
+    const dateToFormatted = new Date(dateTo || '');
 
     const swrKey = `/${searchType}?search=${encodeURIComponent(
         (Array.isArray(query) ? query[0] : query) || ''
     )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''
-    }${dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''}`;
+        dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
+    }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
 
     return {
         props: {
@@ -126,14 +125,14 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    const dateFromFormatted = moment.utc(dateFrom);
-    const dateToFormatted = moment.utc(dateTo);
+    const dateFromFormatted = new Date(dateFrom || '');
+    const dateToFormatted = new Date(dateTo || '');
 
     const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${publicationTypes}&limit=${
         limit || '10'
-    }&offset=${offset || '0'}${dateFromFormatted.isValid() ? `&dateFrom=${dateFromFormatted.format()}` : ''}${
-        dateToFormatted.isValid() ? `&dateTo=${dateToFormatted.format()}` : ''
-    }`;
+    }&offset=${offset || '0'}${
+        dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
+    }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
 
     const { data: results = [], error, isValidating } = useSWR(swrKey);
 
@@ -304,7 +303,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
-                                    <SolidIcons.SearchIcon className="h-6 w-6 text-teal-500" />
+                                    <SolidIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500" />
                                 </button>
                             </label>
                         </form>

@@ -1,6 +1,6 @@
 import React from 'react';
-import * as CodeBlock from '@atlaskit/code';
-import GlobalTheme from '@atlaskit/theme/components';
+// import * as CodeBlock from '@atlaskit/code';
+// import GlobalTheme from '@atlaskit/theme/components';
 
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
@@ -49,7 +49,7 @@ const DocumentationSection: React.FC<SectionProps> = (props): React.ReactElement
             </article>
             <div className="col-span-1 rounded-2xl">
                 <div className="sticky top-28">
-                    <GlobalTheme.Provider value={() => ({ mode: darkMode ? 'dark' : 'light' })}>
+                    {/* <GlobalTheme.Provider value={() => ({ mode: darkMode ? 'dark' : 'light' })}>
                         <p className="block rounded-t-xl bg-teal-200 px-3 py-2 text-xs font-medium tracking-wider text-grey-900 transition-colors duration-500 dark:bg-grey-600 dark:text-white-50">
                             <span>{props.entry.method}</span> {props.entry.endpoint}
                         </p>
@@ -70,7 +70,7 @@ const DocumentationSection: React.FC<SectionProps> = (props): React.ReactElement
                                 showLineNumbers={false}
                             />
                         </div>
-                    </GlobalTheme.Provider>
+                    </GlobalTheme.Provider> */}
                 </div>
             </div>
         </div>

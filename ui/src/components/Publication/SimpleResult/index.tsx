@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
@@ -27,9 +27,9 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                         } flex items-center gap-2 font-semibold leading-3 transition-colors duration-500`}
                     >
                         {props.publication.currentStatus === 'LIVE' ? (
-                            <OutlineIcons.ExternalLinkIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
+                            <OutlineIcons.ArrowTopRightOnSquareIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
                         ) : (
-                            <OutlineIcons.PencilAltIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
+                            <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem] leading-3 text-grey-600 dark:text-teal-500" />
                         )}
 
                         {status}

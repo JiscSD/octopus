@@ -73,6 +73,7 @@ module "s3" {
 module "ses" {
     source = "../modules/ses"
     environment = local.environment
+    email_addresses = var.email_addresses
 }
 
 module "sqs" {
