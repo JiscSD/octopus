@@ -121,15 +121,15 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         publisher: ["Octopus"],
         identifier: [
           {
-            type: "",
-            id: "",
+            type: "doi",
+            id: "https://doi.org/10.57874/OCTOPUS",
           },
         ],
       },
       article: {
         title: publication.title,
         type: publication.type,
-        version: "",
+        version: "VoR",
         language: publication.language,
         identifier: {
           type: "doi",
