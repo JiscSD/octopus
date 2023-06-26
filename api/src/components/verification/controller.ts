@@ -1,18 +1,18 @@
 import * as authorizationService from 'authorization/service';
-import cryptoRandomString from 'crypto-random-string';
 import * as I from 'interface';
 import * as email from 'lib/email';
 import * as response from 'lib/response';
 import * as luxon from 'luxon';
 import * as userService from 'user/service';
 import * as verificationService from 'verification/service';
+import * as helpers from 'lib/helpers';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = cryptoRandomString({ length: 7, type: 'distinguishable' });
+        const code = helpers.generateOTP(7);
 
         // store code with user orcid and email
         await verificationService.upsert({
