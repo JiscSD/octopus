@@ -79,7 +79,9 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       name: {
         firstname: author.firstName,
         surname: author.lastName,
-        fullname: `${author.lastName}, ${author.firstName}`,
+        fullname: `${author.lastName && author.lastName + ", "}${
+          author.firstName
+        }`,
       },
       identifier: [
         {

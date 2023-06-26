@@ -18,7 +18,6 @@ resource "aws_s3_bucket_public_access_block" "image_bucket" {
 
 resource "aws_s3_bucket" "pdf_bucket" {
   bucket = "science-octopus-publishing-pdfs-${var.environment}"
-    acl    = "private"
 }
 
 locals {
@@ -82,7 +81,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   function_name = "pdf_processing_lambda"
   role          = aws_iam_role.pdf_processing_lambda_role.arn
   handler       = "index.handler"
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs18.x"
 
   source_code_hash = filebase64sha256("pdf_processing_lambda.zip")
 
