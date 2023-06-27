@@ -33,7 +33,7 @@ resource "aws_cloudwatch_metric_alarm" "dlq-messages-sent-alarm" {
   alarm_actions             = [var.sns_arn]
 
   dimensions = {
-    QueueName = aws_sqs_queue.science-octopus-pdf-queue.name
+    QueueName = aws_sqs_queue.science-octopus-pdf-queue-dlq.name
   }
 
 }
