@@ -1,3 +1,10 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+    account_id = data.aws_caller_identity.current.account_id
+}
+
+
 resource "aws_ses_domain_identity" "octopus" {
   domain = "${var.environment}.octopus.ac"
 }
@@ -56,7 +63,7 @@ resource "aws_iam_policy" "inbound_email_policy" {
       ],
       "Resource": [
         "arn:aws:s3:::octopus-email-bucket/*",
-        "arn:aws:ses:eu-west-1:${var.aws_account_id}:identity/*"
+        "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
       ]
     }
   ]
@@ -76,25 +83,29 @@ resource "aws_lambda_function" "forward_mail" {
 
   environment {
     variables = {
-      MailS3Bucket   = "email_forwarding_bucket"
-      MailS3Prefix   = "email/${env.environment}/${each.key}"
+      MailS3Bucket   = "email-forwarding-${var.environment}"
+      MailS3Prefix   = "email/${each.key}"
       MailSender     = "octopus@octopus.ac"
       MailRecipients = join(",", each.value)
-      Region         = aws.region
+      Region         = providers.aws.region
     }
   }
 }
 
+resource "aws_ses_receipt_rule_set" "main" {
+  rule_set_name = "forward-${var.environment}-emails"
+}
+
 resource "aws_ses_receipt_rule" "s3_action_rule" {
-  for_each     = var.email_domains
-  rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
+  for_each     = var.email_addresses
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
   rule_name     = "s3-action-rule-${each.key}"
   enabled       = true
 
   actions {
     s3_action {
-      bucket_name       = "email_forwarding_bucket"
-      object_key_prefix = "email/${env.environment}/${each.key}"
+      bucket_name       = "email-forwarding-${var.environment}"
+      object_key_prefix = "email/${each.key}"
     }
   }
 
@@ -102,8 +113,8 @@ resource "aws_ses_receipt_rule" "s3_action_rule" {
 }
 
 resource "aws_ses_receipt_rule" "lambda_action_rule" {
-  for_each     = var.email_domains
-  rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
+  for_each     = var.email_addresses
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
   rule_name     = "lambda-action-rule-${each.key}"
   enabled       = true
 
