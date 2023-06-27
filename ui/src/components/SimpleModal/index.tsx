@@ -9,7 +9,7 @@ type Props = {
     cancelButtonText: string;
     title: string;
     subTitle?: string;
-    children?: React.ReactChildren | React.ReactChild[] | React.ReactChild;
+    children?: React.ReactNode;
 };
 
 const SimpleModal: React.FC<Props> = (props) => {

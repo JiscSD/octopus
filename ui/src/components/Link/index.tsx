@@ -7,9 +7,11 @@ type CustomProps = {
     ariaLabel?: string;
 };
 
-const CustomLink: React.FC<LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & CustomProps> = (
-    props
-): React.ReactElement => {
+type Props = LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & CustomProps;
+
+type LinkRef = HTMLAnchorElement;
+
+const CustomLink = React.forwardRef<LinkRef, Props>((props, ref) => {
     const { href, children, className, openNew, ariaLabel, ...rest } = props;
 
     if (openNew) {
@@ -33,6 +35,8 @@ const CustomLink: React.FC<LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElem
             </a>
         </Link>
     );
-};
+});
+
+CustomLink.displayName = 'CustomLink';
 
 export default CustomLink;

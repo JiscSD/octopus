@@ -59,7 +59,7 @@ const Nav: React.FC = (): React.ReactElement => {
                 dataTestId: 'username-button',
                 subItems: [
                     {
-                        label: 'My Profile',
+                        label: 'My Account',
                         value: Config.urls.account.path
                     },
                     {

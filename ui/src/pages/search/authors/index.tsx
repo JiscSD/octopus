@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -198,7 +198,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
-                                    <SolidIcons.SearchIcon className="h-6 w-6 text-teal-500" />
+                                    <SolidIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500" />
                                 </button>
                             </label>
                         </form>

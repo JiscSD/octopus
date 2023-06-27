@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
@@ -63,7 +63,7 @@ const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
                 onClick={onRemoveBookmarkHandler}
             >
                 {deleteLoading ? (
-                    <OutlineIcons.RefreshIcon className="h-8 w-8 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                    <OutlineIcons.ArrowPathIcon className="h-8 w-8 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                 ) : (
                     <OutlineIcons.XCircleIcon className="h-8 w-8 text-blue-700 transition duration-150 dark:text-blue-50" />
                 )}

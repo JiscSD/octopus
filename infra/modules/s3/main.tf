@@ -41,3 +41,30 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   bucket = each.value.id
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
+
+resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
+  bucket = "email_forwarding_bucket"
+  acl    = "private"
+
+  policy = <<EOF
+{  
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowSESPuts",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ses.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.my_bucket.arn}/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:Referer": "${var.aws_account_id}"
+        }        
+      }
+    }
+  ]
+}
+EOF
+}

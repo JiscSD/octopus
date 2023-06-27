@@ -1,6 +1,6 @@
 import React from 'react';
 import * as HeadlessUi from '@headlessui/react';
-import * as SolidIcon from '@heroicons/react/solid';
+import * as SolidIcon from '@heroicons/react/24/solid';
 import * as tiptap from '@tiptap/react';
 import * as FAIcons from 'react-icons/fa';
 import * as api from '@api';
@@ -307,7 +307,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
                                 <span className="block truncate">{selected.name}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                    <SolidIcon.SelectorIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
+                                    <SolidIcon.ChevronUpDownIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
                                 </span>
                             </HeadlessUi.Listbox.Button>
                             <HeadlessUi.Transition

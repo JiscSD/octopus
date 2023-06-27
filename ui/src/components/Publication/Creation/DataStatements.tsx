@@ -1,6 +1,6 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -229,7 +229,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                 <Components.Button
                     title="Clear selection"
                     disabled={!dataAccessStatement}
-                    startIcon={<OutlineIcons.XIcon className="h-4 w-4" />}
+                    startIcon={<OutlineIcons.XMarkIcon className="h-4 w-4" />}
                     onClick={() => {
                         setDataAccessStatementOther('');
                         updateDataAccessStatement(null);

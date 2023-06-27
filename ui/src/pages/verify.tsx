@@ -9,26 +9,19 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as HeadlessUI from '@headlessui/react';
 import * as Helpers from '@helpers';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // prevent unauthenticated users to access this page
-    const decodedToken = await Helpers.guardPrivateRoute(context);
-    const homeUrl = encodeURIComponent(Config.urls.home.path);
-    const { state: redirectTo = homeUrl } = context.query;
-
-    return {
-        props: {
-            redirectTo,
-            newUser: !decodedToken?.email, // new users don't have an email yet
-            protectedPage: true
-        }
-    };
-};
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => ({
+    props: {
+        redirectTo: context.query.state || encodeURIComponent(Config.urls.home.path),
+        newUser: !currentUser.email, // new users don't have an email yet
+        protectedPage: true
+    }
+}));
 
 type Props = {
     redirectTo: string;
@@ -80,7 +73,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 visible: true,
                 dismiss: true,
                 title: 'Email sent',
-                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                icon: <OutlineIcons.EnvelopeIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                 message: 'Please check your inbox for your verification code.'
             });
         } catch (err) {
@@ -89,7 +82,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 visible: true,
                 dismiss: true,
                 title: 'Unable to send verification email',
-                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                icon: <OutlineIcons.EnvelopeIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                 message: 'Please check your email address and try again.'
             });
         }
@@ -175,7 +168,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.BadgeCheckIcon className="h-5 w-5 text-green-400" />
+                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
                                 Your ORCID iD
                             </span>
                             <input
@@ -188,7 +181,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         </label>
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.BadgeCheckIcon className="h-5 w-5 text-green-400" />
+                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
                                 Your name
                             </span>
                             <input
@@ -241,7 +234,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="justify-self-end px-0"
                                 />
                                 {loading && (
-                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 )}
                             </span>
                         </HeadlessUI.Transition>
@@ -287,7 +280,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 </HeadlessUI.Transition>
                                 <HeadlessUI.Transition
                                     show={success}
@@ -298,7 +291,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
+                                    <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
                                 </HeadlessUI.Transition>
                             </span>
                             <div className="mt-4 text-xs font-medium leading-relaxed text-grey-500 transition-colors duration-500 dark:text-grey-300">

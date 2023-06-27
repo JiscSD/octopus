@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Config from '@config';
@@ -64,7 +64,7 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
                             className="p-2"
                             title="Refresh"
                             icon={
-                                <OutlineIcons.RefreshIcon
+                                <OutlineIcons.ArrowPathIcon
                                     className="ml-6 h-full w-7 animate-reverse-spin justify-center align-middle text-teal-600 transition-colors duration-500 dark:text-teal-400"
                                     aria-hidden="true"
                                     aria-label="Loading ror data"
@@ -93,7 +93,7 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
 const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
     if (props.loading) {
         return (
-            <OutlineIcons.RefreshIcon
+            <OutlineIcons.ArrowPathIcon
                 className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"
                 aria-hidden="true"
                 aria-label="Loading ror data"
@@ -153,7 +153,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
     const [rorLoading, setRorLoading] = React.useState(false);
     const [rorError, setRorError] = React.useState(false);
 
-    const getRorData = React.useCallback(async (value) => {
+    const getRorData = React.useCallback(async (value: string) => {
         const actualRor = value.split('/')[value.split('/').length - 1];
         setRor(value);
         setRorLoading(true);
@@ -256,7 +256,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                             onClick={onSubmitHandler}
                             endIcon={
                                 submitLoading ? (
-                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (
                                     <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 )
@@ -342,7 +342,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                             onClick={onSubmitHandler}
                             endIcon={
                                 submitLoading ? (
-                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (
                                     <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 )

@@ -4,7 +4,7 @@ import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 type Props = {
     publication: Interfaces.Publication;
@@ -169,7 +169,7 @@ const ActionBar: React.FC<Props> = (props) => {
                     <Components.Button
                         className="inline-flex max-w-fit items-center rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
                         disabled={!props.isReadyForPublish || props.isPublishing}
-                        endIcon={<OutlineIcons.CloudUploadIcon className="w-5 shrink-0 text-white-50" />}
+                        endIcon={<OutlineIcons.CloudArrowUpIcon className="w-5 shrink-0 text-white-50" />}
                         title="Publish"
                         onClick={props.onPublish}
                     >
@@ -178,7 +178,7 @@ const ActionBar: React.FC<Props> = (props) => {
                 ) : isApproved ? (
                     <Components.Button
                         className="inline-flex max-w-fit items-center rounded border-2 border-transparent bg-red-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
-                        endIcon={<OutlineIcons.XIcon className="w-5 shrink-0 text-white-50" />}
+                        endIcon={<OutlineIcons.XMarkIcon className="w-5 shrink-0 text-white-50" />}
                         title="Cancel your approval"
                         onClick={props.onCancelApproval}
                     >

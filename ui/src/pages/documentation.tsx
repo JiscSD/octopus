@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 import * as Components from '@components';
-import * as Docs from '@documentation';
+// import * as Docs from '@documentation';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -20,7 +20,7 @@ const Documentation: Types.NextPage = (): React.ReactElement => (
                 <Components.PageTitle text="Documentation" />
             </section>
             <section className="container mx-auto mb-8 px-8">
-                <Components.DocumentationSection entry={Docs.Publications[0]} />
+                {/* <Components.DocumentationSection entry={Docs.Publications[0]} /> */}
             </section>
         </Layouts.Standard>
     </>

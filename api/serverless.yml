@@ -15,7 +15,7 @@ plugins:
 provider:
     name: aws
     timeout: 30
-    runtime: nodejs14.x
+    runtime: nodejs18.x
     region: eu-west-1
     stage: ${opt:stage, 'local'}
     vpc:
@@ -49,6 +49,7 @@ provider:
         LIST_USERS_API_KEY: ${ssm:/list_users_api_key_${self:provider.stage}_octopus}
         QUEUE_URL: ${ssm:/queue_url_${self:provider.stage}_octopus}
         SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}_octopus}
+        MAIL_SERVER: ${ssm:/mail_server_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -124,6 +125,7 @@ custom:
             /list_users_api_key_local_octopus: ${env:LIST_USERS_API_KEY}
             /queue_url_local_octopus: ${env:QUEUE_URL}
             /sqs_endpoint_local_octopus: ${env:SQS_ENDPOINT}
+            /mail_server_local_octopus: ${env:MAIL_SERVER}
     prune:
         automatic: true
         number: 3

@@ -5,7 +5,7 @@ import * as Components from '@components';
 
 type GridItemProps = {
     title: string;
-    children: React.ReactChildren | React.ReactChild;
+    children: React.ReactNode;
 };
 
 const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => (
