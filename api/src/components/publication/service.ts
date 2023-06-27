@@ -7,6 +7,8 @@ import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
 import { Browser } from 'puppeteer-core';
 
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
         where: {
@@ -742,6 +744,8 @@ export const getLinksForPublication = async (id: string) => {
 export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
     const references = await referenceService.getAllByPublication(publication.id);
     const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+    const s3Endpoint =
+        process.env.STAGE === 'local' ? process.env.LOCALSTACK_SERVER : 'https://s3.eu-west-1.amazonaws.com';
 
     let browser: Browser | null = null;
 
@@ -767,16 +771,16 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
         });
 
         // upload pdf to S3
-        await s3
-            .putObject({
+        await s3.send(
+            new PutObjectCommand({
                 Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
                 Key: `${publication.id}.pdf`,
                 ContentType: 'application/pdf',
                 Body: pdf
             })
-            .promise();
+        );
 
-        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+        return `${s3Endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
     } catch (err) {
         console.error(err);
 
