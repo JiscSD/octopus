@@ -38,50 +38,63 @@ resource "aws_route53_record" "dkim_record" {
   records = ["${element(aws_ses_domain_dkim.octopus.dkim_tokens, count.index)}.dkim.amazonses.com"]
 }
 
+resource "aws_iam_role" "inbound_email_role" {
+  name        = "inbound_email_role"
+  description = "IAM role for managing inbound emails"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      },
+    ]
+  })
 
-resource "aws_iam_policy" "inbound_email_policy" {
-  name        = "inbound_email_policy"
-  description = "IAM policy for managing inbound emails"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "VisualEditor0",
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogStream",
-        "logs:CreateLogGroup",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Sid": "VisualEditor1",
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "ses:SendRawEmail"
-      ],
-      "Resource": [
-        "arn:aws:s3:::octopus-email-bucket/*",
-        "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
+  inline_policy { 
+    name = "inbound_email_role_policy"
+    policy = jsonencode ({
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "VisualEditor0",
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogStream",
+            "logs:CreateLogGroup",
+            "logs:PutLogEvents"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "VisualEditor1",
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "ses:SendRawEmail"
+          ],
+          "Resource": [
+            "arn:aws:s3:::octopus-email-bucket/*",
+            "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
+          ]
+        }
       ]
-    }
-  ]
-}
-EOF
+  })
+  }
 }
 
 resource "aws_lambda_function" "forward_mail" {
   for_each         = var.email_addresses
-  function_name    = "forward_mail_${var.environment}_${each.key}"
+  function_name    = "mail-${var.environment}-${replace(each.key, "/@|\\./", "-")}"
   handler          = "index.lambda_handler"
   runtime          = "python3.8"
   filename         = "forward_mail.zip"
-  source_code_hash = filebase64sha256("forward_mail.zip")
-  role             = aws_iam_role.inbound_email_policy.arn
+  source_code_hash = filebase64sha256("${path.module}/forward-mail.zip")
+  role             = aws_iam_role.inbound_email_role.arn
   timeout          = 30
 
   environment {
@@ -101,31 +114,31 @@ resource "aws_ses_receipt_rule_set" "main" {
 
 resource "aws_ses_receipt_rule" "s3_action_rule" {
   for_each     = var.email_addresses
-  rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
-  rule_name     = "s3-action-rule-${each.key}"
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+  name     = "s3-action-rule-${replace(each.key, "/@|\\./", "-")}"
   enabled       = true
 
-  actions {
-    s3_action {
-      bucket_name       = "email-forwarding-${var.environment}"
-      object_key_prefix = "email/${each.key}"
-    }
+  s3_action {
+    bucket_name       = "email-forwarding-${var.environment}"
+    object_key_prefix = "email/${each.key}"
+    position        = 1
   }
+  
 
   recipients = [each.key]
 }
 
 resource "aws_ses_receipt_rule" "lambda_action_rule" {
   for_each     = var.email_addresses
-  rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
-  rule_name     = "lambda-action-rule-${each.key}"
+  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
+  name     = "lambda-action-rule-${replace(each.key, "/@|\\./", "-")}"
   enabled       = true
 
-  actions {
-    lambda_action {
-      function_arn     = aws_lambda_function.forward_mail[each.key].arn
-      invocation_type = "Event"
-    }
+
+  lambda_action {
+    function_arn     = aws_lambda_function.forward_mail[each.key].arn
+    invocation_type = "Event"
+    position        = 1
   }
 
   recipients = [each.key]
