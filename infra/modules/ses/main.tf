@@ -86,7 +86,7 @@ resource "aws_lambda_function" "forward_mail" {
 }
 
 resource "aws_ses_receipt_rule" "s3_action_rule" {
-  for_each     = var.email_domains
+  for_each     = var.email_addresses
   rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
   rule_name     = "s3-action-rule-${each.key}"
   enabled       = true
@@ -102,7 +102,7 @@ resource "aws_ses_receipt_rule" "s3_action_rule" {
 }
 
 resource "aws_ses_receipt_rule" "lambda_action_rule" {
-  for_each     = var.email_domains
+  for_each     = var.email_addresses
   rule_set_name = aws_ses_receipt_rule_set.example.rule_set_name
   rule_name     = "lambda-action-rule-${each.key}"
   enabled       = true
