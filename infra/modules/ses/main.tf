@@ -65,8 +65,8 @@ EOF
 }
 
 resource "aws_lambda_function" "forward_mail" {
-  for_each         = var.email_domains
-  function_name    = "forward_mail_${each.key}"
+  for_each         = var.email_addresses
+  function_name    = "forward_mail_${var.environment}_${each.key}"
   handler          = "index.lambda_handler"
   runtime          = "python3.8"
   filename         = "forward_mail.zip"
@@ -77,10 +77,10 @@ resource "aws_lambda_function" "forward_mail" {
   environment {
     variables = {
       MailS3Bucket   = "email_forwarding_bucket"
-      MailS3Prefix   = var.mail_s3_prefix
+      MailS3Prefix   = "email/${env.environment}/${each.key}"
       MailSender     = "octopus@octopus.ac"
       MailRecipients = join(",", each.value)
-      Region         = var.region
+      Region         = aws.region
     }
   }
 }
@@ -94,7 +94,7 @@ resource "aws_ses_receipt_rule" "s3_action_rule" {
   actions {
     s3_action {
       bucket_name       = "email_forwarding_bucket"
-      object_key_prefix = "emails/"
+      object_key_prefix = "email/${env.environment}/${each.key}"
     }
   }
 
