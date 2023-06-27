@@ -15,7 +15,7 @@ import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios';
 
 const completenessIcons: { [key in Types.TabCompletionStatus]: React.ReactElement } = {
-    COMPLETE: <OutlineIcons.BadgeCheckIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
+    COMPLETE: <OutlineIcons.CheckBadgeIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
     INCOMPLETE: (
         <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-yellow-400 transition-colors duration-500" />
     )
