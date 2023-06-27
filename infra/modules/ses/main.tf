@@ -1,5 +1,8 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "default" {}
+
+
 locals {
     account_id = data.aws_caller_identity.current.account_id
 }
@@ -87,7 +90,7 @@ resource "aws_lambda_function" "forward_mail" {
       MailS3Prefix   = "email/${each.key}"
       MailSender     = "octopus@octopus.ac"
       MailRecipients = join(",", each.value)
-      Region         = providers.aws.region
+      Region         = data.aws_region.default.name
     }
   }
 }
