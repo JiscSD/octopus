@@ -63,7 +63,7 @@ resource "aws_s3_bucket_public_access_block" "email_forwarding_bucket" {
 
 
 resource "aws_s3_bucket_policy" "email_forwarding_bucket" {
-  bucket = "email_forwarding_bucket"
+  bucket = aws_s3_bucket.email_forwarding_bucket.id
 
   policy = <<EOF
 {  
@@ -76,7 +76,7 @@ resource "aws_s3_bucket_policy" "email_forwarding_bucket" {
         "Service": "ses.amazonaws.com"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.email_forwarding_bucket.arn}/*",
+      "Resource": "${aws_s3_bucket.email_forwarding_bucket.arn}/*",
       "Condition": {
         "StringEquals": {
           "aws:Referer": "${local.account_id}"
