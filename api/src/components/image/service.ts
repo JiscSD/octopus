@@ -16,17 +16,15 @@ export const createDBReference = async (name: string, extension: I.ImageExtensio
 };
 
 export const uploadToS3 = async (id: string, image: string, imageType: I.ImageExtension) => {
-    const putObjectParams = {
-        Bucket: `science-octopus-publishing-images-${process.env.STAGE}`,
-        Key: id,
-        ContentType: `image/${imageType}`,
-        ContentEncoding: 'base64',
-        Body: Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
-    };
-
-    const putObjectCommand = new PutObjectCommand(putObjectParams);
-
-    const s3Image = await s3.send(putObjectCommand);
+    const s3Image = await s3.send(
+        new PutObjectCommand({
+            Bucket: `science-octopus-publishing-images-${process.env.STAGE}`,
+            Key: id,
+            ContentType: `image/${imageType}`,
+            ContentEncoding: 'base64',
+            Body: Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
+        })
+    );
 
     return s3Image;
 };
