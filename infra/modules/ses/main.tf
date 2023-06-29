@@ -39,7 +39,7 @@ resource "aws_route53_record" "dkim_record" {
 }
 
 resource "aws_iam_role" "inbound_email_role" {
-  name        = "inbound_email_role"
+  name        = "inbound_email_role-${var.environment}"
   description = "IAM role for managing inbound emails"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

@@ -110,9 +110,7 @@ def send_email(message):
         #Provide the contents of the email.
         response = client_ses.send_raw_email(
             Source=message['Source'],
-            Destinations=[
-                message['Destinations']
-            ],
+            Destinations=message['Destinations'].split(","),
             RawMessage={
                 'Data':message['Data']
             }
