@@ -94,7 +94,7 @@ resource "aws_lambda_permission" "ses" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.forward_mail[each.key].function_name
   principal     = "ses.amazonaws.com"
-  source_arn    = "arn:aws:ses:eu-west-1:${local.account_id}:receipt-rule-set/forward-${var.environment}-emails:receipt-rule/lambda-action-rule-${replace(each.key, "/@|\\./", "-")}"
+  source_arn    = "arn:aws:ses:eu-west-1:${local.account_id}:receipt-rule-set/forward-${var.environment}-emails:receipt-rule/action-rule-${replace(each.key, "/@|\\./", "-")}"
 }
 
 
@@ -123,34 +123,27 @@ resource "aws_ses_receipt_rule_set" "main" {
   rule_set_name = "forward-${var.environment}-emails"
 }
 
-resource "aws_ses_receipt_rule" "s3_action_rule" {
-  for_each     = var.email_addresses
+resource "aws_ses_receipt_rule" "action_rule" {
+  depends_on    = [aws_lambda_permission.ses]
+  for_each      = var.email_addresses
+
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  name     = "s3-action-rule-${replace(each.key, "/@|\\./", "-")}"
+  name          = "action-rule-${replace(each.key, "/@|\\./", "-")}"
   enabled       = true
 
   s3_action {
     bucket_name       = "email-forwarding-${var.environment}"
     object_key_prefix = "email/${each.key}"
-    position        = (index(keys(var.email_addresses),each.key)) * 2 + 1
+    position        = 1
   }
   
-
-  recipients = [each.key]
-}
-
-resource "aws_ses_receipt_rule" "lambda_action_rule" {
-  for_each     = var.email_addresses
-  rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  name     = "lambda-action-rule-${replace(each.key, "/@|\\./", "-")}"
-  enabled       = true
-
-
-  lambda_action {
+    lambda_action {
     function_arn     = aws_lambda_function.forward_mail[each.key].arn
     invocation_type = "Event"
-    position = (index(keys(var.email_addresses), each.key)+1) * 2
+    position =  2
   }
 
   recipients = [each.key]
 }
+
+
