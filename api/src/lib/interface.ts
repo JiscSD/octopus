@@ -55,7 +55,7 @@ export interface OptionalAuthenticatedAPIRequest<
 
 export interface JSONResponse {
     body?: string;
-    headers: any;
+    headers: unknown;
     statusCode: number;
 }
 
@@ -677,7 +677,8 @@ export interface MappedOrcidAffiliation {
         | 'distinction'
         | 'employment'
         | 'education'
-        | 'qualification';
+        | 'qualification'
+        | 'misc.';
     title?: string;
     departmentName?: string;
     startDate?: OrcidAffiliationDate;
@@ -687,6 +688,15 @@ export interface MappedOrcidAffiliation {
     updatedAt: number;
     source: { name: string; orcid: string };
     url?: string;
+}
+
+export interface LegacyAffiliation {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror: string | null;
+    id: string;
 }
 
 export interface UserEmployment {
