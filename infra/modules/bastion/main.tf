@@ -1,6 +1,6 @@
 resource "aws_eip" "elastic_ip" {
-  domain = "vpc"
-  tags   =  {
+  vpc  = true
+  tags =  {
     Name = "bastion_${var.environment}"
   }
 }
@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "allow_ssm_iam_policy" {
 }
 
 data "template_file" "user_data" {
-  template = file("./scripts/install-bastion-software.yaml")
+  template = file("${path.module}/scripts/install-bastion-software.yaml")
 }
 
 resource "aws_instance" "bastion" {
