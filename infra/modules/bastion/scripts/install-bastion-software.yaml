@@ -1,0 +1,12 @@
+#cloud-config
+
+packages:
+  - postgresql
+
+runcmd:
+  # Install NVM globally
+  - |
+    mkdir -p /opt/nvm
+    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | NVM_DIR=/opt/nvm bash
+    printf '\nexport NVM_DIR="/opt/nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"\n' >> /etc/bash.bashrc
+    printf 'cd' >> /etc/bash.bashrc
