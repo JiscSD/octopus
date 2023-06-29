@@ -553,7 +553,9 @@ const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
 };
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
-    await page.waitForResponse((res) => res.url().includes('/coauthors') && res.ok());
+    const responsePromise = page.waitForResponse((res) => res.url().includes('/coauthors') && res.ok());
+    await page.locator('aside button:has-text("Co-authors")').click();
+    await responsePromise;
     const row = page.locator('tr', { hasText: user.email });
     await row.locator('button[title="Delete"]').click();
 };
@@ -801,9 +803,9 @@ test.describe('Publication flow + co-authors', () => {
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
-        await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user3.shortName)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user1.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user2.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user3.shortName}")`)).toBeVisible();
         await page.close();
     });
 
@@ -901,7 +903,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user3);
@@ -989,8 +990,8 @@ test.describe('Publication flow + co-authors', () => {
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
-        await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user1.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user2.shortName}")`)).toBeVisible();
 
         // check authors order on the publication page
         await expect(page.locator('.author-name').first()).toContainText(Helpers.user2.shortName);
@@ -1048,7 +1049,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1120,7 +1120,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1186,7 +1185,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1457,9 +1455,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
-        // preview publication
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.previewButton).click()]);
-
         // check preview page
         await expect(page.getByText('This publication is locked for approval')).toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
@@ -1603,9 +1598,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.requestApprovalButton).click();
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
-
-        // preview publication
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.previewButton).click()]);
 
         // check preview page
         await expect(page.getByText('This publication is locked for approval')).toBeVisible();

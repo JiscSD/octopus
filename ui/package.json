@@ -59,7 +59,6 @@
         "react-icons": "^4.3.1",
         "react-xarrows": "^2.0.2",
         "swr": "^2.1.5",
-        "underscore": "^1.13.6",
         "zustand": "^4.3.8"
     },
     "devDependencies": {
