@@ -135,6 +135,8 @@ export const publicationFlowConflictOfInterest = async (
     conflictOfInterest: boolean,
     conflictOfInterestText?: string
 ) => {
+    await page.click("aside button:has-text('Conflict of interest')");
+
     // COI
     if (conflictOfInterest) {
         await page.locator(PageModel.publish.coi.true).click();
@@ -551,6 +553,9 @@ const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
 };
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
+    const responsePromise = page.waitForResponse((res) => res.url().includes('/coauthors') && res.ok());
+    await page.locator('aside button:has-text("Co-authors")').click();
+    await responsePromise;
     const row = page.locator('tr', { hasText: user.email });
     await row.locator('button[title="Delete"]').click();
 };
@@ -632,7 +637,7 @@ const rejectCoAuthorInvitation = async (
     // navigating to 'I am not an author link' will remove this co-author from the publication
     const page3 = await context.newPage();
     await page3.goto(invitationLink);
-    await page3.waitForLoadState('load');
+    await page3.waitForLoadState('networkidle');
 
     if (checkErrorMessage) {
         await expect(page3.locator(`h2.error-message-e2e`)).toHaveText(errorMessage);
@@ -798,9 +803,9 @@ test.describe('Publication flow + co-authors', () => {
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
-        await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user3.shortName)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user1.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user2.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user3.shortName}")`)).toBeVisible();
         await page.close();
     });
 
@@ -829,6 +834,9 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add one co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -874,6 +882,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user3);
@@ -892,7 +903,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user3);
@@ -937,6 +947,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
+
         // add co-authors
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -948,8 +961,11 @@ test.describe('Publication flow + co-authors', () => {
         // change the order of authors using the keyboard
         await page.locator('span[title="Drag to reorder authors"]').first().focus();
         await page.keyboard.press('Space'); // select first row
+        await page.waitForTimeout(100);
         await page.keyboard.press('ArrowDown'); // move it down
+        await page.waitForTimeout(100);
         await page.keyboard.press('Space'); // confirm position
+        await page.waitForTimeout(100);
 
         // verify authors order again
         await expect(page.locator('table > tbody > tr').first()).toContainText(Helpers.user2.email);
@@ -974,8 +990,8 @@ test.describe('Publication flow + co-authors', () => {
 
         // check publication title and authors
         await expect(page.locator(`h1:has-text("${publicationWithCoAuthors.title}")`)).toBeVisible();
-        await expect(page.getByText(Helpers.user1.shortName)).toBeVisible();
-        await expect(page.getByText(Helpers.user2.shortName)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user1.shortName}")`)).toBeVisible();
+        await expect(page.locator(`span.author-name:has-text("${Helpers.user2.shortName}")`)).toBeVisible();
 
         // check authors order on the publication page
         await expect(page.locator('.author-name').first()).toContainText(Helpers.user2.shortName);
@@ -1012,6 +1028,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1030,7 +1049,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1081,6 +1099,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1099,7 +1120,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1144,6 +1164,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1162,7 +1185,6 @@ test.describe('Publication flow + co-authors', () => {
 
         // Unlock publication
         await unlockPublication(page);
-        await page.locator('aside button:has-text("Co-authors")').click();
 
         // remove co-author from the publication
         await removeCoAuthor(page, Helpers.user2);
@@ -1213,6 +1235,9 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -1269,6 +1294,9 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -1338,6 +1366,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1401,6 +1432,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1420,9 +1454,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.requestApprovalButton).click();
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
-
-        // preview publication
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.previewButton).click()]);
 
         // check preview page
         await expect(page.getByText('This publication is locked for approval')).toBeVisible();
@@ -1483,6 +1514,9 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
@@ -1549,6 +1583,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1561,9 +1598,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.requestApprovalButton).click();
         await page.locator(PageModel.publish.confirmRequestApproval).click();
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
-
-        // preview publication
-        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.previewButton).click()]);
 
         // check preview page
         await expect(page.getByText('This publication is locked for approval')).toBeVisible();
@@ -1627,6 +1661,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1685,6 +1722,9 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
 
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
+
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
         await addCoAuthor(page, Helpers.user2);
@@ -1740,6 +1780,9 @@ test.describe('Publication flow + co-authors', () => {
         await (await page.waitForSelector("aside button:has-text('Main text')")).click();
         await page.locator(PageModel.publish.text.editor).click();
         await page.keyboard.type(publicationWithCoAuthors.content);
+
+        // confirm conflict of interest
+        await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
         await page.locator('aside button:has-text("Co-authors")').click();
