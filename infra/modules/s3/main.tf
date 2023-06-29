@@ -70,17 +70,16 @@ EOF
 }
 
 resource "aws_lambda_function" "pdf_processing_lambda" {
-  filename      = "pdf_processing_lambda.zip"
-  function_name = "pdf_processing_lambda"
+  filename      = "${path.module}/pdf-processing-lambda.zip"
+  function_name = "${var.environment}-pdf-processing-lambda"
   role          = aws_iam_role.pdf_processing_lambda_role.arn
-  handler       = "index.handler"
+  handler       = "lambda_function.lambda_handler"
   runtime       = "nodejs18.x"
-
-  source_code_hash = filebase64sha256("pdf_processing_lambda.zip")
+  source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
 
   environment {
     variables = {
-      AWS_REGION             = "eu-west-1"
+      AWS_REGION             = data.aws_region.default.name
       EMAIL_RECIPIENT        = var.pub_router_failure_channel
       PUBROUTER_API_KEY       = var.pub_router_api_key
       ENVIRONMENT          = var.environment
@@ -91,21 +90,19 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
 resource "aws_iam_role" "pdf_processing_lambda_role" {
   name = "pdf_processing_lambda_role"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_s3_policy" {
@@ -130,5 +127,5 @@ resource "aws_lambda_permission" "s3_trigger_permission" {
 data "archive_file" "pdf_processing_lambda_zip" {
   type        = "zip"
   source_dir  = "lambda"
-  output_path = "pdf_processing_lambda.zip"
+  output_path = "${path.module}/pdf-processing-lambda.zip"
 }

@@ -66,7 +66,7 @@ const sendFailureEmail = async (error, event, publicationId) => {
         Data: "A PubRouter delivery has failed.",
       },
     },
-    Source: "noreply@octopus.com",
+    Source: "octopus@mail.octopus.ac",
   };
 
   return ses.sendEmail(emailParams).promise();
