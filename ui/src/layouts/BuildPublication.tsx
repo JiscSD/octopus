@@ -412,7 +412,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     <aside
                         className={`flex w-full max-w-[30%] flex-col justify-between border-r border-transparent bg-teal-700 pt-10 transition-all duration-300 dark:border-grey-400 2xl:max-w-[25%]`}
                     >
-                        <ul className="sticky top-0 min-h-[500px] space-y-2">
+                        <ul className="sticky top-0 min-h-[600px] space-y-2">
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button
