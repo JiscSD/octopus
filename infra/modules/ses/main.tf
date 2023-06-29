@@ -78,7 +78,7 @@ resource "aws_iam_role" "inbound_email_role" {
             "ses:SendRawEmail"
           ],
           "Resource": [
-            "arn:aws:s3:::octopus-email-bucket/*",
+            "arn:aws:s3:::email-forwarding-${var.environment}/*",
             "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
           ]
         }
@@ -86,6 +86,17 @@ resource "aws_iam_role" "inbound_email_role" {
   })
   }
 }
+
+
+resource "aws_lambda_permission" "ses" {
+  for_each     = var.email_addresses
+  statement_id = aws_lambda_function.forward_mail[each.key].function_name
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.forward_mail[each.key].function_name
+  principal     = "ses.amazonaws.com"
+  source_arn    = "arn:aws:ses:eu-west-1:${local.account_id}:receipt-rule-set/forward-${var.environment}-emails:receipt-rule/lambda-action-rule-${replace(each.key, "/@|\\./", "-")}"
+}
+
 
 resource "aws_lambda_function" "forward_mail" {
   for_each         = var.email_addresses
@@ -101,8 +112,8 @@ resource "aws_lambda_function" "forward_mail" {
     variables = {
       MailS3Bucket   = "email-forwarding-${var.environment}"
       MailS3Prefix   = "email/${each.key}"
-      MailSender     = "octopus@octopus.ac"
-      MailRecipients = join(",", each.value)
+      MailSender     = "octopus@mail.octopus.ac"
+      MailRecipient = join(",", each.value)
       Region         = data.aws_region.default.name
     }
   }
@@ -121,7 +132,7 @@ resource "aws_ses_receipt_rule" "s3_action_rule" {
   s3_action {
     bucket_name       = "email-forwarding-${var.environment}"
     object_key_prefix = "email/${each.key}"
-    position        = 1
+    position        = (index(keys(var.email_addresses),each.key)) * 2 + 1
   }
   
 
@@ -138,7 +149,7 @@ resource "aws_ses_receipt_rule" "lambda_action_rule" {
   lambda_action {
     function_arn     = aws_lambda_function.forward_mail[each.key].arn
     invocation_type = "Event"
-    position        = 1
+    position = (index(keys(var.email_addresses), each.key)+1) * 2
   }
 
   recipients = [each.key]
