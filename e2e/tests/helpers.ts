@@ -1,7 +1,7 @@
 import { Browser, expect, Locator, Page } from '@playwright/test';
 import { PageModel } from './PageModel';
 
-export const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
+export const UI_BASE = process.env.UI_BASE;
 export const MAIL_HOG = process.env.MAIL_HOG;
 
 const requiredEnvVariables = [
@@ -21,7 +21,8 @@ const requiredEnvVariables = [
     'ORCID_TEST_PASS4',
     'ORCID_TEST_FIRST_NAME4',
     'ORCID_TEST_LAST_NAME4',
-    'MAIL_HOG'
+    'MAIL_HOG',
+    'UI_BASE'
 ];
 
 function checkEnvVariable(variableName: string) {
