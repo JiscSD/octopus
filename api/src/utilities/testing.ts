@@ -16,8 +16,8 @@ switch (process.env.STAGE) {
 
 export const agent = supertest.agent(`${host}/${config.versions.v1}`);
 
-export const rollback = () => {};
+export const rollback = (): void => {};
 
-export const migrate = () => {};
+export const migrate = (): void => {};
 
-export const seed = () => {};
+export const seed = (): void => {};

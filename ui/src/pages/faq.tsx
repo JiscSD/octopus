@@ -1,12 +1,11 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import { NextPage } from 'next';
 import Head from 'next/head';
+import { NextPage } from 'next';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Assets from '@assets';
 
 type Props = {
     faqContents: [{ href: string; title: string; content: string }];
@@ -19,7 +18,7 @@ const faqContents = [
         id: 'what_octopus',
         heading: 'What is Octopus?',
         content:
-            "<p className='mb-2'>Octopus sets out to be the new primary research record: a place where researchers from all disciplines can freely record all of their efforts and findings without external requirements unduly shaping their outputs.</p><p className='mb-2'>This complements the traditional paper, which continues to be a good place to disseminate research summaries (and particularly ‘findings’) to a wider audience: publishing in Octopus doesn't stop you publishing in a journal down the line should you want – but it is the place where you establish your priority for all to see, and document your work in full detail in order to do so, rather like a patent office.</p> <p className='mb-2'>Our aim is that the different structure of Octopus will help researchers approach their work differently and allow people to concentrate on excellence rather than chasing ‘impact’.</p> "
+            "<p className='mb-2'>Octopus sets out to be the new primary research record: a place where researchers from all disciplines can freely record all of their research outputs without external requirements unduly shaping their outputs.</p><p className='mb-2'>This complements the traditional paper, which continues to be a good place to disseminate research summaries (and particularly &apos;findings&apos;) to a wider audience: publishing in Octopus doesn't stop you publishing in a journal down the line should you want – but it is the place where you establish your priority for all to see, and document your work in full detail in order to do so, rather like a patent office.</p> <p className='mb-2'>Octopus publications are smaller units. These publications are linked together, reflecting different stages of the research process, allowing each piece of work to be done by different researchers at different times where appropriate. They can be published individually, without needing to fit it into the structure of a traditional journal article. To read more about Octopus' publication types, click <a className='underline' href='https://www.octopus.ac/faq#how_octopus' target='_blank'>here.</a></p><p className='mb-2'>You can also publish on Octopus any work you have previous published in a journal if you retained the copyright, or published CC-BY. Doing this allows your work to get higher visibility and can help it be recognised by your institution or funders.</p> <p className='mb-2'>Our aim is that the different structure of Octopus will help researchers approach their work differently and allow people to concentrate on intrinsic excellence rather than chasing &apos;impact&apos;.</p>"
     },
     {
         title: 'Why record your research on Octopus?',
@@ -67,24 +66,21 @@ const faqContents = [
         href: 'how_account_octopus',
         id: 'how_account_octopus',
         heading: 'How do I create an account?',
-        content:
-            "<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/'>ORCID</a>. You can login using your ORCID credentials. See our <a href='https://int.octopus.ac/privacy' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className='mb-2'>If you do not yet have an ORCID, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>"
+        content: `<p className='mb-2'>Every Octopus account is linked to a valid <a className='underline' href='https://orcid.org/' target="_blank">ORCID®</a> account. You can login using your ORCID credentials. See our <a href='${Config.urls.privacy.path}' className='underline'>Privacy Notice</a> for more information on the data we collect and process in order to provide this platform.</p><p className="mb-2"> ORCID is an independent non-profit organization that provides a persistent identifier – an ORCID iD – that distinguishes you from other researchers and a mechanism for linking your research outputs and activities to your iD. ORCID is integrated into many systems used by publishers, funders, institutions, and other research-related services. Learn more at <a className='underline' href='https://orcid.org/' target="_blank">ORCID.org</a></p><p className='mb-2'>If you do not yet have an ORCID account, we encourage you to consider using this unique, persistent digital identifier developed specifically for researchers.</p><p className='mb-2'>Note that you must be logged-in to an Octopus account in order to share your own work, or to interact with the work of others.</p>`
     },
     {
         title: 'Does each publication get a DOI?',
         href: 'how_doi_octopus',
         id: 'how_doi_octopus',
         heading: 'Does each publication get a DOI?',
-        content:
-            "<p className='mb-2'>When fully launched, Octopus will mint a DOI for each new publication via DataCite.</p><p className='mb-2'>During this testing phase, we are using our own unique IDs. Note that any content published to the site now will not be retained post-launch.</p>"
+        content: "<p className='mb-2'>Yes, Octopus mints a DataCite DOI for each new publication.</p>"
     },
     {
         title: 'Is everything on Octopus open access?',
-        href: 'how_doi_octopus',
-        id: 'how_doi_octopus',
+        href: 'open_access_octopus',
+        id: 'open_access_octopus',
         heading: 'Is everything on Octopus open access?',
-        content:
-            "<p className='mb-2'>All research recorded on Octopus is made available under an open access license, and anyone can read this content without creating an account.</p><p className='mb-2'>However, authors retain the copyright to their work and can select which license they publish under. So, be sure to check on a case-by-case basis before you share, adapt, or build upon another’s work.</p><p className='mb-2'>The platform itself is published under the open-source license GPLv3. The platform code is available via our public <a href='https://github.com/JiscSD/octopus' className='underline'>Github repository</a>, and we invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='https://int.octopus.ac/terms' className='underline'>Terms page</a> for more information.</p>"
+        content: `<p className='mb-2'>All research recorded on Octopus is made available under an open access license, and anyone can read this content without creating an account.</p><p className='mb-2'>However, authors retain the copyright to their work and can select which license they publish under. So, be sure to check on a case-by-case basis before you share, adapt, or build upon another’s work.</p><p className='mb-2'>The platform itself is published under the open-source license GPLv3. The platform code is available via our public <a href='https://github.com/JiscSD/octopus' className='underline'>Github repository</a>, and we invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='${Config.urls.terms.path}' className='underline'>Terms page</a> for more information.</p>`
     },
     {
         title: 'What about copyright?',
@@ -111,20 +107,12 @@ const faqContents = [
             "<p className='mb-2'>Octopus is designed to sit alongside journals and other dissemination outlets, allowing these channels to specialise in delivering key findings to their audiences while Octopus acts like a ‘patent office’ to record who has done what and when, and ensure the quality, integrity and accessibility of all primary research, in full.</p><p className='mb-2'>Recording work to Octopus should be no barrier to publishing a traditional paper. However please note that journal policies differ in how they treat material that has been previously published, such as on a preprint server. If in doubt, we recommend that you check with your intended journal before publishing in Octopus.</p>"
     },
     {
-        title: 'What is the rating system?',
-        href: 'rating_octopus',
-        id: 'rating_octopus',
-        heading: 'What is the rating system?',
-        content:
-            "<p className='mb-2'>Every publication in Octopus can be rated by logged-in users</p><p className='mb-2'>Each type of publication has 3 pre-defined criteria on which you can rate it. These allow us to define what we as a scientific community consider 'good work', and allow authors to get truly meritocratic feedback and reward for their work.</p><p className='mb-2'> Please note that every rating you give will be visible on your user account.</p>"
-    },
-    {
         title: 'Why would I write a public review?',
         href: 'public_review_octopus',
         id: 'public_review_octopus',
         heading: 'Why would I write a public review?',
         content:
-            "<p className='mb-2'>Reviewing and rating is critical to good research, and encouraging good research is at the heart of Octopus.</p> <p className='mb-2'>All reviews are publicly available on Octopus. This enriches the scientific record, allowing readers to see the views and opinions raised by other experts and learn from varied perspectives on a topic. It is also a resource for those just beginning to participate in research, providing ways of thinking about a subject, and guiding good research practice. For the authors of the publication being reviewed, they always have the option to reversion their work taking into account major points raised by early reviewers, and might even choose to invite those reviewers as co-authors on the new version. This new version of a publication may affect all the work done subsequently in the chain.</p><p className='mb-2'>Open peer review, where reviewers’ names are published alongside their comments, contributes to the principles of openness, accountability, and collaboration which underpin the platform. In Octopus, a review is treated as an equal type of publication to any other, so every review you write will itself appear attached to your individual publication list. Treat it as carefully as any other piece of work you publish – and enjoy the credit you will get as a result.</p>"
+            "<p className='mb-2'>Reviewing is critical to good research, and encouraging good research is at the heart of Octopus.</p> <p className='mb-2'>All reviews are publicly available on Octopus. This enriches the scientific record, allowing readers to see the views and opinions raised by other experts and learn from varied perspectives on a topic. It is also a resource for those just beginning to participate in research, providing ways of thinking about a subject, and guiding good research practice. For the authors of the publication being reviewed, they always have the option to reversion their work taking into account major points raised by early reviewers, and might even choose to invite those reviewers as co-authors on the new version. This new version of a publication may affect all the work done subsequently in the chain.</p><p className='mb-2'>Open peer review, where reviewers’ names are published alongside their comments, contributes to the principles of openness, accountability, and collaboration which underpin the platform. In Octopus, a review is treated as an equal type of publication to any other, so every review you write will itself appear attached to your individual publication list. Treat it as carefully as any other piece of work you publish – and enjoy the credit you will get as a result.</p>"
     },
     {
         title: 'Someone has pointed out a really important issue in a review – can I edit my publication?',
@@ -143,12 +131,22 @@ const faqContents = [
             "<p className='mb-2'>If you suspect plagiarism, copyright issues, ethical or scientific misconduct then you can use the Red Flag system to raise your concerns. Select which issue to highlight from a list of predefined criteria and add explanatory comments to explain your concerns to the authors and other readers. You can submit red flags for multiple criteria if you need to.</p><p className='mb-2'>The red flag will immediately appear on the publication page to highlight your concern to other readers. Each red flag will also generate an automated email to all the publication’s authors, who will be able to respond to the issues raised through the platform. All comments will be available to be read alongside red flag.</p><p className='mb-2'>The user who raised the red flag can also remove it, once they feel the issue has been resolved</p>"
     },
     {
-        title: 'If this is only an alpha version, when will Octopus launch?',
-        href: 'removed_octopus',
-        id: 'removed_octopus',
-        heading: 'If this is only an alpha version, when will Octopus launch?',
-        content:
-            "<p className='mb-2'>The platform will launch in June 2022.</p><p className='mb-2'>The alpha release has reduced features and functionality for now, but additional features will be added for testing prior to launch. Please note that any content published to the site during the alpha stage will not be retained in the live version.</p><p className='mb-2'>We are currently gathering user feedback to ensure that the platform meets your needs, and that we prioritise the features of most value to you. Consider completing our feedback form, or joining our user community, to help us develop the platform further.</p>"
+        title: "How do I revoke Octopus's access to my ORCID record?",
+        href: 'revoke_orcid_access',
+        id: 'revoke_orcid_access',
+        heading: "How do I revoke Octopus's access to my ORCID record?",
+        content: `
+            <p className="mb-2">If you are logged into Octopus you can revoke access by clicking the 'Revoke ORCID Access' button next to your ORCID record on your account.</p>
+            <p className="mb-2">
+                You can also revoke access to your ORCID record, on the ORCID website. To do this go to 'Trusted parties' and delete Octopus from the list of 'Trusted organizations'. 
+            </p>
+            <p className="mb-2">
+                Both of these methods will log you out of Octopus. If you attempt to log in again after revoking access you'll be offered the chance to "Give Octopus Permission To Access Your ORCID Record" again.
+            </p>
+            <p>
+                You will not be able to log into Octopus again without granting permission to access your ORCID record.</p>
+            </p>
+        `
     }
 ];
 

@@ -1,9 +1,20 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import * as Interfaces from '@interfaces';
 import * as Config from '@config';
+import * as Interfaces from '@interfaces';
 import * as Types from '@types';
+
+/**
+ *
+ * @TODO
+ * - refactor this store as per Zustand docs `store = { publication, updatePublication, etc...}`
+ * - remove "error" and "setError" from the store and use component state to display errors
+ * - remove redundant actions like: reset, updateId, updateType, etc...
+ * - Also update Publication Interfaces to reflect the actual data coming from "/publication/[id]" endpoint, not just partial data
+ * - Replace any type with well defined types
+ * - use proper types within the store
+ */
 
 let store: any = (set: (params: any) => void) => ({
     // Errors whilst editing
@@ -20,10 +31,13 @@ let store: any = (set: (params: any) => void) => ({
                 description: '',
                 funderStatement: '',
                 funders: [],
+                affiliationsStatement: '',
+                affiliations: [],
                 keywords: [],
                 licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
-                conflictOfInterestStatus: true,
+                references: [],
+                conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
                 ethicalStatement: null,
@@ -50,6 +64,10 @@ let store: any = (set: (params: any) => void) => ({
     content: '',
     updateContent: (content: string) => set(() => ({ content })),
 
+    // References
+    references: [],
+    updateReferences: (references: Interfaces.Reference[]) => set(() => ({ references })),
+
     // Description
     description: '',
     updateDescription: (description: string) => set(() => ({ description })),
@@ -66,7 +84,7 @@ let store: any = (set: (params: any) => void) => ({
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),
 
     // COI
-    conflictOfInterestStatus: true,
+    conflictOfInterestStatus: undefined,
     updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean) => set(() => ({ conflictOfInterestStatus })),
     conflictOfInterestText: '',
     updateConflictOfInterestText: (conflictOfInterestText: string) => set(() => ({ conflictOfInterestText })),
@@ -78,7 +96,7 @@ let store: any = (set: (params: any) => void) => ({
     // Ethical statement
     ethicalStatement: null,
     ethicalStatementFreeText: null,
-    updateEthicalStatement: (ethicalStatement: boolean) => set(() => ({ ethicalStatement })),
+    updateEthicalStatement: (ethicalStatement: string) => set(() => ({ ethicalStatement })),
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string) => set(() => ({ ethicalStatementFreeText })),
 
     dataAccessStatement: null,
@@ -102,8 +120,11 @@ let store: any = (set: (params: any) => void) => ({
     updateFunders: (funders: Interfaces.Funder[]) => set(() => ({ funders })),
 
     // Affiliations
-    affiliations: [],
-    updateAffiliations: (affiliations: Interfaces.Affiliations[]) => set(() => ({ affiliations })),
+    authorAffiliations: [],
+    updateAuthorAffiliations: (authorAffiliations: Interfaces.MappedOrcidAffiliation[]) =>
+        set(() => ({ authorAffiliations })),
+    isIndependentAuthor: false,
+    updateIsIndependentAuthor: (isIndependentAuthor: boolean) => set(() => ({ isIndependentAuthor })),
     affiliationsStatement: '',
     updateAffiliationsStatement: (affiliationsStatement: string) => set(() => ({ affiliationsStatement })),
 

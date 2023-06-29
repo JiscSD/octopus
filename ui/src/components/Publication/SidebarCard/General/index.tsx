@@ -1,6 +1,6 @@
 import React from 'react';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -67,7 +67,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 >
                     <div className="flex items-center">
                         {Config.values.octopusInformation.licences[props.publication.licence].nicename}
-                        <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                     </div>
                 </Components.Link>
             </div>
@@ -83,35 +83,24 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     openNew={true}
                 >
                     <p className="break-words break-all">https://doi.org/{props.publication.doi}</p>
-                    <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>
             {props.publication.type !== 'PEER_REVIEW' && (
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Peer reviews:
+                        Peer reviews: ({peerReviewCount})
                     </span>
-                    <Components.Link
-                        href="#peer-reviews"
-                        ariaLabel="Peer review count"
-                        className="flex items-center  text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                    >
-                        {peerReviewCount === 0
-                            ? 'Write a review'
-                            : `${peerReviewCount} review${peerReviewCount > 1 ? 's' : ''}`}
-                    </Components.Link>
                 </div>
             )}
             {!!activeFlags && (
                 <div className="flex">
                     <span className="mr-2 flex items-center text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Red flags:{' '}
-                        <div className="mx-1 inline-flex">
-                            {uniqueRedFlagCategoryList.map((category) => (
-                                <SolidIcons.FlagIcon key={category} className="h-4 w-4 text-red-500" />
-                            ))}
-                        </div>
-                        ({activeFlags.length})
+                        Red flags:
+                        {uniqueRedFlagCategoryList.map((category) => (
+                            <SolidIcons.FlagIcon key={category} className="ml-1 h-4 w-4 text-red-500" />
+                        ))}
+                        <p className="ml-1">({activeFlags.length})</p>
                     </span>
                 </div>
             )}

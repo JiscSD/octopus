@@ -10,6 +10,9 @@ locals {
     "10.0.0.0/16",      // vpc
     "10.100.0.0/16"     // vpc pairing with code build
   ]
+  third_party_vpn_ips = [
+    "194.83.97.110/32"
+  ]
 }
 
 module "network" {
@@ -38,6 +41,7 @@ module "bastion" {
   public_subnet = module.network.public_subnet_ids[0]
   environment   = local.environment
   allowable_ips = local.allowable_ips
+  third_party_vpn_ips = local.third_party_vpn_ips
   ec2_key_name  = local.project_key_pair_name
 }
 
@@ -69,4 +73,18 @@ module "s3" {
 module "ses" {
     source = "../modules/ses"
     environment = local.environment
+    email_addresses = var.email_addresses
 }
+
+module "sqs" {
+  source = "../modules/sqs"
+  sns_arn = module.sns.arn
+  environment = local.environment
+}
+
+module "sns" {
+  source = "../modules/sns" 
+  environment = local.environment
+  slack_channel_email = var.slack_channel_email
+}
+

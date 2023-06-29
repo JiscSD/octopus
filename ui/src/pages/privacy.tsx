@@ -51,7 +51,7 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         you as an Octopus user:
                     </p>
                     <ul className="mb-4 ml-6 list-disc">
-                        <li>Name (via ORCID)</li>
+                        <li>Name (via ORCID®)</li>
                         <li>Affiliation (via ORCID)</li> <li>Current email address</li>
                     </ul>
                     <p className="mb-4">
@@ -76,8 +76,8 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         </li>
                     </ul>
                     <p className="mb-4">
-                        As well as data from ORCID, all user activity (such as submitted content, ratings, red flags,
-                        and related publications), is stored by Jisc and will be displayed on your public user profile.
+                        As well as data from ORCID, all user activity (such as submitted content, red flags, and related
+                        publications), is stored by Jisc and will be displayed on your public user profile.
                     </p>
                     <p className="mb-4">
                         Further data protection particulars are detailed in the{' '}

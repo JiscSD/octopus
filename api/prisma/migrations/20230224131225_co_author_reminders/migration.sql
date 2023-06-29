@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "CoAuthors" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "reminderDate" TIMESTAMP(3);

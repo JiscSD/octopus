@@ -1,6 +1,6 @@
 import React from 'react';
 import * as DropZone from 'react-dropzone';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -10,6 +10,7 @@ type Props = {
     positiveActionCallback: (files: Interfaces.ImagePreview[]) => void;
     negativeActionCallback: () => void;
     loading: boolean;
+    uploadErrors?: string[];
 };
 
 const FileUpload: React.FC<Props> = (props): React.ReactElement => {
@@ -60,12 +61,12 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 />
                 {isDragActive ? (
                     <span>
-                        <OutlineIcons.DownloadIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.ArrowDownTrayIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">Drop here....</span>
                     </span>
                 ) : (
                     <span>
-                        <OutlineIcons.PhotographIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.PhotoIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">
                             Click or drag files here to upload
                         </span>
@@ -73,21 +74,31 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 )}
             </label>
 
+            {Boolean(props.uploadErrors?.length) && (
+                <Components.Alert
+                    data-testid="upload-error"
+                    severity="ERROR"
+                    title="File upload error"
+                    details={props.uploadErrors}
+                    className="mt-4 w-full"
+                />
+            )}
+
             <div className="mt-6 flex justify-between space-x-4">
+                <Components.ModalButton
+                    text="Upload image"
+                    title="Upload image"
+                    onClick={() => props.positiveActionCallback(previewBase64)}
+                    disabled={props.loading || !previewBase64.length}
+                    loading={props.loading}
+                    actionType="POSITIVE"
+                />
                 <Components.ModalButton
                     text="Cancel"
                     title="Cancel"
                     onClick={() => props.negativeActionCallback()}
                     disabled={props.loading}
                     actionType="NEGATIVE"
-                />
-                <Components.ModalButton
-                    text="Upload image"
-                    title="Upload image"
-                    onClick={() => props.positiveActionCallback(previewBase64)}
-                    disabled={props.loading}
-                    loading={props.loading}
-                    actionType="POSITIVE"
                 />
             </div>
         </section>

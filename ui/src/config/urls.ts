@@ -1,26 +1,15 @@
-let host: string;
-let mediaBucket: string;
-const bucketName = `science-octopus-publishing-images-${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}`;
-let orcidAppiID: string;
-
-switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
-    case 'local':
-        host = 'https://localhost:3001';
-        mediaBucket = `http://localhost:4566/${bucketName}`;
-        orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
-        break;
-    case 'main':
-        host = 'https://octopus.ac';
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        orcidAppiID = '';
-        break;
-    default:
-        //host = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac`;
-        host = `https://octopus.ac`;
-        mediaBucket = `https://${bucketName}.s3.eu-west-1.amazonaws.com`;
-        //orcidAppiID = 'APP-I16GNK4VA08WTE9Y';
-        orcidAppiID = 'APP-FEKD033IO62K51EQ';
+function checkEnvVariable(variable: string | undefined): string {
+    if (variable === undefined) {
+        throw new Error('Environment Variable is undefined.');
+    } else {
+        return variable!;
+    }
 }
+
+const host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
+const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
 export const base = {
     title: 'Octopus | Built for Researchers',
@@ -149,11 +138,11 @@ const urls = {
         canonical: `${base.host}`
     },
     terms: {
-        path: '/terms',
+        path: '/user-terms',
         title: `Terms - ${base.title}`,
         description: 'Terms and conditions relevant to the Octopus site, including details on our open-source licence.',
         keywords: ['open access', 'open source', 'open license', 'open licence', 'GPLv3'],
-        canonical: `${base.host}/terms`
+        canonical: `${base.host}/user-terms`
     },
     privacy: {
         path: '/privacy',
@@ -256,7 +245,7 @@ const urls = {
         canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
+        path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket
 };

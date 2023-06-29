@@ -1,9 +1,13 @@
 import htmlToText from 'html-to-text';
+import axios from 'axios';
+import s3 from 'lib/s3';
+import * as sqs from 'lib/sqs';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
-import * as ratingService from 'rating/service';
+import * as referenceService from 'reference/service';
+import * as coAuthorService from 'coauthor/service';
 
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
@@ -29,6 +33,7 @@ export const getAll = async (
         });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -39,12 +44,9 @@ export const get = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        const aggregate = await ratingService.getAggregate(event.pathParameters.id);
-        const overall = await ratingService.getOverall(event.pathParameters.id);
-
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, publication);
         }
 
         if (!publication) {
@@ -59,7 +61,7 @@ export const get = async (
             event.user?.id === publication.user.id ||
             publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
         ) {
-            return response.json(200, { ...publication, ratings: { aggregate, overall } });
+            return response.json(200, publication);
         }
 
         return response.json(404, {
@@ -67,6 +69,23 @@ export const get = async (
         });
     } catch (err) {
         console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getSeedDataPublications = async (
+    event: I.APIRequest<undefined, I.GetSeedDataPublicationsFilters>
+): Promise<I.JSONResponse> => {
+    try {
+        const publications = await publicationService.getSeedDataPublications(event.queryStringParameters.title);
+
+        return response.json(200, {
+            publications
+        });
+    } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -94,10 +113,10 @@ export const deletePublication = async (
         // has only ever been draft
         if (
             publication.currentStatus !== 'DRAFT' ||
-            !publication.publicationStatus.every((status) => status.status === 'DRAFT')
+            !publication.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
             return response.json(403, {
-                message: 'A publication can only be deleted if has only ever been DRAFT.'
+                message: 'A publication can only be deleted if is currently a draft and has never been LIVE.'
             });
         }
 
@@ -105,6 +124,8 @@ export const deletePublication = async (
 
         return response.json(200, { message: `Publication ${event.pathParameters.id} deleted` });
     } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -141,13 +162,15 @@ export const create = async (
 
         return response.json(201, publication);
     } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
 export const update = async (
     event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -168,14 +191,7 @@ export const update = async (
         }
 
         if (event.body.content) {
-            const isHTMLSafe = helpers.isHTMLSafe(event.body.content);
-
-            if (!isHTMLSafe) {
-                return response.json(404, {
-                    message:
-                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
-                });
-            }
+            event.body.content = helpers.getSafeHTML(event.body.content);
         }
 
         if (event.body.id) {
@@ -212,6 +228,8 @@ export const update = async (
 
         return response.json(200, updatedPublication);
     } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -220,35 +238,90 @@ export const updateStatus = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateStatusPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publicationId = event.pathParameters?.id;
+        const publication = await publicationService.get(publicationId);
 
-        if (publication?.user.id !== event.user.id) {
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        if (publication?.createdBy !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify the status of this publication.'
             });
         }
 
-        // TODO, eventually a service in LIVE can be HIDDEN and a service HIDDEN can become LIVE
-        if (publication?.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A status of a publication that is not in DRAFT cannot be changed.' });
-        }
+        const newStatus = event.pathParameters?.status;
+        const currentStatus = publication.currentStatus;
 
-        const isReadyToPublish = publicationService.isPublicationReadyToPublish(
-            publication,
-            event.pathParameters.status
-        );
-
-        if (!isReadyToPublish) {
-            return response.json(404, {
-                message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+        if (currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
             });
         }
 
-        const updatedPublication = await publicationService.updateStatus(
-            event.pathParameters.id,
-            event.pathParameters.status,
-            isReadyToPublish
-        );
+        if (currentStatus === newStatus) {
+            return response.json(403, { message: `Publication status is already ${newStatus}.` });
+        }
+
+        if (currentStatus === 'DRAFT') {
+            if (newStatus === 'LOCKED') {
+                // check if publication actually has co-authors
+                if (publication.coAuthors.length === 1) {
+                    return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
+                }
+
+                // check if publication is ready to be LOCKED
+                if (!publicationService.isReadyToLock(publication)) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                    });
+                }
+
+                // Lock publication from editing
+                await publicationService.updateStatus(publication.id, 'LOCKED');
+
+                return response.json(200, { message: 'Publication status updated to LOCKED.' });
+            }
+
+            if (newStatus === 'LIVE') {
+                const isReadyToPublish = publicationService.isReadyToPublish(publication);
+
+                if (!isReadyToPublish) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                    });
+                }
+            }
+        }
+
+        if (currentStatus === 'LOCKED') {
+            if (newStatus === 'DRAFT') {
+                // Update status to 'DRAFT'
+                await publicationService.updateStatus(publicationId, newStatus);
+
+                // Cancel co author approvals
+                await coAuthorService.resetCoAuthors(publication?.id);
+
+                return response.json(200, {
+                    message: 'Publication unlocked for editing'
+                });
+            }
+
+            if (newStatus === 'LIVE') {
+                const isReadyToPublish = publicationService.isReadyToPublish(publication);
+
+                if (!isReadyToPublish) {
+                    return response.json(403, {
+                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                    });
+                }
+            }
+        }
+
+        const updatedPublication = await publicationService.updateStatus(publicationId, newStatus);
 
         // now that the publication is LIVE, we store in opensearch
         await publicationService.createOpenSearchRecord({
@@ -263,13 +336,19 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedPublication.content)
         });
 
-        // Publication is live, so update the DOI
-        const res = await helpers.updateDOI(publication.doi, publication);
-        console.log(res);
-        // TODO:  Do we want to do anything with this response?
+        const references = await referenceService.getAllByPublication(publicationId);
 
-        return response.json(200, updatedPublication);
+        // Publication is live, so update the DOI
+        await helpers.updateDOI(publication.doi, publication, references);
+
+        // send message to the pdf generation queue
+        // currently only on deployed instances while a local solution is developed
+        if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationId);
+
+        return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
@@ -280,12 +359,77 @@ export const getLinksForPublication = async (
     try {
         const data = await publicationService.getLinksForPublication(event.pathParameters.id);
 
-        if (!data.rootPublication || data.rootPublication.currentStatus !== 'LIVE') {
+        if (!data.publication || data.publication.currentStatus !== 'LIVE') {
             return response.json(404, { message: 'Not found.' });
         }
 
         return response.json(200, data);
     } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
+};
+
+export const getPDF = async (
+    event: I.APIRequest<undefined, I.GeneratePDFQueryParams, I.GeneratePDFPathParams>
+): Promise<I.JSONResponse> => {
+    const generateNewPDF = event.queryStringParameters?.generateNewPDF === 'true';
+    const redirectToPreview = event.queryStringParameters?.redirectToPreview === 'true';
+    const publicationId = event.pathParameters.id;
+    const publication = await publicationService.get(publicationId);
+
+    if (!publication) {
+        return response.json(404, {
+            message: 'This publication does not exist.'
+        });
+    }
+
+    if (publication.currentStatus !== 'LIVE') {
+        return response.json(403, {
+            message: 'Publication needs to be LIVE in order to generate a PDF version of it.'
+        });
+    }
+
+    let pdfUrl: string | null = null;
+
+    if (!generateNewPDF) {
+        // check if there's a generated PDF for this publication
+        try {
+            const currentPdfUrl = `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
+            const result = await axios.get(currentPdfUrl);
+
+            if (result.status === 200) {
+                pdfUrl = currentPdfUrl;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (!pdfUrl) {
+        // generate new PDF
+        try {
+            const newPDFUrl = await publicationService.generatePDF(publication);
+
+            if (!newPDFUrl) {
+                throw Error('Failed to generate PDF');
+            }
+
+            pdfUrl = newPDFUrl;
+        } catch (error) {
+            console.log(error);
+
+            return response.json(500, 'The PDF version of this publication has failed to generate');
+        }
+    }
+
+    return redirectToPreview
+        ? {
+              statusCode: 302,
+              headers: {
+                  Location: pdfUrl
+              }
+          }
+        : response.json(200, { pdfUrl });
 };

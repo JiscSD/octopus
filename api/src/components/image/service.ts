@@ -1,23 +1,6 @@
-import AWS from 'aws-sdk';
-
 import * as client from 'lib/client';
 import * as I from 'interface';
-
-const config = {
-    region: 'eu-west-1',
-    endpoint: process.env.STAGE === 'local' ? 'http://localhost:4566' : 'https://s3.eu-west-1.amazonaws.com',
-    s3ForcePathStyle: true
-};
-
-if (process.env.STAGE === 'local') {
-    // @ts-ignore
-    config.credentials = {
-        accessKeyId: 'dummy',
-        secretAccessKey: 'dummy'
-    };
-}
-
-const s3 = new AWS.S3(config);
+import s3 from 'lib/s3';
 
 export const createDBReference = async (name: string, extension: I.ImageExtension, user: string) => {
     const imageReference = await client.prisma.images.create({

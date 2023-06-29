@@ -7,39 +7,49 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as email from 'lib/email';
 
-export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>) => {
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.get(event.pathParameters.id);
+
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const getPublicationFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>) => {
+export const getPublicationFlags = async (
+    event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>
+): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByPublicationID(event.pathParameters.id);
+
         return response.json(200, flags);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const getUserFlags = async (event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>) => {
+export const getUserFlags = async (
+    event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>
+): Promise<I.JSONResponse> => {
     try {
         const flags = await flagService.getByUserID(event.pathParameters.id);
+
         return response.json(200, flags);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
 export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
@@ -76,6 +86,7 @@ export const createFlag = async (
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user?.email) {
             emailPromises.push(
                 email.newRedFlagAuthorNotification({
@@ -108,13 +119,14 @@ export const createFlag = async (
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
 export const createFlagComment = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         if (event.body.comment) {
             const isHTMLSafe = helpers.isHTMLSafe(event.body.comment);
@@ -160,6 +172,7 @@ export const createFlagComment = async (
 
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user.email) {
             emailPromises.push(
                 email.updateRedFlagNotification({
@@ -192,11 +205,14 @@ export const createFlagComment = async (
         return response.json(200, flagComment);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>) => {
+export const resolveFlag = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResolveFlagPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.getFlag(event.pathParameters.id);
 
@@ -224,6 +240,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
         if (publication?.user?.email) {
             emailPromises.push(
                 email.resolveRedFlagAuthorNotification({
@@ -254,6 +271,7 @@ export const resolveFlag = async (event: I.AuthenticatedAPIRequest<undefined, un
         return response.json(200, resolveFlag);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

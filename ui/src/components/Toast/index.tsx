@@ -1,6 +1,6 @@
 import React from 'react';
 import * as HeadlessUI from '@headlessui/react';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as Stores from '@stores';
 
@@ -66,7 +66,7 @@ const Toast: React.FC = (): React.ReactElement => {
                                     }}
                                 >
                                     <span className="sr-only">Close</span>
-                                    <SolidIcons.XIcon className="h-5 w-5" aria-hidden="true" />
+                                    <SolidIcons.XMarkIcon className="h-5 w-5" aria-hidden="true" />
                                 </button>
                             </div>
                         </div>

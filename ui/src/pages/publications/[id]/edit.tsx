@@ -1,17 +1,17 @@
 import React from 'react';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Router from 'next/router';
-import * as Framer from 'framer-motion';
 
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Framer from 'framer-motion';
+import * as Router from 'next/router';
+import * as api from '@api';
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as Interfaces from '@interfaces';
+import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import * as api from '@api';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
@@ -36,7 +36,7 @@ const steps: Types.CreationSteps = {
         title: 'Conflict of interest',
         subTitle: 'Conflict of interest',
         component: <Components.PublicationCreationConflictOfInterest />,
-        icon: <OutlineIcons.SearchIcon className="h-5 w-5 text-teal-400" />
+        icon: <OutlineIcons.MagnifyingGlassIcon className="h-5 w-5 text-teal-400" />
     },
     CO_AUTHORS: {
         title: 'Co-authors',
@@ -54,13 +54,13 @@ const steps: Types.CreationSteps = {
         title: 'Data statements',
         subTitle: 'Data statements',
         component: <Components.PublicationCreationDataStatements />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentChartBarIcon className="h-6 w-6 text-teal-400" />
     },
     RESEARCH_PROCESS: {
         title: 'Research process',
         subTitle: 'Research process',
         component: <Components.PublicationCreationResearchProcess />,
-        icon: <OutlineIcons.DocumentReportIcon className="h-6 w-6 text-teal-400" />
+        icon: <OutlineIcons.DocumentChartBarIcon className="h-6 w-6 text-teal-400" />
     },
     REVIEW: {
         title: 'Review & publish',
@@ -70,8 +70,8 @@ const steps: Types.CreationSteps = {
     }
 };
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.guardPrivateRoute(context);
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
+    const token = Helpers.getJWT(context);
 
     let draftedPublicationID: string | string[] | null = null;
     let draftedPublication: Interfaces.Publication | null = null;
@@ -100,6 +100,15 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
+    if (draftedPublication?.currentStatus === 'LOCKED') {
+        return {
+            redirect: {
+                destination: `${Config.urls.viewPublication.path}/${draftedPublication.id}`,
+                permanent: false
+            }
+        };
+    }
+
     if (draftedPublication?.currentStatus !== 'DRAFT') {
         return {
             notFound: true
@@ -112,10 +121,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             forPublicationID,
             step,
             token,
-            error
+            error,
+            protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     draftedPublication: Interfaces.Publication;
@@ -127,7 +137,7 @@ type Props = {
 
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const store = Stores.usePublicationCreationStore();
+    const { updateReferences, updateCoAuthors, ...store } = Stores.usePublicationCreationStore();
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsToUse = React.useMemo(() => {
@@ -139,9 +149,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.DATA_STATEMENT,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -151,9 +161,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -163,9 +173,9 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
                     steps.RESEARCH_PROCESS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
                 break;
@@ -175,8 +185,8 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                     steps.LINKED_PUBLICATIONS,
                     steps.MAIN_TEXT,
                     steps.CONFLICT_OF_INTEREST,
-                    steps.CO_AUTHORS,
                     steps.FUNDERS,
+                    steps.CO_AUTHORS,
                     steps.REVIEW
                 ];
         }
@@ -192,6 +202,35 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
     const [publication] = React.useState(props.draftedPublication);
+
+    const fetchAndSetReferences = React.useCallback(async () => {
+        if (props.draftedPublication.id) {
+            try {
+                const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
+                updateReferences(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftedPublication.id, props.token, updateReferences]);
+
+    const fetchAndSetAuthors = React.useCallback(async () => {
+        if (props.draftedPublication.id) {
+            try {
+                const response = await api.get(`/publications/${props.draftedPublication.id}/coauthors`, props.token);
+                updateCoAuthors(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftedPublication.id, props.token, updateCoAuthors]);
+
+    React.useEffect(() => {
+        fetchAndSetReferences();
+        fetchAndSetAuthors();
+    }, [fetchAndSetReferences, fetchAndSetAuthors]);
 
     React.useEffect(() => {
         if (props.draftedPublication.id) {
@@ -227,10 +266,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             store.updateLanguage(props.draftedPublication.language);
         }
 
-        if (props.draftedPublication.conflictOfInterestStatus) {
-            store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        }
-
         if (props.draftedPublication.conflictOfInterestText) {
             store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
             store.updateLinkTo(props.draftedPublication.linkedTo);
@@ -260,9 +295,18 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
 
         store.updateLinkTo(props.draftedPublication.linkedTo);
-        store.updateCoAuthors(props.draftedPublication.coAuthors);
         store.updateFunders(props.draftedPublication.funders);
         store.updateFunderStatement(props.draftedPublication.fundersStatement);
+
+        const correspondingAuthor = props.draftedPublication?.coAuthors.find(
+            (author) => author.linkedUser === props.draftedPublication.createdBy
+        );
+
+        store.updateAuthorAffiliations(correspondingAuthor?.affiliations || []);
+        store.updateIsIndependentAuthor(correspondingAuthor?.isIndependent || false);
+
+        store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
+        store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
     }, []);
 
     React.useEffect(() => {

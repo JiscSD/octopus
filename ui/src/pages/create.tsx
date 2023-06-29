@@ -1,8 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
-
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -11,28 +10,19 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.guardPrivateRoute(context);
-
-    let publicationForID: string | string[] | null = null;
-    let publicationType: string | string[] | null = null;
-
-    if (context.query.for) publicationForID = context.query.for;
-    if (context.query.type) publicationType = context.query.type;
-
-    if (Array.isArray(publicationForID)) publicationForID = publicationForID[0];
-    if (Array.isArray(publicationType)) publicationType = publicationType[0];
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
+    const { for: publicationForID = null, type: publicationType = null } = context.query;
 
     return {
         props: {
             publicationForID,
             publicationType,
-            token
+            protectedPage: true
         }
     };
-};
+});
 
-const SupportText: React.FC = (props): React.ReactElement => (
+const SupportText: React.FC<React.PropsWithChildren> = (props): React.ReactElement => (
     <span className="mb-3 block w-full text-sm text-grey-700 transition-colors duration-500 dark:text-white-100 xl:w-1/2">
         {props.children}
     </span>
@@ -41,7 +31,6 @@ const SupportText: React.FC = (props): React.ReactElement => (
 type PageProps = {
     publicationForID: string | null;
     publicationType: Types.PublicationType | null;
-    token: string;
 };
 
 const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
@@ -53,6 +42,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
 
     const createPublication = async () => {
         setError(null);
+
         try {
             const response = await api.post<{ id: string }>(
                 Config.endpoints.publications,
@@ -60,7 +50,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     title,
                     type: publicationType
                 },
-                props.token
+                Helpers.getJWT()
             );
 
             if (props.publicationForID) {
@@ -70,7 +60,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         to: props.publicationForID,
                         from: response.data.id
                     },
-                    props.token
+                    Helpers.getJWT()
                 );
             }
 
@@ -98,6 +88,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
 
                     <div className="mb-10">
                         <Components.PageSubTitle text="Record a piece of research" className="!mb-4" />
+
                         <SupportText>
                             Octopus is designed for officially recording your research contributions to the primary
                             research record. It is different from writing an article for a journal (which you can do
@@ -125,6 +116,14 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             guidelines in health research. You will also be given the opportunity to link to additional
                             resources deposited on specialist platforms (such as data or code repositories).
                         </SupportText>
+                        <Components.Link
+                            href={Config.urls.authorGuide.path}
+                            className="my-6 flex w-44 items-center justify-between rounded-lg bg-teal-400 px-8 py-4 text-center outline-0 transition-colors duration-300 hover:bg-teal-300 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:text-white-50 dark:hover:bg-grey-600"
+                        >
+                            <span className="text-center font-montserrat text-sm leading-none tracking-wide">
+                                Author Guide
+                            </span>
+                        </Components.Link>
                     </div>
 
                     <div className="mb-10">
@@ -210,9 +209,8 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         title="Create this publication"
                         disabled={!publicationType || !title.length || !confirmed}
                         onClick={createPublication}
-                        iconPosition="RIGHT"
-                        icon={
-                            <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                        endIcon={
+                            <OutlineIcons.ArrowSmallRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />
                 </section>

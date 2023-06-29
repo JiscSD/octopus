@@ -1,5 +1,11 @@
+import s3 from 'lib/s3';
+import chromium from 'chrome-aws-lambda';
 import * as I from 'interface';
 import * as client from 'lib/client';
+import * as referenceService from 'reference/service';
+import * as Helpers from 'lib/helpers';
+import { Links } from '@prisma/client';
+import { Browser } from 'puppeteer-core';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -15,6 +21,27 @@ export const getAllByIds = async (ids: Array<string>) => {
                     lastName: true,
                     id: true,
                     orcid: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    approvalRequested: true,
+                    confirmedCoAuthor: true,
+                    code: true,
+                    linkedUser: true,
+                    email: true,
+                    publicationId: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             }
         }
@@ -116,7 +143,13 @@ export const get = async (id: string) => {
                     id: true,
                     email: true,
                     linkedUser: true,
+                    publicationId: true,
                     confirmedCoAuthor: true,
+                    approvalRequested: true,
+                    createdAt: true,
+                    reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
                     user: {
                         select: {
                             firstName: true,
@@ -124,6 +157,9 @@ export const get = async (id: string) => {
                             orcid: true
                         }
                     }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             },
             linkedTo: {
@@ -192,6 +228,30 @@ export const get = async (id: string) => {
     return publication;
 };
 
+export const getSeedDataPublications = async (title: string) => {
+    const publications = await client.prisma.publication.findMany({
+        where: {
+            createdBy: 'octopus',
+            title
+        },
+        include: {
+            linkedTo: {
+                where: {
+                    publicationToRef: {
+                        currentStatus: 'LIVE'
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationTo: true
+                }
+            }
+        }
+    });
+
+    return publications;
+};
+
 export const deletePublication = async (id: string) => {
     const deletedPublication = await client.prisma.publication.delete({
         where: {
@@ -213,12 +273,20 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 };
 
 export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
+    const orderBy = filters.orderBy
+        ? {
+              [filters.orderBy]: {
+                  order: filters.orderDirection || 'asc'
+              }
+          }
+        : null;
+
     const query = {
         index: 'publications',
         body: {
             from: filters.offset,
             size: filters.limit,
-            sort: ['_score'],
+            sort: [orderBy || '_score'],
             query: {
                 bool: {
                     filter: {
@@ -243,7 +311,7 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         }
     };
 
-    const must: any[] = [];
+    const must: unknown[] = [];
 
     if (filters.search) {
         // @ts-ignore
@@ -258,14 +326,16 @@ export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
         });
     }
 
-    must.push({
-        range: {
-            publishedDate: {
-                gte: filters.dateFrom,
-                lte: filters.dateTo
+    if (filters.dateFrom || filters.dateTo) {
+        must.push({
+            range: {
+                publishedDate: {
+                    gte: filters.dateFrom,
+                    lte: filters.dateTo
+                }
             }
-        }
-    });
+        });
+    }
 
     // @ts-ignore
     query.body.query.bool.must = must;
@@ -313,6 +383,15 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                 create: {
                     status: 'DRAFT'
                 }
+            },
+            coAuthors: {
+                // add main author to authors list
+                create: {
+                    linkedUser: user.id,
+                    email: user.email || '',
+                    confirmedCoAuthor: true,
+                    approvalRequested: false
+                }
             }
         },
         include: {
@@ -339,7 +418,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
     return publication;
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum, isReadyToPublish: boolean) => {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
     const query = {
         where: {
             id
@@ -373,7 +452,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
         }
     };
 
-    if (isReadyToPublish) {
+    if (status === 'LIVE') {
         // @ts-ignore
         query.data.publishedDate = new Date().toISOString();
     }
@@ -387,6 +466,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
 export const validateConflictOfInterest = (publication: I.Publication) => {
     if (publication.conflictOfInterestStatus) {
         if (!publication.conflictOfInterestText?.length) return false;
+    } else if (publication.conflictOfInterestStatus === null) {
+        return false;
     }
 
     return true;
@@ -405,56 +486,101 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isPublicationReadyToPublish = (publication: I.PublicationWithMetadata, status: string) => {
+export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolean => {
     if (!publication) {
         return false;
     }
 
-    let isReady = false;
-
-    // @ts-ignore This needs looking at, type mismatch between inferred type from get method to what Prisma has
     const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
-    const hasAllFields = ['title', 'content', 'licence'].every((field) => publication[field]);
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
     const conflictOfInterest = validateConflictOfInterest(publication);
     const hasPublishDate = Boolean(publication.publishedDate);
     const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
         publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const coAuthorsAreVerified = publication.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
 
-    const isAttemptToLive = status === 'LIVE';
+    const coAuthorsAreVerified = publication.coAuthors.every(
+        (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
+    );
 
-    // More external checks can be chained here for the future
-    if (
+    return (
         hasAtLeastOneLinkTo &&
-        hasAllFields &&
+        hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        coAuthorsAreVerified &&
-        isAttemptToLive
-    ) {
-        isReady = true;
+        coAuthorsAreVerified
+    );
+};
+
+export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
     }
 
-    return isReady;
+    const hasAtLeastOneLinkTo = publication.linkedTo.length > 0;
+    const hasFilledRequiredFields =
+        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
+    const conflictOfInterest = validateConflictOfInterest(publication);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+    const isDataAndHasPermissionsStatement =
+        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+    const hasConfirmedAffiliations = publication.coAuthors.some(
+        (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
+    );
+
+    return (
+        hasAtLeastOneLinkTo &&
+        hasFilledRequiredFields &&
+        conflictOfInterest &&
+        isDataAndHasEthicalStatement &&
+        isDataAndHasPermissionsStatement &&
+        hasConfirmedAffiliations
+    );
+};
+
+export const isReadyToLock = (publication: I.PublicationWithMetadata) => {
+    if (!publication || publication.currentStatus !== 'DRAFT') {
+        return false;
+    }
+
+    const hasRequestedApprovals = publication.coAuthors.some((author) => author.approvalRequested);
+
+    return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
 
 export const getLinksForPublication = async (id: string) => {
-    const rootPublication = await get(id);
+    const publication = await get(id);
 
-    const linkedToPublications = await client.prisma.$queryRaw`
+    /*
+     * This set of queries provides two result sets:
+     *
+     * "linkedTo" refers to publications to the left of the publication chain.
+     * "linkedFrom" refers to publications that follow to the right of the publication chain.
+     *
+     * The basic function of each query is to recursively select linked publications in each individual direction of the chain.
+     * This can then be used to generate a tree representation branching from a root publication.
+     *
+     * Additional rules:
+     *
+     * 1. Only LIVE publications are returned.
+     * 2. To limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
+     */
+
+    const linkedTo: Links[] = await client.prisma.$queryRaw`
         WITH RECURSIVE to_left AS (
-            SELECT "Links"."publicationFrom",
-                   "Links"."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pto".title "publicationToTitle",
-                   "pto"."publishedDate" "publicationToPublishedDate",
-                   "pto"."currentStatus" "publicationToCurrentStatus",
-                   "pto_user"."firstName" "publicationToFirstName",
-                   "pto_user"."lastName" "publicationToLastName"
+            SELECT "Links"."publicationFrom" "childPublication",
+                   "Links"."publicationTo" "id",
+                   "pfrom".type "childPublicationType",
+                   "pto".type,
+                   "pto".title,
+                   "pto"."createdBy",
+                   "pto"."publishedDate",
+                   "pto"."currentStatus",
+                   "pto_user"."firstName" "authorFirstName",
+                   "pto_user"."lastName" "authorLastName"
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
@@ -470,18 +596,20 @@ export const getLinksForPublication = async (id: string) => {
 
             UNION ALL
 
-            SELECT l."publicationFrom",
-                   l."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pto".title "publicationToTitle",
-                   "pto"."publishedDate" "publicationToPublishedDate",
-                   "pto"."currentStatus" "publicationToCurrentStatus",
-                   "pto_user"."firstName" "publicationToFirstName",
-                   "pto_user"."lastName" "publicationToLastName"
+            SELECT l."publicationFrom" "childPublication",
+                   l."publicationTo" "id",
+                   "pfrom".type "childPublicationType",
+                   "pto".type,
+                   "pto".title,
+                   "pto"."createdBy",
+                   "pto"."publishedDate",
+                   "pto"."currentStatus",
+                   "pto_user"."firstName" "authorFirstName",
+                   "pto_user"."lastName" "authorLastName"
+
               FROM "Links" l
               JOIN to_left
-              ON to_left."publicationTo" = l."publicationFrom"
+              ON to_left."id" = l."publicationFrom"
 
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
@@ -492,24 +620,25 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "User" AS pto_user
               ON "pto"."createdBy" = "pto_user"."id"
         )
-        SELECT *
-          FROM to_left
-         WHERE "publicationToType" != "publicationFromType"
-           AND "publicationToType" != ${rootPublication?.type}
-           AND "publicationToCurrentStatus" = 'LIVE';
+        
+        SELECT * FROM to_left
+        WHERE "type" != "childPublicationType"
+            AND CAST("type" AS text) != ${publication?.type}
+            AND "currentStatus" = 'LIVE';
     `;
 
-    const linkedFromPublications = await client.prisma.$queryRaw`
+    const linkedFrom: Links[] = await client.prisma.$queryRaw`
         WITH RECURSIVE to_right AS (
-            SELECT "Links"."publicationFrom",
-                   "Links"."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pfrom".title "publicationFromTitle",
-                   "pfrom"."publishedDate" "publicationFromPublishedDate",
-                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
-                   "pfrom_user"."firstName" "publicationFromFirstName",
-                   "pfrom_user"."lastName" "publicationFromLastName"
+            SELECT "Links"."publicationFrom" "id",
+                   "Links"."publicationTo" "parentPublication",
+                   "pfrom".type,
+                   "pto".type "parentPublicationType",
+                   "pfrom"."title",
+                   "pfrom"."createdBy",
+                   "pfrom"."publishedDate",
+                   "pfrom"."currentStatus",
+                   "pfrom_user"."firstName" "authorFirstName",
+                   "pfrom_user"."lastName" "authorLastName"
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
@@ -525,18 +654,19 @@ export const getLinksForPublication = async (id: string) => {
 
             UNION ALL
 
-            SELECT l."publicationFrom",
-                   l."publicationTo",
-                   "pfrom".type "publicationFromType",
-                   "pto".type "publicationToType",
-                   "pfrom".title "publicationFromTitle",
-                   "pfrom"."publishedDate" "publicationFromPublishedDate",
-                   "pfrom"."currentStatus" "publicationFromCurrentStatus",
-                   "pfrom_user"."firstName" "publicationFromFirstName",
-                   "pfrom_user"."lastName" "publicationFromLastName"
+            SELECT l."publicationFrom" "id",
+                   l."publicationTo" "parentPublication",
+                   "pfrom".type,
+                   "pto".type "parentPublicationType",
+                   "pfrom"."title",
+                   "pfrom"."createdBy",
+                   "pfrom"."publishedDate",
+                   "pfrom"."currentStatus",
+                   "pfrom_user"."firstName" "authorFirstName",
+                   "pfrom_user"."lastName" "authorLastName"
               FROM "Links" l
               JOIN to_right
-              ON to_right."publicationFrom" = l."publicationTo"
+              ON to_right."id" = l."publicationTo"
 
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
@@ -546,17 +676,114 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "User" AS pfrom_user
               ON "pfrom"."createdBy" = "pfrom_user"."id"
+
+              WHERE "pto"."type" != 'PROBLEM'
         )
         SELECT *
           FROM to_right
-         WHERE "publicationToType" != "publicationFromType"
-           AND "publicationFromType" != ${rootPublication?.type}
-           AND "publicationFromCurrentStatus" = 'LIVE';
+         WHERE "type" != "parentPublicationType"
+           AND "type" != 'PROBLEM'
+           AND "currentStatus" = 'LIVE';
     `;
 
+    const linkedPublications = await client.prisma.publication.findMany({
+        where: {
+            id: {
+                in: linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id))
+            }
+        },
+        select: {
+            id: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    publicationId: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
+        },
+        orderBy: {
+            type: 'asc'
+        }
+    });
+
+    // add authors to 'linkedTo' publications
+    linkedTo.forEach((link) => {
+        Object.assign(link, {
+            authors: linkedPublications.find((publication) => publication.id === link.id)?.coAuthors || []
+        });
+    });
+
+    // add authors to 'linkedFrom' publications
+    linkedFrom.forEach((link) => {
+        Object.assign(link, {
+            authors: linkedPublications.find((publication) => publication.id === link.id)?.coAuthors || []
+        });
+    });
+
     return {
-        rootPublication,
-        linkedFromPublications,
-        linkedToPublications
+        publication,
+        linkedTo,
+        linkedFrom
     };
+};
+
+// AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
+export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
+    const references = await referenceService.getAllByPublication(publication.id);
+    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+
+    let browser: Browser | null = null;
+
+    try {
+        browser = await chromium.puppeteer.launch({
+            args: [...chromium.args, '--font-render-hinting=none'],
+            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
+        });
+
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+        await page.setContent(htmlTemplate, {
+            waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
+        });
+
+        const pdf = await page.pdf({
+            format: 'a4',
+            preferCSSPageSize: true,
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: Helpers.createPublicationHeaderTemplate(publication),
+            footerTemplate: Helpers.createPublicationFooterTemplate(publication)
+        });
+
+        // upload pdf to S3
+        await s3
+            .putObject({
+                Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
+                Key: `${publication.id}.pdf`,
+                ContentType: 'application/pdf',
+                Body: pdf
+            })
+            .promise();
+
+        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+    } catch (err) {
+        console.error(err);
+
+        return null;
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 };

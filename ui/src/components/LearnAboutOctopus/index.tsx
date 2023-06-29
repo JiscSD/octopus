@@ -5,7 +5,7 @@ import * as Components from '@components';
 
 type GridItemProps = {
     title: string;
-    children: React.ReactChildren | React.ReactChild;
+    children: React.ReactNode;
 };
 
 const GridItem: React.FC<GridItemProps> = (props): React.ReactElement => (
@@ -55,7 +55,7 @@ const LearnAboutOctopus: React.FC = (): React.ReactElement => (
                 </GridItem>
                 <GridItem title="Get the credit you deserve">
                     All your work in Octopus, including reviews that you write, are displayed on your personal page for
-                    others to see, along with ratings that others have given them.
+                    others to see.
                 </GridItem>
             </div>
         </div>

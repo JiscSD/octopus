@@ -33,7 +33,7 @@ resource "aws_security_group" "elasticsearch" {
 
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name           = "${var.environment}-octopus"
-  elasticsearch_version = "OpenSearch_1.2"
+  elasticsearch_version = "OpenSearch_2.3.0"
 
   encrypt_at_rest {
     enabled = true
@@ -70,6 +70,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   advanced_options = {
     "rest.action.multi.allow_explicit_index" = "true"
+    "override_main_response_version"         = "true"
   }
 
   advanced_security_options {
@@ -99,6 +100,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 #   depends_on = [
 #     aws_iam_service_linked_role.elasticsearch
 #   ]
+
 }
 
 // Save password to SSM

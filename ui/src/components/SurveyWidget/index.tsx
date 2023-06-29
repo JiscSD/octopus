@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -45,7 +45,7 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
             </span>
             <span className="mb-2 block text-sm">
                 We need your{' '}
-                <Components.Link href="https://forms.office.com/r/DhYd8AdHkx" openNew={true}>
+                <Components.Link href="https://forms.office.com/e/80g02emciH" openNew={true}>
                     <span className="underline">feedback</span>
                 </Components.Link>{' '}
                 to help make it better.

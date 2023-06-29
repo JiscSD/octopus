@@ -1,6 +1,6 @@
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as HeadlessUI from '@headlessui/react';
 import * as Framer from 'framer-motion';
 
@@ -37,7 +37,10 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
     }&exclude=${excludedIds.join(',')}`;
 
     const {
-        data: { data: results = { data: [], metadata: { limit: 10, offset: 0, total: 0 } } } = {},
+        data: results = {
+            data: [],
+            metadata: { limit: 10, offset: 0, total: 0 }
+        },
         error,
         isValidating
     } = useSWR(swrKey, null, {
@@ -94,7 +97,10 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
-                <Components.PublicationCreationStepTitle text="What publications do you want to linked to?" required />
+                <Components.PublicationCreationStepTitle
+                    text="What publications should this publication be linked from?"
+                    required
+                />
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     All publications in Octopus are linked to each other to form research chains, branching down from
                     research problems to real world implementations.
@@ -143,10 +149,9 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
                             title="Add link"
                             disabled={isValidating || createMutateLoading || !selectedPublication}
                             onClick={createLink}
-                            iconPosition="RIGHT"
-                            icon={
+                            endIcon={
                                 createMutateLoading ? (
-                                    <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 ) : (
                                     <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                 )
@@ -202,29 +207,29 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
 
             {!error && !!linkTos.length ? (
                 <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
-                    <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
-                                <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
-                                    <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
-                                        <tr>
-                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
-                                                Publication
-                                            </th>
-                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 " />
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                        {linkTos.map((link) => (
-                                            <Components.PublicationCreationLinkToEntry
-                                                key={link.id}
-                                                link={link}
-                                                deleteLink={deleteLink}
-                                            />
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div className="inline-block min-w-full py-2 align-middle">
+                        <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
+                            <table className="min-w-full divide-y divide-grey-100 dark:divide-teal-300">
+                                <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
+                                    <tr>
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Publication
+                                        </th>
+                                        <th className="whitespace-pre py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            Delete
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="my-4 divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
+                                    {linkTos.map((link) => (
+                                        <Components.PublicationCreationLinkToEntry
+                                            key={link.id}
+                                            link={link}
+                                            deleteLink={deleteLink}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </Framer.motion.div>

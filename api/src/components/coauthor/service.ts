@@ -1,5 +1,44 @@
 import * as client from 'lib/client';
-import cuid from 'cuid';
+import * as I from 'lib/interface';
+import { createId } from '@paralleldrive/cuid2';
+import { Prisma } from '@prisma/client';
+
+export const get = (id: string) =>
+    client.prisma.coAuthors.findUnique({
+        where: {
+            id
+        }
+    });
+
+export const getAllByPublication = async (publicationId: string) => {
+    const coAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationId
+        },
+        select: {
+            id: true,
+            email: true,
+            linkedUser: true,
+            publicationId: true,
+            confirmedCoAuthor: true,
+            approvalRequested: true,
+            isIndependent: true,
+            affiliations: true,
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    orcid: true
+                }
+            }
+        },
+        orderBy: {
+            position: 'asc'
+        }
+    });
+
+    return coAuthors;
+};
 
 export const create = async (email: string, publicationId: string) => {
     const create = await client.prisma.coAuthors.create({
@@ -20,6 +59,43 @@ export const create = async (email: string, publicationId: string) => {
     return create;
 };
 
+export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
+    client.prisma.coAuthors.update({
+        where: {
+            id
+        },
+        data
+    });
+
+/**
+ *
+ * @Important
+ *
+ * onUpdate - only update the 'position' of authors, don't take any other user input
+ * onCreate - don't take user input for fields like: confirmedCoAuthor, approvalRequested or linkedUser
+ *
+ */
+export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
+    client.prisma.$transaction(
+        authors.map((author, index) =>
+            client.prisma.coAuthors.upsert({
+                where: {
+                    publicationId_email: { publicationId, email: author.email }
+                },
+                create: {
+                    email: author.email,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false,
+                    publicationId,
+                    position: index
+                },
+                update: {
+                    position: index // don't update anything else
+                }
+            })
+        )
+    );
+
 export const deleteCoAuthor = async (id: string) => {
     const deleteCoAuthor = await client.prisma.coAuthors.delete({
         where: {
@@ -30,21 +106,15 @@ export const deleteCoAuthor = async (id: string) => {
     return deleteCoAuthor;
 };
 
-export const resendCoAuthor = async (id: string) => {
-    const resendCoAuthor = await client.prisma.coAuthors.update({
+export const deleteCoAuthorByEmail = (publicationId: string, email: string) =>
+    client.prisma.coAuthors.delete({
         where: {
-            id
-        },
-        data: {
-            code: cuid()
+            publicationId_email: { publicationId, email }
         }
     });
 
-    return resendCoAuthor;
-};
-
-export const confirmCoAuthor = async (userId: string, publicationId: string, email: string, code: string) => {
-    const confirmCoAuthor = await client.prisma.coAuthors.updateMany({
+export const linkUser = (userId: string, publicationId: string, email: string, code: string) =>
+    client.prisma.coAuthors.updateMany({
         where: {
             publicationId,
             email,
@@ -55,11 +125,8 @@ export const confirmCoAuthor = async (userId: string, publicationId: string, ema
         }
     });
 
-    return confirmCoAuthor.count;
-};
-
-export const denyCoAuthor = async (publicationId: string, email: string, code: string) => {
-    const denyCoAuthor = await client.prisma.coAuthors.deleteMany({
+export const removeFromPublication = async (publicationId: string, email: string, code: string) =>
+    client.prisma.coAuthors.deleteMany({
         where: {
             publicationId,
             email,
@@ -67,10 +134,7 @@ export const denyCoAuthor = async (publicationId: string, email: string, code: s
         }
     });
 
-    return denyCoAuthor.count;
-};
-
-export const updateCoAuthor = async (publicationId: string, userId: string, confirm: boolean) => {
+export const updateConfirmation = async (publicationId: string, userId: string, confirm: boolean) => {
     const updateCoAuthor = await client.prisma.coAuthors.updateMany({
         where: {
             publicationId,
@@ -80,19 +144,30 @@ export const updateCoAuthor = async (publicationId: string, userId: string, conf
             confirmedCoAuthor: confirm
         }
     });
+
     return updateCoAuthor;
 };
 
 export const resetCoAuthors = async (publicationId: string) => {
+    const publication = await client.prisma.publication.findFirst({
+        where: {
+            id: publicationId
+        }
+    });
+
     const resetCoAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId
+            publicationId,
+            NOT: {
+                linkedUser: publication?.createdBy
+            }
         },
         data: {
             confirmedCoAuthor: false,
-            code: cuid()
+            code: createId()
         }
     });
+
     return resetCoAuthors;
 };
 
@@ -105,4 +180,33 @@ export const isUserAlreadyCoAuthor = async (email: string, publicationId: string
     });
 
     return Boolean(publication);
+};
+
+export const getPendingApprovalForPublication = async (publicationId: string) => {
+    const coAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            confirmedCoAuthor: false,
+            approvalRequested: false,
+            publicationId
+        },
+        orderBy: {
+            position: 'asc'
+        }
+    });
+
+    return coAuthors;
+};
+
+export const updateRequestApprovalStatus = async (publicationId: string, email: string) => {
+    const coAuthors = await client.prisma.coAuthors.updateMany({
+        where: {
+            publicationId,
+            email
+        },
+        data: {
+            approvalRequested: true
+        }
+    });
+
+    return coAuthors;
 };

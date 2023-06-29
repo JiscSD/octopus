@@ -1,0 +1,24 @@
+{
+    "name": "e2e",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "engines": {
+        "node": "18.x"
+    },
+    "scripts": {
+        "test": "npx playwright test",
+        "test:trace": "npx playwright test --trace on"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.35.1",
+        "@types/node": "^18.16.18"
+    },
+    "dependencies": {
+        "@paralleldrive/cuid2": "^2.2.1",
+        "dotenv": "^16.1.4"
+    }
+}

@@ -9,13 +9,8 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const token = Helpers.guardPrivateRoute(context);
-    // If logged in, grab the token from cookies
-
-    let user: Interfaces.User | null = null;
-
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
+    const token = Helpers.getJWT(context);
     let usersBookmarks: Interfaces.BookmarkedPublicationsData[] = [];
 
     try {
@@ -27,12 +22,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            user,
             usersBookmarks,
-            token
+            token,
+            protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     usersBookmarks: Interfaces.BookmarkedPublicationsData[];

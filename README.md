@@ -9,58 +9,67 @@
 **Octopus. The primary research record.**  
 A new way to publish your scientific work that's fast, free and fair.
 
--   The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
--   Publication is instant. Peer review happens openly. All work can be reviewed and rated.
--   Your personal page records everything you do and how it is rated by your peers.
--   Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
+- The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
+- Publication is instant. Peer review happens openly. All work can be reviewed and rated.
+- Your personal page records everything you do and how it is rated by your peers.
+- Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
 
 ---
 
-## Running locally
+## Prerequisites
 
 To run this application locally you will need:
 
--   [Node v14](https://nodejs.org/en/blog/release/v14.17.3/)
--   [Docker](https://www.docker.com/)
--   [Serverless Framework](https://www.serverless.com/)
--   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+- [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
+- [Docker](https://www.docker.com/)
+- [Serverless Framework](https://www.serverless.com/)
+- [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
-First, you will need to setup the databases and email server:
+## Getting started
 
-```bash
-$ ~/octopus docker-compose up
-```
+- [API instructions](./api/README.md)
+- [UI instructions](./ui/README.md)
+- [E2E instructions](./e2e/README.md)
 
-Before running the API, you will need to set the following `ENV` variables in `/api/.env`
+You might also find it useful to get an overview of Octopus's architecture by reading our [system context](./architecture-diagrams/system-context-diagram.png) and [container](./architecture-diagrams/container-diagram.png) diagrams. These are based on the [C4 Model](https://c4model.com/).
 
-```bash
-DATABASE_URL="postgresql://mydbuser:mydbpwd@localhost:5435/postgres?schema=public"
-ORCID_SECRET=ORCID_SECRET_FROM_APP
-ORCID_ID=APP-ORCID_APP_ID_FROM_APP
-JWT_SECRET=abcdefghijklmnopqrstuvwxyz
-STAGE=local
-ELASTICSEARCH_PROTOCOL=http
-ELASTICSEARCH_USER=admin
-ELASTICSEARCH_PASSWORD=admin
-ELASTICSEARCH_ENDPOINT=localhost:9200
-VALIDATION_CODE_EXPIRY=10
-VALIDATION_CODE_ATTEMPTS=3
-```
+## Authentication
 
-Then you can seed the database and start the API:
+Octopus makes use of [ORCID](https://orcid.org) as a means of authenticating end users.
 
-```bash
-$ ~/octopus/api npm install
-$ ~/octopus/api npm run seed:local
-$ ~/octopus/api npm run start:local
-```
+You will need to register a client with ORCID and enter your application ID and secret into your .env file as described in the [API instructions](<(./api/README.md)>).
 
-To start the UI, simple:
+- [Registering a Public API client](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/)
+- [ORCID documentation](https://info.orcid.org/documentation)
 
-```bash
-$ ~/octopus/ui npm install
-$ ~/octopus/ui npm run dev
-```
+In addition to this **only allow users who have verified their email address** can access areas of the site which require authentication (such as publishing content or accepting co-author status). The process of verification is explained below.
+
+## Email verification
+
+Once an end user has logged in using their ORCID account, they will be prompted to verify their email address. This ensures that notifications can be successfully delivered to the recipient, as by default a user's email address in ORCID is not shared.
+
+On reaching `/verify` The flow for this is as follows:
+
+1. User enters their email address, and requests a code be sent to them.
+2. A short 7 character code (eg. `UR10WDK`) is then emailed to the provided address.
+3. The user then enters this code in the supplied field, and clicks to verify.
+4. The user is then redirected to their previously entered destination (if supplied).
+
+On successful verification, the user email address is added to their account, and they will not be prompted again.
+
+Successive failures will result in a code being invalidated, requiring a new code to be sent.
+
+Codes remain valid for a set period in minutes, and beyond this the code is no longer accepted by the API.
+
+The thresholds for both validity period and successive falures are set within the [API](./api/README.md) `.env` file as `VALIDATION_CODE_EXPIRY` (in minutes) and `VALIDATION_CODE_ATTEMPTS` (the number of permitted attempts) respectively.
+
+If a user has not received a code, or has entered the incorrect email address, they are also presented with an option to update their email address or to send a new code.
+
+### Updating email
+
+A previously verified user can also update their email address via their "My profile" page, or by visiting `/verify`.
+
+A user email address is only updated once successfully verified, so entering a new email here will not reflect on the user account until they have completed the process.
 
 ---
 
@@ -82,13 +91,13 @@ These github-actions workflows run on every push:
 
 ### API
 
--   **API Test Suite (TODO)** The Jest test suite for the API runs and outputs any failures.
+- **API Test Suite (TODO)** The Jest test suite for the API runs and outputs any failures.
 
 ### UI
 
--   **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
--   **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
--   **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
+- **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
+- **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
+- **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
 
 All checks will need to pass in order for a PR to be reviewed and merged.
 
@@ -100,14 +109,14 @@ All checks will need to pass in order for a PR to be reviewed and merged.
 
 There are eight publication types:
 
--   **Research Problem** - a neatly defined scientific problem.
--   **Rationale/Hypothesis** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
--   **Methods** - a practical method of testing an existing published Rationale/Hypothesis.
--   **Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
--   **Analysis** - a statistical or thematic analysis of existing published Results.
--   **Interpretation** - a discussion around an existing published Analysis.
--   **Real World Application** - real world applications arising from an existing published Interpretation.
--   **Peer Review** - A considered, detailed review of any of the above kinds of publication.
+- **Research Problem** - a neatly defined scientific problem.
+- **Rationale/Hypothesis** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
+- **Methods** - a practical method of testing an existing published Rationale/Hypothesis.
+- **Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
+- **Analysis** - a statistical or thematic analysis of existing published Results.
+- **Interpretation** - a discussion around an existing published Analysis.
+- **Real World Application** - real world applications arising from an existing published Interpretation.
+- **Peer Review** - A considered, detailed review of any of the above kinds of publication.
 
 ### Links
 
@@ -132,7 +141,7 @@ Any pull requests from contributors will require a member of the team to review 
 1. We have chosen to either use npm packages if they provide a default export, or:
 
 ```
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 ```
 
 ```

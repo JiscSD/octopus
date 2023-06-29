@@ -4,7 +4,7 @@ import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
-export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>) => {
+export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>): Promise<I.JSONResponse> => {
     try {
         // function checks if the user has permission to see it in DRAFT mode
         const fromPublication = await publicationService.get(event.body.from);
@@ -60,11 +60,14 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         return response.json(200, link);
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
-export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>) => {
+export const deleteLink = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteLinkPathParams>
+): Promise<I.JSONResponse> => {
     try {
         const link = await linkService.get(event.pathParameters.id);
 
@@ -74,9 +77,11 @@ export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, und
 
         if (
             link.publicationFromRef.currentStatus !== 'DRAFT' ||
-            !link.publicationFromRef.publicationStatus.every((status) => status.status === 'DRAFT')
+            !link.publicationFromRef.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
-            return response.json(404, { message: 'Cannot delete a link where the publicationFrom is LIVE ' });
+            return response.json(404, {
+                message: 'A link can only be deleted if is currently a draft and has never been LIVE.'
+            });
         }
 
         if (link.publicationFromRef.user.id !== event.user.id) {
@@ -88,6 +93,7 @@ export const deleteLink = async (event: I.AuthenticatedAPIRequest<undefined, und
         return response.json(200, { message: 'Link deleted' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

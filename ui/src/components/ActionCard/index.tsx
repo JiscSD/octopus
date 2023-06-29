@@ -1,6 +1,5 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
-
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 
 type Props = {
@@ -21,11 +20,9 @@ const ActionCard: React.FC<Props> = (props): React.ReactElement => (
             {props.content}
         </p>
         <Components.Button
-            link
             href={props.link}
             title={props.linkText}
-            iconPosition="RIGHT"
-            icon={
+            endIcon={
                 <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
             }
         />

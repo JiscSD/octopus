@@ -15,6 +15,10 @@ export const get = middy(publicationController.get)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication(true));
 
+export const getSeedDataPublications = middy(publicationController.getSeedDataPublications)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser());
+
 export const create = middy(publicationController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
@@ -42,3 +46,8 @@ export const getPublicationLinks = middy(publicationController.getLinksForPublic
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication(true));
+
+export const getPDF = middy(publicationController.getPDF)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.validator(publicationSchema.getPDF, 'pathParameters'));

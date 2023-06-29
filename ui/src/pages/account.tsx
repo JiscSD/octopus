@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
-import JWT from 'jsonwebtoken';
+import axios from 'axios';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -9,53 +10,109 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Assets from '@assets';
+import * as Contexts from '@contexts';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Stores from '@stores';
+import * as Framer from 'framer-motion';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const token = Helpers.guardPrivateRoute(context);
-    // If logged in, grab the token from cookies
-    const decodedJWT = JWT.decode(token);
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
+    const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
+    let userPublications: Interfaces.UserPublication[] = [];
     let error: string | null = null;
 
-    // If there is a cookie with the correct key, send that token with the request, it will either pass or throw
+    // fetch the current user
     try {
-        // @ts-ignore JWT.decode specifies a string return, but we know it will be an object with an id
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}/publications`, token);
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}`, token);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
 
-    if (!user || error) {
-        return {
-            notFound: true
-        };
+    /**
+     * @TODO - /user/{id}/publications now returns paginated results
+     * Need to handle this into a separate ticket
+     *
+     */
+
+    try {
+        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token);
+        userPublications = response.data.results;
+    } catch (err) {
+        const { message } = err as Interfaces.JSONResponseError;
+        error = message;
     }
 
     return {
         props: {
-            user
+            user,
+            userPublications,
+            protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     user: Interfaces.User;
+    userPublications: Interfaces.UserPublication[];
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {
+    const router = useRouter();
+    const confirmation = Contexts.useConfirmationModal();
+    const { setUser } = Stores.useAuthStore();
+    const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
+    const [isRevokingAccess, setIsRevokingAccess] = useState(false);
+
     const livePublications = React.useMemo(
-        () => props.user.Publication.filter((publication) => publication.currentStatus === 'LIVE'),
-        [props.user.Publication]
+        () => props.userPublications.filter((publication) => publication.currentStatus === 'LIVE'),
+        [props.userPublications]
     );
 
     const draftPublications = React.useMemo(
-        () => props.user.Publication.filter((publication) => publication.currentStatus === 'DRAFT'),
-        [props.user.Publication]
+        () =>
+            props.userPublications.filter(
+                (publication) => publication.currentStatus === 'DRAFT' || publication.currentStatus === 'LOCKED'
+            ),
+        [props.userPublications]
     );
+
+    const handleRevokeAccess = useCallback(async () => {
+        const confirmed = await confirmation(
+            'Are you sure?',
+            "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
+            <OutlineIcons.UserMinusIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
+            'Yes',
+            'No'
+        );
+
+        if (confirmed) {
+            setIsRevokingAccess(true);
+            setRevokeAccessError(null);
+
+            try {
+                await api.destroy(Config.endpoints.revokeOrcidAccess, Helpers.getJWT());
+                await router.push({
+                    pathname: `${Config.urls.home.path}`
+                });
+                Helpers.clearJWT();
+                setUser(null);
+            } catch (error) {
+                const errorMessage = axios.isAxiosError(error)
+                    ? error.response?.data?.message
+                    : (error as Error).message;
+
+                setRevokeAccessError(errorMessage);
+            }
+
+            setIsRevokingAccess(false);
+        }
+    }, [confirmation, router, setUser]);
+
+    const verticalDivider = <span className="hidden border-r border-teal-500 py-4 md:block" />;
 
     return (
         <>
@@ -64,41 +121,75 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                 <meta name="description" content={Config.urls.account.description} />
                 <meta name="keywords" content={Config.urls.account.keywords.join(',')} />
                 <link rel="canonical" href={Config.urls.account.canonical} />
-                <title>{`Author: ${props.user.orcid} - ${Config.urls.account.title}`}</title>
+                <title>{`Author: ${props.user?.orcid} - ${Config.urls.account.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
-                <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">
+                <header className="container mx-auto px-8 pt-10 pb-20 md:pb-24 md:pt-16">
                     <div className="mb-8 flex items-center">
                         <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
                         <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
-                            {props.user.firstName} {props.user.lastName}
+                            {props.user?.firstName} {props.user?.lastName}
                         </h1>
                     </div>
-                    <div className="items-end lg:flex">
-                        <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
-                            ORCID:{' '}
-                            <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
-                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                    <div className="flex flex-col flex-wrap gap-4 md:flex-row md:items-center">
+                        <h2 className="font-montserrat text-lg font-medium leading-normal text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            <Components.Link
+                                className="flex w-fit items-center gap-2"
+                                href={`https://orcid.org/${props.user?.orcid}`}
+                                openNew={true}
+                            >
+                                <Assets.OrcidLogoIcon width={24} />
+                                <span className="font-semibold text-teal-500">{props.user?.orcid}</span>
                             </Components.Link>
                         </h2>
-                        {props.user.email && (
-                            <h2 className="mb-2 mr-4 block border-teal-500 pr-4 font-montserrat text-lg font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-0 lg:border-r">
-                                Email: {props.user.email} (
-                                <Components.Link href={`${Config.urls.verify.path}/?state=/account`}>
-                                    <span className="font-semibold text-teal-500">Update</span>
-                                </Components.Link>
-                                )
-                            </h2>
+
+                        {verticalDivider}
+
+                        {props.user?.email && (
+                            <>
+                                <h2 className="font-montserrat text-lg font-medium leading-normal text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    Email: {props.user?.email} (
+                                    <Components.Link
+                                        href={`${Config.urls.verify.path}/?state=${encodeURIComponent(router.asPath)}`}
+                                    >
+                                        <span className="font-semibold text-teal-500">Update</span>
+                                    </Components.Link>
+                                    )
+                                </h2>
+                                {verticalDivider}
+                            </>
                         )}
+
                         <Components.Link
-                            href={`${Config.urls.viewUser.path}/${props.user.id}`}
+                            href={`${Config.urls.viewUser.path}/${props.user?.id}`}
                             className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
                         >
-                            <h3 className="block font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                View live author page
-                            </h3>
+                            <span className="block py-2 font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                View my public author page
+                            </span>
                         </Components.Link>
+
+                        {verticalDivider}
+
+                        <Components.Button
+                            disabled={isRevokingAccess}
+                            endIcon={
+                                <OutlineIcons.UserMinusIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
+                            }
+                            title="Revoke ORCID Access"
+                            onClick={handleRevokeAccess}
+                        />
                     </div>
+                    <Framer.AnimatePresence>
+                        {revokeAccessError && (
+                            <Components.Alert
+                                severity="ERROR"
+                                title={'Cannot revoke ORCID access'}
+                                details={[revokeAccessError]}
+                                className="mt-4"
+                            />
+                        )}
+                    </Framer.AnimatePresence>
                 </header>
 
                 <section id="content" className="container mx-auto mb-16 px-8">
@@ -106,14 +197,18 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         Draft publications
                     </h2>
                     {draftPublications.length ? (
-                        <div className="rouned-md relative space-y-4 lg:w-2/3">
-                            {draftPublications.map((publication: Interfaces.Publication) => (
+                        <div className="relative space-y-4 xl:w-2/3">
+                            {draftPublications.map((publication: Interfaces.UserPublication) => (
                                 <Components.Link
                                     key={publication.id}
-                                    href={`${Config.urls.viewPublication.path}/${publication.id}/edit`}
+                                    href={
+                                        props.user.id === publication.createdBy
+                                            ? `${Config.urls.viewPublication.path}/${publication.id}/edit`
+                                            : `${Config.urls.viewPublication.path}/${publication.id}/`
+                                    }
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} />
+                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
                                 </Components.Link>
                             ))}
                         </div>
@@ -131,14 +226,14 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         Live publications
                     </h2>
                     {livePublications.length ? (
-                        <div className="rouned-md relative lg:w-2/3">
-                            {livePublications.map((publication: Interfaces.Publication) => (
+                        <div className="relative space-y-4 xl:w-2/3">
+                            {livePublications.map((publication: Interfaces.UserPublication) => (
                                 <Components.Link
                                     key={publication.id}
                                     href={`${Config.urls.viewPublication.path}/${publication.id}`}
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} />
+                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
                                 </Components.Link>
                             ))}
                         </div>

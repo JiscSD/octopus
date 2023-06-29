@@ -1,13 +1,12 @@
-import React from 'react';
-import JWT from 'jsonwebtoken';
-import Cookies from 'js-cookie';
-import * as luxon from 'luxon';
-import fileDownload from 'js-file-download';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import JWT from 'jsonwebtoken';
 
-import * as Interfaces from '@interfaces';
+import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as api from '@api';
+import * as Interfaces from '@interfaces';
 
 /**
  * @description Truncates a string
@@ -19,14 +18,29 @@ export const truncateString = (value: string, length: number): string => {
 /**
  * @description Formats a string ISO from the DB
  */
-export const formatDate = (value: string): string => {
+export const formatDate = (value: string, formatType?: 'short' | 'long'): string => {
     const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
         day: 'numeric',
-        month: 'long',
+        month: formatType || 'long',
         year: 'numeric'
     });
 
     return date === 'Invalid DateTime' ? 'N/A' : date;
+};
+
+/**
+ * @description Formats a string ISO from the DB to datetime
+ */
+export const formatDateTime = (value: string, formatType?: 'short' | 'long'): string => {
+    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toLocaleString({
+        day: 'numeric',
+        month: formatType || 'long',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    });
+
+    return date === 'Invalid DateTime' ? 'N/A' : `${date} GMT`;
 };
 
 /**
@@ -44,7 +58,7 @@ export const relativeDate = (value: string): string | null => {
 export const formatPublicationType = (publicationType: Types.PublicationType): string => {
     const types = {
         PROBLEM: 'Research Problem',
-        HYPOTHESIS: 'Rationale/Hypothesis',
+        HYPOTHESIS: 'Rationale / Hypothesis',
         PROTOCOL: 'Method',
         DATA: 'Results',
         ANALYSIS: 'Analysis',
@@ -63,7 +77,8 @@ export const formatStatus = (status: Types.PublicationStatuses): string => {
     const statuses = {
         DRAFT: 'Draft',
         LIVE: 'Live',
-        HIDDEN: 'Hidden'
+        HIDDEN: 'Hidden',
+        LOCKED: 'Locked'
     };
 
     return statuses[status];
@@ -104,17 +119,6 @@ export const findPreviousPublicationType = (type: Types.PublicationType) => {
 };
 
 /**
- * @description Returns the string of the key for the current os
- */
-export const setOSKey = (): string | React.ReactElement => {
-    if (window.navigator.appVersion.indexOf('Mac')) {
-        return <>&#8984;K</>;
-    } else {
-        return 'Ctrl-K';
-    }
-};
-
-/**
  * @description Returns the % of a value to the % max
  */
 export const percentage = (partialValue: number, totalValue: number) => {
@@ -141,7 +145,7 @@ export const randomWholeNumberInRange = (min: number, max: number): number => {
  */
 export const setAndReturnJWT = (token: string) => {
     const expireTime = 8 / 24;
-    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime });
+    Cookies.set(Config.keys.cookieStorage.token, token, { expires: expireTime, secure: true });
     return JWT.decode(token);
 };
 
@@ -153,37 +157,24 @@ export const clearJWT = () => {
 };
 
 /**
- * @description For use in NextJS SSR, check cookies for token & set the response location
+ * @description returns JWT from browser cookies or SSR context
  */
-export const guardPrivateRoute = (context: Types.GetServerSidePropsContext): string => {
-    const cookies = context.req.cookies;
-    const token = cookies[Config.keys.cookieStorage.token];
+export const getJWT = (context?: Types.GetServerSidePropsContext) =>
+    context ? context.req.cookies[Config.keys.cookieStorage.token] : Cookies.get(Config.keys.cookieStorage.token);
 
-    if (!token) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            ).toString('base64')}`
-        });
-        context.res.end();
-        throw new Error('Token not valid');
+/**
+ *
+ * @param token string
+ * @returns decoded user token
+ */
+export const getDecodedUserToken = async (token: string) => {
+    try {
+        return (await (
+            await api.get(Config.endpoints.decodeUserToken, token)
+        ).data) as Types.UserType;
+    } catch (error) {
+        return null;
     }
-
-    // Only allow users with a verified email to access guarded routes
-    const decoded = JWT.decode(token) as Types.UserType;
-
-    if (!decoded.email && !context.req.url?.startsWith(`${Config.urls.verify.path}`)) {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.verify.path}?state=${Buffer.from(
-                context.req.url || Config.urls.home.path,
-                'utf-8'
-            )}&newUser=true`
-        });
-        context.res.end();
-    }
-
-    return token;
 };
 
 /**
@@ -247,8 +238,12 @@ export const blobFileDownload = async (url: string, fileName: string) => {
         responseType: 'blob'
     });
 
-    // @ts-ignore
-    fileDownload(res.data, fileName);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(res.data);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
 };
 
 export const getBase64FromFile = async (file: Blob): Promise<string> =>
@@ -262,16 +257,6 @@ export const getBase64FromFile = async (file: Blob): Promise<string> =>
             reject(error);
         };
     });
-
-export const findRating = (
-    index: number,
-    ratingList: Interfaces.APIRatingShape[],
-    publicationType: Types.PublicationType
-): number | null => {
-    const ratingType = Object.values(Config.values.octopusInformation.publications[publicationType].ratings)[index].id;
-    const found = ratingList.find((rating: Interfaces.APIRatingShape) => rating.category === ratingType);
-    return found ? found.rating : null;
-};
 
 export const formatKeywords = (keywordsAsString: string): string[] => {
     let formattedKeywords: string[] = [];
@@ -291,4 +276,178 @@ export const checkLinkIsValid = (text: string) => {
         /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
     );
     return urlR.test(lowerCaseText);
+};
+
+export const linkedPublicationTypes = {
+    PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
+    HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
+    PROTOCOL: ['PROBLEM', 'DATA'],
+    DATA: ['PROBLEM', 'ANALYSIS'],
+    ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
+    INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
+    REAL_WORLD_APPLICATION: ['PROBLEM']
+};
+
+// original URL regex: /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/
+export const getURLsFromText = (text: string) =>
+    text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g) || [];
+
+export const validateURL = (value: string) =>
+    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
+
+// extracts DOIs including ‘DOI: 10.’ / ‘DOI:10.’ / ‘DOI-10.’ / ‘DOI - 10.’ / ‘DOI 10.’ etc...
+export const getFullDOIsStrings = (text: string) =>
+    text.match(
+        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi
+    ) || [];
+
+// extracts the DOIs only
+export const getDOIsFromText = (text: string) => text.match(/(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/g) || [];
+
+export const validateDOI = (value: string) => /(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b/.test(value);
+
+export const validateEmail = (email: string): Boolean => {
+    const regex = /^([\w+-]+\.)*[\w+-]+@[a-zA-Z][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/;
+    return regex.test(email);
+};
+
+export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
+
+export const getPublicationStatusByAuthor = (
+    publication: Interfaces.Publication | Interfaces.UserPublication,
+    user: Types.UserType | Interfaces.User
+) => {
+    if (publication.currentStatus === 'LIVE') return 'Live';
+
+    if (publication.currentStatus === 'DRAFT') {
+        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    }
+
+    if (publication.coAuthors.length > 1) {
+        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+            return 'Ready to publish';
+        }
+
+        if (
+            user.id !== publication.createdBy &&
+            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+        ) {
+            return 'Pending your approval';
+        }
+    }
+
+    return 'Pending author approval';
+};
+
+export const getFormattedAffiliationDate = (date: number | Interfaces.OrcidAffiliationDate): string => {
+    if (typeof date === 'number') {
+        const jsDate = new Date(date);
+        const day = jsDate.toLocaleDateString('en-GB', { day: '2-digit' });
+        const month = jsDate.toLocaleDateString('en-GB', { month: '2-digit' });
+        const year = jsDate.toLocaleDateString('en-GB', { year: 'numeric' });
+
+        return `${year}-${month}-${day}`;
+    }
+
+    return Object.values({ year: date.year, month: date.month, day: date.day }) // enforce order yyyy-mm-dd
+        .filter((value) => value)
+        .join('-');
+};
+
+export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+    const affiliationsWithStartDate = affiliations.filter((affiliation) => affiliation.startDate);
+    const affiliationsWithoutStartDate = affiliations.filter((affiliation) => !affiliation.startDate);
+
+    return [
+        ...affiliationsWithStartDate.sort((a1, a2) =>
+            getFormattedAffiliationDate(a2.startDate as Interfaces.OrcidAffiliationDate).localeCompare(
+                getFormattedAffiliationDate(a1.startDate as Interfaces.OrcidAffiliationDate)
+            )
+        ),
+        ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
+    ];
+};
+
+export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    fn: F,
+    wait: number,
+    { maxWait }: { maxWait?: number } = {}
+) => {
+    let timeout: NodeJS.Timeout;
+    let maxTimeout: NodeJS.Timeout | null;
+
+    const debounced = (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (maxTimeout) {
+                clearTimeout(maxTimeout);
+                maxTimeout = null;
+            }
+            fn(...args);
+        }, wait);
+
+        if (maxWait && !maxTimeout) {
+            maxTimeout = setTimeout(() => {
+                clearTimeout(timeout);
+                maxTimeout = null;
+                fn(...args);
+            }, maxWait);
+        }
+    };
+
+    return debounced;
+};
+
+/**
+ * @description 'getServerSideProps' wrapper for protected routes
+ */
+
+export const withServerSession = (
+    callback: (
+        context: Types.GetServerSidePropsContext,
+        currentUser: Types.UserType
+    ) => Promise<Types.GetServerSidePropsResult<{}>>
+) => {
+    return async function (context: Types.GetServerSidePropsContext): Promise<Types.GetServerSidePropsResult<{}>> {
+        const token = getJWT(context);
+        const { resolvedUrl } = context;
+
+        if (!token) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const decodedToken = await getDecodedUserToken(token);
+
+        if (!decodedToken) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const { email } = decodedToken;
+        const isVerifyEmailPage = resolvedUrl.startsWith(Config.urls.verify.path);
+
+        // Only allow users with a verified email to access protected routes
+        if (!email && !isVerifyEmailPage) {
+            // redirect to /verify page
+            return {
+                redirect: {
+                    destination: `${Config.urls.verify.path}?state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        return callback(context, decodedToken);
+    };
 };

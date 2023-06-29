@@ -9,21 +9,20 @@ describe('Link co-author', () => {
 
     test('Link a co-author to a publication (allow)', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '987654321' })
+            .patch('/publications/publication-hypothesis-draft/link-coauthor')
+            .query({ apiKey: '000000007' })
             .send({
-                email: 'testemail@test.com',
-                code: 'test',
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
                 approve: true
             });
-
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'testemail@test.com', publicationId: 'publication-problem-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-hypothesis-draft' }
         });
 
-        expect(dbLink?.linkedUser).toEqual('test-user-2');
+        expect(dbLink?.linkedUser).toEqual('test-user-7');
     });
 
     test('Link a co-author to a publication (do not allow) with authentication', async () => {
@@ -31,15 +30,14 @@ describe('Link co-author', () => {
             .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
-                email: 'testemail@test.com',
-                code: 'test',
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
                 approve: false
             });
-
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'testemail@test.com', publicationId: 'publication-problem-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-problem-draft' }
         });
 
         expect(dbLink).toEqual(null);
@@ -50,8 +48,8 @@ describe('Link co-author', () => {
             .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
-                email: 'testemail@test.com',
-                code: 'test',
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
                 approve: false
             });
 
@@ -61,10 +59,10 @@ describe('Link co-author', () => {
     test('Cannot link as co-author if you are the creator', async () => {
         const link = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '123456789' })
+            .query({ apiKey: '000000005' })
             .send({
-                email: 'testemail@test.com',
-                code: 'test',
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
                 approve: true
             });
 
@@ -74,23 +72,23 @@ describe('Link co-author', () => {
     test('Cannot link co-author if user has already been linked as another co-author', async () => {
         const link = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '1234' })
+            .query({ apiKey: '000000006' })
             .send({
-                email: 'testemail@test.com',
-                code: 'test',
+                email: 'test-user-6@jisc.ac.uk',
+                code: 'test-code-user-6',
                 approve: true
             });
 
         expect(link.status).toEqual(404);
     });
 
-    test('Cannot override co-authoriship', async () => {
+    test('Cannot override co-authorship', async () => {
         const link = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
-                email: 'testemai2l@test.com',
-                code: 'test2',
+                email: 'test-user-6@jisc.ac.uk',
+                code: 'test-code-user-6',
                 approve: true
             });
 

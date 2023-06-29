@@ -1,7 +1,7 @@
 import React from 'react';
-import * as NextRouter from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
 
+import * as NextRouter from 'next/router';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 import * as Assets from '@assets';
 import * as Config from '@config';
@@ -19,13 +19,27 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <>
-            <Components.Banner text="This is a beta release still under active development. Please don't use it for recording your real work... yet!" />
+            <Components.Banner>
+                Help us improve by providing{' '}
+                <Components.Link
+                    href="https://forms.office.com/e/80g02emciH"
+                    className="w-fit underline  underline-offset-4"
+                    openNew
+                >
+                    feedback
+                </Components.Link>{' '}
+                or contacting{' '}
+                <Components.Link href="mailto:help@jisc.ac.uk" openNew className="w-fit underline  underline-offset-4">
+                    help@jisc.ac.uk
+                </Components.Link>
+            </Components.Banner>
+            {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
                         <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
                         <Components.Link
-                            href={`${Config.urls.verify.path}?newUser=true`}
+                            href={`${Config.urls.verify.path}`}
                             className="w-fit underline decoration-2 underline-offset-4"
                         >
                             Please confirm your email address to publish content
@@ -33,6 +47,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             )}
+
             <header
                 className={`text-grey-800 transition-colors duration-500  print:hidden  ${
                     props.fixed && 'lg:fixed lg:top-0 lg:left-0 lg:z-20 lg:w-full'
@@ -55,10 +70,9 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                             )}
                         </Components.Link>
                         <div className="flex items-center space-x-3 lg:space-x-4">
-                            {/* Commenting out for temp holding page */}
-                            {/* <Components.Search /> */}
-                            {/* <Components.Nav /> */}
-                            {/* {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />} */}
+                            <Components.Search />
+                            <Components.Nav />
+                            {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />}
                             <Components.EnableDarkMode />
                         </div>
                     </div>

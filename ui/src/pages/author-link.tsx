@@ -1,20 +1,17 @@
-import React from 'react';
-import Head from 'next/head';
-import JWT from 'jsonwebtoken';
-
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
 import * as api from '@api';
+import * as Config from '@config';
+import * as Helpers from '@helpers';
+import * as Layouts from '@layouts';
+import * as Types from '@types';
+import Head from 'next/head';
+import React from 'react';
+import axios from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    let email = null;
-    let code = null;
+    let email: string | null = null;
+    let code: string | null = null;
     let approve = null;
-    let publication = null;
+    let publication: string | null = null;
 
     if (!context.query.code || !context.query.email || !context.query.approve || !context.query.publication) {
         return {
@@ -29,7 +26,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     approve = Array.isArray(context.query.approve) ? context.query.approve[0] : context.query.approve;
     publication = Array.isArray(context.query.publication) ? context.query.publication[0] : context.query.publication;
 
-    if (approve !== 'true' && approve !== 'false') {
+    if (!['true', 'false'].includes(approve)) {
         return {
             redirect: { permanent: true, destination: Config.urls.home.path }
         };
@@ -37,29 +34,41 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // check user credentials
     if (approve === 'true') {
-        try {
-            const token = Helpers.guardPrivateRoute(context);
-
-            await api.patch(
-                `/publications/${publication}/link-coauthor`,
-                {
-                    email,
-                    code,
-                    approve: true
-                },
-                token
-            );
-        } catch (err) {
-            return {
-                props: {
-                    message: 'There was an error linking you as a co-author.'
+        // user must be logged in and have a verified email address in order to accept invitation
+        return Helpers.withServerSession(async (context) => {
+            try {
+                await api.patch(
+                    `/publications/${publication}/link-coauthor`,
+                    {
+                        email,
+                        code,
+                        approve: true
+                    },
+                    Helpers.getJWT(context)
+                );
+            } catch (err: unknown | Types.AxiosError) {
+                if (axios.isAxiosError(err)) {
+                    return {
+                        props: {
+                            title: 'Error linking you as a co-author.',
+                            statusCode: err.response?.status,
+                            message: err.response?.data.message
+                        }
+                    };
                 }
-            };
-        }
 
-        return {
-            redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publication}` }
-        };
+                return {
+                    props: {
+                        status: 500,
+                        message: 'Unknown server error'
+                    }
+                };
+            }
+
+            return {
+                redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publication}` }
+            };
+        })(context);
     }
 
     try {
@@ -68,22 +77,38 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             code,
             approve: false
         });
-    } catch (err) {
+
         return {
             props: {
-                message: 'There was an error denying this request.'
+                title: 'You have indicated that you are not a co-author.',
+                message: 'Thank you for responding. You have now been removed from this draft publication.',
+                statusCode: 200
+            }
+        };
+    } catch (err: unknown | Types.AxiosError) {
+        if (axios.isAxiosError(err)) {
+            return {
+                props: {
+                    title: 'There was an error denying this request.',
+                    statusCode: err.response?.status,
+                    message: err.response?.data.message
+                }
+            };
+        }
+
+        return {
+            props: {
+                status: 500,
+                message: 'Unknown server error'
             }
         };
     }
-
-    return {
-        props: {},
-        redirect: { permanent: true, destination: Config.urls.home.path }
-    };
 };
 
 type Props = {
+    title?: string;
     message: string;
+    statusCode?: number;
 };
 
 const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
@@ -91,12 +116,25 @@ const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
         <Head>
             <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <Layouts.Error
-            title="Page not found."
-            windowTitle={Config.urls[404].title}
-            content={props.message}
-            statusCode={404}
-        />
+        {props.statusCode == 200 ? (
+            <Layouts.InformationLanding
+                title={props.title ? `${props.title}` : ''}
+                windowTitle={props.title || ''}
+                content={props.message}
+                statusCode={props.statusCode || 200}
+            />
+        ) : (
+            <Layouts.Error
+                title={props.title ? `${props.title}` : 'Error.'}
+                windowTitle={
+                    props.statusCode
+                        ? `${props.statusCode} - Octopus | Built for Researchers`
+                        : `${Config.urls[500].title}`
+                }
+                content={props.message}
+                statusCode={props.statusCode || 500}
+            />
+        )}
     </>
 );
 

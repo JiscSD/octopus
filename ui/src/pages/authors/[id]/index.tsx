@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import Head from 'next/head';
-import * as Framer from 'framer-motion';
+import useSWRInfinite from 'swr/infinite';
 
+import * as Framer from 'framer-motion';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
+import * as Assets from '@assets';
+import * as Helpers from '@helpers';
 import * as api from '@api';
 
+const pageSize = 10;
+
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const requestId = context.query.id;
+    const userId = context.query.id;
+    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=0&limit=${pageSize}`;
+    const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
+    let firstUserPublicationsPage: Interfaces.UserPublicationsPage | null = null;
     let error: string | null = null;
 
     try {
-        const response = await api.get(`${Config.endpoints.users}/${requestId}`, undefined);
+        const response = await api.get(`${Config.endpoints.users}/${userId}`, token);
         user = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -28,19 +36,60 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         };
     }
 
+    try {
+        const response = await api.get(userPublicationsUrl, undefined);
+        firstUserPublicationsPage = response.data;
+    } catch (error) {
+        console.log(error);
+    }
+
     return {
         props: {
-            user
+            user,
+            userPublicationsUrl,
+            fallbackData: firstUserPublicationsPage
         }
     };
 };
 
 type Props = {
     user: Interfaces.User;
+    userPublicationsUrl: string;
+    fallbackData: Interfaces.UserPublicationsPage | null;
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
-    const [publicationLimit, setPublicationLimit] = React.useState(1);
+    const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
+
+    const { data, setSize } = useSWRInfinite(
+        (pageIndex, prevPageData) => {
+            if (pageIndex === 0) {
+                return props.userPublicationsUrl;
+            }
+
+            if (prevPageData && !prevPageData.results.length) {
+                return null; // reached the end
+            }
+
+            return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
+        },
+        async (url) => {
+            const response = await api.get(url, undefined);
+            const data = response.data;
+            const { offset, limit, total } = data;
+
+            if (offset + limit >= total) {
+                setHideShowMoreButton(true);
+            }
+
+            return data;
+        },
+        {
+            fallbackData: props.fallbackData ? [props.fallbackData] : undefined
+        }
+    );
+
+    const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
     return (
         <>
@@ -58,12 +107,19 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                             {props.user.firstName} {props.user.lastName}
                         </h1>
                     </div>
-                    <h3 className="block font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        ORCID:{' '}
-                        <Components.Link href={`https://orcid.org/${props.user.orcid}`} openNew={true}>
-                            <span className="font-semibold text-teal-500">{props.user.orcid}</span>
-                        </Components.Link>
-                    </h3>
+                    <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                        {props.user.id === 'octopus' ? null : (
+                            <Components.Link
+                                title="ORCID profile"
+                                className="flex w-fit items-center gap-2"
+                                href={`https://orcid.org/${props.user.orcid}`}
+                                openNew={true}
+                            >
+                                <Assets.OrcidLogoIcon width={24} />
+                                <span className="font-semibold text-teal-500">{props.user.orcid}</span>
+                            </Components.Link>
+                        )}
+                    </div>
                 </header>
 
                 <section className="container mx-auto px-8 pb-12 lg:pb-24">
@@ -124,18 +180,24 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
-                    {props.user.Publication.length ? (
+                    {userPublications.length ? (
                         <div className="rouned-md relative lg:w-2/3">
-                            {props.user.Publication.map((publication: Interfaces.Publication, index) => {
-                                if (index <= publicationLimit) {
+                            {userPublications.map((publication: Interfaces.Publication, index) => {
+                                if (index <= userPublications.length) {
                                     let classes = '';
-                                    index === 0 ? (classes += 'rounded-t-lg ') : null;
-                                    publicationLimit !== 1 && index === publicationLimit - 1
-                                        ? (classes += 'rounded-b-lg')
-                                        : null;
+
+                                    if (index === 0) {
+                                        classes += 'rounded-t-lg ';
+                                    }
+
+                                    if (index === userPublications.length - 1) {
+                                        classes += 'rounded-b-lg';
+                                    }
+
+                                    publication.user = props.user;
 
                                     return (
-                                        <Components.Delay key={publication.id} delay={index * 50}>
+                                        <Components.Delay key={publication.id} delay={50}>
                                             <Components.PublicationSearchResult
                                                 publication={publication}
                                                 className={classes}
@@ -145,18 +207,18 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 }
                             })}
 
-                            {publicationLimit !== props.user.Publication.length && (
+                            {!hideShowMoreButton && (
                                 <Framer.motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="absolute -bottom-10 z-40 flex h-72 w-full items-end justify-center from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 lg:bottom-0 lg:bg-gradient-to-b"
+                                    className="absolute -bottom-10 z-10 flex h-72 w-full items-end justify-center from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 lg:bottom-0 lg:bg-gradient-to-b"
                                 >
                                     <button
-                                        onClick={(e) => setPublicationLimit(props.user.Publication.length)}
+                                        onClick={(e) => setSize((prevSize) => prevSize + 1)}
                                         className="rounded py-1 px-2 text-sm font-semibold uppercase tracking-widest text-grey-600 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
                                     >
-                                        Show all
+                                        Show More
                                     </button>
                                 </Framer.motion.div>
                             )}

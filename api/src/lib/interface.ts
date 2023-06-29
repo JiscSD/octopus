@@ -4,8 +4,8 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-
 import * as publicationService from 'publication/service';
+
 export {
     ImageExtension,
     Languages,
@@ -17,7 +17,6 @@ export {
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-export { HandlerLambda } from 'middy';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -55,8 +54,8 @@ export interface OptionalAuthenticatedAPIRequest<
 }
 
 export interface JSONResponse {
-    body: string;
-    headers: any;
+    body?: string;
+    headers: unknown;
     statusCode: number;
 }
 
@@ -76,7 +75,7 @@ export interface CreatePublicationRequestBody {
     content?: string;
     language?: Languages;
     fundersStatement: string;
-    ethicalStatement?: boolean;
+    ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
@@ -101,13 +100,17 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetSeedDataPublicationsFilters {
+    title: string;
+}
+
 export interface UpdatePublicationPathParams {
     id: string;
 }
 
 export interface UpdateStatusPathParams {
     id: string;
-    status: 'LIVE';
+    status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
 export interface UpdatePublicationRequestBody {
@@ -118,7 +121,7 @@ export interface UpdatePublicationRequestBody {
     keywords?: string[];
     id?: string;
     language?: Languages;
-    ethicalStatement?: boolean;
+    ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
@@ -132,12 +135,14 @@ export type OrderDirection = 'asc' | 'desc';
 
 export interface PublicationFilters {
     search?: string;
-    limit?: string;
-    offset?: string;
+    limit: number;
+    offset: number;
     type: string;
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
+    orderBy?: PublicationOrderBy;
+    orderDirection?: OrderDirection;
 }
 
 export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
@@ -248,6 +253,7 @@ export interface UpdateUserInformation {
         title?: string | null;
         url?: string | null;
     }>;
+    orcidAccessToken: string;
 }
 
 export interface DeletePublicationPathParams {
@@ -258,7 +264,7 @@ export interface DeleteLinkPathParams {
     id: string;
 }
 
-export type ValidStatuses = 'DRAFT' | 'LIVE';
+export type ValidStatuses = 'DRAFT' | 'LIVE' | 'LOCKED';
 /**
  * ORCID
  */
@@ -357,6 +363,24 @@ export interface ORCIDUser {
 /**
  * @description Coauthor
  */
+
+export interface CoAuthor {
+    id: string;
+    linkedUser: null | string;
+    confirmedCoAuthor: boolean;
+    approvalRequested: boolean;
+    email: string;
+    publicationId: string;
+    createdAt?: string;
+    reminderDate?: string | null;
+    affiliations: MappedOrcidAffiliation[];
+    user?: {
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
+}
+
 export interface CreateCoAuthorRequestBody {
     email: string;
 }
@@ -409,46 +433,36 @@ export interface GetBookmarkPathParams {
 export interface GetAllBookmarkPathParams {
     id: string;
 }
-/* @description Ratings
+
+/**
+ * @description References
  */
 
-export type Ratings =
-    | 'PROBLEM_WELL_DEFINED'
-    | 'PROBLEM_ORIGINAL'
-    | 'PROBLEM_IMPORTANT'
-    | 'HYPOTHESIS_WELL_DEFINED'
-    | 'HYPOTHESIS_ORIGINAL'
-    | 'HYPOTHESIS_SCIENTIFICALLY_VALID'
-    | 'PROTOCOL_CLEAR'
-    | 'PROTOCOL_ORIGINAL'
-    | 'PROTOCOL_APPROPRIATE_TEST_OF_HYPOTHESIS'
-    | 'DATA_WELL_ANNOTATED'
-    | 'DATA_SIZE_OF_DATASET'
-    | 'DATA_FOLLOWED_PROTOCOL'
-    | 'ANALYSIS_CLEAR'
-    | 'ANALYSIS_ORIGINAL'
-    | 'ANALYSIS_APPROPRIATE_METHODOLOGY'
-    | 'INTERPRETATION_CLEAR'
-    | 'INTERPRETATION_INSIGHTFUL'
-    | 'INTERPRETATION_CONSISTENT_WITH_DATA'
-    | 'REAL_WORLD_APPLICATION_CLEAR'
-    | 'REAL_WORLD_APPLICATION_APPROPRIATE_TO_IMPLEMENT'
-    | 'REAL_WORLD_APPLICATION_IMPACTFUL'
-    | 'REVIEW_CLEAR'
-    | 'REVIEW_INSIGHTFUL'
-    | 'REVIEW_ORIGINAL';
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
-export interface CreateRatingRequestBody {
-    type: Ratings;
-    value: number;
+export interface Reference {
+    id: string;
+    publicationId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
+}
+
+export interface CreateReferencePath {
+    id: string;
+}
+
+export interface UpdateReferencePath {
+    id: string;
+    referenceId: string;
+}
+
+export interface RemoveAllReferencesPathParams {
+    id: string;
 }
 
 export interface OctopusInformation {
-    publications: {
-        [key in PublicationType]: {
-            ratingCategories: Ratings[];
-        };
-    };
+    publications: PublicationType[];
     languages: Languages[];
 }
 export interface CreateFlagCommentBody {
@@ -465,10 +479,6 @@ export interface ResolveFlagPathParams {
 
 export interface DestroyImagePathParams {
     id: string;
-}
-
-export interface GetRatingsQueryParams {
-    user?: string;
 }
 
 export interface EmailSendOptions {
@@ -521,19 +531,186 @@ export interface DOIResponse {
 
 //affiliations
 
-export interface CreateAffiliationPathParams {
+export interface UpdateAffiliationsPathParams {
     id: string;
 }
 
-export interface DeleteAffiliationPathParams {
-    id: string;
-    affiliation: string;
+export interface UpdateAffiliationsBody {
+    affiliations: MappedOrcidAffiliation[];
+    isIndependent: boolean;
 }
 
-export interface CreateAffiliationRequestBody {
+export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
+
+export interface UserPublicationsFilters {
+    offset: number;
+    limit: number;
+    orderBy?: UserPublicationsOrderBy;
+    orderDirection?: OrderDirection;
+}
+
+export interface SendApprovalReminderPathParams {
+    id: string;
+    coauthor: string;
+}
+
+type NameType = 'Personal' | 'Organizational';
+
+type DataCiteAffiliation = {
     name: string;
-    ror?: string;
-    city: string;
+    nameType: NameType;
+    affiliationIdentifier: string;
+    affiliationIdentifierScheme: string;
+};
+export interface DataCiteCreator {
+    name: string;
+    nameType: NameType;
+    givenName: string | undefined;
+    familyName: string | null;
+    nameIdentifiers: DataCiteCreatorNameIdentifiers[];
+    affiliation: DataCiteAffiliation[];
+}
+
+export interface DataCiteCreatorNameIdentifiers {
+    nameIdentifier: string;
+    nameIdentifierScheme: string;
+    schemeUri: string;
+}
+
+export interface DataCiteUser {
+    firstName: string | undefined;
+    lastName: string | null;
+    orcid: string;
+    affiliations: MappedOrcidAffiliation[];
+}
+export interface GeneratePDFPathParams {
+    id: string;
+}
+
+export interface GeneratePDFQueryParams {
+    redirectToPreview?: string;
+    generateNewPDF?: string;
+}
+
+export interface OrcidAffiliationSummaryDate {
+    year: {
+        value?: string;
+    };
+    month: {
+        value?: string;
+    };
+    day: {
+        value?: string;
+    };
+}
+
+export interface OrcidOrganization {
+    name: string;
+    address: {
+        city: string;
+        region?: string;
+        country: string;
+    };
+    'disambiguated-organization'?: {
+        'disambiguated-organization-identifier': string;
+        'disambiguation-source': string;
+    };
+}
+
+export interface OrcidAffiliationSummary {
+    'created-date': {
+        value: number;
+    };
+    'last-modified-date': {
+        value: number;
+    };
+    source: {
+        'source-orcid': {
+            uri: string;
+            path: string;
+            host: string;
+        };
+        'source-client-id'?: string;
+        'source-name': {
+            value: string;
+        };
+        'assertion-origin-orcid'?: string;
+        'assertion-origin-client-id'?: string;
+        'assertion-origin-name'?: string;
+    };
+    'put-code': number;
+    'department-name'?: string;
+    'role-title'?: string;
+    'start-date'?: OrcidAffiliationSummaryDate;
+    'end-date'?: OrcidAffiliationSummaryDate;
+    organization: OrcidOrganization;
+    url?: { value: string };
+    'external-ids'?: string[];
+    'display-index': string;
+    visibility: string;
+    path: string;
+}
+
+export interface OrcidAffiliationDate {
+    year: string | null;
+    month: string | null;
+    day: string | null;
+}
+
+/**
+ *
+ * Relevant affiliation types for Octopus are:
+ * - Memberships
+ * - Services
+ * - Invited Positions
+ * - Distinctions
+ * - Employments
+ * - Educations
+ * - Qualifications
+ */
+export interface MappedOrcidAffiliation {
+    id: number;
+    affiliationType:
+        | 'membership'
+        | 'service'
+        | 'invited-position'
+        | 'distinction'
+        | 'employment'
+        | 'education'
+        | 'qualification'
+        | 'misc.';
+    title?: string;
+    departmentName?: string;
+    startDate?: OrcidAffiliationDate;
+    endDate?: OrcidAffiliationDate;
+    organization: OrcidOrganization;
+    createdAt: number;
+    updatedAt: number;
+    source: { name: string; orcid: string };
+    url?: string;
+}
+
+export interface LegacyAffiliation {
+    name: string;
     country: string;
+    city: string;
     link: string;
+    ror: string | null;
+    id: string;
+}
+
+export interface UserEmployment {
+    role: string | null;
+    endDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    startDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    department: string | null;
+    organisation: string;
 }

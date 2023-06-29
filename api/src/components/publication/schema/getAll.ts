@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const getAllSchema: I.Schema = {
+const getAllSchema: I.JSONSchemaType<I.PublicationFilters> = {
     type: 'object',
     properties: {
         type: {
@@ -18,18 +18,33 @@ const getAllSchema: I.Schema = {
             default: 0
         },
         search: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         exclude: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         dateFrom: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         dateTo: {
-            type: 'string'
+            type: 'string',
+            nullable: true
+        },
+        orderBy: {
+            type: 'string',
+            enum: ['publishedDate'],
+            nullable: true
+        },
+        orderDirection: {
+            type: 'string',
+            enum: ['asc', 'desc'],
+            nullable: true
         }
     },
+    required: [],
     additionalProperties: false
 };
 

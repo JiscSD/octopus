@@ -1,19 +1,18 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Framer from 'framer-motion';
 
+import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 type TextProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
@@ -83,11 +82,11 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">About the service:</span> To see more information on the
                                     Jisc&apos;s Octopus service and what it offers see our service information page at:
                                     <Components.Link
-                                        href="https://int.octopus.ac/about"
+                                        href={Config.urls.about.path}
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
-                                        https://int.octopus.ac/about.
+                                        https://www.octopus.ac/about.
                                     </Components.Link>
                                 </li>
                                 <li className="mb-6">
@@ -121,11 +120,11 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <span className="font-bold">Privacy Policy:</span> Our Privacy Policy also applies
                                     to your use of the Service:
                                     <Components.Link
-                                        href="https://int.octopus.ac/privacy"
+                                        href={Config.urls.privacy.path}
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
-                                        https://int.octopus.ac/privacy
+                                        https://www.octopus.ac/privacy
                                     </Components.Link>
                                 </li>
                                 <li className="mb-6">
@@ -178,7 +177,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                                 <li className="mb-6">
                                     A <span className="font-bold">Registered User </span> is an individual who has
-                                    created an Octopus user account affiliated with an ORCID ID by following the steps
+                                    created an Octopus user account affiliated with an ORCID® iD by following the steps
                                     set out in Section 3. A Registered User can search, browse, and view content
                                     published to the site, but can also publish their own research as well as review,
                                     rate, create links between, and red flag others&apos; publications. Registered Users
@@ -250,9 +249,9 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <Components.PageSubTitle text="SECTION 5: USER CONTENT" className="mt-8" />
                         <StandardText>
                             <>
-                                Registered Users can create publications on the Service website, submit ratings on other
-                                user&apos;s publications, place red flags against content or add links between
-                                other&apos;s content (<span className="font-bold">User Content</span>).
+                                Registered Users can create publications on the Service website, place red flags against
+                                content or add links between other&apos;s content (
+                                <span className="font-bold">User Content</span>).
                                 <br />
                                 <br />
                                 When you create a publication on the Service website as a Registered User, you will be
@@ -291,7 +290,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <span className="font-bold">All Users shall:</span>
                         </StandardText>
-                        <div>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">only access and use the Service on these Terms</li>
                             </ul>
@@ -494,18 +493,18 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 User Content licensing arrangements.
                             </>
                         </StandardText>
-                        <Components.PageSubTitle text="SECTION 12: LIABILITY" className="mt-8" />
+                        <Components.PageSubTitle text="SECTION 13: ACCESSIBILITY" className="mt-8" />
                         <StandardText>
                             <>
                                 <span className="font-bold">
                                     The Service&apos;s accessibility statement is set out at{' '}
                                 </span>
                                 <Components.Link
-                                    href="https://int.octopus.ac/accessibility"
+                                    href={Config.urls.accessibility.path}
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >
-                                    https://int.octopus.ac/accessibility
+                                    https://www.octopus.ac/accessibility
                                 </Components.Link>
                             </>
                         </StandardText>
@@ -515,7 +514,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 Jisc has an internal complaints procedure. We aim to handle all complaints efficiently
                                 and quickly. If you have complaints regarding the Service please visit{' '}
                                 <Components.Link
-                                    href="https://int.octopus.ac/accessibility"
+                                    href="https://www.jisc.ac.uk/contact/complaints-and-escalations"
                                     openNew={true}
                                     className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                 >
@@ -1076,7 +1075,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         </Components.Link>
                                     </li>
                                     <li className="mb-3">
-                                        ORCiD:{' '}
+                                        ORCID:{' '}
                                         <Components.Link
                                             href="https://orcid.org/"
                                             openNew={true}

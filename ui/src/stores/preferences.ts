@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import * as zustandMiddleware from 'zustand/middleware';
 
 import * as Config from '@config';

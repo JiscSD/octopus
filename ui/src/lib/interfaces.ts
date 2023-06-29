@@ -1,6 +1,6 @@
+import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
-import React from 'react';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -11,7 +11,9 @@ export interface JSONResponseError extends Axios.AxiosError {}
 export interface NavMenuItem {
     label: string;
     value: string;
-    subItems?: NavMenuItem[] | React.ReactNode[] | any[];
+    dataTestId?: string;
+    onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>;
+    subItems?: NavMenuItem[];
 }
 
 export interface PublicationStatus {
@@ -37,13 +39,11 @@ export interface PublicationRef {
 }
 
 export interface LinkTo {
-    linkedTo: any;
     id: string;
     publicationToRef: PublicationRef;
 }
 
 export interface LinkFrom {
-    linkedFrom: any;
     id: string;
     publicationFromRef: PublicationRef;
 }
@@ -64,7 +64,7 @@ export interface CorePublication {
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
-    ethicalStatement: boolean | null;
+    ethicalStatement: string;
     ethicalStatementFreeText: string | null;
 }
 
@@ -73,52 +73,76 @@ export interface Publication extends CorePublication {
     user: User;
     linkedFrom: LinkFrom[];
     linkedTo: LinkTo[];
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
     dataPermissionsStatement: string | null;
     dataPermissionsStatementProvidedBy: string | null;
     selfDeclaration: boolean;
-    ratings: Rating;
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
     affiliations: Affiliations[];
     affiliationStatement: string | null;
     publicationFlags: Flag[];
+    references: Reference[];
+}
+
+export interface LinkedToPublication {
+    id: string;
+    childPublication: string;
+    childPublicationType: Types.PublicationType;
+    type: Types.PublicationType;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+}
+
+export interface LinkedFromPublication {
+    id: string;
+    parentPublication: string;
+    type: Types.PublicationType;
+    parentPublicationType: Types.PublicationType;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
 }
 
 export interface PublicationWithLinks {
-    rootPublication: Publication;
-    linkedToPublications: {
-        publicationFrom: string;
-        publicationTo: string;
-        publicationFromType: Types.PublicationType;
-        publicationToType: Types.PublicationType;
-        publicationToTitle: string;
-        publicationToPublishedDate: string;
-        publicationToCurrentStatus: Types.PublicationStatuses;
-        publicationToFirstName: string;
-        publicationToLastName: string;
-    }[];
-    linkedFromPublications: {
-        publicationFrom: string;
-        publicationTo: string;
-        publicationFromType: Types.PublicationType;
-        publicationToType: Types.PublicationType;
-        publicationFromTitle: string;
-        publicationFromPublishedDate: string;
-        publicationFromCurrentStatus: Types.PublicationStatuses;
-        publicationFromFirstName: string;
-        publicationFromLastName: string;
-    }[];
+    publication: Publication;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
+}
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    publicationId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
 }
 
 export interface CoAuthor {
     id: string;
-    linkedUser: null | string;
+    linkedUser?: null | string;
     confirmedCoAuthor: boolean;
+    approvalRequested: boolean;
     email: string;
+    publicationId: string;
+    createdAt?: string;
+    reminderDate?: string | null;
+    affiliations: MappedOrcidAffiliation[];
+    isIndependent: boolean;
     user?: {
         firstName: string;
         lastName: string;
@@ -162,16 +186,17 @@ export interface CoreUser {
     createdAt: string;
     updatedAt: string;
     orcid: string;
+    employment: EmploymentRecord[];
 }
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
-    Publication: Publication[];
+    publications: Publication[];
     works: WorksRecord[];
 }
 
-export interface SearchResults {
-    data: Publication[] | User[];
+export interface SearchResults<T extends Publication | User> {
+    data: T[];
     metadata: SearchResultMeta;
 }
 
@@ -247,46 +272,12 @@ export interface BookmarkedPublication {
     };
 }
 
-export interface Rating {
-    aggregate: RatingEntry[];
-    overall: {
-        _avg: {
-            rating: number;
-        };
-        _count: {
-            rating: number;
-        };
-    };
-}
-
-export interface RatingEntry {
-    id: string;
-    category: Types.Ratings;
-    _count: {
-        id: number;
-    };
-    _avg: {
-        rating: number | null;
-    };
-}
-
 export interface OctopusInformation {
     publications: {
         [key in Types.PublicationType]: {
             id: Types.PublicationType;
             heading: string;
             content: string;
-            ratings: {
-                [key in Types.Ratings]?: {
-                    id: Types.Ratings;
-                    value: string;
-                    description: string;
-                    labels: {
-                        negative: string;
-                        positive: string;
-                    };
-                };
-            };
         };
     };
     licences: {
@@ -325,13 +316,6 @@ export interface TextEditorImage {
     url: null | string;
     libraryUrl: null | string;
     width: null | string;
-}
-export interface APIRatingShape {
-    id: string;
-    publicationId: string;
-    userId: string;
-    rating: number;
-    category: Types.Ratings;
 }
 
 export interface ImagePreview {
@@ -386,9 +370,9 @@ export interface PublicationUpdateRequestBody extends JSON {
     licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
-    conflictOfInterestStatus: boolean;
+    conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string;
-    ethicalStatement?: boolean | null;
+    ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;
@@ -402,4 +386,67 @@ export interface CreationStep {
     subTitle: string;
     component: React.ReactElement;
     icon: React.ReactElement;
+}
+
+export interface UserPublication {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    publishedDate: string | null;
+    doi: string;
+    title: string | null;
+    type: Types.PublicationType;
+    currentStatus: Types.PublicationStatuses;
+    url_slug: string;
+    licence: Types.LicenceType;
+    content: string | null;
+    coAuthors: CoAuthor[];
+}
+
+export interface UserPublicationsPage {
+    offset: number;
+    limit: number;
+    total: number;
+    results: UserPublication[];
+}
+
+export interface OrcidAffiliationDate {
+    year: string | null;
+    month: string | null;
+    day: string | null;
+}
+
+export interface OrcidOrganization {
+    name: string;
+    address: {
+        city: string;
+        region: string | null;
+        country: string;
+    };
+    'disambiguated-organization': {
+        'disambiguated-organization-identifier': string;
+        'disambiguation-source': string;
+    } | null;
+}
+
+export interface MappedOrcidAffiliation {
+    id: number;
+    affiliationType:
+        | 'membership'
+        | 'service'
+        | 'invited-position'
+        | 'distinction'
+        | 'employment'
+        | 'education'
+        | 'qualification';
+    title: string | null;
+    departmentName: string | null;
+    startDate: OrcidAffiliationDate | null;
+    endDate: OrcidAffiliationDate | null;
+    organization: OrcidOrganization;
+    createdAt: number;
+    updatedAt: number;
+    source: { name: string; orcid: string };
+    url: string | null;
 }

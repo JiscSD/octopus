@@ -12,6 +12,7 @@ datasource db {
 model User {
     id                   String                 @id @default(cuid())
     orcid                String                 @unique
+    orcidAccessToken     String?
     firstName            String
     lastName             String?
     email                String?
@@ -26,7 +27,6 @@ model User {
     coAuthors            CoAuthors[]
     Publication          Publication[]
     PublicationFlags     PublicationFlags[]
-    PublicationRatings   PublicationRatings[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
@@ -57,9 +57,9 @@ model Publication {
     type                               PublicationType
     title                              String?
     licence                            LicenceType            @default(CC_BY)
-    conflictOfInterestStatus           Boolean?               @default(false)
+    conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
-    ethicalStatement                   Boolean?
+    ethicalStatement                   String?
     ethicalStatementFreeText           String?
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
@@ -80,13 +80,22 @@ model Publication {
     linkedTo                           Links[]                @relation("from")
     linkedFrom                         Links[]                @relation("to")
     publicationFlags                   PublicationFlags[]
-    publicationRatings                 PublicationRatings[]
     publicationStatus                  PublicationStatus[]
     PublicationBookmarks               PublicationBookmarks[]
+    References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
     affiliations                       Affiliations[]
     affiliationStatement               String?
+}
+
+model References {
+    id            String        @id
+    publicationId String
+    type          ReferenceType
+    text          String
+    location      String?
+    publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
@@ -141,7 +150,13 @@ model CoAuthors {
     email             String
     code              String      @default(cuid())
     confirmedCoAuthor Boolean     @default(false)
+    approvalRequested Boolean     @default(false)
     linkedUser        String?
+    position          Int         @default(0)
+    createdAt         DateTime    @default(now())
+    reminderDate      DateTime?
+    affiliations      Json[]
+    isIndependent     Boolean     @default(false)
     user              User?       @relation(fields: [linkedUser], references: [id])
     publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
 
@@ -170,18 +185,6 @@ model FlagComments {
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
 }
 
-model PublicationRatings {
-    id            String      @id @default(cuid())
-    publicationId String
-    userId        String
-    rating        Int
-    category      String
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, userId, category])
-}
-
 model PublicationBookmarks {
     id            String      @id @default(cuid())
     publicationId String
@@ -197,6 +200,10 @@ enum ImageExtension {
     png
     jpg
     jpeg
+    apng
+    avif
+    gif
+    webp
 }
 
 enum Role {
@@ -209,6 +216,7 @@ enum PublicationStatusEnum {
     DRAFT
     LIVE
     HIDDEN
+    LOCKED
 }
 
 enum PublicationType {
@@ -234,10 +242,8 @@ enum PublicationFlagCategoryEnum {
 enum LicenceType {
     CC_BY
     CC_BY_SA
-    CC_BY_ND
     CC_BY_NC
     CC_BY_NC_SA
-    CC_BY_NC_ND
 }
 
 enum Languages {
@@ -425,4 +431,10 @@ enum Languages {
     yo
     za
     zu
+}
+
+enum ReferenceType {
+    DOI
+    URL
+    TEXT
 }

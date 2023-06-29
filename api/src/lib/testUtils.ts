@@ -24,12 +24,16 @@ export const testSeed = async (): Promise<void> => {
         });
     }
 
+    await client.prisma.references.createMany({
+        data: seeds.referencesSeedData
+    });
+
     await client.prisma.publicationBookmarks.createMany({
         data: seeds.bookmarkedPublicationSeeds
     });
 };
 
-export const openSearchSeed = async () => {
+export const openSearchSeed = async (): Promise<void> => {
     for (const publication of seeds.publicationsDevSeedData) {
         // only seed in live publications
         if (publication.currentStatus === 'LIVE') {
@@ -70,11 +74,12 @@ export const clearDB = async (): Promise<void> => {
 };
 
 export const getEmails = async (query: string): Promise<any> => {
-    const emails = await axios.get('http://0.0.0.0:8025/api/v2/search', {
+    const emails = await axios.get(`http://${process.env.MAIL_SERVER}:8025/api/v2/search`, {
         params: {
             kind: 'to',
             query
         }
     });
+
     return emails?.data;
 };

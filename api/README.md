@@ -1,22 +1,38 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
 
-The Octopus UI is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
+The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
 
 ## Prerequisites
 
--   Install [Node.js](https://github.com/nodejs/node) `v14`.
-    -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
--   [Serverless](https://www.serverless.com/).
--   [Docker Compose](https://docs.docker.com/get-docker/).
--   .env file.
+-   Install [Node](https://github.com/nodejs/node) `v14` (`v14.18.1` or greater).
+-   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
+-   Install [Docker](https://docs.docker.com/get-docker).
+-   Install [Serverless](https://www.serverless.com).
+-   Obtain credentials to allow access to the [ORCID Public/Member API](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/).
+-   Obtain credentials to allow access to the [DataCite API](https://support.datacite.org/docs/api).
+-   Create your environment file as described below.
 
 ### Environment File
 
-Create a `.env` file inside `api/prisma` with credentials to connect to the postgres db which is hosted in the provided docker container.
+Create a `.env` file inside `~/api` using `cp .env.example .env`.
 
-## Local setup
+Make sure to update the values within to match your environment.
 
-To run the API locally:
+**Changes to .env file**
+When adding a new item to the .env file, make sure to update the environment variables in the docker-compose.yml file so the API tests can access them.
+
+### AWS Credentials File
+
+You will need a octopus credential profile to run locally, this can be populated with dummy data presented below:
+
+```bash
+[octopus]
+aws_access_key_id=xxx
+aws_secret_access_key=yyy
+aws_session_token=zxcxczcx
+```
+
+## Getting started
 
 First, start up Docker Desktop and within the **root directory** run:
 
@@ -32,17 +48,20 @@ Then, open another terminal and within the **API directory** run:
 ~/api$ npm i
 ```
 
-To start the API:
+Then you can seed the database and start the API:
 
 ```bash
-~/api$ npm run start:local
+$ ~/api$ npm run seed:local
+$ ~/api$ npm run start:local
 ```
 
-To run all tests locally:
+To run all tests locally (the API must be running first):
 
 ```bash
 ~/api$ npm run test:local
 ```
+
+To view the UI, you will also need to start the UI Next.js application. More information can be found in the [UI readme](../ui/README.md).
 
 ---
 
@@ -51,8 +70,7 @@ To run all tests locally:
 ## Commands
 
 Whenever a change is made to the Prisma Schema you must run `npx prisma generate` in order for the Prisma Client to update.  
-If you do not run this, the application
-code will break as the client will not reflect the latest schema.
+If you do not run this, the application code will break as the client will not reflect the latest schema.
 
 ```bash
 ~/api$ npx prisma generate
@@ -102,12 +120,6 @@ More information on migrations in Prisma can be found here: [Prisma Migrate Docu
 
 ## Testing
 
-API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working.
-
----
-
-## Workflows on push
-
-We have a job which runs the API test suite through github-actions. If any of the API tests fail, then the action will fail.
+API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working. These can be run manually using `npm run test:local`.
 
 ---

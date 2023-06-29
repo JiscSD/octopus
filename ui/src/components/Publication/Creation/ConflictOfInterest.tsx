@@ -38,8 +38,8 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="coi"
                             value="true"
-                            checked={conflictOfInterestStatus}
                             id="coi-true"
+                            checked={conflictOfInterestStatus}
                             onChange={() => updateConflictOfInterestStatus(true)}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
@@ -51,9 +51,12 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="coi"
                             value="false"
-                            checked={!conflictOfInterestStatus}
                             id="coi-false"
-                            onChange={() => updateConflictOfInterestStatus(false)}
+                            checked={conflictOfInterestStatus === false}
+                            onChange={() => {
+                                updateConflictOfInterestStatus(false);
+                                updateConflictOfInterestText('');
+                            }}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
                     </label>

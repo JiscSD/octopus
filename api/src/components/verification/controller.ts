@@ -1,18 +1,18 @@
 import * as authorizationService from 'authorization/service';
-import cryptoRandomString from 'crypto-random-string';
 import * as I from 'interface';
 import * as email from 'lib/email';
 import * as response from 'lib/response';
 import * as luxon from 'luxon';
 import * as userService from 'user/service';
 import * as verificationService from 'verification/service';
+import * as helpers from 'lib/helpers';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = cryptoRandomString({ length: 7, type: 'distinguishable' });
+        const code = helpers.generateOTP(7);
 
         // store code with user orcid and email
         await verificationService.upsert({
@@ -32,13 +32,14 @@ export const requestCode = async (
         return response.json(200, { message: 'OK' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
 
 export const confirmCode = async (
     event: I.AuthenticatedAPIRequest<I.ConfirmVerificationCodeBody, undefined, I.GetUserParameters>
-) => {
+): Promise<I.JSONResponse> => {
     try {
         const verification = await verificationService.find(event.pathParameters.id);
 
@@ -52,6 +53,7 @@ export const confirmCode = async (
             Number(process.env.VALIDATION_CODE_EXPIRY)
         ) {
             await verificationService.deleteVerification(verification.orcid);
+
             return response.json(404, { message: 'Not found' });
         }
 
@@ -68,17 +70,20 @@ export const confirmCode = async (
             return response.json(200, { token });
         }
 
+        // Regardless of outcome, we want to log the code entry attempt
         const increment = await verificationService.incrementAttempts(verification.orcid);
 
         // Expire code on repeated failures to enter correct value
         if (increment.attempts >= Number(process.env.VALIDATION_CODE_ATTEMPTS)) {
             await verificationService.deleteVerification(verification.orcid);
+
             return response.json(404, { message: 'Not found' });
         }
 
         return response.json(422, { message: 'Incorrect code' });
     } catch (err) {
         console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
