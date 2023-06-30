@@ -88,7 +88,11 @@ custom:
         createRoute53Record: true
     webpack:
         webpackConfig: ./webpack.config.js
-        includeModules: true
+        includeModules:
+            forceExclude:
+                - '@aws-sdk/client-s3'
+                - '@aws-sdk/client-ses'
+                - '@aws-sdk/client-sqs'
         packager: 'npm'
     versions:
         v1: v1
