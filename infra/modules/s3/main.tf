@@ -1,3 +1,5 @@
+data "aws_region" "default" {}
+
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
@@ -46,7 +48,7 @@ resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
   bucket = "email_forwarding_bucket"
   acl    = "private"
 
-  policy = <<EOF
+  access_control_policy = <<EOF
 {  
   "Version": "2012-10-17",
   "Statement": [
