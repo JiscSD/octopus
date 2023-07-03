@@ -14,8 +14,15 @@ import * as Hooks from '@hooks';
 import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios';
 
+const completenessIcons: { [key in Types.TabCompletionStatus]: React.ReactElement } = {
+    COMPLETE: <OutlineIcons.CheckBadgeIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
+    INCOMPLETE: (
+        <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-yellow-400 transition-colors duration-500" />
+    )
+};
+
 type BuildPublicationProps = {
-    steps: Interfaces.CreationStep[];
+    steps: Interfaces.CreationStepWithCompletenessStatus[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
@@ -405,7 +412,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     <aside
                         className={`flex w-full max-w-[30%] flex-col justify-between border-r border-transparent bg-teal-700 pt-10 transition-all duration-300 dark:border-grey-400 2xl:max-w-[25%]`}
                     >
-                        <ul className="sticky top-0 min-h-[500px] space-y-2">
+                        <ul className="sticky top-0 min-h-[600px] space-y-2">
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button
@@ -415,7 +422,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         }`}
                                     >
                                         {step.icon}
-                                        <span className="-mb-1">{step.title}</span>
+                                        <span className="-mb-1 grow">{step.title}</span>
+                                        {completenessIcons[step.status]}
                                     </button>
                                 </li>
                             ))}
@@ -465,7 +473,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                     }`}
                                                 >
                                                     {step.icon}
-                                                    <span className="-mb-1">{step.title}</span>
+                                                    <span className="-mb-1 grow">{step.title}</span>
+                                                    {completenessIcons[step.status]}
                                                 </button>
                                             </li>
                                         ))}

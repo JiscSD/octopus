@@ -368,6 +368,85 @@ export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffili
     ];
 };
 
+// Determines whether a tab is missing mandatory fields or not.
+export const getTabCompleteness = (
+    steps: Interfaces.CreationStep[],
+    store: Types.PublicationCreationStoreType
+): Interfaces.CreationStepWithCompletenessStatus[] => {
+    const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
+    steps.forEach((step) => {
+        switch (step.id) {
+            case 'KEY_INFORMATION':
+                if (store.title && store.licence) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'AFFILIATIONS':
+                if (store.authorAffiliations.length || store.isIndependentAuthor) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'LINKED_PUBLICATIONS':
+                if (store.linkTo?.length) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'MAIN_TEXT':
+                if (!isEmptyContent(store.content) && store.language) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CONFLICT_OF_INTEREST':
+                if (
+                    (store.conflictOfInterestStatus && store.conflictOfInterestText.length) ||
+                    store.conflictOfInterestStatus === false
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CO_AUTHORS':
+                if (store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'FUNDERS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+            case 'DATA_STATEMENT':
+                if (
+                    store.ethicalStatement &&
+                    (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
+                        (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
+                            store.dataPermissionsStatementProvidedBy))
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+
+                break;
+            case 'RESEARCH_PROCESS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+        }
+    });
+    return stepsWithCompleteness;
+};
+
 export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
     fn: F,
     wait: number,
