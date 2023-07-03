@@ -31,7 +31,7 @@ exports.handler = async (event) => {
 };
 
 const postToPubrouter = async (pdfMetadata) => {
-  const apiEndpoint = `https://pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
+  const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
 
   const response = await fetch(apiEndpoint, {
     method: "POST",
