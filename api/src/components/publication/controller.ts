@@ -1,5 +1,6 @@
 import htmlToText from 'html-to-text';
 import axios from 'axios';
+import * as s3 from 'lib/s3';
 import * as sqs from 'lib/sqs';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
@@ -377,8 +378,6 @@ export const getPDF = async (
     const redirectToPreview = event.queryStringParameters?.redirectToPreview === 'true';
     const publicationId = event.pathParameters.id;
     const publication = await publicationService.get(publicationId);
-    const s3Endpoint =
-        process.env.STAGE === 'local' ? process.env.LOCALSTACK_SERVER : 'https://s3.eu-west-1.amazonaws.com';
 
     if (!publication) {
         return response.json(404, {
@@ -397,7 +396,7 @@ export const getPDF = async (
     if (!generateNewPDF) {
         // check if there's a generated PDF for this publication
         try {
-            const currentPdfUrl = `${s3Endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
+            const currentPdfUrl = `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
             const result = await axios.get(currentPdfUrl);
 
             if (result.status === 200) {
