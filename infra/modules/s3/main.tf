@@ -1,5 +1,7 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "default" {}
+
 locals {
     account_id = data.aws_caller_identity.current.account_id
 }
@@ -53,7 +55,7 @@ resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
   bucket = "email_forwarding_bucket"
   acl    = "private"
 
-  policy = <<EOF
+  access_control_policy = <<EOF
 {  
   "Version": "2012-10-17",
   "Statement": [
