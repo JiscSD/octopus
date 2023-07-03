@@ -1,3 +1,10 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+    account_id = data.aws_caller_identity.current.account_id
+}
+
+
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
@@ -42,9 +49,21 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
-resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
-  bucket = "email_forwarding_bucket"
-  acl    = "private"
+
+resource "aws_s3_bucket" "email_forwarding_bucket" {
+  bucket = "email-forwarding-${var.environment}"
+}
+
+resource "aws_s3_bucket_public_access_block" "email_forwarding_bucket" {
+  bucket = aws_s3_bucket.email_forwarding_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = true
+}
+
+
+resource "aws_s3_bucket_policy" "email_forwarding_bucket" {
+  bucket = aws_s3_bucket.email_forwarding_bucket.id
 
   policy = <<EOF
 {  
@@ -57,10 +76,10 @@ resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
         "Service": "ses.amazonaws.com"
       },
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.my_bucket.arn}/*",
+      "Resource": "${aws_s3_bucket.email_forwarding_bucket.arn}/*",
       "Condition": {
         "StringEquals": {
-          "aws:Referer": "${var.aws_account_id}"
+          "aws:Referer": "${local.account_id}"
         }        
       }
     }
