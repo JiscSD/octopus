@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "allow_ssm_iam_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-data "template_file" "user_data" {
+data "template_file" "install_software" {
   template = file("${path.module}/scripts/install-bastion-software.yaml")
 }
 
@@ -79,7 +79,7 @@ resource "aws_instance" "bastion" {
     vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
     key_name                    = var.ec2_key_name
     associate_public_ip_address = true
-    user_data                   = data.template_file.user_data.rendered
+    user_data                   = data.template_file.install_software.rendered
     iam_instance_profile        = aws_iam_instance_profile.allow_ssm_iam_profile.name
     
     tags = {
