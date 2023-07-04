@@ -72,8 +72,24 @@ data "template_file" "install_software" {
   template = file("${path.module}/scripts/install-bastion-software.yaml")
 }
 
+data "aws_ami" "amazon-linux-2023" {
+ most_recent = true
+
+
+ filter {
+   name   = "owner-alias"
+   values = ["amazon"]
+ }
+
+
+ filter {
+   name   = "name"
+   values = ["al2023-ami-2023*"]
+ }
+}
+
 resource "aws_instance" "bastion" {
-    ami                         = "ami-0bb3fad3c0286ebd5"
+    ami                         = "${data.aws_ami.amazon-linux-2023.id}"
     instance_type               = "t3.nano"
     subnet_id                   = var.public_subnet
     vpc_security_group_ids      = [aws_security_group.ec2_sg.id]

@@ -1,7 +1,7 @@
 #cloud-config
 
 packages:
-  - postgresql
+  - postgresql15
 
 runcmd:
   # Install NVM globally
