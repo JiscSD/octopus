@@ -1,12 +1,13 @@
 #cloud-config
 
 packages:
+  - git
   - postgresql15
 
 runcmd:
-  # Install NVM globally
+  # Install NVM globally, cd to home directory on session start
   - |
     mkdir -p /opt/nvm
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | NVM_DIR=/opt/nvm bash
-    printf '\nexport NVM_DIR="/opt/nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"\n' >> /etc/bash.bashrc
-    printf 'cd' >> /etc/bash.bashrc
+    printf '\nexport NVM_DIR="/opt/nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"\n' >> /etc/profile.d/nvm.sh
+    printf 'cd' >> /etc/profile.d/cd.sh
