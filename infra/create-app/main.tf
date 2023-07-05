@@ -12,17 +12,6 @@ module "network" {
   project_name    = local.project_name
 }
 
-# module "frontend" {
-#   source         = "../modules/frontend"
-#   vpc_id         = module.network.vpc_id
-#   public_subnet  = module.network.public_subnet_ids[0]
-#   ec2_key_name   = local.project_key_pair_name
-#   allowable_ips  = local.allowable_ips
-#   domain_name    = var.domain_name
-#   environment    = local.environment
-#   public_subnets = module.network.public_subnet_ids
-# }
-
 module "bastion" {
   source        = "../modules/bastion"
   vpc_id        = module.network.vpc_id
