@@ -1,18 +1,6 @@
 locals {
   project_name          = "octopus"
-  project_key_pair_name = "octopus-ssh"
   environment           = terraform.workspace
-  allowable_ips = [
-    "193.62.83.114/32", // vpn
-    "193.62.83.115/32", // vpn
-    "194.81.3.15/32",   // vpn
-    "194.81.3.16/32",   // vpn
-    "10.0.0.0/16",      // vpc
-    "10.100.0.0/16"     // vpc pairing with code build
-  ]
-  third_party_vpn_ips = [
-    "194.83.97.110/32"
-  ]
 }
 
 module "network" {
@@ -40,9 +28,6 @@ module "bastion" {
   vpc_id        = module.network.vpc_id
   public_subnet = module.network.public_subnet_ids[0]
   environment   = local.environment
-  allowable_ips = local.allowable_ips
-  third_party_vpn_ips = local.third_party_vpn_ips
-  ec2_key_name  = local.project_key_pair_name
 }
 
 module "postgres" {
