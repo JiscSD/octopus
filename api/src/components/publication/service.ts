@@ -1,11 +1,13 @@
-import s3 from 'lib/s3';
 import chromium from 'chrome-aws-lambda';
+import * as s3 from 'lib/s3';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
 import { Browser } from 'puppeteer-core';
+
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -767,16 +769,16 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
         });
 
         // upload pdf to S3
-        await s3
-            .putObject({
+        await s3.client.send(
+            new PutObjectCommand({
                 Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
                 Key: `${publication.id}.pdf`,
                 ContentType: 'application/pdf',
                 Body: pdf
             })
-            .promise();
+        );
 
-        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+        return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
     } catch (err) {
         console.error(err);
 

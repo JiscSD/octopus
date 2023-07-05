@@ -46,7 +46,6 @@
         "@xmldom/xmldom": "^0.8.7",
         "ajv": "^8.12.0",
         "ajv-formats": "^2.1.1",
-        "aws-sdk": "^2.1114.0",
         "axios": "^1.4.0",
         "cheerio": "^1.0.0-rc.10",
         "chrome-aws-lambda": "10.1.0",
