@@ -29,8 +29,8 @@
         "lint:fix": "eslint --fix src/"
     },
     "dependencies": {
-        "@aws-sdk/client-ses": "^3.76.0",
-        "@aws-sdk/client-sqs": "^3.326.0",
+        "@aws-sdk/client-ses": "^3.363.0",
+        "@aws-sdk/client-sqs": "^3.363.0",
         "@middy/core": "^4.5.1",
         "@middy/do-not-wait-for-empty-event-loop": "^4.5.1",
         "@middy/http-json-body-parser": "^4.5.1",
