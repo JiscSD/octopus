@@ -179,7 +179,7 @@ export const link = async (
         }
 
         if (!event.body.approve) {
-            // email has already been linked
+            // check if user has already been linked
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
                     message:
@@ -242,6 +242,11 @@ export const link = async (
             return response.json(404, {
                 message: 'User has already been linked to this publication.'
             });
+        }
+
+        // check if the user email is the same as the one the invitation has been sent to
+        if (event.user.email !== coAuthorByEmail.email) {
+            return response.json(403, { message: 'You are not currently listed as an author on this draft' });
         }
 
         await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
