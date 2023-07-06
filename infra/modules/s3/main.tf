@@ -1,9 +1,10 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "default" {}
+
 locals {
     account_id = data.aws_caller_identity.current.account_id
 }
-
 
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
@@ -49,6 +50,61 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
+
+resource "aws_lambda_function" "pdf_processing_lambda" {
+  filename      = "${path.module}/pdf-processing-lambda.zip"
+  function_name = "${var.environment}-pdf-processing-lambda"
+  role          = aws_iam_role.pdf_processing_lambda_role.arn
+  handler       = "lambda_function.lambda_handler"
+  runtime       = "nodejs18.x"
+  source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
+
+  environment {
+    variables = {
+      AWS_REGION             = data.aws_region.default.name
+      EMAIL_RECIPIENT        = var.pub_router_failure_channel
+      PUBROUTER_API_KEY       = var.pub_router_api_key
+      ENVIRONMENT          = var.environment
+    }
+  }
+}
+
+resource "aws_iam_role" "pdf_processing_lambda_role" {
+  name = "pdf_processing_lambda_role"
+
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "lambda.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_s3_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = aws_iam_role.pdf_processing_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_ses_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
+  role       = aws_iam_role.pdf_processing_lambda_role.name
+}
+
+resource "aws_lambda_permission" "s3_trigger_permission" {
+  statement_id  = "AllowS3Invocation"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.pdf_processing_lambda.arn
+  principal     = "s3.amazonaws.com"
+
+  source_arn = aws_s3_bucket.pdf_bucket.arn
+}
 
 resource "aws_s3_bucket" "email_forwarding_bucket" {
   bucket = "email-forwarding-${var.environment}"
