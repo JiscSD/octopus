@@ -246,7 +246,13 @@ export const link = async (
 
         // check if the user email is the same as the one the invitation has been sent to
         if (event.user.email !== coAuthorByEmail.email) {
-            return response.json(403, { message: 'You are not currently listed as an author on this draft' });
+            const isCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
+
+            return response.json(403, {
+                message: isCoAuthor
+                    ? 'Your email address does not match the one to which the invitation has been sent.'
+                    : 'You are not currently listed as an author on this draft'
+            });
         }
 
         await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
