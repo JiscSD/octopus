@@ -94,4 +94,18 @@ describe('Link co-author', () => {
 
         expect(link.status).toEqual(404);
     });
+
+    test('Cannot link co-author with a different email address', async () => {
+        const response = await testUtils.agent
+            .patch('/publications/publication-problem-draft/link-coauthor')
+            .query({ apiKey: '000000004' }) // trying to accept the invitation logged in as a different user
+            .send({
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
+                approve: true
+            });
+
+        expect(response.status).toEqual(403);
+        expect(response.body.message).toBe('You are not currently listed as an author on this draft');
+    });
 });
