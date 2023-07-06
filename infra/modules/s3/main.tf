@@ -51,32 +51,6 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
-resource "aws_s3_bucket_acl" "email_forwarding_bucket" {
-  bucket = "email_forwarding_bucket"
-  acl    = "private"
-
-  access_control_policy = <<EOF
-{  
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowSESPuts",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ses.amazonaws.com"
-      },
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.my_bucket.arn}/*",
-      "Condition": {
-        "StringEquals": {
-          "aws:Referer": "${var.aws_account_id}"
-        }        
-      }
-    }
-  ]
-}
-EOF
-}
 
 resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "${path.module}/pdf-processing-lambda.zip"
@@ -170,10 +144,4 @@ resource "aws_lambda_permission" "s3_trigger_permission" {
   principal     = "s3.amazonaws.com"
 
   source_arn = aws_s3_bucket.pdf_bucket.arn
-}
-
-data "archive_file" "pdf_processing_lambda_zip" {
-  type        = "zip"
-  source_dir  = "lambda"
-  output_path = "${path.module}/pdf-processing-lambda.zip"
 }
