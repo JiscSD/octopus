@@ -1,19 +1,18 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Framer from 'framer-motion';
 
+import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 type TextProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {

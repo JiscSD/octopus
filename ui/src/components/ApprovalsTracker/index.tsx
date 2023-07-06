@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
-import cuid from 'cuid';
+import React, { useMemo } from 'react';
+import axios from 'axios';
 
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/io5';
 import * as Components from '@components';
@@ -13,6 +13,7 @@ import * as Config from '@config';
 import * as api from '@api';
 
 import { KeyedMutator } from 'swr';
+import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
     publication: Interfaces.Publication;
@@ -73,7 +74,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
 
             if (confirmed) {
                 const newAuthor = {
-                    id: cuid(),
+                    id: createId(),
                     email,
                     publicationId: props.publication.id,
                     approvalRequested: false,
@@ -107,7 +108,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     setAuthorEmailError('');
                     props.onError('');
                 } catch (error) {
-                    props.onError((error as Interfaces.JSONResponseError).response?.data?.message);
+                    props.onError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
                 }
             }
         }, 300); // wait for the other modal to close
@@ -135,7 +136,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 );
                 await props.refreshPublicationData();
             } catch (error) {
-                props.onError((error as Interfaces.JSONResponseError).response?.data?.message);
+                props.onError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
             }
             setSendingReminder(false);
         }
@@ -343,7 +344,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         </h4>
                     ) : (
                         <div className="flex items-center gap-4 sm:justify-center">
-                            <OutlineIcons.BadgeCheckIcon className="w-6 flex-shrink-0 text-green-500 dark:text-green-300" />
+                            <OutlineIcons.CheckBadgeIcon className="w-6 flex-shrink-0 text-green-500 dark:text-green-300" />
                             <h4 className="text-lg dark:text-white-50">
                                 All authors have <span className="font-semibold">approved</span> this publication
                             </h4>

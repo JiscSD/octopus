@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import * as Components from '@components';
 
@@ -11,6 +11,7 @@ type CommonProps = {
     className?: string;
     textSize?: string;
     padding?: string;
+    children?: React.ReactNode;
 };
 
 type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };

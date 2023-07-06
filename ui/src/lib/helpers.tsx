@@ -178,46 +178,6 @@ export const getDecodedUserToken = async (token: string) => {
 };
 
 /**
- * @description For use in NextJS SSR, check cookies for token & set the response location
- */
-export const guardPrivateRoute = async (context: Types.GetServerSidePropsContext): Promise<Types.UserType> => {
-    const token = getJWT(context);
-    const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
-
-    const redirectToORCIDLogin = () => {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${redirectTo}`
-        });
-
-        context.res.end();
-    };
-
-    if (!token) {
-        redirectToORCIDLogin();
-        return {} as Types.UserType;
-    }
-
-    const decodedToken = await getDecodedUserToken(token);
-
-    if (!decodedToken) {
-        redirectToORCIDLogin();
-    } else {
-        const { email } = decodedToken; // check user email
-        const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
-
-        // Only allow users with a verified email to access guarded routes
-        if (!email && !isVerifyEmailPage) {
-            context.res.writeHead(302, {
-                Location: `${Config.urls.verify.path}?state=${redirectTo}`
-            });
-            context.res.end();
-        }
-    }
-
-    return decodedToken as Types.UserType;
-};
-
-/**
  * @description todo
  */
 export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
@@ -406,4 +366,167 @@ export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffili
         ),
         ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
     ];
+};
+
+// Determines whether a tab is missing mandatory fields or not.
+export const getTabCompleteness = (
+    steps: Interfaces.CreationStep[],
+    store: Types.PublicationCreationStoreType
+): Interfaces.CreationStepWithCompletenessStatus[] => {
+    const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
+    steps.forEach((step) => {
+        switch (step.id) {
+            case 'KEY_INFORMATION':
+                if (store.title && store.licence) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'AFFILIATIONS':
+                if (store.authorAffiliations.length || store.isIndependentAuthor) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'LINKED_PUBLICATIONS':
+                if (store.linkTo?.length) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'MAIN_TEXT':
+                if (!isEmptyContent(store.content) && store.language) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CONFLICT_OF_INTEREST':
+                if (
+                    (store.conflictOfInterestStatus && store.conflictOfInterestText.length) ||
+                    store.conflictOfInterestStatus === false
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CO_AUTHORS':
+                if (store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'FUNDERS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+            case 'DATA_STATEMENT':
+                if (
+                    store.ethicalStatement &&
+                    (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
+                        (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
+                            store.dataPermissionsStatementProvidedBy))
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+
+                break;
+            case 'RESEARCH_PROCESS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+        }
+    });
+    return stepsWithCompleteness;
+};
+
+export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    fn: F,
+    wait: number,
+    { maxWait }: { maxWait?: number } = {}
+) => {
+    let timeout: NodeJS.Timeout;
+    let maxTimeout: NodeJS.Timeout | null;
+
+    const debounced = (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (maxTimeout) {
+                clearTimeout(maxTimeout);
+                maxTimeout = null;
+            }
+            fn(...args);
+        }, wait);
+
+        if (maxWait && !maxTimeout) {
+            maxTimeout = setTimeout(() => {
+                clearTimeout(timeout);
+                maxTimeout = null;
+                fn(...args);
+            }, maxWait);
+        }
+    };
+
+    return debounced;
+};
+
+/**
+ * @description 'getServerSideProps' wrapper for protected routes
+ */
+
+export const withServerSession = (
+    callback: (
+        context: Types.GetServerSidePropsContext,
+        currentUser: Types.UserType
+    ) => Promise<Types.GetServerSidePropsResult<{}>>
+) => {
+    return async function (context: Types.GetServerSidePropsContext): Promise<Types.GetServerSidePropsResult<{}>> {
+        const token = getJWT(context);
+        const { resolvedUrl } = context;
+
+        if (!token) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const decodedToken = await getDecodedUserToken(token);
+
+        if (!decodedToken) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const { email } = decodedToken;
+        const isVerifyEmailPage = resolvedUrl.startsWith(Config.urls.verify.path);
+
+        // Only allow users with a verified email to access protected routes
+        if (!email && !isVerifyEmailPage) {
+            // redirect to /verify page
+            return {
+                redirect: {
+                    destination: `${Config.urls.verify.path}?state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        return callback(context, decodedToken);
+    };
 };

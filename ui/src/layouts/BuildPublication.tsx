@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import * as Router from 'next/router';
 import * as ReactIconsFA from 'react-icons/fa';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 import * as Components from '@components';
@@ -14,8 +14,15 @@ import * as Hooks from '@hooks';
 import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios';
 
+const completenessIcons: { [key in Types.TabCompletionStatus]: React.ReactElement } = {
+    COMPLETE: <OutlineIcons.CheckBadgeIcon className="h-6 w-6 text-teal-300 transition-colors duration-500" />,
+    INCOMPLETE: (
+        <OutlineIcons.ExclamationCircleIcon className="h-6 w-6 text-yellow-400 transition-colors duration-500" />
+    )
+};
+
 type BuildPublicationProps = {
-    steps: Interfaces.CreationStep[];
+    steps: Interfaces.CreationStepWithCompletenessStatus[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
     publication: Interfaces.Publication;
@@ -369,7 +376,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
-                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
             </Components.Modal>
@@ -380,7 +387,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 positiveButtonText="Finalise Draft and Send Request"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to finalise your publication?"
-                icon={<OutlineIcons.CloudUploadIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
+                icon={<OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-gray-500 text-sm">
                     This action will lock your publication and notify other authors that they must approve it in its
@@ -405,7 +412,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     <aside
                         className={`flex w-full max-w-[30%] flex-col justify-between border-r border-transparent bg-teal-700 pt-10 transition-all duration-300 dark:border-grey-400 2xl:max-w-[25%]`}
                     >
-                        <ul className="sticky top-0 min-h-[500px] space-y-2">
+                        <ul className="sticky top-0 min-h-[600px] space-y-2">
                             {props.steps.map((step, index) => (
                                 <li key={step.title}>
                                     <button
@@ -415,7 +422,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         }`}
                                     >
                                         {step.icon}
-                                        <span className="-mb-1">{step.title}</span>
+                                        <span className="-mb-1 grow">{step.title}</span>
+                                        {completenessIcons[step.status]}
                                     </button>
                                 </li>
                             ))}
@@ -465,7 +473,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                     }`}
                                                 >
                                                     {step.icon}
-                                                    <span className="-mb-1">{step.title}</span>
+                                                    <span className="-mb-1 grow">{step.title}</span>
+                                                    {completenessIcons[step.status]}
                                                 </button>
                                             </li>
                                         ))}
@@ -517,7 +526,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
                                                 disabled={!isReadyRequestApproval}
                                                 endIcon={
-                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                    <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
                                                 }
                                                 className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             />
@@ -527,7 +536,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                                 onClick={() => setPublishModalVisibility(true)}
                                                 disabled={!isReadyToPublish}
                                                 endIcon={
-                                                    <OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />
+                                                    <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
                                                 }
                                                 className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             />
@@ -579,14 +588,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         {hasUnconfirmedCoAuthors ? (
                                             <Components.IconButton
                                                 title="Request Approval"
-                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
                                                 disabled={!isReadyRequestApproval}
                                                 onClick={() => setRequestApprovalModalVisibility(true)}
                                             />
                                         ) : (
                                             <Components.IconButton
                                                 title="Publish"
-                                                icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                                icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
                                                 disabled={!isReadyToPublish}
                                                 onClick={() => setPublishModalVisibility(true)}
                                             />
@@ -681,7 +690,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyRequestApproval}
-                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            endIcon={
+                                                <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
+                                            }
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
                                         />
@@ -689,7 +700,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         <Components.Button
                                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
                                             disabled={!isReadyToPublish}
-                                            endIcon={<OutlineIcons.CloudUploadIcon className="h-5 w-5 text-white-50" />}
+                                            endIcon={
+                                                <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
+                                            }
                                             title="Publish"
                                             onClick={() => setPublishModalVisibility(true)}
                                         />
@@ -711,14 +724,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     {hasUnconfirmedCoAuthors ? (
                                         <Components.IconButton
                                             disabled={!isReadyRequestApproval}
-                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}
                                         />
                                     ) : (
                                         <Components.IconButton
                                             disabled={!isReadyToPublish}
-                                            icon={<OutlineIcons.CloudUploadIcon className="h-5 w-5" />}
+                                            icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
                                             title="Publish"
                                             onClick={() => setPublishModalVisibility(true)}
                                         />

@@ -382,10 +382,15 @@ export interface PublicationUpdateRequestBody extends JSON {
 }
 
 export interface CreationStep {
+    id: Types.PublicationCreationStep;
     title: string;
     subTitle: string;
     component: React.ReactElement;
     icon: React.ReactElement;
+}
+
+export interface CreationStepWithCompletenessStatus extends CreationStep {
+    status: Types.TabCompletionStatus;
 }
 
 export interface UserPublication {

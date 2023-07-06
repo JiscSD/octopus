@@ -1,5 +1,4 @@
 import * as testUtils from 'lib/testUtils';
-import cryptoRandomString from 'crypto-random-string';
 import * as cheerio from 'cheerio';
 
 describe('Confirm a verification code', () => {
@@ -9,7 +8,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User receives an error on incorrect code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
 
@@ -21,7 +20,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User receives not found on three incorrect code attempts', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0002').query({ apiKey: 123456789, email });
 
@@ -37,7 +36,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User can confirm a correct verification code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
 

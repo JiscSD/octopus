@@ -17,7 +17,6 @@ export {
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-export { HandlerLambda } from 'middy';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -56,7 +55,7 @@ export interface OptionalAuthenticatedAPIRequest<
 
 export interface JSONResponse {
     body?: string;
-    headers: any;
+    headers: unknown;
     statusCode: number;
 }
 
@@ -595,13 +594,13 @@ export interface GeneratePDFQueryParams {
 
 export interface OrcidAffiliationSummaryDate {
     year: {
-        value: string | null;
+        value?: string;
     };
     month: {
-        value: string | null;
+        value?: string;
     };
     day: {
-        value: string | null;
+        value?: string;
     };
 }
 
@@ -609,13 +608,13 @@ export interface OrcidOrganization {
     name: string;
     address: {
         city: string;
-        region: string | null;
+        region?: string;
         country: string;
     };
-    'disambiguated-organization': {
+    'disambiguated-organization'?: {
         'disambiguated-organization-identifier': string;
         'disambiguation-source': string;
-    } | null;
+    };
 }
 
 export interface OrcidAffiliationSummary {
@@ -640,13 +639,13 @@ export interface OrcidAffiliationSummary {
         'assertion-origin-name'?: string;
     };
     'put-code': number;
-    'department-name': string | null;
-    'role-title': string | null;
-    'start-date': OrcidAffiliationSummaryDate | null;
-    'end-date': OrcidAffiliationSummaryDate | null;
+    'department-name'?: string;
+    'role-title'?: string;
+    'start-date'?: OrcidAffiliationSummaryDate;
+    'end-date'?: OrcidAffiliationSummaryDate;
     organization: OrcidOrganization;
-    url: { value: string } | null;
-    'external-ids': string[] | null;
+    url?: { value: string };
+    'external-ids'?: string[];
     'display-index': string;
     visibility: string;
     path: string;
@@ -678,16 +677,26 @@ export interface MappedOrcidAffiliation {
         | 'distinction'
         | 'employment'
         | 'education'
-        | 'qualification';
-    title: string | null;
-    departmentName: string | null;
-    startDate: OrcidAffiliationDate | null;
-    endDate: OrcidAffiliationDate | null;
+        | 'qualification'
+        | 'misc.';
+    title?: string;
+    departmentName?: string;
+    startDate?: OrcidAffiliationDate;
+    endDate?: OrcidAffiliationDate;
     organization: OrcidOrganization;
     createdAt: number;
     updatedAt: number;
     source: { name: string; orcid: string };
-    url: string | null;
+    url?: string;
+}
+
+export interface LegacyAffiliation {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror: string | null;
+    id: string;
 }
 
 export interface UserEmployment {

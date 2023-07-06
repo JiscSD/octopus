@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import ClickAwayListener from 'react-click-away-listener';
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as HeadlessUI from '@headlessui/react';
 
 import * as Components from '@components';
@@ -39,7 +39,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                 }}
                 className="rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <OutlineIcons.MenuIcon
+                <OutlineIcons.Bars3Icon
                     className={`h-8 w-8 text-teal-500 dark:text-white-50 ${
                         open && 'text-grey-100'
                     } transition-colors duration-500 `}

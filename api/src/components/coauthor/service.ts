@@ -1,6 +1,6 @@
 import * as client from 'lib/client';
 import * as I from 'lib/interface';
-import cuid from 'cuid';
+import { createId } from '@paralleldrive/cuid2';
 import { Prisma } from '@prisma/client';
 
 export const get = (id: string) =>
@@ -164,7 +164,7 @@ export const resetCoAuthors = async (publicationId: string) => {
         },
         data: {
             confirmedCoAuthor: false,
-            code: cuid()
+            code: createId()
         }
     });
 

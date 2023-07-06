@@ -1,6 +1,7 @@
 import * as Interfaces from '@interfaces';
 
-export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+export type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+
 export type { AppProps } from 'next/app';
 export type { AxiosError } from 'axios';
 
@@ -316,17 +317,19 @@ export type Languages =
     | 'za'
     | 'zu';
 
-export type PublicationCreationSteps =
+export type PublicationCreationStep =
     | 'KEY_INFORMATION'
+    | 'AFFILIATIONS'
     | 'LINKED_PUBLICATIONS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
     | 'FUNDERS'
     | 'DATA_STATEMENT'
-    | 'RESEARCH_PROCESS'
-    | 'REVIEW';
+    | 'RESEARCH_PROCESS';
 
 export type CreationSteps = {
-    [key in PublicationCreationSteps]: Interfaces.CreationStep;
+    [key in PublicationCreationStep]: Interfaces.CreationStep;
 };
+
+export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';

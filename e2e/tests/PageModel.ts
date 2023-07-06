@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a:has-text("My profile")'
+        myProfileButton: 'a:has-text("My Account")'
     },
     footer: {
         links: [
@@ -133,11 +133,11 @@ export const PageModel = {
     },
     confirmEmail: {},
     myProfile: {
-        liveAuthorPageButton: 'a:has-text("View live author page")',
+        liveAuthorPageButton: 'a:has-text("View my public author page")',
         draftPublicationHeader: 'h2:has-text("Draft publications")'
     },
     myPublications: {
-        liveAuthorPageButton: 'a:has-text("View live author page")'
+        liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
         bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'
@@ -149,7 +149,7 @@ export const PageModel = {
         createThisPublicationButton: 'button[aria-label="Create this publication"]',
         nextButton: 'button:has-text("Next") >> nth=0',
         previewButton: 'button:has-text("Preview") >> nth=0',
-        publishButton: 'button:has-text("Publish") >> nth=1',
+        publishButton: 'button:has-text("Publish") >> nth=0',
         publishButtonTracker: 'button[title="Publish"]',
         requestApprovalButton: 'button:has-text("Request Approval") >> nth=0',
         confirmRequestApproval: 'button:has-text("Finalise Draft and Send Request") >> nth=0',

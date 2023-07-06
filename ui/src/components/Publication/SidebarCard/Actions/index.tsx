@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import * as SWR from 'swr';
 import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';

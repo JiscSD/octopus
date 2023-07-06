@@ -12,16 +12,7 @@ const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
                         type: 'number'
                     },
                     affiliationType: {
-                        type: 'string',
-                        enum: [
-                            'membership',
-                            'service',
-                            'invited-position',
-                            'distinction',
-                            'employment',
-                            'education',
-                            'qualification'
-                        ]
+                        type: 'string'
                     },
                     createdAt: {
                         type: 'number'
@@ -29,50 +20,36 @@ const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
                     updatedAt: {
                         type: 'number'
                     },
-                    departmentName: {
-                        type: 'string'
-                    },
-                    startDate: {
-                        type: 'object',
-                        properties: {
-                            day: {
-                                type: 'string',
-                                nullable: true
-                            },
-                            month: {
-                                type: 'string',
-                                nullable: true
-                            },
-                            year: {
-                                type: 'string',
-                                nullable: true
-                            }
-                        },
-                        required: [],
+                    title: {
+                        type: 'string',
                         nullable: true
                     },
-                    endDate: {
-                        type: 'object',
-                        properties: {
-                            day: {
-                                type: 'string',
-                                nullable: true
-                            },
-                            month: {
-                                type: 'string',
-                                nullable: true
-                            },
-                            year: {
-                                type: 'string',
-                                nullable: true
-                            }
-                        },
-                        required: [],
+                    departmentName: {
+                        type: 'string',
                         nullable: true
                     },
                     organization: {
                         type: 'object',
                         properties: {
+                            name: {
+                                type: 'string'
+                            },
+                            address: {
+                                type: 'object',
+                                properties: {
+                                    city: {
+                                        type: 'string'
+                                    },
+                                    region: {
+                                        type: 'string',
+                                        nullable: true
+                                    },
+                                    country: {
+                                        type: 'string'
+                                    }
+                                },
+                                required: []
+                            },
                             'disambiguated-organization': {
                                 type: 'object',
                                 properties: {
@@ -83,30 +60,11 @@ const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
                                         type: 'string'
                                     }
                                 },
-                                required: ['disambiguated-organization-identifier', 'disambiguation-source'],
-                                nullable: true
-                            },
-                            address: {
-                                type: 'object',
-                                properties: {
-                                    city: {
-                                        type: 'string'
-                                    },
-                                    country: {
-                                        type: 'string'
-                                    },
-                                    region: {
-                                        type: 'string',
-                                        nullable: true
-                                    }
-                                },
-                                required: ['city', 'country']
-                            },
-                            name: {
-                                type: 'string'
+                                nullable: true,
+                                required: []
                             }
                         },
-                        required: ['address']
+                        required: []
                     },
                     source: {
                         type: 'object',
@@ -118,26 +76,46 @@ const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
                                 type: 'string'
                             }
                         },
-                        required: ['name', 'orcid']
-                    },
-                    title: {
-                        type: 'string',
-                        nullable: true
+                        required: []
                     },
                     url: {
                         type: 'string',
                         nullable: true
+                    },
+                    startDate: {
+                        type: 'object',
+                        properties: {
+                            day: {
+                                type: 'string'
+                            },
+                            month: {
+                                type: 'string'
+                            },
+                            year: {
+                                type: 'string'
+                            }
+                        },
+                        nullable: true,
+                        required: []
+                    },
+                    endDate: {
+                        type: 'object',
+                        properties: {
+                            day: {
+                                type: 'string'
+                            },
+                            month: {
+                                type: 'string'
+                            },
+                            year: {
+                                type: 'string'
+                            }
+                        },
+                        nullable: true,
+                        required: []
                     }
                 },
-                required: [
-                    'id',
-                    'departmentName',
-                    'affiliationType',
-                    'createdAt',
-                    'organization',
-                    'source',
-                    'updatedAt'
-                ]
+                required: []
             }
         },
         isIndependent: {

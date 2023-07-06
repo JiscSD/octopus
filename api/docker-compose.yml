@@ -104,7 +104,7 @@ services:
             - AUTHORISATION_CALLBACK_URL=https://localhost:3001/login
             - JWT_SECRET=PUT_JWT_SECRET_HERE
             - MAIL_SERVER=mailhog
-            - LOCALSTACK_SERVER=localstack
+            - LOCALSTACK_SERVER=http://localstack:4566
             - STAGE=local
             - EMAIL_SENDER_ADDRESS=no-reply@local.ac
             - ELASTICSEARCH_PROTOCOL=http
@@ -117,7 +117,7 @@ services:
             - VALIDATION_CODE_ATTEMPTS=3
             - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
             - QUEUE_URL=http://localhost:4566/000000000000/science-octopus-pdf-queue-local
-            - SQS_ENDPOINT=http://localhost:4566
+            - SQS_ENDPOINT=http://localstack:4566
             - LIST_USERS_API_KEY=123456789
 
 volumes:
