@@ -1,11 +1,9 @@
-import middy from '@middy/core';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import middy from '@middy/core';
 
 import * as I from 'interface';
 import * as response from 'lib/response';
-
 
 const validator = (schema: I.Schema, requestType: I.RequestType): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (request): Promise<I.JSONResponse | void> => {
@@ -29,4 +27,5 @@ const validator = (schema: I.Schema, requestType: I.RequestType): middy.Middlewa
         before
     };
 };
+
 export default validator;
