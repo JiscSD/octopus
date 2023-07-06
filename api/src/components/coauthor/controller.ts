@@ -248,7 +248,7 @@ export const link = async (
         if (event.user.email !== coAuthorByEmail.email) {
             const isCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
 
-            return response.json(403, {
+            return response.json(isCoAuthor ? 403 : 404, {
                 message: isCoAuthor
                     ? 'Your email address does not match the one to which the invitation has been sent.'
                     : 'You are not currently listed as an author on this draft'

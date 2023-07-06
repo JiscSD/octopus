@@ -95,17 +95,34 @@ describe('Link co-author', () => {
         expect(link.status).toEqual(404);
     });
 
+    // the following test covers an edge case, but still possible
     test('Cannot link co-author with a different email address', async () => {
+        // trying to accept invitation with a user which is not a co-author
         const response = await testUtils.agent
             .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '000000004' }) // trying to accept the invitation logged in as a different user
+            .query({ apiKey: '000000004' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
                 code: 'test-code-user-7',
                 approve: true
             });
 
-        expect(response.status).toEqual(403);
+        expect(response.status).toEqual(404);
         expect(response.body.message).toBe('You are not currently listed as an author on this draft');
+
+        // trying to accept invitation with a different co-author account
+        const response2 = await testUtils.agent
+            .patch('/publications/publication-problem-draft/link-coauthor')
+            .query({ apiKey: '000000008' })
+            .send({
+                email: 'test-user-7@jisc.ac.uk',
+                code: 'test-code-user-7',
+                approve: true
+            });
+
+        expect(response2.status).toEqual(403);
+        expect(response2.body.message).toBe(
+            'Your email address does not match the one to which the invitation has been sent.'
+        );
     });
 });
