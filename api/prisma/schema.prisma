@@ -30,6 +30,7 @@ model User {
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
+    topicBookmarks       TopicBookmark[]
 }
 
 model Verification {
@@ -87,6 +88,7 @@ model Publication {
     fundersStatement                   String?
     affiliations                       Affiliations[]
     affiliationStatement               String?
+    topics                             Topic[]
 }
 
 model References {
@@ -194,6 +196,42 @@ model PublicationBookmarks {
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([publicationId, userId])
+}
+
+model Topic {
+    id                      String             @id @default(cuid())
+    url_slug                String             @unique @default(cuid())
+    title                   String
+    description             String
+    keywords                String[]
+    language                Languages          @default(en)
+    alternativeTranslations TopicTranslation[]
+    createdAt               DateTime           @default(now())
+    updatedAt               DateTime           @updatedAt
+    parentId                String?                
+    parent                  Topic?             @relation("TopicHierarchy", fields: [parentId], references: [id])
+    children                Topic[]            @relation("TopicHierarchy")
+    bookmarks               TopicBookmark[]
+    publications            Publication[]
+}
+
+model TopicBookmark {
+    id            String      @id @default(cuid())
+    topicId       String
+    userId        String
+    createdAt     DateTime    @default(now())
+    topic         Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([topicId, userId])
+}
+
+model TopicTranslation {
+    id       String    @id @default(cuid())
+    topicId  String
+    language Languages
+    value    String
+    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
 }
 
 enum ImageExtension {
