@@ -16,7 +16,7 @@ describe.only('Create topic', () => {
                 title: 'Topic test 1',
                 parentId: 'test-topic-1'
             });
-        
+
         expect(createTopicRequest.status).toEqual(201);
         expect(createTopicRequest.body.title).toEqual('Topic test 1');
     });

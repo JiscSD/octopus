@@ -8,9 +8,11 @@ export const create = async (e: I.CreateTopicRequestBody) => {
             keywords: e.keywords,
             language: e.language,
             parentId: e.parentId,
-            translations: e.translations?.length ? {
-                create: e.translations
-            } : undefined
+            translations: e.translations?.length
+                ? {
+                      create: e.translations
+                  }
+                : undefined
         },
         include: {
             parent: {

@@ -33,7 +33,7 @@ const createTopicSchema: I.Schema = {
             }
         },
         parentId: {
-            type: 'string',
+            type: 'string'
         }
     },
     required: ['title', 'parentId']

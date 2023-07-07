@@ -68,7 +68,13 @@ export const clearDB = async (): Promise<void> => {
     const deleteUsers = client.prisma.user.deleteMany();
     const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
 
-    await client.prisma.$transaction([deleteUsers, deletePublications, deleteTopics, deleteBookmarks, deletePublicationStatuses]);
+    await client.prisma.$transaction([
+        deleteUsers,
+        deletePublications,
+        deleteTopics,
+        deleteBookmarks,
+        deletePublicationStatuses
+    ]);
 
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'

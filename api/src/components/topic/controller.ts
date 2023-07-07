@@ -3,9 +3,7 @@ import * as response from 'lib/response';
 
 import * as topicService from 'topic/service';
 
-export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreateTopicRequestBody>
-): Promise<I.JSONResponse> => {
+export const create = async (event: I.AuthenticatedAPIRequest<I.CreateTopicRequestBody>): Promise<I.JSONResponse> => {
     try {
         const topic = await topicService.create(event.body);
 
