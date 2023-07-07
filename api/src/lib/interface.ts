@@ -714,3 +714,16 @@ export interface UserEmployment {
     department: string | null;
     organisation: string;
 }
+
+export interface TopicTranslation {
+    language: Languages;
+    value: string;
+}
+
+export interface CreateTopicRequestBody {
+    title: string;
+    keywords?: string[];
+    language?: Languages;
+    translations?: TopicTranslation[];
+    parentId: string;
+}

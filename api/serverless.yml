@@ -491,3 +491,12 @@ functions:
                   path: ${self:custom.versions.v1}/orcid-affiliations
                   method: GET
                   cors: true
+
+    # Topics
+    createTopic:
+        handler: src/components/topic/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics
+                  method: POST
+                  cors: true

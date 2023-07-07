@@ -63,6 +63,9 @@
             "flag/*": [
                 "src/components/flag/*"
             ],
+            "topic/*": [
+                "src/components/topic/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],
