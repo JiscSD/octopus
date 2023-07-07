@@ -1,7 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-data "aws_region" "default" {}
-
 locals {
     account_id = data.aws_caller_identity.current.account_id
 }
@@ -61,7 +59,6 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
 
   environment {
     variables = {
-      AWS_REGION             = data.aws_region.default.name
       EMAIL_RECIPIENT        = var.pub_router_failure_channel
       PUBROUTER_API_KEY       = var.pub_router_api_key
       ENVIRONMENT          = var.environment
