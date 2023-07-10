@@ -14,8 +14,9 @@ plugins:
 
 provider:
     name: aws
+    deploymentMethod: direct
     timeout: 30
-    runtime: nodejs18.x
+    runtime: nodejs16.x
     region: eu-west-1
     stage: ${opt:stage, 'local'}
     vpc:
@@ -93,6 +94,7 @@ custom:
                 - '@aws-sdk/client-s3'
                 - '@aws-sdk/client-ses'
                 - '@aws-sdk/client-sqs'
+                - 'puppeteer'
         packager: 'npm'
     versions:
         v1: v1

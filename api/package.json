@@ -10,7 +10,7 @@
         "url": "https://github.com/JiscSD/octopus/tree/main/api"
     },
     "engines": {
-        "node": "18.*"
+        "node": "16.x"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
@@ -37,6 +37,7 @@
         "@paralleldrive/cuid2": "^2.2.1",
         "@prisma/client": "^4.14.1",
         "@serverless/utils": "^6.11.1",
+        "@sparticuz/chromium": "^114.0.0",
         "@types/cheerio": "^0.22.30",
         "@types/jest": "^29.5.1",
         "@types/jsonwebtoken": "^9.0.2",
@@ -48,7 +49,6 @@
         "ajv-formats": "^2.1.1",
         "axios": "^1.4.0",
         "cheerio": "^1.0.0-rc.10",
-        "chrome-aws-lambda": "10.1.0",
         "copy-webpack-plugin": "^11.0.0",
         "crypto-random-string": "^3.3.1",
         "file-type": "^16.5.4",
@@ -58,8 +58,7 @@
         "luxon": "^3.3.0",
         "middy": "^0.36.0",
         "nodemailer": "^6.7.2",
-        "prisma": "^4.14.1",
-        "puppeteer-core": "10.1.0",
+        "puppeteer-core": "^20.7.3",
         "string-strip-html": "^9.1.6",
         "supertest": "^6.2.3"
     },
@@ -73,6 +72,7 @@
         "@typescript-eslint/eslint-plugin": "^5.9.1",
         "@typescript-eslint/parser": "^5.9.1",
         "aws-lambda": "^1.0.7",
+        "aws-sdk": "^2.1114.0",
         "eslint": "^8.6.0",
         "eslint-config-airbnb-typescript": "^16.1.0",
         "eslint-config-prettier": "^8.6.0",
@@ -83,7 +83,7 @@
         "lint-staged": "^13.1.2",
         "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
-        "puppeteer": "10.1.0",
+        "puppeteer": "^20.7.3",
         "serverless-domain-manager": "^7.0.4",
         "serverless-offline": "^12.0.4",
         "serverless-offline-ssm": "^6.2.0",
