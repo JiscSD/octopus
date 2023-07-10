@@ -14,3 +14,21 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateTopicReque
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetTopicPathParams>): Promise<I.JSONResponse> => {
+    try {
+        const topic = await topicService.get(event.pathParameters.id);
+
+        if (!topic) {
+            return response.json(404, {
+                message: 'Topic not found.'
+            });
+        }
+
+        return response.json(200, topic);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

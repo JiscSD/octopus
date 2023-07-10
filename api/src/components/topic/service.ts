@@ -16,7 +16,38 @@ export const create = async (e: I.CreateTopicRequestBody) => {
         include: {
             parent: {
                 select: {
-                    title: true
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
+            }
+        }
+    });
+
+    return topic;
+};
+
+export const get = async (id: string) => {
+    const topic = await client.prisma.topic.findFirst({
+        where: {
+            id
+        },
+        include: {
+            parent: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
+            },
+            children: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
                 }
             }
         }

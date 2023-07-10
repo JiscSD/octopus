@@ -500,3 +500,10 @@ functions:
                   path: ${self:custom.versions.v1}/topics
                   method: POST
                   cors: true
+    getTopic:
+        handler: src/components/topic/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/{id}
+                  method: GET
+                  cors: true

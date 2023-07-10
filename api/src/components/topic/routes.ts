@@ -10,3 +10,8 @@ export const create = middy(topicController.create)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(topicSchema.create, 'body'));
+
+export const get = middy(topicController.get)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication(true));
