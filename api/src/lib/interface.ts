@@ -82,6 +82,7 @@ export interface CreatePublicationRequestBody {
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
     affiliationStatement?: string;
+    topicIds?: string[];
 }
 
 export interface OpenSearchPublication {

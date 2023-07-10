@@ -259,4 +259,20 @@ describe('Create publication', () => {
         expect(createPublicationRequest.body.type).toEqual('HYPOTHESIS');
         expect(createPublicationRequest.body.selfDeclaration).toEqual(true);
     });
+
+    test('Publication can be linked to topic on creation', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication related to a topic',
+                topicIds: ['test-topic-1']
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.topics[0].title).toEqual('Test topic');
+    });
 });

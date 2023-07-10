@@ -4,11 +4,13 @@ import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as api from '@api';
+import * as Assets from '@assets';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
+import * as Stores from '@stores';
 import * as Types from '@types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
@@ -44,6 +46,8 @@ type Props = {
 };
 
 const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
+    const user = Stores.useAuthStore((state) => state.user);
+
     const topic = props.topic;
     const showChildren = Boolean(topic.children.length);
     const showParents = Boolean(topic.parents.length);
@@ -67,14 +71,44 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                             Language:{' '}
                             {Config.values.octopusInformation.languages.find((l) => l.code === topic.language)?.name}
                         </p>
-                        <Components.Link
-                            href="#"
-                            openNew={true}
-                            className="flex pb-10 text-teal-600 dark:text-teal-400"
-                        >
-                            Write a linked Research Problem
-                            <OutlineIcons.PencilIcon className="ml-2 h-5 w-5" />
-                        </Components.Link>
+                        {user && user.email ? (
+                            <div className="pb-10">
+                                <Components.Link
+                                    href={`${Config.urls.createPublication.path}?topic=${topic.id}&type=PROBLEM`}
+                                    className="flex text-teal-600 dark:text-teal-400 w-fit"
+                                >
+                                    Write a linked Research Problem
+                                    <OutlineIcons.PencilIcon className="ml-2 h-5 w-5" />
+                                </Components.Link>
+                            </div>
+                        ) : user && !user.email ? (
+                            <div className="pb-10">
+                                <Components.Link
+                                    href={`${Config.urls.verify.path}?state=${encodeURIComponent(
+                                        `${Config.urls.viewTopic.path}/${topic.id}`
+                                    )}`}
+                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400 w-fit"
+                                >
+                                    Verify your email for more actions
+                                </Components.Link>
+                            </div>
+                        ) : (
+                            <div className="pb-10">
+                                <Components.Link
+                                    href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
+                                        `${Config.urls.viewTopic.path}/${topic.id}`
+                                    )}`}
+                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400 w-fit"
+                                >
+                                    <Assets.ORCID
+                                        width={25}
+                                        height={25}
+                                        className="mr-2 rounded-md bg-orcid fill-white-50 p-1"
+                                    />
+                                    <span> Sign in for more actions</span>
+                                </Components.Link>
+                            </div>
+                        )}
                     </header>
                     <p className="border-b border-grey-200 py-10">{Config.values.topicDescription}</p>
                     {showChildren && (
