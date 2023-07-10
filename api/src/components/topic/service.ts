@@ -5,7 +5,6 @@ export const create = async (e: I.CreateTopicRequestBody) => {
     const topic = await client.prisma.topic.create({
         data: {
             title: e.title,
-            keywords: e.keywords,
             language: e.language,
             parentId: e.parentId,
             translations: e.translations?.length

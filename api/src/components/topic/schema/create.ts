@@ -7,11 +7,6 @@ const createTopicSchema: I.Schema = {
         title: {
             type: 'string'
         },
-        keywords: {
-            type: 'array',
-            items: { type: 'string' },
-            maxItems: 50
-        },
         language: {
             type: 'string',
             enum: helpers.octopusInformation.languages

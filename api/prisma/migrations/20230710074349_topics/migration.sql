@@ -3,7 +3,6 @@ CREATE TABLE "Topic" (
     "id" TEXT NOT NULL,
     "url_slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "keywords" TEXT[],
     "language" "Languages" NOT NULL DEFAULT 'en',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

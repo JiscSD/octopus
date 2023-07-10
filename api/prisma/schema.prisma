@@ -202,7 +202,6 @@ model Topic {
     id                      String             @id @default(cuid())
     url_slug                String             @unique @default(cuid())
     title                   String
-    keywords                String[]
     language                Languages          @default(en)
     translations            TopicTranslation[]
     createdAt               DateTime           @default(now())

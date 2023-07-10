@@ -2,7 +2,6 @@ const topicSeeds = [
     {
         id: 'test-topic-1',
         title: 'Test topic',
-        keywords: ['test', 'topic'],
         translations: {
             create: [
                 {

@@ -722,7 +722,6 @@ export interface TopicTranslation {
 
 export interface CreateTopicRequestBody {
     title: string;
-    keywords?: string[];
     language?: Languages;
     translations?: TopicTranslation[];
     parentId: string;
