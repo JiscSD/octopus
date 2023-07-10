@@ -75,7 +75,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                             <div className="pb-10">
                                 <Components.Link
                                     href={`${Config.urls.createPublication.path}?topic=${topic.id}&type=PROBLEM`}
-                                    className="flex text-teal-600 dark:text-teal-400 w-fit"
+                                    className="flex w-fit text-teal-600 dark:text-teal-400"
                                 >
                                     Write a linked Research Problem
                                     <OutlineIcons.PencilIcon className="ml-2 h-5 w-5" />
@@ -87,7 +87,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                                     href={`${Config.urls.verify.path}?state=${encodeURIComponent(
                                         `${Config.urls.viewTopic.path}/${topic.id}`
                                     )}`}
-                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400 w-fit"
+                                    className="flex w-fit items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                 >
                                     Verify your email for more actions
                                 </Components.Link>
@@ -98,7 +98,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                                     href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
                                         `${Config.urls.viewTopic.path}/${topic.id}`
                                     )}`}
-                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400 w-fit"
+                                    className="flex w-fit items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                 >
                                     <Assets.ORCID
                                         width={25}
