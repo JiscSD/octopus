@@ -1,11 +1,11 @@
-import chromium from 'chrome-aws-lambda';
 import * as s3 from 'lib/s3';
+import chromium from '@sparticuz/chromium';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
-import { Browser } from 'puppeteer-core';
+import { Browser, launch } from 'puppeteer-core';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
@@ -748,9 +748,12 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
     let browser: Browser | null = null;
 
     try {
-        browser = await chromium.puppeteer.launch({
+        browser = await launch({
             args: [...chromium.args, '--font-render-hinting=none'],
-            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
+            executablePath:
+                process.env.STAGE === 'local'
+                    ? (await import('puppeteer')).executablePath()
+                    : await chromium.executablePath()
         });
 
         const page = await browser.newPage();
