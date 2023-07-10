@@ -455,3 +455,25 @@ export interface MappedOrcidAffiliation {
     source: { name: string; orcid: string };
     url: string | null;
 }
+
+export interface TopicTranslation {
+    id: string;
+    topicId: string;
+    language: Types.Languages;
+    value: string;
+}
+
+export interface BaseTopic {
+    id: string;
+    title: string;
+    language: Types.Languages;
+    translations: TopicTranslation[];
+}
+
+export interface Topic extends BaseTopic {
+    url_slug: string;
+    createdAt: string;
+    updatedAt: string;
+    parents: BaseTopic[];
+    children: BaseTopic[];
+}

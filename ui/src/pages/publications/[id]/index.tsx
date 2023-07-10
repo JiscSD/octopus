@@ -552,15 +552,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </header>
 
                     {/** Full text */}
-                    <Components.PublicationContentSection id="main-text" hasBreak isMainText>
+                    <Components.ContentSection id="main-text" hasBreak isMainText>
                         <div>
                             <Components.ParseHTML content={publicationData.content ?? ''} />
                         </div>
-                    </Components.PublicationContentSection>
+                    </Components.ContentSection>
 
                     {/* References */}
                     {showReferences && (
-                        <Components.PublicationContentSection id="references" title="References" hasBreak>
+                        <Components.ContentSection id="references" title="References" hasBreak>
                             {references.map((reference) => (
                                 <div key={reference.id} className="py-2 break-anywhere">
                                     <Components.ParseHTML content={reference.text} />
@@ -573,14 +573,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     )}
                                 </div>
                             ))}
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {(showParentProblems || showChildProblems) && (
                         <div id="problems">
                             {/* Parent problems */}
                             {showParentProblems && (
-                                <Components.PublicationContentSection
+                                <Components.ContentSection
                                     id="problems-linked-to"
                                     title="Research problems above this in the hierarchy"
                                     hasBreak
@@ -598,12 +598,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </Components.ListItem>
                                         ))}
                                     </Components.List>
-                                </Components.PublicationContentSection>
+                                </Components.ContentSection>
                             )}
 
                             {/* Child problems */}
                             {showChildProblems && (
-                                <Components.PublicationContentSection
+                                <Components.ContentSection
                                     id="problems-linked-from"
                                     title="Research problems below this in the hierarchy"
                                     hasBreak
@@ -621,14 +621,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             </Components.ListItem>
                                         ))}
                                     </Components.List>
-                                </Components.PublicationContentSection>
+                                </Components.ContentSection>
                             )}
                         </div>
                     )}
 
                     {/* Linked peer reviews */}
                     {!!showPeerReviews && (
-                        <Components.PublicationContentSection
+                        <Components.ContentSection
                             id="peer-reviews"
                             title={`Peer reviews created from this ${Helpers.formatPublicationType(
                                 publicationData.type
@@ -648,12 +648,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </Components.ListItem>
                                 ))}
                             </Components.List>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {/* Ethical statement */}
                     {showEthicalStatement && (
-                        <Components.PublicationContentSection id="ethical-statement" title="Ethical statement" hasBreak>
+                        <Components.ContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
                                     {parse(publicationData.ethicalStatement)}
@@ -664,12 +664,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {/* Data permissions statement */}
                     {!!publicationData.dataPermissionsStatement && (
-                        <Components.PublicationContentSection
+                        <Components.ContentSection
                             id="data-permissions-statement"
                             title="Data permissions statement"
                             hasBreak
@@ -684,37 +684,33 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </p>
                                 )}
                             </>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {/* Data access statement */}
                     {!!publicationData.dataAccessStatement && (
-                        <Components.PublicationContentSection
-                            id="data-access-statement"
-                            title="Data access statement"
-                            hasBreak
-                        >
+                        <Components.ContentSection id="data-access-statement" title="Data access statement" hasBreak>
                             <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
                                 {parse(publicationData.dataAccessStatement)}
                             </p>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {/* Self declaration */}
                     {publicationData.selfDeclaration && (
-                        <Components.PublicationContentSection id="self-declaration" title="Self declaration" hasBreak>
+                        <Components.ContentSection id="self-declaration" title="Self declaration" hasBreak>
                             <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
                                 {publicationData.type === 'PROTOCOL' &&
                                     'Data has not yet been collected according to this method/protocol.'}
                                 {publicationData.type === 'HYPOTHESIS' &&
                                     'Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)'}
                             </p>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
 
                     {/* Red flags */}
                     {showRedFlags && (
-                        <Components.PublicationContentSection id="red-flags" title="Red flags" hasBreak>
+                        <Components.ContentSection id="red-flags" title="Red flags" hasBreak>
                             <div className="mt-6 space-y-8">
                                 {activeFlags && !!activeFlags.length ? (
                                     <div>
@@ -749,10 +745,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </div>
                                 ) : null}
                             </div>
-                        </Components.PublicationContentSection>
+                        </Components.ContentSection>
                     )}
                     {/* Publication funders section */}
-                    <Components.PublicationContentSection id="funders" title="Funders" hasBreak>
+                    <Components.ContentSection id="funders" title="Funders" hasBreak>
                         {!publicationData.funders?.length && !publicationData.fundersStatement ? (
                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                 No sources of funding have been specified for this{' '}
@@ -790,10 +786,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 ) : null}
                             </>
                         )}
-                    </Components.PublicationContentSection>
+                    </Components.ContentSection>
 
                     {/** Conflict of interest */}
-                    <Components.PublicationContentSection id="coi" title="Conflict of interest">
+                    <Components.ContentSection id="coi" title="Conflict of interest">
                         <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                             {publicationData.conflictOfInterestStatus
                                 ? publicationData.conflictOfInterestText
@@ -801,7 +797,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                       publicationData.type
                                   )} does not have any specified conflicts of interest.`}
                         </p>
-                    </Components.PublicationContentSection>
+                    </Components.ContentSection>
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
