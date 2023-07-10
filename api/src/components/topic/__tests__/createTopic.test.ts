@@ -14,7 +14,7 @@ describe.only('Create topic', () => {
             })
             .send({
                 title: 'Topic test 1',
-                parentId: 'test-topic-1'
+                parentIds: ['test-topic-1']
             });
 
         expect(createTopicRequest.status).toEqual(201);

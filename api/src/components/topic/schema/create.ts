@@ -27,11 +27,13 @@ const createTopicSchema: I.Schema = {
                 required: ['language', 'value']
             }
         },
-        parentId: {
-            type: 'string'
+        parentIds: {
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 1
         }
     },
-    required: ['title', 'parentId']
+    required: ['title', 'parentIds']
 };
 
 export default createTopicSchema;

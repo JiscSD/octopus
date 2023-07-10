@@ -200,14 +200,12 @@ model PublicationBookmarks {
 
 model Topic {
     id                      String             @id @default(cuid())
-    url_slug                String             @unique @default(cuid())
     title                   String
     language                Languages          @default(en)
     translations            TopicTranslation[]
     createdAt               DateTime           @default(now())
     updatedAt               DateTime           @updatedAt
-    parentId                String?                
-    parent                  Topic?             @relation("TopicHierarchy", fields: [parentId], references: [id])
+    parents                 Topic[]            @relation("TopicHierarchy")
     children                Topic[]            @relation("TopicHierarchy")
     bookmarks               TopicBookmark[]
     publications            Publication[]

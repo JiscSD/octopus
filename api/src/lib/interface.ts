@@ -724,7 +724,7 @@ export interface CreateTopicRequestBody {
     title: string;
     language?: Languages;
     translations?: TopicTranslation[];
-    parentId: string;
+    parentIds: string[];
 }
 
 export interface GetTopicPathParams {

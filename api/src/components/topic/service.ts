@@ -6,7 +6,9 @@ export const create = async (e: I.CreateTopicRequestBody) => {
         data: {
             title: e.title,
             language: e.language,
-            parentId: e.parentId,
+            parents: {
+                connect: e.parentIds.map((parentId) => ({ id: parentId }))
+            },
             translations: e.translations?.length
                 ? {
                       create: e.translations
@@ -14,7 +16,7 @@ export const create = async (e: I.CreateTopicRequestBody) => {
                 : undefined
         },
         include: {
-            parent: {
+            parents: {
                 select: {
                     id: true,
                     title: true,
@@ -34,7 +36,8 @@ export const get = async (id: string) => {
             id
         },
         include: {
-            parent: {
+            translations: true,
+            parents: {
                 select: {
                     id: true,
                     title: true,
