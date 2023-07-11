@@ -221,6 +221,14 @@ export const get = async (id: string) => {
                         }
                     }
                 }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
             }
         }
     });

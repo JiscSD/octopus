@@ -129,18 +129,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         return false;
     }, [publicationData, user]);
+    const topics = publicationData?.topics;
 
     const list = [];
 
     const showReferences = Boolean(references?.length);
     const showChildProblems = Boolean(childProblems?.length);
     const showParentProblems = Boolean(parentProblems?.length);
+    const showTopics = Boolean(topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement = publicationData?.type === 'DATA' && Boolean(publicationData.ethicalStatement);
     const showRedFlags = !!publicationData?.publicationFlags?.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
+    if (showTopics) list.push({ title: 'Linked topics', href: 'topics' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
     if (publicationData?.dataPermissionsStatement)
@@ -624,6 +627,26 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </Components.ContentSection>
                             )}
                         </div>
+                    )}
+                    {showTopics && (
+                        <Components.ContentSection
+                            id="topics"
+                            title="Research topics above this in the hierarchy"
+                            hasBreak
+                        >
+                            <Components.List ordered={false}>
+                                {topics.map((topic) => (
+                                    <Components.ListItem key={topic.id}>
+                                        <Components.Link
+                                            href={`${Config.urls.viewTopic.path}/${topic.id}`}
+                                            className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                        >
+                                            {topic.title}
+                                        </Components.Link>
+                                    </Components.ListItem>
+                                ))}
+                            </Components.List>
+                        </Components.ContentSection>
                     )}
 
                     {/* Linked peer reviews */}

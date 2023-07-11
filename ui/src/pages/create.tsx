@@ -51,7 +51,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 {
                     title,
                     type: publicationType,
-                    topicIds: props.topicId ? [props.topicId] : null
+                    topicIds: props.topicId ? [props.topicId] : []
                 },
                 Helpers.getJWT()
             );

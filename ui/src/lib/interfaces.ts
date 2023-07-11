@@ -86,6 +86,7 @@ export interface Publication extends CorePublication {
     affiliationStatement: string | null;
     publicationFlags: Flag[];
     references: Reference[];
+    topics: BaseTopic[];
 }
 
 export interface LinkedToPublication {
@@ -471,7 +472,6 @@ export interface BaseTopic {
 }
 
 export interface Topic extends BaseTopic {
-    url_slug: string;
     createdAt: string;
     updatedAt: string;
     parents: BaseTopic[];
