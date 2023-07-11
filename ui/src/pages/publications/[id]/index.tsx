@@ -129,7 +129,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         return false;
     }, [publicationData, user]);
-    const topics = publicationData?.topics;
+    const topics = publicationData?.topics || [];
 
     const list = [];
 
