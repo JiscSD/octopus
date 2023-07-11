@@ -23,7 +23,8 @@ export const create = async (e: I.CreateTopicRequestBody) => {
                     language: true,
                     translations: true
                 }
-            }
+            },
+            translations: true
         }
     });
 
