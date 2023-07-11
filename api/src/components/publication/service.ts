@@ -744,17 +744,20 @@ export const getLinksForPublication = async (id: string) => {
 export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
     const references = await referenceService.getAllByPublication(publication.id);
     const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+    const isLocal = process.env.STAGE === 'local';
 
     let browser: Browser | null = null;
 
     try {
+        chromium.setGraphicsMode = false;
+
         browser = await launch({
             args: [...chromium.args, '--font-render-hinting=none'],
-            executablePath:
-                process.env.STAGE === 'local'
-                    ? (await import('puppeteer')).executablePath()
-                    : await chromium.executablePath()
+            executablePath: isLocal ? (await import('puppeteer')).executablePath() : await chromium.executablePath(),
+            headless: chromium.headless
         });
+
+        console.log('Browser opened!');
 
         const page = await browser.newPage();
         await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
@@ -781,6 +784,8 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
             })
         );
 
+        console.log('Successfully generated PDF for publicationId: ', publication.id);
+
         return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
     } catch (err) {
         console.error(err);
@@ -788,7 +793,14 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
         return null;
     } finally {
         if (browser) {
+            // close all pages
+            for (const page of await browser.pages()) {
+                await page.close();
+            }
+
+            // close browser
             await browser.close();
+            console.log('Browser closed!');
         }
     }
 };
