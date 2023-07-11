@@ -212,5 +212,8 @@ export const PageModel = {
         }
     },
     coauthorApprove: {},
-    coauthorDeny: {}
+    coauthorDeny: {},
+    topic: {
+        createProblemLink: 'a:has-text("Write a linked Research Problem")'
+    }
 };
