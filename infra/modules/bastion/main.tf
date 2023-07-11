@@ -1,15 +1,3 @@
-resource "aws_eip" "elastic_ip" {
-  domain = "vpc"
-  tags   =  {
-    Name = "bastion_${var.environment}"
-  }
-}
-
-resource "aws_eip_association" "eip_assoc" {
-  instance_id   = aws_instance.bastion.id
-  allocation_id = aws_eip.elastic_ip.id
-}
-
 resource "aws_security_group" "ec2_sg" {
   name    = "ec2-sg"
   vpc_id  = var.vpc_id
