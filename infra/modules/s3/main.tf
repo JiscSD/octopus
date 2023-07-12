@@ -62,7 +62,6 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
 
   environment {
     variables = {
-      AWS_REGION             = data.aws_region.default.name
       EMAIL_RECIPIENT        = var.pub_router_failure_channel
       PUBROUTER_API_KEY       = var.pub_router_api_key
       ENVIRONMENT          = var.environment
@@ -134,6 +133,11 @@ resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_s3_policy" {
 
 resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_ses_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
+  role       = aws_iam_role.pdf_processing_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_cloudwatch_logs_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   role       = aws_iam_role.pdf_processing_lambda_role.name
 }
 

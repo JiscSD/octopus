@@ -1,8 +1,6 @@
 const AWS = require("aws-sdk");
 const fetch = require("node-fetch");
 
-AWS.config.update({ region: process.env.AWS_REGION });
-
 exports.handler = async (event) => {
   try {
     const bucket = event.Records[0].s3.bucket.name;
