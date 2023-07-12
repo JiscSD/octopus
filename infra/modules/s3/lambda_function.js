@@ -1,33 +1,6 @@
 const AWS = require("aws-sdk");
 const fetch = require("node-fetch");
 
-exports.handler = async (event) => {
-  try {
-    const bucket = event.Records[0].s3.bucket.name;
-    const key = event.Records[0].s3.object.key;
-
-    const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
-
-    const publicationId = key.replace(/\.pdf$/, "");
-
-    const publication = await fetch(
-      `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
-      { method: "GET" }
-    );
-
-    const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
-
-    const apiResponse = await postToPubrouter(pdfMetadata);
-
-    // Check the API response and handle failures
-    if (apiResponse.status !== "success") {
-      await retryPostingPublication(pdfMetadata);
-    }
-  } catch (error) {
-    await sendFailureEmail(error, event, publicationId);
-  }
-};
-
 const postToPubrouter = async (pdfMetadata) => {
   const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
 
@@ -163,4 +136,31 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       peer_reviewed: false,
     },
   };
+};
+
+exports.handler = async (event) => {
+  try {
+    const bucket = event.Records[0].s3.bucket.name;
+    const key = event.Records[0].s3.object.key;
+
+    const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
+
+    const publicationId = key.replace(/\.pdf$/, "");
+
+    const publication = await fetch(
+      `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
+      { method: "GET" }
+    );
+
+    const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
+
+    const apiResponse = await postToPubrouter(pdfMetadata);
+
+    // Check the API response and handle failures
+    if (apiResponse.status !== "success") {
+      await retryPostingPublication(pdfMetadata);
+    }
+  } catch (error) {
+    await sendFailureEmail(error, event, publicationId);
+  }
 };
