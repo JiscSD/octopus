@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "engines": {
-        "node": "16"
+        "node": "18.x"
     },
     "scripts": {
         "test": "npx playwright test",
@@ -14,8 +14,8 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@playwright/test": "^1.34.3",
-        "@types/node": "^20.2.5"
+        "@playwright/test": "^1.35.1",
+        "@types/node": "^18.16.18"
     },
     "dependencies": {
         "@paralleldrive/cuid2": "^2.2.1",
