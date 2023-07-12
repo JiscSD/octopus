@@ -45,11 +45,11 @@ export { default as PublicationCreationConflictOfInterest } from './Publication/
 export { default as PublicationCreationDataStatements } from './Publication/Creation/DataStatements';
 export { default as PublicationCreationFunders } from './Publication/Creation/Funders';
 export { default as PublicationCreationKeyInformation } from './Publication/Creation/KeyInformation';
+export { default as PublicationCreationAffiliations } from './Publication/Creation/Affiliations';
 export { default as PublicationCreationLinkedPublications } from './Publication/Creation/LinkedPublications';
 export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
 export { default as PublicationCreationMainText } from './Publication/Creation/MainText';
 export { default as PublicationCreationResearchProcess } from './Publication/Creation/ResearchProcess';
-export { default as PublicationCreationReview } from './Publication/Creation/Review';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationLink } from './Publication/Link';
 export { default as PublicationSearchResult } from './Publication/SearchResult';

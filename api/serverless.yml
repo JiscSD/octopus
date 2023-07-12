@@ -14,6 +14,7 @@ plugins:
 
 provider:
     name: aws
+    deploymentMethod: direct
     timeout: 30
     runtime: nodejs18.x
     region: eu-west-1
@@ -88,7 +89,12 @@ custom:
         createRoute53Record: true
     webpack:
         webpackConfig: ./webpack.config.js
-        includeModules: true
+        includeModules:
+            forceExclude:
+                - '@aws-sdk/client-s3'
+                - '@aws-sdk/client-ses'
+                - '@aws-sdk/client-sqs'
+                - 'puppeteer'
         packager: 'npm'
     versions:
         v1: v1
