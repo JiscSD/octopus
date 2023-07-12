@@ -62,7 +62,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                             <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
                                                 <HeadlessUI.Menu.Button
                                                     className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
-                                                    onClick={handleClose}
+                                                    onClick={() => setOpen(true)}
                                                 >
                                                     <span className="flex items-center">
                                                         {item.label}
