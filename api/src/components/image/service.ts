@@ -1,6 +1,7 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
-import s3 from 'lib/s3';
+import * as s3 from 'lib/s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 export const createDBReference = async (name: string, extension: I.ImageExtension, user: string) => {
     const imageReference = await client.prisma.images.create({
@@ -15,15 +16,15 @@ export const createDBReference = async (name: string, extension: I.ImageExtensio
 };
 
 export const uploadToS3 = async (id: string, image: string, imageType: I.ImageExtension) => {
-    const s3Image = await s3
-        .putObject({
+    const s3Image = await s3.client.send(
+        new PutObjectCommand({
             Bucket: `science-octopus-publishing-images-${process.env.STAGE}`,
             Key: id,
             ContentType: `image/${imageType}`,
             ContentEncoding: 'base64',
             Body: Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
         })
-        .promise();
+    );
 
     return s3Image;
 };
