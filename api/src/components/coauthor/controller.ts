@@ -427,10 +427,10 @@ export const requestApproval = async (
 export const sendApprovalReminder = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
 ): Promise<I.JSONResponse> => {
-    const { coAuthor, id } = event.pathParameters;
+    const { coauthor, id } = event.pathParameters;
 
     const publication = await publicationService.get(id);
-    const author = await coAuthorService.get(coAuthor);
+    const author = await coAuthorService.get(coauthor);
 
     if (!publication) {
         return response.json(404, {
@@ -493,7 +493,7 @@ export const sendApprovalReminder = async (
         });
 
         // update co-author reminderDate
-        await coAuthorService.update(coAuthor, { reminderDate: new Date() });
+        await coAuthorService.update(coauthor, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
 

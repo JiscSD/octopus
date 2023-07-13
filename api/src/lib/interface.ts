@@ -551,7 +551,7 @@ export interface UserPublicationsFilters {
 
 export interface SendApprovalReminderPathParams {
     id: string;
-    coAuthor: string;
+    coauthor: string;
 }
 
 type NameType = 'Personal' | 'Organizational';
