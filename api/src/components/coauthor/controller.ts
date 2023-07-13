@@ -179,7 +179,7 @@ export const link = async (
         }
 
         if (!event.body.approve) {
-            // email has already been linked
+            // check if user has already been linked
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
                     message:
@@ -241,6 +241,17 @@ export const link = async (
         if (coAuthorByEmail.linkedUser) {
             return response.json(404, {
                 message: 'User has already been linked to this publication.'
+            });
+        }
+
+        // check if the user email is the same as the one the invitation has been sent to
+        if (event.user.email !== coAuthorByEmail.email) {
+            const isCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
+
+            return response.json(isCoAuthor ? 403 : 404, {
+                message: isCoAuthor
+                    ? 'Your email address does not match the one to which the invitation has been sent.'
+                    : 'You are not currently listed as an author on this draft'
             });
         }
 

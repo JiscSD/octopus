@@ -8,7 +8,7 @@ export let baseURL: string;
 
 switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     case 'local':
-        baseURL = 'http://localhost:4003/local/v1';
+        baseURL = 'http://127.0.0.1:4003/local/v1'; // https://github.com/node-fetch/node-fetch/issues/1624
         break;
     case 'main':
         baseURL = 'https://api.octopus.ac/v1';

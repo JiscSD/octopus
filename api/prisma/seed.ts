@@ -1,8 +1,10 @@
 import htmlToText from 'html-to-text';
-import s3 from '../src/lib/s3';
+import * as s3 from '../src/lib/s3';
 import * as sqs from '../src/lib/sqs';
 import * as SeedData from './seeds';
 import * as client from '../src/lib/client';
+
+import { CreateBucketCommand, GetBucketAclCommand } from '@aws-sdk/client-s3';
 
 export const initialDevSeed = async (): Promise<void> => {
     // Create users
@@ -77,37 +79,37 @@ export const initialDevSeed = async (): Promise<void> => {
         // create S3 bucket locally for image uploads
 
         try {
-            await s3
-                .getBucketAcl({
+            await s3.client.send(
+                new GetBucketAclCommand({
                     Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
                 })
-                .promise();
+            );
             console.log('Bucket already exists');
         } catch (err) {
             // Bucket does not exist, therefor create
-            await s3
-                .createBucket({
+            await s3.client.send(
+                new CreateBucketCommand({
                     Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
                 })
-                .promise();
+            );
             console.log('Bucket created');
         }
 
         // create S3 bucket locally for PDF uploads
         try {
-            await s3
-                .getBucketAcl({
+            await s3.client.send(
+                new GetBucketAclCommand({
                     Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
                 })
-                .promise();
+            );
             console.log('Bucket already exists');
         } catch (err) {
             // Bucket does not exist, therefor create
-            await s3
-                .createBucket({
+            await s3.client.send(
+                new CreateBucketCommand({
                     Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
                 })
-                .promise();
+            );
             console.log('Bucket created');
         }
 
