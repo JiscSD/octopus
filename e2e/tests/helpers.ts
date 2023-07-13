@@ -76,6 +76,12 @@ export const login = async (page: Page, browser: Browser, user = user1) => {
     await page.waitForSelector(PageModel.header.loginButton);
     await Promise.all([page.waitForNavigation(), page.click(PageModel.header.loginButton)]);
 
+    // If necessary, reject cookies
+    const cookieCheck = await page.locator(PageModel.login.rejectCookies);
+    if (cookieCheck) {
+        await page.click(PageModel.login.rejectCookies);
+    }
+
     await page.fill(PageModel.login.username, user.email);
     await page.fill(PageModel.login.password, user.password);
 
