@@ -110,46 +110,45 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                             </div>
                         )}
                     </header>
-                    <p className="border-b border-grey-200 py-10">{Config.values.topicDescription}</p>
+                    <p className="py-10">{Config.values.topicDescription}</p>
                     {showChildren && (
-                        <Components.ContentSection
-                            id="children"
-                            title="Research topics below this in the hierarchy"
-                            hasBreak
-                        >
-                            <Components.List ordered={false}>
-                                {topic.children.map((child) => (
-                                    <Components.ListItem key={child.id}>
-                                        <Components.Link
-                                            href={`${Config.urls.viewTopic.path}/${child.id}`}
-                                            className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                        >
-                                            {child.title}
-                                        </Components.Link>
-                                    </Components.ListItem>
-                                ))}
-                            </Components.List>
-                        </Components.ContentSection>
+                        <div className="border-t border-grey-200">
+                            <Components.ContentSection
+                                id="children"
+                                title="Research topics below this in the hierarchy"
+                            >
+                                <Components.List ordered={false}>
+                                    {topic.children.map((child) => (
+                                        <Components.ListItem key={child.id}>
+                                            <Components.Link
+                                                href={`${Config.urls.viewTopic.path}/${child.id}`}
+                                                className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                            >
+                                                {child.title}
+                                            </Components.Link>
+                                        </Components.ListItem>
+                                    ))}
+                                </Components.List>
+                            </Components.ContentSection>
+                        </div>
                     )}
                     {showParents && (
-                        <Components.ContentSection
-                            id="parents"
-                            title="Research topics above this in the hierarchy"
-                            hasBreak
-                        >
-                            <Components.List ordered={false}>
-                                {topic.parents.map((parent) => (
-                                    <Components.ListItem key={parent.id}>
-                                        <Components.Link
-                                            href={`${Config.urls.viewTopic.path}/${parent.id}`}
-                                            className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                                        >
-                                            {parent.title}
-                                        </Components.Link>
-                                    </Components.ListItem>
-                                ))}
-                            </Components.List>
-                        </Components.ContentSection>
+                        <div className="border-t border-grey-200">
+                            <Components.ContentSection id="parents" title="Research topics above this in the hierarchy">
+                                <Components.List ordered={false}>
+                                    {topic.parents.map((parent) => (
+                                        <Components.ListItem key={parent.id}>
+                                            <Components.Link
+                                                href={`${Config.urls.viewTopic.path}/${parent.id}`}
+                                                className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                            >
+                                                {parent.title}
+                                            </Components.Link>
+                                        </Components.ListItem>
+                                    ))}
+                                </Components.List>
+                            </Components.ContentSection>
+                        </div>
                     )}
                 </section>
             </Layouts.Topic>
