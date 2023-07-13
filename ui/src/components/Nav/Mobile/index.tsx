@@ -60,10 +60,7 @@ const Mobile: React.FC<Props> = (props): React.ReactElement => {
                                     <li key={item.value} className="my-4">
                                         {item.subItems?.length ? (
                                             <HeadlessUI.Menu as="div" className="relative z-50 inline-block text-left">
-                                                <HeadlessUI.Menu.Button
-                                                    className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50"
-                                                    onClick={() => setOpen(true)}
-                                                >
+                                                <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50">
                                                     <span className="flex items-center">
                                                         {item.label}
                                                         <OutlineIcons.ChevronDownIcon className="ml-2 h-4 w-4 text-grey-500 transition-colors duration-500 dark:text-teal-500" />
