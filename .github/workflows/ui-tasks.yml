@@ -16,10 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node 18 Environment
+      - name: Setup Node 18.x Environment
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -36,10 +36,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node 18 Environment
+      - name: Setup Node 18.x Environment
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -56,10 +56,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node 18 Environment
+      - name: Setup Node 18.x Environment
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -80,10 +80,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node 18 Environment
+      - name: Setup Node 18.x Environment
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
