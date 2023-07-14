@@ -4,7 +4,7 @@ module.exports = {
             settings: {
                 hostname: '127.0.0.1'
             },
-            startServerCommand: 'npm run dev',
+            startServerCommand: 'npm run start',
             url: [
                 'http://localhost:3000/',
                 'http://localhost:3000/browse',
