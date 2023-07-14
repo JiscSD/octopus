@@ -8,9 +8,36 @@ export const get = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        const publicationId = event.pathParameters.id;
 
-        return response.json(200, coAuthors);
+        const publication = await publicationService.get(publicationId);
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        const coAuthors = publication.coAuthors;
+
+        const correspondingAuthor = coAuthors.find((coAuthor) => coAuthor.linkedUser === publication.createdBy);
+
+        // enforce adding corresponding author if it's missing - this will fix old publications which don't have the corresponding author in the coAuthors list
+        if (!correspondingAuthor) {
+            const correspondingAuthor = await coAuthorService.createCorrespondingAuthor(publication);
+
+            // put corresponding author in the first position
+            coAuthors.unshift({
+                ...correspondingAuthor,
+                user: {
+                    firstName: publication.user.firstName,
+                    lastName: publication.user.lastName,
+                    orcid: publication.user.orcid
+                }
+            });
+        }
+
+        return response.json(200, publication.coAuthors);
     } catch (err) {
         console.log(err);
 
