@@ -373,6 +373,7 @@ export interface CoAuthor {
     publicationId: string;
     createdAt?: string;
     reminderDate?: string | null;
+    isIndependent: boolean;
     affiliations: MappedOrcidAffiliation[];
     user?: {
         firstName: string;

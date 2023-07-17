@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-export const json = (statusCode: number, body: any): I.JSONResponse => ({
+export const json = (statusCode: number, body): I.JSONResponse => ({
     body: JSON.stringify(body),
     headers: {
         'Access-Control-Allow-Credentials': true,

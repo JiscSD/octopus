@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node 16 Environment
-        uses: actions/setup-node@v2
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -34,12 +34,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node 16 Environment
-        uses: actions/setup-node@v2
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -54,12 +54,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node 16 Environment
-        uses: actions/setup-node@v2
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -78,12 +78,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node 16 Environment
-        uses: actions/setup-node@v2
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -92,3 +92,23 @@ jobs:
       - name: Run Unit tests
         working-directory: ./ui
         run: npm run test
+
+  typescript-lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies
+        working-directory: ./ui
+        run: npm ci
+
+      - name: Run tsc to check for typescript errors
+        working-directory: ./ui
+        run: tsc

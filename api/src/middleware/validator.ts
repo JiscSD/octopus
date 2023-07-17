@@ -1,6 +1,6 @@
-import middy from '@middy/core';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import middy from '@middy/core';
 
 import * as I from 'interface';
 import * as response from 'lib/response';

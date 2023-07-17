@@ -459,7 +459,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
                     )}
 
-                    {author && (
+                    {showApprovalsTracker && author && (
                         <Components.EditAffiliationsModal
                             author={author}
                             autoUpdate={isCorrespondingAuthor || !author.confirmedCoAuthor}
