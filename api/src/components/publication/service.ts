@@ -804,3 +804,30 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
         }
     }
 };
+
+export const getResearchTopics = () =>
+    client.prisma.publication.findMany({
+        where: {
+            type: 'PROBLEM',
+            createdBy: 'octopus',
+            content: {
+                contains: 'This is an automatically-generated topic'
+            },
+            References: {
+                none: {}
+            }
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    orcid: true
+                }
+            },
+            linkedTo: true,
+            linkedFrom: true,
+            PublicationBookmarks: true
+        }
+    });

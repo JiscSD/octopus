@@ -215,6 +215,13 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
+    getResearchTopics:
+        handler: src/components/publication/routes.getResearchTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/research-topics
+                  method: GET
+                  cors: true
     # Users
     getUsers:
         handler: src/components/user/routes.getAll
