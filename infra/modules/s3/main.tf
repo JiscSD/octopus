@@ -141,6 +141,19 @@ resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_cloudwatch_logs
   role       = aws_iam_role.pdf_processing_lambda_role.name
 }
 
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.pdf_bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.pdf_processing_lambda.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "AWSLogs/"
+    filter_suffix       = ".log"
+  }
+
+  depends_on = [aws_lambda_permission.s3_trigger_permission]
+}
+
 resource "aws_lambda_permission" "s3_trigger_permission" {
   statement_id  = "AllowS3Invocation"
   action        = "lambda:InvokeFunction"

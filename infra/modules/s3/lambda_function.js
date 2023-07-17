@@ -1,5 +1,4 @@
 const AWS = require("aws-sdk");
-const fetch = require("node-fetch");
 
 const postToPubrouter = async (pdfMetadata) => {
   const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
@@ -139,13 +138,12 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
 };
 
 exports.handler = async (event) => {
+  const key = event.Records[0].s3.object.key;
+  const publicationId = key.replace(/\.pdf$/, "");
   try {
     const bucket = event.Records[0].s3.bucket.name;
-    const key = event.Records[0].s3.object.key;
 
     const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
-
-    const publicationId = key.replace(/\.pdf$/, "");
 
     const publication = await fetch(
       `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
