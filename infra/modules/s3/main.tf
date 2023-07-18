@@ -56,7 +56,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "${path.module}/pdf-processing-lambda.zip"
   function_name = "${var.environment}-pdf-processing-lambda"
   role          = aws_iam_role.pdf_processing_lambda_role.arn
-  handler       = "lambda_function.lambda_handler"
+  handler       = "lambda_function.handler"
   runtime       = "nodejs18.x"
   source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
 
@@ -147,8 +147,8 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   lambda_function {
     lambda_function_arn = aws_lambda_function.pdf_processing_lambda.arn
     events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/"
-    filter_suffix       = ".log"
+    filter_prefix       = ""
+    filter_suffix       = ".pdf"
   }
 
   depends_on = [aws_lambda_permission.s3_trigger_permission]

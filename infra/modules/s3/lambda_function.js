@@ -1,4 +1,4 @@
-const AWS = require("aws-sdk");
+const AWS = require("@aws-sdk/client-ses");
 
 const postToPubrouter = async (pdfMetadata) => {
   const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
