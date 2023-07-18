@@ -36,7 +36,7 @@
         "@opensearch-project/opensearch": "^2.1.0",
         "@paralleldrive/cuid2": "^2.2.1",
         "@prisma/client": "^4.14.1",
-        "@serverless/utils": "^6.11.1",
+        "@serverless/utils": "^6.13.1",
         "@sparticuz/chromium": "^114.0.0",
         "@xmldom/xmldom": "^0.8.7",
         "ajv": "^8.12.0",
