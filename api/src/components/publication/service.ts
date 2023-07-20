@@ -1,11 +1,13 @@
-import s3 from 'lib/s3';
-import chromium from 'chrome-aws-lambda';
+import * as s3 from 'lib/s3';
+import chromium from '@sparticuz/chromium';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 import { Links } from '@prisma/client';
-import { Browser } from 'puppeteer-core';
+import { Browser, launch } from 'puppeteer-core';
+
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 export const getAllByIds = async (ids: Array<string>) => {
     const publications = await client.prisma.publication.findMany({
@@ -763,14 +765,20 @@ export const getLinksForPublication = async (id: string) => {
 export const generatePDF = async (publication: I.Publication & I.PublicationWithMetadata): Promise<string | null> => {
     const references = await referenceService.getAllByPublication(publication.id);
     const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+    const isLocal = process.env.STAGE === 'local';
 
     let browser: Browser | null = null;
 
     try {
-        browser = await chromium.puppeteer.launch({
+        chromium.setGraphicsMode = false;
+
+        browser = await launch({
             args: [...chromium.args, '--font-render-hinting=none'],
-            executablePath: process.env.STAGE === 'local' ? undefined : await chromium.executablePath
+            executablePath: isLocal ? (await import('puppeteer')).executablePath() : await chromium.executablePath(),
+            headless: chromium.headless
         });
+
+        console.log('Browser opened!');
 
         const page = await browser.newPage();
         await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
@@ -788,23 +796,32 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
         });
 
         // upload pdf to S3
-        await s3
-            .putObject({
+        await s3.client.send(
+            new PutObjectCommand({
                 Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
                 Key: `${publication.id}.pdf`,
                 ContentType: 'application/pdf',
                 Body: pdf
             })
-            .promise();
+        );
 
-        return `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+        console.log('Successfully generated PDF for publicationId: ', publication.id);
+
+        return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
     } catch (err) {
         console.error(err);
 
         return null;
     } finally {
         if (browser) {
+            // close all pages
+            for (const page of await browser.pages()) {
+                await page.close();
+            }
+
+            // close browser
             await browser.close();
+            console.log('Browser closed!');
         }
     }
 };

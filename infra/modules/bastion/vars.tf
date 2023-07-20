@@ -9,15 +9,3 @@ variable "public_subnet" {
 variable "environment" {
     type = string
 }
-
-variable "ec2_key_name" {
-    type = string
-}
-
-variable "allowable_ips" {
-    type = list(string)
-}
-
-variable "third_party_vpn_ips" {
-    type = list(string)
-}

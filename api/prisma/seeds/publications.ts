@@ -217,6 +217,12 @@ const publicationSeeds = [
                     email: 'test-user-7@jisc.ac.uk',
                     code: 'test-code-user-7',
                     confirmedCoAuthor: false
+                },
+                {
+                    id: 'coauthor-test-user-8-problem-draft',
+                    email: 'test-user-8@jisc.ac.uk',
+                    code: 'test-code-user-8',
+                    confirmedCoAuthor: false
                 }
             ]
         },
