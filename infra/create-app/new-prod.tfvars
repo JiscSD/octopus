@@ -1,4 +1,4 @@
-profile = "octopus-dev"
+profile = "octopus-prod"
 
 allocated_storage       = 50
 instance                = "db.m5.large"

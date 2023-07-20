@@ -1,4 +1,4 @@
-domain_name = "int.octopus.ac"
+profile = "octopus-dev"
 
 allocated_storage       = 50
 instance                = "db.m5.large"
