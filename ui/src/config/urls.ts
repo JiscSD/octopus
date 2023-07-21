@@ -120,6 +120,13 @@ const urls = {
         canonical: `${base.host}/publications` // append `/{publication_id}/flag/{flag_id}`
     },
 
+    // Topics
+    viewTopic: {
+        path: '/topics',
+        title: `${base.title}`,
+        canonical: `${base.host}/topics`
+    },
+
     // Static Pages
     home: {
         path: '/',

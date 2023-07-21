@@ -70,6 +70,10 @@ const createPublicationSchema: I.Schema = {
         },
         affiliationStatement: {
             type: 'string'
+        },
+        topicIds: {
+            type: 'array',
+            items: { type: 'string' }
         }
     },
     required: ['type', 'title'],

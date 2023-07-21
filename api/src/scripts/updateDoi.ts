@@ -160,6 +160,14 @@ const updateDoi = async (): Promise<void> => {
                         }
                     }
                 }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
             }
         }
     });

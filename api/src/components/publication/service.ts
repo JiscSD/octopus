@@ -223,6 +223,14 @@ export const get = async (id: string) => {
                         }
                     }
                 }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
             }
         }
     });
@@ -394,7 +402,12 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                     confirmedCoAuthor: true,
                     approvalRequested: false
                 }
-            }
+            },
+            topics: e.topicIds?.length
+                ? {
+                      connect: e.topicIds.map((topicId) => ({ id: topicId }))
+                  }
+                : undefined
         },
         include: {
             publicationStatus: {
@@ -412,6 +425,14 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                     id: true,
                     firstName: true,
                     lastName: true
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
                 }
             }
         }

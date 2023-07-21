@@ -11,13 +11,14 @@ import * as Types from '@types';
 import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
-    const { for: publicationForID = null, type: publicationType = null } = context.query;
+    const { for: publicationForID = null, type: publicationType = null, topic: topicId = null } = context.query;
 
     return {
         props: {
             publicationForID,
             publicationType,
-            protectedPage: true
+            protectedPage: true,
+            topicId
         }
     };
 });
@@ -31,6 +32,7 @@ const SupportText: React.FC<React.PropsWithChildren> = (props): React.ReactEleme
 type PageProps = {
     publicationForID: string | null;
     publicationType: Types.PublicationType | null;
+    topicId: string | null;
 };
 
 const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
@@ -48,7 +50,8 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 Config.endpoints.publications,
                 {
                     title,
-                    type: publicationType
+                    type: publicationType,
+                    topicIds: props.topicId ? [props.topicId] : []
                 },
                 Helpers.getJWT()
             );

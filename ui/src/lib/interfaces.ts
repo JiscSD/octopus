@@ -86,6 +86,7 @@ export interface Publication extends CorePublication {
     affiliationStatement: string | null;
     publicationFlags: Flag[];
     references: Reference[];
+    topics: BaseTopic[];
 }
 
 export interface LinkedToPublication {
@@ -454,4 +455,25 @@ export interface MappedOrcidAffiliation {
     updatedAt: number;
     source: { name: string; orcid: string };
     url: string | null;
+}
+
+export interface TopicTranslation {
+    id: string;
+    topicId: string;
+    language: Types.Languages;
+    value: string;
+}
+
+export interface BaseTopic {
+    id: string;
+    title: string;
+    language: Types.Languages;
+    translations: TopicTranslation[];
+}
+
+export interface Topic extends BaseTopic {
+    createdAt: string;
+    updatedAt: string;
+    parents: BaseTopic[];
+    children: BaseTopic[];
 }

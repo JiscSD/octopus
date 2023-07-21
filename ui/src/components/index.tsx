@@ -38,7 +38,7 @@ export { default as ProgressBar } from './Progress/Bar';
 export { default as BookmarkedPublications } from './Publication/BookmarkedPublications';
 export { default as PublicationCard } from './Publication/Card';
 export { default as PublicationCarousel } from './Publication/Carousel';
-export { default as PublicationContentSection } from './Publication/ContentSection';
+export { default as ContentSection } from './GenericContent/ContentSection';
 export { default as PublicationCreationCoAuthor } from './Publication/Creation/CoAuthor';
 export { default as PublicationCreationCoAuthorEntry } from './Publication/Creation/CoAuthorEntry';
 export { default as PublicationCreationConflictOfInterest } from './Publication/Creation/ConflictOfInterest';

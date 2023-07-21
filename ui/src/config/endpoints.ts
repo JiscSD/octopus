@@ -10,7 +10,8 @@ const endpoints = {
     bookmarks: `${api.baseURL}/bookmarks`,
     decodeUserToken: `${api.baseURL}/decode-user-token`,
     verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,
-    revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`
+    revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`,
+    topics: `${api.baseURL}/topics`
 };
 
 export default endpoints;

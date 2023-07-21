@@ -82,6 +82,7 @@ export interface CreatePublicationRequestBody {
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
     affiliationStatement?: string;
+    topicIds?: string[];
 }
 
 export interface OpenSearchPublication {
@@ -714,4 +715,20 @@ export interface UserEmployment {
     };
     department: string | null;
     organisation: string;
+}
+
+export interface TopicTranslation {
+    language: Languages;
+    value: string;
+}
+
+export interface CreateTopicRequestBody {
+    title: string;
+    language?: Languages;
+    translations?: TopicTranslation[];
+    parentIds: string[];
+}
+
+export interface GetTopicPathParams {
+    id: string;
 }

@@ -48,6 +48,14 @@ export const initialDevSeed = async (): Promise<void> => {
         }
     }
 
+    // Create topics - one by one because they can relate to each other
+    for (const topic of SeedData.topicsDevSeedData) {
+        await client.prisma.topic.create({
+            // @ts-ignore
+            data: topic
+        });
+    }
+
     for (const problem of SeedData.problems) {
         await client.prisma.publication.create({
             // @ts-ignore
