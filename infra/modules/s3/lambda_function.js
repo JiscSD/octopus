@@ -1,7 +1,7 @@
 const AWS = require("@aws-sdk/client-ses");
 
 const postToPubrouter = async (pdfMetadata) => {
-  const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
+  const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${process.env.PUBROUTER_API_KEY}`;
 
   const response = await fetch(apiEndpoint, {
     method: "POST",
@@ -14,12 +14,21 @@ const postToPubrouter = async (pdfMetadata) => {
   return response.json();
 };
 
-const retryPostingPublication = async (pdfMetadata) => {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  return postToPubrouter(pdfMetadata);
+const retryPostingPublication = async (pdfMetadata, publicationId) => {
+  const apiResponse = await postToPubrouter(pdfMetadata);
+
+  if (apiResponse.status !== "200") {
+    await sendFailureEmail(
+      apiResponse,
+      "PubRouter delivery has failed",
+      publicationId
+    );
+  } else {
+    return;
+  }
 };
 
-const sendFailureEmail = async (error, event, publicationId) => {
+const sendFailureEmail = async (error, reason, publicationId) => {
   const ses = new AWS.SES();
 
   const emailParams = {
@@ -29,7 +38,9 @@ const sendFailureEmail = async (error, event, publicationId) => {
     Message: {
       Body: {
         Text: {
-          Data: `Publication Id: ${publicationId}, Error: ${error}, Event: ${event}`,
+          Data: `Publication Id: ${publicationId}, Reason: ${reason}, Error Message: ${JSON.stringify(
+            error
+          )}`,
         },
       },
       Subject: {
@@ -39,7 +50,7 @@ const sendFailureEmail = async (error, event, publicationId) => {
     Source: "octopus@mail.octopus.ac",
   };
 
-  return ses.sendEmail(emailParams).promise();
+  return ses.sendEmail(emailParams);
 };
 
 const mapPublicationToMetadata = (publication, pdfUrl) => {
@@ -59,7 +70,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
           id: author.orcid,
         },
       ],
-      affiliations: author.affiliations.map((affiliation) => ({
+      affiliations: author.affiliations?.map((affiliation) => ({
         identifier: [
           {
             type: affiliation.ror ? "ROR" : "Link",
@@ -74,7 +85,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
   };
 
   return {
-    event: "Published",
+    event: "submitted",
     provider: {
       agent: "Octopus",
     },
@@ -91,6 +102,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       journal: {
         title: "Octopus",
         publisher: ["Octopus"],
+        volume: "<Number of a journal (or other document) within a series>",
         identifier: [
           {
             type: "doi",
@@ -98,11 +110,14 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
           },
         ],
       },
+      publication_status: "Published",
       article: {
         title: publication.title,
         type: publication.type,
-        version: "VoR",
+        version: "VOR",
         language: publication.language,
+        e_num:
+          "<Electronic article number - an alternative to page_range / start_page / end_page>",
         identifier: {
           type: "doi",
           id: publication.doi,
@@ -110,13 +125,17 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         },
       },
       author: publication.coAuthors
-        .map((author) => formatAuthor(author, true))
+        ?.map((author) => formatAuthor(author, true))
         .push(formatAuthor(publication.user, false)),
       publication_date: {
         date: publication.createdAt,
+        year: "2023",
+        month: "01",
+        day: "01",
       },
       publication_status: "Published",
-      funding: publication.funders.map((funder) => ({
+      accepted_date: "2023-01-01",
+      funding: publication.funders?.map((funder) => ({
         name: funder.name,
         identifier: [
           {
@@ -140,25 +159,28 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
 exports.handler = async (event) => {
   const key = event.Records[0].s3.object.key;
   const publicationId = key.replace(/\.pdf$/, "");
-  try {
-    const bucket = event.Records[0].s3.bucket.name;
+  const bucket = event.Records[0].s3.bucket.name;
 
-    const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
+  const pdfUrl = `https:/.s3.eu-west-1.amazonaws.com/${bucket}/${key}`;
 
-    const publication = await fetch(
-      `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
-      { method: "GET" }
-    );
+  const publication = await fetch(
+    `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`
+  );
 
+  if (publication.ok) {
     const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
 
     const apiResponse = await postToPubrouter(pdfMetadata);
 
     // Check the API response and handle failures
-    if (apiResponse.status !== "success") {
-      await retryPostingPublication(pdfMetadata);
+    if (apiResponse.status !== "200") {
+      await retryPostingPublication(pdfMetadata, publicationId);
     }
-  } catch (error) {
-    await sendFailureEmail(error, event, publicationId);
+  } else {
+    await sendFailureEmail(
+      publication.error,
+      "Publication could not be retrieved from the Octopus API",
+      publicationId
+    );
   }
 };
