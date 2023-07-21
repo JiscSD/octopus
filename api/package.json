@@ -34,7 +34,7 @@
         "@middy/do-not-wait-for-empty-event-loop": "^4.5.1",
         "@middy/http-json-body-parser": "^4.5.1",
         "@middy/validator": "^4.5.1",
-        "@opensearch-project/opensearch": "^2.1.0",
+        "@opensearch-project/opensearch": "^2.3.0",
         "@paralleldrive/cuid2": "^2.2.1",
         "@prisma/client": "^4.14.1",
         "@serverless/utils": "^6.11.1",
