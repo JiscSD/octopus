@@ -67,3 +67,5 @@ There are some parts of this project's infrastructure that are **not** managed/c
 
 - An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-app-tfstate)**.
 - Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50.
+- A Route 53 hosted zone for `octopus.ac`
+- AWS Amplify config
