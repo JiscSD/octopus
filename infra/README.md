@@ -57,15 +57,23 @@ To run this Terraform, follow the below:
 ```bash
 ~/infra/create-app $ terraform init                             # init the terraform
 ~/infra/create-app $ terraform workspace select $WORKSPACE      # select the environment workspace (int or prod)
-~/infra/create-app $ terraform plan --var-file=int.tfvars        # pre-apply dry run (pass in environment vars)
-~/infra/create-app $ terraform apply --var-file=int.tfvars       # apply the terraform (pass in environment vars)
+~/infra/create-app $ terraform plan --var-file=int.tfvars       # pre-apply dry run (pass in environment vars)
+~/infra/create-app $ terraform apply --var-file=int.tfvars      # apply the terraform (pass in environment vars)
 ```
 
 ## Not managed by Terraform
 
 There are some parts of this project's infrastructure that are **not** managed/created by Terraform. These were created manually and must be managed manually in AWS. They are as follows:
 
-- An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-app-tfstate)**.
+- An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-tfstate)**.
 - Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50.
-- A Route 53 hosted zone for `octopus.ac`
+- Most Route 53 config
 - AWS Amplify config
+
+## Migration to prod AWS account
+We are in the process of moving the prod environment to a separate AWS account. Until this is done, there are the following additional things to note:
+- There is a new workspace called `new-prod` with its own `.tfvars` file. We will remove this after the migration. For now, it allows us to provision prod-like resources in parallel to the currently running prod environment.
+- Terraform will expect a number of profiles to be defined in your `~/.aws/credentials` file when running commands, depending on the account you're working with:
+    - `octopus-tfstate`: a separate account to store terraform state for all environments, and other centralised things TBD
+    - `octopus-prod`: the account for the prod environment (where new-prod currently lives, and where prod will eventually live)
+    - `octopus-dev`: the account for the int environment (where prod and int currently live, and eventually will only contain int)
