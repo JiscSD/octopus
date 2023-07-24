@@ -20,15 +20,18 @@ module "bastion" {
 }
 
 module "postgres" {
-  source                  = "../modules/postgres"
-  private_subnet_ids      = module.network.private_subnet_ids
-  environment             = local.environment
-  vpc_id                  = module.network.vpc_id
-  allocated_storage       = var.allocated_storage
-  instance                = var.instance
-  project_name            = local.project_name
-  db_version              = var.db_version
-  backup_retention_period = var.backup_retention_period
+  source                                = "../modules/postgres"
+  private_subnet_ids                    = module.network.private_subnet_ids
+  environment                           = local.environment
+  vpc_id                                = module.network.vpc_id
+  allocated_storage                     = var.rds_allocated_storage
+  max_allocated_storage                 = var.rds_max_allocated_storage
+  instance                              = var.rds_instance
+  project_name                          = local.project_name
+  db_version                            = var.rds_db_version
+  backup_retention_period               = var.rds_backup_retention_period
+  monitoring_interval                   = var.rds_monitoring_interval
+  performance_insights_retention_period = var.rds_performance_insights_retention_period
 }
 
 module "elasticsearch" {
