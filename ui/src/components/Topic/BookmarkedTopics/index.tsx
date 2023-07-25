@@ -8,12 +8,12 @@ import * as Config from '@config';
 import * as Components from '@components';
 
 type Props = {
-    publication: Interfaces.BookmarkedPublication;
+    topic: Interfaces.BookmarkedTopic;
     token: string;
     onDelete: () => void;
 };
 
-const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
+const BookmarkedTopics: React.FC<Props> = (props): React.ReactElement => {
     const [deleteLoading, setDeleteLoading] = React.useState(false);
 
     const onRemoveBookmarkHandler = async () => {
@@ -24,40 +24,21 @@ const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
     return (
         <div className="mb-8 flex grid-cols-8 items-center justify-center align-middle ">
             <Components.Link
-                key={props.publication.id}
-                href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                key={props.topic.id}
+                href={`${Config.urls.viewTopic.path}/${props.topic.id}`}
                 className="col-span-7 flex w-full"
             >
                 <div className="w-full rounded border border-transparent bg-white-50 p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
                     <div className="lg: flex justify-between">
                         <div className="flex items-end text-sm">
                             <span className="mr-2 leading-3 text-teal-600 dark:text-teal-400">
-                                {Helpers.formatPublicationType(props.publication.type)}
+                                Research Topic
                             </span>
-                            {props.publication.publishedDate ? (
-                                <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                                    Published: {Helpers.formatDate(props.publication.publishedDate)}
-                                </span>
-                            ) : (
-                                <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                                    Last updated: {Helpers.formatDate(props.publication.updatedAt)}
-                                </span>
-                            )}
                         </div>
                     </div>
                     <span className="mt-2 block font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.publication.title}
+                        {props.topic.title}
                     </span>
-                    <div className="flex justify-between">
-                        <span className="mt-2 block font-montserrat text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                            {props.publication.user.firstName} {props.publication.user.lastName}
-                            {props.publication.coAuthors &&
-                                props.publication.coAuthors.map(
-                                    (author) => ', ' + author.user.firstName + ' ' + author.user.lastName
-                                )}
-                        </span>
-                        <span className="mt-2 text-xs leading-5 text-teal-600 empty:hidden dark:text-teal-400">{props.publication.doi}</span>
-                    </div>
                 </div>
             </Components.Link>
             <button
@@ -75,4 +56,4 @@ const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
     );
 };
 
-export default BookmarkedPublications;
+export default BookmarkedTopics;

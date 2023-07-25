@@ -274,6 +274,25 @@ export interface BookmarkedPublication {
     };
 }
 
+export interface BookmarkedTopicsData {
+    id: string;
+    topicId: string;
+    userId: string;
+    topic: BookmarkedTopic;
+}
+
+export interface BookmarkedTopic {
+    id: string;
+    title: string;
+    language: Types.Languages;
+    translations: {
+        language: Types.Languages;
+        value: string;
+    }
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface OctopusInformation {
     publications: {
         [key in Types.PublicationType]: {

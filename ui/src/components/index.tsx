@@ -73,6 +73,7 @@ export { default as SurveyWidget } from './SurveyWidget';
 export { default as Tabs } from './Tabs';
 export { default as TextEditor } from './TextEditor';
 export { default as Toast } from './Toast';
+export { default as BookmarkedTopics } from './Topic/BookmarkedTopics';
 export { default as URLSourceUpload } from './URLSourceUpload';
 export { default as UserHistoryTable } from './Users/HistoryTable';
 export { default as UserSearchResult } from './Users/SearchResult';
