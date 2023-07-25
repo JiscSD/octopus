@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
-
 import * as api from '@api';
 import * as Assets from '@assets';
 import * as Components from '@components';
@@ -16,6 +15,7 @@ import * as Types from '@types';
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const id = context.query.id;
     let topic: Interfaces.Topic | null = null;
+    let bookmark: boolean = false;
     let error: string | null = null;
 
     const token = Helpers.getJWT(context);
@@ -28,6 +28,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
+    try {
+        const response = await api.get(`${Config.endpoints.topics}/${id}/bookmark`, token);
+        bookmark = response.data;
+    } catch (err) {
+        console.log(err);
+    }
+
     if (!topic || error) {
         return {
             notFound: true
@@ -36,22 +43,54 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            topic
+            topic,
+            bookmark
         }
     };
 };
 
 type Props = {
     topic: Interfaces.Topic;
+    bookmark: boolean;
 };
 
 const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
 
+    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
+
     const topic = props.topic;
     const showChildren = Boolean(topic.children.length);
     const showParents = Boolean(topic.parents.length);
     const showPublications = Boolean(topic.publications.length);
+
+    const isBookmarkVisible = useMemo(() => {
+        if (user && topic) {
+            return true;
+        } else {
+            return false;
+        }
+    }, [topic, user]);
+
+    const onBookmarkHandler = async () => {
+        if (isBookmarked) {
+            // Delete the bookmark
+            try {
+                await api.destroy(`topics/${topic.id}/bookmark`, user?.token);
+                setIsBookmarked(false);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            // Create the bookmark
+            try {
+                await api.post(`topics/${topic.id}/bookmark`, {}, user?.token);
+                setIsBookmarked(true);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    };
 
     return (
         <>
@@ -63,9 +102,27 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
             <Layouts.Topic fixedHeader={false}>
                 <section className="col-span-9 text-grey-800 dark:text-grey-100">
                     <header className="border-b border-grey-200">
-                        <h1 className="mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
-                            {topic.title}
-                        </h1>
+                        <div className="grid w-full grid-cols-8">
+                            <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
+                                {topic.title}
+                            </h1>
+                            {isBookmarkVisible && (
+                                <div className="col-span-1 grid justify-items-end">
+                                    <button
+                                        className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
+                                        onClick={onBookmarkHandler}
+                                        aria-label="toggle-bookmark"
+                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                    >
+                                        <OutlineIcons.BookmarkIcon
+                                            className={`h-8 w-8 ${
+                                                isBookmarked ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
+                                            } text-blue-700 transition duration-150 dark:text-blue-50`}
+                                        />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                         <p className="mb-4">
                             <em>Research Topic</em>
                         </p>

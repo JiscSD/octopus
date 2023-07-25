@@ -14,7 +14,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     let usersBookmarks: Interfaces.BookmarkedPublicationsData[] = [];
 
     try {
-        const response = await api.get(`${Config.endpoints.bookmarks}`, token);
+        const response = await api.get(`${Config.endpoints.publicationBookmarks}`, token);
         usersBookmarks = response.data;
     } catch (err) {
         console.log(err);
@@ -41,7 +41,7 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
         try {
             await api.destroy(`${Config.endpoints.publications}/${publication}/bookmark`, props.token);
 
-            const getBookmarks = await api.get(`${Config.endpoints.bookmarks}`, props.token);
+            const getBookmarks = await api.get(`${Config.endpoints.publicationBookmarks}`, props.token);
             setUserBookmarks(getBookmarks.data);
         } catch (err) {
             console.log(err);
