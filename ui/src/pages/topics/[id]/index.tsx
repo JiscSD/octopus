@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
@@ -30,7 +30,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     try {
         const response = await api.get(`${Config.endpoints.topics}/${id}/bookmark`, token);
-        bookmark = response.data;
+        bookmark = response.data  ? true : false;
     } catch (err) {
         console.log(err);
     }
@@ -57,12 +57,16 @@ type Props = {
 const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
 
-    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
+    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark);
 
     const topic = props.topic;
     const showChildren = Boolean(topic.children.length);
     const showParents = Boolean(topic.parents.length);
     const showPublications = Boolean(topic.publications.length);
+
+    useEffect(() => {
+        setIsBookmarked(props.bookmark);
+    }, [props.bookmark]);
 
     const isBookmarkVisible = useMemo(() => {
         if (user && topic) {

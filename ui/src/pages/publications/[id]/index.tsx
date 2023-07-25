@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -52,7 +52,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     try {
         const response = await api.get(`${Config.endpoints.publications}/${requestedId}/bookmark`, token);
-        bookmark = response.data;
+        bookmark = response.data ? true : false;
     } catch (err) {
         console.log(err);
     }
@@ -84,11 +84,15 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
+    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
+
+    useEffect(() => {
+        setIsBookmarked(props.bookmark);
+    }, [props.bookmark]);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
