@@ -24,7 +24,7 @@ export const create = async (
         }
 
         // check to see if the user is the author or co author. if so throw an error
-        const isUserCoAuthor = publication.coAuthors.some((user) => user.id == event.user.id);
+        const isUserCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.linkedUser == event.user.id);
 
         if (isUserCoAuthor || event.user.id === publication.user.id) {
             return response.json(401, {
