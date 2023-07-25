@@ -36,8 +36,8 @@
             "user/*": [
                 "src/components/user/*"
             ],
-            "bookmark/*": [
-                "src/components/bookmark/*"
+            "publicationBookmark/*": [
+                "src/components/publicationBookmark/*"
             ],
             "link/*": [
                 "src/components/link/*"
@@ -65,6 +65,9 @@
             ],
             "topic/*": [
                 "src/components/topic/*"
+            ],
+            "topicBookmark/*": [
+                "src/components/topicBookmark/*"
             ],
             "lib/*": [
                 "src/lib/*"

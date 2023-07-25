@@ -1,10 +1,10 @@
 import * as response from 'lib/response';
-import * as bookmarkService from 'bookmark/service';
+import * as publicationBookmarkService from 'publicationBookmark/service';
 import * as publicationService from 'publication/service';
 import * as I from 'interface';
 
 export const create = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateBookmarkPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreatePublicationBookmarkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -32,7 +32,7 @@ export const create = async (
             });
         }
 
-        const bookmark = await bookmarkService.get(event.pathParameters.id, event.user.id);
+        const bookmark = await publicationBookmarkService.get(event.pathParameters.id, event.user.id);
 
         // check that the user hasn't already bookmarked this publication
         if (bookmark) {
@@ -41,7 +41,7 @@ export const create = async (
             });
         }
 
-        await bookmarkService.create(event.pathParameters.id, event.user.id);
+        await publicationBookmarkService.create(event.pathParameters.id, event.user.id);
 
         return response.json(200, { message: 'You have bookmarked this publication.' });
     } catch (err) {
@@ -52,7 +52,7 @@ export const create = async (
 };
 
 export const remove = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemoveBookmarkPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.RemovePublicationBookmarkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -71,16 +71,16 @@ export const remove = async (
             });
         }
 
-        const bookmark = await bookmarkService.get(event.pathParameters.id, event.user.id);
+        const bookmark = await publicationBookmarkService.get(event.pathParameters.id, event.user.id);
 
         // check that the user has created the bookmark/ hasn't already deleted it
         if (!bookmark) {
             return response.json(404, {
-                message: 'You have already deleted the bookmark for this publication.'
+                message: 'You do not have a bookmark to remove for this publication.'
             });
         }
 
-        await bookmarkService.remove(bookmark.id);
+        await publicationBookmarkService.remove(bookmark.id);
 
         return response.json(200, { message: 'Bookmark deleted from this publication.' });
     } catch (err) {
@@ -89,7 +89,7 @@ export const remove = async (
 };
 
 export const get = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetBookmarkPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetPublicationBookmarkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -108,7 +108,7 @@ export const get = async (
             });
         }
 
-        const bookmark = await bookmarkService.get(event.pathParameters.id, event.user.id);
+        const bookmark = await publicationBookmarkService.get(event.pathParameters.id, event.user.id);
 
         if (!bookmark) {
             return response.json(200, false);
@@ -121,14 +121,14 @@ export const get = async (
 };
 
 export const getAll = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetAllBookmarkPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetAllPublicationBookmarkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const bookmarks = await bookmarkService.getAll(event.user.id);
+        const bookmarks = await publicationBookmarkService.getAll(event.user.id);
 
         if (!bookmarks) {
             return response.json(404, {
-                message: 'No bookmarks exist'
+                message: 'No bookmarks found for this user.'
             });
         }
 

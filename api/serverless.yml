@@ -418,33 +418,62 @@ functions:
                   path: ${self:custom.versions.v1}/images
                   method: GET
                   cors: true
-    # Bookmarks
-    createBookmark:
-        handler: src/components/bookmark/routes.create
+    # Publication bookmarks
+    createPublicationBookmark:
+        handler: src/components/publicationBookmark/routes.create
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
                   method: POST
                   cors: true
-    removeBookmark:
-        handler: src/components/bookmark/routes.remove
+    removePublicationBookmark:
+        handler: src/components/publicationBookmark/routes.remove
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
                   method: DELETE
                   cors: true
-    getBookmark:
-        handler: src/components/bookmark/routes.get
+    getPublicationBookmark:
+        handler: src/components/publicationBookmark/routes.get
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/bookmark
                   method: GET
                   cors: true
-    getAllBookmark:
-        handler: src/components/bookmark/routes.getAll
+    getAllPublicationBookmarks:
+        handler: src/components/publicationBookmark/routes.getAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/bookmarks
+                  path: ${self:custom.versions.v1}/publications/bookmarks
+                  method: GET
+                  cors: true
+    # Topic bookmarks
+    createTopicBookmark:
+        handler: src/components/topicBookmark/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/{id}/bookmark
+                  method: POST
+                  cors: true
+    removeTopicBookmark:
+        handler: src/components/topicBookmark/routes.remove
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/{id}/bookmark
+                  method: DELETE
+                  cors: true
+    getTopicBookmark:
+        handler: src/components/topicBookmark/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/{id}/bookmark
+                  method: GET
+                  cors: true
+    getAllTopicBookmarks:
+        handler: src/components/topicBookmark/routes.getAll
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/bookmarks
                   method: GET
                   cors: true
     # Verification

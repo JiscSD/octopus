@@ -419,21 +419,39 @@ export interface ImageSentBody {
     image: string;
 }
 
-// @description Bookmarks
+// @description Publication bookmarks
 
-export interface CreateBookmarkPathParams {
+export interface CreatePublicationBookmarkPathParams {
     id: string;
 }
 
-export interface RemoveBookmarkPathParams {
+export interface RemovePublicationBookmarkPathParams {
     id: string;
 }
 
-export interface GetBookmarkPathParams {
+export interface GetPublicationBookmarkPathParams {
     id: string;
 }
 
-export interface GetAllBookmarkPathParams {
+export interface GetAllPublicationBookmarkPathParams {
+    id: string;
+}
+
+// @description Topic bookmarks
+
+export interface CreateTopicBookmarkPathParams {
+    id: string;
+}
+
+export interface RemoveTopicBookmarkPathParams {
+    id: string;
+}
+
+export interface GetTopicBookmarkPathParams {
+    id: string;
+}
+
+export interface GetAllTopicBookmarkPathParams {
     id: string;
 }
 
