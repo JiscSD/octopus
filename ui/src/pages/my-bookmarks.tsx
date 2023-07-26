@@ -112,7 +112,13 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                             {!!userTopicBookmarks.length && (
                                 <>
-                                    <h2 className="mt-8 mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8 lg:mt-16">
+                                    <h2
+                                        className={`mt-${
+                                            userPublicationBookmarks.length ? 8 : 0
+                                        } mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8 lg:mt-${
+                                            userPublicationBookmarks.length ? 16 : 0
+                                        }`}
+                                    >
                                         Your bookmarked topics
                                     </h2>
                                     <div className="relative rounded-md lg:w-2/3">
