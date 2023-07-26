@@ -7,9 +7,7 @@ describe('Get a topic bookmark', () => {
     });
 
     test('Get a topic bookmark', async () => {
-        const bookmark = await testUtils.agent
-            .get('/topics/test-topic-1/bookmark')
-            .query({ apiKey: '987654321' });
+        const bookmark = await testUtils.agent.get('/topics/test-topic-1/bookmark').query({ apiKey: '987654321' });
 
         expect(bookmark.status).toEqual(200);
     });
@@ -23,9 +21,7 @@ describe('Get a topic bookmark', () => {
     });
 
     test('Cannot get a topic bookmark as an un-authenticated user', async () => {
-        const bookmark = await testUtils.agent
-            .get('/topics/test-topic-1/bookmark')
-            .query({ apiKey: null });
+        const bookmark = await testUtils.agent.get('/topics/test-topic-1/bookmark').query({ apiKey: null });
 
         expect(bookmark.status).toEqual(401);
     });

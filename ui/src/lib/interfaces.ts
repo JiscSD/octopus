@@ -288,7 +288,7 @@ export interface BookmarkedTopic {
     translations: {
         language: Types.Languages;
         value: string;
-    }
+    };
     createdAt: string;
     updatedAt: string;
 }

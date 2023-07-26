@@ -30,7 +30,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     try {
         const response = await api.get(`${Config.endpoints.topics}/${id}/bookmark`, token);
-        bookmark = response.data  ? true : false;
+        bookmark = response.data ? true : false;
     } catch (err) {
         console.log(err);
     }

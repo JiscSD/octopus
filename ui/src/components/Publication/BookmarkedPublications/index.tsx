@@ -56,7 +56,9 @@ const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
                                     (author) => ', ' + author.user.firstName + ' ' + author.user.lastName
                                 )}
                         </span>
-                        <span className="mt-2 text-xs leading-5 text-teal-600 empty:hidden dark:text-teal-400">{props.publication.doi}</span>
+                        <span className="mt-2 text-xs leading-5 text-teal-600 empty:hidden dark:text-teal-400">
+                            {props.publication.doi}
+                        </span>
                     </div>
                 </div>
             </Components.Link>

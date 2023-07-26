@@ -12,7 +12,7 @@ const endpoints = {
     verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,
     revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`,
     topics: `${api.baseURL}/topics`,
-    topicBookmarks: `${api.baseURL}/topics/bookmarks`,
+    topicBookmarks: `${api.baseURL}/topics/bookmarks`
 };
 
 export default endpoints;

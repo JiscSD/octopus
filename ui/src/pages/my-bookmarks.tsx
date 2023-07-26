@@ -68,7 +68,7 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
 
     return (
         <>
@@ -91,40 +91,42 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="container mx-auto mb-16 px-8">
                     {userPublicationBookmarks.length || userTopicBookmarks.length ? (
                         <>
-                        {!!userPublicationBookmarks.length && (
-                            <>
-                                <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                                    Your bookmarked publications
-                                </h2>
-                                <div className="relative rounded-md lg:w-2/3">
-                                    {userPublicationBookmarks.map((bookmark: Interfaces.BookmarkedPublicationsData) => (
-                                        <Components.BookmarkedPublications
-                                            publication={bookmark.publication}
-                                            key={bookmark.id}
-                                            token={props.token}
-                                            onDelete={() => deletePublicationBookmark(bookmark.publication.id)}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                        {!!userTopicBookmarks.length && (
-                            <>
-                                <h2 className="mt-8 mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8 lg:mt-16">
-                                    Your bookmarked topics
-                                </h2>
-                                <div className="relative rounded-md lg:w-2/3">
-                                    {userTopicBookmarks.map((bookmark: Interfaces.BookmarkedTopicsData) => (
-                                        <Components.BookmarkedTopics
-                                            topic={bookmark.topic}
-                                            key={bookmark.id}
-                                            token={props.token}
-                                            onDelete={() => deleteTopicBookmark(bookmark.topic.id)}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
+                            {!!userPublicationBookmarks.length && (
+                                <>
+                                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                                        Your bookmarked publications
+                                    </h2>
+                                    <div className="relative rounded-md lg:w-2/3">
+                                        {userPublicationBookmarks.map(
+                                            (bookmark: Interfaces.BookmarkedPublicationsData) => (
+                                                <Components.BookmarkedPublications
+                                                    publication={bookmark.publication}
+                                                    key={bookmark.id}
+                                                    token={props.token}
+                                                    onDelete={() => deletePublicationBookmark(bookmark.publication.id)}
+                                                />
+                                            )
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                            {!!userTopicBookmarks.length && (
+                                <>
+                                    <h2 className="mt-8 mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8 lg:mt-16">
+                                        Your bookmarked topics
+                                    </h2>
+                                    <div className="relative rounded-md lg:w-2/3">
+                                        {userTopicBookmarks.map((bookmark: Interfaces.BookmarkedTopicsData) => (
+                                            <Components.BookmarkedTopics
+                                                topic={bookmark.topic}
+                                                key={bookmark.id}
+                                                token={props.token}
+                                                onDelete={() => deleteTopicBookmark(bookmark.topic.id)}
+                                            />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </>
                     ) : (
                         <Components.Alert
@@ -132,7 +134,7 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                             title="You do not currently have any bookmarked publications or topics"
                             className="w-fit"
                         />
-                    )}  
+                    )}
                 </section>
             </Layouts.Standard>
         </>

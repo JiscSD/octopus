@@ -31,9 +31,7 @@ const BookmarkedTopics: React.FC<Props> = (props): React.ReactElement => {
                 <div className="w-full rounded border border-transparent bg-white-50 p-3 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none">
                     <div className="lg: flex justify-between">
                         <div className="flex items-end text-sm">
-                            <span className="mr-2 leading-3 text-teal-600 dark:text-teal-400">
-                                Research Topic
-                            </span>
+                            <span className="mr-2 leading-3 text-teal-600 dark:text-teal-400">Research Topic</span>
                         </div>
                     </div>
                     <span className="mt-2 block font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
