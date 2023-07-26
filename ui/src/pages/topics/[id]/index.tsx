@@ -116,7 +116,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
                                         onClick={onBookmarkHandler}
                                         aria-label="toggle-bookmark"
-                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this topic'}`}
                                     >
                                         <OutlineIcons.BookmarkIcon
                                             className={`h-8 w-8 ${
