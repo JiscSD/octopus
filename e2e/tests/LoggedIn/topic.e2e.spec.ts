@@ -4,7 +4,9 @@ import { PageModel } from '../PageModel';
 
 test.describe.configure({ mode: 'serial' });
 
-const addBookmark = async (page: Page) => {
+// Recreate parameter controls the behaviour when a bookmark already exists.
+// If true, it will remove and recreate it; if false, it will leave it.
+const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
     await page.goto(`${Helpers.UI_BASE}/topics/test-topic-1`, {
         waitUntil: 'domcontentloaded'
     });
@@ -14,11 +16,16 @@ const addBookmark = async (page: Page) => {
 
     const isRemoveBookmarkVisible = await page.isVisible(PageModel.topic.removeBookmark);
     if (isRemoveBookmarkVisible) {
-        await page.locator(PageModel.topic.removeBookmark).click();
+        if (recreate) {
+            await page.locator(PageModel.topic.removeBookmark).click();
+        } else {
+            return true;
+        }
+    } else {
+        await expect(page.locator(PageModel.topic.addBookmark)).toBeVisible();
+        await page.locator(PageModel.topic.addBookmark).click();
     }
-    await expect(page.locator(PageModel.topic.addBookmark)).toBeVisible();
-    await page.locator(PageModel.topic.addBookmark).click();
-};
+}
 
 test.describe('Topic page', () => {
 
@@ -32,7 +39,7 @@ test.describe('Topic page', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
 
         // Add bookmark
-        await addBookmark(page);
+        await ensureBookmarkPresent(page, true);
     
         // Confirm it is present on 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
@@ -50,7 +57,7 @@ test.describe('Topic page', () => {
         await Helpers.login(page, browser);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
 
-        await addBookmark(page);
+        await ensureBookmarkPresent(page);
 
         // Remove bookmark
         await expect(page.locator(PageModel.topic.removeBookmark)).toBeVisible();
@@ -72,7 +79,7 @@ test.describe('Topic page', () => {
         await Helpers.login(page, browser);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
 
-        await addBookmark(page);
+        await ensureBookmarkPresent(page);
 
         // Remove bookmark from 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
