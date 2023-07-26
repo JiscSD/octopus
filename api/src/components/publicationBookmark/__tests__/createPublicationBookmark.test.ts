@@ -51,7 +51,7 @@ describe('create a publication bookmark', () => {
             .post('/publications/publication-problem-live/bookmark')
             .query({ apiKey: '987654321' });
 
-        expect(bookmark.status).toEqual(404);
+        expect(bookmark.status).toEqual(400);
     });
 
     test('Cannot create publication bookmarks a publication that does not exist', async () => {

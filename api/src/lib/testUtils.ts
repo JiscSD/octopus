@@ -38,6 +38,10 @@ export const testSeed = async (): Promise<void> => {
     await client.prisma.publicationBookmarks.createMany({
         data: seeds.bookmarkedPublicationSeeds
     });
+
+    await client.prisma.topicBookmark.createMany({
+        data: seeds.bookmarkedTopicSeeds
+    });
 };
 
 export const openSearchSeed = async (): Promise<void> => {

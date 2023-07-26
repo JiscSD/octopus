@@ -36,7 +36,7 @@ export const create = async (
 
         // check that the user hasn't already bookmarked this publication
         if (bookmark) {
-            return response.json(404, {
+            return response.json(400, {
                 message: 'You have already bookmarked this publication.'
             });
         }
