@@ -42,7 +42,6 @@
         "axios": "^1.4.0",
         "cheerio": "^1.0.0-rc.10",
         "copy-webpack-plugin": "^11.0.0",
-        "file-type": "^16.5.4",
         "html-to-text": "^8.1.0",
         "json5": "^1.0.2",
         "jsonwebtoken": "^9.0.0",
