@@ -14,11 +14,11 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@playwright/test": "^1.35.1",
-        "@types/node": "^18.16.18"
+        "@playwright/test": "^1.36.2",
+        "@types/node": "^18.17.1"
     },
     "dependencies": {
         "@paralleldrive/cuid2": "^2.2.1",
-        "dotenv": "^16.1.4"
+        "dotenv": "^16.3.1"
     }
 }
