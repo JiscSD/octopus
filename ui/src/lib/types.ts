@@ -95,7 +95,7 @@ export type PublicationCreationStoreType = {
 
 export type JSONValue = unknown;
 
-export type SearchType = 'publications' | 'authors';
+export type SearchType = 'publications' | 'authors' | 'users';
 
 export type SearchParameter = Interfaces.Publication | Interfaces.User;
 
