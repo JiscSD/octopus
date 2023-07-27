@@ -52,6 +52,15 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
     if (Array.isArray(dateTo)) dateTo = dateTo[0];
 
+    if (
+        publicationTypes &&
+        !publicationTypes
+            .split(',')
+            .every((type) => Config.values.publicationTypes.includes(type as Types.PublicationType))
+    ) {
+        publicationTypes = Config.values.publicationTypes.join(',');
+    }
+
     // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
     limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
     offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
@@ -116,9 +125,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     // params
     const [searchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
-    const [publicationTypes, setPublicationTypes] = React.useState(
-        props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
-    );
+    const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
     // param for pagination
@@ -128,9 +135,9 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const dateFromFormatted = new Date(dateFrom || '');
     const dateToFormatted = new Date(dateTo || '');
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${publicationTypes}&limit=${
-        limit || '10'
-    }&offset=${offset || '0'}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${
+        publicationTypes || Config.values.publicationTypes.join(',')
+    }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
     }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
 
@@ -181,6 +188,21 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     };
 
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
+        if (e.target.name === 'select-all') {
+            await router.push(
+                {
+                    query: {
+                        ...router.query,
+                        type: value
+                    }
+                },
+                undefined,
+                { shallow: true }
+            );
+
+            return setPublicationTypes(value);
+        }
+
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
@@ -197,7 +219,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             { shallow: true }
         );
 
-        setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
+        setPublicationTypes(uniqueArray);
     };
 
     const resetFilters = async (): Promise<void> => {
@@ -351,6 +373,39 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                 </div>
                                             </div>
                                         ))}
+
+                                        <div className="relative flex items-start border-t border-b border-grey-100 py-3">
+                                            <div className="flex h-5 items-center">
+                                                <input
+                                                    id="select-all"
+                                                    aria-describedby="select-all"
+                                                    name="select-all"
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
+                                                    checked={Config.values.publicationTypes.every((type) =>
+                                                        publicationTypes.includes(type)
+                                                    )}
+                                                    onChange={(e) =>
+                                                        collatePublicationTypes(
+                                                            e,
+                                                            e.target.checked
+                                                                ? Config.values.publicationTypes.join(',')
+                                                                : ''
+                                                        )
+                                                    }
+                                                    disabled={!results}
+                                                />
+                                            </div>
+                                            <div className="ml-3 text-sm">
+                                                <label
+                                                    htmlFor="select-all"
+                                                    className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                    aria-disabled={!results}
+                                                >
+                                                    Select/deselect all
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <Framer.motion.form
                                         name="date-form"
