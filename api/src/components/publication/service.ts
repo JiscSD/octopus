@@ -831,9 +831,18 @@ export const getResearchTopics = () =>
         where: {
             type: 'PROBLEM',
             createdBy: 'octopus',
-            content: {
-                contains: 'This is an automatically-generated topic'
-            },
+            OR: [
+                {
+                    linkedTo: {
+                        none: {} // god problem will be converted to a god topic
+                    }
+                },
+                {
+                    content: {
+                        contains: 'This is an automatically-generated topic'
+                    }
+                }
+            ],
             References: {
                 none: {}
             }
