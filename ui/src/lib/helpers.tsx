@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
@@ -7,6 +8,7 @@ import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Interfaces from '@interfaces';
+import { Middleware } from 'swr';
 
 /**
  * @description Truncates a string
@@ -528,5 +530,30 @@ export const withServerSession = (
         }
 
         return callback(context, decodedToken);
+    };
+};
+
+// This is a SWR middleware for keeping the data even if key changes until new data has loaded.
+export const laggy: Middleware = (useSWRNext) => {
+    return (key, fetcher, config) => {
+        // Use a ref to store previous returned data.
+        const laggyDataRef = React.useRef<{} | null>();
+
+        // Actual SWR hook.
+        const swr = useSWRNext(key, fetcher, config);
+
+        React.useEffect(() => {
+            // Update ref if data is not undefined.
+            if (swr.data !== undefined) {
+                laggyDataRef.current = swr.data;
+            }
+        }, [swr.data]);
+
+        // Fallback to previous data if the current data is undefined.
+        const dataOrLaggyData = swr.data === undefined ? laggyDataRef.current : swr.data;
+
+        return Object.assign({}, swr, {
+            data: dataOrLaggyData
+        });
     };
 };
