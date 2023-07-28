@@ -1,17 +1,14 @@
 const AWS = require("aws-sdk");
-const fetch = require("node-fetch");
-
-AWS.config.update({ region: process.env.AWS_REGION });
 
 exports.handler = async (event) => {
+  const bucket = event.Records[0].s3.bucket.name;
+  const key = event.Records[0].s3.object.key;
+
+  const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
+
+  const publicationId = key.replace(/\.pdf$/, "");
+
   try {
-    const bucket = event.Records[0].s3.bucket.name;
-    const key = event.Records[0].s3.object.key;
-
-    const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
-
-    const publicationId = key.replace(/\.pdf$/, "");
-
     const publication = await fetch(
       `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
       { method: "GET" }
@@ -45,7 +42,6 @@ const postToPubrouter = async (pdfMetadata) => {
 };
 
 const retryPostingPublication = async (pdfMetadata) => {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   return postToPubrouter(pdfMetadata);
 };
 
@@ -89,7 +85,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
           id: author.orcid,
         },
       ],
-      affiliations: author.affiliations.map((affiliation) => ({
+      affiliations: author.affiliations?.map((affiliation) => ({
         identifier: [
           {
             type: affiliation.ror ? "ROR" : "Link",
@@ -104,12 +100,8 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
   };
 
   return {
-    event: "Published",
     provider: {
       agent: "Octopus",
-    },
-    content: {
-      packaging_format: publication.doi,
     },
     links: [
       {
@@ -120,6 +112,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
     metadata: {
       journal: {
         title: "Octopus",
+        volume: "<Tim to confirm ocontent as this is a required field>",
         publisher: ["Octopus"],
         identifier: [
           {
@@ -131,7 +124,8 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       article: {
         title: publication.title,
         type: publication.type,
-        version: "VoR",
+        version: "VOR",
+        e_num: "<Tim to confirm content>",
         language: publication.language,
         identifier: {
           type: "doi",
@@ -140,13 +134,17 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         },
       },
       author: publication.coAuthors
-        .map((author) => formatAuthor(author, true))
+        ?.map((author) => formatAuthor(author, true))
         .push(formatAuthor(publication.user, false)),
       publication_date: {
         date: publication.createdAt,
+        year: publication.createdAt.slice(0, 4),
+        month: publication.createdAt.slice(4, 2),
+        day: publication.createdAt.slice(7, 2),
       },
+      accepted_date: publication.createdAt,
       publication_status: "Published",
-      funding: publication.funders.map((funder) => ({
+      funding: publication.funders?.map((funder) => ({
         name: funder.name,
         identifier: [
           {
