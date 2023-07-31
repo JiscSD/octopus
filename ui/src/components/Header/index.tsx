@@ -50,7 +50,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
             <header
                 className={`text-grey-800 transition-colors duration-500  print:hidden  ${
-                    props.fixed && 'lg:fixed lg:top-0 lg:left-0 lg:z-20 lg:w-full'
+                    props.fixed && 'lg:fixed lg:left-0 lg:top-0 lg:z-20 lg:w-full'
                 }`}
             >
                 <div className="container mx-auto px-8">

@@ -96,7 +96,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </div>
             </td>
-            <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {!props.isMainAuthor && (
                     <Components.IconButton
                         className="p-2"

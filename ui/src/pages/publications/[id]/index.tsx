@@ -477,7 +477,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             severity="RED_FLAG"
                             className="mb-4"
                         >
-                            <ul className="mt-3 mb-4">
+                            <ul className="mb-4 mt-3">
                                 {uniqueRedFlagCategoryList.map((category) => (
                                     <li key={category} className="text-sm text-red-700">
                                         - {Config.values.octopusInformation.redFlagReasons[category].nicename}

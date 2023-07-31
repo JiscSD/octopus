@@ -15,7 +15,7 @@ type CardItemProps = {
 };
 
 const CardItem: React.FC<CardItemProps> = (props): React.ReactElement => (
-    <div className="w-30 mx-3 mt-3 space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
+    <div className="w-30 mx-3 mt-3 space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
         <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.title}
@@ -125,7 +125,7 @@ const About: NextPage = (): React.ReactElement => (
             </PageSection>
 
             <PageSection>
-                <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
+                <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
                     <div className="text-center lg:mt-5">
                         <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Do you feel like these principles align with your own?

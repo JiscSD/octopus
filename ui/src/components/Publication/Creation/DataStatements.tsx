@@ -167,7 +167,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     Select from the pre-defined statements below, or create your own. You can provide a link to any
                     publicly accessible datasets in the &apos;Additional materials&apos; field.
                 </span>
-                <fieldset className="mt-8 mb-4 space-y-3">
+                <fieldset className="mb-4 mt-8 space-y-3">
                     {dataAccessOptions.map((option) => (
                         <label
                             key={option}

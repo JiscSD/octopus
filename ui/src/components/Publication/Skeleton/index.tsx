@@ -22,8 +22,8 @@ const Skeleton: React.FC<Props> = (props): React.ReactElement => (
                 border
                 border-transparent
                 bg-white-50
-                py-4
                 px-4
+                py-4
                 shadow
                 outline-0
                 transition-all

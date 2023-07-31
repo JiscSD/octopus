@@ -31,7 +31,7 @@ const SurveyAlert: React.FC = (): React.ReactElement => {
                 onClick={() => toggleFeedback()}
                 name="Open Close icon"
                 aria-label="Open Close icon"
-                className="absolute top-[5.35%] right-5 rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
+                className="absolute right-5 top-[5.35%] rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
             >
                 {!feedback ? (
                     <OutlineIcons.ChevronUpIcon className="h-5 w-5 text-grey-800 transition-colors duration-500 dark:text-white-50" />
