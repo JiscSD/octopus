@@ -8,9 +8,36 @@ export const get = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const coAuthors = await coAuthorService.getAllByPublication(event.pathParameters.id);
+        const publicationId = event.pathParameters.id;
 
-        return response.json(200, coAuthors);
+        const publication = await publicationService.get(publicationId);
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        const coAuthors = publication.coAuthors;
+
+        const correspondingAuthor = coAuthors.find((coAuthor) => coAuthor.linkedUser === publication.createdBy);
+
+        // enforce adding corresponding author if it's missing - this will fix old publications which don't have the corresponding author in the coAuthors list
+        if (!correspondingAuthor) {
+            const correspondingAuthor = await coAuthorService.createCorrespondingAuthor(publication);
+
+            // put corresponding author in the first position
+            coAuthors.unshift({
+                ...correspondingAuthor,
+                user: {
+                    firstName: publication.user.firstName,
+                    lastName: publication.user.lastName,
+                    orcid: publication.user.orcid
+                }
+            });
+        }
+
+        return response.json(200, publication.coAuthors);
     } catch (err) {
         console.log(err);
 
@@ -179,7 +206,7 @@ export const link = async (
         }
 
         if (!event.body.approve) {
-            // email has already been linked
+            // check if user has already been linked
             if (coAuthorByEmail.linkedUser) {
                 return response.json(404, {
                     message:
@@ -241,6 +268,17 @@ export const link = async (
         if (coAuthorByEmail.linkedUser) {
             return response.json(404, {
                 message: 'User has already been linked to this publication.'
+            });
+        }
+
+        // check if the user email is the same as the one the invitation has been sent to
+        if (event.user.email !== coAuthorByEmail.email) {
+            const isCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
+
+            return response.json(isCoAuthor ? 403 : 404, {
+                message: isCoAuthor
+                    ? 'Your email address does not match the one to which the invitation has been sent.'
+                    : 'You are not currently listed as an author on this draft'
             });
         }
 
@@ -416,10 +454,10 @@ export const requestApproval = async (
 export const sendApprovalReminder = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
 ): Promise<I.JSONResponse> => {
-    const { coauthor: authorId, id: publicationId } = event.pathParameters;
+    const { coauthor, id } = event.pathParameters;
 
-    const publication = await publicationService.get(publicationId);
-    const author = await coAuthorService.get(authorId);
+    const publication = await publicationService.get(id);
+    const author = await coAuthorService.get(coauthor);
 
     if (!publication) {
         return response.json(404, {
@@ -440,7 +478,7 @@ export const sendApprovalReminder = async (
         });
     }
 
-    if (!author || author.publicationId !== publicationId) {
+    if (!author || author.publicationId !== id) {
         return response.json(404, {
             message: 'This author does not exist on this publication'
         });
@@ -475,14 +513,14 @@ export const sendApprovalReminder = async (
         await email.sendApprovalReminder({
             coAuthor: { email: author.email, code: author.code },
             publication: {
-                id: publicationId,
+                id: id,
                 title: publication.title || '',
                 creator: `${publication.user.firstName} ${publication.user.lastName}`
             }
         });
 
         // update co-author reminderDate
-        await coAuthorService.update(authorId, { reminderDate: new Date() });
+        await coAuthorService.update(coauthor, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
 

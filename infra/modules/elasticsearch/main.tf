@@ -33,7 +33,7 @@ resource "aws_security_group" "elasticsearch" {
 
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name           = "${var.environment}-octopus"
-  elasticsearch_version = "OpenSearch_2.3"
+  elasticsearch_version = "OpenSearch_2.7"
 
   encrypt_at_rest {
     enabled = true

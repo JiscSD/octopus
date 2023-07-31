@@ -129,7 +129,8 @@ export const PageModel = {
         username: '#username',
         password: '#password',
         signInButton: '#signin-button',
-        authorizeButton: '#authorize-button'
+        authorizeButton: '#authorize-button',
+        rejectCookies: '#onetrust-reject-all-handler'
     },
     confirmEmail: {},
     myProfile: {
@@ -212,5 +213,8 @@ export const PageModel = {
         }
     },
     coauthorApprove: {},
-    coauthorDeny: {}
+    coauthorDeny: {},
+    topic: {
+        createProblemLink: 'a:has-text("Write a linked Research Problem")'
+    }
 };

@@ -14,6 +14,7 @@ plugins:
 
 provider:
     name: aws
+    deploymentMethod: direct
     timeout: 30
     runtime: nodejs18.x
     region: eu-west-1
@@ -88,7 +89,12 @@ custom:
         createRoute53Record: true
     webpack:
         webpackConfig: ./webpack.config.js
-        includeModules: true
+        includeModules:
+            forceExclude:
+                - '@aws-sdk/client-s3'
+                - '@aws-sdk/client-ses'
+                - '@aws-sdk/client-sqs'
+                - 'puppeteer'
         packager: 'npm'
     versions:
         v1: v1
@@ -207,6 +213,13 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
+                  method: GET
+                  cors: true
+    getResearchTopics:
+        handler: src/components/publication/routes.getResearchTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/research-topics
                   method: GET
                   cors: true
     # Users
@@ -489,5 +502,21 @@ functions:
         events:
             - http:
                   path: ${self:custom.versions.v1}/orcid-affiliations
+                  method: GET
+                  cors: true
+
+    # Topics
+    createTopic:
+        handler: src/components/topic/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics
+                  method: POST
+                  cors: true
+    getTopic:
+        handler: src/components/topic/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics/{id}
                   method: GET
                   cors: true

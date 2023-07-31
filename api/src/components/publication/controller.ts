@@ -1,6 +1,6 @@
 import htmlToText from 'html-to-text';
 import axios from 'axios';
-import s3 from 'lib/s3';
+import * as s3 from 'lib/s3';
 import * as sqs from 'lib/sqs';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
@@ -396,7 +396,7 @@ export const getPDF = async (
     if (!generateNewPDF) {
         // check if there's a generated PDF for this publication
         try {
-            const currentPdfUrl = `${s3.endpoint.href}science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
+            const currentPdfUrl = `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
             const result = await axios.get(currentPdfUrl);
 
             if (result.status === 200) {
@@ -432,4 +432,14 @@ export const getPDF = async (
               }
           }
         : response.json(200, { pdfUrl });
+};
+
+export const getResearchTopics = async (): Promise<I.JSONResponse> => {
+    try {
+        const researchTopics = await publicationService.getResearchTopics();
+
+        return response.json(200, researchTopics);
+    } catch (error) {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
 };

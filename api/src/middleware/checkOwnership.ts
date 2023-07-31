@@ -5,7 +5,7 @@ import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 
 const checkOwnership = (): middy.MiddlewareObj => {
-    const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2 & Record<string, any>> = async (
+    const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2 & Record<string, I.User>> = async (
         request
     ): Promise<I.JSONResponse | void> => {
         try {

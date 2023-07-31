@@ -217,6 +217,12 @@ const publicationSeeds = [
                     email: 'test-user-7@jisc.ac.uk',
                     code: 'test-code-user-7',
                     confirmedCoAuthor: false
+                },
+                {
+                    id: 'coauthor-test-user-8-problem-draft',
+                    email: 'test-user-8@jisc.ac.uk',
+                    code: 'test-code-user-8',
+                    confirmedCoAuthor: false
                 }
             ]
         },
@@ -895,6 +901,40 @@ const publicationSeeds = [
         },
         conflictOfInterestStatus: false,
         conflictOfInterestText: 'This is text text'
+    },
+    {
+        id: 'research-topic',
+        title: 'Music',
+        content:
+            'This is an automatically-generated topic, produced in order to provide authors with a place to attach new Problem publications',
+        type: 'PROBLEM',
+        licence: 'CC_BY',
+        currentStatus: 'LIVE',
+        doi: '10.57874/01x8-yb56',
+        user: {
+            connect: {
+                id: 'octopus'
+            }
+        },
+        publicationStatus: {
+            create: [
+                {
+                    status: 'DRAFT',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                },
+                {
+                    status: 'LIVE',
+                    createdAt: '2022-01-20T15:51:42.523Z'
+                }
+            ]
+        },
+        linkedTo: {
+            create: {
+                publicationTo: 'publication-problem-live'
+            }
+        },
+        conflictOfInterestStatus: false,
+        conflictOfInterestText: ''
     }
 ];
 

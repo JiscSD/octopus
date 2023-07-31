@@ -2,6 +2,26 @@ name: API-build
 on: [push]
 
 jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node 18.x Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies
+        working-directory: ./api
+        run: npm ci
+
+      - name: Run tsc to check for typescript errors
+        working-directory: ./api
+        run: tsc
+
   prettier:
     timeout-minutes: 10
     runs-on: ubuntu-latest

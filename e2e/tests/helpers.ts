@@ -1,7 +1,7 @@
 import { Browser, expect, Locator, Page } from '@playwright/test';
 import { PageModel } from './PageModel';
 
-export const UI_BASE = process.env.UI_BASE || 'https://localhost:3001';
+export const UI_BASE = process.env.UI_BASE;
 export const MAIL_HOG = process.env.MAIL_HOG;
 
 const requiredEnvVariables = [
@@ -21,7 +21,8 @@ const requiredEnvVariables = [
     'ORCID_TEST_PASS4',
     'ORCID_TEST_FIRST_NAME4',
     'ORCID_TEST_LAST_NAME4',
-    'MAIL_HOG'
+    'MAIL_HOG',
+    'UI_BASE'
 ];
 
 function checkEnvVariable(variableName: string) {
@@ -74,6 +75,12 @@ export const user4: TestUser = {
 export const login = async (page: Page, browser: Browser, user = user1) => {
     await page.waitForSelector(PageModel.header.loginButton);
     await Promise.all([page.waitForNavigation(), page.click(PageModel.header.loginButton)]);
+
+    // If necessary, reject cookies
+    const cookieCheck = await page.locator(PageModel.login.rejectCookies);
+    if (cookieCheck) {
+        await page.click(PageModel.login.rejectCookies);
+    }
 
     await page.fill(PageModel.login.username, user.email);
     await page.fill(PageModel.login.password, user.password);

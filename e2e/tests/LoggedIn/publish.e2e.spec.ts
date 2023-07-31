@@ -346,6 +346,37 @@ test.describe('Publication flow', () => {
         await checkPublication(page, problemPublication);
     });
 
+    test('Create a problem from an existing research topic', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // Navigate to topic and create related problem
+        await page.goto(`${Helpers.UI_BASE}/topics/test-topic-1`);
+        await page.locator(PageModel.topic.createProblemLink).click();
+
+        // Fill in basic fields
+        await page.waitForURL(`${Helpers.UI_BASE}/create?topic=test-topic-1&type=PROBLEM`);
+        await page.locator(PageModel.publish.title).click();
+        await page.keyboard.type("Problem from topic");
+        await page.locator(PageModel.publish.confirmPublicationType).click();
+        
+        // Save and expect topic to be associated in response
+        await page.locator(PageModel.publish.createThisPublicationButton).click();
+        const response = await page.waitForResponse(response =>
+            response.url().includes('/publications') &&
+            response.request().method() === 'POST'
+        );
+
+        const json = JSON.parse(await response.text());
+        expect(json.topics.length === 1);
+        expect(json.topics[0].title === 'Test topic');
+    });
+
     test('Create a hypothesis (standard publication)', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
