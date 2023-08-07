@@ -165,7 +165,7 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
                         leaveTo="opacity-0"
                         afterLeave={() => setSearch('')}
                     >
-                        <HeadlessUI.Combobox.Options className="absolute mt-2 max-h-96 w-2/3 overflow-scroll rounded bg-white-50 shadow-xl">
+                        <HeadlessUI.Combobox.Options className="absolute z-10 mt-2 max-h-96 w-2/3 overflow-scroll rounded bg-white-50 shadow-xl">
                             {!isValidating &&
                                 results.data.map((publication: Interfaces.Publication, index: number) => (
                                     <HeadlessUI.Combobox.Option
