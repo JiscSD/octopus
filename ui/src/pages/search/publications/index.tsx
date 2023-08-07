@@ -31,8 +31,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let dateTo: string | string[] | null = null;
 
     // defaults to results
-    let results: Interfaces.Publication[] | [] = [];
-    let metadata: Interfaces.SearchResultMeta | {} = {};
+    let searchResults: { data: Interfaces.Publication[]; metadata: Interfaces.SearchResultMeta } = {
+        data: [],
+        metadata: {
+            limit: 10,
+            offset: 0,
+            total: 0
+        }
+    };
 
     // default error
     let error: string | null = null;
@@ -52,6 +58,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
     if (Array.isArray(dateTo)) dateTo = dateTo[0];
 
+    if (publicationTypes) {
+        // filter valid publication types only
+        publicationTypes = publicationTypes
+            .split(',')
+            .filter((type) => Config.values.publicationTypes.includes(type as Types.PublicationType))
+            .join(',');
+    }
+
     // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
     limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
     offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
@@ -65,8 +79,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             offset,
             publicationTypes
         );
-        results = response.data;
-        metadata = response.metadata;
+
+        searchResults = response;
+
         error = null;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
@@ -92,7 +107,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             dateFrom,
             dateTo,
             fallback: {
-                [swrKey]: results
+                [swrKey]: searchResults
             },
             error
         }
@@ -108,6 +123,7 @@ type Props = {
     dateFrom: string | null;
     dateTo: string | null;
     error: string | null;
+    fallback: { [key: string]: { data: Interfaces.Publication[] } & Interfaces.SearchResultMeta };
 };
 
 const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -116,9 +132,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     // params
     const [searchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
-    const [publicationTypes, setPublicationTypes] = React.useState(
-        props.publicationTypes ? props.publicationTypes : Config.values.publicationTypes.join(',')
-    );
+    const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
     // param for pagination
@@ -128,13 +142,17 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     const dateFromFormatted = new Date(dateFrom || '');
     const dateToFormatted = new Date(dateTo || '');
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${publicationTypes}&limit=${
-        limit || '10'
-    }&offset=${offset || '0'}${
+    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${
+        publicationTypes || Config.values.publicationTypes.join(',')
+    }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
     }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
 
-    const { data: results = [], error, isValidating } = useSWR(swrKey);
+    const {
+        data: response,
+        error,
+        isValidating
+    } = useSWR(swrKey, null, { fallback: props.fallback, use: [Helpers.laggy] });
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>
@@ -181,6 +199,21 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     };
 
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
+        if (e.target.name === 'select-all') {
+            await router.push(
+                {
+                    query: {
+                        ...router.query,
+                        type: value
+                    }
+                },
+                undefined,
+                { shallow: true }
+            );
+
+            return setPublicationTypes(value);
+        }
+
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
@@ -197,7 +230,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             { shallow: true }
         );
 
-        setPublicationTypes(uniqueArray ? uniqueArray : Config.values.publicationTypes.join(','));
+        setPublicationTypes(uniqueArray);
     };
 
     const resetFilters = async (): Promise<void> => {
@@ -207,7 +240,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
         searchInputRef.current && (searchInputRef.current.value = '');
         setOffset(0);
         setLimit(10);
-        setPublicationTypes(Config.values.publicationTypes.join(','));
+        setPublicationTypes('');
         setDateFrom('');
         setDateTo('');
     };
@@ -337,20 +370,53 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                                 : false
                                                         }
                                                         onChange={(e) => collatePublicationTypes(e, type)}
-                                                        disabled={!results}
+                                                        disabled={!response}
                                                     />
                                                 </div>
                                                 <div className="ml-3 text-sm">
                                                     <label
                                                         htmlFor={type}
                                                         className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                        aria-disabled={!results}
+                                                        aria-disabled={!response}
                                                     >
                                                         {Helpers.formatPublicationType(type)}
                                                     </label>
                                                 </div>
                                             </div>
                                         ))}
+
+                                        <div className="relative flex items-start border-t border-b border-grey-100 py-3">
+                                            <div className="flex h-5 items-center">
+                                                <input
+                                                    id="select-all"
+                                                    aria-describedby="select-all"
+                                                    name="select-all"
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
+                                                    checked={Config.values.publicationTypes.every((type) =>
+                                                        publicationTypes.includes(type)
+                                                    )}
+                                                    onChange={(e) =>
+                                                        collatePublicationTypes(
+                                                            e,
+                                                            e.target.checked
+                                                                ? Config.values.publicationTypes.join(',')
+                                                                : ''
+                                                        )
+                                                    }
+                                                    disabled={!response}
+                                                />
+                                            </div>
+                                            <div className="ml-3 text-sm">
+                                                <label
+                                                    htmlFor="select-all"
+                                                    className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                    aria-disabled={!response}
+                                                >
+                                                    Select/deselect all
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <Framer.motion.form
                                         name="date-form"
@@ -428,7 +494,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                     />
                                 )}
 
-                                {!error && !results?.data?.length && !isValidating && (
+                                {!error && !response?.data?.length && !isValidating && (
                                     <Components.Alert
                                         severity="INFO"
                                         title="No results found"
@@ -439,13 +505,13 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                     />
                                 )}
 
-                                {!isValidating && results?.data?.length && (
+                                {response?.data?.length && (
                                     <>
                                         <div className="rounded">
-                                            {results.data.map((result: any, index: number) => {
+                                            {response.data.map((result: any, index: number) => {
                                                 let classes = '';
                                                 index === 0 ? (classes += 'rounded-t') : null;
-                                                index === results.data.length - 1
+                                                index === response.data.length - 1
                                                     ? (classes += '!border-b-transparent !rounded-b')
                                                     : null;
 
@@ -459,8 +525,8 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                             })}
                                         </div>
 
-                                        {!isValidating && !!results.data.length && (
-                                            <Components.Delay delay={results.data.length * 50}>
+                                        {!isValidating && !!response.data.length && (
+                                            <Components.Delay delay={response.data.length * 50}>
                                                 <Framer.motion.div
                                                     initial={{ opacity: 0 }}
                                                     animate={{ opacity: 1 }}
@@ -486,17 +552,17 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                                 setOffset((prev) => prev + limit);
                                                             }}
                                                             className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                                            disabled={limit + offset > results.metadata.total}
+                                                            disabled={limit + offset >= response.metadata.total}
                                                         >
                                                             Next
                                                         </button>
                                                     </div>
                                                     <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                                         Showing {offset + 1} -{' '}
-                                                        {limit + offset > results.metadata.total
-                                                            ? results.metadata.total
+                                                        {limit + offset > response.metadata.total
+                                                            ? response.metadata.total
                                                             : limit + offset}{' '}
-                                                        of {results.metadata.total}
+                                                        of {response.metadata.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>

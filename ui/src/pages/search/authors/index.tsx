@@ -20,7 +20,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: Types.SearchType = 'users';
+    let searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
@@ -89,7 +89,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
-    const [searchType] = React.useState(props.searchType);
+    const [searchType, setSearchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
@@ -138,7 +138,11 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={(e) => router.push(`/search/${e.target.value}`)}
+                                onChange={(e) => {
+                                    const value: Types.SearchType = e.target.value as Types.SearchType;
+                                    setSearchType(value);
+                                    router.push(`/search/${value}`);
+                                }}
                                 value={searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}

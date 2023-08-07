@@ -831,9 +831,18 @@ export const getResearchTopics = () =>
         where: {
             type: 'PROBLEM',
             createdBy: 'octopus',
-            content: {
-                contains: 'This is an automatically-generated topic'
-            },
+            OR: [
+                {
+                    linkedTo: {
+                        none: {} // god problem will be converted to a god topic
+                    }
+                },
+                {
+                    content: {
+                        contains: 'This is an automatically-generated topic'
+                    }
+                }
+            ],
             References: {
                 none: {}
             }
@@ -847,8 +856,56 @@ export const getResearchTopics = () =>
                     orcid: true
                 }
             },
-            linkedTo: true,
-            linkedFrom: true,
+            linkedTo: {
+                select: {
+                    id: true,
+                    publicationToRef: {
+                        select: {
+                            id: true,
+                            title: true,
+                            publishedDate: true,
+                            currentStatus: true,
+                            description: true,
+                            keywords: true,
+                            type: true,
+                            doi: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            linkedFrom: {
+                select: {
+                    id: true,
+                    publicationFromRef: {
+                        select: {
+                            id: true,
+                            title: true,
+                            publishedDate: true,
+                            currentStatus: true,
+                            description: true,
+                            keywords: true,
+                            type: true,
+                            doi: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             PublicationBookmarks: true
         }
     });
