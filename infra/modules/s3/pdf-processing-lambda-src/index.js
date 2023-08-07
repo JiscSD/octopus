@@ -1,6 +1,6 @@
-const AWS = require("aws-sdk");
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const bucket = event.Records[0].s3.bucket.name;
   const key = event.Records[0].s3.object.key;
 
@@ -9,20 +9,28 @@ exports.handler = async (event) => {
   const publicationId = key.replace(/\.pdf$/, "");
 
   try {
-    const publication = await fetch(
+    const publicationResponse = await fetch(
       `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
       { method: "GET" }
     );
+    const publication = await publicationResponse.json();
+
+    console.log('Fetched publication: ', publication);
 
     const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
 
+    console.log('PDF metadata: ', pdfMetadata);
+
     const apiResponse = await postToPubrouter(pdfMetadata);
+
+    console.log('Pubrouter response: ', apiResponse);
 
     // Check the API response and handle failures
     if (apiResponse.status !== "success") {
       await retryPostingPublication(pdfMetadata);
     }
   } catch (error) {
+    console.log('Error uploading to pubrouter. Sending failure email.');
     await sendFailureEmail(error, event, publicationId);
   }
 };
@@ -46,7 +54,7 @@ const retryPostingPublication = async (pdfMetadata) => {
 };
 
 const sendFailureEmail = async (error, event, publicationId) => {
-  const ses = new AWS.SES();
+  const client = new SESClient({ region: "eu-west-1" });
 
   const emailParams = {
     Destination: {
@@ -65,7 +73,9 @@ const sendFailureEmail = async (error, event, publicationId) => {
     Source: "octopus@mail.octopus.ac",
   };
 
-  return ses.sendEmail(emailParams).promise();
+  const command = new SendEmailCommand(emailParams);
+
+  return client.send(command);
 };
 
 const mapPublicationToMetadata = (publication, pdfUrl) => {

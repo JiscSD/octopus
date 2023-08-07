@@ -53,7 +53,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "${path.module}/pdf-processing-lambda.zip"
   function_name = "octopus-api-${var.environment}-pdfProcessingLambda"
   role          = aws_iam_role.pdf_processing_lambda_role.arn
-  handler       = "lambda_function.lambda_handler"
+  handler       = "index.handler"
   runtime       = "nodejs18.x"
   source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
 
@@ -94,13 +94,26 @@ resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_ses_policy" {
   role       = aws_iam_role.pdf_processing_lambda_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_execution_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.pdf_processing_lambda_role.name
+}
+
 resource "aws_lambda_permission" "s3_trigger_permission" {
   statement_id  = "AllowS3Invocation"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.pdf_processing_lambda.arn
+  function_name = aws_lambda_function.pdf_processing_lambda.function_name
   principal     = "s3.amazonaws.com"
 
   source_arn = aws_s3_bucket.pdf_bucket.arn
+}
+
+resource "aws_s3_bucket_notification" "s3-lambda-trigger" {
+  bucket = aws_s3_bucket.pdf_bucket.id
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.pdf_processing_lambda.arn
+    events              = ["s3:ObjectCreated:*"]
+  }
 }
 
 resource "aws_s3_bucket" "email_forwarding_bucket" {
