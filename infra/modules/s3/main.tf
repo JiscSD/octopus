@@ -51,7 +51,7 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
 
 resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "${path.module}/pdf-processing-lambda.zip"
-  function_name = "${var.environment}-pdf-processing-lambda"
+  function_name = "octopus-api-${var.environment}-pdfProcessingLambda"
   role          = aws_iam_role.pdf_processing_lambda_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "nodejs18.x"
