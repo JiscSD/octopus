@@ -63,6 +63,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   handler       = "index.handler"
   runtime       = "nodejs18.x"
   source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
+  timeout       = 10 // if a retry is needed, this function can hit the 3 second default timeout
 
   environment {
     variables = {

@@ -43,6 +43,7 @@ export const handler = async (event) => {
       if (retry.status === "success") {
         return baseJSONResponse(200, "Successfully submitted to publication router");
       } else {
+        await sendFailureEmail(JSON.stringify(retry), event, publicationId);
         return baseJSONResponse(500, "Failed to submit to publication router");
       }
     }
