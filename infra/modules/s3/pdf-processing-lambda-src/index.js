@@ -1,5 +1,13 @@
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
+const baseJSONResponse = (statusCode, body) => ({
+  body: JSON.stringify(body),
+  headers: {
+      'Content-Type': 'application/json'
+  },
+  statusCode
+});
+
 export const handler = async (event) => {
   const bucket = event.Records[0].s3.bucket.name;
   const key = event.Records[0].s3.object.key;
@@ -15,42 +23,55 @@ export const handler = async (event) => {
     );
     const publication = await publicationResponse.json();
 
-    console.log('Fetched publication: ', publication);
+    console.log('Fetched publication: ', JSON.stringify(publication));
 
     const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
 
-    console.log('PDF metadata: ', pdfMetadata);
+    console.log('PDF metadata: ', JSON.stringify(pdfMetadata));
 
     const apiResponse = await postToPubrouter(pdfMetadata);
 
     console.log('Pubrouter response: ', apiResponse);
 
     // Check the API response and handle failures
-    if (apiResponse.status !== "success") {
-      await retryPostingPublication(pdfMetadata);
+    if (apiResponse.status === "success") {
+      return baseJSONResponse(200, "Successfully submitted to publication router");
+    } else {
+      // Retry once
+      console.log('First attempt failed; retrying');
+      const retry = await postToPubrouter(pdfMetadata);
+      if (retry.status === "success") {
+        return baseJSONResponse(200, "Successfully submitted to publication router");
+      } else {
+        return baseJSONResponse(500, "Failed to submit to publication router");
+      }
     }
   } catch (error) {
-    console.log('Error uploading to pubrouter. Sending failure email.');
+    console.log('Error uploading to pubrouter: ', error.message);
     await sendFailureEmail(error, event, publicationId);
+    return baseJSONResponse(500, "Error submitting to publication router");
   }
 };
 
 const postToPubrouter = async (pdfMetadata) => {
-  const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${process.env.PUBROUTER_API_KEY}`;
-
-  const response = await fetch(apiEndpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(pdfMetadata),
-  });
-
-  return response.json();
-};
-
-const retryPostingPublication = async (pdfMetadata) => {
-  return postToPubrouter(pdfMetadata);
+  // We use a different API key per publication type.
+  const apiKeys = JSON.parse(process.env.PUBROUTER_API_KEYS);
+  if (!Object.keys(apiKeys).includes(pdfMetadata.metadata.article.type)) {
+    throw new Error(`Publication type "${pdfMetadata.metadata.article.type}" not found in API keys object`);
+  } else {
+    const apiKey = apiKeys[pdfMetadata.metadata.article.type];
+    const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
+  
+    const response = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pdfMetadata),
+    });
+  
+    return response.json();
+  }
 };
 
 const sendFailureEmail = async (error, event, publicationId) => {

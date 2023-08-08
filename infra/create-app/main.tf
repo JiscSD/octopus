@@ -43,10 +43,9 @@ module "elasticsearch" {
 }
 
 module "s3" {
-  source                     = "../modules/s3"
-  environment                = local.environment
-  pub_router_api_key         = var.pub_router_api_key
-  pub_router_failure_channel = var.pub_router_failure_channel
+  source       = "../modules/s3"
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "ses" {

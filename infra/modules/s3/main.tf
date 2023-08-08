@@ -4,6 +4,14 @@ locals {
     account_id = data.aws_caller_identity.current.account_id
 }
 
+data "aws_ssm_parameter" "pubrouter_api_keys" {
+  name = "pubrouter_api_keys_${var.environment}_${var.project_name}"
+}
+
+data "aws_ssm_parameter" "pubrouter_failure_channel" {
+  name = "pubrouter_failure_channel_${var.environment}_${var.project_name}"
+}
+
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
@@ -48,7 +56,6 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
-
 resource "aws_lambda_function" "pdf_processing_lambda" {
   filename      = "${path.module}/pdf-processing-lambda.zip"
   function_name = "octopus-api-${var.environment}-pdfProcessingLambda"
@@ -59,9 +66,9 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
 
   environment {
     variables = {
-      EMAIL_RECIPIENT        = var.pub_router_failure_channel
-      PUBROUTER_API_KEY       = var.pub_router_api_key
-      ENVIRONMENT          = var.environment
+      ENVIRONMENT        = var.environment
+      EMAIL_RECIPIENT    = data.aws_ssm_parameter.pubrouter_failure_channel.value
+      PUBROUTER_API_KEYS = data.aws_ssm_parameter.pubrouter_api_keys.value
     }
   }
 }
