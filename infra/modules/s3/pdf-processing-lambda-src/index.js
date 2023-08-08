@@ -144,7 +144,6 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
     metadata: {
       journal: {
         title: "Octopus",
-        volume: "<Tim to confirm ocontent as this is a required field>",
         publisher: ["Octopus"],
         identifier: [
           {
@@ -157,7 +156,6 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         title: publication.title,
         type: publication.type,
         version: "VOR",
-        e_num: "<Tim to confirm content>",
         language: publication.language,
         identifier: {
           type: "doi",
