@@ -110,7 +110,7 @@ const EditReferenceModal: React.FC<Props> = ({ title, reference, onSave, onClose
                     leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
-                    <div className="transition-alls relative w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pt-5 pb-4 shadow-xl sm:px-8 sm:py-6 sm:align-middle lg:max-w-3xl">
+                    <div className="transition-alls relative w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pb-4 pt-5 shadow-xl sm:px-8 sm:py-6 sm:align-middle lg:max-w-3xl">
                         <HeadlessUI.Dialog.Title
                             as="h3"
                             className="pb-4 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"

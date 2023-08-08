@@ -259,14 +259,14 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
             </Head>
 
             <Layouts.Standard>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16 lg:pb-0">
+                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pb-0 lg:pt-16">
                     <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
                 </section>
                 <section
                     id="content"
                     className="container mx-auto grid grid-cols-1 gap-x-6 px-8 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10"
                 >
-                    <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
+                    <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-x-6 gap-y-4 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
 
                         <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">

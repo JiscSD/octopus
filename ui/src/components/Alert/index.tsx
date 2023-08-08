@@ -92,7 +92,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                     }`}
                 >
                     <div className="flex items-start" data-testid="alert-box">
-                        <div className="mr-3 ml-1">{classes.icon}</div>
+                        <div className="ml-1 mr-3">{classes.icon}</div>
                         <div className="">
                             {!!props.title && (
                                 <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
@@ -119,7 +119,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                         openNew={props.supportLink.external}
                                         className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
                                     >
-                                        <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
+                                        <span className="rounded bg-grey-700 px-2 py-1 text-sm font-semibold text-white-50 transition-colors duration-500">
                                             {props.supportLink.text}
                                         </span>
                                     </Components.Link>
@@ -131,7 +131,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                     <button
                                         type="button"
                                         onClick={() => setShow(false)}
-                                        className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                        className="rounded bg-grey-700 px-2 py-1 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                                     >
                                         Dismiss
                                     </button>

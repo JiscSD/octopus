@@ -169,23 +169,23 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 >
                     <thead className="bg-grey-50 duration-500 dark:bg-grey-700">
                         <tr>
-                            <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50">
+                            <th className="whitespace-pre px-6 py-3.5  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50">
                                 Author
                             </th>
-                            <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                            <th className="whitespace-pre px-6 py-3.5  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                 Status
                             </th>
                             {isCorrespondingUser && (
                                 <>
-                                    <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                    <th className="whitespace-pre px-6 py-3.5  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                         Edit email
                                     </th>
-                                    <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                                    <th className="whitespace-pre px-6 py-3.5  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                         Send Reminder
                                     </th>
                                 </>
                             )}
-                            <th className="whitespace-pre py-3.5 px-6  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
+                            <th className="whitespace-pre px-6 py-3.5  text-left text-sm font-semibold text-grey-900 duration-500 dark:text-grey-50 ">
                                 Affiliations
                             </th>
                         </tr>
@@ -198,7 +198,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
 
                             return (
                                 <tr key={author.id}>
-                                    <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-grey-900 duration-500 dark:text-white-50">
                                         {author.linkedUser ? (
                                             <>
                                                 <Components.Link
@@ -216,7 +216,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                         )}
                                         {isCorrespondingUser && <p className="mt-1 text-xs">{author.email}</p>}
                                     </td>
-                                    <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                    <td className="whitespace-nowrap px-6 py-4  text-sm text-grey-900 duration-500 dark:text-white-50">
                                         {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
                                             <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
                                         ) : author.linkedUser === props.publication.createdBy ? (
@@ -231,7 +231,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     </td>
                                     {isCorrespondingUser && (
                                         <>
-                                            <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                            <td className="whitespace-nowrap px-6 py-4  text-sm text-grey-900 duration-500 dark:text-white-50">
                                                 {!author.linkedUser && (
                                                     <Components.IconButton
                                                         className="p-2"
@@ -246,7 +246,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                     />
                                                 )}
                                             </td>
-                                            <td className="whitespace-nowrap py-4 px-6  text-sm text-grey-900 duration-500 dark:text-white-50">
+                                            <td className="whitespace-nowrap px-6 py-4  text-sm text-grey-900 duration-500 dark:text-white-50">
                                                 {!author.linkedUser && !author.reminderDate && (
                                                     <Components.IconButton
                                                         className="p-2"
@@ -264,7 +264,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                             </td>
                                         </>
                                     )}
-                                    <td className="whitespace-nowrap py-4 px-6 text-sm text-grey-900 duration-500 dark:text-white-50">
+                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-grey-900 duration-500 dark:text-white-50">
                                         <div className="flex cursor-default items-center gap-4">
                                             {author.isIndependent ? (
                                                 <p>Unaffiliated</p>
@@ -336,7 +336,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 </table>
             </div>
             {isCorrespondingUser && (
-                <div className="rounded-b-lg bg-grey-50 py-4 px-6 text-left text-sm text-grey-900 dark:bg-grey-700 dark:text-white-50 sm:text-center">
+                <div className="rounded-b-lg bg-grey-50 px-6 py-4 text-left text-sm text-grey-900 dark:bg-grey-700 dark:text-white-50 sm:text-center">
                     {remainingApprovalsCount > 0 ? (
                         <h4 className="text-lg dark:text-white-50">
                             <span className="font-semibold">{remainingApprovalsCount}</span> more author{' '}

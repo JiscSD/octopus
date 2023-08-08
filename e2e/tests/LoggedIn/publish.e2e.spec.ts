@@ -44,6 +44,7 @@ export const publicationFlowLinkedPublication = async (
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
     await page.locator(PageModel.publish.linkedPub.addLink).click();
+    await expect(page.locator(PageModel.publish.linkedPub.deleteLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
 };

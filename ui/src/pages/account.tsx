@@ -124,7 +124,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                 <title>{`Author: ${props.user?.orcid} - ${Config.urls.account.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
-                <header className="container mx-auto px-8 pt-10 pb-20 md:pb-24 md:pt-16">
+                <header className="container mx-auto px-8 pb-20 pt-10 md:pb-24 md:pt-16">
                     <div className="mb-8 flex items-center">
                         <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
                         <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">

@@ -191,7 +191,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                 positiveActionCallback={resolve}
                                 cancelButtonText="Cancel"
                             >
-                                <p className="mt-4 mb-8 text-xs text-grey-700">
+                                <p className="mb-8 mt-4 text-xs text-grey-700">
                                     The flag will be marked as resolved across the site, and you will no longer be able
                                     to comment on this thread. Users can still view the flag and its comment history
                                     from the publication page.
@@ -271,7 +271,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                 value={comment}
                                                 onChange={(value) => setComment(value)}
                                             />
-                                            <div className="mt-2 ml-auto flex w-fit space-x-4">
+                                            <div className="ml-auto mt-2 flex w-fit space-x-4">
                                                 {props.isResolvable && (
                                                     <Components.Button
                                                         title="Resolve flag"

@@ -95,9 +95,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             >
                 <>
                     {!!submitting && (
-                        <Assets.Spinner width={25} height={25} className="absolute top-5 right-5 stroke-teal-500" />
+                        <Assets.Spinner width={25} height={25} className="absolute right-5 top-5 stroke-teal-500" />
                     )}
-                    <p className="mt-4 mb-8 text-left text-xs text-grey-700">
+                    <p className="mb-8 mt-4 text-left text-xs text-grey-700">
                         Flag any potential research integrity issues with this publication.
                         <br className="hidden xl:block" />
                         The author(s) will receive a notification of this flag, and will have the opportunity to respond
