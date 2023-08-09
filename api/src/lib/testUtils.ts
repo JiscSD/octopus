@@ -35,12 +35,8 @@ export const testSeed = async (): Promise<void> => {
         data: seeds.referencesSeedData
     });
 
-    await client.prisma.publicationBookmarks.createMany({
-        data: seeds.bookmarkedPublicationSeeds
-    });
-
-    await client.prisma.topicBookmark.createMany({
-        data: seeds.bookmarkedTopicSeeds
+    await client.prisma.bookmark.createMany({
+        data: seeds.bookmarkSeeds
     });
 };
 

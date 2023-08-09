@@ -2,24 +2,24 @@ import middy from '@middy/core';
 
 import * as middleware from 'middleware';
 
-import * as topicBookmarkController from 'topicBookmark/controller';
+import * as bookmarkController from 'bookmark/controller';
 
-export const create = middy(topicBookmarkController.create)
+export const create = middy(bookmarkController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
-export const remove = middy(topicBookmarkController.remove)
+export const deleteBookmark = middy(bookmarkController.deleteBookmark)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
-export const get = middy(topicBookmarkController.get)
+export const get = middy(bookmarkController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
 
-export const getAll = middy(topicBookmarkController.getAll)
+export const getAll = middy(bookmarkController.getAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());

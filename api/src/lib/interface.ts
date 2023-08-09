@@ -419,40 +419,21 @@ export interface ImageSentBody {
     image: string;
 }
 
-// @description Publication bookmarks
+// @description Bookmarks
+export type BookmarkType = 'PUBLICATION' | 'TOPIC';
 
-export interface CreatePublicationBookmarkPathParams {
+export interface CreateBookmarkRequestBody {
+    type: BookmarkType;
+    entityId: string;
+}
+
+export interface DeleteBookmarkPathParams {
     id: string;
 }
 
-export interface RemovePublicationBookmarkPathParams {
-    id: string;
-}
-
-export interface GetPublicationBookmarkPathParams {
-    id: string;
-}
-
-export interface GetAllPublicationBookmarkPathParams {
-    id: string;
-}
-
-// @description Topic bookmarks
-
-export interface CreateTopicBookmarkPathParams {
-    id: string;
-}
-
-export interface RemoveTopicBookmarkPathParams {
-    id: string;
-}
-
-export interface GetTopicBookmarkPathParams {
-    id: string;
-}
-
-export interface GetAllTopicBookmarkPathParams {
-    id: string;
+export interface GetBookmarkPathParams {
+    type: BookmarkType;
+    entityId: string;
 }
 
 /**

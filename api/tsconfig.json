@@ -66,8 +66,8 @@
             "topic/*": [
                 "src/components/topic/*"
             ],
-            "topicBookmark/*": [
-                "src/components/topicBookmark/*"
+            "bookmark/*": [
+                "src/components/bookmark/*"
             ],
             "lib/*": [
                 "src/lib/*"
