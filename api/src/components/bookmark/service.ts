@@ -63,11 +63,14 @@ export const deleteBookmark = async (id: string) => {
     return bookmark;
 };
 
-export const getAll = async (userId: string) => {
+export const getAll = async (userId: string, type: I.BookmarkType | undefined) => {
     const bookmark = await client.prisma.bookmark.findMany({
-        where: {
-            userId
-        },
+        where: type
+            ? {
+                  type,
+                  userId
+              }
+            : { userId },
         select: {
             id: true,
             type: true,

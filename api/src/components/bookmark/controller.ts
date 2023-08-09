@@ -222,7 +222,8 @@ export const get = async (
 
 export const getAll = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
     try {
-        const bookmarks = await bookmarkService.getAll(event.user.id);
+        const typeFilter: I.BookmarkType | undefined = event.queryStringParameters?.type as I.BookmarkType;
+        const bookmarks = await bookmarkService.getAll(event.user.id, typeFilter);
 
         if (!bookmarks) {
             return response.json(404, {

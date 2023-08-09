@@ -13,6 +13,13 @@ describe('Get all bookmarks', () => {
         expect(bookmarks.body).toHaveLength(3);
     });
 
+    test('Get all bookmarks of a given type', async () => {
+        const bookmarks = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321', type: 'TOPIC' });
+
+        expect(bookmarks.status).toEqual(200);
+        expect(bookmarks.body).toHaveLength(2);
+    });
+
     test('Cannot access bookmarks as an un-authenticated user', async () => {
         const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: null });
 

@@ -421,6 +421,7 @@ export interface ImageSentBody {
 
 // @description Bookmarks
 export type BookmarkType = 'PUBLICATION' | 'TOPIC';
+export type GetBookmarkPathParamType = Lowercase<BookmarkType>;
 
 export interface CreateBookmarkRequestBody {
     type: BookmarkType;
@@ -432,7 +433,7 @@ export interface DeleteBookmarkPathParams {
 }
 
 export interface GetBookmarkPathParams {
-    type: BookmarkType;
+    type: GetBookmarkPathParamType;
     entityId: string;
 }
 
