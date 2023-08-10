@@ -12,7 +12,7 @@ describe('Create a bookmark', () => {
             entityId: 'test-topic-1'
         });
 
-        expect(bookmark.status).toEqual(200);
+        expect(bookmark.status).toEqual(201);
     });
 
     test('Cannot create a bookmark as an un-authenticated user', async () => {
