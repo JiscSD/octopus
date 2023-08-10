@@ -216,7 +216,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 >
                                     <button
                                         onClick={(e) => setSize((prevSize) => prevSize + 1)}
-                                        className="rounded py-1 px-2 text-sm font-semibold uppercase tracking-widest text-grey-600 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
+                                        className="rounded px-2 py-1 text-sm font-semibold uppercase tracking-widest text-grey-600 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
                                     >
                                         Show More
                                     </button>

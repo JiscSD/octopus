@@ -50,7 +50,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
             <label
                 {...getRootProps()}
                 htmlFor="file-upload"
-                className="relative flex w-full items-center justify-center rounded border-2 border-dashed border-grey-100 bg-grey-50 py-4 px-8 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                className="relative flex w-full items-center justify-center rounded border-2 border-dashed border-grey-100 bg-grey-50 px-8 py-4 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
             >
                 <input
                     id="file-upload"

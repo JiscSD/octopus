@@ -136,7 +136,7 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:px-8 sm:py-6 sm:align-middle xl:max-w-5xl">
+                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:px-8 sm:py-6 sm:align-middle xl:max-w-5xl">
                             <HeadlessUI.Dialog.Title
                                 as="h3"
                                 className="pb-8 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"

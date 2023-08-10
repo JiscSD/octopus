@@ -29,8 +29,8 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 border-b
                 border-grey-50
                 bg-white-50
-                py-4
                 px-4
+                py-4
                 shadow
                 outline-0
                 transition-colors

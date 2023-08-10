@@ -51,3 +51,7 @@ export const getPDF = middy(publicationController.getPDF)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.validator(publicationSchema.getPDF, 'pathParameters'));
+
+export const getResearchTopics = middy(publicationController.getResearchTopics).use(
+    middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
+);

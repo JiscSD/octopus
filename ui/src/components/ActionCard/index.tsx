@@ -11,7 +11,7 @@ type Props = {
 };
 
 const ActionCard: React.FC<Props> = (props): React.ReactElement => (
-    <div className="space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
+    <div className="space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
         <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.title}

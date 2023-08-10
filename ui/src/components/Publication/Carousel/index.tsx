@@ -25,7 +25,7 @@ const Carousel: React.FC<Props> = (props): React.ReactElement => {
             <div className="overflow-hidden">
                 <div
                     ref={container}
-                    className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none scroll-smooth pt-2 pb-6 pl-[2px] sm:snap-none"
+                    className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none scroll-smooth pb-6 pl-[2px] pt-2 sm:snap-none"
                 >
                     {props.publications.map((publication: Interfaces.Publication, index: number) => (
                         <div key={index} className="mr-10 min-w-[300px] snap-center sm:snap-align-none">
@@ -45,7 +45,7 @@ const Carousel: React.FC<Props> = (props): React.ReactElement => {
             </button>
 
             {/** Fade off */}
-            <div className="absolute top-0 right-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-white-50 transition-colors duration-500 dark:to-grey-800 md:block" />
+            <div className="absolute right-0 top-0 hidden h-full w-1/6 select-none bg-gradient-to-r from-transparent to-white-50 transition-colors duration-500 dark:to-grey-800 md:block" />
         </div>
     );
 };

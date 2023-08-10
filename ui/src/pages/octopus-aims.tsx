@@ -203,7 +203,7 @@ const OctopusAims: NextPage = (): React.ReactElement => (
         <Layouts.Standard fixedHeader={false}>
             <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
                 <Components.PageTitle text="Octopus in detail: aims and priorities" />
-                <span className="my-6 mx-auto flex  space-x-1 font-montserrat text-xl font-normal text-grey-800 transition-colors duration-500 dark:text-white-100">
+                <span className="mx-auto my-6 flex  space-x-1 font-montserrat text-xl font-normal text-grey-800 transition-colors duration-500 dark:text-white-100">
                     Octopus is designed to change the incentive structure within the research community to ensure that
                     what is recognised, rewarded, encouraged is what will best drive research in the &apos;right&apos;
                     direction. Here&apos;s we&apos;ve provided more information on each of the issues Octopus is
