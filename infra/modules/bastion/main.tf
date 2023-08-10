@@ -16,7 +16,7 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 resource "aws_iam_role" "allow_ssm_role" {
-  name               = "ssm-role"
+  name               = "ssm-role-${var.environment}"
   description        = "Allow SSM access to EC2"
   assume_role_policy = <<EOF
 {
@@ -31,7 +31,7 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "allow_ssm_iam_profile" {
-  name = "ec2_profile"
+  name = "ec2_profile_${var.environment}"
   role = aws_iam_role.allow_ssm_role.name
 }
 
