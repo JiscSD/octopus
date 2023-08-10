@@ -68,7 +68,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
             >
                 <>
                     <div
-                        className={`mb-2 line-clamp-3 text-xs leading-snug xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
+                        className={`mb-2 text-xs leading-snug line-clamp-3 xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
                             props.isSelected ? 'font-semibold' : 'font-medium'
                         }`}
                         title={props.title}
