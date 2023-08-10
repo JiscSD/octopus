@@ -53,7 +53,7 @@ const BookmarkedPublications: React.FC<Props> = (props): React.ReactElement => {
                             {props.publication.user.firstName} {props.publication.user.lastName}
                             {props.publication.coAuthors &&
                                 props.publication.coAuthors.map(
-                                    (author) => ', ' + author.user.firstName + ' ' + author.user.lastName
+                                    (author) => ', ' + author?.user?.firstName + ' ' + author?.user?.lastName
                                 )}
                         </span>
                         <span className="mt-2 text-xs leading-5 text-teal-600 empty:hidden dark:text-teal-400">
