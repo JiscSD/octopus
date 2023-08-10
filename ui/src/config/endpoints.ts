@@ -7,12 +7,11 @@ const endpoints = {
     authorization: `${api.baseURL}/authorization`,
     verification: `${api.baseURL}/verification`,
     flag: `${api.baseURL}/flag`,
-    publicationBookmarks: `${api.baseURL}/publications/bookmarks`,
+    bookmarks: `${api.baseURL}/bookmarks`,
     decodeUserToken: `${api.baseURL}/decode-user-token`,
     verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,
     revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`,
-    topics: `${api.baseURL}/topics`,
-    topicBookmarks: `${api.baseURL}/topics/bookmarks`
+    topics: `${api.baseURL}/topics`
 };
 
 export default endpoints;

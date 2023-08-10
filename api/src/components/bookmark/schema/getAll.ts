@@ -11,7 +11,7 @@ const getAllBookmarksSchema: I.JSONSchemaType<{ type: I.BookmarkType; apiKey: st
             type: 'string'
         }
     },
-    required: ['apiKey'],
+    required: ['type'],
     additionalProperties: false
 };
 

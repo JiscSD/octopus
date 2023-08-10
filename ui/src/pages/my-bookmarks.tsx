@@ -11,28 +11,27 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);
-    let usersPublicationBookmarks: Interfaces.BookmarkedPublicationsData[] = [];
-    let usersTopicBookmarks: Interfaces.BookmarkedTopicsData[] = [];
+    let userPublicationBookmarks: Interfaces.BookmarkedEntityData[] = [];
+    let userTopicBookmarks: Interfaces.BookmarkedEntityData[] = [];
 
     try {
-        const response = await api.get(`${Config.endpoints.publicationBookmarks}`, token);
-        usersPublicationBookmarks = response.data;
+        const response = await api.get(`${Config.endpoints.bookmarks}?type=PUBLICATION`, token);
+        userPublicationBookmarks = response.data;
     } catch (err) {
         console.log(err);
     }
 
     try {
-        const response = await api.get(`${Config.endpoints.topicBookmarks}`, token);
-        usersTopicBookmarks = response.data;
-        console.log(usersTopicBookmarks);
+        const response = await api.get(`${Config.endpoints.bookmarks}?type=TOPIC`, token);
+        userTopicBookmarks = response.data;
     } catch (err) {
         console.log(err);
     }
 
     return {
         props: {
-            usersPublicationBookmarks,
-            usersTopicBookmarks,
+            userPublicationBookmarks,
+            userTopicBookmarks,
             token,
             protectedPage: true
         }
@@ -40,30 +39,33 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 });
 
 type Props = {
-    usersPublicationBookmarks: Interfaces.BookmarkedPublicationsData[];
-    usersTopicBookmarks: Interfaces.BookmarkedTopicsData[];
+    userPublicationBookmarks: Interfaces.BookmarkedEntityData[];
+    userTopicBookmarks: Interfaces.BookmarkedEntityData[];
     token: string;
 };
 
 const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
-    const [userPublicationBookmarks, setUserPublicationBookmarks] = React.useState(props.usersPublicationBookmarks);
-    const [userTopicBookmarks, setUserTopicBookmarks] = React.useState(props.usersTopicBookmarks);
+    const [userPublicationBookmarks, setUserPublicationBookmarks] = React.useState(props.userPublicationBookmarks);
+    const [userTopicBookmarks, setUserTopicBookmarks] = React.useState(props.userTopicBookmarks);
 
-    const deletePublicationBookmark = async (publication: string) => {
+    const deletePublicationBookmark = async (id: string) => {
         try {
-            await api.destroy(`${Config.endpoints.publications}/${publication}/bookmark`, props.token);
+            await api.destroy(`${Config.endpoints.bookmarks}/${id}`, props.token);
 
-            const getPublicationBookmarks = await api.get(`${Config.endpoints.publicationBookmarks}`, props.token);
+            const getPublicationBookmarks = await api.get(
+                `${Config.endpoints.bookmarks}?type=PUBLICATION`,
+                props.token
+            );
             setUserPublicationBookmarks(getPublicationBookmarks.data);
         } catch (err) {
             console.log(err);
         }
     };
-    const deleteTopicBookmark = async (topic: string) => {
+    const deleteTopicBookmark = async (id: string) => {
         try {
-            await api.destroy(`${Config.endpoints.topics}/${topic}/bookmark`, props.token);
+            await api.destroy(`${Config.endpoints.bookmarks}/${id}`, props.token);
 
-            const getTopicBookmarks = await api.get(`${Config.endpoints.topicBookmarks}`, props.token);
+            const getTopicBookmarks = await api.get(`${Config.endpoints.bookmarks}?type=TOPIC`, props.token);
             setUserTopicBookmarks(getTopicBookmarks.data);
         } catch (err) {
             console.log(err);
@@ -97,16 +99,14 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                                         Your bookmarked publications
                                     </h2>
                                     <div className="relative rounded-md lg:w-2/3">
-                                        {userPublicationBookmarks.map(
-                                            (bookmark: Interfaces.BookmarkedPublicationsData) => (
-                                                <Components.BookmarkedPublications
-                                                    publication={bookmark.publication}
-                                                    key={bookmark.id}
-                                                    token={props.token}
-                                                    onDelete={() => deletePublicationBookmark(bookmark.publication.id)}
-                                                />
-                                            )
-                                        )}
+                                        {userPublicationBookmarks.map((bookmark: Interfaces.BookmarkedEntityData) => (
+                                            <Components.BookmarkedPublications
+                                                publication={bookmark.entity as Interfaces.BookmarkedPublication}
+                                                key={bookmark.id}
+                                                token={props.token}
+                                                onDelete={() => deletePublicationBookmark(bookmark.id)}
+                                            />
+                                        ))}
                                     </div>
                                 </>
                             )}
@@ -122,12 +122,12 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
                                         Your bookmarked topics
                                     </h2>
                                     <div className="relative rounded-md lg:w-2/3">
-                                        {userTopicBookmarks.map((bookmark: Interfaces.BookmarkedTopicsData) => (
+                                        {userTopicBookmarks.map((bookmark: Interfaces.BookmarkedEntityData) => (
                                             <Components.BookmarkedTopics
-                                                topic={bookmark.topic}
+                                                topic={bookmark.entity as Interfaces.BookmarkedTopic}
                                                 key={bookmark.id}
                                                 token={props.token}
-                                                onDelete={() => deleteTopicBookmark(bookmark.topic.id)}
+                                                onDelete={() => deleteTopicBookmark(bookmark.id)}
                                             />
                                         ))}
                                     </div>

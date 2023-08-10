@@ -64,18 +64,18 @@ export const create = async (
         // Generic checks
 
         // Check that the user hasn't already bookmarked this entity
-        const bookmark = await bookmarkService.getByFields(type, entityId, event.user.id);
+        const existingBookmark = await bookmarkService.getByFields(type, entityId, event.user.id);
 
-        if (bookmark) {
+        if (existingBookmark) {
             return response.json(400, {
                 message: 'You have already bookmarked this entity.'
             });
         }
 
         // Create bookmark
-        await bookmarkService.create(type, entityId, event.user.id);
+        const bookmark = await bookmarkService.create(type, entityId, event.user.id);
 
-        return response.json(200, { message: 'Bookmark created successfully.' });
+        return response.json(201, bookmark);
     } catch (err) {
         console.log(err);
 
@@ -220,9 +220,11 @@ export const get = async (
     }
 };
 
-export const getAll = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
+export const getAll = async (
+    event: I.AuthenticatedAPIRequest<undefined, I.GetAllBookmarksQueryStringParameters>
+): Promise<I.JSONResponse> => {
     try {
-        const typeFilter: I.BookmarkType | undefined = event.queryStringParameters?.type as I.BookmarkType;
+        const typeFilter: I.BookmarkType = event.queryStringParameters.type;
         const bookmarks = await bookmarkService.getAll(event.user.id, typeFilter);
 
         if (!bookmarks) {

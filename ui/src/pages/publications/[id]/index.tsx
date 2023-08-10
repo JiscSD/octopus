@@ -37,7 +37,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
-    let bookmark: boolean = false;
+    let bookmarkId: string | null = null;
     let error: string | null = null;
 
     const token = Helpers.getJWT(context);
@@ -51,8 +51,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/bookmark`, token);
-        bookmark = response.data ? true : false;
+        const response = await api.get(`${Config.endpoints.bookmarks}/publication/${requestedId}`, token);
+        bookmarkId = response.data ? response.data.id : null;
     } catch (err) {
         console.log(err);
     }
@@ -67,7 +67,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             publication,
             userToken: token || '',
-            bookmark,
+            bookmarkId,
             publicationId: publication.id,
             protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus)
         }
@@ -77,22 +77,24 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 type Props = {
     publication: Interfaces.Publication;
     publicationId: string;
-    bookmark: boolean;
+    bookmarkId: string | null;
     userToken: string;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark);
+    const isBookmarked = props.bookmarkId ? true : false;
+    const [showBookmark, setShowBookmark] = React.useState(isBookmarked);
+    const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
 
     useEffect(() => {
-        setIsBookmarked(props.bookmark);
-    }, [props.bookmark]);
+        setShowBookmark(isBookmarked);
+    }, [isBookmarked]);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -119,7 +121,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isBookmarkVisible = useMemo(() => {
+    const isBookmarkButtonVisible = useMemo(() => {
         if (!user || !publicationData) {
             return false;
         }
@@ -204,19 +206,32 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const onBookmarkHandler = async () => {
-        if (isBookmarked) {
+        if (showBookmark) {
             //delete the bookmark
             try {
-                await api.destroy(`publications/${publicationData?.id}/bookmark`, user?.token);
-                setIsBookmarked(false);
+                await api.destroy(`bookmarks/${bookmarkId}`, user?.token);
+                setShowBookmark(false);
             } catch (err) {
                 console.log(err);
             }
         } else {
             //create the bookmark
             try {
-                await api.post(`publications/${publicationData?.id}/bookmark`, {}, user?.token);
-                setIsBookmarked(true);
+                const newBookmarkResponse = await api.post<{
+                    id: string;
+                    type: string;
+                    entityId: string;
+                    userId: string;
+                }>(
+                    `bookmarks`,
+                    {
+                        type: 'PUBLICATION',
+                        entityId: publicationData?.id
+                    },
+                    user?.token
+                );
+                setShowBookmark(true);
+                setBookmarkId(newBookmarkResponse.data?.id);
             } catch (err) {
                 console.log(err);
             }
@@ -506,17 +521,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
                                 {publicationData.title}
                             </h1>
-                            {isBookmarkVisible && (
+                            {isBookmarkButtonVisible && (
                                 <div className="col-span-1 grid justify-items-end">
                                     <button
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
                                         onClick={onBookmarkHandler}
                                         aria-label="toggle-bookmark"
-                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                        title={`${showBookmark ? 'Remove bookmark' : 'Bookmark this publication'}`}
                                     >
                                         <OutlineIcons.BookmarkIcon
                                             className={`h-8 w-8 ${
-                                                isBookmarked ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
+                                                showBookmark ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
                                             } text-blue-700 transition duration-150 dark:text-blue-50`}
                                         />
                                     </button>

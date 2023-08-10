@@ -63,7 +63,7 @@ const Nav: React.FC = (): React.ReactElement => {
                         value: Config.urls.account.path
                     },
                     {
-                        label: 'My bookmarks',
+                        label: 'My Bookmarks',
                         value: Config.urls.myBookmarks.path
                     },
                     {

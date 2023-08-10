@@ -333,3 +333,5 @@ export type CreationSteps = {
 };
 
 export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
+
+export type BookmarkType = 'PUBLICATION' | 'TOPIC';

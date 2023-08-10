@@ -63,14 +63,12 @@ export const deleteBookmark = async (id: string) => {
     return bookmark;
 };
 
-export const getAll = async (userId: string, type: I.BookmarkType | undefined) => {
-    const bookmark = await client.prisma.bookmark.findMany({
-        where: type
-            ? {
-                  type,
-                  userId
-              }
-            : { userId },
+export const getAll = async (userId: string, type: I.BookmarkType): Promise<I.PopulatedBookmark[]> => {
+    const bookmarks = await client.prisma.bookmark.findMany({
+        where: {
+            type,
+            userId
+        },
         select: {
             id: true,
             type: true,
@@ -82,5 +80,72 @@ export const getAll = async (userId: string, type: I.BookmarkType | undefined) =
         }
     });
 
-    return bookmark;
+    const populatedBookmarks: I.PopulatedBookmark[] = [];
+
+    // Populate entity. Has to be done with a separate query because the
+    // relationship is not enforced in prisma.
+    await Promise.all(
+        bookmarks.map(async (bookmark, idx) => {
+            switch (bookmark.type) {
+                case 'PUBLICATION': {
+                    const entity = await client.prisma.publication.findUnique({
+                        where: {
+                            id: bookmark.entityId
+                        },
+                        select: {
+                            id: true,
+                            title: true,
+                            createdAt: true,
+                            type: true,
+                            publishedDate: true,
+                            coAuthors: {
+                                select: {
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true
+                                        }
+                                    }
+                                }
+                            },
+                            doi: true,
+                            updatedAt: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        }
+                    });
+
+                    if (entity) {
+                        populatedBookmarks[idx] = { ...bookmarks[idx], entity };
+                    }
+
+                    break;
+                }
+
+                case 'TOPIC': {
+                    const entity = await client.prisma.topic.findUnique({
+                        where: {
+                            id: bookmark.entityId
+                        },
+                        select: {
+                            id: true,
+                            title: true
+                        }
+                    });
+
+                    if (entity) {
+                        populatedBookmarks[idx] = { ...bookmarks[idx], entity };
+                    }
+
+                    break;
+                }
+            }
+        })
+    );
+
+    return populatedBookmarks;
 };
