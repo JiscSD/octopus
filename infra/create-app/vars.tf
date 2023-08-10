@@ -1,6 +1,6 @@
-# variable "full_domain_name" {
-#   type = string
-# }
+variable "profile" {
+  type = string
+}
 
 variable "rds_allocated_storage" {
   type = number
@@ -27,10 +27,6 @@ variable "rds_monitoring_interval" {
 
 variable "rds_performance_insights_retention_period" {
   type = number
-}
-
-variable "domain_name" {
-  type = string
 }
 
 variable "elasticsearch_instance_size" {

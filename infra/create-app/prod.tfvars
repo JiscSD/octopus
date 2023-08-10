@@ -1,4 +1,4 @@
-domain_name = "octopus.ac"
+profile = "octopus-dev"
 
 rds_allocated_storage                     = 50
 rds_max_allocated_storage                 = 100
