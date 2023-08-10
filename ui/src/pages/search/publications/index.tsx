@@ -385,7 +385,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                             </div>
                                         ))}
 
-                                        <div className="relative flex items-start border-t border-b border-grey-100 py-3">
+                                        <div className="relative flex items-start border-b border-t border-grey-100 py-3">
                                             <div className="flex h-5 items-center">
                                                 <input
                                                     id="select-all"
