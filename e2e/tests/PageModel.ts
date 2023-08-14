@@ -178,7 +178,8 @@ export const PageModel = {
         },
         linkedPub: {
             input: 'input[placeholder="Search for publications"]',
-            addLink: 'button[aria-label="Add link"]'
+            addLink: 'button[aria-label="Add link"]',
+            deleteLink: 'td > button[title="Delete"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',

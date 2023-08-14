@@ -16,15 +16,22 @@ resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
 
-resource "aws_s3_bucket_public_access_block" "image_bucket" {
+resource "aws_s3_bucket_public_access_block" "image_bucket_allow_public" {
   bucket = aws_s3_bucket.image_bucket.id
 
   block_public_acls   = true
-  block_public_policy = true
+  block_public_policy = false
 }
 
 resource "aws_s3_bucket" "pdf_bucket" {
   bucket = "science-octopus-publishing-pdfs-${var.environment}"
+}
+
+resource "aws_s3_bucket_public_access_block" "pdf_bucket_allow_public" {
+  bucket = aws_s3_bucket.pdf_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = false
 }
 
 locals {

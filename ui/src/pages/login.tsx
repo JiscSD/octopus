@@ -144,7 +144,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Link
                             href={`${Config.urls.orcidLogin.path}&state=${props.redirectTo}`}
                             ariaLabel="Sign in with ORCID"
-                            className="flex items-center rounded-md bg-orcid py-2 px-4"
+                            className="flex items-center rounded-md bg-orcid px-4 py-2"
                         >
                             <Assets.ORCID width={20} height={20} className="fill-white-50" />
                             <span className="ml-2 text-xs text-white-50">Sign in with ORCID</span>
@@ -164,7 +164,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Link
                             href={`${Config.urls.orcidLogin.path}&state=${props.redirectTo}`}
                             ariaLabel="Sign in with ORCID"
-                            className="flex items-center rounded-md bg-orcid py-2 px-4"
+                            className="flex items-center rounded-md bg-orcid px-4 py-2"
                         >
                             <Assets.ORCID width={20} height={20} className="fill-white-50" />
                             <span className="ml-2 text-xs text-white-50">Sign in with ORCID</span>
@@ -182,7 +182,7 @@ const Login: Types.NextPage<Props> = (props): React.ReactElement => {
                 <title>{Config.urls.orcidLoginCallback.title}</title>
             </Head>
 
-            <main className="container flex min-h-screen w-full flex-col items-center justify-center bg-white-50 py-20 px-8 text-center dark:bg-grey-800">
+            <main className="container flex min-h-screen w-full flex-col items-center justify-center bg-white-50 px-8 py-20 text-center dark:bg-grey-800">
                 {loginError || (
                     <>
                         {darkMode ? (

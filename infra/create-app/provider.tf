@@ -1,15 +1,15 @@
 provider "aws" {
   region  = "eu-west-1"
-  profile = "octopus"
+  profile = var.profile
 }
 
 terraform {
   required_version = ">=1.5.1"
   backend "s3" {
-    bucket  = "octopus-app-tfstate"
+    bucket  = "octopus-tfstate"
     key     = "terraform.tfstate"
     region  = "eu-west-1"
-    profile = "octopus"
+    profile = "octopus-tfstate"
   }
   required_providers {
     aws = {

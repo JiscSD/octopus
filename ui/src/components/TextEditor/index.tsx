@@ -322,7 +322,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                             key={index}
                                             className={({ active }) =>
                                                 `${active ? 'text-slate-800  bg-grey-50' : 'text-slate-600'}
-                          relative cursor-default select-none py-2 px-4 ${heading.className}`
+                          relative cursor-default select-none px-4 py-2 ${heading.className}`
                                             }
                                             value={heading}
                                         >
@@ -648,7 +648,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="file"
                                     aria-label="Choose a Word document"
                                     accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                                 />
                                 <span className="sr-only">Choose a Word document</span>
                             </label>
@@ -744,7 +744,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 <span>Import from Microsoft Word (.docx)</span>
             </button>
 
-            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pb-4 pt-2 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                 <MenuBar
                     editor={textEditor}
                     loading={loading}

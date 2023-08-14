@@ -318,7 +318,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                             <OutlineIcons.ArrowPathIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                         textSize="sm"
-                        className="py-2 px-1"
+                        className="px-1 py-2"
                         disabled={loading}
                     />
                 </div>
