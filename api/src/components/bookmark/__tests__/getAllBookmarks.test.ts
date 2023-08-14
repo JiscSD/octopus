@@ -26,14 +26,18 @@ describe('Get multiple bookmarks', () => {
     });
 
     test('Get a bookmark for a given entity', async () => {
-        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321', type: 'TOPIC', entityId: 'test-topic-1'});
+        const bookmark = await testUtils.agent
+            .get('/bookmarks')
+            .query({ apiKey: '987654321', type: 'TOPIC', entityId: 'test-topic-1' });
 
         expect(bookmark.status).toEqual(200);
         expect(bookmark.body).toHaveLength(1);
     });
 
     test('Check for bookmark that does not exist', async () => {
-        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321', type: 'TOPIC', entityId: 'made-up-topic'});
+        const bookmark = await testUtils.agent
+            .get('/bookmarks')
+            .query({ apiKey: '987654321', type: 'TOPIC', entityId: 'made-up-topic' });
 
         expect(bookmark.status).toEqual(200);
         expect(bookmark.body).toHaveLength(0);
