@@ -98,8 +98,6 @@ export const deleteBookmark = async (
             });
         }
 
-        const { id, type, entityId } = bookmark;
-
         // Check that the user owns the bookmark
         if (bookmark.userId !== event.user.id) {
             return response.json(403, {
@@ -107,50 +105,8 @@ export const deleteBookmark = async (
             });
         }
 
-        // Checks depending on bookmark type
-        switch (type) {
-            case 'PUBLICATION': {
-                // Check that the publication exists
-                const publication = await publicationService.get(entityId);
-
-                if (!publication) {
-                    return response.json(404, {
-                        message: 'This publication does not exist.'
-                    });
-                }
-
-                // Check that the publication is live
-                if (publication.currentStatus === 'DRAFT') {
-                    return response.json(404, {
-                        message: 'You cannot bookmark a draft publication.'
-                    });
-                }
-
-                break;
-            }
-
-            case 'TOPIC': {
-                // Check that the topic exists
-                const topic = await topicService.get(entityId);
-
-                if (!topic) {
-                    return response.json(404, {
-                        message: 'This topic does not exist.'
-                    });
-                }
-
-                break;
-            }
-
-            default:
-                // Invalid bookmark type supplied
-                return response.json(400, {
-                    message: 'Invalid bookmark type.'
-                });
-        }
-
         // Delete bookmark
-        await bookmarkService.deleteBookmark(id);
+        await bookmarkService.deleteBookmark(bookmark.id);
 
         return response.json(200, { message: 'Bookmark deleted successfully.' });
     } catch (err) {
