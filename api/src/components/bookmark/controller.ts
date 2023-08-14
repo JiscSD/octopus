@@ -122,12 +122,6 @@ export const getAll = async (
         const entityFilter = event.queryStringParameters.entityId || undefined;
         const bookmarks = await bookmarkService.getMany(event.user.id, typeFilter, entityFilter);
 
-        if (!bookmarks) {
-            return response.json(404, {
-                message: 'No bookmarks found for this user.'
-            });
-        }
-
         return response.json(200, bookmarks);
     } catch (err) {
         return response.json(500, { message: 'Unknown server error.' });
