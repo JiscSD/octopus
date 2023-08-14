@@ -433,13 +433,6 @@ functions:
                   path: ${self:custom.versions.v1}/bookmarks/{id}
                   method: DELETE
                   cors: true
-    getBookmark:
-        handler: src/components/bookmark/routes.get
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/bookmarks/{type}/{entityId}
-                  method: GET
-                  cors: true
     getAllBookmarks:
         handler: src/components/bookmark/routes.getAll
         events:

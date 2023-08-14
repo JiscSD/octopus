@@ -114,74 +114,13 @@ export const deleteBookmark = async (
     }
 };
 
-// For checking whether an entity is bookmarked.
-export const get = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetBookmarkPathParams>
-): Promise<I.JSONResponse> => {
-    const type = event.pathParameters.type.toUpperCase();
-
-    try {
-        // Checks depending on bookmark type
-        switch (type) {
-            case 'PUBLICATION': {
-                // Check that the publication exists
-                const publication = await publicationService.get(event.pathParameters.entityId);
-
-                if (!publication) {
-                    return response.json(404, {
-                        message: 'This publication does not exist.'
-                    });
-                }
-
-                // Check that the publication is live
-                if (publication.currentStatus === 'DRAFT') {
-                    return response.json(404, {
-                        message: 'This publication is in a draft state, so no bookmark exists.'
-                    });
-                }
-
-                break;
-            }
-
-            case 'TOPIC': {
-                // Check that the topic exists
-                const topic = await topicService.get(event.pathParameters.entityId);
-
-                if (!topic) {
-                    return response.json(404, {
-                        message: 'This topic does not exist.'
-                    });
-                }
-
-                break;
-            }
-
-            default:
-                // Invalid bookmark type supplied
-                return response.json(400, {
-                    message: 'Invalid bookmark type.'
-                });
-        }
-
-        // Get bookmark
-        const bookmark = await bookmarkService.getByFields(type, event.pathParameters.entityId, event.user.id);
-
-        if (!bookmark) {
-            return response.json(200, false);
-        }
-
-        return response.json(200, bookmark);
-    } catch (err) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
 export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, I.GetAllBookmarksQueryStringParameters>
 ): Promise<I.JSONResponse> => {
     try {
         const typeFilter: I.BookmarkType = event.queryStringParameters.type;
-        const bookmarks = await bookmarkService.getAll(event.user.id, typeFilter);
+        const entityFilter = event.queryStringParameters.entityId || undefined;
+        const bookmarks = await bookmarkService.getMany(event.user.id, typeFilter, entityFilter);
 
         if (!bookmarks) {
             return response.json(404, {

@@ -438,15 +438,11 @@ export interface CreateBookmarkRequestBody {
 
 export interface GetAllBookmarksQueryStringParameters {
     type: BookmarkType;
+    entityId?: string;
 }
 
 export interface DeleteBookmarkPathParams {
     id: string;
-}
-
-export interface GetBookmarkPathParams {
-    type: GetBookmarkPathParamType;
-    entityId: string;
 }
 
 export interface BookmarkedPublication {

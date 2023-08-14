@@ -51,8 +51,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(`${Config.endpoints.bookmarks}/publication/${requestedId}`, token);
-        bookmarkId = response.data ? response.data.id : null;
+        const response = await api.get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token);
+        bookmarkId = response.data && response.data.length === 1 ? response.data[0].id : null;
     } catch (err) {
         console.log(err);
     }
