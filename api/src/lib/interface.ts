@@ -733,3 +733,20 @@ export interface CreateTopicRequestBody {
 export interface GetTopicPathParams {
     id: string;
 }
+
+export interface TopicsFilters {
+    search?: string;
+    limit?: number;
+    offset?: number;
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}

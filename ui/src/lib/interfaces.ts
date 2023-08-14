@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Types from '@types';
 import * as Axios from 'axios';
+import { ParsedUrlQuery } from 'querystring';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -476,4 +477,19 @@ export interface Topic extends BaseTopic {
     updatedAt: string;
     parents: BaseTopic[];
     children: BaseTopic[];
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}
+
+export interface TopicsPageQuery extends ParsedUrlQuery {
+    query?: string;
 }
