@@ -6,6 +6,7 @@ import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
+import * as Types from '@types';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Stores from '@stores';
@@ -26,6 +27,7 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
     const [selectedPublication, setSelectedPublication] = React.useState<Interfaces.Publication | null>(null);
     const [mutateError, setMutateError] = React.useState<string | undefined>();
     const [createMutateLoading, setCreateMutateLoading] = React.useState(false);
+    const [entityType, setEntityType] = React.useState<'PUBLICATION' | 'TOPIC'>('PUBLICATION');
 
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
     const formattedAsString = availableLinkTypes.join(',');
@@ -135,28 +137,44 @@ const LinkedPublications: React.FC = (): React.ReactElement => {
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
                 <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
-                    <div className="flex items-center space-x-4">
-                        <HeadlessUI.Combobox.Input
-                            className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
-                            autoComplete="off"
-                            displayValue={(publication: Interfaces.Publication) => {
-                                return publication?.title || '';
+                    <div className="flex flex-wrap sm:flex-nowrap items-center sm:space-x-4">
+                        <select
+                            name="linked-entity-type"
+                            id="linked-entity-type"
+                            onChange={(e) => {
+                                const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
+                                setEntityType(value);
                             }}
-                            placeholder="Search for publications"
-                            onChange={(event) => setSearch(event.target.value)}
-                        />
-                        <Components.Button
-                            title="Add link"
-                            disabled={isValidating || createMutateLoading || !selectedPublication}
-                            onClick={createLink}
-                            endIcon={
-                                createMutateLoading ? (
-                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                ) : (
-                                    <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                )
-                            }
-                        />
+                            value={entityType}
+                            className="!mt-0 block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 mr-4 sm:mr-0"
+                            disabled={isValidating}
+                        >
+                            <option value="PUBLICATION">Publications</option>
+                            <option value="TOPIC">Research topics</option>
+                        </select>
+                        <div className="flex space-x-4 mt-4 sm:mt-0">
+                            <HeadlessUI.Combobox.Input
+                                className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
+                                autoComplete="off"
+                                displayValue={(publication: Interfaces.Publication) => {
+                                    return publication?.title || '';
+                                }}
+                                placeholder="Search for publications"
+                                onChange={(event) => setSearch(event.target.value)}
+                            />
+                            <Components.Button
+                                title="Add link"
+                                disabled={isValidating || createMutateLoading || !selectedPublication}
+                                onClick={createLink}
+                                endIcon={
+                                    createMutateLoading ? (
+                                        <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    ) : (
+                                        <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    )
+                                }
+                            />
+                        </div>
                     </div>
                     <HeadlessUI.Transition
                         as={React.Fragment}
