@@ -1,6 +1,6 @@
 import * as testUtils from 'lib/testUtils';
 
-describe('Get all bookmarks', () => {
+describe('Get multiple bookmarks', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
@@ -23,5 +23,19 @@ describe('Get all bookmarks', () => {
         const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: null, type: 'PUBLICATION' });
 
         expect(bookmark.status).toEqual(401);
+    });
+
+    test('Get a bookmark for a given entity', async () => {
+        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321', type: 'TOPIC', entityId: 'test-topic-1'});
+
+        expect(bookmark.status).toEqual(200);
+        expect(bookmark.body).toHaveLength(1);
+    });
+
+    test('Check for bookmark that does not exist', async () => {
+        const bookmark = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321', type: 'TOPIC', entityId: 'made-up-topic'});
+
+        expect(bookmark.status).toEqual(200);
+        expect(bookmark.body).toHaveLength(0);
     });
 });
