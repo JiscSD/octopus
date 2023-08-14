@@ -51,12 +51,7 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
     const deletePublicationBookmark = async (id: string) => {
         try {
             await api.destroy(`${Config.endpoints.bookmarks}/${id}`, props.token);
-
-            const getPublicationBookmarks = await api.get(
-                `${Config.endpoints.bookmarks}?type=PUBLICATION`,
-                props.token
-            );
-            setUserPublicationBookmarks(getPublicationBookmarks.data);
+            setUserPublicationBookmarks(userPublicationBookmarks.filter(bookmark => bookmark.id !== id));
         } catch (err) {
             console.log(err);
         }
@@ -64,9 +59,7 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
     const deleteTopicBookmark = async (id: string) => {
         try {
             await api.destroy(`${Config.endpoints.bookmarks}/${id}`, props.token);
-
-            const getTopicBookmarks = await api.get(`${Config.endpoints.bookmarks}?type=TOPIC`, props.token);
-            setUserTopicBookmarks(getTopicBookmarks.data);
+            setUserTopicBookmarks(userTopicBookmarks.filter(bookmark => bookmark.id !== id));
         } catch (err) {
             console.log(err);
         }
