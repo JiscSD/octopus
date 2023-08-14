@@ -101,35 +101,44 @@ const sendFailureEmail = async (error, event, publicationId) => {
 };
 
 const mapPublicationToMetadata = (publication, pdfUrl) => {
-  const formatAuthor = (author, coAuthor) => {
+  const formatAuthor = (author) => {
     return {
-      type: coAuthor ? "author" : "corresp",
+      type: (author.linkedUser === publication.user.id) ? "corresp" : "author",
       name: {
-        firstname: author.firstName,
-        surname: author.lastName,
-        fullname: `${author.lastName && author.lastName + ", "}${
-          author.firstName
+        firstname: author.user.firstName,
+        surname: author.user.lastName || '',
+        fullname: `${author.user.lastName && author.user.lastName + ", "}${
+          author.user.firstName
         }`,
       },
       identifier: [
         {
           type: "orcid",
-          id: author.orcid,
+          id: author.user.orcid,
         },
       ],
       affiliations: author.affiliations?.map((affiliation) => ({
         identifier: [
-          {
-            type: affiliation.ror ? "ROR" : "Link",
-            id: affiliation.link,
-          },
+          ...(
+            affiliation.organization['disambiguated-organization'] &&
+            affiliation.organization['disambiguated-organization']['disambiguation-source'] === 'ROR'
+          ) ? [{
+            type: "ROR",
+            id: affiliation.organization['disambiguated-organization']['disambiguated-organization-identifier']
+          }] : [],
+          ...affiliation.url ? [{
+            type: "Link",
+            id: affiliation.url
+          }] : [],
         ],
-        org: affiliation.name,
-        city: affiliation.city,
-        country: affiliation.country,
+        org: affiliation.organization.name,
+        city: affiliation.organization.address.city,
+        country: affiliation.organization.address.country,
       })),
     };
   };
+
+  const formattedPublicationDate = publication.createdAt.slice(0, 10);
 
   return {
     provider: {
@@ -156,23 +165,20 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         title: publication.title,
         type: publication.type,
         version: "VOR",
-        language: publication.language,
-        identifier: {
+        language: [publication.language],
+        identifier: [{
           type: "doi",
-          id: publication.doi,
-          subject: publication.keywords,
-        },
+          id: publication.doi
+        }],
       },
-      author: publication.coAuthors
-        ?.map((author) => formatAuthor(author, true))
-        .push(formatAuthor(publication.user, false)),
+      author: publication.coAuthors?.map((author) => formatAuthor(author)),
       publication_date: {
-        date: publication.createdAt,
-        year: publication.createdAt.slice(0, 4),
-        month: publication.createdAt.slice(4, 2),
-        day: publication.createdAt.slice(7, 2),
+        date: formattedPublicationDate,
+        year: formattedPublicationDate.slice(0, 4),
+        month: formattedPublicationDate.slice(5, 7),
+        day: formattedPublicationDate.slice(8, 10),
       },
-      accepted_date: publication.createdAt,
+      accepted_date: formattedPublicationDate,
       publication_status: "Published",
       funding: publication.funders?.map((funder) => ({
         name: funder.name,
