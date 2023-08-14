@@ -557,3 +557,6 @@ export const laggy: Middleware = (useSWRNext) => {
         });
     };
 };
+
+// helper to scroll top smooth - using setTimeout to ensure event loop executes this after any state updates so it doesn't get interrupted
+export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);

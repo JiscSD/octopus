@@ -520,3 +520,10 @@ functions:
                   path: ${self:custom.versions.v1}/topics/{id}
                   method: GET
                   cors: true
+    getTopics:
+        handler: src/components/topic/routes.getTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/topics
+                  method: GET
+                  cors: true

@@ -32,3 +32,15 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetTopicPa
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getTopics = async (event: I.APIRequest<undefined, I.TopicsFilters>): Promise<I.JSONResponse> => {
+    try {
+        const paginatedTopics = await topicService.getPaginatedResults(event.queryStringParameters);
+
+        return response.json(200, paginatedTopics);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

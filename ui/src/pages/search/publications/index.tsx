@@ -126,7 +126,7 @@ type Props = {
     fallback: { [key: string]: { data: Interfaces.Publication[] } & Interfaces.SearchResultMeta };
 };
 
-const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => {
+const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
@@ -283,6 +283,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                             >
                                 <option value="publications">Publications</option>
                                 <option value="authors">Authors</option>
+                                <option value="topics">Topics</option>
                             </select>
                         </label>
 
@@ -385,7 +386,7 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                             </div>
                                         ))}
 
-                                        <div className="relative flex items-start border-t border-b border-grey-100 py-3">
+                                        <div className="relative flex items-start border-b border-t border-grey-100 py-3">
                                             <div className="flex h-5 items-center">
                                                 <input
                                                     id="select-all"
@@ -537,8 +538,8 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
                                                     <div className="flex justify-between">
                                                         <button
                                                             onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                 setOffset((prev) => prev - limit);
+                                                                Helpers.scrollTopSmooth();
                                                             }}
                                                             disabled={offset === 0}
                                                             className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
@@ -548,8 +549,8 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
 
                                                         <button
                                                             onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
                                                                 setOffset((prev) => prev + limit);
+                                                                Helpers.scrollTopSmooth();
                                                             }}
                                                             className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                                             disabled={limit + offset >= response.metadata.total}
@@ -578,4 +579,4 @@ const PublicationSearch: Types.NextPage<Props> = (props): React.ReactElement => 
     );
 };
 
-export default PublicationSearch;
+export default Publications;

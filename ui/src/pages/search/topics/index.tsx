@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import useSWR from 'swr';
 import Head from 'next/head';
 
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
 import * as SolidIcons from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -13,104 +14,84 @@ import * as Types from '@types';
 import * as api from '@api';
 import * as Helpers from '@helpers';
 
-/**
- *
- * @TODO - refactor getServerSideProps
- * remove unnecessary if statements
- */
+const pageSizes = [5, 10, 15, 20, 50];
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // defaults to possible query params
-    let searchType: Types.SearchType = 'authors';
-    let query: string | string[] | null = null;
-    let limit: number | string | string[] | null = null;
-    let offset: number | string | string[] | null = null;
-
-    // defaults to results
-    let results: Interfaces.CoreUser[] | [] = [];
-    let metadata: Interfaces.SearchResultMeta | {} = {};
-
-    // default error
+    const searchType: Types.SearchType = 'topics';
+    let { query = '' } = context.query as Interfaces.TopicsPageQuery;
     let error: string | null = null;
+    let fallbackData: Interfaces.TopicsPaginatedResults = {
+        offset: 0,
+        limit: 10,
+        results: [],
+        total: 0
+    };
 
-    // setting params
-    if (context.query.query) query = context.query.query;
-    if (context.query.limit) limit = context.query.limit;
-    if (context.query.offset) offset = context.query.offset;
-
-    // If multiple of the same params are provided, pick the first
-    if (Array.isArray(query)) query = query[0];
-    if (Array.isArray(limit)) limit = limit[0];
-    if (Array.isArray(offset)) offset = offset[0];
-
-    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
-    limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
-    offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
-
-    // ensure the value of the seach type is acceptable
-    // ensure the value of the search type is acceptable
+    const topicsUrl = `${Config.endpoints.topics}?offset=${fallbackData.offset}&limit=${fallbackData.limit}&search=${query}`;
 
     try {
-        const response = await api.search<Interfaces.User>(searchType, encodeURIComponent(query || ''), limit, offset);
-        results = response.data;
-        metadata = response.metadata;
-        error = null;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
+        fallbackData = (await api.get(topicsUrl, undefined)).data;
+    } catch (error) {
+        const { message } = error as Interfaces.JSONResponseError;
         error = message;
     }
 
-    const swrKey = `/users?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}&limit=${
-        limit || '10'
-    }&offset=${offset || '0'}`;
-
     return {
         props: {
+            error,
             searchType,
-            query,
-            limit,
-            offset,
             fallback: {
-                [swrKey]: results
-            },
-            error
+                [topicsUrl]: fallbackData
+            }
         }
     };
 };
 
 type Props = {
-    searchType?: Types.SearchType;
-    query: string | null;
-    limit: string | null;
-    offset: string | null;
     error: string | null;
+    searchType: Types.SearchType;
+    fallback: { [key: string]: Interfaces.TopicsPaginatedResults };
 };
 
-const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
+const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const searchInputRef = React.useRef<HTMLInputElement>(null);
-    // params
-    const [searchType, setSearchType] = React.useState(props.searchType);
-    const [query, setQuery] = React.useState(props.query ? props.query : '');
-    // param for pagination
-    const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
-    const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
+    const { query = '' } = router.query as Interfaces.TopicsPageQuery;
+    const [limit, setLimit] = React.useState(10);
+    const [offset, setOffset] = React.useState(0);
 
-    // ugly complex swr key
+    const { data, error, isValidating } = useSWR<Interfaces.TopicsPaginatedResults>(
+        `${Config.endpoints.topics}?offset=${offset}&limit=${limit}&search=${query}`,
+        {
+            fallback: props.fallback,
+            use: [Helpers.laggy]
+        }
+    );
 
-    const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
-
-    const { data: results = [], error, isValidating } = useSWR(swrKey);
-
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
+    const handleSearchFormSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        const searchTerm = searchInputRef.current?.value || '';
-        setQuery(searchTerm);
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
+
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
+
+        await router.push({ query: newQuery }, undefined, { shallow: true });
+        setOffset(0);
     };
 
-    React.useEffect(() => {
-        setOffset(0);
-    }, [query, limit]);
+    const handlePageSizeChange: React.ChangeEventHandler<HTMLSelectElement> = async (e) =>
+        setLimit(Number(e.target.value));
+
+    const handleGoNext = async () => {
+        setOffset((prevOffset) => prevOffset + limit);
+        Helpers.scrollTopSmooth();
+    };
+
+    const handleGoBack = async () => {
+        setOffset((prevOffset) => (prevOffset - limit < 0 ? 0 : prevOffset - limit));
+        Helpers.scrollTopSmooth();
+    };
 
     return (
         <>
@@ -118,16 +99,18 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                 <meta name="description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{Config.urls.search.title.replace('publications', 'authors')}</title>
+                <title>{Config.urls.search.title.replace('publications', 'topics')}</title>
             </Head>
 
             <Layouts.Standard>
                 <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pb-0 lg:pt-16">
-                    <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
+                    <Components.PageTitle
+                        text={`Search results ${router.query.query ? `for ${router.query.query}` : ''}`}
+                    />
                 </section>
                 <section
                     id="content"
-                    className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8"
+                    className="container mx-auto grid grid-cols-1 gap-x-6 px-8 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10"
                 >
                     <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-x-6 gap-y-4 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
@@ -139,12 +122,8 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={(e) => {
-                                    const value: Types.SearchType = e.target.value as Types.SearchType;
-                                    setSearchType(value);
-                                    router.push(`/search/${value}`);
-                                }}
-                                value={searchType}
+                                onChange={(e) => router.push(`/search/${e.target.value}`)}
+                                value={props.searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
@@ -154,44 +133,39 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                             </select>
                         </label>
 
-                        <label
-                            htmlFor="order-direction"
-                            className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
-                        >
+                        <label htmlFor="pageSize" className="relative col-span-4 block lg:col-span-2 xl:col-span-1">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Showing
                             </span>
                             <select
-                                name="order-direction"
-                                id="order-direction"
-                                onChange={(e) => setLimit(parseInt(e.target.value, 10))}
+                                name="pageSize"
+                                id="pageSize"
+                                onChange={handlePageSizeChange}
                                 value={limit}
                                 className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
+                                {pageSizes.map((pageSize) => (
+                                    <option key={pageSize} value={pageSize}>
+                                        {pageSize}
+                                    </option>
+                                ))}
                             </select>
                         </label>
 
                         <form
-                            name="query-form"
                             id="query-form"
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
-                            onSubmit={handlerSearchFormSubmit}
+                            onSubmit={handleSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative block w-full">
+                            <label htmlFor="searchTerm" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>
                                 <input
-                                    ref={searchInputRef}
-                                    name="query"
-                                    id="query"
-                                    defaultValue={props.query ? props.query : ''}
+                                    name="searchTerm"
+                                    id="searchTerm"
+                                    defaultValue={query}
                                     type="text"
                                     placeholder="Type here and press enter..."
                                     className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
@@ -199,7 +173,6 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                 />
                                 <button
                                     type="submit"
-                                    form="query-form"
                                     aria-label="Search"
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
@@ -222,12 +195,12 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                 {error && (
                                     <Components.Alert
                                         severity="ERROR"
-                                        title={error}
+                                        title={error.message}
                                         details={['Placeholder support text here']}
                                     />
                                 )}
 
-                                {!error && !results?.data?.length && !isValidating && (
+                                {!error && !data?.results?.length && !isValidating && (
                                     <Components.Alert
                                         severity="INFO"
                                         title="No results found"
@@ -238,28 +211,69 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                     />
                                 )}
 
-                                {!isValidating && results?.data?.length && (
+                                {data?.results?.length && (
                                     <>
                                         <div className="rounded">
-                                            {results.data.map((result: any, index: number) => {
+                                            {data.results.map((topic, index) => {
                                                 let classes = '';
                                                 index === 0 ? (classes += 'rounded-t') : null;
-                                                index === results.data.length - 1
+                                                index === data.results.length - 1
                                                     ? (classes += '!border-b-transparent !rounded-b')
                                                     : null;
 
                                                 return (
-                                                    <Components.UserSearchResult
-                                                        key={`user-${index}-${result.id}`}
-                                                        user={result}
-                                                        className={classes}
-                                                    />
+                                                    <Framer.motion.div
+                                                        key={topic.id}
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        exit={{ opacity: 0 }}
+                                                        transition={{ type: 'tween', duration: 0.35 }}
+                                                    >
+                                                        <Components.Link
+                                                            href={`${Config.urls.viewTopic.path}/${topic.id}`}
+                                                            role="button"
+                                                            className={`
+                                                    grid
+                                                    overflow-hidden
+                                                    rounded-none
+                                                    border-b
+                                                    border-grey-50
+                                                    bg-white-50
+                                                    px-4
+                                                    py-7
+                                                    shadow
+                                                    outline-0
+                                                    transition-colors
+                                                    duration-500
+                                                    hover:opacity-95
+                                                    focus:overflow-hidden
+                                                    focus:border-transparent
+                                                    focus:opacity-95
+                                                    focus:ring-2
+                                                    focus:ring-yellow-500
+                                                    dark:border-grey-600
+                                                    dark:bg-grey-700
+                                                    lg:grid-cols-12
+                                                    ${classes ? classes : ''}
+                                                    `}
+                                                        >
+                                                            <div className="z-10 col-span-11 w-full">
+                                                                <h2 className="col-span-7 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                                    {topic.title}
+                                                                </h2>
+                                                            </div>
+
+                                                            <div className="lg: col-span-1 mt-4 hidden h-full w-full items-center justify-end lg:mt-0 lg:flex">
+                                                                <OutlineIcons.ChevronRightIcon className="h-5 w-5 text-teal-400" />
+                                                            </div>
+                                                        </Components.Link>
+                                                    </Framer.motion.div>
                                                 );
                                             })}
                                         </div>
 
-                                        {!isValidating && !!results.data.length && (
-                                            <Components.Delay delay={results.data.length * 50}>
+                                        {!isValidating && !!data.results.length && (
+                                            <Components.Delay delay={data.results.length * 50}>
                                                 <Framer.motion.div
                                                     initial={{ opacity: 0 }}
                                                     animate={{ opacity: 1 }}
@@ -269,10 +283,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 >
                                                     <div className="flex justify-between">
                                                         <button
-                                                            onClick={(e) => {
-                                                                setOffset((prev) => prev - limit);
-                                                                Helpers.scrollTopSmooth();
-                                                            }}
+                                                            onClick={handleGoBack}
                                                             disabled={offset === 0}
                                                             className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                                         >
@@ -280,22 +291,20 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         </button>
 
                                                         <button
-                                                            onClick={(e) => {
-                                                                setOffset((prev) => prev + limit);
-                                                                Helpers.scrollTopSmooth();
-                                                            }}
+                                                            onClick={handleGoNext}
                                                             className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                                            disabled={limit + offset > results.metadata.total}
+                                                            disabled={limit + offset >= data.total}
                                                         >
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                    <span
+                                                        id="pagination-info"
+                                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                                                    >
                                                         Showing {offset + 1} -{' '}
-                                                        {limit + offset > results.metadata.total
-                                                            ? results.metadata.total
-                                                            : limit + offset}{' '}
-                                                        of {results.metadata.total}
+                                                        {limit + offset > data.total ? data.total : limit + offset} of{' '}
+                                                        {data.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>
@@ -311,4 +320,4 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Authors;
+export default Topics;
