@@ -84,17 +84,16 @@ type Props = {
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const isBookmarked = props.bookmarkId ? true : false;
-    const [showBookmark, setShowBookmark] = React.useState(isBookmarked);
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
+    const isBookmarked = bookmarkId ? true : false;
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
 
     useEffect(() => {
-        setShowBookmark(isBookmarked);
-    }, [isBookmarked]);
+        setBookmarkId(props.bookmarkId);
+    }, [props.bookmarkId, props.publicationId]);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -206,11 +205,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const onBookmarkHandler = async () => {
-        if (showBookmark) {
+        if (isBookmarked) {
             //delete the bookmark
             try {
                 await api.destroy(`bookmarks/${bookmarkId}`, user?.token);
-                setShowBookmark(false);
+                setBookmarkId(null);
             } catch (err) {
                 console.log(err);
             }
@@ -230,7 +229,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     },
                     user?.token
                 );
-                setShowBookmark(true);
+
                 setBookmarkId(newBookmarkResponse.data?.id);
             } catch (err) {
                 console.log(err);
@@ -527,11 +526,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"
                                         onClick={onBookmarkHandler}
                                         aria-label="toggle-bookmark"
-                                        title={`${showBookmark ? 'Remove bookmark' : 'Bookmark this publication'}`}
+                                        title={`${isBookmarked ? 'Remove bookmark' : 'Bookmark this publication'}`}
                                     >
                                         <OutlineIcons.BookmarkIcon
                                             className={`h-8 w-8 ${
-                                                showBookmark ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
+                                                isBookmarked ? 'fill-blue-700 dark:fill-blue-50' : 'fill-transparent'
                                             } text-blue-700 transition duration-150 dark:text-blue-50`}
                                         />
                                     </button>
