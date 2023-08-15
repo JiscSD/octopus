@@ -185,20 +185,10 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     <article className="col-span-12 min-h-screen">
                         {props.error ? (
-                            <Components.Alert
-                                severity="ERROR"
-                                title={props.error}
-                                details={['Placeholder support text here']}
-                            />
+                            <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
                             <Framer.AnimatePresence>
-                                {error && (
-                                    <Components.Alert
-                                        severity="ERROR"
-                                        title={error.message}
-                                        details={['Placeholder support text here']}
-                                    />
-                                )}
+                                {error && <Components.Alert severity="ERROR" title={error.message} />}
 
                                 {!error && !data?.results?.length && !isValidating && (
                                     <Components.Alert
