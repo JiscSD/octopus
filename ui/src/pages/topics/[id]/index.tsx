@@ -51,6 +51,8 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
     const topic = props.topic;
     const showChildren = Boolean(topic.children.length);
     const showParents = Boolean(topic.parents.length);
+    const showPublications = Boolean(topic.publications.length);
+
     return (
         <>
             <Head>
@@ -111,6 +113,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                         )}
                     </header>
                     <p className="py-10">{Config.values.topicDescription}</p>
+
                     {showChildren && (
                         <div className="border-t border-grey-200">
                             <Components.ContentSection
@@ -132,6 +135,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                             </Components.ContentSection>
                         </div>
                     )}
+
                     {showParents && (
                         <div className="border-t border-grey-200">
                             <Components.ContentSection id="parents" title="Research topics above this in the hierarchy">
@@ -143,6 +147,25 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                             >
                                                 {parent.title}
+                                            </Components.Link>
+                                        </Components.ListItem>
+                                    ))}
+                                </Components.List>
+                            </Components.ContentSection>
+                        </div>
+                    )}
+
+                    {showPublications && (
+                        <div className="border-t border-grey-200">
+                            <Components.ContentSection id="publications" title="Research problems linked to this topic">
+                                <Components.List ordered={false}>
+                                    {topic.publications.map((publication) => (
+                                        <Components.ListItem key={publication.id}>
+                                            <Components.Link
+                                                href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                                className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                                            >
+                                                {publication.title}
                                             </Components.Link>
                                         </Components.ListItem>
                                     ))}

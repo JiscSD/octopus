@@ -53,6 +53,15 @@ export const get = async (id: string) => {
                     language: true,
                     translations: true
                 }
+            },
+            publications: {
+                select: {
+                    id: true,
+                    title: true
+                },
+                where: {
+                    currentStatus: 'LIVE'
+                }
             }
         }
     });
