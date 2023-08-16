@@ -46,8 +46,10 @@ export { default as PublicationCreationDataStatements } from './Publication/Crea
 export { default as PublicationCreationFunders } from './Publication/Creation/Funders';
 export { default as PublicationCreationKeyInformation } from './Publication/Creation/KeyInformation';
 export { default as PublicationCreationAffiliations } from './Publication/Creation/Affiliations';
-export { default as PublicationCreationLinkedPublications } from './Publication/Creation/LinkedPublications';
-export { default as PublicationCreationLinkToEntry } from './Publication/Creation/LinkToEntry';
+export { default as PublicationCreationLinkedPublications } from './Publication/Creation/Links';
+export { default as LinkedPublicationsCombobox } from './Publication/Creation/Links/LinkedPublicationsCombobox';
+export { default as LinkedTopicsCombobox } from './Publication/Creation/Links/LinkedTopicsCombobox';
+export { default as PublicationCreationLinkedPublicationRow } from './Publication/Creation/Links/LinkedPublicationRow';
 export { default as PublicationCreationMainText } from './Publication/Creation/MainText';
 export { default as PublicationCreationResearchProcess } from './Publication/Creation/ResearchProcess';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';

@@ -52,7 +52,7 @@ export const getAllByIds = async (ids: Array<string>) => {
     return publications;
 };
 
-export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
+export const update = async (id: string, updateContent: I.UpdatePublicationData) => {
     const updatedPublication = await client.prisma.publication.update({
         where: {
             id

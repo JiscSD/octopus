@@ -30,8 +30,8 @@ const steps: Types.CreationSteps = {
     },
     LINKED_PUBLICATIONS: {
         id: 'LINKED_PUBLICATIONS',
-        title: 'Linked publications',
-        subTitle: 'Linked publications',
+        title: 'Links',
+        subTitle: 'Links',
         component: <Components.PublicationCreationLinkedPublications />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-300" />
     },

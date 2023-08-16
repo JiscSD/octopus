@@ -17,6 +17,11 @@ const getTopicsSchema: I.JSONSchemaType<I.TopicsFilters> = {
             type: 'string',
             nullable: true,
             default: ''
+        },
+        exclude: {
+            type: 'string',
+            nullable: true,
+            default: ''
         }
     }
 };

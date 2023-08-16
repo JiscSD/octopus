@@ -190,10 +190,6 @@ export const update = async (
             return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
         }
 
-        if (event.body.content) {
-            event.body.content = helpers.getSafeHTML(event.body.content);
-        }
-
         if (event.body.id) {
             const isIdInUse = await publicationService.isIdInUse(event.body.id);
 
@@ -224,7 +220,13 @@ export const update = async (
             });
         }
 
-        const updatedPublication = await publicationService.update(event.pathParameters.id, event.body);
+        const updateContent = {
+            ...event.body,
+            ...event.body.content && { content: helpers.getSafeHTML(event.body.content)},
+            ...event.body.topics && { topics: { set: event.body.topics.map(topicId => ({ id: topicId }))}}
+        } as I.UpdatePublicationData;
+
+        const updatedPublication = await publicationService.update(event.pathParameters.id, updateContent);
 
         return response.json(200, updatedPublication);
     } catch (err) {

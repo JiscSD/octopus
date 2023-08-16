@@ -129,6 +129,15 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    topics?: string[];
+}
+
+export interface UpdatePublicationData extends Omit<UpdatePublicationRequestBody, 'topics'> {
+    topics?: {
+        set: {
+            id: string
+        }[]
+    }
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -738,6 +747,7 @@ export interface TopicsFilters {
     search?: string;
     limit?: number;
     offset?: number;
+    exclude?: string;
 }
 
 export interface TopicsPaginatedResults {
