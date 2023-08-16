@@ -26,6 +26,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 items-start
                 gap-4
                 overflow-hidden
+                rounded-none
                 border-b
                 border-grey-50
                 bg-white-50

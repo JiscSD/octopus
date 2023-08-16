@@ -54,7 +54,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     React.useEffect(() => {
         if (store.error) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            Helpers.scrollTopSmooth();
         }
     }, [store.error]);
 
@@ -746,7 +746,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 title="Next"
                                 onClick={() => {
                                     props.setStep((prevState: number) => prevState + 1);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    Helpers.scrollTopSmooth();
                                 }}
                             />
                         ) : (
@@ -756,7 +756,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 title="Next"
                                 onClick={() => {
                                     props.setStep((prevState: number) => prevState + 1);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    Helpers.scrollTopSmooth();
                                 }}
                             />
                         )}
