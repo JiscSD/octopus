@@ -244,6 +244,7 @@ functions:
                   method: GET
                   cors: true
     getUserPublications:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/user/routes.getPublications
         events:
             - http:
