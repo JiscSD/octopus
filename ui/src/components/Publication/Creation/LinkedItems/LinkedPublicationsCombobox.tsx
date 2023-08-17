@@ -16,7 +16,7 @@ type LinkedPublicationsComboboxProps = {
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
-}
+};
 
 const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props): React.ReactElement => {
     const SWRConfig = useSWRConfig();
@@ -51,8 +51,6 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
         }
     });
 
-    console.log(results.data);
-
     if (error) {
         props.setError(error.message);
     }
@@ -83,9 +81,9 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
 
     return (
         <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
-            <div className="flex flex-wrap sm:flex-nowrap items-center sm:space-x-4">
+            <div className="flex flex-wrap items-center sm:flex-nowrap sm:space-x-4">
                 <HeadlessUI.Combobox.Input
-                    className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 mr-4 sm:mr-0 mt-4"
+                    className="mr-4 mt-4 w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
                     autoComplete="off"
                     displayValue={(publication: Interfaces.Publication) => {
                         return publication?.title || '';
@@ -122,9 +120,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                 className={({ active }) =>
                                     `relative cursor-default select-none p-2 text-teal-900 ${
                                         active && 'ring-2 ring-inset ring-yellow-400'
-                                    } ${index === 0 && 'rounded-t'} ${
-                                        index === results.length - 1 && 'rounded-b'
-                                    }`
+                                    } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
                                 }
                                 value={publication}
                             >
@@ -147,7 +143,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                 </HeadlessUI.Combobox.Options>
             </HeadlessUI.Transition>
         </HeadlessUI.Combobox>
-    )
+    );
 };
 
 export default LinkedPublicationsCombobox;

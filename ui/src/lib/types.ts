@@ -322,7 +322,7 @@ export type Languages =
 export type PublicationCreationStep =
     | 'KEY_INFORMATION'
     | 'AFFILIATIONS'
-    | 'LINKED_PUBLICATIONS'
+    | 'LINKED_ITEMS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'

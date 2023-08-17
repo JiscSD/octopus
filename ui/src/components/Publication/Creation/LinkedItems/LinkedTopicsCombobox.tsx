@@ -10,15 +10,15 @@ import * as Types from '@types';
 
 import * as api from '@api';
 
-type LinkedPublicationsComboboxProps = {
+type LinkedTopicsComboboxProps = {
     fetchAndSetLinks: (token: string, entityType: Types.LinkedEntityType) => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
     topics: Interfaces.BaseTopic[];
-}
+};
 
-const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props): React.ReactElement => {
+const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React.ReactElement => {
     const SWRConfig = useSWRConfig();
 
     const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
@@ -29,9 +29,9 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
 
     const currentTopicIds = [...props.topics.map((topic) => topic.id)];
 
-    const swrKey = `/topics?&limit=10${
-        search.length > 2 ? `&search=${search}` : ''
-    }&exclude=${currentTopicIds.join(',')}`;
+    const swrKey = `/topics?&limit=10${search.length > 2 ? `&search=${search}` : ''}&exclude=${currentTopicIds.join(
+        ','
+    )}`;
 
     const {
         data: data = {
@@ -48,8 +48,6 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
         }
     });
 
-    console.log(data.results);
-
     if (error) {
         props.setError(error.message);
     }
@@ -64,10 +62,7 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
                 await api.patch(
                     '/publications/' + currentPublicationId,
                     {
-                        topics: [
-                            ...currentTopicIds,
-                            selectedTopic.id
-                        ]
+                        topics: [...currentTopicIds, selectedTopic.id]
                     },
                     user.token
                 );
@@ -82,9 +77,9 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
 
     return (
         <HeadlessUI.Combobox value={selectedTopic} onChange={setSelectedTopic}>
-            <div className="flex flex-wrap sm:flex-nowrap items-center sm:space-x-4">
+            <div className="flex flex-wrap items-center sm:flex-nowrap sm:space-x-4">
                 <HeadlessUI.Combobox.Input
-                    className="w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 mr-4 sm:mr-0 mt-4"
+                    className="mr-4 mt-4 w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
                     autoComplete="off"
                     displayValue={(topic: Interfaces.BaseTopic) => {
                         return topic?.title || '';
@@ -121,16 +116,11 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
                                 className={({ active }) =>
                                     `relative cursor-default select-none p-2 text-teal-900 ${
                                         active && 'ring-2 ring-inset ring-yellow-400'
-                                    } ${index === 0 && 'rounded-t'} ${
-                                        index === data.results.length - 1 && 'rounded-b'
-                                    }`
+                                    } ${index === 0 && 'rounded-t'} ${index === data.results.length - 1 && 'rounded-b'}`
                                 }
                                 value={topic}
                             >
                                 <div className="space-y-2">
-                                    <span className="font-montserrat text-sm font-medium text-teal-600">
-                                        Research Topic
-                                    </span>
                                     <p className="text-grey-800">{topic.title}</p>
                                 </div>
                             </HeadlessUI.Combobox.Option>
@@ -138,7 +128,7 @@ const LinkedTopicsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props):
                 </HeadlessUI.Combobox.Options>
             </HeadlessUI.Transition>
         </HeadlessUI.Combobox>
-    )
+    );
 };
 
 export default LinkedTopicsCombobox;

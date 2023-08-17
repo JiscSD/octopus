@@ -6,36 +6,21 @@ import * as Helpers from '@helpers';
 import * as Components from '@components';
 
 type Props = {
-    link: Interfaces.LinkTo;
-    deleteLink: (id: string) => void;
+    topic: Interfaces.BaseTopic;
+    deleteTopic: (id: string) => void;
 };
 
-const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
+const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const handleClick = () => {
         setLoading(true);
-        props.deleteLink(props.link.id);
+        props.deleteTopic(props.topic.id);
     };
 
     return (
-        <tr key={props.link.id}>
+        <tr key={props.topic.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                <div className="space-y-2">
-                    <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-100">
-                        {Helpers.formatPublicationType(props.link.publicationToRef.type)}
-                    </span>
-                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.link.publicationToRef.title}
-                    </p>
-                    <div className="flex items-center space-x-2">
-                        <span className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {Helpers.formatDate(props.link.publicationToRef.publishedDate)},
-                        </span>
-                        <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {props.link.publicationToRef.user.firstName[0]}. {props.link.publicationToRef.user.lastName}
-                        </span>
-                    </div>
-                </div>
+                <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">{props.topic.title}</p>
             </td>
             <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {loading ? (
@@ -68,4 +53,4 @@ const LinkToEntry: React.FC<Props> = (props): React.ReactElement => {
     );
 };
 
-export default LinkToEntry;
+export default LinkedTopicRow;

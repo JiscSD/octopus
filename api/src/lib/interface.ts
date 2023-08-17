@@ -135,9 +135,9 @@ export interface UpdatePublicationRequestBody {
 export interface UpdatePublicationData extends Omit<UpdatePublicationRequestBody, 'topics'> {
     topics?: {
         set: {
-            id: string
-        }[]
-    }
+            id: string;
+        }[];
+    };
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
