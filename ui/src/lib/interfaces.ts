@@ -458,6 +458,11 @@ export interface MappedOrcidAffiliation {
     url: string | null;
 }
 
+export interface TopicPublication {
+    id: string;
+    title: string;
+}
+
 export interface TopicTranslation {
     id: string;
     topicId: string;
@@ -477,6 +482,7 @@ export interface Topic extends BaseTopic {
     updatedAt: string;
     parents: BaseTopic[];
     children: BaseTopic[];
+    publications: TopicPublication[];
 }
 
 export interface TopicsPaginatedResults {
