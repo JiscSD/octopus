@@ -100,9 +100,10 @@ custom:
         v1: v1
     serverless-offline:
         useChildProcesses: true
-    warmup:
-        default:
-            enabled: true
+    provisionedConcurrencyCount:
+        local: 0
+        int: 1
+        prod: 2
     serverless-offline-ssm:
         stages:
             - local
@@ -152,6 +153,7 @@ functions:
         handler: src/lib/testUtils.openSearchSeed
     # Publications
     getPublications:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/publication/routes.getAll
         events:
             - http:
@@ -159,6 +161,7 @@ functions:
                   method: GET
                   cors: true
     getPublication:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/publication/routes.get
         events:
             - http:
@@ -201,6 +204,7 @@ functions:
                   method: DELETE
                   cors: true
     getPublicationLinks:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/publication/routes.getPublicationLinks
         events:
             - http:
@@ -216,6 +220,7 @@ functions:
                   method: GET
                   cors: true
     getResearchTopics:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/publication/routes.getResearchTopics
         events:
             - http:
@@ -224,6 +229,7 @@ functions:
                   cors: true
     # Users
     getUsers:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/user/routes.getAll
         events:
             - http:
@@ -238,6 +244,7 @@ functions:
                   method: GET
                   cors: true
     getUserPublications:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/user/routes.getPublications
         events:
             - http:
@@ -254,6 +261,7 @@ functions:
                   cors: true
     # Auth
     authorization:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/authorization/routes.authorize
         events:
             - http:
@@ -442,7 +450,6 @@ functions:
     # Verification
     requestVerification:
         handler: src/components/verification/routes.requestCode
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/verification/{id}
@@ -450,7 +457,6 @@ functions:
                   cors: true
     confirmVerification:
         handler: src/components/verification/routes.confirmCode
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/verification/{id}
@@ -472,8 +478,8 @@ functions:
                   cors: true
     # References
     getReferences:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/reference/routes.get
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
@@ -481,7 +487,6 @@ functions:
                   cors: true
     updateAllReference:
         handler: src/components/reference/routes.updateAll
-        warmup: true
         events:
             - http:
                   path: ${self:custom.versions.v1}/publications/{id}/reference
@@ -521,6 +526,7 @@ functions:
                   method: GET
                   cors: true
     getTopics:
+        provisionedConcurrency: ${self:custom.provisionedConcurrencyCount.${self:provider.stage}}
         handler: src/components/topic/routes.getTopics
         events:
             - http:
