@@ -23,11 +23,11 @@ export const testBookmarking = async (page: Page, id: string) => {
     await page.locator(PageModel.header.usernameButton).click();
     await page.locator(PageModel.header.myBookmarksButton).click();
 
-    await page.waitForSelector(PageModel.myBookmarks.bookmark);
-    await expect(page.locator(PageModel.myBookmarks.bookmark)).toHaveAttribute('href', `/publications/${id}`);
+    await page.waitForSelector(PageModel.myBookmarks.publicationBookmark);
+    await expect(page.locator(PageModel.myBookmarks.publicationBookmark)).toHaveAttribute('href', `/publications/${id}`);
 
     // Remove bookmark
-    await page.locator(PageModel.myBookmarks.bookmark).click();
+    await page.locator(PageModel.myBookmarks.publicationBookmark).click();
     await page.waitForSelector('h1');
     await expect(page.locator(PageModel.livePublication.removeBookmark)).toBeVisible();
     await page.locator(PageModel.livePublication.removeBookmark).click();
@@ -85,7 +85,7 @@ test.describe('Live Publication', () => {
         await Helpers.login(page, browser);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
 
-        testBookmarking(page, 'cl3fz14dr0001es6i5ji51rq4');
+        await testBookmarking(page, 'cl3fz14dr0001es6i5ji51rq4');
     });
 
     test('Flagging a publication', async ({ browser }) => {
@@ -97,7 +97,7 @@ test.describe('Live Publication', () => {
         await Helpers.login(page, browser);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
 
-        testFlagging(page, 'cl3fz14dr0001es6i5ji51rq4', 'testing the flagging functionality');
+        await testFlagging(page, 'cl3fz14dr0001es6i5ji51rq4', 'testing the flagging functionality');
     });
 
     test('Author profile', async ({ browser }) => {

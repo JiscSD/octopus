@@ -423,24 +423,17 @@ functions:
         handler: src/components/bookmark/routes.create
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
+                  path: ${self:custom.versions.v1}/bookmarks
                   method: POST
                   cors: true
-    removeBookmark:
-        handler: src/components/bookmark/routes.remove
+    deleteBookmark:
+        handler: src/components/bookmark/routes.deleteBookmark
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
+                  path: ${self:custom.versions.v1}/bookmarks/{id}
                   method: DELETE
                   cors: true
-    getBookmark:
-        handler: src/components/bookmark/routes.get
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/bookmark
-                  method: GET
-                  cors: true
-    getAllBookmark:
+    getAllBookmarks:
         handler: src/components/bookmark/routes.getAll
         events:
             - http:
