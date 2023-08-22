@@ -833,8 +833,8 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
             createdBy: 'octopus',
             OR: [
                 {
-                    linkedTo: {
-                        none: {} // god problem will be converted to a god topic
+                    id: {
+                        equals: 'why' // god problem will be converted to a god topic
                     }
                 },
                 {
