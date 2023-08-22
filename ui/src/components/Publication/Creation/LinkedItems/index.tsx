@@ -98,13 +98,8 @@ const Links: React.FC = (): React.ReactElement => {
                         }`;
                     })}
                     For more information on publication types, please see the{' '}
-                    <Components.Link
-                        href="/faq#pub_type_octopus"
-                    >
-                        FAQ
-                    </Components.Link>
-                    . The search box below has been filtered to only show {linkableEntityLabel}s that can be linked to
-                    your publication type.{' '}
+                    <Components.Link href="/faq#pub_type_octopus">FAQ</Components.Link>. The search box below has been
+                    filtered to only show {linkableEntityLabel}s that can be linked to your publication type.{' '}
                     {isProblem && ' Use the dropdown to switch between searching for publications or research topics.'}
                 </p>
 
