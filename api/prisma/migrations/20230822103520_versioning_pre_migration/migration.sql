@@ -50,7 +50,7 @@ CREATE TABLE "PublicationVersion" (
     "currentStatus" "PublicationStatusEnum" NOT NULL DEFAULT 'DRAFT',
     "publishedDate" TIMESTAMP(3),
     "title" TEXT,
-    "licence" "LicenceType" DEFAULT 'CC_BY',
+    "licence" "LicenceType" NOT NULL DEFAULT 'CC_BY',
     "conflictOfInterestStatus" BOOLEAN,
     "conflictOfInterestText" TEXT,
     "ethicalStatement" TEXT,
