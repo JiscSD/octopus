@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -37,7 +37,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     let publication: Interfaces.Publication | null = null;
-    let bookmark: boolean = false;
+    let bookmarkId: string | null = null;
     let error: string | null = null;
 
     const token = Helpers.getJWT(context);
@@ -51,8 +51,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/bookmark`, token);
-        bookmark = response.data;
+        const response = await api.get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token);
+        bookmarkId = response.data && response.data.length === 1 ? response.data[0].id : null;
     } catch (err) {
         console.log(err);
     }
@@ -67,7 +67,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             publication,
             userToken: token || '',
-            bookmark,
+            bookmarkId,
             publicationId: publication.id,
             protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus)
         }
@@ -77,18 +77,23 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 type Props = {
     publication: Interfaces.Publication;
     publicationId: string;
-    bookmark: boolean;
+    bookmarkId: string | null;
     userToken: string;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
     const confirmation = Contexts.useConfirmationModal();
-    const [isBookmarked, setIsBookmarked] = React.useState(props.bookmark ? true : false);
+    const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
+    const isBookmarked = bookmarkId ? true : false;
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
+
+    useEffect(() => {
+        setBookmarkId(props.bookmarkId);
+    }, [props.bookmarkId, props.publicationId]);
 
     const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
         `${Config.endpoints.publications}/${props.publicationId}`,
@@ -115,7 +120,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isBookmarkVisible = useMemo(() => {
+    const isBookmarkButtonVisible = useMemo(() => {
         if (!user || !publicationData) {
             return false;
         }
@@ -203,16 +208,29 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         if (isBookmarked) {
             //delete the bookmark
             try {
-                await api.destroy(`publications/${publicationData?.id}/bookmark`, user?.token);
-                setIsBookmarked(false);
+                await api.destroy(`bookmarks/${bookmarkId}`, user?.token);
+                setBookmarkId(null);
             } catch (err) {
                 console.log(err);
             }
         } else {
             //create the bookmark
             try {
-                await api.post(`publications/${publicationData?.id}/bookmark`, {}, user?.token);
-                setIsBookmarked(true);
+                const newBookmarkResponse = await api.post<{
+                    id: string;
+                    type: string;
+                    entityId: string;
+                    userId: string;
+                }>(
+                    `bookmarks`,
+                    {
+                        type: 'PUBLICATION',
+                        entityId: publicationData?.id
+                    },
+                    user?.token
+                );
+
+                setBookmarkId(newBookmarkResponse.data?.id);
             } catch (err) {
                 console.log(err);
             }
@@ -502,7 +520,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
                                 {publicationData.title}
                             </h1>
-                            {isBookmarkVisible && (
+                            {isBookmarkButtonVisible && (
                                 <div className="col-span-1 grid justify-items-end">
                                     <button
                                         className="h-8 hover:cursor-pointer focus:outline-none focus:ring focus:ring-yellow-200 focus:ring-offset-2 dark:outline-none dark:focus:ring dark:focus:ring-yellow-600 dark:focus:ring-offset-1"

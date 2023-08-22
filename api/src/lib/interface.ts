@@ -1,4 +1,12 @@
-import { Languages, LicenceType, Prisma, PublicationFlagCategoryEnum, PublicationType, Role } from '@prisma/client';
+import {
+    Languages,
+    LicenceType,
+    Prisma,
+    PublicationFlagCategoryEnum,
+    PublicationType,
+    Role,
+    BookmarkType
+} from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
     APIGatewayProxyEventQueryStringParameters,
@@ -14,7 +22,8 @@ export {
     PublicationStatusEnum,
     PublicationType,
     Role,
-    Topic
+    Topic,
+    BookmarkType
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -429,21 +438,53 @@ export interface ImageSentBody {
 }
 
 // @description Bookmarks
+export type GetBookmarkPathParamType = Lowercase<BookmarkType>;
 
-export interface CreateBookmarkPathParams {
+export interface CreateBookmarkRequestBody {
+    type: BookmarkType;
+    entityId: string;
+}
+
+export interface GetAllBookmarksQueryStringParameters {
+    type: BookmarkType;
+    entityId?: string;
+}
+
+export interface DeleteBookmarkPathParams {
     id: string;
 }
 
-export interface RemoveBookmarkPathParams {
+export interface BookmarkedPublication {
     id: string;
+    title: string | null;
+    createdAt: Date;
+    type: PublicationType;
+    publishedDate: Date | null;
+    coAuthors: Array<{
+        user: {
+            firstName: string;
+            lastName: string | null;
+        } | null;
+    }>;
+    doi: string;
+    updatedAt: Date;
+    user: {
+        firstName: string;
+        lastName: string | null;
+    };
 }
 
-export interface GetBookmarkPathParams {
+export interface BookmarkedTopic {
     id: string;
+    title: string;
 }
 
-export interface GetAllBookmarkPathParams {
+export interface PopulatedBookmark {
     id: string;
+    type: BookmarkType;
+    entityId: string;
+    userId: string;
+    entity: BookmarkedPublication | BookmarkedTopic;
 }
 
 /**

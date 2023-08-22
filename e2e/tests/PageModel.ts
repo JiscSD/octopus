@@ -141,7 +141,9 @@ export const PageModel = {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
-        bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'
+        publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
+        topicBookmark: 'a[href="/topics/test-topic-1"]',
+        removeTopicBookmark: 'a[href="/topics/test-topic-1"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
         title: 'input[type="text"]',
@@ -219,6 +221,8 @@ export const PageModel = {
     coauthorApprove: {},
     coauthorDeny: {},
     topic: {
-        createProblemLink: 'a:has-text("Write a linked Research Problem")'
+        createProblemLink: 'a:has-text("Write a linked Research Problem")',
+        addBookmark: '[title="Bookmark this topic"]',
+        removeBookmark: '[title="Remove bookmark"]',
     }
 };

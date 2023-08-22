@@ -242,36 +242,37 @@ export interface LicenceTypeShape {
     link: string;
 }
 
-export interface BookmarkedPublicationsData {
+export interface BookmarkedEntityData {
     id: string;
-    publicationId: string;
+    type: Types.BookmarkType;
+    entityId: string;
     userId: string;
-    publication: BookmarkedPublication;
+    entity: BookmarkedPublication | BookmarkedTopic;
 }
 
 export interface BookmarkedPublication {
     id: string;
-    title: string;
-    publicationId: string;
+    title: string | null;
     createdAt: string;
-    currentStatus: string;
-    url_slug: string;
-    description: string;
     type: Types.PublicationType;
-    publishedDate: string;
+    publishedDate: string | null;
     coAuthors: Array<{
         user: {
             firstName: string;
-            lastName: string;
-            id: string;
-        };
+            lastName: string | null;
+        } | null;
     }>;
     doi: string;
     updatedAt: string;
     user: {
         firstName: string;
-        lastName: string;
+        lastName: string | null;
     };
+}
+
+export interface BookmarkedTopic {
+    id: string;
+    title: string;
 }
 
 export interface OctopusInformation {
@@ -458,6 +459,11 @@ export interface MappedOrcidAffiliation {
     url: string | null;
 }
 
+export interface TopicPublication {
+    id: string;
+    title: string;
+}
+
 export interface TopicTranslation {
     id: string;
     topicId: string;
@@ -477,6 +483,22 @@ export interface Topic extends BaseTopic {
     updatedAt: string;
     parents: BaseTopic[];
     children: BaseTopic[];
+    publications: TopicPublication[];
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}
+
+export interface TopicsPageQuery extends ParsedUrlQuery {
+    query?: string;
 }
 
 export interface TopicsPaginatedResults {

@@ -30,7 +30,7 @@ model User {
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
-    topicBookmarks       TopicBookmark[]
+    bookmarks            Bookmark[]
 }
 
 model Verification {
@@ -207,19 +207,18 @@ model Topic {
     updatedAt               DateTime           @updatedAt
     parents                 Topic[]            @relation("TopicHierarchy")
     children                Topic[]            @relation("TopicHierarchy")
-    bookmarks               TopicBookmark[]
     publications            Publication[]
 }
 
-model TopicBookmark {
+model Bookmark {
     id            String      @id @default(cuid())
-    topicId       String
+    type          BookmarkType
+    entityId      String
     userId        String
     createdAt     DateTime    @default(now())
-    topic         Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
     user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([topicId, userId])
+    @@unique([entityId, type, userId])
 }
 
 model TopicTranslation {
@@ -471,4 +470,9 @@ enum ReferenceType {
     DOI
     URL
     TEXT
+}
+
+enum BookmarkType {
+    PUBLICATION
+    TOPIC
 }

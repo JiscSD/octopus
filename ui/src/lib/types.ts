@@ -337,3 +337,5 @@ export type CreationSteps = {
 export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
 
 export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
+
+export type BookmarkType = 'PUBLICATION' | 'TOPIC';
