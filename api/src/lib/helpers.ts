@@ -475,7 +475,7 @@ const formatPDFDate = (date: Date): string => {
 };
 
 export const createPublicationHTMLTemplate = (
-    publication: I.Publication & I.PublicationWithMetadata,
+    publication: I.PublicationWithMetadata,
     references: I.Reference[]
 ): string => {
     const {
@@ -484,7 +484,6 @@ export const createPublicationHTMLTemplate = (
         coAuthors,
         funders,
         conflictOfInterestText,
-        affiliations,
         type,
         language,
         licence,
@@ -502,9 +501,16 @@ export const createPublicationHTMLTemplate = (
     // parsing the publication content can sometimes help with unpaired opening/closing tags
     const mainText = content ? cheerio.load(content).html() : '';
 
-    const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
+    const authors = coAuthors?.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser)) || [];
 
-    if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
+    // If corresponding author is not found in coauthors list, and we have the necessary fields, mock them up
+    if (
+        !authors?.find((author) => author.linkedUser === publication.createdBy) &&
+        publication.createdBy &&
+        publication.user &&
+        publication.id &&
+        publication.versionId
+    ) {
         authors.unshift({
             id: publication.createdBy,
             approvalRequested: false,
@@ -512,7 +518,7 @@ export const createPublicationHTMLTemplate = (
             createdAt: new Date(),
             email: publication.user.email || '',
             linkedUser: publication.createdBy,
-            publicationId: publication.id,
+            publicationVersionId: publication.versionId,
             user: publication.user,
             reminderDate: null,
             isIndependent: true,
@@ -721,12 +727,7 @@ export const createPublicationHTMLTemplate = (
                     .join(', ')}
             </p>
             <p class="metadata">
-                <strong>Affiliations:</strong> ${affiliations
-                    .map((affiliation) => `<a href="${affiliation.link}">${affiliation.name}</a>`)
-                    .join(', ')}
-            </p>
-            <p class="metadata">
-                <strong>Publication Type:</strong> ${formatPublicationType(type)}
+                <strong>Publication Type:</strong> ${type ? formatPublicationType(type) : ''}
             </p>
             <p class="metadata">
                 <strong>Publication Date:</strong> ${
@@ -734,10 +735,10 @@ export const createPublicationHTMLTemplate = (
                 }
             </p>
             <p class="metadata">
-                <strong>Language:</strong> ${language.toUpperCase()}
+                <strong>Language:</strong> ${language ? language.toUpperCase() : ''}
             </p>
             <p class="metadata">
-                <strong>License Type:</strong> ${licences[licence]?.niceName}
+                <strong>License Type:</strong> ${licence ? licences[licence]?.niceName : ''}
             </p>
             <p class="metadata">
                 <strong>DOI:</strong> 
@@ -769,13 +770,13 @@ export const createPublicationHTMLTemplate = (
             </div>
 
             ${
-                linkedTo.length
+                linkedTo?.length
                     ? ` <div class="section">
                             <h5 class="section-title">Parent publications</h5>
                             ${linkedTo
                                 .map(
                                     (link) =>
-                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.title}</a></p>`
+                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.versions[0].title}</a></p>`
                                 )
                                 .join('')}
                         </div>`
@@ -783,7 +784,7 @@ export const createPublicationHTMLTemplate = (
             }
 
             ${
-                selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(type)
+                type && selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(type)
                     ? ` <div class="section">
                             <h5 class="section-title">Data access statement</h5>
                             ${
@@ -827,7 +828,7 @@ export const createPublicationHTMLTemplate = (
             <div class="section">
                 <h5 class="section-title">Funders</h5>
                 ${
-                    funders.length
+                    funders?.length
                         ? ` <div>
                     <p>This Research Problem has the following sources of funding:</p>
                     <ul class="funders-list">
@@ -858,10 +859,16 @@ export const createPublicationHTMLTemplate = (
     return htmlTemplate;
 };
 
-export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string => {
-    const authors = publication.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
+export const createPublicationHeaderTemplate = (publication: I.PublicationWithMetadata): string => {
+    const authors = publication.coAuthors?.filter((author) => author.confirmedCoAuthor && author.linkedUser) || [];
 
-    if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
+    if (
+        !authors?.find((author) => author.linkedUser === publication.createdBy) &&
+        publication.createdBy &&
+        publication.user &&
+        publication.id &&
+        publication.versionId
+    ) {
         authors.unshift({
             id: publication.createdBy,
             approvalRequested: false,
@@ -869,7 +876,7 @@ export const createPublicationHeaderTemplate = (publication: I.Publication & I.P
             createdAt: new Date(),
             email: publication.user.email || '',
             linkedUser: publication.createdBy,
-            publicationId: publication.id,
+            publicationVersionId: publication.versionId,
             user: publication.user,
             reminderDate: null,
             isIndependent: true,
@@ -919,7 +926,7 @@ export const createPublicationHeaderTemplate = (publication: I.Publication & I.P
     </div>`;
 };
 
-export const createPublicationFooterTemplate = (publication: I.Publication): string => {
+export const createPublicationFooterTemplate = (publication: I.PublicationWithMetadata): string => {
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
     const base64OctopusLogo = fs.readFileSync('assets/img/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.svg', {
         encoding: 'base64'

@@ -68,6 +68,7 @@ DROP COLUMN "fundersStatement",
 DROP COLUMN "keywords",
 DROP COLUMN "language",
 DROP COLUMN "licence",
+DROP COLUMN "publishedDate",
 DROP COLUMN "selfDeclaration",
 DROP COLUMN "title";
 

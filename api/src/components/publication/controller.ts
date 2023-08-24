@@ -6,6 +6,7 @@ import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 import * as referenceService from 'reference/service';
 import * as coAuthorService from 'coauthor/service';
 
@@ -58,8 +59,8 @@ export const get = async (
 
         // only the owner or co-authors can view publications
         if (
-            event.user?.id === publication.user.id ||
-            publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
+            event.user?.id === publication.user?.id ||
+            publication.coAuthors?.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
         ) {
             return response.json(200, publication);
         }
@@ -102,18 +103,22 @@ export const deletePublication = async (
             });
         }
 
-        if (publication.user.id !== event.user.id) {
+        if (publication.user?.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to delete this publication.'
             });
         }
 
-        // the logic here is a bit odd, but the currentStatus and publicationStatus array are not intrisinsicly linked
+        // The logic here is a bit odd, but the currentStatus and publicationStatus array are not intrinsically linked
         // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
-        // has only ever been draft
+        // has only ever been draft.
+        // Also, this means that for us to delete a publication, there must only have been one version of it.
         if (
             publication.currentStatus !== 'DRAFT' ||
-            !publication.publicationStatus.every((status) => status.status !== 'LIVE')
+            (publication.publicationStatus &&
+                !publication.publicationStatus.every((status) => status.status !== 'LIVE')) ||
+            // The latest version comes from publicationService.get, so if this is 1, there has only been one version
+            publication.versionNumber !== 1
         ) {
             return response.json(403, {
                 message: 'A publication can only be deleted if is currently a draft and has never been LIVE.'
@@ -180,13 +185,13 @@ export const update = async (
             });
         }
 
-        if (publication?.user.id !== event.user.id) {
+        if (publication.user?.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify this publication.'
             });
         }
 
-        if (publication?.currentStatus !== 'DRAFT') {
+        if (publication.currentStatus !== 'DRAFT') {
             return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
         }
 
@@ -247,7 +252,12 @@ export const updateStatus = async (
             });
         }
 
-        if (publication?.createdBy !== event.user.id) {
+        // check that we have a version ID to update the status of
+        if (!publication.versionId) {
+            throw Error('Publication does not have a current version ID');
+        }
+
+        if (publication.createdBy !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify the status of this publication.'
             });
@@ -269,7 +279,7 @@ export const updateStatus = async (
         if (currentStatus === 'DRAFT') {
             if (newStatus === 'LOCKED') {
                 // check if publication actually has co-authors
-                if (publication.coAuthors.length === 1) {
+                if (publication.coAuthors?.length === 1) {
                     return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
                 }
 
@@ -281,7 +291,7 @@ export const updateStatus = async (
                 }
 
                 // Lock publication from editing
-                await publicationService.updateStatus(publication.id, 'LOCKED');
+                await publicationVersionService.updateStatus(publication.versionId, 'LOCKED');
 
                 return response.json(200, { message: 'Publication status updated to LOCKED.' });
             }
@@ -300,10 +310,10 @@ export const updateStatus = async (
         if (currentStatus === 'LOCKED') {
             if (newStatus === 'DRAFT') {
                 // Update status to 'DRAFT'
-                await publicationService.updateStatus(publicationId, newStatus);
+                await publicationVersionService.updateStatus(publication.versionId, newStatus);
 
                 // Cancel co author approvals
-                await coAuthorService.resetCoAuthors(publication?.id);
+                await coAuthorService.resetCoAuthors(publicationId);
 
                 return response.json(200, {
                     message: 'Publication unlocked for editing'
@@ -321,24 +331,28 @@ export const updateStatus = async (
             }
         }
 
-        const updatedPublication = await publicationService.updateStatus(publicationId, newStatus);
+        const updatedVersion = await publicationVersionService.updateStatus(publication.versionId, newStatus);
 
         // now that the publication is LIVE, we store in opensearch
         await publicationService.createOpenSearchRecord({
-            id: updatedPublication.id,
-            type: updatedPublication.type,
-            title: updatedPublication.title,
-            licence: updatedPublication.licence,
-            description: updatedPublication.description,
-            keywords: updatedPublication.keywords,
-            content: updatedPublication.content,
-            publishedDate: updatedPublication.publishedDate,
-            cleanContent: htmlToText.convert(updatedPublication.content)
+            id: updatedVersion.id,
+            type: updatedVersion.publication.type,
+            title: updatedVersion.title,
+            licence: updatedVersion.licence,
+            description: updatedVersion.description,
+            keywords: updatedVersion.keywords,
+            content: updatedVersion.content,
+            publishedDate: updatedVersion.publishedDate,
+            cleanContent: htmlToText.convert(updatedVersion.content)
         });
 
         const references = await referenceService.getAllByPublication(publicationId);
 
         // Publication is live, so update the DOI
+        if (!publication.doi) {
+            throw Error('Publication doi is not defined');
+        }
+
         await helpers.updateDOI(publication.doi, publication, references);
 
         // send message to the pdf generation queue

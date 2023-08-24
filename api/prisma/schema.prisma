@@ -58,7 +58,6 @@ model Publication {
     url_slug                           String                 @unique @default(cuid())
     type                               PublicationType
     doi                                String
-    publishedDate                      DateTime?
     createdBy                          String
     createdAt                          DateTime               @default(now())
     updatedAt                          DateTime               @updatedAt
