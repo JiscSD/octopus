@@ -81,9 +81,9 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
 
     return (
         <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
-            <div className="flex flex-wrap items-center sm:flex-nowrap sm:space-x-4">
+            <div className="flex items-center gap-4">
                 <HeadlessUI.Combobox.Input
-                    className="mr-4 mt-4 w-2/3 rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
+                    className="w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
                     autoComplete="off"
                     displayValue={(publication: Interfaces.Publication) => {
                         return publication?.title || '';
@@ -93,7 +93,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                 />
                 <Components.Button
                     title="Add link"
-                    className="mt-4"
+                    className="flex-shrink-0"
                     disabled={isValidating || props.loading || !selectedPublication}
                     onClick={createLink}
                     endIcon={
@@ -112,7 +112,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                 leaveTo="opacity-0"
                 afterLeave={() => setSearch('')}
             >
-                <HeadlessUI.Combobox.Options className="absolute z-10 mt-2 max-h-96 w-2/3 overflow-scroll rounded bg-white-50 shadow-xl">
+                <HeadlessUI.Combobox.Options className="absolute z-10 mt-2 max-h-96 overflow-scroll rounded bg-white-50 shadow-xl">
                     {!isValidating &&
                         results.data.map((publication: Interfaces.Publication, index: number) => (
                             <HeadlessUI.Combobox.Option

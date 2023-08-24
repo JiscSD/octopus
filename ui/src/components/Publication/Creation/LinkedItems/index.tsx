@@ -112,35 +112,39 @@ const Links: React.FC = (): React.ReactElement => {
 
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
-                <select
-                    name="linked-entity-type"
-                    id="linked-entity-type"
-                    onChange={(e) => {
-                        const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
-                        setEntityType(value);
-                    }}
-                    value={entityType}
-                    className="!mt-0 mr-4 block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
-                >
-                    <option value="PUBLICATION">Publications</option>
-                    <option value="TOPIC">Research topics</option>
-                </select>
-                {entityType === 'PUBLICATION' ? (
-                    <Components.LinkedPublicationsCombobox
-                        fetchAndSetLinks={fetchAndSetLinks}
-                        setError={setError}
-                        loading={loading}
-                        setLoading={setLoading}
-                    />
-                ) : (
-                    <Components.LinkedTopicsCombobox
-                        fetchAndSetLinks={fetchAndSetLinks}
-                        setError={setError}
-                        loading={loading}
-                        setLoading={setLoading}
-                        topics={topics}
-                    />
-                )}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-wrap">
+                    <select
+                        name="linked-entity-type"
+                        id="linked-entity-type"
+                        onChange={(e) => {
+                            const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
+                            setEntityType(value);
+                        }}
+                        value={entityType}
+                        className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
+                    >
+                        <option value="PUBLICATION">Publications</option>
+                        <option value="TOPIC">Research topics</option>
+                    </select>
+                    <div className="flex-1">
+                        {entityType === 'PUBLICATION' ? (
+                            <Components.LinkedPublicationsCombobox
+                                fetchAndSetLinks={fetchAndSetLinks}
+                                setError={setError}
+                                loading={loading}
+                                setLoading={setLoading}
+                            />
+                        ) : (
+                            <Components.LinkedTopicsCombobox
+                                fetchAndSetLinks={fetchAndSetLinks}
+                                setError={setError}
+                                loading={loading}
+                                setLoading={setLoading}
+                                topics={topics}
+                            />
+                        )}
+                    </div>
+                </div>
             </div>
 
             {error && !loading && <Components.Alert severity="ERROR" title={error} allowDismiss />}
