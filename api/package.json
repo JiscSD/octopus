@@ -26,6 +26,7 @@
         "insertTestTopics": "ts-node prisma/insertTestTopics.ts",
         "convertResearchTopics": "ts-node -r tsconfig-paths/register prisma/convertResearchTopics.ts",
         "convertPublicationBookmarks": "ts-node prisma/convertPublicationBookmarks.ts",
+        "migrateToVersionedPublications": "ts-node -r tsconfig-paths/register prisma/migrateToVersionedPublications.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",
