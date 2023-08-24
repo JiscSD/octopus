@@ -141,14 +141,6 @@ export interface UpdatePublicationRequestBody {
     topics?: string[];
 }
 
-export interface UpdatePublicationData extends Omit<UpdatePublicationRequestBody, 'topics'> {
-    topics?: {
-        set: {
-            id: string;
-        }[];
-    };
-}
-
 export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';

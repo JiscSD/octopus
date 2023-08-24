@@ -500,18 +500,3 @@ export interface TopicsPaginatedResults {
 export interface TopicsPageQuery extends ParsedUrlQuery {
     query?: string;
 }
-
-export interface TopicsPaginatedResults {
-    offset: number;
-    limit: number;
-    total: number;
-    results: {
-        id: string;
-        title: string;
-        createdAt: Date;
-    }[];
-}
-
-export interface TopicsPageQuery extends ParsedUrlQuery {
-    query?: string;
-}

@@ -222,9 +222,8 @@ export const update = async (
 
         const updateContent = {
             ...event.body,
-            ...(event.body.content && { content: helpers.getSafeHTML(event.body.content) }),
-            ...(event.body.topics && { topics: { set: event.body.topics.map((topicId) => ({ id: topicId })) } })
-        } as I.UpdatePublicationData;
+            ...(event.body.content && { content: helpers.getSafeHTML(event.body.content) })
+        };
 
         const updatedPublication = await publicationService.update(event.pathParameters.id, updateContent);
 
