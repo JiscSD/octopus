@@ -112,7 +112,7 @@ const Links: React.FC = (): React.ReactElement => {
 
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-wrap">
+                <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
                     <select
                         name="linked-entity-type"
                         id="linked-entity-type"
