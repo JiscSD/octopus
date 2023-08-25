@@ -17,7 +17,6 @@ const BlogCard: React.FC<Props> = (props) => {
             <h3 className="blog-card-title font-montserrat text-lg font-bold leading-snug text-grey-900 transition-colors dark:text-white-50 2xl:text-xl">
                 {props.title}
             </h3>
-
             <div className="flex h-full flex-col justify-between gap-6">
                 <div className="blog-card-text text-sm text-grey-800 transition-colors dark:text-white-50 lg:text-base">
                     {shortBlogText}
