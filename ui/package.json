@@ -24,6 +24,8 @@
         "lighthouse": "lhci autorun"
     },
     "dependencies": {
+        "@contentful/rich-text-plain-text-renderer": "^16.0.6",
+        "@contentful/rich-text-react-renderer": "^15.17.1",
         "@headlessui/react": "^1.7.15",
         "@heroicons/react": "^2.0.18",
         "@paralleldrive/cuid2": "^2.2.1",
@@ -42,6 +44,7 @@
         "@tiptap/starter-kit": "^2.0.4",
         "@types/react-beautiful-dnd": "^13.1.4",
         "axios": "^1.4.0",
+        "contentful": "^10.5.0",
         "framer-motion": "^10.13.2",
         "html-react-parser": "^4.2.0",
         "js-cookie": "^3.0.5",
@@ -61,6 +64,7 @@
         "zustand": "^4.3.9"
     },
     "devDependencies": {
+        "@contentful/rich-text-types": "^16.2.1",
         "@lhci/cli": "^0.12.0",
         "@tailwindcss/line-clamp": "^0.4.4",
         "@tailwindcss/typography": "^0.5.9",
