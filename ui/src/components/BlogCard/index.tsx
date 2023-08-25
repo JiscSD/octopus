@@ -21,7 +21,6 @@ const BlogCard: React.FC<Props> = (props) => {
                 <div className="blog-card-text text-sm text-grey-800 transition-colors dark:text-white-50 lg:text-base">
                     {shortBlogText}
                 </div>
-
                 <p className="blog-card-footer text-xs font-medium tracking-wide text-grey-800 transition-colors dark:text-grey-100">
                     By {props.author} | {props.createdAt}
                 </p>
