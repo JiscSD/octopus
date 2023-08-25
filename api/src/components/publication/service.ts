@@ -4,7 +4,7 @@ import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
-import { Links } from '@prisma/client';
+import { Links, Prisma } from '@prisma/client';
 import { Browser, launch } from 'puppeteer-core';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
@@ -826,15 +826,15 @@ export const generatePDF = async (publication: I.Publication & I.PublicationWith
     }
 };
 
-export const getResearchTopics = () =>
+export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInput = {}) =>
     client.prisma.publication.findMany({
         where: {
             type: 'PROBLEM',
             createdBy: 'octopus',
             OR: [
                 {
-                    linkedTo: {
-                        none: {} // god problem will be converted to a god topic
+                    id: {
+                        equals: 'why' // god problem will be converted to a god topic
                     }
                 },
                 {
@@ -845,7 +845,8 @@ export const getResearchTopics = () =>
             ],
             References: {
                 none: {}
-            }
+            },
+            ...additionalFilters
         },
         include: {
             user: {
