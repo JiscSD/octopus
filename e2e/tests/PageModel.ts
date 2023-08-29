@@ -220,6 +220,18 @@ export const PageModel = {
     topic: {
         createProblemLink: 'a:has-text("Write a linked Research Problem")',
         addBookmark: '[title="Bookmark this topic"]',
-        removeBookmark: '[title="Remove bookmark"]',
+        removeBookmark: '[title="Remove bookmark"]'
+    },
+    blog: {
+        pageTitle: 'h1:has-text("The Octopus Blog")',
+        pageDescription: 'h2:has-text("Stay up to date with the latest from the Octopus team")',
+        followOnTwitter: 'h4:has-text("Follow Octopus on Twitter")',
+        paginationInfo: '#pagination-info',
+        nextButton: 'button:has-text("Next")',
+        prevButton: 'button:has-text("Previous")',
+        blogCard: '.blog-card',
+        blogCardTitle: '.blog-card-title',
+        blogCardText: '.blog-card-text',
+        blogCardFooter: '.blog-card-footer'
     }
 };
