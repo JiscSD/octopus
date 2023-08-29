@@ -4,17 +4,72 @@ import * as helpers from '../lib/helpers';
 const updateDoi = async (): Promise<void> => {
     const publications = await client.prisma.publication.findMany({
         where: {
-            currentStatus: 'LIVE'
+            versions: {
+                some: {
+                    isCurrent: true,
+                    currentStatus: 'LIVE'
+                }
+            }
         },
         include: {
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
+            versions: {
+                where: {
+                    isCurrent: true
                 },
-                orderBy: {
-                    createdAt: 'desc'
+                include: {
+                    publicationStatus: {
+                        select: {
+                            status: true,
+                            createdAt: true,
+                            id: true
+                        },
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
+                    funders: {
+                        select: {
+                            id: true,
+                            city: true,
+                            country: true,
+                            name: true,
+                            link: true,
+                            ror: true
+                        }
+                    },
+                    References: {
+                        select: {
+                            id: true,
+                            type: true,
+                            text: true,
+                            location: true,
+                            publicationVersionId: true
+                        }
+                    },
+                    coAuthors: {
+                        select: {
+                            id: true,
+                            email: true,
+                            linkedUser: true,
+                            publicationVersionId: true,
+                            confirmedCoAuthor: true,
+                            approvalRequested: true,
+                            createdAt: true,
+                            reminderDate: true,
+                            isIndependent: true,
+                            affiliations: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        }
+                    }
                 }
             },
             publicationFlags: {
@@ -48,63 +103,15 @@ const updateDoi = async (): Promise<void> => {
                     updatedAt: true
                 }
             },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true
-                }
-            },
-            affiliations: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true
-                }
-            },
-            References: {
-                select: {
-                    id: true,
-                    type: true,
-                    text: true,
-                    location: true,
-                    publicationId: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
             linkedTo: {
                 where: {
                     publicationToRef: {
-                        currentStatus: 'LIVE'
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
                     }
                 },
                 select: {
@@ -112,11 +119,18 @@ const updateDoi = async (): Promise<void> => {
                     publicationToRef: {
                         select: {
                             id: true,
-                            title: true,
-                            publishedDate: true,
-                            currentStatus: true,
-                            description: true,
-                            keywords: true,
+                            versions: {
+                                where: {
+                                    isCurrent: true
+                                },
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            },
                             type: true,
                             doi: true,
                             user: {
@@ -134,7 +148,12 @@ const updateDoi = async (): Promise<void> => {
             linkedFrom: {
                 where: {
                     publicationFromRef: {
-                        currentStatus: 'LIVE'
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
                     }
                 },
                 select: {
@@ -142,11 +161,18 @@ const updateDoi = async (): Promise<void> => {
                     publicationFromRef: {
                         select: {
                             id: true,
-                            title: true,
-                            publishedDate: true,
-                            currentStatus: true,
-                            description: true,
-                            keywords: true,
+                            versions: {
+                                where: {
+                                    isCurrent: true
+                                },
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            },
                             type: true,
                             doi: true,
                             user: {
@@ -172,9 +198,17 @@ const updateDoi = async (): Promise<void> => {
         }
     });
 
+    // Simplify publications
+    const simplifiedPublications = publications.map((publication) => {
+        // Discard versionOf field from current version
+        const { versionOf, ...versionRest } = publication.versions[0];
+
+        return { ...versionRest, versionId: versionRest.id, ...publication };
+    });
+
     let index = 1;
 
-    for (const publication of publications) {
+    for (const publication of simplifiedPublications) {
         await helpers.updateDOI(publication.doi, publication, publication.References).catch((err) => console.log(err));
         console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
         index++;

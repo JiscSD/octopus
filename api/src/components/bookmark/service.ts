@@ -99,20 +99,8 @@ export const getMany = async (
                         },
                         select: {
                             id: true,
-                            title: true,
                             createdAt: true,
                             type: true,
-                            publishedDate: true,
-                            coAuthors: {
-                                select: {
-                                    user: {
-                                        select: {
-                                            firstName: true,
-                                            lastName: true
-                                        }
-                                    }
-                                }
-                            },
                             doi: true,
                             updatedAt: true,
                             user: {
@@ -120,12 +108,37 @@ export const getMany = async (
                                     firstName: true,
                                     lastName: true
                                 }
+                            },
+                            versions: {
+                                where: {
+                                    isCurrent: true
+                                },
+                                select: {
+                                    publishedDate: true,
+                                    title: true,
+                                    coAuthors: {
+                                        select: {
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     });
 
                     if (entity) {
-                        populatedBookmarks[idx] = { ...bookmarks[idx], entity };
+                        // Put data from latest version into entity
+                        const { versions, ...entityRest } = entity;
+                        const entityWithData = {
+                            ...entityRest,
+                            ...versions[0]
+                        };
+                        populatedBookmarks[idx] = { ...bookmarks[idx], entity: entityWithData };
                     }
 
                     break;

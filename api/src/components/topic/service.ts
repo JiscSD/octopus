@@ -58,16 +58,30 @@ export const get = async (id: string) => {
             publications: {
                 select: {
                     id: true,
-                    title: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
+                    versions: {
+                        where: {
+                            isCurrent: true,
+                            currentStatus: 'LIVE'
+                        },
+                        select: {
+                            title: true
+                        }
+                    }
                 }
             }
         }
     });
 
-    return topic;
+    // Squash publication data
+    const simplifiedTopic = {
+        ...topic,
+        publications: topic?.publications.map((publication) => ({
+            id: publication.id,
+            title: publication.versions[0].title
+        }))
+    };
+
+    return simplifiedTopic;
 };
 
 export const getPaginatedResults = async (filters: I.TopicsFilters) => {

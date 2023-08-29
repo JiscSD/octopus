@@ -55,7 +55,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: 'Link already exists.' });
         }
 
-        const link = await linkService.create(event.body.from, event.body.to);
+        const link = await linkService.create(event.body.from, event.body.to, toPublication.versionId);
 
         return response.json(200, link);
     } catch (err) {
@@ -80,7 +80,7 @@ export const deleteLink = async (
             !link.publicationFromRef.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
             return response.json(404, {
-                message: 'A link can only be deleted if is currently a draft and has never been LIVE.'
+                message: 'A link can only be deleted if it has been made from a publication currently in draft state.'
             });
         }
 

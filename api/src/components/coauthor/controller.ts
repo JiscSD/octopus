@@ -3,6 +3,7 @@ import * as I from 'interface';
 import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export const get = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
@@ -101,7 +102,7 @@ export const updateAll = async (
             // notify co-authors that they've been removed (if their approval has been requested)
             for (const coAuthor of removedCoAuthors) {
                 // remove co-author from this publication
-                await coAuthorService.deleteCoAuthorByEmail(coAuthor.publicationId, coAuthor.email);
+                await coAuthorService.deleteCoAuthorByEmail(coAuthor.publicationVersionId, coAuthor.email);
 
                 if (coAuthor.approvalRequested) {
                     // notify co-author that they've been removed
@@ -117,7 +118,7 @@ export const updateAll = async (
             }
         }
 
-        await coAuthorService.updateAll(publicationId, newCoAuthorsArray);
+        await coAuthorService.updateAll(publication.versionId, newCoAuthorsArray);
 
         return response.json(200, 'Successfully updated publication authors');
     } catch (err) {
@@ -216,7 +217,11 @@ export const link = async (
                 });
             }
 
-            await coAuthorService.removeFromPublication(event.pathParameters.id, event.body.email, event.body.code);
+            await coAuthorService.removeFromPublicationVersion(
+                publication.versionId,
+                event.body.email,
+                event.body.code
+            );
 
             // notify main author about rejection
             await email.notifyCoAuthorRejection({
@@ -233,7 +238,7 @@ export const link = async (
             if (publication.coAuthors.length === 2) {
                 // this means only the creator remained and we can safely update publication status back to DRAFT
                 // to avoid publication being LOCKED without co-authors
-                await publicationService.updateStatus(publication.id, 'DRAFT');
+                await publicationVersionService.updateStatus(publication.versionId, 'DRAFT');
             }
 
             return response.json(200, 'Removed co-author from publication');
@@ -284,7 +289,7 @@ export const link = async (
             });
         }
 
-        await coAuthorService.linkUser(event.user.id, event.pathParameters.id, event.body.email, event.body.code);
+        await coAuthorService.linkUser(event.user.id, publication.versionId, event.body.email, event.body.code);
 
         return response.json(200, 'Linked user account');
     } catch (err) {
@@ -334,7 +339,7 @@ export const updateConfirmation = async (
         }
 
         // update coAuthor confirmation status
-        await coAuthorService.updateConfirmation(event.pathParameters.id, event.user.id, event.body.confirm);
+        await coAuthorService.updateConfirmation(publication.versionId, event.user.id, event.body.confirm);
 
         if (event.body.confirm) {
             // notify main author about confirmation
@@ -427,7 +432,7 @@ export const requestApproval = async (
         }
 
         // get all pending co authors
-        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublication(publicationId);
+        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublicationVersion(publication.versionId);
 
         // email pending co authors and update their record
         for (const pendingCoAuthor of pendingCoAuthors) {
@@ -440,10 +445,10 @@ export const requestApproval = async (
                 publicationTitle: publication?.title || 'No title yet'
             });
 
-            await coAuthorService.updateRequestApprovalStatus(publicationId, pendingCoAuthor.email);
+            await coAuthorService.updateRequestApprovalStatus(publication.versionId, pendingCoAuthor.email);
         }
 
-        const coAuthors = await coAuthorService.getAllByPublication(publicationId);
+        const coAuthors = await coAuthorService.getAllByPublicationVersion(publication.versionId);
 
         return response.json(200, coAuthors);
     } catch (err) {
@@ -480,7 +485,7 @@ export const sendApprovalReminder = async (
         });
     }
 
-    if (!author || author.publicationId !== id) {
+    if (!author || author.publicationVersionId !== publication.versionId) {
         return response.json(404, {
             message: 'This author does not exist on this publication'
         });

@@ -483,7 +483,7 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
 };
 
 export const createPublicationHTMLTemplate = (
-    publication: I.Publication & I.PublicationWithMetadata,
+    publication: I.PublicationWithMetadata,
     references: I.Reference[]
 ): string => {
     const {
@@ -511,6 +511,7 @@ export const createPublicationHTMLTemplate = (
 
     const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
 
+    // If corresponding author is not found in coauthors list, and we have the necessary fields, mock them up
     if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
         authors.unshift({
             id: publication.createdBy,
@@ -519,7 +520,7 @@ export const createPublicationHTMLTemplate = (
             createdAt: new Date(),
             email: publication.user.email || '',
             linkedUser: publication.createdBy,
-            publicationId: publication.id,
+            publicationVersionId: publication.versionId,
             user: publication.user,
             reminderDate: null,
             isIndependent: true,
@@ -841,7 +842,7 @@ export const createPublicationHTMLTemplate = (
                             ${linkedTo
                                 .map(
                                     (link) =>
-                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.title}</a></p>`
+                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.versions[0].title}</a></p>`
                                 )
                                 .join('')}
                         </div>`
@@ -924,7 +925,7 @@ export const createPublicationHTMLTemplate = (
     return htmlTemplate;
 };
 
-export const createPublicationHeaderTemplate = (publication: I.Publication & I.PublicationWithMetadata): string => {
+export const createPublicationHeaderTemplate = (publication: I.PublicationWithMetadata): string => {
     const authors = publication.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
 
     if (!authors.find((author) => author.linkedUser === publication.createdBy)) {
@@ -935,7 +936,7 @@ export const createPublicationHeaderTemplate = (publication: I.Publication & I.P
             createdAt: new Date(),
             email: publication.user.email || '',
             linkedUser: publication.createdBy,
-            publicationId: publication.id,
+            publicationVersionId: publication.versionId,
             user: publication.user,
             reminderDate: null,
             isIndependent: true,
@@ -985,7 +986,7 @@ export const createPublicationHeaderTemplate = (publication: I.Publication & I.P
     </div>`;
 };
 
-export const createPublicationFooterTemplate = (publication: I.Publication): string => {
+export const createPublicationFooterTemplate = (publication: I.PublicationWithMetadata): string => {
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
     const base64OctopusLogo = fs.readFileSync('assets/img/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.svg', {
         encoding: 'base64'
