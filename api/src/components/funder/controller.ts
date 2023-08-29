@@ -29,7 +29,7 @@ export const create = async (
             });
         }
 
-        const funder = await funderService.create(event.pathParameters.id, event.body);
+        const funder = await funderService.create(publication.versionId, event.body);
 
         return response.json(200, funder);
     } catch (err) {
@@ -65,7 +65,7 @@ export const destroy = async (
             });
         }
 
-        const funder = await funderService.destroy(event.pathParameters.id, event.pathParameters.funder);
+        const funder = await funderService.destroy(publication.versionId, event.pathParameters.funder);
 
         return response.json(200, funder);
     } catch (err) {
