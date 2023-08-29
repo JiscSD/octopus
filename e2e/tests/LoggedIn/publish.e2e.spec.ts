@@ -40,11 +40,11 @@ export const publicationFlowLinkedPublication = async (
     linkedPubTitle: string
 ) => {
     // Linked pub
-    await page.locator(PageModel.publish.linkedPub.input).click();
+    await page.locator(PageModel.publish.linkedItems.publicationInput).click();
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
-    await page.locator(PageModel.publish.linkedPub.addLink).click();
-    await expect(page.locator(PageModel.publish.linkedPub.deleteLink)).toBeVisible();
+    await page.locator(PageModel.publish.linkedItems.addLink).click();
+    await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
 };
@@ -345,6 +345,27 @@ test.describe('Publication flow', () => {
 
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, problemPublication);
+    });
+
+    test('Create a problem and link it to a topic', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'problem to link to topic', 'PROBLEM');
+        // Go to Linked Items tab
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
+        // Link a topic and expect it to appear below with a delete button
+        await page.locator(PageModel.publish.linkedItems.entityTypeSelect).selectOption('Research topics');
+        await page.locator(PageModel.publish.linkedItems.topicInput).click();
+        await page.keyboard.type("test");
+        await page.locator(`[role="option"]:has-text("Test topic")`).click();
+        await page.locator(PageModel.publish.linkedItems.addLink).click();
+        await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
     });
 
     test('Create a problem from an existing research topic', async ({ browser }) => {
@@ -767,7 +788,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, true);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -865,7 +886,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -915,7 +936,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -983,7 +1004,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1067,7 +1088,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1141,7 +1162,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1209,7 +1230,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1284,7 +1305,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1346,7 +1367,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1420,7 +1441,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1489,7 +1510,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1575,7 +1596,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1646,7 +1667,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1727,7 +1748,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1791,7 +1812,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, false);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
@@ -1853,7 +1874,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowAffiliations(page, true);
 
         // add linked publication
-        await (await page.waitForSelector("aside button:has-text('Linked publications')")).click();
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
         await publicationFlowLinkedPublication(
             page,
             'living organisms',
