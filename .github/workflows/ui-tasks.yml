@@ -7,6 +7,8 @@ env:
   NEXT_PUBLIC_MEDIA_BUCKET: https://science-octopus-publishing-images-int.s3.eu-west-1.amazonaws.com
   NEXT_PUBLIC_ORCID_APP_ID: APP-GXJE14DWV9NGHP5T
   NEXT_PUBLIC_ORCID_AUTH_URL: https://sandbox.orcid.org/oauth
+  NEXT_PUBLIC_CONTENTFUL_SPACE_ID: ${{secrets.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}}
+  NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN: ${{secrets.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN}}
 
 jobs:
   prettier:
