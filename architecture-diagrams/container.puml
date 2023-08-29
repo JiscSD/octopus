@@ -19,6 +19,7 @@ System(orcid, "ORCID", "Distinguishes researchers by providing them with a uniqu
 System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)")
 System(doiOrg, "doi.org", "Governs the Digital Object Identifier (DOI) system")
 System(rorOrg, "ror.org", "Registry of identifiers for research organizations")
+System(pubRouter, "Publications Router", "Forwards publications and metadata to other repositories")
 
 Rel(octopusUser, webServer, "Visits octopus.ac using", "HTTPS")
 Rel(octopusUser, ui, "Manages and browses publications using")
@@ -32,6 +33,7 @@ Rel(api, opensearch, "Reads / writes from index", "Opensearch JS client")
 Rel(api, orcid, "Gets user data from", "OAuth")
 Rel(api, datacite, "Mints a DOI per publication using")
 Rel(api, email, "Sends emails using")
+Rel(api, pubRouter, "Notifies about publications")
 Rel(email, octopusUser, "Sends emails to")
 Rel(datacite, doiOrg, "Registers octopus publication DOIs with")
 

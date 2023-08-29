@@ -43,8 +43,9 @@ module "elasticsearch" {
 }
 
 module "s3" {
-  source             = "../modules/s3"
-  environment        = local.environment
+  source       = "../modules/s3"
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "ses" {
