@@ -735,6 +735,10 @@ export interface MappedOrcidAffiliation {
     url?: string;
 }
 
+export interface AffiliationWithFormattedName extends MappedOrcidAffiliation {
+    name: string;
+}
+
 export interface LegacyAffiliation {
     name: string;
     country: string;
