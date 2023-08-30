@@ -129,20 +129,20 @@ const Links: React.FC = (): React.ReactElement => {
                         </select>
                     )}
                     <div className="flex-1">
-                        {entityType === 'PUBLICATION' ? (
-                            <Components.LinkedPublicationsCombobox
-                                fetchAndSetLinks={fetchAndSetLinks}
-                                setError={setError}
-                                loading={loading}
-                                setLoading={setLoading}
-                            />
-                        ) : (
+                        {entityType === 'TOPIC' && !!isProblem ? (
                             <Components.LinkedTopicsCombobox
                                 fetchAndSetLinks={fetchAndSetLinks}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
                                 topics={topics}
+                            />
+                        ) : (
+                            <Components.LinkedPublicationsCombobox
+                                fetchAndSetLinks={fetchAndSetLinks}
+                                setError={setError}
+                                loading={loading}
+                                setLoading={setLoading}
                             />
                         )}
                     </div>
