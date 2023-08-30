@@ -113,19 +113,21 @@ const Links: React.FC = (): React.ReactElement => {
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
                 <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
-                    <select
-                        name="linked-entity-type"
-                        id="linked-entity-type"
-                        onChange={(e) => {
-                            const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
-                            setEntityType(value);
-                        }}
-                        value={entityType}
-                        className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
-                    >
-                        <option value="PUBLICATION">Publications</option>
-                        <option value="TOPIC">Research topics</option>
-                    </select>
+                    {!!isProblem && (
+                        <select
+                            name="linked-entity-type"
+                            id="linked-entity-type"
+                            onChange={(e) => {
+                                const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
+                                setEntityType(value);
+                            }}
+                            value={entityType}
+                            className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
+                        >
+                            <option value="PUBLICATION">Publications</option>
+                            <option value="TOPIC">Research topics</option>
+                        </select>
+                    )}
                     <div className="flex-1">
                         {entityType === 'PUBLICATION' ? (
                             <Components.LinkedPublicationsCombobox
@@ -156,7 +158,7 @@ const Links: React.FC = (): React.ReactElement => {
                     entityType="PUBLICATION"
                 />
             )}
-            {!error && !!topics.length && (
+            {!error && !!topics.length && !!isProblem && (
                 <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
             {!error && !linkTos.length && !topics.length && (
