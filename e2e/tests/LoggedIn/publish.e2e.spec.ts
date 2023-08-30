@@ -368,6 +368,26 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
     });
 
+    test('Cannot link a non-problem publication to a topic', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'hypothesis that should not be linkable to a topic', 'HYPOTHESIS');
+        // Go to Linked Items tab
+        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
+        // Entity type select should not be visible
+        await expect(page.locator(PageModel.publish.linkedItems.entityTypeSelect)).not.toBeVisible();
+        // Publication combobox should be visible
+        await expect(page.locator(PageModel.publish.linkedItems.publicationInput)).toBeVisible();
+        // Topic combobox should not be visible
+        await expect(page.locator(PageModel.publish.linkedItems.topicInput)).not.toBeVisible();
+    });
+
     test('Create a problem from an existing research topic', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
