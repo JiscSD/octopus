@@ -1,7 +1,14 @@
 import * as Interfaces from '@interfaces';
 import * as Contentful from 'contentful';
 
-export type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+export type {
+    GetServerSideProps,
+    GetServerSidePropsContext,
+    GetServerSidePropsResult,
+    NextPage,
+    GetStaticProps,
+    GetStaticPaths
+} from 'next';
 
 export type { AppProps } from 'next/app';
 export type { AxiosError } from 'axios';
@@ -344,6 +351,6 @@ export type BookmarkType = 'PUBLICATION' | 'TOPIC';
 export type BlogFields = {
     title: Contentful.EntryFields.Text;
     author: Contentful.EntryFields.Text;
-    featuredImage?: Contentful.Asset;
     content: Contentful.EntryFields.RichText;
+    slug: Contentful.EntryFields.Text;
 };

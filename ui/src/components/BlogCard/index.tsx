@@ -2,7 +2,7 @@ import * as Types from '@types';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 import { useMemo } from 'react';
 
-type Props = Types.BlogFields & {
+type Props = Pick<Types.BlogFields, 'title' | 'author' | 'content'> & {
     createdAt: string;
 };
 

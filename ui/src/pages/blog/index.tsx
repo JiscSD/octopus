@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import client from '@contentfulClient';
@@ -13,7 +14,8 @@ import * as Assets from '@assets';
 import * as Helpers from '@helpers';
 
 const Blog: NextPage = (): JSX.Element => {
-    const [skip, setSkip] = React.useState(0);
+    const router = useRouter();
+    const skip = Number(router.query.skip) || 0;
     const { data, error, isLoading } = useSWR(`${skip}`, () =>
         client.getEntries({ limit: 18, skip, order: ['-sys.createdAt'] })
     );
@@ -22,7 +24,11 @@ const Blog: NextPage = (): JSX.Element => {
         if (!data) {
             return;
         }
-        setSkip((prevSkip) => prevSkip + data.limit);
+
+        await router.push({
+            pathname: router.pathname,
+            query: { skip: skip + data.limit }
+        });
         Helpers.scrollTopSmooth();
     };
 
@@ -30,7 +36,13 @@ const Blog: NextPage = (): JSX.Element => {
         if (!data) {
             return;
         }
-        setSkip((prevSkip) => (prevSkip - data.limit < 0 ? 0 : prevSkip - data.limit));
+
+        const newSkip = skip - data.limit < 0 ? 0 : skip - data.limit;
+        await router.push({
+            pathname: router.pathname,
+            query: newSkip ? { skip: newSkip } : undefined
+        });
+
         Helpers.scrollTopSmooth();
     };
 
@@ -77,7 +89,11 @@ const Blog: NextPage = (): JSX.Element => {
                             const createdAt = Helpers.formatDate(blog.sys.createdAt);
 
                             return (
-                                <Components.Link key={blog.sys.id} href={`/blog/${blog.sys.id}`}>
+                                <Components.Link
+                                    key={blog.sys.id}
+                                    href={`${router.pathname}/${blogFields.slug}?canGoBack=true`}
+                                    as={`${router.pathname}/${blogFields.slug}`}
+                                >
                                     <Components.BlogCard
                                         title={blogFields.title}
                                         content={blogFields.content}
