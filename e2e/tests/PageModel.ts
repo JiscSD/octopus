@@ -225,7 +225,7 @@ export const PageModel = {
     blog: {
         pageTitle: 'h1:has-text("The Octopus Blog")',
         pageDescription: 'h2:has-text("Stay up to date with the latest from the Octopus team")',
-        followOnTwitter: 'h4:has-text("Follow Octopus on Twitter")',
+        followOnTwitter: 'p:has-text("Follow Octopus on Twitter")',
         paginationInfo: '#pagination-info',
         nextButton: 'button:has-text("Next")',
         prevButton: 'button:has-text("Previous")',
