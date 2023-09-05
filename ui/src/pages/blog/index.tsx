@@ -51,7 +51,7 @@ const Blog: NextPage = (): JSX.Element => {
                             text={Config.urls.blog.description}
                             className="!mx-0 font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50"
                         />
-                        <h4 className="pb-8 text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                        <p className="pb-8 text-grey-700 transition-colors duration-500 dark:text-grey-50">
                             Follow Octopus on Twitter{' '}
                             <Components.Link
                                 href="https://twitter.com/octopus_ac"
@@ -65,7 +65,7 @@ const Blog: NextPage = (): JSX.Element => {
                                     className="inline transition-colors dark:fill-white-50"
                                 />
                             </Components.Link>
-                        </h4>
+                        </p>
                     </div>
                 </section>
 
