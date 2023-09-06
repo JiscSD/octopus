@@ -113,7 +113,7 @@ const Links: React.FC = (): React.ReactElement => {
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
                 <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
-                    {!!isProblem && (
+                    {isProblem && (
                         <select
                             name="linked-entity-type"
                             id="linked-entity-type"
@@ -129,7 +129,7 @@ const Links: React.FC = (): React.ReactElement => {
                         </select>
                     )}
                     <div className="flex-1">
-                        {entityType === 'TOPIC' && !!isProblem ? (
+                        {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
                                 fetchAndSetLinks={fetchAndSetLinks}
                                 setError={setError}
@@ -158,7 +158,7 @@ const Links: React.FC = (): React.ReactElement => {
                     entityType="PUBLICATION"
                 />
             )}
-            {!error && !!topics.length && !!isProblem && (
+            {!error && !!topics.length && (
                 <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
             {!error && !linkTos.length && !topics.length && (
