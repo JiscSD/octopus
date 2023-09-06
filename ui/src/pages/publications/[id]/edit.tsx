@@ -242,9 +242,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             store.updateContent(props.draftedPublication.content);
         }
 
-        if (props.draftedPublication.licence) {
-            store.updateLicence(props.draftedPublication.licence);
-        }
         if (props.draftedPublication.language) {
             store.updateLanguage(props.draftedPublication.language);
         }

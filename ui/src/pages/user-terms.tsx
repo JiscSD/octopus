@@ -229,7 +229,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <br />
                                 Subject to Section 9 and the paragraph below and in consideration of the mutual
                                 obligations and promises as set out in these Terms (the sufficiency of which is
-                                acknowledged by you and us) we hereby grant you a licence under these Terms to use the
+                                acknowledged by you and us) we hereby grant you a license under these Terms to use the
                                 Service and under the terms set out at:{' '}
                                 <Components.Link
                                     href="https://creativecommons.org/licenses/by-nc/4.0/"
@@ -255,8 +255,8 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <br />
                                 <br />
                                 When you create a publication on the Service website as a Registered User, you will be
-                                required to provide us with a licence to use your content as part of the Service under
-                                the following licence terms:{' '}
+                                required to provide us with a license to use your content as part of the Service under
+                                the following license terms:{' '}
                                 <Components.Link
                                     href="https://creativecommons.org/licenses/by-nc/4.0/."
                                     openNew={true}
@@ -300,7 +300,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     copy and content on the Service Website, other than in accordance with these Terms
-                                    or the licence terms applicable to any User Content;
+                                    or the license terms applicable to any User Content;
                                 </li>
                                 <li className="mb-6">
                                     do anything which may cause (whether on purpose or not) the introduction or spread
@@ -380,7 +380,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 The Service website contains materials which are owned by or licensed to Jisc and which
                                 are not subject to the licensing arrangements described in Section 4 above.
                                 <br /> <br />
-                                Any content not explicitly licensed under these Terms or any Creative Commons licence
+                                Any content not explicitly licensed under these Terms or any Creative Commons license
                                 should be assumed to be the property of Jisc. Such content will include (but is not
                                 limited to) logos and trading names (including but not limited to the Jisc trade mark),
                                 certain text, photographic and video images, sound recordings and the design, layout and
@@ -533,7 +533,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                                 <li className="mb-6">
                                     <span className="font-bold">Entire agreement: </span> These Terms (including the
-                                    Privacy Policy and any relevant User Content licence terms) contain all the terms
+                                    Privacy Policy and any relevant User Content license terms) contain all the terms
                                     applicable to the use of the Service and Service website by you, and form the entire
                                     agreement between you and Jisc.
                                 </li>
@@ -624,7 +624,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     means all applicable laws, statutes, regulations, decree directives, legislative
                                     enactments, orders, binding decisions of a competent Court or Tribunal, rule,
                                     regulatory policies, guidelines, codes, other binding restriction, regulatory
-                                    permits and licences applicable under law which are in force from time to time
+                                    permits and licenses applicable under law which are in force from time to time
                                     during the provision of the Service to which a party and/or any Processing of
                                     Personal Data is subject from time to time;
                                     <br />

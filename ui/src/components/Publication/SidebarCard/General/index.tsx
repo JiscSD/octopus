@@ -57,11 +57,11 @@ const General: React.FC<Props> = (props): React.ReactElement => {
             </div>
             <div className="flex">
                 <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Licence:
+                    License:
                 </span>
                 <Components.Link
                     href={Config.values.octopusInformation.licences[props.publication.licence].link}
-                    title="licence"
+                    title="license"
                     openNew={true}
                     className=" text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                 >

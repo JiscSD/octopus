@@ -34,7 +34,6 @@ let store: any = (set: (params: any) => void) => ({
                 affiliationsStatement: '',
                 affiliations: [],
                 keywords: [],
-                licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
                 references: [],
                 conflictOfInterestStatus: undefined,
@@ -76,10 +75,6 @@ let store: any = (set: (params: any) => void) => ({
     // Keywords
     keywords: [],
     updateKeywords: (keywords: string[]) => set(() => ({ keywords })),
-
-    // Licence
-    licence: Config.values.octopusInformation.licences.CC_BY.value,
-    updateLicence: (licence: Types.LicenceType) => set(() => ({ licence })),
 
     language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),

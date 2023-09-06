@@ -16,10 +16,12 @@ export const createPublication = async (page: Page, publicationTitle: string, pu
     await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.createThisPublicationButton).click()]);
 };
 
-export const publicationFlowKeyInformation = async (page: Page, licenceType: string) => {
+export const publicationFlowKeyInformation = async (page: Page) => {
     // Key Information
-    // Change licence
-    await page.locator(PageModel.publish.keyInformation.licence).selectOption(licenceType);
+    // Change license
+    // This is no longer a field - there is only one license we want people to use.
+    // We may want to reintroduce it one day, so commenting out.
+    // await page.locator(PageModel.publish.keyInformation.license).selectOption(licenseType);
     await page.locator(PageModel.publish.nextButton).click();
 };
 
@@ -32,7 +34,7 @@ export const publicationFlowAffiliations = async (page: Page, isIndependentAutho
     }
 
     await page.locator(PageModel.publish.nextButton).click();
-}
+};
 
 export const publicationFlowLinkedPublication = async (
     page: Page,
@@ -201,7 +203,6 @@ export const publicationFlowReview = async (page: Page, pubType: string, licence
 const problemPublication = {
     pubType: 'Research Problem',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -214,7 +215,6 @@ const problemPublication = {
 const hypothesisPublication = {
     pubType: 'Rationale / Hypothesis',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -227,7 +227,7 @@ const hypothesisPublication = {
 const methodPublication = {
     pubType: 'Method',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
+    license: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -240,7 +240,6 @@ const methodPublication = {
 const analysisPublication = {
     pubType: 'Analysis',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -253,7 +252,6 @@ const analysisPublication = {
 const interpretationPublication = {
     pubType: 'Interpretation',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -266,7 +264,6 @@ const interpretationPublication = {
 const realWorldApplicationPublication = {
     pubType: 'Real World Application',
     language: 'Afar',
-    licence: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
@@ -279,7 +276,6 @@ const realWorldApplicationPublication = {
 interface PublicationTestType {
     pubType: string;
     language: string;
-    licence: string;
     title: string;
     author: string;
     text: string;
@@ -292,11 +288,9 @@ interface PublicationTestType {
 export const checkPublication = async (page: Page, publication: PublicationTestType) => {
     // Wait for page to be loaded - viz will try to fetch links
     await page.waitForResponse((response) => response.url().includes('/links'));
-
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
         `aside span:has-text("${publication.language}")`,
-        `aside a:has-text("${publication.licence}")`,
         `main > section > header > div >> a:has-text("${Helpers.user1.shortName}")`,
         `h1:has-text("${publication.title}")`,
         `text=${publication.references[1].text}`,
@@ -320,7 +314,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'PROBLEM');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
@@ -366,9 +360,9 @@ test.describe('Publication flow', () => {
         // Link a topic and expect it to appear below with a delete button
         await page.locator(PageModel.publish.linkedItems.entityTypeSelect).selectOption('Research topics');
         await page.locator(PageModel.publish.linkedItems.topicInput).click();
-        await page.keyboard.type("test");
+        await page.keyboard.type('test');
         await page.locator(`[role="option"]:has-text("Test topic")`).click();
-        await page.locator(PageModel.publish.linkedItems.addLink).click();        
+        await page.locator(PageModel.publish.linkedItems.addLink).click();
         await page.waitForResponse((response) => response.url().includes('/publications/') && response.ok());
         await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
     });
@@ -409,14 +403,13 @@ test.describe('Publication flow', () => {
         // Fill in basic fields
         await page.waitForURL(`${Helpers.UI_BASE}/create?topic=test-topic-1&type=PROBLEM`);
         await page.locator(PageModel.publish.title).click();
-        await page.keyboard.type("Problem from topic");
+        await page.keyboard.type('Problem from topic');
         await page.locator(PageModel.publish.confirmPublicationType).click();
-        
+
         // Save and expect topic to be associated in response
         await page.locator(PageModel.publish.createThisPublicationButton).click();
-        const response = await page.waitForResponse(response =>
-            response.url().includes('/publications') &&
-            response.request().method() === 'POST'
+        const response = await page.waitForResponse(
+            (response) => response.url().includes('/publications') && response.request().method() === 'POST'
         );
 
         const json = JSON.parse(await response.text());
@@ -434,7 +427,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'HYPOTHESIS');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
@@ -474,7 +467,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'PROTOCOL');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
@@ -514,7 +507,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'ANALYSIS');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
@@ -554,7 +547,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'INTERPRETATION');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, true);
         await publicationFlowLinkedPublication(page, 'a', 'Analysis of Improving the quality of life for sustainable');
         await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
@@ -590,7 +583,7 @@ test.describe('Publication flow', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
 
         await createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, true);
         await publicationFlowLinkedPublication(
             page,
@@ -807,7 +800,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliation tab
         await publicationFlowAffiliations(page, true);
@@ -905,7 +898,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -955,7 +948,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1023,7 +1016,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1107,7 +1100,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1181,7 +1174,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1249,7 +1242,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1324,7 +1317,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1386,7 +1379,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1460,7 +1453,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1529,7 +1522,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1615,7 +1608,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1686,7 +1679,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1767,7 +1760,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1831,7 +1824,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, false);
@@ -1893,7 +1886,7 @@ test.describe('Publication flow + co-authors', () => {
         await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
 
         // fill 'Key information' tab
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
 
         // fill affiliations tab
         await publicationFlowAffiliations(page, true);
@@ -2031,7 +2024,7 @@ test.describe('Publication Flow + File import', () => {
     test('Create PROBLEM publication where text is filled from document import', async () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
         await createPublication(page, 'test publication - file import', 'PROBLEM');
-        await publicationFlowKeyInformation(page, 'CC_BY_NC');
+        await publicationFlowKeyInformation(page);
         await publicationFlowAffiliations(page, false);
         await publicationFlowLinkedPublication(
             page,
