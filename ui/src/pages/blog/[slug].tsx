@@ -66,16 +66,16 @@ const renderOptions: Options = {
             <h2 className="mb-4 font-montserrat text-[25px] font-semibold">{children}</h2>
         ),
         [BLOCKS.HEADING_3]: (node, children) => (
-            <h2 className="mb-4 font-montserrat text-[22px] font-semibold">{children}</h2>
+            <h3 className="mb-4 font-montserrat text-[22px] font-semibold">{children}</h3>
         ),
         [BLOCKS.HEADING_4]: (node, children) => (
-            <h2 className="mb-4 font-montserrat text-[20px] font-semibold">{children}</h2>
+            <h4 className="mb-4 font-montserrat text-[20px] font-semibold">{children}</h4>
         ),
         [BLOCKS.HEADING_5]: (node, children) => (
-            <h2 className="mb-4 font-montserrat text-[18px] font-semibold">{children}</h2>
+            <h5 className="mb-4 font-montserrat text-[18px] font-semibold">{children}</h5>
         ),
         [BLOCKS.HEADING_6]: (node, children) => (
-            <h2 className="mb-4 font-montserrat text-[16px] font-semibold">{children}</h2>
+            <h6 className="mb-4 font-montserrat text-[16px] font-semibold">{children}</h6>
         ),
         [BLOCKS.PARAGRAPH]: (node, children) => <p className="mb-6 leading-6">{children}</p>,
         [BLOCKS.EMBEDDED_ASSET]: (node) => {
