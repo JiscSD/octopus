@@ -57,7 +57,9 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                         >
                             <strong>{Config.values.octopusInformation.licences.CC_BY.fullName}</strong>
                         </Components.Link>
-                        <span className="mb-2 block text-sm lg:w-10/12">{Config.values.octopusInformation.licences.CC_BY.description}</span>
+                        <span className="mb-2 block text-sm lg:w-10/12">
+                            {Config.values.octopusInformation.licences.CC_BY.description}
+                        </span>
                         <span className="block text-sm lg:w-10/12">
                             View all{' '}
                             <Components.Link
