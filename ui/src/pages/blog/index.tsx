@@ -51,21 +51,19 @@ const Blog: NextPage = (): JSX.Element => {
                             text={Config.urls.blog.description}
                             className="!mx-0 font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50"
                         />
-                        <p className="pb-8 text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                        <Components.Link
+                            href="https://twitter.com/octopus_ac"
+                            openNew={true}
+                            ariaLabel="Twitter"
+                            className="mb-8 w-fit text-grey-700 transition-colors duration-500 dark:text-grey-50"
+                        >
                             Follow Octopus on Twitter{' '}
-                            <Components.Link
-                                href="https://twitter.com/octopus_ac"
-                                openNew={true}
-                                ariaLabel="Twitter"
-                                className="h-fit"
-                            >
-                                <Assets.Twitter
-                                    width={25}
-                                    height={25}
-                                    className="inline transition-colors dark:fill-white-50"
-                                />
-                            </Components.Link>
-                        </p>
+                            <Assets.Twitter
+                                width={25}
+                                height={25}
+                                className="inline transition-colors dark:fill-white-50"
+                            />
+                        </Components.Link>
                     </div>
                 </section>
 
