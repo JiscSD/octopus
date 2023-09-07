@@ -162,7 +162,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 content: store.content,
                 description: store.description,
                 keywords: Helpers.formatKeywords(store.keywords),
-                licence: Config.values.octopusInformation.licences.CC_BY.value, // This is no longer editable - save hard-coded value
                 language: store.language,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,
