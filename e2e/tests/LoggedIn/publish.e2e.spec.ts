@@ -227,7 +227,6 @@ const hypothesisPublication = {
 const methodPublication = {
     pubType: 'Method',
     language: 'Afar',
-    license: 'CC BY-NC 4.0',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
