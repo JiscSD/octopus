@@ -8,8 +8,13 @@ const migrateToVersionedPublications = async (): Promise<void> => {
     const versionsToCreate: Prisma.PublicationVersionCreateManyInput[] = existingPublications.map(publication => ({
         versionOf: publication.id,
         versionNumber: 1,
-        createdBy: publication.createdBy,
-        currentStatus: publication.currentStatus,
+        // This will always have been mandatory up to this point, so this OR operator is just to keep typescript happy
+        // since the field has been made optional in the pre-migration. createdBy will have a value.
+        // The same is done for other previously mandatory fields to be removed. 
+        createdBy: publication.createdBy || '',
+        createdAt: publication.createdAt as Date,
+        updatedAt: publication.updatedAt as Date,
+        currentStatus: publication.currentStatus || undefined,
         publishedDate: publication.publishedDate,
         title: publication.title,
         licence: publication.licence || undefined,
@@ -36,31 +41,6 @@ const migrateToVersionedPublications = async (): Promise<void> => {
     if (createVersions.count !== existingPublications.length) {
         throw new Error("Count mismatch between existing publications and new versions");
     }
-
-    // Adjust links - they will still be from publication to publication but should now
-    // have a reference to the version that was linked to (the only version of the
-    // publication, at this stage).
-    const existingLinks = await client.prisma.links.findMany();
-    await Promise.all(existingLinks.map(async link => {
-        // Get the ID of the version the link should point to. We should have just created this
-        const linkedVersion = await client.prisma.publicationVersion.findFirst({
-            where: {
-                versionOf: link.publicationTo
-            },
-            select: {
-                id: true
-            }
-        });
-
-        await client.prisma.links.update({
-            where: {
-                id: link.id
-            },
-            data: {
-                linkToVersion: linkedVersion?.id
-            }
-        });
-    }));
 
     // Update other relations. This is a simple case of adding a reference to the version, and
     // removing the reference to the publication itself
