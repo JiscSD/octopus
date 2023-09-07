@@ -20,12 +20,13 @@ ALTER TABLE "Funders" ADD COLUMN     "publicationVersionId" TEXT,
 ALTER COLUMN "publicationId" DROP NOT NULL;
 
 -- AlterTable
-ALTER TABLE "Links" ADD COLUMN     "linkToVersion" TEXT;
-
--- AlterTable
 ALTER TABLE "Publication" DROP COLUMN "affiliationStatement",
 ALTER COLUMN "licence" DROP NOT NULL,
-ALTER COLUMN "language" DROP NOT NULL;
+ALTER COLUMN "language" DROP NOT NULL,
+ALTER COLUMN "currentStatus" DROP NOT NULL,
+ALTER COLUMN "createdBy" DROP NOT NULL,
+ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "PublicationStatus" ADD COLUMN     "publicationVersionId" TEXT,
@@ -79,9 +80,6 @@ ALTER TABLE "References" ADD CONSTRAINT "References_publicationVersionId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "Funders" ADD CONSTRAINT "Funders_publicationVersionId_fkey" FOREIGN KEY ("publicationVersionId") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Links" ADD CONSTRAINT "Links_linkToVersion_fkey" FOREIGN KEY ("linkToVersion") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PublicationStatus" ADD CONSTRAINT "PublicationStatus_publicationVersionId_fkey" FOREIGN KEY ("publicationVersionId") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
