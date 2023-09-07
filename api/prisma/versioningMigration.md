@@ -8,13 +8,13 @@ This requires a few more steps than a typical migration in order to preserve exi
 
 ### Instructions
 1. Back up / snapshot the database to be migrated
-2. Check out the commit where only the first migration of the two we need to apply (20230824124157_versioning_pre_migration) is present
-    1. The hash for this commit is: 95aaf2fd8003fc2d396977b77eaa7625b131868c (`git checkout 95aaf2fd8003fc2d396977b77eaa7625b131868c`)
+2. Check out the commit where only the first migration of the two we need to apply (20230907140932_versioning_pre_migration) is present
+    1. The hash for this commit is: 62608fb320a45708f0a61d2e0d33ac73677079a6 (`git checkout 62608fb320a45708f0a61d2e0d33ac73677079a6`)
     2. Prisma does not allow you to apply pending migrations one by one, but we don't want to apply both of our migrations at this stage. So we need to make sure only the first migration is checked out for now
 3. Move to the `api` directory
 4. Run the first migration - on int/prod, run `npx prisma migrate deploy`. On local env, run `npx prisma migrate dev`
 5. Run the script to move the data to its new place: `npm run migrateToVersionedPublications`
-6. Check out the second migration (20230824130600_versioning_post_migration) either by getting the latest version of this branch (as long as no further migrations are added), or to be sure, use the commit hash: `git checkout c9ef8be22fdb5f40c387ad4f75e8f3ad47b48d97`
+6. Check out the second migration (20230907143139_versioning_post_migration) either by getting the latest version of this branch (as long as no further migrations are added), or to be sure, use the commit hash: `git checkout 381f14e8d981e3aa738451f16469df525284b657`
 7. Run the second migration by repeating the command you used in step 4
 8. Confirm (using e.g. prisma studio) that the migrations worked. For example, there should be the same number of rows in the Publication and PublicationVersion tables, and the fields should be populated where appropriate in the PublicationVersion table
 
