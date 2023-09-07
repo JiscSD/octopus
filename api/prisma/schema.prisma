@@ -25,7 +25,6 @@ model User {
     works                Json[]
     education            Json[]
     coAuthors            CoAuthors[]
-    Publication          Publication[]
     publicationVersions  PublicationVersion[]
     PublicationFlags     PublicationFlags[]
     flagComments         FlagComments[]
@@ -63,33 +62,6 @@ model Publication {
     linkedTo                           Links[]                @relation("from")
     linkedFrom                         Links[]                @relation("to")
     topics                             Topic[]
-    // Old fields - to be migrated from and removed
-    title                              String?
-    createdBy                          String?
-    createdAt                          DateTime?               @default(now())
-    updatedAt                          DateTime?               @updatedAt
-    publishedDate                      DateTime?
-    user                               User?                  @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    licence                            LicenceType?           @default(CC_BY)
-    conflictOfInterestStatus           Boolean?
-    conflictOfInterestText             String?
-    ethicalStatement                   String?
-    ethicalStatementFreeText           String?
-    dataPermissionsStatement           String?
-    dataPermissionsStatementProvidedBy String?
-    dataAccessStatement                String?
-    selfDeclaration                    Boolean?               @default(false)
-    description                        String?
-    keywords                           String[]
-    content                            String?
-    language                           Languages?             @default(en)
-    coAuthors                          CoAuthors[]
-    currentStatus                      PublicationStatusEnum? @default(DRAFT)
-    publicationStatus                  PublicationStatus[]
-    References                         References[]
-    funders                            Funders[]
-    fundersStatement                   String?
-    // New fields
     versions                           PublicationVersion[]
 }
 
@@ -131,10 +103,6 @@ model References {
     type                 ReferenceType
     text                 String
     location             String?
-    // Old fields - to be migrated from and removed
-    publicationId        String?
-    publication          Publication?   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    // New fields
     publicationVersionId String?
     publicationVersion   PublicationVersion?   @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
@@ -147,10 +115,6 @@ model Funders {
     link                 String
     ror                  String?
     createdAt            DateTime    @default(now())
-    // Old fields - to be migrated from and removed
-    publicationId        String?
-    publication          Publication?   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    // New fields - to be mandatory after migration
     publicationVersionId String?
     publicationVersion   PublicationVersion?   @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
@@ -171,10 +135,6 @@ model PublicationStatus {
     id            String                @id @default(cuid())
     status        PublicationStatusEnum
     createdAt     DateTime              @default(now())
-    // Old fields - to be migrated from and removed
-    publicationId String?
-    publication   Publication?           @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    // New fields
     publicationVersionId String?
     publicationVersion PublicationVersion? @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
@@ -192,16 +152,12 @@ model CoAuthors {
     affiliations             Json[]
     isIndependent            Boolean     @default(false)
     user                     User?       @relation(fields: [linkedUser], references: [id])
-    // Old fields - to be migrated from and removed
-    publicationId            String?
-    publication              Publication? @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    // New fields
     publicationVersion       PublicationVersion? @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
     publicationVersionId     String?
 
     // This @@unique needs to be disabled for the migration step because the fields involved must be mandatory.
     // It needs to be reinstated after migration with publicationVersionId, not publicationId.
-    // @@unique([publicationVersionId, email])
+    @@unique([publicationVersionId, email])
 }
 
 model PublicationFlags {
