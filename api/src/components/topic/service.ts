@@ -71,13 +71,14 @@ export const get = async (id: string) => {
 };
 
 export const getPaginatedResults = async (filters: I.TopicsFilters) => {
-    const { offset = 0, limit = 10, search = '' } = filters;
+    const { offset = 0, limit = 10, search = '', exclude = '' } = filters;
 
     const where: Prisma.TopicWhereInput = {
         title: {
             contains: search?.trim(),
             mode: 'insensitive'
-        }
+        },
+        ...(exclude && { id: { notIn: exclude.split(',') } })
     };
 
     const topics = await client.prisma.topic.findMany({

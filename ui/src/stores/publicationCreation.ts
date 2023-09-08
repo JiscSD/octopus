@@ -40,6 +40,7 @@ let store: any = (set: (params: any) => void) => ({
                 conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
+                topics: [],
                 ethicalStatement: null,
                 ethicalStatementFreeText: null,
                 dataAccessStatement: null,
@@ -92,6 +93,10 @@ let store: any = (set: (params: any) => void) => ({
     // Links
     linkTo: [],
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo })),
+
+    // Topics
+    topics: [],
+    updateTopics: (topics: Interfaces.BaseTopic[]) => set(() => ({ topics })),
 
     // Ethical statement
     ethicalStatement: null,

@@ -392,8 +392,8 @@ export const getTabCompleteness = (
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
-            case 'LINKED_PUBLICATIONS':
-                if (store.linkTo?.length) {
+            case 'LINKED_ITEMS':
+                if (store.linkTo?.length || store.topics?.length) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });

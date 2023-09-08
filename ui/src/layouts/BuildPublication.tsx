@@ -64,8 +64,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (!store.title) ready = { ready: false, message: 'You must provide a title' };
             if (!store.content) ready = { ready: false, message: 'You must provide main text' };
             if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
-            if (!store.linkTo?.length)
-                ready = { ready: false, message: 'You must link this publication to at least one other' };
+            if (!store.linkTo?.length && !store.topics?.length)
+                ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
             if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
                 ready = {
@@ -113,8 +113,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (!store.title) ready = { ready: false, message: 'You must provide a title' };
             if (!store.content) ready = { ready: false, message: 'You must provide main text' };
             if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
-            if (!store.linkTo?.length)
-                ready = { ready: false, message: 'You must link this publication to at least one other' };
+            if (!store.linkTo?.length && !store.topics?.length)
+                ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
             if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
                 ready = {

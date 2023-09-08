@@ -53,11 +53,19 @@ export const getAllByIds = async (ids: Array<string>) => {
 };
 
 export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
+    // Only if topics are passed, format them in a way that prisma can understand.
+    // This will overwrite existing topics with those whose IDs were passed in updateContent.
+    const { topics, ...dataRest } = updateContent;
+    const data = {
+        ...dataRest,
+        ...(!!updateContent.topics && { topics: { set: updateContent.topics.map((topicId) => ({ id: topicId })) } })
+    };
+
     const updatedPublication = await client.prisma.publication.update({
         where: {
             id
         },
-        data: updateContent
+        data
     });
 
     return updatedPublication;

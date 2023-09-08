@@ -138,6 +138,7 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    topics?: string[];
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -734,6 +735,10 @@ export interface MappedOrcidAffiliation {
     url?: string;
 }
 
+export interface AffiliationWithFormattedName extends MappedOrcidAffiliation {
+    name: string;
+}
+
 export interface LegacyAffiliation {
     name: string;
     country: string;
@@ -779,6 +784,7 @@ export interface TopicsFilters {
     search?: string;
     limit?: number;
     offset?: number;
+    exclude?: string;
 }
 
 export interface TopicsPaginatedResults {

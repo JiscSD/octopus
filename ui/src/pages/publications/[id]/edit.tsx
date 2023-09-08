@@ -28,11 +28,11 @@ const steps: Types.CreationSteps = {
         component: <Components.PublicationCreationAffiliations />,
         icon: <OutlineIcons.TagIcon className="h-6 w-6 text-teal-300" />
     },
-    LINKED_PUBLICATIONS: {
-        id: 'LINKED_PUBLICATIONS',
-        title: 'Linked publications',
-        subTitle: 'Linked publications',
-        component: <Components.PublicationCreationLinkedPublications />,
+    LINKED_ITEMS: {
+        id: 'LINKED_ITEMS',
+        title: 'Linked items',
+        subTitle: 'Linked items',
+        component: <Components.PublicationCreationLinkedItems />,
         icon: <OutlineIcons.CubeTransparentIcon className="h-6 w-6 text-teal-300" />
     },
     MAIN_TEXT: {
@@ -153,7 +153,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         let arr: Interfaces.CreationStep[] = [
             steps.KEY_INFORMATION,
             steps.AFFILIATIONS,
-            steps.LINKED_PUBLICATIONS,
+            steps.LINKED_ITEMS,
             steps.MAIN_TEXT,
             steps.CONFLICT_OF_INTEREST,
             steps.FUNDERS
@@ -290,6 +290,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
         store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
+        store.updateTopics(props.draftedPublication.topics);
     }, []);
 
     React.useEffect(() => {

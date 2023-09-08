@@ -64,6 +64,8 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
+    topics: Interfaces.BaseTopic[];
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
     ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
@@ -320,7 +322,7 @@ export type Languages =
 export type PublicationCreationStep =
     | 'KEY_INFORMATION'
     | 'AFFILIATIONS'
-    | 'LINKED_PUBLICATIONS'
+    | 'LINKED_ITEMS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
@@ -333,5 +335,7 @@ export type CreationSteps = {
 };
 
 export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
+
+export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
 
 export type BookmarkType = 'PUBLICATION' | 'TOPIC';

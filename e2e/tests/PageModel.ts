@@ -178,10 +178,13 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
-        linkedPub: {
-            input: 'input[placeholder="Search for publications"]',
+        linkedItems: {
+            entityTypeSelect: 'select#linked-entity-type',
+            publicationInput: 'input[placeholder="Search for publications"]',
+            topicInput: 'input[placeholder="Search for topics"]',
             addLink: 'button[aria-label="Add link"]',
-            deleteLink: 'td > button[title="Delete"]'
+            deletePublicationLink: '#linked-publication-table > tbody > tr > td > button[title="Delete"]',
+            deleteTopicLink: '#linked-topic-table > tbody > tr > td > button[title="Delete"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',
