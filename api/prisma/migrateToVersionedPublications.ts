@@ -1,3 +1,5 @@
+// Disable TS checking as this is only used against an outdated prisma schema
+// @ts-nocheck
 import * as client from 'lib/client';
 import { Prisma } from '@prisma/client';
 

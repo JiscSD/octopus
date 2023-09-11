@@ -153,8 +153,15 @@ export const createFlagComment = async (
             });
         }
 
-        // The user attempting to leave a comment, is not the flag creator, or the publication owner
-        if (flag.createdBy !== event.user.id && flag.publication.user.id !== event.user.id) {
+        // The user attempting to leave a comment is not the flag creator or the publication owner.
+        // The publication owner is defined as the user on the first version.
+        const firstVersion = flag.publication.versions.find((version) => version.versionNumber === 1);
+
+        if (!firstVersion) {
+            throw Error('Could not get first version of publication');
+        }
+
+        if (flag.createdBy !== event.user.id && firstVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to comment on this flag.'
             });

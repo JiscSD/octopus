@@ -99,23 +99,23 @@ export const getMany = async (
                         },
                         select: {
                             id: true,
-                            createdAt: true,
                             type: true,
                             doi: true,
-                            updatedAt: true,
-                            user: {
-                                select: {
-                                    firstName: true,
-                                    lastName: true
-                                }
-                            },
                             versions: {
                                 where: {
                                     isCurrent: true
                                 },
                                 select: {
                                     publishedDate: true,
+                                    createdAt: true,
+                                    updatedAt: true,
                                     title: true,
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true
+                                        }
+                                    },
                                     coAuthors: {
                                         select: {
                                             user: {

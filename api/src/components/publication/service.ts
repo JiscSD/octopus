@@ -16,16 +16,6 @@ export const getAllByIds = async (ids: Array<string>) => {
             id: {
                 in: ids
             }
-        },
-        include: {
-            user: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                    id: true,
-                    orcid: true
-                }
-            }
         }
     });
 
@@ -38,6 +28,14 @@ export const getAllByIds = async (ids: Array<string>) => {
             isCurrent: true
         },
         include: {
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    id: true,
+                    orcid: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
@@ -87,7 +85,16 @@ export const update = async (id: string, updateContent: I.UpdatePublicationReque
 
     const updatedPublication = await client.prisma.publication.update({
         where: {
-            id
+            versionOf: id,
+            isCurrent: true
+        },
+        select: {
+            id: true
+        }
+    });
+    const updatedPublication = await client.prisma.publicationVersion.update({
+        where: {
+            id: currentVersion?.id
         },
         data
     });
@@ -132,17 +139,6 @@ export const get = async (id: string, versionNumber?: number) => {
                     }
                 }
             },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
             linkedTo: {
                 where: {
                     publicationToRef: {
@@ -161,14 +157,6 @@ export const get = async (id: string, versionNumber?: number) => {
                             id: true,
                             type: true,
                             doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            },
                             versions: {
                                 select: {
                                     title: true,
@@ -200,14 +188,6 @@ export const get = async (id: string, versionNumber?: number) => {
                             id: true,
                             type: true,
                             doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            },
                             versions: {
                                 select: {
                                     title: true,
@@ -247,6 +227,17 @@ export const get = async (id: string, versionNumber?: number) => {
     const version = await client.prisma.publicationVersion.findFirst({
         where: versionWhere,
         include: {
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            },
             publicationStatus: {
                 select: {
                     status: true,
@@ -295,7 +286,7 @@ export const get = async (id: string, versionNumber?: number) => {
     });
 
     if (!version || !publication) {
-        throw Error('Failed to find publication and/or latest version data');
+        return null;
     }
 
     // Discard versionOf field
@@ -309,11 +300,11 @@ export const get = async (id: string, versionNumber?: number) => {
 export const getSeedDataPublications = async (title: string) => {
     const publications = await client.prisma.publication.findMany({
         where: {
-            createdBy: 'octopus',
             versions: {
                 some: {
                     isCurrent: true,
-                    title
+                    title,
+                    createdBy: 'octopus'
                 }
             }
         },
@@ -486,11 +477,6 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                     }
                 }
             },
-            user: {
-                connect: {
-                    id: user.id
-                }
-            },
             topics: e.topicIds?.length
                 ? {
                       connect: e.topicIds.map((topicId) => ({ id: topicId }))
@@ -498,13 +484,6 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                 : undefined
         },
         include: {
-            user: {
-                select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true
-                }
-            },
             topics: {
                 select: {
                     id: true,
@@ -515,6 +494,13 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
             },
             versions: {
                 include: {
+                    user: {
+                        select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    },
                     publicationStatus: {
                         select: {
                             status: true,
@@ -556,6 +542,13 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
             content: true,
             language: true,
             fundersStatement: true,
+            user: {
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true
+                }
+            },
             publicationStatus: {
                 select: {
                     status: true,
@@ -724,10 +717,10 @@ export const getLinksForPublication = async (id: string) => {
                    "Links"."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
-                   "pto_version".title,
-                   "pto"."createdBy",
-                   "pto_version"."publishedDate",
-                   "pto_version"."currentStatus",
+                   "pto_latest_version".title,
+                   "pto_first_version"."createdBy",
+                   "pto_latest_version"."publishedDate",
+                   "pto_latest_version"."currentStatus",
                    "pto_user"."firstName" "authorFirstName",
                    "pto_user"."lastName" "authorLastName"
 
@@ -738,12 +731,16 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
 
-              LEFT JOIN "PublicationVersion" AS pto_version
-              ON "pto".id = "pto_version"."versionOf"
-              AND "pto_version"."isCurrent" = 't'
+              LEFT JOIN "PublicationVersion" AS pto_latest_version
+              ON "pto".id = "pto_latest_version"."versionOf"
+              AND "pto_latest_version"."isCurrent" = 't'
+
+              LEFT JOIN "PublicationVersion" AS pto_first_version
+              ON "pto".id = "pto_first_version"."versionOf"
+              AND "pto_first_version"."versionNumber" = 1
 
               LEFT JOIN "User" AS pto_user
-              ON "pto"."createdBy" = "pto_user"."id"
+              ON "pto_first_version"."createdBy" = "pto_user"."id"
 
             WHERE "Links"."publicationFrom" = ${id}
 
@@ -753,10 +750,10 @@ export const getLinksForPublication = async (id: string) => {
                    l."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
-                   "pto_version".title,
-                   "pto"."createdBy",
-                   "pto_version"."publishedDate",
-                   "pto_version"."currentStatus",
+                   "pto_latest_version".title,
+                   "pto_first_version"."createdBy",
+                   "pto_latest_version"."publishedDate",
+                   "pto_latest_version"."currentStatus",
                    "pto_user"."firstName" "authorFirstName",
                    "pto_user"."lastName" "authorLastName"
 
@@ -770,12 +767,16 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
 
-              LEFT JOIN "PublicationVersion" AS pto_version
-              ON "pto".id = "pto_version"."versionOf"
-              AND "pto_version"."isCurrent" = 't'
+              LEFT JOIN "PublicationVersion" AS pto_latest_version
+              ON "pto".id = "pto_latest_version"."versionOf"
+              AND "pto_latest_version"."isCurrent" = 't'
+
+              LEFT JOIN "PublicationVersion" AS pto_first_version
+              ON "pto".id = "pto_first_version"."versionOf"
+              AND "pto_first_version"."versionNumber" = 1
 
               LEFT JOIN "User" AS pto_user
-              ON "pto"."createdBy" = "pto_user"."id"
+              ON "pto_first_version"."createdBy" = "pto_user"."id"
         )
         
         SELECT * FROM to_left
@@ -790,10 +791,10 @@ export const getLinksForPublication = async (id: string) => {
                    "Links"."publicationTo" "parentPublication",
                    "pfrom".type,
                    "pto".type "parentPublicationType",
-                   "pfrom_version"."title",
-                   "pfrom"."createdBy",
-                   "pfrom_version"."publishedDate",
-                   "pfrom_version"."currentStatus",
+                   "pfrom_latest_version"."title",
+                   "pfrom_first_version"."createdBy",
+                   "pfrom_latest_version"."publishedDate",
+                   "pfrom_latest_version"."currentStatus",
                    "pfrom_user"."firstName" "authorFirstName",
                    "pfrom_user"."lastName" "authorLastName"
 
@@ -801,15 +802,19 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "Links"."publicationFrom"
 
-              LEFT JOIN "PublicationVersion" AS pfrom_version
-              ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isCurrent" = 't'
+              LEFT JOIN "PublicationVersion" AS pfrom_latest_version
+              ON "pfrom".id = "pfrom_latest_version"."versionOf"
+              AND "pfrom_latest_version"."isCurrent" = 't'
+
+              LEFT JOIN "PublicationVersion" AS pfrom_first_version
+              ON "pfrom".id = "pfrom_first_version"."versionOf"
+              AND "pfrom_first_version"."versionNumber" = 1
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
 
               LEFT JOIN "User" AS pfrom_user
-              ON "pfrom"."createdBy" = "pfrom_user"."id"
+              ON "pfrom_first_version"."createdBy" = "pfrom_user"."id"
 
             WHERE "Links"."publicationTo" = ${id}
 
@@ -819,10 +824,10 @@ export const getLinksForPublication = async (id: string) => {
                    l."publicationTo" "parentPublication",
                    "pfrom".type,
                    "pto".type "parentPublicationType",
-                   "pfrom_version"."title",
-                   "pfrom"."createdBy",
-                   "pfrom_version"."publishedDate",
-                   "pfrom_version"."currentStatus",
+                   "pfrom_latest_version"."title",
+                   "pfrom_first_version"."createdBy",
+                   "pfrom_latest_version"."publishedDate",
+                   "pfrom_latest_version"."currentStatus",
                    "pfrom_user"."firstName" "authorFirstName",
                    "pfrom_user"."lastName" "authorLastName"
               FROM "Links" l
@@ -832,15 +837,19 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
 
-              LEFT JOIN "PublicationVersion" AS pfrom_version
-              ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isCurrent" = 't'
+              LEFT JOIN "PublicationVersion" AS pfrom_latest_version
+              ON "pfrom".id = "pfrom_latest_version"."versionOf"
+              AND "pfrom_latest_version"."isCurrent" = 't'
+
+              LEFT JOIN "PublicationVersion" AS pfrom_first_version
+              ON "pfrom".id = "pfrom_first_version"."versionOf"
+              AND "pfrom_first_version"."versionNumber" = 1
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
 
               LEFT JOIN "User" AS pfrom_user
-              ON "pfrom"."createdBy" = "pfrom_user"."id"
+              ON "pfrom_first_version"."createdBy" = "pfrom_user"."id"
 
               WHERE "pto"."type" != 'PROBLEM'
         )
@@ -977,11 +986,10 @@ export const generatePDF = async (publication: I.PublicationWithMetadata): Promi
     }
 };
 
-export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInput = {}) =>
-    client.prisma.publication.findMany({
+export const getResearchTopics = async () => {
+    const publications = await client.prisma.publication.findMany({
         where: {
             type: 'PROBLEM',
-            createdBy: 'octopus',
             OR: [
                 {
                     id: {
@@ -1005,6 +1013,7 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
             ...additionalFilters,
             versions: {
                 some: {
+                    createdBy: 'octopus',
                     isCurrent: true,
                     References: {
                         none: {}
@@ -1013,12 +1022,19 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
             }
         },
         include: {
-            user: {
-                select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    orcid: true
+            versions: {
+                where: {
+                    isCurrent: true
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                            orcid: true
+                        }
+                    }
                 }
             },
             linkedTo: {
@@ -1029,16 +1045,16 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
                             id: true,
                             type: true,
                             doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            },
                             versions: {
                                 select: {
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    },
                                     title: true,
                                     publishedDate: true,
                                     currentStatus: true,
@@ -1058,16 +1074,16 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
                             id: true,
                             type: true,
                             doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            },
                             versions: {
                                 select: {
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    },
                                     title: true,
                                     publishedDate: true,
                                     currentStatus: true,
@@ -1082,3 +1098,13 @@ export const getResearchTopics = (additionalFilters: Prisma.PublicationWhereInpu
             PublicationBookmarks: true
         }
     });
+
+    // Merge versioned data into the publication records
+    const mergedPublications = publications.map((publication) => {
+        const currentVersion = publication.versions[0];
+
+        return { ...currentVersion, ...publication };
+    });
+
+    return mergedPublications;
+};

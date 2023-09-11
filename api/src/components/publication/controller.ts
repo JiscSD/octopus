@@ -195,12 +195,8 @@ export const update = async (
             return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
         }
 
-        if (event.body.id) {
-            const isIdInUse = await publicationService.isIdInUse(event.body.id);
-
-            if (isIdInUse) {
-                return response.json(404, { message: 'ID is already in use.' });
-            }
+        if (event.body.content) {
+            event.body.content = helpers.getSafeHTML(event.body.content);
         }
 
         if (

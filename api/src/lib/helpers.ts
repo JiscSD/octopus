@@ -85,7 +85,7 @@ export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
 export const updateDOI = async (
     doi: string,
     publication: I.PublicationWithMetadata,
-    references: I.Reference[]
+    references: I.AbstractedReference[]
 ): Promise<I.DOIResponse> => {
     if (!publication) {
         throw Error('Publication not found');
@@ -484,7 +484,7 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
 
 export const createPublicationHTMLTemplate = (
     publication: I.PublicationWithMetadata,
-    references: I.Reference[]
+    references: I.AbstractedReference[]
 ): string => {
     const {
         title,
