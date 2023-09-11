@@ -1,940 +1,683 @@
-const publicationSeeds = [
+import { Prisma } from '@prisma/client';
+
+const publicationSeeds: Prisma.PublicationCreateInput[] = [
     {
         id: 'publication-1',
-        title: 'Publication 1',
-        type: 'PEER_REVIEW',
-        content: 'Publication 1',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
         doi: '10.82259/cty5-2g01',
-        publicationStatus: {
+        type: 'PEER_REVIEW',
+        versions: {
             create: {
-                status: 'DRAFT'
+                id: 'publication-1-v1',
+                versionNumber: 1,
+                title: 'Publication 1',
+                content: 'Publication 1',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: { status: 'DRAFT' } }
             }
         }
     },
     {
         id: 'publication-2',
-        title: 'Publication 2',
-        type: 'PROBLEM',
-        content: 'Publication 2',
-        user: {
-            connect: {
-                id: 'test-user-2'
-            }
-        },
         doi: '10.82259/cty5-2g02',
-        publicationStatus: {
+        type: 'PROBLEM',
+        versions: {
             create: {
-                status: 'DRAFT'
+                id: 'publication-2-v1',
+                versionNumber: 1,
+                title: 'Publication 2',
+                content: 'Publication 2',
+                user: { connect: { id: 'test-user-2' } },
+                publicationStatus: { create: { status: 'DRAFT' } }
             }
         }
     },
-
-    // PROBLEM
     {
         id: 'publication-problem-live',
-        title: 'Publication PROBLEM-LIVE',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        content: 'Publication PROBLEM-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g03',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        funders: {
+        type: 'PROBLEM',
+        versions: {
             create: {
-                id: 'publication-problem-live-funder',
-                name: 'name',
-                country: 'country',
-                city: 'city',
-                link: 'https://example.com'
-            }
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-1-problem-live',
-                    email: 'test-user-1@jisc.ac.uk',
-                    code: 'test-code-user-1',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-1'
+                id: 'publication-problem-live-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-LIVE',
+                content: 'Publication PROBLEM-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 },
-                {
-                    id: 'coauthor-test-user-6-problem-live',
-                    email: 'test-user-6@jisc.ac.uk',
-                    code: 'test-code-user-6',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-6'
-                }
-            ]
-        },
-        publicationFlags: {
-            create: {
-                id: 'publication-problem-live-flag',
-                createdBy: 'test-user-2',
-                category: 'PLAGIARISM',
-                flagComments: {
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-problem-live',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-code-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1'
+                        },
+                        {
+                            id: 'coauthor-test-user-6-problem-live',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-6'
+                        }
+                    ]
+                },
+                funders: {
                     create: {
-                        createdBy: 'test-user-2',
-                        comment: 'This is a comment'
+                        id: 'publication-problem-live-funder',
+                        name: 'name',
+                        country: 'country',
+                        city: 'city',
+                        link: 'https://example.com'
                     }
                 }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
-                }
-            ]
         }
     },
     {
         id: 'locked-publication-problem-confirmed-co-authors',
-        title: 'LOCKED Publication PROBLEM confirmed co-authors',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        content: 'LOCKED Publication PROBLEM confirmed co-authors',
-        conflictOfInterestStatus: false,
-        currentStatus: 'LOCKED',
         doi: '10.82259/cty5-2g03',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'test-user-1',
-                    email: 'test-user-1@jisc.ac.uk',
-                    code: 'test-user-1',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-1',
-                    isIndependent: true,
-                    affiliations: []
-                },
-                {
-                    id: 'test-user-2',
-                    email: 'test-user-2@jisc.ac.uk',
-                    code: 'test-user-2',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-2',
-                    isIndependent: true,
-                    affiliations: []
-                }
-            ]
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LOCKED',
-                    createdAt: '2022-01-22T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'locked-publication-problem-confirmed-co-authors-v1',
+                versionNumber: 1,
+                title: 'LOCKED Publication PROBLEM confirmed co-authors',
+                conflictOfInterestStatus: false,
+                content: 'LOCKED Publication PROBLEM confirmed co-authors',
+                currentStatus: 'LOCKED',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LOCKED', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
+                },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'test-user-1',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true,
+                            affiliations: []
+                        },
+                        {
+                            id: 'test-user-2',
+                            email: 'test-user-2@jisc.ac.uk',
+                            code: 'test-user-2',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-2',
+                            isIndependent: true,
+                            affiliations: []
+                        }
+                    ]
+                }
             }
         }
     },
     {
         id: 'publication-problem-draft',
-        title: 'Publication PROBLEM-DRAFT',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        content: 'Publication PROBLEM-DRAFT',
-        currentStatus: 'DRAFT',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g04',
-        user: {
-            connect: {
-                id: 'test-user-5'
-            }
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
-            }
-        },
-        keywords: ['science', 'technology'],
-        funders: {
-            create: {
-                id: 'publication-problem-draft-funder',
-                name: 'name',
-                country: 'country',
-                city: 'city',
-                link: 'https://example.com'
-            }
-        },
-        affiliations: {
-            create: {
-                id: 'publication-problem-draft-affiliation',
-                name: 'name',
-                country: 'country',
-                city: 'city',
-                link: 'https://example.com'
-            }
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-5-problem-draft',
-                    email: 'test-user-5@jisc.ac.uk',
-                    code: 'test-code-user-5',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5',
-                    isIndependent: true,
-                    affiliations: []
+                id: 'publication-problem-draft-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication PROBLEM-DRAFT',
+                currentStatus: 'DRAFT',
+                keywords: ['science', 'technology'],
+                user: { connect: { id: 'test-user-5' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-5-problem-draft',
+                            email: 'test-user-5@jisc.ac.uk',
+                            code: 'test-code-user-5',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-5',
+                            isIndependent: true,
+                            affiliations: []
+                        },
+                        {
+                            id: 'coauthor-test-user-6-problem-draft',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-6'
+                        },
+                        {
+                            id: 'coauthor-test-user-7-problem-draft',
+                            email: 'test-user-7@jisc.ac.uk',
+                            code: 'test-code-user-7',
+                            confirmedCoAuthor: false
+                        },
+                        {
+                            id: 'coauthor-test-user-8-problem-draft',
+                            email: 'test-user-8@jisc.ac.uk',
+                            code: 'test-code-user-8',
+                            confirmedCoAuthor: false
+                        }
+                    ]
                 },
-                {
-                    id: 'coauthor-test-user-6-problem-draft',
-                    email: 'test-user-6@jisc.ac.uk',
-                    code: 'test-code-user-6',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-6'
-                },
-                {
-                    id: 'coauthor-test-user-7-problem-draft',
-                    email: 'test-user-7@jisc.ac.uk',
-                    code: 'test-code-user-7',
-                    confirmedCoAuthor: false
-                },
-                {
-                    id: 'coauthor-test-user-8-problem-draft',
-                    email: 'test-user-8@jisc.ac.uk',
-                    code: 'test-code-user-8',
-                    confirmedCoAuthor: false
+                funders: {
+                    create: {
+                        id: 'publication-problem-draft-funder',
+                        name: 'name',
+                        country: 'country',
+                        city: 'city',
+                        link: 'https://example.com'
+                    }
                 }
-            ]
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
+            }
         }
     },
     {
         id: 'publication-problem-locked',
-        title: 'Publication PROBLEM-LOCKED',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        content: 'Publication PROBLEM-LOCKED',
-        currentStatus: 'LOCKED',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g04',
-        user: {
-            connect: {
-                id: 'test-user-5'
-            }
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
-            }
-        },
-        keywords: ['science', 'technology'],
-        funders: {
-            create: {
-                id: 'publication-problem-locked-funder',
-                name: 'name',
-                country: 'country',
-                city: 'city',
-                link: 'https://example.com'
-            }
-        },
-        affiliations: {
-            create: {
-                id: 'publication-problem-locked-affiliation',
-                name: 'name',
-                country: 'country',
-                city: 'city',
-                link: 'https://example.com'
-            }
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-5-problem-locked',
-                    email: 'test-user-5@jisc.ac.uk',
-                    code: 'test-code-user-5',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5',
-                    isIndependent: true,
-                    affiliations: []
+                id: 'publication-problem-locked-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-LOCKED',
+                conflictOfInterestStatus: false,
+                content: 'Publication PROBLEM-LOCKED',
+                currentStatus: 'LOCKED',
+                keywords: ['science', 'technology'],
+                user: { connect: { id: 'test-user-5' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-5-problem-locked',
+                            email: 'test-user-5@jisc.ac.uk',
+                            code: 'test-code-user-5',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-5',
+                            isIndependent: true,
+                            affiliations: []
+                        },
+                        {
+                            id: 'coauthor-test-user-6-problem-locked',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-6',
+                            isIndependent: true,
+                            affiliations: []
+                        },
+                        {
+                            id: 'coauthor-test-user-7-problem-locked',
+                            email: 'test-user-7@jisc.ac.uk',
+                            code: 'test-code-user-7',
+                            confirmedCoAuthor: false,
+                            isIndependent: true,
+                            affiliations: []
+                        }
+                    ]
                 },
-                {
-                    id: 'coauthor-test-user-6-problem-locked',
-                    email: 'test-user-6@jisc.ac.uk',
-                    code: 'test-code-user-6',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-6',
-                    isIndependent: true,
-                    affiliations: []
-                },
-                {
-                    id: 'coauthor-test-user-7-problem-locked',
-                    email: 'test-user-7@jisc.ac.uk',
-                    code: 'test-code-user-7',
-                    confirmedCoAuthor: false,
-                    isIndependent: true,
-                    affiliations: []
-                }
-            ]
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        }
-    },
-
-    // HYPOTHESIS
-    {
-        id: 'publication-hypothesis-live',
-        title: 'Publication HYPOTHESIS-LIVE',
-        type: 'HYPOTHESIS',
-        licence: 'CC_BY',
-        content: 'Publication HYPOTHESIS-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
-        doi: '10.82259/cty5-2g05',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationFlags: {
-            create: {
-                id: 'publication-hypothesis-live-flag',
-                createdBy: 'test-user-2',
-                category: 'PLAGIARISM',
-                resolved: true,
-                flagComments: {
+                funders: {
                     create: {
-                        createdBy: 'test-user-2',
-                        comment: 'This is a comment'
+                        id: 'publication-problem-locked-funder',
+                        name: 'name',
+                        country: 'country',
+                        city: 'city',
+                        link: 'https://example.com'
                     }
                 }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        }
+    },
+    {
+        id: 'publication-hypothesis-live',
+        doi: '10.82259/cty5-2g05',
+        type: 'HYPOTHESIS',
+        versions: {
+            create: {
+                id: 'publication-hypothesis-live-v1',
+                versionNumber: 1,
+                title: 'Publication HYPOTHESIS-LIVE',
+                content: 'Publication HYPOTHESIS-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-hypothesis-draft',
-        title: 'Publication HYPOTHESIS-DRAFT',
-        type: 'HYPOTHESIS',
-        licence: 'CC_BY',
-        content: 'Publication HYPOTHESIS-DRAFT',
-        currentStatus: 'DRAFT',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g06',
-        user: {
-            connect: {
-                id: 'test-user-5'
-            }
-        },
-        linkedTo: {
+        type: 'HYPOTHESIS',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-hypothesis-draft-v1',
+                versionNumber: 1,
+                title: 'Publication HYPOTHESIS-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication HYPOTHESIS-DRAFT',
+                currentStatus: 'DRAFT',
+                keywords: ['science', 'technology'],
+                user: { connect: { id: 'test-user-5' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-6-hypothesis-draft',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: false,
+                            linkedUser: 'test-user-6'
+                        },
+                        {
+                            id: 'coauthor-test-user-7-hypothesis-draft',
+                            email: 'test-user-7@jisc.ac.uk',
+                            code: 'test-code-user-7'
+                        }
+                    ]
+                }
             }
-        },
-        keywords: ['science', 'technology'],
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-6-hypothesis-draft',
-                    email: 'test-user-6@jisc.ac.uk',
-                    code: 'test-code-user-6',
-                    confirmedCoAuthor: false,
-                    linkedUser: 'test-user-6'
-                },
-                {
-                    id: 'coauthor-test-user-7-hypothesis-draft',
-                    email: 'test-user-7@jisc.ac.uk',
-                    code: 'test-code-user-7'
-                }
-            ]
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
         }
     },
-
-    // PROTOCOL
     {
         id: 'publication-protocol-live',
-        title: 'Publication PROTOCOL-LIVE',
-        type: 'PROTOCOL',
-        licence: 'CC_BY',
-        content: 'Publication PROTOCOL-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g07',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        type: 'PROTOCOL',
+        versions: {
+            create: {
+                id: 'publication-protocol-live-v1',
+                versionNumber: 1,
+                title: 'Publication PROTOCOL-LIVE',
+                content: 'Publication PROTOCOL-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-protocol-draft',
-        title: 'Publication PROTOCOL-DRAFT',
-        type: 'PROTOCOL',
-        licence: 'CC_BY',
-        content: 'Publication PROTOCOL-DRAFT',
-        currentStatus: 'DRAFT',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g08',
-        user: {
-            connect: {
-                id: 'test-user-5'
-            }
-        },
-        linkedTo: {
+        type: 'PROTOCOL',
+        linkedTo: { create: { publicationTo: 'publication-hypothesis-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-hypothesis-live'
+                id: 'publication-protocol-draft-v1',
+                versionNumber: 1,
+                title: 'Publication PROTOCOL-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication PROTOCOL-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-5' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-5-protocol-draft',
+                            email: 'test-user-5@jisc.ac.uk',
+                            code: 'test-code-user-5',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-5',
+                            affiliations: [],
+                            isIndependent: true
+                        },
+                        {
+                            id: 'coauthor-test-user-6-protocol-draft',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-6',
+                            affiliations: [],
+                            isIndependent: true
+                        }
+                    ]
+                }
             }
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-5-protocol-draft',
-                    email: 'test-user-5@jisc.ac.uk',
-                    code: 'test-code-user-5',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-5',
-                    affiliations: [],
-                    isIndependent: true
-                },
-                {
-                    id: 'coauthor-test-user-6-protocol-draft',
-                    email: 'test-user-6@jisc.ac.uk',
-                    code: 'test-code-user-6',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-6',
-                    affiliations: [],
-                    isIndependent: true
-                }
-            ]
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
         }
     },
-
-    // DATA
     {
         id: 'publication-data-live',
-        title: 'Publication DATA-LIVE',
-        type: 'DATA',
-        licence: 'CC_BY',
-        content: 'Publication DATA-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g09',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        type: 'DATA',
+        versions: {
+            create: {
+                id: 'publication-data-live-v1',
+                versionNumber: 1,
+                title: 'Publication DATA-LIVE',
+                content: 'Publication DATA-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-data-draft',
-        title: 'Publication DATA-DRAFT',
-        type: 'DATA',
-        licence: 'CC_BY',
-        content: 'Publication DATA-DRAFT',
-        currentStatus: 'DRAFT',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g10',
-        user: {
-            connect: {
-                id: 'test-user-1'
+        type: 'DATA',
+        versions: {
+            create: {
+                id: 'publication-data-draft-v1',
+                versionNumber: 1,
+                title: 'Publication DATA-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication DATA-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
         }
     },
-
-    //ANALYSIS
     {
         id: 'publication-analysis-live',
-        title: 'Publication ANALYSIS-LIVE',
-        type: 'ANALYSIS',
-        licence: 'CC_BY',
-        content: 'Publication ANALYSIS-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g11',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        type: 'ANALYSIS',
+        versions: {
+            create: {
+                id: 'publication-analysis-live-v1',
+                versionNumber: 1,
+                title: 'Publication ANALYSIS-LIVE',
+                content: 'Publication ANALYSIS-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-analysis-draft',
-        title: 'Publication ANALYSIS-DRAFT',
-        type: 'ANALYSIS',
-        licence: 'CC_BY',
-        content: 'Publication ANALYSIS-DRAFT',
-        currentStatus: 'DRAFT',
-        conflictOfInterestStatus: false,
         doi: '10.82259/cty5-2g12',
-        user: {
-            connect: {
-                id: 'test-user-1'
+        type: 'ANALYSIS',
+        versions: {
+            create: {
+                id: 'publication-analysis-draft-v1',
+                versionNumber: 1,
+                title: 'Publication ANALYSIS-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication ANALYSIS-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-analysis-draft',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-code-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true,
+                            affiliations: []
+                        }
+                    ]
+                }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        coAuthors: {
-            create: [
-                {
-                    id: 'coauthor-test-user-1-analysis-draft',
-                    email: 'test-user-1@jisc.ac.uk',
-                    code: 'test-code-user-1',
-                    confirmedCoAuthor: true,
-                    linkedUser: 'test-user-1',
-                    isIndependent: true,
-                    affiliations: []
-                }
-            ]
         }
     },
-
-    // INTERPRETATION
     {
         id: 'publication-interpretation-live',
-        title: 'Publication INTERPRETATION-LIVE',
-        type: 'INTERPRETATION',
-        licence: 'CC_BY',
-        content: 'Publication INTERPRETATION-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g13',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        type: 'INTERPRETATION',
+        versions: {
+            create: {
+                id: 'publication-interpretation-live-v1',
+                versionNumber: 1,
+                title: 'Publication INTERPRETATION-LIVE',
+                content: 'Publication INTERPRETATION-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-interpretation-draft',
-        title: 'Publication INTERPRETATION-DRAFT',
-        type: 'INTERPRETATION',
-        content: 'Publication INTERPRETATION-DRAFT',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g14',
-        user: {
-            connect: {
-                id: 'test-user-1'
+        type: 'INTERPRETATION',
+        versions: {
+            create: {
+                id: 'publication-interpretation-draft-v1',
+                versionNumber: 1,
+                title: 'Publication INTERPRETATION-DRAFT',
+                content: 'Publication INTERPRETATION-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
         }
     },
-
-    // REAL_WORLD_APPLICATION
     {
         id: 'publication-real-world-application-live',
-        title: 'Publication REAL_WORLD_APPLICATION-LIVE',
-        type: 'REAL_WORLD_APPLICATION',
-        licence: 'CC_BY',
-        content: 'Publication REAL_WORLD_APPLICATION-LIVE',
-        currentStatus: 'LIVE',
-        publishedDate: '2022-01-22T15:51:42.523Z',
         doi: '10.82259/cty5-2g15',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-22T15:51:42.523Z'
+        type: 'REAL_WORLD_APPLICATION',
+        versions: {
+            create: {
+                id: 'publication-real-world-application-live-v1',
+                versionNumber: 1,
+                title: 'Publication REAL_WORLD_APPLICATION-LIVE',
+                content: 'Publication REAL_WORLD_APPLICATION-LIVE',
+                currentStatus: 'LIVE',
+                publishedDate: '2022-01-22T15:51:42.523Z',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                    ]
                 }
-            ]
+            }
         }
     },
     {
         id: 'publication-real-world-application-draft',
-        title: 'Publication REAL_WORLD_APPLICATION-DRAFT',
-        type: 'REAL_WORLD_APPLICATION',
-        content: 'Publication REAL_WORLD_APPLICATION-DRAFT',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g16',
-        user: {
-            connect: {
-                id: 'test-user-1'
+        type: 'REAL_WORLD_APPLICATION',
+        versions: {
+            create: {
+                id: 'publication-real-world-application-draft-v1',
+                versionNumber: 1,
+                title: 'Publication REAL_WORLD_APPLICATION-DRAFT',
+                content: 'Publication REAL_WORLD_APPLICATION-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
         }
     },
-
-    // publications with links
     {
         id: 'publication-hypothesis-draft-problem-live',
-        title: 'Publication HYPOTHESIS-DRAFT',
-        type: 'HYPOTHESIS',
-        licence: 'CC_BY',
-        content: 'Publication HYPOTHESIS-DRAFT',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g17',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'HYPOTHESIS',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-hypothesis-draft-problem-live-v1',
+                versionNumber: 1,
+                title: 'Publication HYPOTHESIS-DRAFT',
+                conflictOfInterestStatus: false,
+                content: 'Publication HYPOTHESIS-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        conflictOfInterestStatus: false
+        }
     },
     {
-        // This is listed as problem but is a hypothesis
         id: 'publication-problem-draft-no-content',
-        title: 'Publication PROBLEM-DRAFT',
-        type: 'HYPOTHESIS',
-        licence: 'CC_BY',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g18',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'HYPOTHESIS',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-problem-draft-no-content-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
     },
     {
         id: 'publication-hypothesis-live-problem-live',
-        title: 'Publication HYPOTHESIS-LIVE',
-        type: 'HYPOTHESIS',
-        licence: 'CC_BY',
-        content: 'Publication HYPOTHESIS-LIVE',
-        currentStatus: 'LIVE',
         doi: '10.82259/cty5-2g23',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'HYPOTHESIS',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
-            }
-        },
-        linkedFrom: {
-            create: {
-                publicationFrom: 'publication-data-live'
+                id: 'publication-hypothesis-live-problem-live-v1',
+                versionNumber: 1,
+                title: 'Publication HYPOTHESIS-LIVE',
+                content: 'Publication HYPOTHESIS-LIVE',
+                currentStatus: 'LIVE',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
     },
-
-    // publications with and without conflicts of interest
     {
         id: 'publication-problem-draft-with-coi-but-no-text',
-        title: 'Publication PROBLEM-DRAFT COI',
-        content: '<p>This is the content</p>',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g19',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-problem-draft-with-coi-but-no-text-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT COI',
+                conflictOfInterestStatus: true,
+                content: '<p>This is the content</p>',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        conflictOfInterestStatus: true
+        }
     },
     {
         id: 'publication-problem-draft-with-coi-with-text',
-        title: 'Publication PROBLEM-DRAFT COI',
-        content: '<p>This is the content</p>',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g20',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-problem-draft-with-coi-with-text-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT COI',
+                conflictOfInterestStatus: true,
+                conflictOfInterestText: 'This is text text',
+                content: '<p>This is the content</p>',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        conflictOfInterestStatus: true,
-        conflictOfInterestText: 'This is text text'
+        }
     },
     {
         id: 'publication-problem-draft-with-no-coi-with-no-text',
-        title: 'Publication PROBLEM-DRAFT COI',
-        content: '<p>This is the content</p>',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g21',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-problem-draft-with-no-coi-with-no-text-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT COI',
+                conflictOfInterestStatus: false,
+                content: '<p>This is the content</p>',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        conflictOfInterestStatus: false
-        // conflictOfInterestText: 'This is text text'
+        }
     },
     {
         id: 'publication-problem-draft-with-no-coi-with-text',
-        title: 'Publication PROBLEM-DRAFT COI',
-        content: '<p>This is the content</p>',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        currentStatus: 'DRAFT',
         doi: '10.82259/cty5-2g22',
-        user: {
-            connect: {
-                id: 'test-user-1'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'publication-problem-draft-with-no-coi-with-text-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-DRAFT COI',
+                conflictOfInterestStatus: false,
+                conflictOfInterestText: 'This is text text',
+                content: '<p>This is the content</p>',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
-        },
-        conflictOfInterestStatus: false,
-        conflictOfInterestText: 'This is text text'
+        }
     },
     {
         id: 'research-topic',
-        title: 'Music',
-        content:
-            'This is an automatically-generated topic, produced in order to provide authors with a place to attach new Problem publications',
-        type: 'PROBLEM',
-        licence: 'CC_BY',
-        currentStatus: 'LIVE',
         doi: '10.57874/01x8-yb56',
-        user: {
-            connect: {
-                id: 'octopus'
-            }
-        },
-        publicationStatus: {
-            create: [
-                {
-                    status: 'DRAFT',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                },
-                {
-                    status: 'LIVE',
-                    createdAt: '2022-01-20T15:51:42.523Z'
-                }
-            ]
-        },
-        linkedTo: {
+        type: 'PROBLEM',
+        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        versions: {
             create: {
-                publicationTo: 'publication-problem-live'
+                id: 'research-topic-v1',
+                versionNumber: 1,
+                title: 'Music',
+                conflictOfInterestStatus: false,
+                conflictOfInterestText: '',
+                content:
+                    'This is an automatically-generated topic, produced in order to provide authors with a place to attach new Problem publications',
+                currentStatus: 'LIVE',
+                user: { connect: { id: 'octopus' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }
+                    ]
+                }
             }
-        },
-        conflictOfInterestStatus: false,
-        conflictOfInterestText: ''
+        }
     }
 ];
 

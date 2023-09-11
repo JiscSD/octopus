@@ -1,16 +1,18 @@
-const topicSeeds = [
+import { Prisma } from '@prisma/client';
+
+const topicSeeds: Prisma.TopicCreateInput[] = [
     {
         id: 'test-topic-1',
         title: 'Test topic',
         translations: {
             create: [
                 {
-                    language: "fr",
-                    value: "Sujet de test"
+                    language: 'fr',
+                    value: 'Sujet de test'
                 },
                 {
-                    language: "es",
-                    value: "Tema de prueba"
+                    language: 'es',
+                    value: 'Tema de prueba'
                 }
             ]
         },
@@ -18,11 +20,11 @@ const topicSeeds = [
             create: [
                 {
                     id: 'test-topic-1a',
-                    title: 'Test sub-topic A',
+                    title: 'Test sub-topic A'
                 },
                 {
                     id: 'test-topic-1b',
-                    title: 'Test sub-topic B',
+                    title: 'Test sub-topic B'
                 }
             ]
         }
