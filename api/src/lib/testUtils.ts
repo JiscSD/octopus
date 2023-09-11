@@ -1,32 +1,34 @@
 import supertest from 'supertest';
+import htmlToText from 'html-to-text';
+import axios from 'axios';
 
 import * as client from 'lib/client';
 import * as seeds from 'prisma/seeds';
-import axios from 'axios';
 
 jest.setTimeout(60000);
 
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
+/**
+ * @TODO - use a smaller set of data for tests
+ * - using such a large set of data for tests is unnecessary and it makes them very slow to run
+ */
+
 export const testSeed = async (): Promise<void> => {
     for (const user of seeds.users) {
         await client.prisma.user.create({
-            // @ts-ignore
             data: user
         });
     }
 
-    // not ideal, but best thing I can do right now. For some reason createMany will not work with provided seed data...
     for (const publication of seeds.publications) {
         await client.prisma.publication.create({
-            // @ts-ignore
             data: publication
         });
     }
 
     for (const topic of seeds.topicsDevSeedData) {
         await client.prisma.topic.create({
-            //@ts-ignore
             data: topic
         });
     }
@@ -41,20 +43,36 @@ export const testSeed = async (): Promise<void> => {
 };
 
 export const openSearchSeed = async (): Promise<void> => {
-    for (const publication of seeds.publicationsDevSeedData) {
-        // only seed in live publications
-        if (publication.currentStatus === 'LIVE') {
+    const publications = await client.prisma.publication.findMany({
+        include: {
+            versions: {
+                where: {
+                    isCurrent: true
+                }
+            }
+        }
+    });
+
+    for (const publication of publications) {
+        const latestVersion = publication.versions[0];
+
+        // only seed in live versions
+        if (latestVersion?.currentStatus === 'LIVE') {
             await client.search.create({
                 index: 'publications',
                 id: publication.id,
                 body: {
-                    title: publication.title,
+                    id: publication.id,
                     type: publication.type,
-                    licence: publication.licence,
-                    content: publication.content,
-                    keywords: publication.keywords,
-                    description: publication.description,
-                    publishedDate: publication.publishedDate
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
+                    language: 'en',
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: htmlToText.convert(latestVersion.content)
                 }
             });
         }

@@ -21,28 +21,37 @@ export const initialDevSeed = async (): Promise<void> => {
     }
 
     // Create publications
-    for (const publication of SeedData.publicationsDevSeedData) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: publication
+    for (const seedPublication of SeedData.publicationsDevSeedData) {
+        const createdPublication = await client.prisma.publication.create({
+            data: seedPublication,
+            include: {
+                versions: {
+                    where: {
+                        isCurrent: true
+                    }
+                }
+            }
         });
 
-        if (publication.currentStatus === 'LIVE') {
+        const latestVersion = createdPublication.versions[0];
+
+        // always populate search with the latest versions beside "id" and "type"
+        if (latestVersion.currentStatus === 'LIVE') {
             await client.search.create({
                 index: 'publications',
-                id: publication.id,
+                id: createdPublication.id,
                 body: {
-                    id: publication.id,
-                    type: publication.type,
-                    title: publication.title,
-                    licence: publication.licence,
-                    description: publication.description,
-                    keywords: publication.keywords,
-                    content: publication.content,
+                    id: createdPublication.id,
+                    type: createdPublication.type,
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
                     language: 'en',
-                    currentStatus: publication.currentStatus,
-                    publishedDate: publication.publishedDate,
-                    cleanContent: htmlToText.convert(publication.content)
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: htmlToText.convert(latestVersion.content)
                 }
             });
         }
@@ -51,33 +60,41 @@ export const initialDevSeed = async (): Promise<void> => {
     // Create topics - one by one because they can relate to each other
     for (const topic of SeedData.topicsDevSeedData) {
         await client.prisma.topic.create({
-            // @ts-ignore
             data: topic
         });
     }
 
     for (const problem of SeedData.problems) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: problem
+        const createdProblem = await client.prisma.publication.create({
+            data: problem,
+            include: {
+                versions: {
+                    where: {
+                        isCurrent: true
+                    }
+                }
+            }
         });
 
-        if (problem.currentStatus === 'LIVE') {
+        const latestVersion = createdProblem.versions[0];
+
+        // always populate search with the latest versions beside "id" and "type"
+        if (latestVersion.currentStatus === 'LIVE') {
             await client.search.create({
                 index: 'publications',
-                id: problem.id,
+                id: createdProblem.id,
                 body: {
-                    id: problem.id,
-                    type: problem.type,
-                    title: problem.title,
-                    licence: problem.licence,
-                    description: problem.description,
-                    keywords: problem.keywords,
-                    content: problem.content,
+                    id: createdProblem.id,
+                    type: createdProblem.type,
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
                     language: 'en',
-                    currentStatus: problem.currentStatus,
-                    publishedDate: problem.publishedDate,
-                    cleanContent: htmlToText.convert(problem.content)
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: htmlToText.convert(latestVersion.content)
                 }
             });
         }
@@ -147,27 +164,36 @@ export const initialProdSeed = async (): Promise<void> => {
     }
 
     for (const problem of SeedData.problemsProd) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: problem
+        const publication = await client.prisma.publication.create({
+            data: problem,
+            include: {
+                versions: {
+                    where: {
+                        isCurrent: true
+                    }
+                }
+            }
         });
 
-        if (problem.currentStatus === 'LIVE') {
+        const latestVersion = publication.versions[0];
+
+        // always populate search with the latest versions beside "id" and "type"
+        if (latestVersion.currentStatus === 'LIVE') {
             await client.search.create({
                 index: 'publications',
-                id: problem.id,
+                id: publication.id,
                 body: {
-                    id: problem.id,
-                    type: problem.type,
-                    title: problem.title,
-                    licence: problem.licence,
-                    description: problem.description,
-                    keywords: problem.keywords,
-                    content: problem.content,
+                    id: publication.id,
+                    type: publication.type,
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
                     language: 'en',
-                    currentStatus: problem.currentStatus,
-                    publishedDate: problem.publishedDate,
-                    cleanContent: htmlToText.convert(problem.content)
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: htmlToText.convert(latestVersion.content)
                 }
             });
         }
