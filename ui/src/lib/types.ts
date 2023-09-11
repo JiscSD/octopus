@@ -1,4 +1,5 @@
 import * as Interfaces from '@interfaces';
+import * as Contentful from 'contentful';
 
 export type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 
@@ -339,3 +340,10 @@ export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
 export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
 
 export type BookmarkType = 'PUBLICATION' | 'TOPIC';
+
+export type BlogFields = {
+    title: Contentful.EntryFields.Text;
+    author: Contentful.EntryFields.Text;
+    featuredImage?: Contentful.Asset;
+    content: Contentful.EntryFields.RichText;
+};
