@@ -29,6 +29,10 @@ const Nav: React.FC = (): React.ReactElement => {
                 value: Config.urls.browsePublications.path
             },
             {
+                label: 'Blog',
+                value: Config.urls.blog.path
+            },
+            {
                 label: 'How To',
                 value: '',
                 subItems: [
