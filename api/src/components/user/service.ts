@@ -142,15 +142,25 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         OR: [
             { createdBy: id },
             {
-                coAuthors: {
+                versions: {
                     some: {
-                        linkedUser: id
+                        isCurrent: true,
+                        coAuthors: {
+                            some: {
+                                linkedUser: id
+                            }
+                        }
                     }
                 }
             }
         ],
-        currentStatus: {
-            in: statuses
+        versions: {
+            some: {
+                isCurrent: true,
+                currentStatus: {
+                    in: statuses
+                }
+            }
         }
     };
 
@@ -160,36 +170,43 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         where,
         select: {
             id: true,
-            title: true,
             type: true,
             doi: true,
             createdBy: true,
             createdAt: true,
             updatedAt: true,
-            publishedDate: true,
-            currentStatus: true,
             url_slug: true,
-            licence: true,
-            content: true,
-            coAuthors: {
+            versions: {
+                where: {
+                    isCurrent: true
+                },
                 select: {
-                    id: true,
-                    approvalRequested: true,
-                    confirmedCoAuthor: true,
-                    code: true,
-                    email: true,
-                    publicationId: true,
-                    linkedUser: true,
-                    user: {
+                    title: true,
+                    publishedDate: true,
+                    currentStatus: true,
+                    licence: true,
+                    content: true,
+                    coAuthors: {
                         select: {
-                            orcid: true,
-                            firstName: true,
-                            lastName: true
+                            id: true,
+                            approvalRequested: true,
+                            confirmedCoAuthor: true,
+                            code: true,
+                            email: true,
+                            publicationVersionId: true,
+                            linkedUser: true,
+                            user: {
+                                select: {
+                                    orcid: true,
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
                         }
                     }
-                },
-                orderBy: {
-                    position: 'asc'
                 }
             }
         },
@@ -201,9 +218,21 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
                 : undefined
     });
 
+    // Simplify publications
+    const simplifiedPublications = userPublications.map((publication) => {
+        const simplifiedPublication = {
+            ...publication,
+            ...publication.versions[0]
+        };
+        // Discard versions field
+        const { versions, ...simplifiedPublicationRest } = simplifiedPublication;
+
+        return simplifiedPublicationRest;
+    });
+
     const totalUserPublications = await client.prisma.publication.count({ where });
 
-    return { offset, limit, total: totalUserPublications, results: userPublications };
+    return { offset, limit, total: totalUserPublications, results: simplifiedPublications };
 };
 
 export const getUserList = async () => {

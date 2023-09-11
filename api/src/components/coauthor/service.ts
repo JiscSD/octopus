@@ -10,16 +10,16 @@ export const get = (id: string) =>
         }
     });
 
-export const getAllByPublication = async (publicationId: string) => {
+export const getAllByPublicationVersion = async (publicationVersionId: string) => {
     const coAuthors = await client.prisma.coAuthors.findMany({
         where: {
-            publicationId
+            publicationVersionId
         },
         select: {
             id: true,
             email: true,
             linkedUser: true,
-            publicationId: true,
+            publicationVersionId: true,
             confirmedCoAuthor: true,
             approvalRequested: true,
             isIndependent: true,
@@ -40,25 +40,6 @@ export const getAllByPublication = async (publicationId: string) => {
     return coAuthors;
 };
 
-export const create = async (email: string, publicationId: string) => {
-    const create = await client.prisma.coAuthors.create({
-        data: {
-            publicationId,
-            email
-        },
-        select: {
-            id: true,
-            publicationId: true,
-            email: true,
-            linkedUser: true,
-            confirmedCoAuthor: true,
-            code: true
-        }
-    });
-
-    return create;
-};
-
 export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
     client.prisma.coAuthors.update({
         where: {
@@ -75,18 +56,18 @@ export const update = (id: string, data: Prisma.CoAuthorsUpdateInput) =>
  * onCreate - don't take user input for fields like: confirmedCoAuthor, approvalRequested or linkedUser
  *
  */
-export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
-    client.prisma.$transaction(
+export const updateAll = async (publicationVersionId: string, authors: I.CoAuthor[]) => {
+    const update = await client.prisma.$transaction(
         authors.map((author, index) =>
             client.prisma.coAuthors.upsert({
                 where: {
-                    publicationId_email: { publicationId, email: author.email }
+                    publicationVersionId_email: { publicationVersionId, email: author.email }
                 },
                 create: {
                     email: author.email,
                     approvalRequested: false,
                     confirmedCoAuthor: false,
-                    publicationId,
+                    publicationVersionId,
                     position: index
                 },
                 update: {
@@ -95,6 +76,9 @@ export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
             })
         )
     );
+
+    return update;
+};
 
 export const deleteCoAuthor = async (id: string) => {
     const deleteCoAuthor = await client.prisma.coAuthors.delete({
@@ -106,17 +90,17 @@ export const deleteCoAuthor = async (id: string) => {
     return deleteCoAuthor;
 };
 
-export const deleteCoAuthorByEmail = (publicationId: string, email: string) =>
+export const deleteCoAuthorByEmail = (publicationVersionId: string, email: string) =>
     client.prisma.coAuthors.delete({
         where: {
-            publicationId_email: { publicationId, email }
+            publicationVersionId_email: { publicationVersionId, email }
         }
     });
 
-export const linkUser = (userId: string, publicationId: string, email: string, code: string) =>
-    client.prisma.coAuthors.updateMany({
+export const linkUser = async (userId: string, publicationVersionId: string, email: string, code: string) => {
+    const update = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId,
+            publicationVersionId,
             email,
             code
         },
@@ -125,19 +109,22 @@ export const linkUser = (userId: string, publicationId: string, email: string, c
         }
     });
 
-export const removeFromPublication = async (publicationId: string, email: string, code: string) =>
+    return update;
+};
+
+export const removeFromPublicationVersion = async (publicationVersionId: string, email: string, code: string) =>
     client.prisma.coAuthors.deleteMany({
         where: {
-            publicationId,
+            publicationVersionId,
             email,
             code
         }
     });
 
-export const updateConfirmation = async (publicationId: string, userId: string, confirm: boolean) => {
+export const updateConfirmation = async (publicationVersionId: string, userId: string, confirm: boolean) => {
     const updateCoAuthor = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId,
+            publicationVersionId,
             linkedUser: userId
         },
         data: {
@@ -148,18 +135,18 @@ export const updateConfirmation = async (publicationId: string, userId: string, 
     return updateCoAuthor;
 };
 
-export const resetCoAuthors = async (publicationId: string) => {
-    const publication = await client.prisma.publication.findFirst({
+export const resetCoAuthors = async (publicationVersionId: string) => {
+    const publicationVersion = await client.prisma.publicationVersion.findFirst({
         where: {
-            id: publicationId
+            id: publicationVersionId
         }
     });
 
     const resetCoAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId,
+            publicationVersionId,
             NOT: {
-                linkedUser: publication?.createdBy
+                linkedUser: publicationVersion?.createdBy
             }
         },
         data: {
@@ -171,23 +158,12 @@ export const resetCoAuthors = async (publicationId: string) => {
     return resetCoAuthors;
 };
 
-export const isUserAlreadyCoAuthor = async (email: string, publicationId: string) => {
-    const publication = await client.prisma.coAuthors.count({
-        where: {
-            email: email,
-            publicationId
-        }
-    });
-
-    return Boolean(publication);
-};
-
-export const getPendingApprovalForPublication = async (publicationId: string) => {
+export const getPendingApprovalForPublicationVersion = async (publicationVersionId: string) => {
     const coAuthors = await client.prisma.coAuthors.findMany({
         where: {
             confirmedCoAuthor: false,
             approvalRequested: false,
-            publicationId
+            publicationVersionId
         },
         orderBy: {
             position: 'asc'
@@ -197,10 +173,10 @@ export const getPendingApprovalForPublication = async (publicationId: string) =>
     return coAuthors;
 };
 
-export const updateRequestApprovalStatus = async (publicationId: string, email: string) => {
+export const updateRequestApprovalStatus = async (publicationVersionId: string, email: string) => {
     const coAuthors = await client.prisma.coAuthors.updateMany({
         where: {
-            publicationId,
+            publicationVersionId,
             email
         },
         data: {
@@ -215,7 +191,7 @@ export const createCorrespondingAuthor = (publication: I.PublicationWithMetadata
     client.prisma.coAuthors.create({
         data: {
             email: publication?.user.email || '',
-            publicationId: publication?.id || '',
+            publicationVersionId: publication?.versionId || '',
             linkedUser: publication?.createdBy,
             affiliations: [],
             isIndependent: true,

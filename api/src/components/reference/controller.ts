@@ -39,10 +39,10 @@ export const updateAll = async (
             }
         }
 
-        // check that we are updating the publication with the correct id
-        if (event.body.some((reference) => reference.publicationId !== event.pathParameters.id)) {
+        // check that we are updating the publication version with the correct id
+        if (event.body.some((reference) => reference.publicationVersionId !== publication.versionId)) {
             return response.json(403, {
-                message: 'Please enter the correct publication id.'
+                message: 'Please enter the correct publication version id.'
             });
         }
 
