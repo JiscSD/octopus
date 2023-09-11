@@ -44,6 +44,7 @@ export const publicationFlowLinkedPublication = async (
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
     await page.locator(PageModel.publish.linkedItems.addLink).click();
+    await page.waitForResponse((response) => response.url().includes('/links') && response.ok());
     await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -289,6 +290,9 @@ interface PublicationTestType {
 }
 
 export const checkPublication = async (page: Page, publication: PublicationTestType) => {
+    // Wait for page to be loaded - viz will try to fetch links
+    await page.waitForResponse((response) => response.url().includes('/links'));
+
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
         `aside span:has-text("${publication.language}")`,
@@ -364,7 +368,8 @@ test.describe('Publication flow', () => {
         await page.locator(PageModel.publish.linkedItems.topicInput).click();
         await page.keyboard.type("test");
         await page.locator(`[role="option"]:has-text("Test topic")`).click();
-        await page.locator(PageModel.publish.linkedItems.addLink).click();
+        await page.locator(PageModel.publish.linkedItems.addLink).click();        
+        await page.waitForResponse((response) => response.url().includes('/publications/') && response.ok());
         await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
     });
 
