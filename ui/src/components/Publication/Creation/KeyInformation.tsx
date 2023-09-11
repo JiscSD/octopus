@@ -30,11 +30,11 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 />
             </div>
             <div>
-                <label htmlFor="cc-license-label" id="cc-license-label">
-                    <Components.PublicationCreationStepTitle text="Creative commons license" />
+                <label htmlFor="cc-licence-label" id="cc-licence-label">
+                    <Components.PublicationCreationStepTitle text="Creative commons licence" />
                 </label>
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                    Your publication will use a CC BY 4.0 license by default. Contact the Octopus team at{' '}
+                    Your publication will use a CC BY 4.0 licence by default. Contact the Octopus team at{' '}
                     <Components.Link
                         href="mailto:help@jisc.ac.uk"
                         openNew={true}
@@ -42,7 +42,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     >
                         help@jisc.ac.uk
                     </Components.Link>{' '}
-                    if you would like to discuss using a different license type.
+                    if you would like to discuss using a different licence type.
                 </span>
                 <Framer.motion.div
                     initial={{ opacity: 0 }}

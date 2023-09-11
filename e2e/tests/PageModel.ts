@@ -169,7 +169,6 @@ export const PageModel = {
         unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
-            // license: 'select#license',
             rorID: 'input[name=ror]',
             addAffiliationButton: 'button[aria-label="Add affiliation"]:enabled',
             manualAffiliationSelect: 'input#manual',
