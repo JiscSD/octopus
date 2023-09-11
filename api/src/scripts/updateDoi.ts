@@ -17,6 +17,17 @@ const updateDoi = async (): Promise<void> => {
                     isCurrent: true
                 },
                 include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    },
                     publicationStatus: {
                         select: {
                             status: true,
@@ -92,17 +103,6 @@ const updateDoi = async (): Promise<void> => {
                     }
                 }
             },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
             linkedTo: {
                 where: {
                     publicationToRef: {
@@ -128,19 +128,19 @@ const updateDoi = async (): Promise<void> => {
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             },
                             type: true,
-                            doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            }
+                            doi: true
                         }
                     }
                 }
@@ -170,19 +170,19 @@ const updateDoi = async (): Promise<void> => {
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             },
                             type: true,
-                            doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            }
+                            doi: true
                         }
                     }
                 }
@@ -209,7 +209,12 @@ const updateDoi = async (): Promise<void> => {
     let index = 1;
 
     for (const publication of simplifiedPublications) {
-        await helpers.updateDOI(publication.doi, publication, publication.References).catch((err) => console.log(err));
+        const abstractedReferences = publication.References.map((reference) => {
+            const { publicationVersionId, ...referenceRest } = reference;
+
+            return { publicationId: publication.id, ...referenceRest };
+        });
+        await helpers.updateDOI(publication.doi, publication, abstractedReferences).catch((err) => console.log(err));
         console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
         index++;
     }

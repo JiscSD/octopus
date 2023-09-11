@@ -73,13 +73,15 @@ export const get = async (id: string) => {
     });
 
     // Squash publication data
-    const simplifiedTopic = {
-        ...topic,
-        publications: topic?.publications.map((publication) => ({
-            id: publication.id,
-            title: publication.versions[0].title
-        }))
-    };
+    const simplifiedTopic = topic
+        ? {
+              ...topic,
+              publications: topic?.publications.map((publication) => ({
+                  id: publication.id,
+                  title: publication.versions[0].title
+              }))
+          }
+        : topic;
 
     return simplifiedTopic;
 };

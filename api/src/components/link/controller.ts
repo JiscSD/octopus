@@ -55,7 +55,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: 'Link already exists.' });
         }
 
-        const link = await linkService.create(event.body.from, event.body.to, toPublication.versionId);
+        const link = await linkService.create(event.body.from, event.body.to);
 
         return response.json(200, link);
     } catch (err) {
@@ -84,7 +84,7 @@ export const deleteLink = async (
             });
         }
 
-        if (link.publicationFromRef.user.id !== event.user.id) {
+        if (link.publicationFromRef.versions[0].user.id !== event.user.id) {
             return response.json(403, { message: 'You do not have permissions to delete this link' });
         }
 

@@ -199,14 +199,6 @@ export const update = async (
             event.body.content = helpers.getSafeHTML(event.body.content);
         }
 
-        if (event.body.id) {
-            const isIdInUse = await publicationService.isIdInUse(event.body.id);
-
-            if (isIdInUse) {
-                return response.json(404, { message: 'ID is already in use.' });
-            }
-        }
-
         if (
             event.body.selfDeclaration !== undefined &&
             publication.type !== 'PROTOCOL' &&
@@ -229,7 +221,9 @@ export const update = async (
             });
         }
 
-        const updatedPublication = await publicationService.update(event.pathParameters.id, event.body);
+        await publicationService.update(event.pathParameters.id, event.body);
+
+        const updatedPublication = await publicationService.get(event.pathParameters.id);
 
         return response.json(200, updatedPublication);
     } catch (err) {

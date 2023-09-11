@@ -57,15 +57,6 @@ describe('Update publication', () => {
         expect(updatePublication.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
     });
 
-    test('Can update publication id', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ id: 'brand-new-id' });
-
-        expect(updatePublication.body.id).toEqual('brand-new-id');
-    });
-
     test('Can update publication licence', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')

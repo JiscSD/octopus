@@ -1,11 +1,10 @@
 import * as client from 'lib/client';
 
-export const create = async (fromPublicationId: string, toPublicationId: string, toPublicationVersionId: string) => {
+export const create = async (fromPublicationId: string, toPublicationId: string) => {
     const link = await client.prisma.links.create({
         data: {
             publicationFrom: fromPublicationId,
-            publicationTo: toPublicationId,
-            linkToVersion: toPublicationVersionId
+            publicationTo: toPublicationId
         }
     });
 
@@ -39,14 +38,14 @@ export const get = async (id: string) => {
             publicationFromRef: {
                 select: {
                     id: true,
-                    user: true,
                     versions: {
                         where: {
                             isCurrent: true
                         },
                         select: {
                             currentStatus: true,
-                            publicationStatus: true
+                            publicationStatus: true,
+                            user: true
                         }
                     }
                 }
@@ -54,11 +53,11 @@ export const get = async (id: string) => {
             publicationToRef: {
                 select: {
                     id: true,
-                    user: true,
                     versions: {
                         select: {
                             currentStatus: true,
-                            publicationStatus: true
+                            publicationStatus: true,
+                            user: true
                         }
                     }
                 }

@@ -130,7 +130,6 @@ export interface UpdatePublicationRequestBody {
     licence?: LicenceType;
     description?: string;
     keywords?: string[];
-    id?: string;
     language?: Languages;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
@@ -156,7 +155,7 @@ export interface PublicationFilters {
     orderDirection?: OrderDirection;
 }
 
-export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
+export type PublicationWithMetadata = Exclude<Prisma.PromiseReturnType<typeof publicationService.get>, null>;
 
 /**
  * @description Links
@@ -491,6 +490,12 @@ export interface Reference {
     text: string;
     location?: string | null;
 }
+
+export interface AbstractedReference extends Omit<Reference, 'publicationVersionId'> {
+    publicationId: string;
+}
+
+export type UpdateReferencesBody = Array<AbstractedReference>;
 
 export interface CreateReferencePath {
     id: string;

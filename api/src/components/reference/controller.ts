@@ -16,7 +16,7 @@ export const get = async (
 };
 
 export const updateAll = async (
-    event: I.AuthenticatedAPIRequest<I.Reference[], undefined, I.CreateReferencePath>
+    event: I.AuthenticatedAPIRequest<I.UpdateReferencesBody, undefined, I.CreateReferencePath>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
@@ -40,7 +40,7 @@ export const updateAll = async (
         }
 
         // check that we are updating the publication version with the correct id
-        if (event.body.some((reference) => reference.publicationVersionId !== publication.versionId)) {
+        if (event.body.some((reference) => reference.publicationId !== publication.id)) {
             return response.json(403, {
                 message: 'Please enter the correct publication version id.'
             });
