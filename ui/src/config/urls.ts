@@ -17,6 +17,7 @@ const base = {
 };
 
 const urls = {
+    base,
     // Search
     search: {
         path: '/search',
