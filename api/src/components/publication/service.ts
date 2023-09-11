@@ -522,7 +522,8 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
         return false;
     }
 
-    const hasAtLeastOneLinkTo = publication.linkedTo.length !== 0;
+    const hasAtLeastOneLinkOrTopic =
+        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
     const conflictOfInterest = validateConflictOfInterest(publication);
@@ -536,7 +537,7 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     );
 
     return (
-        hasAtLeastOneLinkTo &&
+        hasAtLeastOneLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
@@ -551,7 +552,8 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata)
         return false;
     }
 
-    const hasAtLeastOneLinkTo = publication.linkedTo.length > 0;
+    const hasAtLeastOneLinkOrTopic =
+        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
     const conflictOfInterest = validateConflictOfInterest(publication);
@@ -563,7 +565,7 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata)
     );
 
     return (
-        hasAtLeastOneLinkTo &&
+        hasAtLeastOneLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
