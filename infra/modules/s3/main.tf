@@ -82,7 +82,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
 }
 
 resource "aws_iam_role" "pdf_processing_lambda_role" {
-  name = "pdf_processing_lambda_role"
+  name = "octopus_${var.environment}_pdf_processing_lambda_role"
 
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
