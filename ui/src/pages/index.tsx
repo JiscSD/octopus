@@ -51,6 +51,8 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.home.description} />
                 <meta name="keywords" content={Config.urls.home.keywords.join(', ')} />
+                <meta name="og:title" content={Config.urls.home.title} key="og:title" />
+                <meta name="og:description" content={Config.urls.home.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.home.canonical} />
                 <title>{Config.urls.home.title}</title>
             </Head>

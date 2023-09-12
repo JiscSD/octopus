@@ -396,13 +396,18 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [author?.linkedUser, publicationData?.createdBy]
     );
 
+    const pageTitle = publicationData ? `${publicationData.title} - ${Config.urls.viewPublication.title}` : '';
+    const contentText = publicationData ? Helpers.htmlToText(publicationData.content) : '';
+
     return publicationData ? (
         <>
             <Head>
                 <meta name="description" content={publicationData.description || ''} />
                 <meta name="keywords" content={publicationData.keywords?.join(', ') || ''} />
+                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} key="og:title" />
+                <meta name="og:description" content={Helpers.truncateString(contentText, 200)} key="og:description" />
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publicationData.id}`} />
-                <title>{`${publicationData.title} - ${Config.urls.viewPublication.title}`}</title>
+                <title>{pageTitle}</title>
             </Head>
 
             <Layouts.Publication

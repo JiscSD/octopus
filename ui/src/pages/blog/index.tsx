@@ -51,6 +51,8 @@ const Blog: NextPage = (): JSX.Element => {
             <Head>
                 <meta name="description" content={Config.urls.blog.description} />
                 <meta name="keywords" content={Config.urls.blog.keywords.join(', ')} />
+                <meta name="og:title" content={Config.urls.blog.documentTitle} key="og:title" />
+                <meta name="og:description" content={Config.urls.blog.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.blog.canonical} />
                 <title>{Config.urls.blog.documentTitle}</title>
             </Head>

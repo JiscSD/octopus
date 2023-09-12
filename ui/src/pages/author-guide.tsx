@@ -42,6 +42,8 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
         <Head>
             <meta name="description" content={Config.urls.authorGuide.description} />
             <meta name="keywords" content={Config.urls.authorGuide.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.authorGuide.title} key="og:title" />
+            <meta name="og:description" content={Config.urls.authorGuide.description} key="og:description" />
             <link rel="canonical" href={Config.urls.authorGuide.canonical} />
             <title>{Config.urls.authorGuide.title}</title>
         </Head>

@@ -43,10 +43,12 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
 const GetInvolved: NextPage = (): React.ReactElement => (
     <>
         <Head>
-            <meta name="description" content={Config.urls.authorGuide.description} />
-            <meta name="keywords" content={Config.urls.authorGuide.keywords.join(', ')} />
-            <link rel="canonical" href={Config.urls.authorGuide.canonical} />
-            <title>{Config.urls.authorGuide.title}</title>
+            <meta name="description" content={Config.urls.getInvolved.description} />
+            <meta name="keywords" content={Config.urls.getInvolved.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.getInvolved.title} key="og:title" />
+            <meta name="og:description" content={Config.urls.getInvolved.description} key="og:description" />
+            <link rel="canonical" href={Config.urls.getInvolved.canonical} />
+            <title>{Config.urls.getInvolved.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>

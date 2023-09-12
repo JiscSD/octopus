@@ -90,14 +90,16 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
+    const pageTitle = `Author: ${props.user.orcid} - ${Config.urls.viewUser.title}`;
 
     return (
         <>
             <Head>
                 <meta name="description" content="" />
                 <meta name="keywords" content="" />
+                <meta name="og:title" content={pageTitle} key="og:title" />
                 <link rel="canonical" href={`${Config.urls.viewUser.canonical}/${props.user.id}`} />
-                <title>{`Author: ${props.user.orcid} - ${Config.urls.viewUser.title}`}</title>
+                <title>{pageTitle}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">

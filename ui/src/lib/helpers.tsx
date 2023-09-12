@@ -13,8 +13,12 @@ import { Middleware } from 'swr';
 /**
  * @description Truncates a string
  */
-export const truncateString = (value: string, length: number): string => {
-    return value.length ? (length < value.length ? `${value.substring(0, length)}...` : value) : value;
+export const truncateString = (string: string, length: number): string => {
+    if (length <= 3) {
+        return '...';
+    }
+    const sliceLength = length - 3;
+    return string.length > sliceLength ? string.slice(0, sliceLength) + '...' : string;
 };
 
 /**
@@ -560,3 +564,7 @@ export const laggy: Middleware = (useSWRNext) => {
 
 // helper to scroll top smooth - using setTimeout to ensure event loop executes this after any state updates so it doesn't get interrupted
 export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+
+export const htmlToText = (htmlString: string): string => {
+    return new DOMParser().parseFromString(htmlString, 'text/html').documentElement.textContent || '';
+};
