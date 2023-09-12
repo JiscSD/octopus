@@ -51,6 +51,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 {
                     title,
                     type: publicationType,
+                    licence: Config.values.octopusInformation.licences.CC_BY.value, // This is no longer editable - save hard-coded value
                     topicIds: props.topicId ? [props.topicId] : []
                 },
                 Helpers.getJWT()

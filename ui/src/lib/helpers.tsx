@@ -379,7 +379,7 @@ export const getTabCompleteness = (
     steps.forEach((step) => {
         switch (step.id) {
             case 'KEY_INFORMATION':
-                if (store.title && store.licence) {
+                if (store.title) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });

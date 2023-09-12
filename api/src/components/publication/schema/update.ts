@@ -7,10 +7,6 @@ const updatePublicationSchema: I.Schema = {
         title: {
             type: 'string'
         },
-        licence: {
-            type: 'string',
-            enum: <I.LicenceType[]>['CC_BY', 'CC_BY_SA', 'CC_BY_NC', 'CC_BY_NC_SA']
-        },
         content: {
             type: 'string'
         },

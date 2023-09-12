@@ -127,7 +127,6 @@ export interface UpdateStatusPathParams {
 export interface UpdatePublicationRequestBody {
     content?: string;
     title?: string;
-    licence?: LicenceType;
     description?: string;
     keywords?: string[];
     id?: string;

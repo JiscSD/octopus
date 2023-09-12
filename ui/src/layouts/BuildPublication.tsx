@@ -63,7 +63,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             let ready = { ready: true, message: '' };
             if (!store.title) ready = { ready: false, message: 'You must provide a title' };
             if (!store.content) ready = { ready: false, message: 'You must provide main text' };
-            if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
             if (
                 (store.type === 'PROBLEM' && !store.linkTo?.length && !store.topics?.length) ||
                 (store.type !== 'PROBLEM' && !store.linkTo?.length)
@@ -115,7 +114,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             let ready = { ready: true, message: '' };
             if (!store.title) ready = { ready: false, message: 'You must provide a title' };
             if (!store.content) ready = { ready: false, message: 'You must provide main text' };
-            if (!store.licence) ready = { ready: false, message: 'You must select a licence' };
             if (!store.linkTo?.length && !store.topics?.length)
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
@@ -164,7 +162,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 content: store.content,
                 description: store.description,
                 keywords: Helpers.formatKeywords(store.keywords),
-                licence: store.licence,
                 language: store.language,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,

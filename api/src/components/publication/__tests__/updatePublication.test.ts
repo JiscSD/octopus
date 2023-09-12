@@ -66,13 +66,15 @@ describe('Update publication', () => {
         expect(updatePublication.body.id).toEqual('brand-new-id');
     });
 
-    test('Can update publication licence', async () => {
+    test('Cannot update publication licence', async () => {
+        // This was previously possible but we have now removed the ability because
+        // there is only one licence type we want people to use and we set it automatically.
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
             .query({ apiKey: 123456789 })
             .send({ licence: 'CC_BY_SA' });
 
-        expect(updatePublication.body.licence).toEqual('CC_BY_SA');
+        expect(updatePublication.status).toEqual(422);
     });
 
     test('Can update keywords', async () => {
@@ -91,15 +93,6 @@ describe('Update publication', () => {
             .send({ description: 'Test description' });
 
         expect(updatePublication.body.description).toEqual('Test description');
-    });
-
-    test('Cannot update publication with invalid licence enum', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ licence: 'INVALID' });
-
-        expect(updatePublication.status).toEqual(422);
     });
 
     test('Cannot update publication with invalid update parameter', async () => {
