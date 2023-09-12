@@ -33,7 +33,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         <Assets.Github height={25} width={25} className="fill-white-50" />
                     </Components.Link>
                     <Components.Link
-                        href="https://twitter.com/science_octopus"
+                        href="https://twitter.com/octopus_ac"
                         openNew={true}
                         ariaLabel="Twitter"
                         className="h-fit"

@@ -11,12 +11,13 @@ const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
 const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
-export const base = {
+const base = {
     title: 'Octopus | Built for Researchers',
     host
 };
 
 const urls = {
+    base,
     // Search
     search: {
         path: '/search',
@@ -254,7 +255,15 @@ const urls = {
     orcidLogin: {
         path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },
-    mediaBucket
+    mediaBucket,
+    blog: {
+        path: '/blog',
+        title: 'The Octopus Blog',
+        description: 'Stay up to date with the latest from the Octopus team',
+        documentTitle: `The Octopus Blog - ${base.title}`,
+        keywords: ['blog', 'Octopus blog'],
+        canonical: `${base.host}/blog`
+    }
 };
 
 export default urls;

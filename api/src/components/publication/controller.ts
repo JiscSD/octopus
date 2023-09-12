@@ -204,19 +204,26 @@ export const update = async (
             publication.type !== 'HYPOTHESIS'
         ) {
             return response.json(400, {
-                message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
+                message:
+                    'You can not declare a self declaration for a publication that is not a protocol or hypothesis.'
             });
         }
 
         if (event.body.dataAccessStatement !== undefined && publication.type !== 'DATA') {
             return response.json(400, {
-                message: 'You can not supply a data access statement on and non data publication.'
+                message: 'You can not supply a data access statement on a non data publication.'
             });
         }
 
         if (event.body.dataPermissionsStatement !== undefined && publication.type !== 'DATA') {
             return response.json(400, {
-                message: 'You can not supply a data permissions statement on and non data publication.'
+                message: 'You can not supply a data permissions statement on a non data publication.'
+            });
+        }
+
+        if (event.body.topics !== undefined && publication.type !== 'PROBLEM') {
+            return response.json(400, {
+                message: 'You can not supply topics for a publication that is not a problem.'
             });
         }
 

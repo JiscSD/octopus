@@ -61,7 +61,9 @@ const postToPubrouter = async (pdfMetadata) => {
     throw new Error(`Publication type "${pdfMetadata.metadata.article.type}" not found in API keys object`);
   } else {
     const apiKey = apiKeys[pdfMetadata.metadata.article.type];
-    const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
+    // Temporarily using the validation endpoint, instead of the notification one
+    const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`;
+    // const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
   
     const response = await fetch(apiEndpoint, {
       method: "POST",

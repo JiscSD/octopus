@@ -95,3 +95,4 @@ export { default as AuthorAffiliations } from './Publication/AuthorAffiliations'
 export { default as AffiliationCard } from './Publication/AffiliationCard';
 export { default as SimpleModal } from './SimpleModal';
 export { default as EditAffiliationsModal } from './EditAffiliationsModal';
+export { default as BlogCard } from './BlogCard';
