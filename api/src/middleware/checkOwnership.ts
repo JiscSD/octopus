@@ -19,9 +19,9 @@ const checkOwnership = (): middy.MiddlewareObj => {
             const publicationId = request.event.pathParameters?.id;
 
             if (publicationId) {
-                const publication = await publicationService.get(publicationId);
+                const publication = await publicationService.getWithVersion(publicationId);
 
-                if (publication && publication.createdBy !== user.id) {
+                if (publication && publication.versions[0].createdBy !== user.id) {
                     return response.json(403, {
                         message: 'User is not the author of this publication.'
                     });

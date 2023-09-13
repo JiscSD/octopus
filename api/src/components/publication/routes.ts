@@ -25,7 +25,7 @@ export const create = middy(publicationController.create)
     .use(middleware.authentication())
     .use(middleware.validator(publicationSchema.create, 'body'));
 
-export const update = middy(publicationController.update)
+export const update = middy(publicationController.updateCurrentVersion)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())

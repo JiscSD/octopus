@@ -11,7 +11,7 @@ export const get = async (
     try {
         const publicationId = event.pathParameters.id;
 
-        const publication = await publicationService.get(publicationId);
+        const publication = await publicationService.getWithVersion(publicationId);
 
         if (!publication) {
             return response.json(404, {
@@ -19,26 +19,28 @@ export const get = async (
             });
         }
 
-        const coAuthors = publication.coAuthors;
+        const currentVersion = publication.versions[0];
 
-        const correspondingAuthor = coAuthors.find((coAuthor) => coAuthor.linkedUser === publication.createdBy);
+        const coAuthors = currentVersion.coAuthors;
+
+        const correspondingAuthor = coAuthors.find((coAuthor) => coAuthor.linkedUser === currentVersion.createdBy);
 
         // enforce adding corresponding author if it's missing - this will fix old publications which don't have the corresponding author in the coAuthors list
         if (!correspondingAuthor) {
-            const correspondingAuthor = await coAuthorService.createCorrespondingAuthor(publication);
+            const correspondingAuthor = await coAuthorService.createCorrespondingAuthor(currentVersion);
 
             // put corresponding author in the first position
             coAuthors.unshift({
                 ...correspondingAuthor,
                 user: {
-                    firstName: publication.user.firstName,
-                    lastName: publication.user.lastName,
-                    orcid: publication.user.orcid
+                    firstName: currentVersion.user.firstName,
+                    lastName: currentVersion.user.lastName,
+                    orcid: currentVersion.user.orcid
                 }
             });
         }
 
-        return response.json(200, publication.coAuthors);
+        return response.json(200, currentVersion.coAuthors);
     } catch (err) {
         console.log(err);
 
@@ -51,7 +53,7 @@ export const updateAll = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publicationId = event.pathParameters.id;
-        const publication = await publicationService.get(publicationId);
+        const publication = await publicationService.getWithVersion(publicationId);
 
         // Does the publication exist?
         if (!publication) {
@@ -60,15 +62,17 @@ export const updateAll = async (
             });
         }
 
-        // Is this user the author of the publication?
-        if (publication?.user.id !== event?.user.id) {
+        const currentVersion = publication.versions[0];
+
+        // Is this user the author of this version of the publication?
+        if (currentVersion.user.id !== event?.user.id) {
             return response.json(403, {
                 message: 'You do not have the right permissions for this action.'
             });
         }
 
-        // Is the publication in draft?
-        if (publication.currentStatus === 'LIVE') {
+        // Is the current version of the publication not live?
+        if (currentVersion.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
             });
@@ -83,12 +87,12 @@ export const updateAll = async (
         }
 
         const newCoAuthorsArray = event.body;
-        const oldCoAuthorsArray = publication.coAuthors;
+        const oldCoAuthorsArray = currentVersion.coAuthors;
         const removedCoAuthors = oldCoAuthorsArray.filter(
             (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.email === newCoAuthor.email)
         );
 
-        // check if corresponding author is trying to remove himself
+        // check if corresponding author is trying to remove themself
         if (removedCoAuthors.some((author) => author.linkedUser === event.user.id)) {
             return response.json(403, {
                 message: 'You are not allowed to remove yourself from the publication.'
@@ -100,7 +104,7 @@ export const updateAll = async (
             // notify co-authors that they've been removed (if their approval has been requested)
             for (const coAuthor of removedCoAuthors) {
                 // remove co-author from this publication
-                await coAuthorService.deleteCoAuthorByEmail(coAuthor.publicationVersionId, coAuthor.email);
+                await coAuthorService.deleteCoAuthorByEmail(currentVersion.id, coAuthor.email);
 
                 if (coAuthor.approvalRequested) {
                     // notify co-author that they've been removed
@@ -109,14 +113,14 @@ export const updateAll = async (
                             email: coAuthor.email
                         },
                         publication: {
-                            title: publication.title || ''
+                            title: currentVersion.title || ''
                         }
                     });
                 }
             }
         }
 
-        await coAuthorService.updateAll(publication.versionId, newCoAuthorsArray);
+        await coAuthorService.updateAll(currentVersion.id, newCoAuthorsArray);
 
         return response.json(200, 'Successfully updated publication authors');
     } catch (err) {
@@ -130,7 +134,7 @@ export const remove = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -139,22 +143,24 @@ export const remove = async (
             });
         }
 
-        // Is this user the author of the publication?
-        if (publication.user.id !== event.user.id) {
+        const currentVersion = publication.versions[0];
+
+        // Is this user the author of this version of the publication?
+        if (currentVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have the right permissions for this action.'
             });
         }
 
-        // Is the publication in draft?
-        if (publication.currentStatus === 'LIVE') {
+        // Is the current version of the publication not live?
+        if (currentVersion.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
 
-        // Is the coauthor actually a coauthor of this publication
-        if (!publication.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthor)) {
+        // Is the coauthor actually a coauthor of this version of the publication
+        if (!currentVersion.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthor)) {
             return response.json(404, {
                 message: 'This coauthor has not been added to this publication.'
             });
@@ -166,10 +172,11 @@ export const remove = async (
         await email.notifyCoAuthorRemoval({
             coAuthor: {
                 email:
-                    publication.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthor)?.email || ''
+                    currentVersion.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthor)?.email ||
+                    ''
             },
             publication: {
-                title: publication.title || ''
+                title: currentVersion.title || ''
             }
         });
 
@@ -185,7 +192,7 @@ export const link = async (
     event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.ConfirmCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         if (!publication) {
             return response.json(404, {
@@ -193,13 +200,15 @@ export const link = async (
             });
         }
 
-        if (publication.currentStatus === 'LIVE') {
+        const currentVersion = publication.versions[0];
+
+        if (currentVersion.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'This publication is LIVE and therefore cannot be edited.'
             });
         }
 
-        const coAuthorByEmail = publication.coAuthors.find((coAuthor) => coAuthor.email === event.body.email);
+        const coAuthorByEmail = currentVersion.coAuthors.find((coAuthor) => coAuthor.email === event.body.email);
 
         // check if this user is part of co-authors list
         if (!coAuthorByEmail) {
@@ -215,11 +224,7 @@ export const link = async (
                 });
             }
 
-            await coAuthorService.removeFromPublicationVersion(
-                publication.versionId,
-                event.body.email,
-                event.body.code
-            );
+            await coAuthorService.removeFromPublicationVersion(currentVersion.id, event.body.email, event.body.code);
 
             // notify main author about rejection
             await email.notifyCoAuthorRejection({
@@ -227,16 +232,16 @@ export const link = async (
                     email: event.body.email
                 },
                 publication: {
-                    title: publication.title || '',
-                    authorEmail: publication.user.email || ''
+                    title: currentVersion.title || '',
+                    authorEmail: currentVersion.user.email || ''
                 }
             });
 
             // check if this was the last co-author who denied their involvement
-            if (publication.coAuthors.length === 2) {
+            if (currentVersion.coAuthors.length === 2) {
                 // this means only the creator remained and we can safely update publication status back to DRAFT
                 // to avoid publication being LOCKED without co-authors
-                await publicationVersionService.updateStatus(publication.versionId, 'DRAFT');
+                await publicationVersionService.updateStatus(currentVersion.id, 'DRAFT');
             }
 
             return response.json(200, 'Removed co-author from publication');
@@ -255,15 +260,15 @@ export const link = async (
             });
         }
 
-        // Cannot link user to co-author if it is the owner
-        if (publication.user.id === event.user.id) {
+        // Cannot link user to co-author if it is the author of the current version
+        if (currentVersion.user.id === event.user.id) {
             return response.json(404, {
-                message: 'You cannot link yourself as the co-author, if you are the creator.'
+                message: 'You cannot link yourself as a co-author if you are already the corresponding author.'
             });
         }
 
         // User is already linked as a co-author
-        if (publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
+        if (currentVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)) {
             return response.json(404, {
                 message: 'You are already linked as an author on this draft'
             });
@@ -278,7 +283,7 @@ export const link = async (
 
         // check if the user email is the same as the one the invitation has been sent to
         if (event.user.email !== coAuthorByEmail.email) {
-            const isCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
+            const isCoAuthor = currentVersion.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
 
             return response.json(isCoAuthor ? 403 : 404, {
                 message: isCoAuthor
@@ -287,7 +292,7 @@ export const link = async (
             });
         }
 
-        await coAuthorService.linkUser(event.user.id, publication.versionId, event.body.email, event.body.code);
+        await coAuthorService.linkUser(event.user.id, currentVersion.id, event.body.email, event.body.code);
 
         return response.json(200, 'Linked user account');
     } catch (err) {
@@ -301,7 +306,7 @@ export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         // Does the publication exist?
         if (!publication) {
@@ -310,17 +315,19 @@ export const updateConfirmation = async (
             });
         }
 
-        // Is the publication in locked mode?
-        if (publication.currentStatus !== 'LOCKED') {
+        const currentVersion = publication.versions[0];
+
+        // Is the publication's current version in locked mode?
+        if (currentVersion.currentStatus !== 'LOCKED') {
             return response.json(403, {
                 message:
-                    publication.currentStatus === 'LIVE'
+                    currentVersion.currentStatus === 'LIVE'
                         ? 'You cannot approve a LIVE publication'
                         : 'This publication is not ready for review yet'
             });
         }
 
-        const coAuthor = publication.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
+        const coAuthor = currentVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
 
         // Is the coauthor actually a coauthor of this publication
         if (!coAuthor) {
@@ -337,7 +344,7 @@ export const updateConfirmation = async (
         }
 
         // update coAuthor confirmation status
-        await coAuthorService.updateConfirmation(publication.versionId, event.user.id, event.body.confirm);
+        await coAuthorService.updateConfirmation(currentVersion.id, event.user.id, event.body.confirm);
 
         if (event.body.confirm) {
             // notify main author about confirmation
@@ -347,12 +354,12 @@ export const updateConfirmation = async (
                     lastName: event.user.lastName || ''
                 },
                 publication: {
-                    authorEmail: publication.user.email || '',
-                    title: publication.title || '',
+                    authorEmail: currentVersion.user.email || '',
+                    title: currentVersion.title || '',
                     url: `${process.env.BASE_URL}/publications/${publication.id}`
                 },
                 remainingConfirmationsCount:
-                    publication.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
+                    currentVersion.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
             });
         } else {
             // notify main author about rejection
@@ -361,8 +368,8 @@ export const updateConfirmation = async (
                     email: event.user.email || ''
                 },
                 publication: {
-                    title: publication.title || '',
-                    authorEmail: publication.user.email || ''
+                    title: currentVersion.title || '',
+                    authorEmail: currentVersion.user.email || ''
                 }
             });
         }
@@ -380,29 +387,31 @@ export const requestApproval = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publicationId = event.pathParameters.id;
-        const publication = await publicationService.get(publicationId);
+        const publication = await publicationService.getWithVersion(publicationId);
 
         if (!publication) {
             return response.json(404, { message: 'Publication not found' });
         }
 
-        if (publication.currentStatus === 'LIVE') {
+        const currentVersion = publication.versions[0];
+
+        if (currentVersion.currentStatus === 'LIVE') {
             return response.json(403, { message: 'Cannot request approvals for a LIVE publication.' });
         }
 
         // check if user is not the corresponding author
-        if (event.user.id !== publication.createdBy) {
+        if (event.user.id !== currentVersion.createdBy) {
             return response.json(403, {
                 message: 'You are not allowed to request approvals for this publication.'
             });
         }
 
         // check if publication actually has co-authors
-        if (publication.coAuthors.length < 2) {
+        if (currentVersion.coAuthors.length < 2) {
             return response.json(403, { message: 'There is no co-author to request approval from.' });
         }
 
-        if (publication.currentStatus === 'DRAFT') {
+        if (currentVersion.currentStatus === 'DRAFT') {
             if (!publicationService.isReadyToRequestApproval(publication)) {
                 return response.json(403, {
                     message:
@@ -410,18 +419,18 @@ export const requestApproval = async (
                 });
             }
 
-            // check if publication was LOCKED before
-            if (publication.publicationStatus.some(({ status }) => status === 'LOCKED')) {
+            // check if this version was LOCKED before
+            if (currentVersion.publicationStatus.some(({ status }) => status === 'LOCKED')) {
                 // notify linked co-authors about changes
-                const linkedCoAuthors = publication.coAuthors.filter(
-                    (author) => author.linkedUser && author.linkedUser !== publication.createdBy
+                const linkedCoAuthors = currentVersion.coAuthors.filter(
+                    (author) => author.linkedUser && author.linkedUser !== currentVersion.createdBy
                 );
 
                 for (const linkedCoAuthor of linkedCoAuthors) {
                     await email.notifyCoAuthorsAboutChanges({
                         coAuthor: { email: linkedCoAuthor.email },
                         publication: {
-                            title: publication.title || '',
+                            title: currentVersion.title || '',
                             url: `${process.env.BASE_URL}/publications/${publication.id}`
                         }
                     });
@@ -430,7 +439,7 @@ export const requestApproval = async (
         }
 
         // get all pending co authors
-        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublicationVersion(publication.versionId);
+        const pendingCoAuthors = await coAuthorService.getPendingApprovalForPublicationVersion(currentVersion.id);
 
         // email pending co authors and update their record
         for (const pendingCoAuthor of pendingCoAuthors) {
@@ -440,13 +449,13 @@ export const requestApproval = async (
                 userLastName: event.user.lastName,
                 code: pendingCoAuthor.code,
                 publicationId,
-                publicationTitle: publication?.title || 'No title yet'
+                publicationTitle: currentVersion.title || 'No title yet'
             });
 
-            await coAuthorService.updateRequestApprovalStatus(publication.versionId, pendingCoAuthor.email);
+            await coAuthorService.updateRequestApprovalStatus(currentVersion.id, pendingCoAuthor.email);
         }
 
-        const coAuthors = await coAuthorService.getAllByPublicationVersion(publication.versionId);
+        const coAuthors = await coAuthorService.getAllByPublicationVersion(currentVersion.id);
 
         return response.json(200, coAuthors);
     } catch (err) {
@@ -461,7 +470,7 @@ export const sendApprovalReminder = async (
 ): Promise<I.JSONResponse> => {
     const { coauthor, id } = event.pathParameters;
 
-    const publication = await publicationService.get(id);
+    const publication = await publicationService.getWithVersion(id);
     const author = await coAuthorService.get(coauthor);
 
     if (!publication) {
@@ -470,20 +479,22 @@ export const sendApprovalReminder = async (
         });
     }
 
+    const currentVersion = publication.versions[0];
+
     // Can only send reminder on publications that have been locked for review
-    if (publication.currentStatus !== 'LOCKED') {
+    if (currentVersion.currentStatus !== 'LOCKED') {
         return response.json(403, {
             message: 'A reminder is not able to be sent unless approval is being requested'
         });
     }
 
-    if (event.user.id !== publication.createdBy) {
+    if (event.user.id !== currentVersion.createdBy) {
         return response.json(403, {
             message: 'You do not have the right permissions for this action.'
         });
     }
 
-    if (!author || author.publicationVersionId !== publication.versionId) {
+    if (!author || author.publicationVersionId !== currentVersion.id) {
         return response.json(404, {
             message: 'This author does not exist on this publication'
         });
@@ -519,8 +530,8 @@ export const sendApprovalReminder = async (
             coAuthor: { email: author.email, code: author.code },
             publication: {
                 id: id,
-                title: publication.title || '',
-                creator: `${publication.user.firstName} ${publication.user.lastName}`
+                title: currentVersion.title || '',
+                creator: `${currentVersion.user.firstName} ${currentVersion.user.lastName}`
             }
         });
 

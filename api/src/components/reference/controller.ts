@@ -19,7 +19,7 @@ export const updateAll = async (
     event: I.AuthenticatedAPIRequest<I.UpdateReferencesBody, undefined, I.CreateReferencePath>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersionMerged(event.pathParameters.id);
 
         //check that the publication exists
         if (!publication) {
