@@ -14,11 +14,12 @@ import { Middleware } from 'swr';
  * @description Truncates a string
  */
 export const truncateString = (string: string, length: number): string => {
+    const trimmedString = string.trim();
     if (length <= 3) {
         return '...';
     }
     const sliceLength = length - 3;
-    return string.length > sliceLength ? string.slice(0, sliceLength) + '...' : string;
+    return trimmedString.length > sliceLength ? trimmedString.slice(0, sliceLength).trimEnd() + '...' : trimmedString;
 };
 
 /**
