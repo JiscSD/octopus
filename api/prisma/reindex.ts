@@ -2,7 +2,7 @@ import htmlToText from 'html-to-text';
 
 import * as client from '../src/lib/client';
 
-const reindex = async () => {
+const reindex = async (): Promise<void> => {
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'
     });
@@ -25,6 +25,9 @@ const reindex = async () => {
             versions: {
                 where: {
                     currentStatus: 'LIVE'
+                },
+                orderBy: {
+                    versionNumber: 'desc'
                 }
             }
         }
@@ -33,11 +36,8 @@ const reindex = async () => {
     console.log(`reindexing ${pubs.length}`);
 
     for (const pub of pubs) {
-        const latestLiveVersion = pub.versions.find((version) => {
-            // Either current version is LIVE, or it is not, in which case the previous version must be LIVE.
-            // Publications with only one version that is not LIVE won't be returned by the query above.
-            return version.isCurrent || version.versionNumber === (pub.versions.length - 1)
-        });
+        const latestLiveVersion = pub.versions[0];
+
         if (latestLiveVersion) {
             await client.search.create({
                 index: 'publications',
@@ -60,4 +60,6 @@ const reindex = async () => {
     }
 };
 
-reindex();
+reindex()
+    .then(() => console.log('Completed reindex'))
+    .catch((error) => console.log('Error while reindexing: ', error));
