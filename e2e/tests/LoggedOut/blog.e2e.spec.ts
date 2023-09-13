@@ -56,6 +56,8 @@ test.describe('Blog', () => {
         // clicking the Next button goes to second page
         await page.click(PageModel.blog.nextButton);
 
+        await page.waitForResponse((response) => response.url().includes('https://cdn.contentful.com/'));
+
         // check the rest of blog posts are displayed
         expect(await page.locator(PageModel.blog.blogCard).count()).toEqual(contentfulBlogPosts.length - skip);
 
