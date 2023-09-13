@@ -15,7 +15,8 @@ export const updateAffiliations = async (
         const isIndependent = event.body.isIndependent;
         const affiliations = event.body.affiliations;
         const publicationId = event.pathParameters.id;
-        const publication = await publicationService.get(publicationId);
+        // Get publication with current version
+        const publication = await publicationService.getWithVersion(publicationId);
 
         //check that the publication exists
         if (!publication) {
@@ -24,16 +25,18 @@ export const updateAffiliations = async (
             });
         }
 
+        const currentVersion = publication.versions[0];
+
         //check if publication is LIVE
-        if (publication.currentStatus === 'LIVE') {
+        if (currentVersion.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'You cannot add affiliations to a LIVE publication.'
             });
         }
 
-        const coAuthor = publication.coAuthors.find((author) => author.linkedUser === event.user.id);
+        const coAuthor = currentVersion.coAuthors.find((author) => author.linkedUser === event.user.id);
 
-        // check if this user is an author on this publication
+        // check if this user is an author on this publication's current version
         if (!coAuthor) {
             return response.json(403, {
                 message: 'You do not have permissions to add an affiliation to this publication.'
@@ -41,14 +44,14 @@ export const updateAffiliations = async (
         }
 
         // while the publication status is DRAFT, only the corresponding author can update his/her affiliations
-        if (publication.currentStatus === 'DRAFT' && coAuthor.linkedUser !== publication.createdBy) {
+        if (currentVersion.currentStatus === 'DRAFT' && coAuthor.linkedUser !== currentVersion.createdBy) {
             return response.json(403, {
                 message: 'You cannot add affiliations while the publication is being edited.'
             });
         }
 
         // enforce adding affiliations if co-author is not independent
-        if (publication.currentStatus === 'LOCKED' && !isIndependent && !affiliations.length) {
+        if (currentVersion.currentStatus === 'LOCKED' && !isIndependent && !affiliations.length) {
             return response.json(403, {
                 message: 'Please fill out your affiliation information.'
             });
@@ -62,7 +65,7 @@ export const updateAffiliations = async (
         }
 
         // check if coauthor (beside the corresponding one) has already approved this publication
-        if (coAuthor.linkedUser !== publication.createdBy && coAuthor.confirmedCoAuthor) {
+        if (coAuthor.linkedUser !== currentVersion.createdBy && coAuthor.confirmedCoAuthor) {
             return response.json(403, {
                 message: 'You cannot change your affiliation information while the publication has been approved.'
             });

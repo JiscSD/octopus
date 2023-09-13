@@ -7,7 +7,7 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateFunderRequestBody, undefined, I.CreateFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         //check that the publication exists
         if (!publication) {
@@ -16,20 +16,22 @@ export const create = async (
             });
         }
 
+        const currentVersion = publication.versions[0];
+
         //check that the publication is live
-        if (publication.currentStatus !== 'DRAFT') {
+        if (currentVersion.currentStatus !== 'DRAFT') {
             return response.json(403, {
                 message: 'You can only add funding to a draft publication.'
             });
         }
 
-        if (event.user.id !== publication.user.id) {
+        if (event.user.id !== currentVersion.user.id) {
             return response.json(403, {
                 message: 'You do not have permissions to add a funder.'
             });
         }
 
-        const funder = await funderService.create(publication.versionId, event.body);
+        const funder = await funderService.create(currentVersion.id, event.body);
 
         return response.json(200, funder);
     } catch (err) {
@@ -43,7 +45,7 @@ export const destroy = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         //check that the publication exists
         if (!publication) {
@@ -52,20 +54,22 @@ export const destroy = async (
             });
         }
 
+        const currentVersion = publication?.versions[0];
+
         //check that the publication is live
-        if (publication.currentStatus !== 'DRAFT') {
+        if (currentVersion.currentStatus !== 'DRAFT') {
             return response.json(403, {
                 message: 'You cannot delete funding from a publication that is not a draft.'
             });
         }
 
-        if (event.user.id !== publication.user.id) {
+        if (event.user.id !== currentVersion.user.id) {
             return response.json(403, {
                 message: 'You do not have permissions to delete a funder.'
             });
         }
 
-        const funder = await funderService.destroy(publication.versionId, event.pathParameters.funder);
+        const funder = await funderService.destroy(currentVersion.id, event.pathParameters.funder);
 
         return response.json(200, funder);
     } catch (err) {

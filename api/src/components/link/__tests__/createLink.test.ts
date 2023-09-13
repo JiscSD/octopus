@@ -59,7 +59,7 @@ describe('Create links', () => {
                 from: 'publication-problem-live'
             });
 
-        expect(link.statusCode).toEqual(404);
+        expect(link.statusCode).toEqual(403);
     });
 
     test('User cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT)', async () => {
@@ -73,7 +73,7 @@ describe('Create links', () => {
                 from: 'publication-problem-draft'
             });
 
-        expect(link.statusCode).toEqual(404);
+        expect(link.statusCode).toEqual(403);
     });
 
     test('Cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE) if no auth', async () => {

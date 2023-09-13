@@ -187,12 +187,12 @@ export const updateRequestApprovalStatus = async (publicationVersionId: string, 
     return coAuthors;
 };
 
-export const createCorrespondingAuthor = (publication: I.PublicationWithMetadata) =>
+export const createCorrespondingAuthor = (publicationVersion: I.PublicationVersion) =>
     client.prisma.coAuthors.create({
         data: {
-            email: publication?.user.email || '',
-            publicationVersionId: publication?.versionId || '',
-            linkedUser: publication?.createdBy,
+            email: publicationVersion.user.email || '',
+            publicationVersionId: publicationVersion.id || '',
+            linkedUser: publicationVersion.createdBy,
             affiliations: [],
             isIndependent: true,
             approvalRequested: false,

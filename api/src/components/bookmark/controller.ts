@@ -13,26 +13,37 @@ export const create = async (
         // Checks depending on bookmark type
         switch (type) {
             case 'PUBLICATION': {
-                // Check that the publication exists
                 const publication = await publicationService.get(entityId);
 
+                // Check that the publication exists
                 if (!publication) {
                     return response.json(404, {
                         message: 'This publication does not exist.'
                     });
                 }
 
-                // Check that the publication is live
-                if (publication.currentStatus === 'DRAFT') {
+                // Check that the publication has a live version
+                if (!publication.versions.some((version) => version.currentStatus === 'LIVE')) {
                     return response.json(403, {
-                        message: 'You cannot bookmark a draft publication.'
+                        message: 'You cannot bookmark a publication which has not gone live.'
                     });
                 }
 
-                // Check to see if the user is the author or co author. If so throw an error
-                const isUserCoAuthor = publication.coAuthors.some((coAuthor) => coAuthor.linkedUser == event.user.id);
+                const latestPublishedVersion =
+                    publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
+                    publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
 
-                if (isUserCoAuthor || event.user.id === publication.user.id) {
+                if (!latestPublishedVersion) {
+                    throw Error('Could not get latest published version of publication');
+                }
+
+                // Check to see if the user is the author or a co author of the latest published version
+                // of the publication. If so throw an error
+                const isUserAuthor =
+                    latestPublishedVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser == event.user.id) ||
+                    latestPublishedVersion.user.id === event.user.id;
+
+                if (isUserAuthor) {
                     return response.json(401, {
                         message: 'You cannot bookmark a publication you have authored or co-authored.'
                     });

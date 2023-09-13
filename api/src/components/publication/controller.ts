@@ -43,7 +43,8 @@ export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        // Get the publication with the latest version data merged in to keep it simple for the UI.
+        const publication = await publicationService.getWithVersionMerged(event.pathParameters.id);
 
         // anyone can see a LIVE publication
         if (publication?.currentStatus === 'LIVE') {
@@ -103,7 +104,13 @@ export const deletePublication = async (
             });
         }
 
-        if (publication.user.id !== event.user.id) {
+        const firstVersion = publication.versions.find((version) => version.versionNumber === 1);
+
+        if (!firstVersion) {
+            throw Error('Unable to get first version');
+        }
+
+        if (firstVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to delete this publication.'
             });
@@ -112,16 +119,15 @@ export const deletePublication = async (
         // The logic here is a bit odd, but the currentStatus and publicationStatus array are not intrinsically linked
         // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
         // has only ever been draft.
-        // Also, this means that for us to delete a publication, there must only have been one version of it.
+        // Also, for us to delete a publication, there must only have been one version of it.
         if (
-            publication.currentStatus !== 'DRAFT' ||
-            (publication.publicationStatus &&
-                !publication.publicationStatus.every((status) => status.status !== 'LIVE')) ||
-            // The latest version comes from publicationService.get, so if this is 1, there has only been one version
-            publication.versionNumber !== 1
+            firstVersion.currentStatus !== 'DRAFT' ||
+            (firstVersion.publicationStatus &&
+                !firstVersion.publicationStatus.every((status) => status.status !== 'LIVE')) ||
+            publication.versions.length > 1
         ) {
             return response.json(403, {
-                message: 'A publication can only be deleted if is currently a draft and has never been LIVE.'
+                message: 'A publication can only be deleted if it is currently a draft and has never been LIVE.'
             });
         }
 
@@ -173,11 +179,11 @@ export const create = async (
     }
 };
 
-export const update = async (
+export const updateCurrentVersion = async (
     event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.getWithVersion(event.pathParameters.id);
 
         if (!publication) {
             return response.json(403, {
@@ -185,13 +191,19 @@ export const update = async (
             });
         }
 
-        if (publication.user.id !== event.user.id) {
+        const currentVersion = publication.versions[0];
+
+        if (!currentVersion) {
+            throw Error('Unable to find current version for publication');
+        }
+
+        if (currentVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify this publication.'
             });
         }
 
-        if (publication.currentStatus !== 'DRAFT') {
+        if (currentVersion.currentStatus !== 'DRAFT') {
             return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
         }
 
@@ -248,7 +260,7 @@ export const updateStatus = async (
 ): Promise<I.JSONResponse> => {
     try {
         const publicationId = event.pathParameters?.id;
-        const publication = await publicationService.get(publicationId);
+        const publication = await publicationService.getWithVersion(publicationId);
 
         if (!publication) {
             return response.json(404, {
@@ -256,14 +268,16 @@ export const updateStatus = async (
             });
         }
 
-        if (publication.createdBy !== event.user.id) {
+        const currentVersion = publication.versions[0];
+
+        if (currentVersion.createdBy !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to modify the status of this publication.'
             });
         }
 
         const newStatus = event.pathParameters?.status;
-        const currentStatus = publication.currentStatus;
+        const currentStatus = currentVersion.currentStatus;
 
         if (currentStatus === 'LIVE') {
             return response.json(403, {
@@ -278,7 +292,7 @@ export const updateStatus = async (
         if (currentStatus === 'DRAFT') {
             if (newStatus === 'LOCKED') {
                 // check if publication actually has co-authors
-                if (publication.coAuthors.length === 1) {
+                if (currentVersion.coAuthors.length === 1) {
                     return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
                 }
 
@@ -290,7 +304,7 @@ export const updateStatus = async (
                 }
 
                 // Lock publication from editing
-                await publicationVersionService.updateStatus(publication.versionId, 'LOCKED');
+                await publicationVersionService.updateStatus(currentVersion.id, 'LOCKED');
 
                 return response.json(200, { message: 'Publication status updated to LOCKED.' });
             }
@@ -309,10 +323,10 @@ export const updateStatus = async (
         if (currentStatus === 'LOCKED') {
             if (newStatus === 'DRAFT') {
                 // Update status to 'DRAFT'
-                await publicationVersionService.updateStatus(publication.versionId, newStatus);
+                await publicationVersionService.updateStatus(currentVersion.id, newStatus);
 
                 // Cancel co author approvals
-                await coAuthorService.resetCoAuthors(publication.versionId);
+                await coAuthorService.resetCoAuthors(currentVersion.id);
 
                 return response.json(200, {
                     message: 'Publication unlocked for editing'
@@ -330,7 +344,7 @@ export const updateStatus = async (
             }
         }
 
-        const updatedVersion = await publicationVersionService.updateStatus(publication.versionId, newStatus);
+        const updatedVersion = await publicationVersionService.updateStatus(currentVersion.id, newStatus);
 
         // now that the publication is LIVE, we store in opensearch
         await publicationService.createOpenSearchRecord({
@@ -368,7 +382,8 @@ export const getLinksForPublication = async (
     try {
         const data = await publicationService.getLinksForPublication(event.pathParameters.id);
 
-        if (!data.publication || data.publication.currentStatus !== 'LIVE') {
+        // If publication doesn't exist or has no LIVE version
+        if (!data.publication || !data.publication.versions.some((version) => version.currentStatus === 'LIVE')) {
             return response.json(404, { message: 'Not found.' });
         }
 
@@ -394,7 +409,7 @@ export const getPDF = async (
         });
     }
 
-    if (publication.currentStatus !== 'LIVE') {
+    if (!publication.versions.some((version) => version.currentStatus === 'LIVE')) {
         return response.json(403, {
             message: 'Publication needs to be LIVE in order to generate a PDF version of it.'
         });
@@ -419,7 +434,25 @@ export const getPDF = async (
     if (!pdfUrl) {
         // generate new PDF
         try {
-            const newPDFUrl = await publicationService.generatePDF(publication);
+            // We know the publication has at least one LIVE version.
+            const latestPublishedVersion =
+                publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
+                publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+
+            if (!latestPublishedVersion) {
+                throw Error('Unable to get latest published version from supplied object');
+            }
+
+            const publicationWithLatestPublishedVersion = await publicationService.getWithVersion(
+                publication.id,
+                latestPublishedVersion.versionNumber
+            );
+
+            if (!publicationWithLatestPublishedVersion) {
+                throw Error('Unable to get latest published version from DB');
+            }
+
+            const newPDFUrl = await publicationService.generatePDF(publicationWithLatestPublishedVersion);
 
             if (!newPDFUrl) {
                 throw Error('Failed to generate PDF');

@@ -39,10 +39,8 @@ export const get = async (id: string) => {
                 select: {
                     id: true,
                     versions: {
-                        where: {
-                            isCurrent: true
-                        },
                         select: {
+                            isCurrent: true,
                             currentStatus: true,
                             publicationStatus: true,
                             user: true
@@ -55,6 +53,7 @@ export const get = async (id: string) => {
                     id: true,
                     versions: {
                         select: {
+                            isCurrent: true,
                             currentStatus: true,
                             publicationStatus: true,
                             user: true
@@ -68,26 +67,7 @@ export const get = async (id: string) => {
         }
     });
 
-    if (!link || link.publicationFromRef.versions === undefined || link.publicationToRef.versions === undefined) {
-        throw Error('Insufficient data to format full link');
-    }
-
-    // Put currentStatus and publicationStatus at level above for convenience
-    const simplifiedLink = {
-        ...link,
-        publicationFromRef: {
-            ...link?.publicationFromRef,
-            currentStatus: link?.publicationFromRef.versions[0].currentStatus,
-            publicationStatus: link?.publicationFromRef.versions[0].publicationStatus
-        },
-        publicationToRef: {
-            ...link?.publicationToRef,
-            currentStatus: link?.publicationToRef.versions[0].currentStatus,
-            publicationStatus: link?.publicationToRef.versions[0].publicationStatus
-        }
-    };
-
-    return simplifiedLink;
+    return link;
 };
 
 export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {

@@ -9,6 +9,8 @@ import { Browser, launch } from 'puppeteer-core';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
+import * as publicationVersionService from 'publicationVersion/service';
+
 export const getAllByIds = async (ids: Array<string>) => {
     // Get base publications
     const publications = await client.prisma.publication.findMany({
@@ -112,7 +114,9 @@ export const isIdInUse = async (id: string) => {
     return Boolean(publication);
 };
 
-export const get = async (id: string, versionNumber?: number) => {
+// For convenience, sometimes we want to present a publication with the data from
+// a particular version inline, disguised as one entity. For example, when we provide it straight to the UI.
+export const getWithVersionMerged = async (id: string, versionNumber?: number) => {
     // Get the overall publication without versions initially
     const publication = await client.prisma.publication.findFirst({
         where: {
@@ -295,6 +299,335 @@ export const get = async (id: string, versionNumber?: number) => {
     // Necessary to name version id as versionId because "id" will be overwritten
     // by spread operator with publication's id
     return { ...versionRest, versionId: version?.id, ...publication };
+};
+
+// Get a publication with a version attached. By default, the current version.
+export const getWithVersion = async (id: string, versionNumber?: number) => {
+    return await client.prisma.publication.findFirst({
+        where: {
+            id
+        },
+        include: {
+            versions: {
+                where: {
+                    versionOf: id,
+                    ...(versionNumber
+                        ? {
+                              versionNumber
+                          }
+                        : {
+                              isCurrent: true
+                          })
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    },
+                    publicationStatus: {
+                        select: {
+                            status: true,
+                            createdAt: true,
+                            id: true
+                        },
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
+                    funders: {
+                        select: {
+                            id: true,
+                            city: true,
+                            country: true,
+                            name: true,
+                            link: true,
+                            ror: true
+                        }
+                    },
+                    coAuthors: {
+                        select: {
+                            id: true,
+                            email: true,
+                            linkedUser: true,
+                            publicationVersionId: true,
+                            confirmedCoAuthor: true,
+                            approvalRequested: true,
+                            createdAt: true,
+                            reminderDate: true,
+                            isIndependent: true,
+                            affiliations: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        }
+                    }
+                }
+            },
+            publicationFlags: {
+                select: {
+                    id: true,
+                    category: true,
+                    resolved: true,
+                    createdBy: true,
+                    createdAt: true,
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
+                }
+            },
+            linkedTo: {
+                where: {
+                    publicationToRef: {
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationToRef: {
+                        select: {
+                            id: true,
+                            type: true,
+                            doi: true,
+                            versions: {
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            linkedFrom: {
+                where: {
+                    publicationFromRef: {
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationFromRef: {
+                        select: {
+                            id: true,
+                            type: true,
+                            doi: true,
+                            versions: {
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
+            }
+        }
+    });
+};
+
+export const get = async (id: string) => {
+    return await client.prisma.publication.findUnique({
+        where: {
+            id
+        },
+        include: {
+            versions: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    },
+                    publicationStatus: {
+                        select: {
+                            status: true,
+                            createdAt: true,
+                            id: true
+                        },
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
+                    funders: {
+                        select: {
+                            id: true,
+                            city: true,
+                            country: true,
+                            name: true,
+                            link: true,
+                            ror: true
+                        }
+                    },
+                    coAuthors: {
+                        select: {
+                            id: true,
+                            email: true,
+                            linkedUser: true,
+                            publicationVersionId: true,
+                            confirmedCoAuthor: true,
+                            approvalRequested: true,
+                            createdAt: true,
+                            reminderDate: true,
+                            isIndependent: true,
+                            affiliations: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    orcid: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        }
+                    }
+                }
+            },
+            publicationFlags: {
+                select: {
+                    id: true,
+                    category: true,
+                    resolved: true,
+                    createdBy: true,
+                    createdAt: true,
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    }
+                }
+            },
+            linkedTo: {
+                where: {
+                    publicationToRef: {
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationToRef: {
+                        select: {
+                            id: true,
+                            type: true,
+                            doi: true,
+                            versions: {
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            linkedFrom: {
+                where: {
+                    publicationFromRef: {
+                        versions: {
+                            some: {
+                                isCurrent: true,
+                                currentStatus: 'LIVE'
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationFromRef: {
+                        select: {
+                            id: true,
+                            type: true,
+                            doi: true,
+                            versions: {
+                                select: {
+                                    title: true,
+                                    publishedDate: true,
+                                    currentStatus: true,
+                                    description: true,
+                                    keywords: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    language: true,
+                    translations: true
+                }
+            }
+        }
+    });
 };
 
 export const getSeedDataPublications = async (title: string) => {
@@ -603,16 +936,6 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
     return { ...version, versionId: version.id, ...publication };
 };
 
-export const validateConflictOfInterest = (publication: I.PublicationWithMetadata) => {
-    if (publication.conflictOfInterestStatus) {
-        if (!publication.conflictOfInterestText?.length) return false;
-    } else if (publication.conflictOfInterestStatus === null) {
-        return false;
-    }
-
-    return true;
-};
-
 export const doesDuplicateFlagExist = async (publication, category, user) => {
     const flag = await client.prisma.publicationFlags.findFirst({
         where: {
@@ -626,7 +949,7 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolean => {
+export const isReadyToPublish = (publication: I.PublicationWithVersionAttached): boolean => {
     if (!publication) {
         return false;
     }
@@ -634,14 +957,14 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
     const hasAtLeastOneLinkOrTopic =
         publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
-        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
-    const conflictOfInterest = validateConflictOfInterest(publication);
-    const hasPublishDate = Boolean(publication.publishedDate);
-    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+        ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
+    const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
+    const hasPublishDate = Boolean(version.publishedDate);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? version.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
-        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
+        publication.type === 'DATA' ? version.dataPermissionsStatement !== null : true;
 
-    const coAuthorsAreVerified = !!publication.coAuthors?.every(
+    const coAuthorsAreVerified = !!version.coAuthors.every(
         (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
     );
 
@@ -652,25 +975,28 @@ export const isReadyToPublish = (publication: I.PublicationWithMetadata): boolea
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        coAuthorsAreVerified
+        coAuthorsAreVerified &&
+        version.isCurrent
     );
 };
 
-export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata): boolean => {
-    if (!publication || publication.currentStatus !== 'DRAFT') {
+export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAttached): boolean => {
+    const version = publication?.versions[0];
+
+    if (!publication || !version?.isCurrent || version?.currentStatus !== 'DRAFT') {
         return false;
     }
 
     const hasAtLeastOneLinkOrTopic =
         publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
-        ['title', 'licence'].every((field) => publication[field]) && !Helpers.isEmptyContent(publication.content || '');
-    const conflictOfInterest = validateConflictOfInterest(publication);
-    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? publication.ethicalStatement !== null : true;
+        ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
+    const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
+    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? version.ethicalStatement !== null : true;
     const isDataAndHasPermissionsStatement =
-        publication.type === 'DATA' ? publication.dataPermissionsStatement !== null : true;
-    const hasConfirmedAffiliations = !!publication.coAuthors?.some(
-        (author) => author.linkedUser === publication.createdBy && (author.isIndependent || author.affiliations.length)
+        publication.type === 'DATA' ? version.dataPermissionsStatement !== null : true;
+    const hasConfirmedAffiliations = !!version.coAuthors.some(
+        (author) => author.linkedUser === version.createdBy && (author.isIndependent || author.affiliations.length)
     );
 
     return (
@@ -679,16 +1005,19 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithMetadata)
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
-        hasConfirmedAffiliations
+        hasConfirmedAffiliations &&
+        version.isCurrent
     );
 };
 
-export const isReadyToLock = (publication: I.PublicationWithMetadata): boolean => {
-    if (!publication || publication.currentStatus !== 'DRAFT') {
+export const isReadyToLock = (publication: I.PublicationWithVersionAttached): boolean => {
+    const version = publication?.versions[0];
+
+    if (!publication || version?.currentStatus !== 'DRAFT') {
         return false;
     }
 
-    const hasRequestedApprovals = !!publication.coAuthors?.some((author) => author.approvalRequested);
+    const hasRequestedApprovals = !!version.coAuthors.some((author) => author.approvalRequested);
 
     return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
@@ -922,7 +1251,7 @@ export const getLinksForPublication = async (id: string) => {
 };
 
 // AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
-export const generatePDF = async (publication: I.PublicationWithMetadata): Promise<string | null> => {
+export const generatePDF = async (publication: I.PublicationWithVersionAttached): Promise<string | null> => {
     const references = await referenceService.getAllByPublication(publication.id);
     const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
     const isLocal = process.env.STAGE === 'local';

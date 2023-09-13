@@ -13,6 +13,7 @@ import {
     APIGatewayProxyEventV2
 } from 'aws-lambda';
 import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export {
     ImageExtension,
@@ -155,7 +156,17 @@ export interface PublicationFilters {
     orderDirection?: OrderDirection;
 }
 
-export type PublicationWithMetadata = Exclude<Prisma.PromiseReturnType<typeof publicationService.get>, null>;
+export type PublicationWithVersionDataMerged = Exclude<
+    Prisma.PromiseReturnType<typeof publicationService.getWithVersionMerged>,
+    null
+>;
+
+export type PublicationWithVersionAttached = Exclude<
+    Prisma.PromiseReturnType<typeof publicationService.getWithVersion>,
+    null
+>;
+
+export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
 
 /**
  * @description Links

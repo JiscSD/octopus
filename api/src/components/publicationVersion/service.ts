@@ -131,3 +131,13 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
 
     return updatedPublication;
 };
+
+export const validateConflictOfInterest = (version: I.PublicationVersion) => {
+    if (version.conflictOfInterestStatus) {
+        if (!version.conflictOfInterestText?.length) return false;
+    } else if (version.conflictOfInterestStatus === null) {
+        return false;
+    }
+
+    return true;
+};

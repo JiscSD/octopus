@@ -53,13 +53,23 @@ export const createFlag = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        if (!publication || publication.currentStatus !== 'LIVE') {
+        if (!publication || !publication.versions.some((version) => version.currentStatus === 'LIVE')) {
             return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
+                message: 'Cannot flag that a publication that does not exist, or has never been LIVE'
             });
         }
 
-        if (publication.user.id === event.user.id) {
+        // Latest published version (the version presented when someone tries to raise a flag) is either current version,
+        // or if that's not LIVE, the version before, as we've already confirmed that the publication has been live at some point.
+        const latestPublishedVersion =
+            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
+            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+
+        if (!latestPublishedVersion) {
+            throw Error('Unable to find latest published version');
+        }
+
+        if (latestPublishedVersion.user.id === event.user.id) {
             return response.json(403, {
                 message: 'Cannot flag your own publication'
             });
@@ -87,11 +97,11 @@ export const createFlag = async (
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user?.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.newRedFlagAuthorNotification({
-                    to: publication.user.email,
-                    publicationName: publication.title,
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title,
                     publicationId: publication.id,
                     flagId: flag.id,
                     type: helpers.formatFlagType(event.body.category),
@@ -106,7 +116,7 @@ export const createFlag = async (
             emailPromises.push(
                 email.newRedFlagCreatorNotification({
                     to: event.user.email,
-                    publicationName: publication.title,
+                    publicationName: latestPublishedVersion.title,
                     publicationId: publication.id,
                     flagId: flag.id
                 })
@@ -153,15 +163,18 @@ export const createFlagComment = async (
             });
         }
 
-        // The user attempting to leave a comment is not the flag creator or the publication owner.
-        // The publication owner is defined as the user on the first version.
-        const firstVersion = flag.publication.versions.find((version) => version.versionNumber === 1);
+        const publication = flag.publication;
 
-        if (!firstVersion) {
-            throw Error('Could not get first version of publication');
+        // The user attempting to leave a comment is not the flag creator or the publication owner.
+        const latestPublishedVersion =
+            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
+            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+
+        if (!latestPublishedVersion) {
+            throw Error('Could not get latest published version of publication');
         }
 
-        if (flag.createdBy !== event.user.id && firstVersion.user.id !== event.user.id) {
+        if (flag.createdBy !== event.user.id && latestPublishedVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to comment on this flag.'
             });
@@ -173,19 +186,17 @@ export const createFlagComment = async (
             event.user.id
         );
 
-        const publication = await publicationService.get(flag.publicationId);
-
         const flagCreator = await userService.get(flag.createdBy, true);
 
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.updateRedFlagNotification({
-                    to: publication.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
                     type: helpers.formatFlagType(flag.category),
                     submitter: `${event.user.firstName} ${event.user.lastName || ''}`
@@ -197,8 +208,8 @@ export const createFlagComment = async (
             emailPromises.push(
                 email.updateRedFlagNotification({
                     to: flagCreator.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
                     type: helpers.formatFlagType(flag.category),
                     submitter: `${event.user.firstName} ${event.user.lastName || ''}`
@@ -243,17 +254,25 @@ export const resolveFlag = async (
 
         const resolveFlag = await flagService.resolveFlag(event.pathParameters.id);
 
-        const publication = await publicationService.get(flag.publicationId);
+        const publication = flag.publication;
+
+        const latestPublishedVersion =
+            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
+            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+
+        if (!latestPublishedVersion) {
+            throw Error('Could not get latest published version of publication');
+        }
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user?.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.resolveRedFlagAuthorNotification({
-                    to: publication.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
                     type: helpers.formatFlagType(flag.category)
                 })
@@ -265,8 +284,8 @@ export const resolveFlag = async (
             emailPromises.push(
                 email.resolveRedFlagCreatorNotification({
                     to: event.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id
                 })
             );
