@@ -9,7 +9,7 @@ applications:
         build:
           commands:
             - START="$(date +%Y-%m-%dT%H:%M:%S%z)"
-            - npm run build
+            - # npm run build
             - echo http://3.249.144.255:4000/api/plugins/webhook/2/deployments -X 'POST' -d "{ \"commit_sha\":\"$AWS_COMMIT_ID\", \"repo_url\":\"https://github.com/JiscSD/octopus\", \"start_time\":\"$START\",\"end_time\":\"$(date +%Y-%m-%dT%H:%M:%S%z)\"}"
       artifacts:
         baseDirectory: .next
