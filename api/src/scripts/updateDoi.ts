@@ -6,15 +6,14 @@ const updateDoi = async (): Promise<void> => {
         where: {
             versions: {
                 some: {
-                    isLatestVersion: true,
-                    currentStatus: 'LIVE'
+                    isLatestLiveVersion: true
                 }
             }
         },
         include: {
             versions: {
                 where: {
-                    isLatestVersion: true
+                    isLatestLiveVersion: true
                 },
                 include: {
                     user: {
@@ -108,8 +107,7 @@ const updateDoi = async (): Promise<void> => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -121,7 +119,7 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isLatestVersion: true
+                                    isLatestLiveVersion: true
                                 },
                                 select: {
                                     title: true,
@@ -150,8 +148,7 @@ const updateDoi = async (): Promise<void> => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -163,7 +160,7 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isLatestVersion: true
+                                    isLatestLiveVersion: true
                                 },
                                 select: {
                                     title: true,

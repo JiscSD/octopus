@@ -383,7 +383,7 @@ export const getLinksForPublication = async (
         const data = await publicationService.getLinksForPublication(event.pathParameters.id);
 
         // If publication doesn't exist or has no LIVE version
-        if (!data.publication || !data.publication.versions.some((version) => version.currentStatus === 'LIVE')) {
+        if (!data.publication || !data.publication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(404, { message: 'Not found.' });
         }
 
