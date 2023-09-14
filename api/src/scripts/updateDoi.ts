@@ -198,24 +198,12 @@ const updateDoi = async (): Promise<void> => {
         }
     });
 
-    // Simplify publications
-    const simplifiedPublications = publications.map((publication) => {
-        // Discard versionOf field from current version
-        const { versionOf, ...versionRest } = publication.versions[0];
-
-        return { ...versionRest, versionId: versionRest.id, ...publication };
-    });
-
     let index = 1;
 
-    for (const publication of simplifiedPublications) {
-        const abstractedReferences = publication.References.map((reference) => {
-            const { publicationVersionId, ...referenceRest } = reference;
-
-            return { publicationId: publication.id, ...referenceRest };
-        });
-        await helpers.updateDOI(publication.doi, publication, abstractedReferences).catch((err) => console.log(err));
-        console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
+    for (const publication of publications) {
+        const references = publication.versions[0].References;
+        await helpers.updateDOI(publication.doi, publication, references).catch((err) => console.log(err));
+        console.log(`No: ${index}. ${publication.versions[0].title} doi updated (${publication.doi})`);
         index++;
     }
 };

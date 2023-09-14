@@ -502,11 +502,7 @@ export interface Reference {
     location?: string | null;
 }
 
-export interface AbstractedReference extends Omit<Reference, 'publicationVersionId'> {
-    publicationId: string;
-}
-
-export type UpdateReferencesBody = Array<AbstractedReference>;
+export type UpdateReferencesBody = Array<Reference>;
 
 export interface CreateReferencePath {
     id: string;

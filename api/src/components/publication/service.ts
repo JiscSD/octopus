@@ -1245,7 +1245,7 @@ export const getLinksForPublication = async (id: string) => {
 
 // AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
 export const generatePDF = async (publication: I.PublicationWithVersionAttached): Promise<string | null> => {
-    const references = await referenceService.getAllByPublication(publication.id);
+    const references = await referenceService.getAllByPublicationVersion(publication.versions[0].id);
     const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
     const isLocal = process.env.STAGE === 'local';
 
