@@ -1,0 +1,20 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - nvm use 18
+            - npm ci
+        build:
+          commands:
+            - npm run build
+            - curl http://3.249.144.255:4000/api/plugins/webhook/2/deployments -X 'POST' -d "{ \"commit_sha\":\"$AWS_COMMIT_ID\", \"repo_url\":\"https://github.com/JiscSD/octopus\", \"start_time\":\"\" }"
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    appRoot: ui
