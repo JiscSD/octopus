@@ -55,7 +55,7 @@ export const createFlag = async (
 
         if (!publication || !publication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist, or has never been LIVE'
+                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
             });
         }
 
