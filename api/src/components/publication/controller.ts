@@ -359,7 +359,7 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedVersion.content)
         });
 
-        const references = await referenceService.getAllByPublication(publicationId);
+        const references = await referenceService.getAllByPublicationVersion(updatedVersion.id);
 
         // Publication is live, so update the DOI
         await helpers.updateDOI(publication.doi, publication, references);

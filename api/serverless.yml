@@ -463,14 +463,14 @@ functions:
         handler: src/components/reference/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
+                  path: ${self:custom.versions.v1}/publicationVersions/{id}/reference
                   method: get
                   cors: true
     updateAllReference:
         handler: src/components/reference/routes.updateAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
+                  path: ${self:custom.versions.v1}/publicationVersions/{id}/reference
                   method: put
                   cors: true
 
