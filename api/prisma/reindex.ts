@@ -17,17 +17,14 @@ const reindex = async (): Promise<void> => {
         where: {
             versions: {
                 some: {
-                    currentStatus: 'LIVE'
+                    isLatestLiveVersion: true
                 }
             }
         },
         include: {
             versions: {
                 where: {
-                    currentStatus: 'LIVE'
-                },
-                orderBy: {
-                    versionNumber: 'desc'
+                    isLatestLiveVersion: true
                 }
             }
         }

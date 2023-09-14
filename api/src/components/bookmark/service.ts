@@ -103,7 +103,7 @@ export const getMany = async (
                             doi: true,
                             versions: {
                                 where: {
-                                    isCurrent: true
+                                    isLatestVersion: true
                                 },
                                 select: {
                                     publishedDate: true,

@@ -6,6 +6,10 @@ This requires a few more steps than a typical migration in order to preserve exi
  - run a second migration to remove the parts of the database we no longer need and set new fields as mandatory where needed
  - each publication will now be a versioned publication with 1 version
 
+## Before you start
+
+I recommend following this guide outside your IDE, for example on github, so you don't accidentally view an older version of it when checking out different commit hashes.
+
 ### Instructions
 1. Back up / snapshot the database to be migrated
 2. Check out the commit where only the first migration of the two we need to apply (20230914131438_versioning_pre_migration) is present

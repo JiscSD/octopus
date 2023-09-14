@@ -36,7 +36,8 @@ const problems: Prisma.PublicationCreateInput[] = [
                             createdAt: '2022-06-30T12:00:00.523Z'
                         }
                     ]
-                }
+                },
+                isLatestLiveVersion: true
             }
         }
     }
