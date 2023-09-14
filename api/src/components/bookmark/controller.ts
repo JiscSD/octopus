@@ -29,26 +29,6 @@ export const create = async (
                     });
                 }
 
-                const latestPublishedVersion =
-                    publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
-                    publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
-
-                if (!latestPublishedVersion) {
-                    throw Error('Could not get latest published version of publication');
-                }
-
-                // Check to see if the user is the author or a co author of the latest published version
-                // of the publication. If so throw an error
-                const isUserAuthor =
-                    latestPublishedVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser == event.user.id) ||
-                    latestPublishedVersion.user.id === event.user.id;
-
-                if (isUserAuthor) {
-                    return response.json(401, {
-                        message: 'You cannot bookmark a publication you have authored or co-authored.'
-                    });
-                }
-
                 break;
             }
 
