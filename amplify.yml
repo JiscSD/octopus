@@ -10,7 +10,7 @@ applications:
           commands:
             - START="$(date +%Y-%m-%dT%H:%M:%S%z)"
             - npm run build
-            - END=="$(date +%Y-%m-%dT%H:%M:%S%z)"
+            - END="$(date +%Y-%m-%dT%H:%M:%S%z)"
             - echo http://3.249.144.255:4000/api/plugins/webhook/2/deployments -X 'POST' -d "{ \"commit_sha\":\"$AWS_COMMIT_ID\", \"repo_url\":\"https://github.com/JiscSD/octopus\", \"start_time\":\"$START\",\"end_time\":\"$END\"}"
             - curl http://3.249.144.255:4000/api/plugins/webhook/2/deployments -X 'POST' -d "{ \"commit_sha\":\"$AWS_COMMIT_ID\", \"repo_url\":\"https://github.com/JiscSD/octopus\", \"start_time\":\"$START\",\"end_time\":\"$END\"}"
       artifacts:
