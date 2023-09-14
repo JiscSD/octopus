@@ -141,8 +141,7 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                     publicationToRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -172,8 +171,7 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -395,8 +393,7 @@ export const getWithVersion = async (id: string, versionNumber?: number) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -426,8 +423,7 @@ export const getWithVersion = async (id: string, versionNumber?: number) => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -554,8 +550,7 @@ export const get = async (id: string) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -585,8 +580,7 @@ export const get = async (id: string) => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -640,8 +634,7 @@ export const getSeedDataPublications = async (title: string) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isLatestVersion: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }

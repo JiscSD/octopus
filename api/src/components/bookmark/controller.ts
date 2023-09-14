@@ -23,7 +23,7 @@ export const create = async (
                 }
 
                 // Check that the publication has a live version
-                if (!publication.versions.some((version) => version.currentStatus === 'LIVE')) {
+                if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
                     return response.json(403, {
                         message: 'You cannot bookmark a publication which has not gone live.'
                     });

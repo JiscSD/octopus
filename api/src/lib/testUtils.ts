@@ -44,38 +44,43 @@ export const testSeed = async (): Promise<void> => {
 
 export const openSearchSeed = async (): Promise<void> => {
     const publications = await client.prisma.publication.findMany({
+        where: {
+            versions: {
+                some: {
+                    // only seed in live versions
+                    isLatestLiveVersion: true
+                }
+            }
+        },
         include: {
             versions: {
                 where: {
-                    isLatestVersion: true
+                    isLatestLiveVersion: true
                 }
             }
         }
     });
 
     for (const publication of publications) {
-        const latestVersion = publication.versions[0];
+        const latestLiveVersion = publication.versions[0];
 
-        // only seed in live versions
-        if (latestVersion?.currentStatus === 'LIVE') {
-            await client.search.create({
-                index: 'publications',
+        await client.search.create({
+            index: 'publications',
+            id: publication.id,
+            body: {
                 id: publication.id,
-                body: {
-                    id: publication.id,
-                    type: publication.type,
-                    title: latestVersion.title,
-                    licence: latestVersion.licence,
-                    description: latestVersion.description,
-                    keywords: latestVersion.keywords,
-                    content: latestVersion.content,
-                    language: 'en',
-                    currentStatus: latestVersion.currentStatus,
-                    publishedDate: latestVersion.publishedDate,
-                    cleanContent: htmlToText.convert(latestVersion.content)
-                }
-            });
-        }
+                type: publication.type,
+                title: latestLiveVersion.title,
+                licence: latestLiveVersion.licence,
+                description: latestLiveVersion.description,
+                keywords: latestLiveVersion.keywords,
+                content: latestLiveVersion.content,
+                language: 'en',
+                currentStatus: latestLiveVersion.currentStatus,
+                publishedDate: latestLiveVersion.publishedDate,
+                cleanContent: htmlToText.convert(latestLiveVersion.content)
+            }
+        });
     }
 };
 

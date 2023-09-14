@@ -60,8 +60,7 @@ export const get = async (id: string) => {
                     id: true,
                     versions: {
                         where: {
-                            isLatestVersion: true,
-                            currentStatus: 'LIVE'
+                            isLatestLiveVersion: true
                         },
                         select: {
                             title: true

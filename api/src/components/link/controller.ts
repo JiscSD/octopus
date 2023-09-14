@@ -46,7 +46,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         }
 
         // Check if publication to be linked to has a live version
-        if (!toPublication.versions.some((version) => version.currentStatus === 'LIVE')) {
+        if (!toPublication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(403, {
                 message: `Publication with id ${event.body.to} is not LIVE.`
             });
