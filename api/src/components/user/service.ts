@@ -143,7 +143,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             {
                 versions: {
                     some: {
-                        isCurrent: true,
+                        isLatestVersion: true,
                         createdBy: id
                     }
                 }
@@ -151,7 +151,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             {
                 versions: {
                     some: {
-                        isCurrent: true,
+                        isLatestVersion: true,
                         coAuthors: {
                             some: {
                                 linkedUser: id
@@ -163,7 +163,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         ],
         versions: {
             some: {
-                isCurrent: true,
+                isLatestVersion: true,
                 currentStatus: {
                     in: statuses
                 }
@@ -182,7 +182,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             url_slug: true,
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 },
                 select: {
                     createdBy: true,

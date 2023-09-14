@@ -27,7 +27,7 @@ export const getAllByIds = async (ids: Array<string>) => {
             versionOf: {
                 in: ids
             },
-            isCurrent: true
+            isLatestVersion: true
         },
         include: {
             user: {
@@ -88,7 +88,7 @@ export const update = async (id: string, updateContent: I.UpdatePublicationReque
     const updatedPublication = await client.prisma.publication.update({
         where: {
             versionOf: id,
-            isCurrent: true
+            isLatestVersion: true
         },
         select: {
             id: true
@@ -148,7 +148,7 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -179,7 +179,7 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -224,7 +224,7 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                   versionNumber
               }
             : {
-                  isCurrent: true
+                  isLatestVersion: true
               })
     };
 
@@ -316,7 +316,7 @@ export const getWithVersion = async (id: string, versionNumber?: number) => {
                               versionNumber
                           }
                         : {
-                              isCurrent: true
+                              isLatestVersion: true
                           })
                 },
                 include: {
@@ -402,7 +402,7 @@ export const getWithVersion = async (id: string, versionNumber?: number) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -433,7 +433,7 @@ export const getWithVersion = async (id: string, versionNumber?: number) => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -561,7 +561,7 @@ export const get = async (id: string) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -592,7 +592,7 @@ export const get = async (id: string) => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -635,7 +635,7 @@ export const getSeedDataPublications = async (title: string) => {
         where: {
             versions: {
                 some: {
-                    isCurrent: true,
+                    isLatestVersion: true,
                     title,
                     createdBy: 'octopus'
                 }
@@ -647,7 +647,7 @@ export const getSeedDataPublications = async (title: string) => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -857,7 +857,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
         select: {
             id: true,
             versionNumber: true,
-            isCurrent: true,
+            isLatestVersion: true,
             currentStatus: true,
             publishedDate: true,
             title: true,
@@ -976,14 +976,14 @@ export const isReadyToPublish = (publication: I.PublicationWithVersionAttached):
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
         coAuthorsAreVerified &&
-        version.isCurrent
+        version.isLatestVersion
     );
 };
 
 export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAttached): boolean => {
     const version = publication?.versions[0];
 
-    if (!publication || !version?.isCurrent || version?.currentStatus !== 'DRAFT') {
+    if (!publication || !version?.isLatestVersion || version?.currentStatus !== 'DRAFT') {
         return false;
     }
 
@@ -1006,7 +1006,7 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAt
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
         hasConfirmedAffiliations &&
-        version.isCurrent
+        version.isLatestVersion
     );
 };
 
@@ -1062,7 +1062,7 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "PublicationVersion" AS pto_latest_version
               ON "pto".id = "pto_latest_version"."versionOf"
-              AND "pto_latest_version"."isCurrent" = 't'
+              AND "pto_latest_version"."isLatestVersion" = 't'
 
               LEFT JOIN "PublicationVersion" AS pto_first_version
               ON "pto".id = "pto_first_version"."versionOf"
@@ -1098,7 +1098,7 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "PublicationVersion" AS pto_latest_version
               ON "pto".id = "pto_latest_version"."versionOf"
-              AND "pto_latest_version"."isCurrent" = 't'
+              AND "pto_latest_version"."isLatestVersion" = 't'
 
               LEFT JOIN "PublicationVersion" AS pto_first_version
               ON "pto".id = "pto_first_version"."versionOf"
@@ -1133,7 +1133,7 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "PublicationVersion" AS pfrom_latest_version
               ON "pfrom".id = "pfrom_latest_version"."versionOf"
-              AND "pfrom_latest_version"."isCurrent" = 't'
+              AND "pfrom_latest_version"."isLatestVersion" = 't'
 
               LEFT JOIN "PublicationVersion" AS pfrom_first_version
               ON "pfrom".id = "pfrom_first_version"."versionOf"
@@ -1168,7 +1168,7 @@ export const getLinksForPublication = async (id: string) => {
 
               LEFT JOIN "PublicationVersion" AS pfrom_latest_version
               ON "pfrom".id = "pfrom_latest_version"."versionOf"
-              AND "pfrom_latest_version"."isCurrent" = 't'
+              AND "pfrom_latest_version"."isLatestVersion" = 't'
 
               LEFT JOIN "PublicationVersion" AS pfrom_first_version
               ON "pfrom".id = "pfrom_first_version"."versionOf"
@@ -1199,7 +1199,7 @@ export const getLinksForPublication = async (id: string) => {
             id: true,
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 },
                 include: {
                     coAuthors: {
@@ -1231,7 +1231,7 @@ export const getLinksForPublication = async (id: string) => {
     linkedTo.forEach((link) => {
         Object.assign(link, {
             // This comes from the versions array, however we should only get one back because
-            // we are filtering it down to versions that have isCurrent = true. So we access it at [0].
+            // we are filtering it down to versions that have isLatestVersion = true. So we access it at [0].
             authors: linkedPublications.find((publication) => publication.id === link.id)?.versions[0].coAuthors || []
         });
     });
@@ -1328,7 +1328,7 @@ export const getResearchTopics = async () => {
                 {
                     versions: {
                         some: {
-                            isCurrent: true,
+                            isLatestVersion: true,
                             content: {
                                 contains: 'This is an automatically-generated topic'
                             }
@@ -1343,7 +1343,7 @@ export const getResearchTopics = async () => {
             versions: {
                 some: {
                     createdBy: 'octopus',
-                    isCurrent: true,
+                    isLatestVersion: true,
                     References: {
                         none: {}
                     }
@@ -1353,7 +1353,7 @@ export const getResearchTopics = async () => {
         include: {
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 },
                 include: {
                     user: {

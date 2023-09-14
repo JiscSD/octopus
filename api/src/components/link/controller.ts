@@ -90,7 +90,7 @@ export const deleteLink = async (
             return response.json(404, { message: 'Link not found' });
         }
 
-        const fromCurrentVersion = link.publicationFromRef.versions.find((version) => version.isCurrent);
+        const fromCurrentVersion = link.publicationFromRef.versions.find((version) => version.isLatestVersion);
 
         if (
             fromCurrentVersion?.currentStatus !== 'DRAFT' ||

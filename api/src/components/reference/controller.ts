@@ -29,7 +29,7 @@ export const updateAll = async (
         }
 
         // References should only be updated on the current version
-        if (!version.isCurrent) {
+        if (!version.isLatestVersion) {
             return response.json(403, {
                 message: 'References can only be updated on the current version.'
             });

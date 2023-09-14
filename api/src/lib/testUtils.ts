@@ -47,7 +47,7 @@ export const openSearchSeed = async (): Promise<void> => {
         include: {
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 }
             }
         }

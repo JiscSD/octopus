@@ -27,7 +27,7 @@ export const initialDevSeed = async (): Promise<void> => {
             include: {
                 versions: {
                     where: {
-                        isCurrent: true
+                        isLatestVersion: true
                     }
                 }
             }
@@ -70,7 +70,7 @@ export const initialDevSeed = async (): Promise<void> => {
             include: {
                 versions: {
                     where: {
-                        isCurrent: true
+                        isLatestVersion: true
                     }
                 }
             }
@@ -169,7 +169,7 @@ export const initialProdSeed = async (): Promise<void> => {
             include: {
                 versions: {
                     where: {
-                        isCurrent: true
+                        isLatestVersion: true
                     }
                 }
             }

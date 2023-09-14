@@ -27,7 +27,9 @@ const problems: Prisma.PublicationCreateInput[] = [
                             { status: 'DRAFT', createdAt: '2022-05-21T12:00:00.000Z' },
                             { status: 'LIVE', createdAt: '2022-05-21T13:00:00.000Z' }
                         ]
-                    }
+                    },
+                    currentStatus: 'LIVE',
+                    isLatestLiveVersion: true
                 }
             ]
         }
@@ -63,6 +65,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"How do living organisms function, survive, reproduce and evolve?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -99,6 +102,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How has life on earth evolved?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -135,6 +139,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How do we improve catalysts for chemical reactions?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -171,6 +176,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we produce more efficient and less polluting sources of energy?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -207,6 +213,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we better manage energy storage?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -243,6 +250,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve the function and relience of construction materials?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -279,6 +287,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we minimise threats to human health and wellbeing?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -315,6 +324,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How do we improve the availability of fresh and safe drinking water?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -351,6 +361,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve education?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -387,6 +398,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve food supplies?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -425,6 +437,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'How can we better understand and mitigate the effects that environmental pollutants have on human health and wellbeing?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -463,6 +476,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"How can we better understand, prevent and reverse damage and threats to ecosystems and species?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -499,6 +513,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"How can we diagnose, prevent and treat human diseases?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -537,6 +552,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Non Communicable Diseases (NCDs) are the major causes of mortality and morbidity globally.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['non', 'communicable', 'diseases', 'ncds']
                 }
             ]
@@ -573,6 +589,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we better understand and treat injuries?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -611,6 +628,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"How can we improve the quality of life, and reduce the burden of disease, in older people?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -648,6 +666,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve surgical and non-pharmaceutical medical techniques and practices?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -684,6 +703,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve pharmacological treatments and practices?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -726,6 +746,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"How can we better understand and hence diagnose, prevent and treat cancers: malignant growths or tumours resulting from an uncontrolled division of cells?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -764,6 +785,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"How can we better understand, predict, treat and prevent infectious diseases and infections?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -800,6 +822,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"How can we better understand, prevent and treat metabolic disorders?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -838,6 +861,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"How can we better recognise, prevent and improve behaviour that threatens harm to a person and others around them?"',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -874,6 +898,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'How can we improve equalities in access to healthcare and treatments?',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['']
                 }
             ]
@@ -912,6 +937,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mental health conditions are of rising concern due to their increased contribution to the global burden of disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mental', 'health', 'conditions', 'rising']
                 }
             ]
@@ -950,6 +976,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neurological diseases are one of the main contemporary challenges in advanced societies.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['objectives', 'neurological', 'diseases', 'main']
                 }
             ]
@@ -988,6 +1015,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Severe acute respiratory syndrome coronavirus 2 or SARS-CoV-2, a novel coronavirus, is probably the most dramatic health and human crisis in living memory."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['novel', 'coronavirus']
                 }
             ]
@@ -1024,6 +1052,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Obesity is a growing epidemic leading to worldwide public health concerns.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['obesity', 'growing', 'epidemic']
                 }
             ]
@@ -1062,6 +1091,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Adverse drug reactions (ADRs) are an important cause of morbidity and mortality across the world and contribute to a significant economic burden on healthcare resources and community.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adverse', 'drug', 'reactions', 'adrs']
                 }
             ]
@@ -1100,6 +1130,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Breast cancer is the second most cause of cancer related death among women all over the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'related', 'death', 'women']
                 }
             ]
@@ -1138,6 +1169,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Alzheimer’s disease (AD) is a progressive neurodegenerative disease that has emerged as the most prevalent form of late-life dementia in humans.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alzheimer', 'disease', 'ad']
                 }
             ]
@@ -1176,6 +1208,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Breast cancer is a clinically heterogeneous disease, and it is generally accepted that the different clinical courses of patients with histologically similar tumors are due to molecular differences among cancers."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['breast', 'cancer', 'clinically', 'heterogeneous']
                 }
             ]
@@ -1214,6 +1247,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The incidence of hepatocellular carcinoma (HCC) is increasing worldwide, largely due to hepatitis B virus (HBV), hepatitis C virus and liver cirrhosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['incidence', 'hepatocellular', 'carcinoma', 'hcc']
                 }
             ]
@@ -1252,6 +1286,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Diabetes is a common disease worldwide with a multitude of complications and high mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetes', 'common', 'disease', 'worldwide']
                 }
             ]
@@ -1290,6 +1325,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Glioblastoma (GB) represents the most common and aggressive form of malignant primary brain tumour associated with high rates of morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['glioblastoma', 'gb']
                 }
             ]
@@ -1328,6 +1364,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cardiovascular diseases (CVDs) are the main cause of morbidity and mortality in developed countries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cardiovascular', 'diseases', 'cvds', 'main']
                 }
             ]
@@ -1364,6 +1401,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Tuberculosis (TB) continues to be an important public health problem worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tuberculosis', 'tb', 'continues', 'important']
                 }
             ]
@@ -1402,6 +1440,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Colorectal cancer (CRC) is the third most commonly diagnosed malignancy and the second leading cause of cancer-related deaths worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['colorectal', 'cancer', 'crc']
                 }
             ]
@@ -1440,6 +1479,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Parkinson’s disease (PD) is one of the common disorders in the central nervous system.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['parkinson', 'disease', 'pd']
                 }
             ]
@@ -1478,6 +1518,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The rise and spread of antimicrobial drug resistance present one of the most pressing health issues of our days.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['antimicrobial', 'drug', 'resistance', 'present']
                 }
             ]
@@ -1516,6 +1557,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Non-small cell lung cancer (NSCLC) accounts for approximately 85% of lung cancer cases and remains the leading cause of cancer-related death.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cell', 'lung', 'cancer', 'nsclc']
                 }
             ]
@@ -1554,6 +1596,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pancreatic adenocarcinoma is one of the deadliest malignancies worldwide, mainly due to frequent diagnosis at an advanced stage and its strong chemoresistance."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pancreatic', 'adenocarcinoma', 'deadliest', 'malignancies']
                 }
             ]
@@ -1592,6 +1635,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"In the last decades, prostate cancer (PC) has become one of the most common cancer in Europe and in the United States."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prostate', 'cancer', 'pc', 'common']
                 }
             ]
@@ -1630,6 +1674,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Nonalcoholic fatty liver disease (NAFLD) is represented by a spectrum of liver pathologies ranging from simple steatosis to nonalcoholic steatohepatitis (NASH).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fatty', 'liver', 'disease', 'nafld']
                 }
             ]
@@ -1667,6 +1712,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Stroke is one of the major causes of morbidity and mortality throughout the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['stroke', 'major', 'causes', 'morbidity']
                 }
             ]
@@ -1705,6 +1751,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Human Papillomavirus Viruses (HPVs) are associated with the majority of human cervical and anal cancers and 10-30% of head and neck squamous carcinomas.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'papillomavirus', 'viruses', 'hpvs']
                 }
             ]
@@ -1743,6 +1790,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Multiple sclerosis (MS) is a T cell-mediated organ-specific inflammatory disease leading to central nervous system (CNS) demyelination.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['multiple', 'sclerosis', 'ms', 'cell']
                 }
             ]
@@ -1781,6 +1829,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Inflammatory bowel diseases (IBD), including Crohn\'s disease (CD) and ulcerative colitis (UC), are chronic, relapsing and destructive inflammatory disorders of the gastrointestinal tract which can lead to organ damage and impair quality of life."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ibd', 'including', 'crohn', 'disease']
                 }
             ]
@@ -1819,6 +1868,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic obstructive pulmonary disease (COPD) represents a huge epidemiological burden and is associated with a high incidence of morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['obstructive', 'pulmonary', 'disease', 'copd']
                 }
             ]
@@ -1857,6 +1907,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Osteoarthritis (OA) is designated the 11th highest contributor of 291 diseases of global disability and the most common cause of chronic disability in elderly people.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteoarthritis', 'oa', 'designated']
                 }
             ]
@@ -1895,6 +1946,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chronic kidney disease (CKD) represents a growing public health problem associated with loss of kidney function and cardiovascular disease (CVD), the main leading cause of morbidity and mortality in CKD."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'kidney', 'disease', 'ckd']
                 }
             ]
@@ -1933,6 +1985,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rheumatoid arthritis (RA) is a common chronic inflammatory disease affecting many tissues and resulting in substantial morbidity and increased mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rheumatoid', 'arthritis', 'ra']
                 }
             ]
@@ -1971,6 +2024,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Heart failure (HF) is among the most common causes of hospitalization, and its incidence will likely increase in an aging population of “survivors” "',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['heart', 'failure', 'hf']
                 }
             ]
@@ -2009,6 +2063,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Psoriasis is a common chronic inflammatory skin disease with a complex pathogenesis consisting of a genetic component, immune dysfunction, and environmental factors."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['psoriasis', 'common', 'chronic', 'inflammatory']
                 }
             ]
@@ -2047,6 +2102,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acute myeloid leukemia (AML) is a heterogeneous disease with variable presentation, molecular phenotype, and cytogenetic abnormalities and has seen very little improvement in patient survival over the last few decades."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'myeloid', 'leukemia', 'aml']
                 }
             ]
@@ -2085,6 +2141,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Malaria is the world’s most prevalent mosquito-borne disease caused by Plasmodium parasites, and responsible for over half a million deaths per year."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malaria', 'world', 'prevalent', 'mosquito']
                 }
             ]
@@ -2123,6 +2180,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Multiple myeloma (MM) is a plasma-cell malignancy characterized by marked epidemiological, biological, and clinical heterogeneity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['multiple', 'myeloma', 'mm']
                 }
             ]
@@ -2161,6 +2219,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Dengue is one of the most important mosquito-borne infections accounting for severe morbidity and mortality worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dengue', 'important', 'mosquito', 'borne']
                 }
             ]
@@ -2199,6 +2258,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Sepsis is a leading cause of intensive care unit (ICU) admissions worldwide and a major cause of morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sepsis', 'leading', 'cause', 'intensive']
                 }
             ]
@@ -2237,6 +2297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Asthma is a complex disease, involving many different allergic, inflammatory, and environmental components."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['asthma', 'complex', 'disease']
                 }
             ]
@@ -2275,6 +2336,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Polycystic ovary syndrome (PCOS) is one of the most common reproductive endocrine disorders among women of reproductive age, with a variety of complications and consequences mostly due to hyperandrogenism and insulin resistance (IR)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['polycystic', 'ovary', 'syndrome', 'pcos']
                 }
             ]
@@ -2313,6 +2375,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Autism spectrum disorders (ASDs) are common yet complex neurodevelopmental disorders, characterized by social, communication and behavioral deficits."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autism', 'spectrum', 'disorders', 'asds']
                 }
             ]
@@ -2349,6 +2412,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Systemic lupus erythematosus (SLE) is a chronic systemic autoimmune disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['systemic', 'lupus', 'erythematosus', 'sle']
                 }
             ]
@@ -2387,6 +2451,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Infection with the human immunodeficiency virus (HIV), the causative agent of acquired immune deficiency syndrome (AIDS), is a major global health problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['immunodeficiency', 'virus', 'hiv', 'causative']
                 }
             ]
@@ -2425,6 +2490,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neurological dysfunctions are the most impactful and persistent consequences of traumatic brain injury (TBI).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['traumatic', 'brain', 'injury', 'tbi']
                 }
             ]
@@ -2463,6 +2529,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Obstructive sleep apnea syndrome (OSAS) is described as repetitive obstructions of the upper airways during sleep, causing concomitant episodes of systemic hypoxia and associated cardiovascular and metabolic pathologies."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sleep', 'apnea', 'syndrome', 'osas']
                 }
             ]
@@ -2499,6 +2566,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Triple_negative breast cancer (TNBC) is a highly heterogeneous disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['triple', 'negative', 'breast', 'cancer']
                 }
             ]
@@ -2537,6 +2605,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Leishmania infection causes considerable human morbidity and may develop into a deadly visceral form in endemic regions.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['leishmania', 'infection', 'causes']
                 }
             ]
@@ -2575,6 +2644,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Major depressive disorder (MDD) is a leading cause of disability and a significant cause of mortality worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['major', 'depressive', 'disorder', 'mdd']
                 }
             ]
@@ -2613,6 +2683,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Osteoporosis has long been recognized as a major cause of morbidity and mortality in the elderly, especially in women."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteoporosis']
                 }
             ]
@@ -2651,6 +2722,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Preeclampsia (PE), a hypertensive disease of pregnancy, is a leading cause of fetal and maternal morbidity/mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['preeclampsia', 'pe', 'hypertensive', 'disease']
                 }
             ]
@@ -2689,6 +2761,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Melanoma is a cutaneous cancer with an increasing worldwide prevalence and high mortality due to unresectable or metastatic stages.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['melanoma', 'cutaneous', 'cancer']
                 }
             ]
@@ -2727,6 +2800,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"recent decades, fungal infections have incredibly increased with Candida genus as the major cause of morbidity and mortality in hospitalized and immunocompromised patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infections', 'incredibly', 'increased', 'candida']
                 }
             ]
@@ -2765,6 +2839,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Heavy metal contamination resulting from anthropogenic activities is one of the major environmental problems in the modern world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metal', 'contamination', 'resulting', 'anthropogenic']
                 }
             ]
@@ -2801,6 +2876,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Gastric adenocarcinoma is an important and common malignant disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gastric', 'adenocarcinoma', 'important', 'common']
                 }
             ]
@@ -2839,6 +2915,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Human cytomegalovirus (CMV), a ubiquitous human pathogen, is a leading cause of congenital infections and represents a serious health risk for the immunosuppressed patient."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'cytomegalovirus', 'cmv']
                 }
             ]
@@ -2877,6 +2954,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Renal cell carcinoma (RCC) represents 2% to 3% of human cancers and is aggressive, with metastatic capability."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['renal', 'cell', 'carcinoma', 'rcc']
                 }
             ]
@@ -2915,6 +2993,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Osteosarcoma is one of the most common primary malignancies in bones and is characterized by high metastatic rates.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteosarcoma', 'common', 'primary', 'malignancies']
                 }
             ]
@@ -2953,6 +3032,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Methicillin-resistant Staphylococcus aureus (MRSA) is a major cause of nosocomial and community-acquired infection worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['resistant', 'staphylococcus', 'aureus', 'mrsa']
                 }
             ]
@@ -2991,6 +3071,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Amyotrophic lateral sclerosis (ALS) is a devastating motor neuron degenerative disease whose etiology and pathogenesis remain poorly understood.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['amyotrophic', 'lateral', 'sclerosis', 'als']
                 }
             ]
@@ -3029,6 +3110,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Retinal degeneration caused blindness, such as age-related macular degeneration (AMD), diabetic retinopathy (DR), retinitis pigmentosa (RP) and retinal detachment, is a major problem in clinical ophthalmology."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['degeneration', 'amd', 'diabetic', 'retinopathy']
                 }
             ]
@@ -3065,6 +3147,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Epilepsy is a severe brain disorder affecting numerous patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['epilepsy', 'severe', 'brain', 'disorder']
                 }
             ]
@@ -3103,6 +3186,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Among the various types of interstitial lung diseases, idiopathic pulmonary fibrosis (IPF) is the most common disorder and has a poor prognosis and a limited response to pharmacological treatment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['idiopathic', 'pulmonary', 'fibrosis', 'ipf']
                 }
             ]
@@ -3141,6 +3225,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Attention deficit and hyperactivity disorder (ADHD) has a high prevalence and is frequently associated with comorbid illnesses.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adhd', 'high', 'prevalence']
                 }
             ]
@@ -3177,6 +3262,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Drug resistance remains a major obstacle to successful cancer treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['drug', 'resistance', 'remains', 'major']
                 }
             ]
@@ -3215,6 +3301,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The human pathogen Helicobacter pylori colonises approximately half of the global population and infectioncan lead to a range of gastric diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pathogen', 'helicobacter', 'pylori', 'colonises']
                 }
             ]
@@ -3253,6 +3340,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The incidence of thyroid cancer (TC), a rare malignancy, has strongly risen in recent decades."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['incidence', 'thyroid', 'cancer', 'tc']
                 }
             ]
@@ -3289,6 +3377,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Periodontal disease is multifaceted in nature.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['periodontal', 'disease', 'multifaceted', 'nature']
                 }
             ]
@@ -3327,6 +3416,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Tobacco smoking poses a great global health burden to > 1 billion smokers and those subject to passive smoking, and is well known to be a causal factor in at least 12 types of cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['health', 'burden', 'billion', 'smokers']
                 }
             ]
@@ -3365,6 +3455,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The metabolic syndrome is a constellation of risk factors including dyslipidemia, dysglycemia, hypertension, a pro_inflammatory state, and a prothrombotic state."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metabolic', 'syndrome']
                 }
             ]
@@ -3403,6 +3494,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Sickle Cell disease (SCD) is a chronic, inherited hemoglobin disorder associated with lifelong severe and life-threatening complications in neonates, pediatrics, and transitioning young adults (1)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sickle', 'cell', 'disease', 'scd']
                 }
             ]
@@ -3441,6 +3533,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Graft versus host disease (GVHD) is a severe complication after allogenic hematopoietic cell transplantation (HSCT).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['versus', 'host', 'disease', 'gvhd']
                 }
             ]
@@ -3479,6 +3572,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Arsenic is a Group I human carcinogen, and chronic arsenic exposure through drinking water is a major threat to human population."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['arsenic', 'exposure', 'drinking', 'water']
                 }
             ]
@@ -3517,6 +3611,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pulmonary arterial hypertension is a progressive and debilitating disorder with an associated high morbidity and mortality rate.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pulmonary', 'arterial', 'hypertension']
                 }
             ]
@@ -3555,6 +3650,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Prion diseases are fatal neurodegenerative disorders associated with the conversion of cellular prion protein (PrPC) into its aberrant infectious form (PrPSc).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prion', 'diseases', 'fatal', 'neurodegenerative']
                 }
             ]
@@ -3593,6 +3689,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Bladder cancer (BC) is among the most common malignancies in the world and a relevant cause of cancer mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bladder', 'cancer', 'bc']
                 }
             ]
@@ -3631,6 +3728,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic myeloid leukemia (CML) is a myeloproliferative disorder with clonal proliferation of all myeloid cell lines.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'myeloid', 'leukemia', 'cml']
                 }
             ]
@@ -3669,6 +3767,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Atrial fibrillation (AF) is the most common arrhythmia encountered in clinical practice, with a prevalence that increases alongside the ageing population worldwide."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['atrial', 'fibrillation', 'af']
                 }
             ]
@@ -3707,6 +3806,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Huntington's disease (HD) is a fatal neurodegenerative disorder that is caused by a CAG repeat expansion encoding a polyglutamine tract in the huntingtin (htt) gene.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['huntington', 'disease', 'hd']
                 }
             ]
@@ -3745,6 +3845,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Duchenne muscular dystrophy (DMD) is a fatal muscle wasting disorder caused by mutations in the dystrophin gene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['duchenne', 'muscular', 'dystrophy', 'dmd']
                 }
             ]
@@ -3783,6 +3884,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Spinal cord injury (SCI) is a condition that puts the patient’s life at risk in the acute phase and, during the chronic stage, results in permanent deficits in motor, sensory and autonomic functions."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['spinal', 'cord', 'injury', 'sci']
                 }
             ]
@@ -3821,6 +3923,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Respiratory syncytial virus (RSV) causes significant burden of disease during infancy and childhood.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['respiratory', 'syncytial', 'virus', 'rsv']
                 }
             ]
@@ -3859,6 +3962,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Systemic sclerosis (SSc) is a connective tissue disease with a poor prognosis and disease-related pulmonary fibrosis, pulmonary arterial hypertension (PAH) and cardiac involvement accounted for most deaths (1)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['systemic', 'sclerosis', 'ssc']
                 }
             ]
@@ -3897,6 +4001,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Zika virus (ZIKV), a member of the Flaviviridae family, was brought into the spotlight due to its widespread and increased pathogenicity, including Guillain-Barré syndrome and microcephaly."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['zika', 'virus', 'zikv']
                 }
             ]
@@ -3933,6 +4038,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Endometriosis is a common gynecological disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['endometriosis', 'common', 'gynecological', 'disease']
                 }
             ]
@@ -3971,6 +4077,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Schizophrenia is a chronic and devastating brain disorder with ongoing cognitive, behavioral, and emotional deteriorated functions."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['schizophrenia', 'chronic', 'devastating', 'brain']
                 }
             ]
@@ -4009,6 +4116,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Air pollution has emerged as a significant health, environmental, economic, and social problem all over the world."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['air', 'pollution', 'emerged', 'significant']
                 }
             ]
@@ -4045,6 +4153,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Plastic and microplastic pollution is an environmental and societal concern.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['plastic', 'microplastic', 'pollution', 'environmental']
                 }
             ]
@@ -4083,6 +4192,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Opioid abuse has become a major public health crisis that affects millions of individuals across the globe.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['opioid', 'abuse', 'major', 'public']
                 }
             ]
@@ -4121,6 +4231,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Low back pain (LBP) has become a major public health problem worldwide although the burden and underlying causes differ across locations and demographic groups.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['low', 'pain', 'lbp']
                 }
             ]
@@ -4159,6 +4270,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chagas’ disease, which is caused by the protozoan Trypanosoma cruzi affects approximately 18 million people in Latin America and still remains as a public health problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chagas', 'disease', 'caused', 'protozoan']
                 }
             ]
@@ -4197,6 +4309,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pseudomonas aeruginosa is an important bacterial pathogen, particularly as a cause of infections in hospitalised patients, immunocompromised hosts and patients with cystic fibrosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pseudomonas', 'aeruginosa', 'important']
                 }
             ]
@@ -4235,6 +4348,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Type 1 Diabetes Mellitus results from an autoimmune destruction of the pancreatic beta cells, which produce insulin."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autoimmune', 'destruction', 'pancreatic', 'beta']
                 }
             ]
@@ -4273,6 +4387,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Epstein_Barr virus (EBV) is a human tumor virus and is etiologically linked to various malignancies.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['epstein', 'barr', 'virus', 'ebv']
                 }
             ]
@@ -4311,6 +4426,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neurofibromatosis type 1 (NF1) is an inherited disorder in which affected individuals develop both benign and malignant tumours at an increased frequency.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neurofibromatosis', 'type', 'nf1']
                 }
             ]
@@ -4349,6 +4465,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Atopic dermatitis (AD) is a chronic inflammatory skin disease characterized by infiltration of activated T cells.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['atopic', 'dermatitis', 'ad']
                 }
             ]
@@ -4387,6 +4504,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Clostridioides difficile infection (CDI) is a leading cause of hospital-associated antibiotic-related diarrhea and deaths worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['clostridioides', 'difficile', 'infection', 'cdi']
                 }
             ]
@@ -4425,6 +4543,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Suicide is a global public health burden, causing around 800,000 deaths annually along with many more attempts (World Health Organization 2019)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['suicide', 'global', 'public', 'health']
                 }
             ]
@@ -4463,6 +4582,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Human T_cell lymphotropic virus type 1 (HTLV_1) is the etiologic agent of adult T_cell leukemia/lymphoma (ATLL), HTLV_1_associated myelopathy/tropical spastic paraparesis (HAM/TSP), infective dermatitis associated with HTLV_1 (IDH), and various other clinical conditions."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lymphotropic', 'virus', 'type', 'htlv']
                 }
             ]
@@ -4501,6 +4621,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Sjögren’s syndrome (SS) is a chronic autoimmune disease with complex and diverse clinical manifestations.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sjögren', 'syndrome', 'ss', 'chronic']
                 }
             ]
@@ -4539,6 +4660,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Oesophageal squamous cell carcinoma (ESCC) is one of the most malignant cancers worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['squamous', 'cell', 'carcinoma', 'escc']
                 }
             ]
@@ -4577,6 +4699,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Viral hepatitis is a major public health problem occurring endemically in all parts of the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['viral', 'hepatitis', 'major', 'public']
                 }
             ]
@@ -4615,6 +4738,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cystic fibrosis (CF) is a multi-system disease resulting from mutations in the CFTR gene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cystic', 'fibrosis', 'cf']
                 }
             ]
@@ -4652,6 +4776,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Alcohol dependence and abuse are major public health problems throughout the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alcohol', 'dependence', 'abuse']
                 }
             ]
@@ -4690,6 +4815,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Irritable bowel syndrome (IBS) remains an incompletely understood, common syndrome with significant unmet medical needs."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['irritable', 'bowel', 'syndrome', 'ibs']
                 }
             ]
@@ -4728,6 +4854,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gastrointestinal stromal tumors (GIST) are the most common mesenchymal tumors of the digestive tract.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gastrointestinal', 'stromal', 'tumors', 'gist']
                 }
             ]
@@ -4766,6 +4893,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acute pancreatitis is a common gastrointestinal disease leading to hospital admission, and its incidence continues to rise."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'pancreatitis', 'common', 'gastrointestinal']
                 }
             ]
@@ -4804,6 +4932,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acute respiratory distress syndrome (ARDS) causes a heterogeneous lung injury and remains a serious medical problem, with one of the only treatments being supportive care in the form of mechanical ventilation."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['respiratory', 'distress', 'syndrome', 'ards']
                 }
             ]
@@ -4842,6 +4971,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Sudden cardiac death (SCD) is a major public health issue accounting for 15–20% of all-cause deaths.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sudden', 'cardiac', 'death', 'scd']
                 }
             ]
@@ -4880,6 +5010,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Epithelial ovarian cancer (EOC) is one of the major increasing lethal malignancies of the gynecological tract, mostly due to delayed diagnosis and chemoresistance, as well as its very heterogeneous genetic makeup."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['epithelial', 'ovarian', 'cancer', 'eoc']
                 }
             ]
@@ -4918,6 +5049,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Falls are serious and relatively common, and can result in significant morbidity and mortality for older adults."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['falls', 'relatively', 'common']
                 }
             ]
@@ -4956,6 +5088,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Basal cell carcinomas (BCCs) are the most common form of skin cancers with high and increasing incidence rates.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['basal', 'cell', 'carcinomas', 'bccs']
                 }
             ]
@@ -4994,6 +5127,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Celiac disease (CD) is an immune-mediated disorder induced by the ingestion of gluten in genetically susceptible individuals.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['celiac', 'disease', 'cd', 'immune']
                 }
             ]
@@ -5030,6 +5164,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Sarcoidosis has been a disease of puzzling occurrence and clinical course.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sarcoidosis', 'disease', 'puzzling', 'occurrence']
                 }
             ]
@@ -5068,6 +5203,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Excessive and unsafe usage of pesticides lead to adverse effect on human beings, plants, animals and aquatic life."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['excessive', 'unsafe', 'usage', 'pesticides']
                 }
             ]
@@ -5106,6 +5242,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Migraine is a diseases characterized with severe headaches, with neurological and systemic findings."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['objectives', 'migraine', 'diseases', 'characterized']
                 }
             ]
@@ -5144,6 +5281,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Postnatal depression is an important complication of child-bearing and can have long-term  adverse consequences for both mother and child.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['postnatal', 'depression', 'important', 'complication']
                 }
             ]
@@ -5182,6 +5320,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Climate change is the major growing concern where greenhouse gas emissions have a major role.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['concern', 'greenhouse', 'gas', 'emissions']
                 }
             ]
@@ -5220,6 +5359,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Foot ulcers are a common complication of diabetes and are associated with an increase in lower limb amputation and death.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ulcers', 'common', 'complication', 'diabetes']
                 }
             ]
@@ -5258,6 +5398,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Malignant pleural mesothelioma (MPM) is an uncommon, almost universally fatal, asbestos_induced malignancy."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignant', 'pleural', 'mesothelioma', 'mpm']
                 }
             ]
@@ -5296,6 +5437,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chronic pain is common, often widespread and has a substantial impact on health and quality of life."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'pain', 'common']
                 }
             ]
@@ -5334,6 +5476,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intimate partner violence (IPV) is a global health problem impacting millions of women each year.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intimate', 'partner', 'violence', 'ipv']
                 }
             ]
@@ -5372,6 +5515,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Invasive species represent one of the most important threats to biodiversity worldwide, with consequences for ecosystem functioning and the delivery of important ecological services to society."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['invasive', 'species', 'represent', 'important']
                 }
             ]
@@ -5410,6 +5554,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Posttraumatic stress disorder (PTSD) is a highly prevalent, debilitating mental health condition."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['posttraumatic', 'stress', 'disorder', 'ptsd']
                 }
             ]
@@ -5448,6 +5593,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Community-acquired pneumonia (CAP) is a significant clinical and public health problem.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['community', 'acquired', 'pneumonia', 'cap']
                 }
             ]
@@ -5486,6 +5632,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Atherosclerosis is a disease of the arterial wall that is modulated by the inflammatory balance.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['atherosclerosis', 'disease', 'arterial', 'wall']
                 }
             ]
@@ -5524,6 +5671,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Gestational diabetes mellitus (GDM) is associated with pregnancy complications and fetal complications, as well as long-term health consequences for pregnant people and their offspring."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gestational', 'diabetes', 'mellitus', 'gdm']
                 }
             ]
@@ -5562,6 +5710,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neuroendocrine tumors (NET) are a very heterogeneous group of neoplasms; in recent years we have seen an increase in their incidence (3.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuroendocrine', 'tumors', 'net']
                 }
             ]
@@ -5600,6 +5749,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pulmonary embolism (PE) and deep vein thrombosis (DVT), the two clinical manifestations of venous thromboembolism (VTE), constitute a major global burden of cardiovascular disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['venous', 'thromboembolism', 'vte', 'constitute']
                 }
             ]
@@ -5638,6 +5788,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Oxidative stress (when free radical generation exceeds antioxidant defense) occurs in many human diseases and makes significant contributions to their pathogenesis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['oxidative', 'stress', 'free', 'radical']
                 }
             ]
@@ -5676,6 +5827,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Schistosomiasis is an important parasitic disease that causes major host morbidity and mortality in endemic areas.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['schistosomiasis', 'important', 'parasitic', 'disease']
                 }
             ]
@@ -5714,6 +5866,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Familial hypercholesterolemia (FH) is among the most common single-gene diseases and is due to mutations of the low-density lipoprotein (LDL) receptor gene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['familial', 'hypercholesterolemia', 'fh', 'common']
                 }
             ]
@@ -5752,6 +5905,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Infants born too early are of public health concern since complications associated with preterm birth (PTB) are the leading cause of children’s mortality and a major cause of morbidity and disability.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['preterm', 'birth', 'ptb']
                 }
             ]
@@ -5794,6 +5948,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cancer patients are particularly vulnerable to depression and anxiety, with fatigue as the most prevalent symptom of those undergoing treatment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vulnerable', 'depression', 'anxiety', 'fatigue']
                 }
             ]
@@ -5832,6 +5987,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The dissemination of tumor cells (metastasis) from the primary tumor is the principal cause of death in cancer patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dissemination', 'tumor', 'cells', 'metastasis']
                 }
             ]
@@ -5870,6 +6026,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cadmium (Cd) is one of the most toxic heavy metals and inhibits physiological processes of plants.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cadmium', 'cd', 'toxic']
                 }
             ]
@@ -5908,6 +6065,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Head and neck cancer is particular due to its infiltrative nature and lymphatic extension, with multidisciplinary treatment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neck', 'cancer', '', 'infiltrative']
                 }
             ]
@@ -5946,6 +6104,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cholangiocarcinoma is a devastating cancer of biliary origin with limited treatment options.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cholangiocarcinoma', 'devastating', 'cancer', 'biliary']
                 }
             ]
@@ -5984,6 +6143,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Urinary tract infections (UTIs) are among the most commonly encountered bacterial infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infections', 'utis', 'commonly']
                 }
             ]
@@ -6022,6 +6182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Salmonella Enteritidis is a major cause of foodborne gastroenteritis and is thus a persistent threat to global public health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['salmonella', 'enteritidis', 'major', 'cause']
                 }
             ]
@@ -6060,6 +6221,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Malnutrition remains to be a major public health problem in developing countries, particularly among children under-5_years of age children who are more vulnerable to both macro and micro-nutrient deficiencies."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malnutrition', 'remains', 'major', 'public']
                 }
             ]
@@ -6098,6 +6260,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Autosomal dominant polycystic kidney disease (ADPKD) is characterized by innumerous fluid-filled cysts and progressive deterioration of renal function.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['polycystic', 'kidney', 'disease', 'adpkd']
                 }
             ]
@@ -6136,6 +6299,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Medulloblastoma is the most common malignant brain tumor in childhood and adolescence.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['medulloblastoma', 'common', 'malignant', 'brain']
                 }
             ]
@@ -6174,6 +6338,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lead (Pb) is a ubiquitous poisonous metal, affecting the health of vast populations worldwide."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lead', 'pb', 'ubiquitous', 'poisonous']
                 }
             ]
@@ -6212,6 +6377,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cancer stem cells (CSCs) are a small population of undifferentiated cancer cells within tumors, which contribute to tumorigenicity and relapse."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'stem', 'cells', 'cscs']
                 }
             ]
@@ -6250,6 +6416,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Diffuse large B cell lymphoma (DLBCL) and follicular lymphoma (FL) constitute 70% of all non-Hodgkin lymphomas (NHL).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dlbcl', 'follicular', 'lymphoma', 'fl']
                 }
             ]
@@ -6288,6 +6455,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Glaucoma is a complex condition of the eye and the second leading cause of blindness around the globe.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['glaucoma']
                 }
             ]
@@ -6326,6 +6494,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mitochondrial diseases are characterized by considerable clinical and genetic heterogeneity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mitochondrial', 'diseases', 'characterized', 'considerable']
                 }
             ]
@@ -6364,6 +6533,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Congenital heart defects (CHD) are the leading cause of infant mortality among birth defects, and later morbidities and premature mortality remain problematic."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'heart', 'defects', 'chd']
                 }
             ]
@@ -6402,6 +6572,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acinetobacter baumannii has emerged as a significant hospital pathogen, quickly becoming resistant to commonly prescribed antimicrobials."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acinetobacter', 'baumannii', 'emerged', 'significant']
                 }
             ]
@@ -6438,6 +6609,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Bipolar disorder is a common, chronic, and complex mental illness."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bipolar', 'disorder', 'common']
                 }
             ]
@@ -6476,6 +6648,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Bisphenol A (BPA) and p_nonylphenol (NP) are representative endocrine disruptors (EDs) that may have adverse effects on human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bisphenol', 'bpa', 'nonylphenol', 'np']
                 }
             ]
@@ -6514,6 +6687,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cystic echinococcosis (CE) or hydatidosis, caused by the larval stage of Echinococcus granulosus (EG)-complex, is a neglected parasitic disease of public health importance."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundcystic', 'echinococcosis', 'ce', 'hydatidosis']
                 }
             ]
@@ -6552,6 +6726,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Behçet\'s disease (BD) is still considered as a mysterious multisystemic disorder characterized by recurrent involvement of muco-cutaneous, ocular, intestinal, vascular and/or nervous system organs."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['behçet', 'disease', 'bd', 'considered']
                 }
             ]
@@ -6590,6 +6765,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acute renal failure (ARF) secondary to ischemic injury remains a common and potentially devastating problem.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['arf', 'secondary', 'ischemic', 'injury']
                 }
             ]
@@ -6628,6 +6804,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Iron deficiency anemia (IDA) is a major public health problem especially in underdeveloped and developing countries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['iron', 'deficiency', 'anemia', 'ida']
                 }
             ]
@@ -6666,6 +6843,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Listeria monocytogenes has been recognized as a human pathogen for decades and is known to be an important foodborne pathogen.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['listeria', 'monocytogenes', 'recognized', 'human']
                 }
             ]
@@ -6704,6 +6882,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Human rotaviruses (HRV) are a common cause of acute nonbacterial gastroenteritis in pediatric patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'rotaviruses', 'hrv']
                 }
             ]
@@ -6742,6 +6921,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Infection with herpes simplex virus (HSV) types 1 and 2 is ubiquitous in the human population.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['herpes', 'simplex', 'virus', 'hsv']
                 }
             ]
@@ -6780,6 +6960,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Dental caries remains the single most common chronic childhood disease; without intervention, the prevalence and severity of caries increase into adulthood."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['severity', 'caries', 'increase', 'adulthood']
                 }
             ]
@@ -6818,6 +6999,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Malignant schwannomas are uncommon sarcomas that arise from the sheath of Schwann surrounding peripheral nerve fibers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignant', 'schwannomas', 'uncommon', 'sarcomas']
                 }
             ]
@@ -6856,6 +7038,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nasopharyngeal carcinoma (NPC) is a globally rare cancer, with a unique geographic distribution."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nasopharyngeal', 'carcinoma', 'npc', 'globally']
                 }
             ]
@@ -6894,6 +7077,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Delirium, a condition marked by changes in clinical and mental status, has increasingly been understood as prevalent and dangerous, particularly among elderly or frail patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['delirium', 'condition']
                 }
             ]
@@ -6932,6 +7116,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Norovirus, a leading cause of acute gastroenteritis in humans, is a highly diverse virus."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['norovirus', 'leading', 'cause', 'acute']
                 }
             ]
@@ -6970,6 +7155,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Fusarium graminearum is a devastating pathogenic fungus causing fusarium head blight (FHB) of wheat.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fusarium', 'graminearum', 'devastating', 'pathogenic']
                 }
             ]
@@ -7008,6 +7194,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Embryonic exposure to ethanol leads to a condition of physical, behavioral, and cognitive deficiencies named fetal alcohol spectrum disorders (FASD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fetal', 'alcohol', 'spectrum', 'disorders']
                 }
             ]
@@ -7046,6 +7233,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Peripheral artery disease (PAD) is a manifestation of systemic atherosclerosis and conveys a significant health burden globally.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peripheral', 'artery', 'disease', 'pad']
                 }
             ]
@@ -7084,6 +7272,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Trauma is the leading cause of death in the United States among individuals between the ages of 1 and 44 years.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trauma', 'leading', 'cause', 'death']
                 }
             ]
@@ -7122,6 +7311,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Polycyclic aromatic hydrocarbons (PAHs) and oxygenated-PAHs are globally worrisome air pollutants because of their highly direct-acting mutagenicity and carcinogenicity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aromatic', 'hydrocarbons', 'pahs', 'oxygenated']
                 }
             ]
@@ -7160,6 +7350,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Healthcare associated infections are a major problem contributing to morbidity and mortality worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['healthcare', 'associated', 'infections']
                 }
             ]
@@ -7198,6 +7389,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The treatment of myelodysplastic syndromes (MDS) remains a challenge to the clinician despite recent advances.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['treatment', 'myelodysplastic', 'syndromes', 'mds']
                 }
             ]
@@ -7236,6 +7428,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Uterus leiomyoma is the most common benign tumor that takes one of the leading places in the structure of gynecological pathology.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['uterus', 'leiomyoma', 'common', 'benign']
                 }
             ]
@@ -7274,6 +7467,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Kawasaki disease (KD) is an acute systemic vasculitis of unknown cause that mainly affects infants and children and can result in coronary artery complications if left untreated.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['kawasaki', 'disease', 'kd']
                 }
             ]
@@ -7312,6 +7506,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Sleep disorders have reached epidemic proportions worldwide, affecting the youth as well as the elderly, crossing the entire lifespan in both developed and developing countries."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sleep', 'disorders', 'reached', 'epidemic']
                 }
             ]
@@ -7350,6 +7545,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Leprosy is a chronic infectious disease that requires better understanding since it continues to be a significant health problem in many parts of the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['leprosy', 'chronic', 'infectious', 'disease']
                 }
             ]
@@ -7388,6 +7584,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Fragile X syndrome (FXS) is a genetic pathology due to an excessive length of a repetitive sequence of trinucleotides (CGG) in a specific gene (FMR1), matched to FMR1 protein, which is primarily responsible for the regular brain developing and functioning."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fragile', 'syndrome', 'fxs', 'genetic']
                 }
             ]
@@ -7426,6 +7623,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mercury is a common environmental contaminant and it is also harmful to human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mercury', 'common', 'environmental', 'contaminant']
                 }
             ]
@@ -7464,6 +7662,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Obsessive compulsive disorder (OCD) is a complex and heterogeneous condition, withwide variations in symptom presentation, associated clinical characteristics, and responseto treatment (Keeley et al."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['obsessive', 'compulsive', 'disorder', 'ocd']
                 }
             ]
@@ -7502,6 +7701,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hemophagocytic lymphohistiocytosis (HLH) is a rare syndrome of excessive immune activation associated with high mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemophagocytic', 'lymphohistiocytosis', 'hlh']
                 }
             ]
@@ -7540,6 +7740,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chlamydia trachomatis is an important genital pathogen and the most common bacterial cause of sexually transmitted infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chlamydia', 'trachomatis', 'important', 'genital']
                 }
             ]
@@ -7576,6 +7777,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Meningioma is a common primary tumor of central nervous system.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['meningioma', 'common', 'primary', 'tumor']
                 }
             ]
@@ -7614,6 +7816,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Myasthenia Gravis (MG) is an autoimmune disease of the neuromuscular junction which results in generalised weakness.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myasthenia', 'gravis', 'mg', 'autoimmune']
                 }
             ]
@@ -7652,6 +7855,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Infertility is a major reproductive and social problem with a worldwide prevalence of 10-15%.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infertility', 'major', 'reproductive', 'social']
                 }
             ]
@@ -7690,6 +7894,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"KSHV is a tumorigenic _-herpesvirus that has been identified as the etiologic agent of Kaposi’s sarcoma (KS), a multifocal highly vascularized neoplasm that is the most common malignancy associated with acquired immunodeficiency syndrome (AIDS)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundkshv', 'tumorigenic', 'herpesvirus']
                 }
             ]
@@ -7728,6 +7933,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cachexia is a major cause of mortality in cancer patients and is characterized by a continuous skeletal muscle loss.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cachexia', 'major', 'cause', 'mortality']
                 }
             ]
@@ -7766,6 +7972,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"In neurodegenerative diseases, a wide range of amyloid proteins or peptides such as amyloid-beta and _-synuclein fail to keep native functional conformations, followed by misfolding and self-assembling into a diverse array of aggregates."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peptides', 'amyloid', 'beta', 'synuclein']
                 }
             ]
@@ -7804,6 +8011,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Group B Streptococcus (GBS or S. agalactiae) is a major cause of severe disease in neonates.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['group', 'streptococcus', 'gbs', 'agalactiae']
                 }
             ]
@@ -7842,6 +8050,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gastroesophageal reflux disease (GERD) is an increasingly prevalent disease in today’s society.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gastroesophageal', 'reflux', 'disease', 'gerd']
                 }
             ]
@@ -7880,6 +8089,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hereditary nonpolyposis colorectal cancer (HNPCC), also known as Lynch syndrome, is an autosomal dominant cancer caused by a germline mutation of mismatch repair (MMR) genes."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nonpolyposis', 'colorectal', 'cancer', 'hnpcc']
                 }
             ]
@@ -7918,6 +8128,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pediatric soft tissue sarcomas (STSs), of which rhabdomyosarcoma is the most common, constitute approximately 5-6% of all cancers in children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tissue', 'sarcomas', 'stss', 'rhabdomyosarcoma']
                 }
             ]
@@ -7956,6 +8167,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cyanobacterial harmful algal blooms (CyanoHABs) and the release of cyanotoxins have posed adverse impacts to aquatic system and human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cyanobacterial', 'harmful', 'algal', 'blooms']
                 }
             ]
@@ -7994,6 +8206,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ultraviolet (UV) radiation leads to the formation of free radicals, which may cause immunological modulations, skin aging or skin cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ultraviolet', 'uv', 'radiation']
                 }
             ]
@@ -8032,6 +8245,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The phenomenon of the increasing number of ageing people in the world is arguably the most significant economic, health and social challenge that we face today."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['increasing', 'number', 'ageing', 'people']
                 }
             ]
@@ -8070,6 +8284,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Aneurysmal subarachnoid hemorrhage (SAH) affects 30,000 patients per year, causing neurologic morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aneurysmal', 'subarachnoid', 'hemorrhage', 'sah']
                 }
             ]
@@ -8108,6 +8323,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hemophilia A (HA) is an X-linked bleeding disorder caused by the absence or reduced activity of coagulation factor VIII.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemophilia', 'ha', 'linked', 'bleeding']
                 }
             ]
@@ -8146,6 +8362,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'IgG4-related disease is an emerging pathological condition characterized by one or several fibrosing and inflammatory organ involvements.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['igg4', 'related', 'disease']
                 }
             ]
@@ -8184,6 +8401,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Langerhans' cell histiocytosis (LCH) is a rare disease with variable clinical appearance.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['langerhans', 'cell', 'histiocytosis', 'lch']
                 }
             ]
@@ -8222,6 +8440,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hypertrophic (HCM) and dilated (DCM) cardiomyopathies are important causes of heart failure, arrhythmia, and sudden cardiac death."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dilated', 'dcm', 'cardiomyopathies', 'important']
                 }
             ]
@@ -8260,6 +8479,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The beta-thalassaemias are very important genetic disorders of haemoglobin synthesis and are amongst the commonest monogenic disorders.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['beta', 'thalassaemias', 'important', 'genetic']
                 }
             ]
@@ -8298,6 +8518,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Antiphospholipid antibodies (aPL) play the central pathogenic role in antiphospholipid syndrome (APS) characterized by arterial and venous thrombosis, recurrent fetal loss and persistent circulating aPL."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['antiphospholipid', 'antibodies', 'apl']
                 }
             ]
@@ -8336,6 +8557,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Erectile dysfunction (ED) is a major health problem that affects a significant proportion of the general population, and its prevalence is even higher in patients with CV risk factors and/or disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['erectile', 'dysfunction', 'ed']
                 }
             ]
@@ -8374,6 +8596,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Otitis media (OM) is one of the most common infectious diseases affecting children globally and the most common reason for antibiotic prescription and paediatric surgery.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['otitis', 'media', 'om']
                 }
             ]
@@ -8412,6 +8635,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Disease due to pulmonary Aspergillus infection remains a significant unmet need, particularly in immunocompromised patients, patients in critical care and those with underlying chronic lung diseases."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['disease', 'pulmonary', 'aspergillus', 'infection']
                 }
             ]
@@ -8448,6 +8672,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Idiopathic Thrombocytopenic Purpura (ITP) is a common hematological disorder.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['idiopathic', 'thrombocytopenic', 'purpura', 'itp']
                 }
             ]
@@ -8486,6 +8711,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Spinal muscular atrophy (SMA) is a severe neurodegenerative autosomal recessive disorder.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['spinal', 'muscular', 'atrophy', 'sma']
                 }
             ]
@@ -8524,6 +8750,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Carbapenem-resistant Enterobacteriaceae, particularly Klebsiella pneumoniae, are rapidly emerging as significant health care-associated pathogens."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['carbapenem', 'resistant', 'enterobacteriaceae', 'particularly']
                 }
             ]
@@ -8562,6 +8789,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mucopolysaccharidosis type-I (MPS-1) is an autosomal recessive lysosomal storage disorder caused by mutations in the _-L-iduronidase (IDUA) gene (OMIM 252800).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mucopolysaccharidosis', 'type', 'mps', 'autosomal']
                 }
             ]
@@ -8598,6 +8826,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Oral malignancy comprises about five per cent of all forms of cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['oral', 'malignancy', 'comprises', 'cent']
                 }
             ]
@@ -8636,6 +8865,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Primary biliary cirrhosis (PBC) and primary sclerosing cholangitis (PSC) are chronic autoimmune-mediated diseases of the biliary tree, resulting in a loss of bile ducts."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['primary', 'biliary', 'cirrhosis', 'pbc']
                 }
             ]
@@ -8672,6 +8902,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Primary hyperparathyroidism has become a relatively common endocrine disorder.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hyperparathyroidism', 'relatively', 'common', 'endocrine']
                 }
             ]
@@ -8710,6 +8941,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Bullying is a complex phenomenon that is reported to be pervasive in many countries around the world ',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bullying', 'complex', 'phenomenon']
                 }
             ]
@@ -8748,6 +8980,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Fabry disease is a rare, progressive, X-linked inherited storage disorder due to absent or deficient of lysosomal alfa galactosidase A activity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fabry', 'disease']
                 }
             ]
@@ -8786,6 +9019,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The textile industry is responsible for the disposal of a large volume of effluents containing synthetic dyes, which are considered to be highly toxic compounds for both human health and the environment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dyes', 'considered', 'highly', 'toxic']
                 }
             ]
@@ -8822,6 +9056,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'microRNAs (miRNAs) control a multitude of pathways in human cancers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['micrornas', 'mirnas', 'control']
                 }
             ]
@@ -8860,6 +9095,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Postoperative infections, particularly surgical site infections (SSIs), cause significant morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['surgical', 'site', 'infections', 'ssis']
                 }
             ]
@@ -8898,6 +9134,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Food allergy is a serious human health problem with increasing prevalence world-wide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['food', 'allergy', 'human', 'health']
                 }
             ]
@@ -8936,6 +9173,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Habitat loss and degradation due to human-induced landscape alterations are considered to be a major threat to biodiversity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'induced', 'landscape', 'alterations']
                 }
             ]
@@ -8974,6 +9212,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Resistance to androgen-deprivation therapies and progression to so-called castrate-resistant prostate cancer (CRPC) remain challenges in prostate cancer (PCa) management and treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['castrate', 'resistant', 'prostate', 'cancer']
                 }
             ]
@@ -9012,6 +9251,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cancer-related pain (CRP) and its treatments are common and the scariest problems that patients with cancer fear and negatively affect their quality of life.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'related', 'pain', 'crp']
                 }
             ]
@@ -9050,6 +9290,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'A significant proportion of patients with pediatric acute lymphoblastic leukemia (ALL) still suffers from relapse and therapy-related toxicities.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pediatric', 'acute', 'lymphoblastic', 'leukemia']
                 }
             ]
@@ -9088,6 +9329,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Autoimmune diseases represent a complex heterogeneous group of disorders that occur as a results of immune homeostasis dysregulation and loss of self-tolerance.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autoimmune', 'diseases']
                 }
             ]
@@ -9126,6 +9368,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Neonatal encephalopathy due to hypoxia-ischemia (HI) leads to severe, life-long morbidities in thousands of neonates born in the USA and worldwide each year."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neonatal', 'encephalopathy', 'hypoxia', 'ischemia']
                 }
             ]
@@ -9164,6 +9407,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Juvenile idiopathic arthritis (JIA) is the most common chronic rheumatic disease in children and an important cause of short-term and long-term disability.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['juvenile', 'idiopathic', 'arthritis', 'jia']
                 }
             ]
@@ -9202,6 +9446,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'p53 is a bona fide tumor suppressor gene whose loss of function marks the most common genetic alteration in human malignancy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['p53', 'bona', 'fide', 'tumor']
                 }
             ]
@@ -9240,6 +9485,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Radiotherapy is a prominent tool in oncology but it can be held responsible for important biological damages as ionizing radiations also induce degradation of healthy tissues.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['biological', 'damages', 'ionizing', 'radiations']
                 }
             ]
@@ -9278,6 +9524,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Acne vulgaris is a chronic inflammatory disease of the pilosebaceous units that affects 85% of the world's population aged 11–30 years.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acne', 'vulgaris', 'chronic', 'inflammatory']
                 }
             ]
@@ -9314,6 +9561,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Mucormycoses are emerging and potentially lethal infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mucormycoses', 'emerging', 'potentially', 'lethal']
                 }
             ]
@@ -9350,6 +9598,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Brain metastases are clinically devastating.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['brain', 'metastases', 'clinically', 'devastating']
                 }
             ]
@@ -9388,6 +9637,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Merkel cell carcinoma (MCC) is a rare but aggressive neuroendocrine cutaneous malignancy, with a predilection for sun-exposed sites in elderly patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['merkel', 'cell', 'carcinoma', 'mcc']
                 }
             ]
@@ -9426,6 +9676,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Anxiety disorders are amongst the most common and disabling of psychiatric illnesses and have severe health and socio-economic implications.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anxiety', 'disorders', 'common', 'disabling']
                 }
             ]
@@ -9464,6 +9715,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Spontaneous intracerebral hemorrhages (ICH) account for 10–30% of all strokes and are a result of acute bleeding into the brain due to ruptures of small penetrating arteries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['spontaneous', 'intracerebral', 'hemorrhages', 'ich']
                 }
             ]
@@ -9502,6 +9754,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Aortic dissection is a life-threatening condition which requires immediate surgical intervention.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aortic', 'dissection']
                 }
             ]
@@ -9540,6 +9793,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vitamin D has garnered a great deal of attention in recent years due to a global prevalence of vitamin D deficiency associated with an increased risk of a variety of human diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['global', 'prevalence', 'vitamin', 'deficiency']
                 }
             ]
@@ -9578,6 +9832,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"large amount of chromium (Cr) has entered the natural environment from the wastewater and waste residues, and the hexavalent (Cr(VI)) is highly poisonous, threatening the ecological environment and human health directly."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cr', 'vi', 'highly', 'poisonous']
                 }
             ]
@@ -9614,6 +9869,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Fibromyalgia (FM) is a frequent cause of chronic widespread pain (CWP).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fibromyalgia', 'fm', 'frequent', 'cause']
                 }
             ]
@@ -9652,6 +9908,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Frontotemporal dementia (FTD) is a common cause of dementia that encompasses 3 clinical subtypes: a behavioral/dysexecutive (frontal) variant and 2 variants with prominent language impairments.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['frontotemporal', 'dementia', 'ftd', 'common']
                 }
             ]
@@ -9690,6 +9947,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Primary central nervous system lymphomas (PCNSLs) have recently received considerable clinical attention due to their increasing incidence.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['central', 'nervous', 'lymphomas', 'pcnsls']
                 }
             ]
@@ -9728,6 +9986,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hepatitis E virus (HEV) infection has been reported to be more prevalent in the developed countries than previously thought.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatitis', 'virus', 'hev']
                 }
             ]
@@ -9766,6 +10025,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Bronchopulmonary dysplasia (BPD) is the most usual reason for preterm infants to require chronic mechanical ventilation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['usual', 'reason', 'preterm', 'infants']
                 }
             ]
@@ -9804,6 +10064,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tuberous Sclerosis Complex (TSC) is a multisystem genetic disorder characterized by hamartomatous neurological lesions that exhibit abnormal cell proliferation and differentiation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tuberous', 'sclerosis', 'complex', 'tsc']
                 }
             ]
@@ -9842,6 +10103,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acute appendicitis is one of the main pathological conditions requiring emergency surgical intervention.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundacute', 'appendicitis', 'main', 'pathological']
                 }
             ]
@@ -9880,6 +10142,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Testicular germ cell tumors are the most common malignancy in young males, and the frequency of these tumors has risen dramatically over the last century."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['testicular', 'germ', 'cell', 'tumors']
                 }
             ]
@@ -9918,6 +10181,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Burnout is an occupational syndrome frequently encountered within the healthcare profession.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['burnout', 'occupational', 'syndrome']
                 }
             ]
@@ -9956,6 +10220,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Aflatoxins produced by Aspergillus flavus are potent carcinogens that contaminate agricultural crops.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aflatoxins', 'produced', 'aspergillus', 'flavus']
                 }
             ]
@@ -9994,6 +10259,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Urinary incontinence is a common condition that negatively impacts quality of life of millions women.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['incontinence', 'common', 'condition', 'negatively']
                 }
             ]
@@ -10032,6 +10298,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"West Nile Virus (WNV) is a globally important mosquito borne virus, with significant implications for human and animal health."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['west', 'nile', 'virus', 'wnv']
                 }
             ]
@@ -10070,6 +10337,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Benign Prostatic Hyperplasia (BPH) is a common disease observed in 90 percent of men over 60.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['benign', 'prostatic', 'hyperplasia', 'bph']
                 }
             ]
@@ -10108,6 +10376,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pemphigus is a group of chronic autoimmune vesico-bullous disorders in which the epidermis and the basement membrane zone are the focus of attack resulting in cutaneous and mucosal blister formation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pemphigus', 'group', 'chronic', 'autoimmune']
                 }
             ]
@@ -10146,6 +10415,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Prosthetic joint infection remains one of the most devastating complications of arthroplasty.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prosthetic', 'joint', 'infection']
                 }
             ]
@@ -10184,6 +10454,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Abdominal aortic aneurysms (AAA) are a significant cause of worldwide mortality and morbidity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['abdominal', 'aortic', 'aneurysms', 'aaa']
                 }
             ]
@@ -10222,6 +10493,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Guillain Barré syndrome (GBS) is an acute immunedmediated polyneuropathy often after an antecedent infection.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['guillain', 'barré', 'syndrome', 'gbs']
                 }
             ]
@@ -10260,6 +10532,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Lyme borreliosis (LB) is a multi-system disease caused by the tick — trasmitted spirochete Borrelia burgdorferi (Bb).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lyme', 'borreliosis', 'lb']
                 }
             ]
@@ -10296,6 +10569,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Adenoid cystic carcinoma (ACC) is an unusual tumor of salivary glands.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adenoid', 'cystic', 'carcinoma', 'acc']
                 }
             ]
@@ -10334,6 +10608,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Takotsubo cardiomyopathy (TC) is a syndrome characterized by transient local systolic dysfunction of the left ventricle with no evidence of coronary artery disease or acute plaque rupture.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['takotsubo', 'cardiomyopathy', 'tc', 'syndrome']
                 }
             ]
@@ -10370,6 +10645,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Ameloblastoma is a benign and local aggressive odontogenic tumor.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ameloblastoma']
                 }
             ]
@@ -10408,6 +10684,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The spinocerebellar ataxias (SCAs) are a clinically and genetically heterogeneous group of neurodegenerative diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['spinocerebellar', 'ataxias', 'scas']
                 }
             ]
@@ -10446,6 +10723,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acetaminophen (APAP) overdose is the most frequent cause of drug-induced acute liver failure.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acetaminophen', 'apap', 'overdose', 'frequent']
                 }
             ]
@@ -10484,6 +10762,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Wilson's disease (WD) is an autosomal recessively inherited copper storage disorder due to mutations in ATP7B gene that causes hepatic and neurologic symptoms.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wilson', 'disease', 'wd']
                 }
             ]
@@ -10520,6 +10799,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Hemangioma is a common vascular tumor of childhood.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemangioma', 'common', 'vascular', 'tumor']
                 }
             ]
@@ -10558,6 +10838,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Infective endocarditis (IE) although uncommon, is characterized by high short-term morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infective', 'endocarditis']
                 }
             ]
@@ -10596,6 +10877,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Methamphetamine is a powerful psychostimulant that causes significant neurological impairments with long-lasting effects and has provoked serious international concerns about public health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['methamphetamine']
                 }
             ]
@@ -10634,6 +10916,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hyperphosphorylated tau has long been proposed as the key molecule disrupting normal neuronal microtubule dynamics and leading to neurofibrillary degeneration in Alzheimer disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hyperphosphorylated', 'tau']
                 }
             ]
@@ -10672,6 +10955,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Autoimmune thyroid diseases (AITD), including Graves’ disease (GD) and Hashimoto\'s thyroiditis (HT) are complex diseases that arise due to interplay between environmental and genetic factors."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autoimmune', 'thyroid', 'diseases', 'aitd']
                 }
             ]
@@ -10708,6 +10992,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Giant cell tumor (GCT) is a relatively common skeletal tumor.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['giant', 'cell', 'tumor', 'gct']
                 }
             ]
@@ -10746,6 +11031,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '" Bacterial meningitis is one of the most serious infections seen in infants and children, which is associated with acute complications and chronic morbidity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['context', 'bacterial', 'meningitis']
                 }
             ]
@@ -10784,6 +11070,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Anorexia Nervosa (AN) is a serious psychiatric illness with both psychological and medical sequelae that usually onsets during adolescence.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anorexia', 'nervosa', 'psychiatric']
                 }
             ]
@@ -10822,6 +11109,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Insulin resistance, when combined with decreased _-cell mass and relative insufficient insulin secretion, leads to type 2 diabetes."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['insulin', 'resistance']
                 }
             ]
@@ -10860,6 +11148,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cerebral palsy (CP) is a major neurodevelopmental disorder, presently estimated to affect approximately 1 in 500 children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['palsy', 'cp', 'major', 'neurodevelopmental']
                 }
             ]
@@ -10898,6 +11187,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hidradenitis suppurativa (HS) is a chronic inflammatory skin disease presenting with painful nodules, abscesses, sinus tracts, and scarring primarily affecting apocrine gland-rich intertriginous areas."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hidradenitis', 'suppurativa', 'hs']
                 }
             ]
@@ -10936,6 +11226,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Many countries and regions around the world have experienced severe water shortages and water contamination problems because of population increase and ever-growing water demands combined with climate change and imbalanced rainfall distributions.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['severe', 'water', 'shortages', 'water']
                 }
             ]
@@ -10974,6 +11265,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cancer treatment is one of the major challenges facing the modern biomedical profession.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'treatment', 'major', 'challenges']
                 }
             ]
@@ -11010,6 +11302,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Soil erosion has been recognized as a major agricultural problem of the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['erosion', 'recognized', 'major', 'agricultural']
                 }
             ]
@@ -11048,6 +11341,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Paragangliomas are very uncommon, highly vascularised neuroendocrine tumours that originate in the extraadrenal chromaffin cells."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paragangliomas', 'uncommon', 'highly', 'vascularised']
                 }
             ]
@@ -11086,6 +11380,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Fanconi anemia (FA) is characterized by congenital abnormalities, bone marrow failure, chromosome fragility, and cancer susceptibility."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fanconi', 'anemia', 'fa', 'characterized']
                 }
             ]
@@ -11124,6 +11419,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Post-Transplant Lymphoproliferative Disorder (PTLD), an EBV-driven lymphoproliferative disorder (LPD), represents a life-threatening challenge for patients (pts) following solid organ transplant (SOT) or hematopoietic cell transplant (HCT)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['transplant', 'lymphoproliferative', 'disorder', 'ptld']
                 }
             ]
@@ -11162,6 +11458,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Peripheral neuropathy is a frequent complication of diabetes mellitus and a common symptom of neuropathic pain, the mechanism of which is complex and involves both peripheral and central components of the sensory system."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peripheral', 'neuropathy']
                 }
             ]
@@ -11200,6 +11497,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hepatic encephalopathy (HE) is a major complication for acute and chronic liver failure.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatic', 'encephalopathy']
                 }
             ]
@@ -11238,6 +11536,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Varicella-zoster virus (VZV) is a medically important human alphaherpesvirus that causes varicella and zoster.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['varicella', 'zoster', 'virus', 'vzv']
                 }
             ]
@@ -11276,6 +11575,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ebola viruses are highly lethal human pathogens that have received considerable attention in recent years due to an increasing re-emergence in Central Africa and a potential for use as a biological weapon.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ebola', 'viruses', 'highly', 'lethal']
                 }
             ]
@@ -11314,6 +11614,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'CD8-positive primary cutaneous T cell lymphomas (CTCL) are rare disorders and mainly include primary cutaneous CD8-positive aggressive epidermotropic cytotoxic T-cell lymphoma (AECTL) and CD8+ variant mycosis fungoides (MF).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cutaneous', 'cell', 'lymphomas', 'ctcl']
                 }
             ]
@@ -11352,6 +11653,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Human immunodeficiency virus (HIV_1) infection often results in central nervous system (CNS) dysfunction, yet the mechanism(s) of action for HIV_1 in the CNS are not fully understood."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mechanism', 'action', 'hiv', 'cns']
                 }
             ]
@@ -11388,6 +11690,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Post partum hemorrhage is a major cause of maternal morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemorrhage', 'major', 'cause', 'maternal']
                 }
             ]
@@ -11426,6 +11729,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic rhinosinusitis (CRS) is a heterogeneous disease defined by epithelial inflammation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'rhinosinusitis', 'crs']
                 }
             ]
@@ -11464,6 +11768,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ewing sarcoma (ES) is a malignant bone or soft-tissue cancer that mainly arises in children and young adults.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ewing', 'sarcoma', 'es', 'malignant']
                 }
             ]
@@ -11502,6 +11807,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Amplification and overexpression of human epidermal growth factor receptor 2 (HER2) in breast cancer is associated with an adverse prognosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['receptor', 'her2', 'breast', 'cancer']
                 }
             ]
@@ -11540,6 +11846,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hearing loss is one of the most prevalent chronic conditions affecting the health of the aged.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hearing', 'loss', 'prevalent', 'chronic']
                 }
             ]
@@ -11578,6 +11885,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Cushing's disease is a rare condition of chronic hypercortisolism caused by an adrenocorticotropic hormone-secreting pituitary adenoma and associated with debilitating complications and excess mortality.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cushing', 'disease']
                 }
             ]
@@ -11616,6 +11924,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hereditary epidermolysis bullosa (EB) is a mechanobullous skin fragility disorder characterized by defective epithelial adhesion, leading to mechanical stress_induced skin blistering."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'epidermolysis', 'bullosa', 'eb']
                 }
             ]
@@ -11658,6 +11967,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Tourette syndrome (TS) is a rare, chronic neuropsychiatric disorder of unknown etiology that is characterized by waxing and waning multiform motor and phonic tics and a broad range of behavioral symptoms (Shapiro et al."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tourette', 'syndrome', 'ts']
                 }
             ]
@@ -11696,6 +12006,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mantle cell lymphoma (MCL) is characterized by marked differences in outcome, emphasizing the need for strong prognostic biomarkers."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mantle', 'cell', 'lymphoma', 'mcl']
                 }
             ]
@@ -11734,6 +12045,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Child sexual abuse is a social and public health concern locally and worldwide because it is associated with numerous and serious short-and long-term devastating consequences.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['child', 'sexual', 'abuse', 'social']
                 }
             ]
@@ -11770,6 +12082,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Burn injuries are one of the most devastating injuries encountered in medicine.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['burn', 'injuries', 'devastating', 'injuries']
                 }
             ]
@@ -11808,6 +12121,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nontuberculous mycobacteria (NTM) are pathogens that cause chronic respiratory disease, even in immunocompetent patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nontuberculous', 'mycobacteria', 'ntm', 'pathogens']
                 }
             ]
@@ -11846,6 +12160,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Progressive multifocal leukoencephalopathy (PML) is a severely debilitating and often fatal demyelinating disease of the central nervous system (CNS) in immunosuppressed individuals caused by JC polyomavirus (JCV), a ubiquitous human pathogen."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['progressive', 'multifocal', 'leukoencephalopathy', 'pml']
                 }
             ]
@@ -11884,6 +12199,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Familial Mediterranean fever (FMF) is the most common autoinflammatory disease in the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['familial', 'mediterranean', 'fever', 'fmf']
                 }
             ]
@@ -11922,6 +12238,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ankylosing Spondylitis (AS) is one of the most common chronic autoimmune and autoinflammatory diseases and it can be defined both by its debilitating phenotype and its major social impact.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ankylosing', 'spondylitis', 'common', 'chronic']
                 }
             ]
@@ -11960,6 +12277,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"von Willebrand disease (VWD) is an inherited, genetically and clinically heterogeneous hemorrhagic disorder."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['von', 'willebrand', 'disease', 'vwd']
                 }
             ]
@@ -11998,6 +12316,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Most primary breast cancers express estrogen receptor _ and can be treated via endocrine therapy using anti-estrogens such as tamoxifen; however, acquired endocrine resistance is a critical issue."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['breast', 'cancers', 'express', 'estrogen']
                 }
             ]
@@ -12036,6 +12355,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vitiligo is a common depigmenting disorder ensuing the loss of epidermal melanocytes.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vitiligo', 'common', 'depigmenting', 'disorder']
                 }
             ]
@@ -12074,6 +12394,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Charcot_Marie_Tooth disease (CMT) is a clinically and genetically heterogeneous inherited neuropathy, with Type 1A being the most common."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['marie', 'tooth', 'disease', 'cmt']
                 }
             ]
@@ -12110,6 +12431,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Solid wastes constitute an important and emerging problem.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['solid', 'wastes', 'constitute', 'important']
                 }
             ]
@@ -12146,6 +12468,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Worldwide, organ shortage is a major limiting factor to transplantations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['organ', 'shortage', 'major', 'limiting']
                 }
             ]
@@ -12184,6 +12507,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Sexually transmitted infections (STIs) and reproductive tract infections (RTIs) are a major public health problem worldwide, affecting the quality of life and causing serious morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['reproductive', 'tract', 'infections', 'rtis']
                 }
             ]
@@ -12222,6 +12546,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rett syndrome (RTT) is an X-linked neurodevelopmental disorder caused mainly by mutations in the MECP2 gene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rett', 'syndrome', 'rtt', 'linked']
                 }
             ]
@@ -12260,6 +12585,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital long QT syndrome (LQTS) is characterized by QT prolongation with predisposition to life-threatening arrhythmia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'long', 'qt', 'syndrome']
                 }
             ]
@@ -12298,6 +12624,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rabies is a viral zoonosis that causes disease in the central nervous system (CNS) of mammals and it is considered a serious problem of public health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rabies', 'viral', 'zoonosis', 'causes']
                 }
             ]
@@ -12336,6 +12663,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The oil industry is plagued with regular incidences of spills into the environment, causing environmental damage to flora and fauna, especially in marine environments where spills easily travel long distances from their sources."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['spills', 'environment', 'causing', 'environmental']
                 }
             ]
@@ -12374,6 +12702,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pollution of water resources by phosphorus (P) is a critical issue in regions with agricultural and urban development.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pollution', 'water', 'resources', 'phosphorus']
                 }
             ]
@@ -12412,6 +12741,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"IgA nephropathy is the most common glomerular disease worldwide, yet there is no international consensus for its pathological or clinical classification."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['iga', 'nephropathy', 'common', 'glomerular']
                 }
             ]
@@ -12450,6 +12780,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Carpal tunnel syndrome (CTS), in its idiopathic form, is an extremely frequent entrapment neuropathy in the clinical practice."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['carpal', 'tunnel', 'syndrome', 'cts']
                 }
             ]
@@ -12486,6 +12817,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Today global climate change and its impact on crop production is a major issue.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['climate', 'change', 'impact', 'crop']
                 }
             ]
@@ -12524,6 +12856,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Temporomandibular joint (TMJ) disorders, known as TMDs, are significant public health problems and may result in pain and disability."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['temporomandibular', 'joint', 'tmj', 'disorders']
                 }
             ]
@@ -12562,6 +12895,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital adrenal hyperplasia (CAH) is an autosomal recessive disease predominantly caused by 21-hydroxylase deficiency.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'adrenal', 'hyperplasia', 'cah']
                 }
             ]
@@ -12600,6 +12934,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gaucher disease (GD) is an autosomal recessively inherited lysosomal storage disorder caused by an inborn glucocerebrosidase (GBA) deficiency.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['background', 'gaucher', 'disease', 'gd']
                 }
             ]
@@ -12638,6 +12973,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Allergic rhinitis (AR) is an inflammatory, immunoglobulin E (IgE)-mediated disease characterized by the typical symptoms of sneezing, rhinorrhea, nasal itching, and congestion."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['allergic', 'rhinitis', 'ar']
                 }
             ]
@@ -12676,6 +13012,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Women carrying a pathogenic mutation in either BRCA1 or BRCA2 have a major risk of developing breast and/or ovarian cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['carrying', 'pathogenic', 'mutation', 'brca1']
                 }
             ]
@@ -12714,6 +13051,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Solitary fibrous tumor (SFT) is a mesenchymal neoplasm that was originally described to be localized in the pleura, but thereafter, this has been reported in several anatomic sites."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['solitary', 'fibrous', 'tumor', 'sft']
                 }
             ]
@@ -12752,6 +13090,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lipomas are among the most common benign tumors of mesenchymal origin, having been described in virtually every area of the body."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lipomas', 'common', 'benign', 'tumors']
                 }
             ]
@@ -12790,6 +13129,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Coral reefs are currently under threat as a consequence of local and global stressors, in particular, mass coral bleaching induced by climate warming."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coral', 'bleaching', 'induced', 'climate']
                 }
             ]
@@ -12828,6 +13168,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Long non_coding RNAs (lncRNAs) are aberrantly expressed in many disease conditions, including cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['non', 'coding', 'rnas', 'lncrnas']
                 }
             ]
@@ -12866,6 +13207,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Thrombotic complications of heparin_induced thrombocytopenia (HIT) can be devastating if not recognized and treated promptly.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['complications', 'heparin', 'induced', 'thrombocytopenia']
                 }
             ]
@@ -12904,6 +13246,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The surgical management of patients with congenital diaphragmatic hernia (CDH) is challenging and ever changing.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'diaphragmatic', 'hernia', 'cdh']
                 }
             ]
@@ -12942,6 +13285,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mycotoxins are widespread natural toxins with diverse toxicological impacts, produced in crops like cereals in the field and/or post-harvest."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mycotoxins', 'widespread', 'natural', 'toxins']
                 }
             ]
@@ -12980,6 +13324,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Activating FLT3 internal tandem duplication mutations (FLT3-ITDs) occur in approximately 30% of acute myeloid leukemia (AML) patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['duplication', 'mutations', 'flt3', 'itds']
                 }
             ]
@@ -13018,6 +13363,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Perfluorinated compounds (PFCs), a group of persistent organic pollutants, have been widely detected in environmental media and posed great threats to human health."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['perfluorinated', 'compounds', 'pfcs']
                 }
             ]
@@ -13056,6 +13402,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acquired resistance to EGF receptor (EGFR) tyrosine kinase inhibitor (TKI) is a critical problem in the treatment of lung cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['egfr', 'tyrosine', 'kinase', 'inhibitor']
                 }
             ]
@@ -13094,6 +13441,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Patients with familial adenomatous polyposis have an excess risk for adenomas and cancers of the upper and lower gastrointestinal tract.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['patients', 'familial', 'adenomatous', 'polyposis']
                 }
             ]
@@ -13132,6 +13480,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Eosinophilic esophagitis (EoE) is a chronic immune/antigen-mediated clinicopathologic condition that has become an increasingly important cause of upper gastrointestinal morbidity in adults and children over the past 2 decades.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['eosinophilic', 'esophagitis', 'eoe', 'chronic']
                 }
             ]
@@ -13170,6 +13519,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cryptococcus neoformans is a widely disseminated fungus shown to be responsible for infections in individuals with impaired cell mediated immunity, such as patients with human immunodeficiency virus (HIV)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cryptococcus', 'neoformans']
                 }
             ]
@@ -13208,6 +13558,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hereditary hemochromatosis (HH) is a common genetic disease in the United States, but little is known about the diagnosis from the patient\'s perspective."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'hemochromatosis', 'hh']
                 }
             ]
@@ -13246,6 +13597,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The rapid depletion of natural resources and the environmental concerns associated with the use of fossil fuels as the main source of global energy is leading to an increased interest in alternative and renewable energy sources.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['depletion', 'natural', 'resources', 'environmental']
                 }
             ]
@@ -13284,6 +13636,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neuroblastoma (NB) is an embryonal malignancy derived from the abnormal differentiation of the sympathetic nervous system.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuroblastoma', 'nb']
                 }
             ]
@@ -13322,6 +13675,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Musculoskeletal disorders (MSDs) are the most common health issues around the globe and a major cause of disability among workers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['musculoskeletal', 'disorders', 'msds', 'common']
                 }
             ]
@@ -13360,6 +13714,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cancer has long been considered a genetic disease, characterized by a sequential accumulation of genetic alterations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'long', 'considered', 'genetic']
                 }
             ]
@@ -13398,6 +13753,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Family caregivers of people with dementia face many problems as,  stress, depression, anxiety and high level of burdens related to caregiving ."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['family', 'caregivers', 'people', 'dementia']
                 }
             ]
@@ -13434,6 +13790,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Cleft lip and palate is a commonly observed congenital maxillofacial defect.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cleft', 'lip', 'palate', 'commonly']
                 }
             ]
@@ -13472,6 +13829,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although much attention has been paid to the exploration of highly active electrocatalysts, especially catalysts for hydrogen evolution reaction (HER), oxygen evolution reaction (OER) and oxygen reduction reaction (ORR), the development of multifunctional catalysts remains a challenge."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['electrocatalysts', 'especially', 'catalysts', 'hydrogen']
                 }
             ]
@@ -13510,6 +13868,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Coxiella burnetii is an intracellular bacterium that causes acute and chronic Q fever.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coxiella', 'burnetii', 'intracellular', 'bacterium']
                 }
             ]
@@ -13548,6 +13907,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Alopecia areata (AA) is a disease of wide spectrum with varying extent and distribution of hair loss in each patient.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alopecia', 'areata', 'aa', 'disease']
                 }
             ]
@@ -13586,6 +13946,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chikungunya is a viral disease caused by arthropod-borne Chikungunya virus (CHIKV) and transmitted by Aedes mosquitoes.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chikungunya', 'viral', 'disease', 'caused']
                 }
             ]
@@ -13624,6 +13985,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The presence of endocrine disrupting compounds (EDCs) in water and wastewater poses potential risks on aquatic environment and human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['endocrine', 'disrupting', 'compounds', 'edcs']
                 }
             ]
@@ -13660,6 +14022,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Synovial cell sarcoma is an extremely rare tumor of mesenchymal origin.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['synovial', 'cell', 'sarcoma']
                 }
             ]
@@ -13697,6 +14060,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Globally, maternal morbidity and mortality remain a major public health challenge."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['maternal', 'morbidity', 'mortality', 'remained']
                 }
             ]
@@ -13735,6 +14099,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The overactivation of microglia is known to trigger inflammatory reactions in the central nervous system, which ultimately induce neuroinflammatory disorders including Alzheimer’s disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['overactivation', 'microglia', 'known']
                 }
             ]
@@ -13771,6 +14136,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Moyamoya disease is an idiopathic vascular disorder of the intracranial arteries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['moyamoya', 'disease', 'idiopathic', 'vascular']
                 }
             ]
@@ -13809,6 +14175,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ehlers–Danlos syndrome (EDS) type IV is a collagen vascular disease with an autosomal dominant inheritance caused by COL3A1 mutation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ehlers', 'danlos', 'syndrome', 'eds']
                 }
             ]
@@ -13847,6 +14214,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ticks are primary vectors for many well-known disease-causing agents that affect human and animal populations globally such as tick-borne encephalitis, Crimean-Congo hemorrhagic fever and African swine fever."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['globally', 'tick', 'borne', 'encephalitis']
                 }
             ]
@@ -13885,6 +14253,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Primary cardiac tumors are rare, and atrial myxomas represent about half of the benigntumors encountered."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tumors', 'rare', 'atrial', 'myxomas']
                 }
             ]
@@ -13923,6 +14292,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Biofilms, surface-bound communities of microbes, are economically and medically important due to their pathogenic and obstructive properties."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['biofilms', 'surface', 'bound', 'communities']
                 }
             ]
@@ -13959,6 +14329,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Chronic Rejection (CR) is the leading cause of renal allograft dysfunction.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cause', 'renal', 'allograft', 'dysfunction']
                 }
             ]
@@ -13997,6 +14368,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Diarrhea is the second leading cause of under-five mortality and globally accounts for 526,000 child deaths every year."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diarrhea', 'second', 'leading', 'cause']
                 }
             ]
@@ -14035,6 +14407,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vibrio cholerae is an important bacterial pathogen that causes global cholera epidemic.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vibrio', 'cholerae', 'important', 'bacterial']
                 }
             ]
@@ -14073,6 +14446,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Japanese encephalitis (JE) is one of the most important viral encephalitides in Asia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['important', 'viral', 'encephalitides', 'asia']
                 }
             ]
@@ -14111,6 +14485,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Viruses are the most abundant and diverse pathogens challenging the host immune system, and as such are a severe threat to human health."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pathogens', 'challenging', 'host', 'immune']
                 }
             ]
@@ -14149,6 +14524,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Multiple negative factors, including the poor electronic conductivity of sulfur, dissolution and shuttling of lithium polysulfides (Li2Sn), and sluggish decomposition of solid Li2S, seriously hinder practical applications of lithium-sulfur (Li-S) batteries."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['practical', 'applications', 'lithium', 'sulfur']
                 }
             ]
@@ -14187,6 +14563,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Brugada syndrome (BrS) was first described as a primary electrical disorder predisposing to the risk of sudden cardiac death and characterized by right precordial lead ST elevation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['brugada', 'syndrome', 'brs']
                 }
             ]
@@ -14225,6 +14602,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Benign paroxysmal positional vertigo is the most common peripheral vestibular disorder.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vertigo', 'common', 'peripheral', 'vestibular']
                 }
             ]
@@ -14261,6 +14639,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Retinoblastoma (RB) is a childhood retinal malignancy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['retinoblastoma', 'rb', 'childhood', 'retinal']
                 }
             ]
@@ -14299,6 +14678,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Necrotizing enterocolitis (NEC) is a devastating intestinal disease resulting in major neonatal morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['necrotizing', 'enterocolitis', 'nec']
                 }
             ]
@@ -14336,6 +14716,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Venous thromboembolism is a common complication in patients with malignant disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['venous', 'thromboembolism', 'common', 'complication']
                 }
             ]
@@ -14374,6 +14755,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Extranodal natural killer (NK)/T_cell lymphoma, nasal type (ENKTLN), is characterized by higher prevalence in East Asians and South Americans, association with Epstein–Barr virus infection, aggressive nature in most cases, and resistance to conventional treatment strategies such as chemotherapy and radiotherapy."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nk', 'cell', 'lymphoma', 'nasal']
                 }
             ]
@@ -14412,6 +14794,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Contrast-induced nephropathy (CIN) is the third most common cause of hospital-acquired kidney injury and is related to increased long-term morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['contrast', 'induced', 'nephropathy', 'cin']
                 }
             ]
@@ -14450,6 +14833,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Measles, which until recently had been a rare disease in the United States, is re-emerging in our communities due to a combination of increased global mobility and decreased vaccinations across the country."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['measles', 'recently', 'rare', 'disease']
                 }
             ]
@@ -14488,6 +14872,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mitral regurgitation (MR) is the second most prevalent valvular heart disease in developed countries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mitral', 'regurgitation', 'mr']
                 }
             ]
@@ -14526,6 +14911,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Wildland fires are globally widespread, constituting the primary forest disturbance in many ecosystems."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wildland', 'fires', 'globally', 'widespread']
                 }
             ]
@@ -14564,6 +14950,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Stress is one of the important risks that negatively affect both the working life and health of individuals.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['stress', 'important', 'risks', 'negatively']
                 }
             ]
@@ -14600,6 +14987,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Targeted drug delivery is one of the key challenges in cancer nanomedicine.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['key', 'challenges', 'cancer', 'nanomedicine']
                 }
             ]
@@ -14638,6 +15026,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Frailty is a common clinical syndrome in older adults that carries an increased risk for poor health outcomes including falls, incident disability, hospitalisation and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['context', 'frailty', 'common', 'clinical']
                 }
             ]
@@ -14676,6 +15065,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Myeloproliferative neoplasms (MPN) are a group of clonal hematopoietic stem cell disorders with a variable clinical course: essential thrombocytosis (ET) and polycythemia vera (PV) are associated with excess clotting and bleeding but an overall normal or near-normal life expectancy, while myelofibrosis has a variable but generally poor prognosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['2825', 'myeloproliferative', 'neoplasms', 'mpn']
                 }
             ]
@@ -14714,6 +15104,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Immune-mediated necrotising myopathy (IMNM) and inclusion body myositis (IBM) belong to a spectrum of conditions called the idiopathic inflammatory myopathies.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myopathy', 'imnm', 'inclusion']
                 }
             ]
@@ -14752,6 +15143,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"2,3,7,8_Tetrachlorodibenzo_p_dioxin (TCDD) and polychlorinated biphenyls (PCBs) are persistent organic pollutants which coexist in environment, and human are co_exposed to these chemicals."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tcdd', 'polychlorinated', 'biphenyls', 'pcbs']
                 }
             ]
@@ -14790,6 +15182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Takayasu\'s arteritis (TA) is a rare disease that can be overlooked during the first visit to a GP, rheumatologist, or any other medical specialist due to a variety of its symptoms."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['takayasu', 'arteritis', 'ta']
                 }
             ]
@@ -14826,6 +15219,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Landslides represent a frequent and threatening natural disaster.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['introduction', 'landslides', 'represent']
                 }
             ]
@@ -14864,6 +15258,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Niemann_Pick type C disease is a rare autosomal recessive lysosomal disorder that leads to the accumulation of lipids in cellular organelles.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['niemann', 'pick', 'type', 'disease']
                 }
             ]
@@ -14902,6 +15297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ataxia-telangiectasia (A-T) is an autosomal recessive disorder involving cerebellar degeneration, immunodeficiency, chromosomal instability, radiosensitivity and cancer predisposition."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ataxia', 'telangiectasia', 'autosomal', 'recessive']
                 }
             ]
@@ -14940,6 +15336,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neurocysticercosis is the most common parasitic infection of the central nervous system caused by larvae of Taenia solium.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neurocysticercosis', 'common', 'parasitic', 'infection']
                 }
             ]
@@ -14978,6 +15375,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Prader-Willi syndrome (PWS) is a genetically determined disorder in which the absence of expression of one or more maternally imprinted gene(s) in the chromosomal region 15q11-13 results in a characteristic facial appearance, learning disabilities (mental retardation), and severe overeating behaviour owing to an abnormal satiety response to food intake, together with a range of other behaviours."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prader', 'willi', 'syndrome', 'pws']
                 }
             ]
@@ -15016,6 +15414,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Multiple endocrine neoplasia type 2A (MEN2A) is a rare syndrome caused almost by germline RET mutation, and characterized by medullary thyroid carcinoma (MTC), in combination or not with pheochromocytoma (PHEO), hyperparathyroidism (HPTH), cutaneous lichen amyloidosis (CLA), and Hirschsprung\'s disease (HD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neoplasia', 'type', '2a', 'men2a']
                 }
             ]
@@ -15054,6 +15453,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Presence of blood brain barrier is one of the major hurdle in drug delivery to brain for the treatment of neurological diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['blood', 'brain', 'barrier']
                 }
             ]
@@ -15092,6 +15492,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cases of pertussis, or whooping cough, have increased in recent years despite widespread vaccination and adequate antibiotic treatments."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pertussis', 'whooping', 'cough', 'increased']
                 }
             ]
@@ -15128,6 +15529,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: "Castleman's disease is a rare lymphoproliferative disorder of unknown aetiology.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['castleman', 'disease', 'rare', 'lymphoproliferative']
                 }
             ]
@@ -15166,6 +15568,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Diffuse nitrogen pollution in groundand surface waters is of concern, especially in regions with intense agricultural activities."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diffuse', 'nitrogen', 'pollution', 'groundand']
                 }
             ]
@@ -15204,6 +15607,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hereditary hemorrhagic telangiectasia (HHT), also known as Rendu-Osler-Weber disease, is a rare autosomal dominant vascular disorder involving arteriovenous malformation (AVM) due to angiodysplasia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'hemorrhagic', 'telangiectasia', 'hht']
                 }
             ]
@@ -15241,6 +15645,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'LRRK2 gene mutations (PARK8) are a common cause of genetic Parkinson disease (PD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['genetic', 'parkinson']
                 }
             ]
@@ -15279,6 +15684,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Common variable immunodeficiency disorders (CVID), the most frequent cause of symptomatic primary immunodeficiency, are defined by impaired antibody production."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['variable', 'immunodeficiency', 'disorders', 'cvid']
                 }
             ]
@@ -15317,6 +15723,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The continuous increase of people with chronic diseases is one of the greatest challenges for healthcare systems worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'diseases', 'greatest', 'challenges']
                 }
             ]
@@ -15355,6 +15762,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Skin wound healing, especially chronic wound healing, is a common challenging clinical problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wound', 'healing', 'common', 'challenging']
                 }
             ]
@@ -15393,6 +15801,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Adrenocortical tumors are rare neoplasms with poor prognosis and with an incidence of one in one million population.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adrenocortical', 'tumors', 'rare', 'neoplasms']
                 }
             ]
@@ -15431,6 +15840,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The worldwide spread of COVID-19 pandemic poses new challenges to higher education, in general, and to pedagogical education in particular."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pandemic', 'poses', 'new', 'challenges']
                 }
             ]
@@ -15467,6 +15877,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Turner syndrome is a chromosomal condition that affects development in females.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['turner', 'syndrome', 'chromosomal', 'condition']
                 }
             ]
@@ -15505,6 +15916,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Osteogenesis imperfecta (OI) is a genetic disorder of connective tissue characterized by bone fragility and alteration in synthesis and posttranslational modification of type I collagen.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteogenesis', 'imperfecta', 'oi', 'genetic']
                 }
             ]
@@ -15543,6 +15955,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cardiovascular event and infection are the first and second leading causes of death in the peritoneal dialysis (PD) populations ',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['causes', 'death', 'peritoneal', 'dialysis']
                 }
             ]
@@ -15581,6 +15994,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mutations in KRAS are among the most frequent RAS alterations in human cancers and the prevalent driver event in lung adenocarcinoma (LUAD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mutations', 'kras', 'frequent', 'ras']
                 }
             ]
@@ -15619,6 +16033,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Barrett’s oesophagus is an acquired condition that predisposes patients to the development of oesophageal adenocarcinoma through intermediate stages of dysplasia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['barrett', 'oesophagus', 'acquired', 'condition']
                 }
             ]
@@ -15657,6 +16072,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intervertebral disc (IVD) disorders associated with pain and disability are extremely prevalent and current treatment options do not result in restoration of tissue integrity or function.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intervertebral', 'disc', 'ivd', 'disorders']
                 }
             ]
@@ -15695,6 +16111,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Since the early 1980s, adolescents in the United States have experienced high rates of unintended pregnancies and sexually transmitted diseases (STDs), including HIV infection."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['unintended', 'pregnancies', 'sexually', 'transmitted']
                 }
             ]
@@ -15733,6 +16150,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neuronal ceroid lipofuscinoses (NCLs; CLN) are mainly autosomal recessive neurodegenerative disorders characterized by the accumulation of autofluorescent lipopigments in neuronal and other cells.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuronal', 'ceroid', 'lipofuscinoses', 'ncls']
                 }
             ]
@@ -15771,6 +16189,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Down Syndrome (DS), trisomy 21, is characterized by synaptic abnormalities and cognitive deficits throughout the lifespan and with development of Alzheimer\'s disease (AD) neuropathology and progressive cognitive decline in adults."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['syndrome', 'ds', 'trisomy', '21']
                 }
             ]
@@ -15809,6 +16228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tissue ischemia/reperfusion (IR) injury underlies several leading causes of death such as heart-attack and stroke.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ischemia', 'reperfusion', 'ir', 'injury']
                 }
             ]
@@ -15845,6 +16265,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Angiosarcoma is a rare and aggressive vascular malignancy with a poor prognosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['angiosarcoma', 'rare', 'aggressive', 'vascular']
                 }
             ]
@@ -15883,6 +16304,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ventilator associated pneumonia (VAP) is the leading nosocomial infection in intensive care.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pneumonia', 'vap', 'leading', 'nosocomial']
                 }
             ]
@@ -15925,6 +16347,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ozone (O3) is a key air pollutant that is produced from precursor emissions and has adverse impacts on human health and ecosystems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ozone', 'o3']
                 }
             ]
@@ -15963,6 +16386,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Alcoholic hepatitis (AH) is a severe inflammatory liver disease that develops in some heavy drinkers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alcoholic', 'hepatitis', 'ah']
                 }
             ]
@@ -16001,6 +16425,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Bleeding associated with portal hypertension, is a major cause of morbidity and mortality in patients with cirrhosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bleeding', 'associated', 'portal', 'hypertension']
                 }
             ]
@@ -16039,6 +16464,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The hemolytic uremic syndrome (HUS) is related to a thrombotic microangiopathy in the kidney, leading to hypertension and acute renal failure."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemolytic', 'uremic', 'syndrome', 'hus']
                 }
             ]
@@ -16077,6 +16503,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Enterovirus 71 (EV71) and Coxsackievirus A16 (CA16) are the main etiological agents of Hand, Foot and Mouth Disease (HFMD), a common disease among children and had caused several outbreaks in the Asia-Pacific region."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['enterovirus', '71', 'ev71', 'coxsackievirus']
                 }
             ]
@@ -16115,6 +16542,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Liver fibrosis, the excessive accumulation of extracellular matrix (ECM) in the liver, develops as a long-term consequence of chronic liver injury, and significantly contributes to the mortal complications of chronic liver disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['extracellular', 'matrix', 'ecm', 'liver']
                 }
             ]
@@ -16153,6 +16581,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The chronic fatigue syndrome comprises one of the most challenging issues in contemporary medicine.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'fatigue', 'syndrome', 'comprises']
                 }
             ]
@@ -16191,6 +16620,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Transthyretin (TTR) cardiac amyloidosis (CA) is a progressive infiltrative cardiomyopathy with no specific therapy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['transthyretin', 'ttr', 'cardiac', 'amyloidosis']
                 }
             ]
@@ -16229,6 +16659,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ever-rising energy demand, fossil fuel dependence, and climate issues have harmful consequences to the society."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['climate', 'issues', 'harmful', 'consequences']
                 }
             ]
@@ -16267,6 +16698,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lichen planus (LP) is a chronic autoimmune disease that affects the oral mucosa as well as the skin, genital mucosa and other sites."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lichen', 'planus', 'lp', 'chronic']
                 }
             ]
@@ -16303,6 +16735,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Respiratory infection remains a leading killer of young children worldwide',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mortality', 'children', 'years', 'age']
                 }
             ]
@@ -16341,6 +16774,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Right ventricular failure (RVF) remains a major cause of morbidity and mortality after left ventricular assist device (LVAD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['right', 'ventricular', 'failure', 'rvf']
                 }
             ]
@@ -16379,6 +16813,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Anaphylaxis is responsible for considerable morbidity and may in some cases prove fatal.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anaphylaxis', 'responsible', 'considerable', 'morbidity']
                 }
             ]
@@ -16417,6 +16852,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neurodegenerative diseases refer to the selective loss of neuronal systems in patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neurodegenerative', 'diseases', 'refer', 'selective']
                 }
             ]
@@ -16455,6 +16891,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Friedreich ataxia (FA) is the most common type of hereditary ataxia, caused by expansions of an unstable GAA trinucleotide repeat in the X25 gene located on chromosome 9q13 leading to insufficient levels of the protein frataxin."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'ataxia', 'caused']
                 }
             ]
@@ -16491,6 +16928,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Dystonia is a disorder of movement caused by various etiologies.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dystonia', 'disorder', 'movement', 'caused']
                 }
             ]
@@ -16529,6 +16967,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Restless legs syndrome (RLS) is a neuro-sensorimotor disorder affecting 2–4% of adults.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['restless', 'legs', 'syndrome', 'rls']
                 }
             ]
@@ -16567,6 +17006,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Burkholderia pseudomallei is the etiological agent of melioidosis, a severe infectious disease of humans and animals."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['burkholderia', 'pseudomallei', 'etiological', 'agent']
                 }
             ]
@@ -16605,6 +17045,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mastocytosis is a myeloid neoplasm characterized by abnormal accumulation and frequent activation of mast cells (MCs) in various organs.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mastocytosis', 'myeloid', 'neoplasm']
                 }
             ]
@@ -16641,6 +17082,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Aortic valve stenosis is a common disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aortic', 'valve', 'stenosis', 'common']
                 }
             ]
@@ -16679,6 +17121,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pressure ulcers are common in clinical practice and pose a significant health problem worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pressure', 'ulcers', 'common', 'clinical']
                 }
             ]
@@ -16717,6 +17160,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The field of photocatalysis is an active area owing to the possible contributions to solve some challenging problems such as sustainable energy production, environmental pollution control, and even global warming."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['photocatalysis']
                 }
             ]
@@ -16755,6 +17199,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pharmaceuticals have recently emerged as novel pollutants of potential concern in the aquatic environment where they are commonly introduced as complex mixtures via municipal effluent.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pollutants', 'potential', 'concern', 'aquatic']
                 }
             ]
@@ -16793,6 +17238,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Corrosion of reinforcing steel due to the ingression of chloride ions from deicing salt and/or seawater has been a major cause of the deterioration of reinforced concrete structures.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['corrosion', 'reinforcing']
                 }
             ]
@@ -16831,6 +17277,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Trypanosoma brucei is a unicellular eukaryote that causes the deadly human African trypanosomiasis ('sleeping sickness') in humans.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trypanosoma', 'brucei']
                 }
             ]
@@ -16869,6 +17316,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gout is a common metabolic disorder characterized by elevated uric acid leading to the formation and accumulation of uric acid crystals in synovial fluids.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gout', 'common', 'metabolic', 'disorder']
                 }
             ]
@@ -16911,6 +17359,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ischemia-reperfusion injury is an important cause of liver damage occurring during surgical procedures including hepatic resection and liver transplantation, and represents the main underlying cause of graft dysfunction post-transplantation."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ischemia', 'reperfusion', 'injury']
                 }
             ]
@@ -16947,6 +17396,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Femur fracture is an acute event with a high incidence and mortality worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['femur', 'fracture', 'acute', 'event']
                 }
             ]
@@ -16985,6 +17435,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Complex regional pain syndrome (CRPS), formerly known as reflex sympathetic dystrophy, is a chronic neuropathic pain disorder with significant autonomic features."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pain', 'syndrome', 'crps']
                 }
             ]
@@ -17023,6 +17474,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gestational trophoblastic disease or neoplasia covers a spectrum of benign and malignant conditions arising from pregnancies with highly abnormal development of trophoblastic tissue.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gestational', 'trophoblastic', 'disease', 'neoplasia']
                 }
             ]
@@ -17061,6 +17513,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Glycogen storage disease type II (GSD-II; Pompe disease; MIM 232300) is an inherited muscular dystrophy caused by deficiency in the activity of the lysosomal enzyme acid alpha-glucosidase (GAA).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gsd', 'ii', 'pompe', 'disease']
                 }
             ]
@@ -17099,6 +17552,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hereditary Angioedema (HAE) is a rare autosomal dominant (AD) disease characterized by deficient (type 1) or nonfunctional (type 2) C1 inhibitor protein.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'angioedema', 'hae']
                 }
             ]
@@ -17137,6 +17591,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Necrotizing fasciitis is a rapidly spreading infection of the soft tissue, which carries significant morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['necrotizing', 'fasciitis']
                 }
             ]
@@ -17175,6 +17630,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Intrauterine growth restriction (IUGR) is an important cause of fetal, perinatal and neonatal morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intrauterine', 'growth', 'restriction', 'iugr']
                 }
             ]
@@ -17213,6 +17669,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Porphyromonas gingivalis is one of the major oral pathogens implicated in the widespread inflammatory disorder periodontitis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['porphyromonas', 'gingivalis', 'major', 'oral']
                 }
             ]
@@ -17251,6 +17708,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Inflammatory myofibroblastic tumors (IMTs) are rare mesenchymal neoplasms that are composed of myofibroblastic cells accompanied by inflammatory infiltrate.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inflammatory', 'myofibroblastic', 'tumors', 'imts']
                 }
             ]
@@ -17293,6 +17751,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Venous leg ulcers are a common and recurring type of chronic or complex wound that are associated with considerable cost to patients and to healthcare providers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['venous', 'leg', 'ulcers']
                 }
             ]
@@ -17331,6 +17790,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Road traffic injuries (RTIs) are a leading cause of morbidity, disability and mortality in low income countries."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['road', 'traffic', 'injuries', 'rtis']
                 }
             ]
@@ -17369,6 +17829,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hypoxia exists to some degree in most solid tumors due to inadequate oxygen delivery of the abnormal vasculature which cannot meet the demands of the rapidly proliferating cancer cells.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tumors', 'inadequate', 'oxygen', 'delivery']
                 }
             ]
@@ -17407,6 +17868,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Myocardial infarction (MI) is characterized by an extended subclinical phase leading to the sudden onset of life-threatening acute events (Figure).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myocardial', 'infarction', 'mi', 'characterized']
                 }
             ]
@@ -17445,6 +17907,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Multiple system atrophy (MSA) is an _-synucleinopathy that is clinically characterized by varying degrees of parkinsonian, autonomic, and cerebellar features."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['multiple', 'atrophy', 'msa', 'synucleinopathy']
                 }
             ]
@@ -17483,6 +17946,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Angioimmunoblastic T-cell lymphoma (AITL) accounts for 18% of peripheral T-cell lymphomas worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['angioimmunoblastic', 'cell', 'lymphoma', 'aitl']
                 }
             ]
@@ -17521,6 +17985,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Implant infections remain a major healthcare problem due to the prolonged hospitalisation period required to disrupt and treat bacterial biofilm formation, and the need for additional surgery to remove/replace the infected implant, which if not removed in a timely manner may lead to sepsis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['implant', 'infections', 'remain']
                 }
             ]
@@ -17559,6 +18024,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Bronchiolitis is a clinical syndrome commonly encountered in practice, particularly among infants and young children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bronchiolitis', 'clinical', 'syndrome', 'commonly']
                 }
             ]
@@ -17597,6 +18063,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Nitrous oxide (N2O) is a powerful atmospheric greenhouse gas and cause of ozone layer depletion.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['oxide', 'n2o', 'powerful', 'atmospheric']
                 }
             ]
@@ -17635,6 +18102,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"DNA double-strand breaks are highly toxic DNA lesions that cause genomic instability, if not efficiently repaired."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dna', 'double', 'strand', 'breaks']
                 }
             ]
@@ -17673,6 +18141,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cocaine dependence is a common and serious condition, which has become nowadays a substantial public health problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cocaine', 'dependence', 'common', 'condition']
                 }
             ]
@@ -17711,6 +18180,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Legionella pneumophila is the etiologic agent of a severe form of nosocomial and community-acquired pneumonia in humans.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['legionella', 'pneumophila', 'etiologic']
                 }
             ]
@@ -17749,6 +18219,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Liver cirrhosis is a major yet largely preventable and underappreciated cause of global health loss.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cirrhosis', 'major', 'largely', 'preventable']
                 }
             ]
@@ -17787,6 +18258,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Men who have sex with men (MSM) and individuals identifying as Black or Hispanic/Latino experience the largest burden of Human Immunodeficiency Virus (HIV) infection.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sex', 'men', 'msm', 'individuals']
                 }
             ]
@@ -17825,6 +18297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Rhinovirus infections are the most common cause of viral illness in humans, and there is increasing evidence of their etiological role in severe acute respiratory tract infections (ARTIs)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rhinovirus', 'infections', 'common', 'cause']
                 }
             ]
@@ -17861,6 +18334,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Uveal melanoma (UM) is the most common malignant tumour of the eye.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aims', 'uveal', 'melanoma']
                 }
             ]
@@ -17899,6 +18373,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Paraquat (PQ), a widely used potent herbicide, generates superoxide anions and other free radicals, leading to severe toxicity and acute lung injury."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paraquat', 'pq', 'widely', 'used']
                 }
             ]
@@ -17937,6 +18412,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nanoparticles (NPs) are being employed for various industrial purposes with increasing frequency, yet the adverse health effects associated with the prolonged exposure of humans and the environment to NPs has not been well-established."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nanoparticles', 'nps', 'employed', 'various']
                 }
             ]
@@ -17973,6 +18449,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Phyllodes tumor of the breast is a rare fibroepithelial tumor.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['phyllodes', 'tumor', 'breast', 'rare']
                 }
             ]
@@ -18011,6 +18488,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mutations in SPG7 and SPAST are common causes of hereditary spastic paraplegia (HSP).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hereditary', 'spastic', 'paraplegia', 'hsp']
                 }
             ]
@@ -18049,6 +18527,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Parasitic helminths are a major cause of chronic human disease, affecting more than 3 billion people worldwide."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['parasitic', 'helminths', 'major', 'cause']
                 }
             ]
@@ -18087,6 +18566,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Fibrous dysplasia (FD) is an abnormal bony lesion of unknown aetiology with insufficient bone maturation and fibrous tissue replacement.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fibrous', 'dysplasia', 'fd']
                 }
             ]
@@ -18125,6 +18605,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pneumocystis carinii (PC) pneumonia is recognized as the leading cause of opportunistic pulmonary infections in immunocompromised hosts during the past decade.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pneumocystis', 'carinii', 'pc', 'pneumonia']
                 }
             ]
@@ -18163,6 +18644,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cerebral small vessel disease (SVD) is an important cause of stroke, cognitive decline and vascular dementia (VaD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['svd', 'important', 'cause', 'stroke']
                 }
             ]
@@ -18201,6 +18683,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Malignant hyperthermia (MH) is a pharmacogenetic disorder of skeletal muscle that manifests in response to anesthetic triggering agents.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignant', 'hyperthermia', 'mh', 'pharmacogenetic']
                 }
             ]
@@ -18239,6 +18722,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Apolipoprotein E4 (apoE4), the most prevalent genetic risk factor for Alzheimer\'s disease (AD), is associated with neuronal and vascular impairments."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['apolipoprotein', 'e4', 'apoe4']
                 }
             ]
@@ -18276,6 +18760,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Autoimmune hepatitis (AIH) is an immune-mediated disease with no curative treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aims', 'autoimmune', 'hepatitis', 'aih']
                 }
             ]
@@ -18314,6 +18799,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Thymomas and thymic carcinomas are rare epithelial tumors arising from the thymus gland.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['thymic', 'carcinomas', 'rare', 'epithelial']
                 }
             ]
@@ -18352,6 +18838,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic carriers of hepatitis B virus (HBV) who have to be immunosuppressed are at risk for HBV reactivation and hepatitis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['risk', 'hbv', 'reactivation', 'hepatitis']
                 }
             ]
@@ -18390,6 +18877,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mortality due to breast cancer is increasingly linked to early, undetected metastasis, making methods for earlier detection acutely necessary."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['early', 'undetected', 'metastasis']
                 }
             ]
@@ -18428,6 +18916,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The persistence of the latent HIV-1 reservoir is a major obstacle to curing HIV-1 infection.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['persistence', 'latent', 'hiv', 'reservoir']
                 }
             ]
@@ -18466,6 +18955,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Inflammatory breast cancer (IBC) is the deadliest, distinct subtype of breast cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inflammatory', 'breast', 'cancer', 'ibc']
                 }
             ]
@@ -18504,6 +18994,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gonorrhoea is a sexually transmitted infection with major public health implications and Neisseria gonorrhoeae has developed resistance to all antimicrobials introduced for treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neisseria', 'gonorrhoeae', 'developed', 'resistance']
                 }
             ]
@@ -18540,6 +19031,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Sarcopenia is a disorder causing age-related loss of muscle mass.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sarcopenia', 'disorder', 'causing', 'age']
                 }
             ]
@@ -18578,6 +19070,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pyoderma gangrenosum (PG) is a rare neutrophilic dermatosis that can take many clinical forms.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pyoderma', 'gangrenosum', 'pg']
                 }
             ]
@@ -18616,6 +19109,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Osteomyelitis is a disease which is heterogeneous in its pathophysiology, clinical presentation and management."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteomyelitis', 'disease', 'heterogeneous', 'pathophysiology']
                 }
             ]
@@ -18652,6 +19146,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Chronic exposure to fluoride is a public health problem worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'exposure', 'fluoride', 'public']
                 }
             ]
@@ -18690,6 +19185,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Adenoviruses are human pathogens increasingly used as gene therapy and vaccination vectors.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adenoviruses', 'human', 'pathogens', 'increasingly']
                 }
             ]
@@ -18728,6 +19224,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Individuals with serious mental illness (SMI) such as schizophrenia and bipolar disorder face a higher risk of early death due to cardiovascular disease and other preventable chronic illnesses.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['illness', 'smi', 'schizophrenia', 'bipolar']
                 }
             ]
@@ -18766,6 +19263,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hemorrhagic shock (HS) accounts for 30-40% of trauma-induced mortality, which is due to multi-organ-failure subsequent to systemic hyper-inflammation, triggered by hypoxemia and tissue ischemia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemorrhagic', 'shock', 'hs']
                 }
             ]
@@ -18804,6 +19302,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cancer is a group of diseases characterized by abnormal cell growth and proliferation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'group', 'diseases', 'characterized']
                 }
             ]
@@ -18842,6 +19341,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Aplastic Anemia is a rare hematological disorder caused by bone marrow failure leading to pancytopenia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aplastic', 'anemia', 'rare', 'hematological']
                 }
             ]
@@ -18880,6 +19380,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Persons who inject drugs (PWID) are at an elevated risk for human immunodeficiency virus (HIV) and hepatitis C virus (HCV) infection.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundpersons', 'inject', 'drugs', 'pwid']
                 }
             ]
@@ -18918,6 +19419,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Streptococcus suis is a zoonotic pathogen with worldwide distribution, responsible for more than 700 human cases globally reported."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['streptococcus', 'suis', 'zoonotic', 'pathogen']
                 }
             ]
@@ -18954,6 +19456,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Ochratoxin A (OTA) is a toxic metabolite, produced by Aspergillus spp."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ochratoxin', 'ota', 'toxic', 'metabolite']
                 }
             ]
@@ -18992,6 +19495,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nephrotic syndrome (NS) is the most common renal disease among children, and contributes to life-threatening complications such as thromboembolic disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nephrotic', 'syndrome', 'ns']
                 }
             ]
@@ -19030,6 +19534,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Exposure to carbon monoxide (CO) is a well-recognized cause of morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['exposure', 'carbon', 'monoxide']
                 }
             ]
@@ -19068,6 +19573,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"As a key regulatory mechanism of gene expression, DNA methylation patterns are widely altered in many complex genetic diseases, including cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['expression', 'dna', 'methylation', 'patterns']
                 }
             ]
@@ -19106,6 +19612,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Constipation is a common problem and is frequently taken for granted by both the lay and medical populations.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['constipation', 'common', 'problem', 'frequently']
                 }
             ]
@@ -19144,6 +19651,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Waldenström Macroglobulinemia (WM) is a B-cell lymphoproliferative disorder characterized mainly by uncontrolled accrual of M- immunoglobulin, secreted by malignant lymphoplasmatic cells."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['waldenström', 'macroglobulinemia', 'wm', 'cell']
                 }
             ]
@@ -19182,6 +19690,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Laryngeal carcinoma (LC) is the most commonly diagnosed malignancy and recently the incidence of this disease has increased.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['laryngeal', 'carcinoma', 'lc', 'commonly']
                 }
             ]
@@ -19220,6 +19729,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Scrub Typhus is a zoonotic infectious diseases caused by obligate intracellular gram negative, non-flagellate, and non-spore-forming Cocco-bacilli - the rickettsae Orientia Tsutsugumoshi."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['scrub', 'typhus', 'zoonotic', 'infectious']
                 }
             ]
@@ -19258,6 +19768,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Physical inactivity has major negative health consequences throughout the lifespan and physical   exercise is an important component of a comprehensive approach to chronic disease prevention and health   promotion.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['consequences', 'lifespan', 'physical', 'exercise']
                 }
             ]
@@ -19296,6 +19807,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ferroptosis, a cell death modality characterized by iron-dependent lipid peroxidation, is involved in the development of multiple pathological conditions, including ischemic tissue damage, infection, neurodegeneration, and cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ferroptosis', 'cell', 'death', 'modality']
                 }
             ]
@@ -19334,6 +19846,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Colletotrichum truncatum is one of the most economically important fungal pathogen causing anthracnose disease in pre and post-harvest stages of many crops worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['truncatum', 'economically', 'important', 'fungal']
                 }
             ]
@@ -19376,6 +19889,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chemotherapy-induced peripheral neuropathy (CIPN) is one of the main dose-limiting adverse effects of a number of firstline cancer treatment regimens that include neurotoxic chemotherapeutic agents (e.g., taxanes, platinum compounds, vinca alkaloids, and proteasome inhibitors)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chemotherapy', 'induced', 'peripheral', 'neuropathy']
                 }
             ]
@@ -19414,6 +19928,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cardiac allograft vasculopathy (CAV) is a major threat to long-term survival after heart transplantation (HT).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cardiac', 'allograft', 'vasculopathy', 'cav']
                 }
             ]
@@ -19450,6 +19965,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Wilms tumor is the most common renal malignancy in childhood.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wilms', 'tumor', 'common', 'renal']
                 }
             ]
@@ -19488,6 +20004,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Campylobacter jejuni related outbreaks and prevalence on retail poultry products pose threats to public health and cause financial burden worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['campylobacter', 'jejuni', 'related', 'outbreaks']
                 }
             ]
@@ -19526,6 +20043,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acute coronary syndromes (ACS) caused by atherosclerotic plaque rupture are clinically manifested as an ST-elevation myocardial infarction, non-ST-elevation myocardial infarction, or unstable angina."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'coronary', 'syndromes', 'acs']
                 }
             ]
@@ -19562,6 +20080,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Bacterial vaginosis is the leading vaginal disorder in women in reproductive age.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bacterial', 'vaginosis', 'leading', 'vaginal']
                 }
             ]
@@ -19600,6 +20119,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"BK polyomavirus (BKV) infection commonly complicates kidney transplantation, contributing to morbidity and allograft failure."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bk', 'polyomavirus', 'bkv', 'infection']
                 }
             ]
@@ -19638,6 +20158,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Catheter-associated urinary tract infections (CAUTI) adversely affect more than 30% of patients in critical care hospital settings.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['urinary', 'tract', 'infections', 'cauti']
                 }
             ]
@@ -19676,6 +20197,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The pathogenic bacterial genus Xanthomonas infects a wide variety of host plants and causes devastating diseases in many crops.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pathogenic', 'bacterial', 'genus', 'xanthomonas']
                 }
             ]
@@ -19713,6 +20235,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Acute subdural hematoma represents an important cause of disability and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'subdural', 'hematoma', 'represents']
                 }
             ]
@@ -19755,6 +20278,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nausea and vomiting can cause considerable distress and discomfort to patients undergoing chemotherapy, radiotherapy, or surgery."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nausea', 'vomiting']
                 }
             ]
@@ -19793,6 +20317,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Diabetic ketoacidosis (DKA) is a life-threatening complication of diabetes mellitus (DM).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetic', 'ketoacidosis', 'dka']
                 }
             ]
@@ -19831,6 +20356,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"HHV-6, the first T-lymphotropic human herpesvirus, is an important novel human pathogen."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hhv', 'lymphotropic', 'human', 'herpesvirus']
                 }
             ]
@@ -19869,6 +20395,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The dearth of intrinsic regenerative capacity of articular cartilage makes it a challenge to deal with the cartilage defects.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['regenerative', 'capacity', 'articular', 'cartilage']
                 }
             ]
@@ -19907,6 +20434,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Transfusional iron overload is a potentially fatal complication of the treatment of thalassaemia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['transfusional', 'iron', 'overload', 'potentially']
                 }
             ]
@@ -19944,6 +20472,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Type 1 diabetes mellitus is the most common chronic metabolic disorder in children.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'metabolic', 'disorder', 'children']
                 }
             ]
@@ -19982,6 +20511,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chest pain is a frequent medical problem causing concern for both patients and physicians.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chest', 'pain', 'frequent', 'medical']
                 }
             ]
@@ -20018,6 +20548,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Shigella is a major cause of dysentery worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['shigella', 'major', 'cause', 'dysentery']
                 }
             ]
@@ -20056,6 +20587,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Lysosomal storage diseases (LSDs) encompass a wide range of disorders characterized by inborn errors of lysosomal function.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lysosomal', 'storage', 'diseases', 'lsds']
                 }
             ]
@@ -20094,6 +20626,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'PAROXYSMAL nocturnal hemoglobinuria is a disease with a fascinating diversity of challenges and implications.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paroxysmal', 'nocturnal', 'hemoglobinuria', 'disease']
                 }
             ]
@@ -20132,6 +20665,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pneumococcal infections have increasingly high mortality rates despite the availability of vaccines and antibiotics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pneumococcal', 'infections', 'increasingly', 'high']
                 }
             ]
@@ -20170,6 +20704,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Narcolepsy is a lifelong disease, manifesting with excessive daytime sleepiness and cataplexy, arising between childhood and young adulthood."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['narcolepsy']
                 }
             ]
@@ -20208,6 +20743,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lung neuroendocrine tumors (NET) comprise typical (TC) and atypical carcinoid (AC), large cell neuroendocrine carcinoma (LCNEC) and small cell lung carcinoma (SCLC)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lung', 'neuroendocrine', 'tumors', 'net']
                 }
             ]
@@ -20244,6 +20780,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Atrial septal defect (ASD) is one of the most common congenital heart diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['atrial', 'septal', 'defect', 'asd']
                 }
             ]
@@ -20282,6 +20819,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Giardia intestinalis (also referred to as Giardia lamblia) is an anaerobic flagellated parasitic protozoan which infects the human small intestine, leading to a spectrum of disorders, including severe diarrhoea, abdominal pain, anorexia and stunted growth in children1."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intestinalis', 'referred', 'giardia', 'lamblia']
                 }
             ]
@@ -20320,6 +20858,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pseudoxanthoma elasticum (PXE) is a heritable ectopic mineralization disorder affecting cutaneous, ocular, and cardiovascular systems, caused by mutations in the ABCC6 gene."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pseudoxanthoma', 'elasticum', 'pxe']
                 }
             ]
@@ -20358,6 +20897,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"P-glycoprotein (P-gp), an important efflux transporter, is encoded by the MDR1 class of genes and is a central element of the multidrug resistance (MDR) phenomenon in cancer cells."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['glycoprotein', 'gp', 'important', 'efflux']
                 }
             ]
@@ -20396,6 +20936,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mucoepidermoid carcinoma (MEC) is a salivary gland tumor characterized by parotid differentiation (1).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mucoepidermoid', 'carcinoma', 'mec', 'salivary']
                 }
             ]
@@ -20434,6 +20975,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acromegaly is a chronic disease with signs and symptoms due to growth hormone (GH) excess.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acromegaly', 'chronic', 'disease']
                 }
             ]
@@ -20476,6 +21018,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Severe toxic side effects and drug resistance are the major limitations of doxorubicin (Dox), one of the most potent anticancer agents in clinical use."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['major', 'limitations', 'doxorubicin', 'dox']
                 }
             ]
@@ -20514,6 +21057,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Coastal marine ecosystems in many parts of the world are under unrelenting stress caused by urban development, hazardous or toxic substances, overfishing, habitat destruction, the introduction of exotic species and natural toxins."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coastal', 'marine', 'ecosystems']
                 }
             ]
@@ -20550,6 +21094,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'The critical and growing shortage of nurses is a global concern.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['shortage', 'nurses', 'global', 'concern']
                 }
             ]
@@ -20586,6 +21131,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'ESBL and AmpC _-lactamases are an increasing concern for public health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['esbl', 'ampc', 'lactamases', 'increasing']
                 }
             ]
@@ -20624,6 +21170,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Over the last 10 years, harnessing of the immune system to attack tumors has been one of the major breakthroughs in cancer, primarily through the use of immune checkpoint inhibitors (ICIs)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['immune', 'checkpoint', 'inhibitors', 'icis']
                 }
             ]
@@ -20662,6 +21209,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Premenstrual syndrome (PMS) is a common cause of physical, psychological and social problems in women of reproductive age."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['premenstrual', 'syndrome', 'pms']
                 }
             ]
@@ -20700,6 +21248,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cellular senescence suppresses cancer by arresting cell proliferation, essentially permanently, in response to oncogenic stimuli, including genotoxic stress."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cellular', 'senescence', 'suppresses', 'cancer']
                 }
             ]
@@ -20738,6 +21287,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Bluetongue virus (BTV) is the cause of bluetongue, an emerging, arthropod-transmitted disease of ungulates."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bluetongue', 'virus', 'btv', 'cause']
                 }
             ]
@@ -20776,6 +21326,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Hodgkin's lymphoma (HL) is one of the most common cancers in adolescents and young adults (AYA).",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hodgkin', 'lymphoma', 'hl']
                 }
             ]
@@ -20814,6 +21365,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Primary ciliary dyskinesia (PCD), a genetically heterogeneous condition enriched in some consanguineous populations, results from recessive mutations affecting cilia biogenesis and motility."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ciliary', 'dyskinesia', 'pcd', 'genetically']
                 }
             ]
@@ -20852,6 +21404,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acute disseminated encephalomyelitis (ADEM) is a rare demyelinating disease of the central nervous system (CNS) that classically occurs in children and adolescents.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'disseminated', 'encephalomyelitis', 'adem']
                 }
             ]
@@ -20888,6 +21441,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Loneliness is of significant concern in the older adult population.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['loneliness', 'significant', 'concern', 'older']
                 }
             ]
@@ -20926,6 +21480,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ductal carcinoma in situ (DCIS) of the breast is a non-invasive lesion associated with a ten-fold increased relative risk for future invasive ductal cancer (IDC).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ductal', 'carcinoma', 'situ', 'dcis']
                 }
             ]
@@ -20964,6 +21519,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Foodborne illness undermines human health by causing fever, stomachache and even lethality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['foodborne', 'illness', 'undermines', 'human']
                 }
             ]
@@ -21002,6 +21558,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Crimean–Congo hemorrhagic fever virus (CCHFV) infrequently causes hemorrhagic fever in humans with a case fatality rate of 30%.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hemorrhagic', 'fever', 'virus', 'cchfv']
                 }
             ]
@@ -21040,6 +21597,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Medication-related osteonecrosis of the jaw (MRONJ) has been recognized as one of the most disabling comorbidities associated to the assumption of bisphosphonates (BPs) and antiresorptive drugs.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['related', 'osteonecrosis', 'jaw', 'mronj']
                 }
             ]
@@ -21076,6 +21634,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Pleomorphic adenoma (PA) is the most common benign tumor of salivary glands.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pleomorphic', 'adenoma', 'pa']
                 }
             ]
@@ -21114,6 +21673,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Retinopathy of prematurity (ROP), a leading cause of pediatric blindness, predominantly affects premature and low-birth-weight infants."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['retinopathy', 'prematurity', 'rop']
                 }
             ]
@@ -21150,6 +21710,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Severe anemia in pregnancy results in relatively poor maternal and fetal outcome.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['severe', 'anemia', 'pregnancy', 'results']
                 }
             ]
@@ -21188,6 +21749,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chondrosarcoma (CS) is a malignant tumor of long and flat bone characterized by the formation of cartilage.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chondrosarcoma', 'cs', 'malignant', 'tumor']
                 }
             ]
@@ -21224,6 +21786,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Social determinants are the leading causes of health disparities.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['leading', 'causes', 'health', 'disparities']
                 }
             ]
@@ -21262,6 +21825,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Primary aldosteronism is characterized by inappropriate overproduction of aldosterone by adrenal lesions and leads to hypertension.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['overproduction', 'aldosterone', 'adrenal', 'lesions']
                 }
             ]
@@ -21298,6 +21862,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Pain after surgery is common, and its management remains a clinical challenge."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pain', 'surgery', 'common', 'management']
                 }
             ]
@@ -21336,6 +21901,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'breast cancer in males is a rare disease accounting for less than 1% of all cancers in men.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['breast', 'cancer', 'males', 'rare']
                 }
             ]
@@ -21374,6 +21940,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Osteochondroma is a benign cartilaginous neoplasm and the most common benign tumor of bone.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteochondroma', 'benign', 'cartilaginous', 'neoplasm']
                 }
             ]
@@ -21410,6 +21977,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Tinnitus is a condition which is often seen coexisting with hearing loss.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tinnitus', 'condition', 'seen', 'coexisting']
                 }
             ]
@@ -21448,6 +22016,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Medication non-adherence is a major healthcare barrier, especially among diseases that are largely asymptomatic such as hypertension."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['medication', 'non', 'adherence']
                 }
             ]
@@ -21486,6 +22055,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "\"Antineutrophil cytoplasmic antibodies (ANCA) are generally believed to be strongly associ_ated with some primary systemic vasculitides (PSV), such as Wegener's granulomatosis (WG), microscopic polyangiitis (MPA), and Churg-Strauss syndrome (CSS), which have some clinical manifestations in common and are 'pauci-immune' by immunohistology.\"",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['antineutrophil', 'cytoplasmic', 'antibodies', 'anca']
                 }
             ]
@@ -21524,6 +22094,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acid mine drainage is a main environmental problem linked to coal and sulfide ore mining.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coal', 'sulfide', 'ore', 'mining']
                 }
             ]
@@ -21564,6 +22135,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Peripheral nerve injury is a serious challenge ',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peripheral', 'nerve', 'injury', 'challenge']
                 }
             ]
@@ -21602,6 +22174,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Alpha-1-antitrypsin deficiency (AATD) is a rare condition with clinical mani-festations of the lung and the liver.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alpha', 'antitrypsin', 'deficiency', 'aatd']
                 }
             ]
@@ -21640,6 +22213,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Congenital hydrocephalus is one of the common neurological problems in infants, characterized by excessive accumulation of cerebrospinal fluid (CSF) in the central nervous system."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'hydrocephalus', 'common', 'neurological']
                 }
             ]
@@ -21678,6 +22252,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The hepatitis C virus (HCV) contains a positive-sense RNA genome that encodes a unique polyprotein precursor, which must be processed by proteases to enable viral maturation."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatitis', 'virus', 'hcv']
                 }
             ]
@@ -21716,6 +22291,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acrylamide, a probable human carcinogen, is ubiquitously present in the human environment, with sources including heated starchy foods, coffee and cigarette smoke."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acrylamide', 'probable', 'human', 'carcinogen']
                 }
             ]
@@ -21758,6 +22334,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mental illness and substance use are prevalent among people living with HIV and often lead to poor health outcomes.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prevalent', 'people', 'living', 'hiv']
                 }
             ]
@@ -21796,6 +22373,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Many HIV_infected patients with chronic hepatitis C virus (HCV) infection do not receive treatment for HCV infection, often because of contraindications or poor adherence to anti_HIV therapy."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'hepatitis', 'virus', 'hcv']
                 }
             ]
@@ -21834,6 +22412,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Congenital Factor XIII (FXIII) deficiency is a rare, inherited, autosomal recessive coagulation disorder."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'factor', 'xiii', 'fxiii']
                 }
             ]
@@ -21872,6 +22451,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Dermatomyositis (DM) is an idiopathic inflammatory myopathy (IIM) characterized by inflammation of muscles with systemic and cutaneous involvement, highly associated with breast cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dermatomyositis', 'dm']
                 }
             ]
@@ -21910,6 +22490,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Vulvar cancer is the fourth most common gynaecological malignancy, with an annual incidence of 2 out of 100_000 women."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vulvar', 'cancer', 'fourth', 'common']
                 }
             ]
@@ -21948,6 +22529,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pulmonary alveolar proteinosis (PAP) is a syndrome of reduced GM-CSF-dependent, macrophage-mediated surfactant clearance, dysfunctional foamy alveolar macrophages, alveolar surfactant accumulation, and hypoxemic respiratory failure for which the pathogenetic mechanism is unknown."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pulmonary', 'alveolar', 'proteinosis', 'pap']
                 }
             ]
@@ -21986,6 +22568,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Patients infected with human immunodeficiency virus (HIV) have been found to be prone to lipid abnormalities because of specific antiretroviral therapy (ART) and HIV infection itself and thus may be more susceptible to coronary artery disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hiv', 'prone', 'lipid', 'abnormalities']
                 }
             ]
@@ -22022,6 +22605,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Pituitary adenomas are known as representing 15 % of aH intracranial tumours.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pituitary', 'adenomas', 'known', 'representing']
                 }
             ]
@@ -22060,6 +22644,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Perinatal asphyxia (PA) is an important cause of neonatal morbidity, mortality, and neurologic handicap in children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['perinatal', 'asphyxia', 'pa']
                 }
             ]
@@ -22098,6 +22683,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Microsatellite instability (MSI) phenotype, caused by a deficiency of DNA mismatch repair genes, has been detected in a subset of tumors in the gastrointestinal tract."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['microsatellite', 'instability', 'msi', 'phenotype']
                 }
             ]
@@ -22136,6 +22722,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Citrus Huanglongbing (HLB) is one of the most destructive citrus diseases worldwide, and is associated with the phloem-limited plant pathogenic bacteria Candidatus Liberibacter species."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hlb', 'destructive', 'citrus', 'diseases']
                 }
             ]
@@ -22174,6 +22761,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Botulinum toxins (BoNT) type A, B, E, F may induce a serious neuroparalytic illness in humans."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['botulinum', 'toxins', 'bont', 'type']
                 }
             ]
@@ -22210,6 +22798,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Bicuspid aortic valve (BAV) is the most common congenital heart disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bicuspid', 'aortic', 'valve', 'bav']
                 }
             ]
@@ -22246,6 +22835,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Borderline personality disorder (BPD) is a common and severe mental illness.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['borderline', 'personality', 'disorder', 'bpd']
                 }
             ]
@@ -22282,6 +22872,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Dermatofibrosarcoma protuberans (DFSP) is a locally aggressive tumour.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dermatofibrosarcoma', 'protuberans', 'dfsp']
                 }
             ]
@@ -22320,6 +22911,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Lymphatic filariasis is a major health problem in India with a large number of patients tending to be asymptomatic.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lymphatic', 'filariasis', 'major', 'health']
                 }
             ]
@@ -22358,6 +22950,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Giant Cell Arteritis (GCA) is the most common form of primary systemic vasculitis, mainly affecting adults over 50 years old."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['giant', 'cell', 'arteritis', 'gca']
                 }
             ]
@@ -22396,6 +22989,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Exposure to indoor radon is of great concern because it is an environmental hazard for developing lung cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['indoor', 'radon', 'great', 'concern']
                 }
             ]
@@ -22432,6 +23026,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Trigeminal neuralgia (TGN) causes severe unilateral facial pain.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trigeminal', 'neuralgia', 'tgn', 'causes']
                 }
             ]
@@ -22468,6 +23063,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Trichomonas vaginalis infection is one of the sexually transmitted diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trichomonas', 'vaginalis', 'infection', 'sexually']
                 }
             ]
@@ -22506,6 +23102,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vancomycin-resistant Enterococcus faecium (VREF) has emerged as a relevant multidrug-resistant pathogen and potentially lethal etiology of health care associated infections worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vancomycin', 'resistant', 'enterococcus', 'faecium']
                 }
             ]
@@ -22542,6 +23139,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Acute liver failure (ALF) remains a disease with poor patient outcome.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'liver', 'failure', 'alf']
                 }
             ]
@@ -22578,6 +23176,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Chronic inflammation and cancer are intimately associated.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'inflammation', 'cancer', 'intimately']
                 }
             ]
@@ -22616,6 +23215,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Dry eye disease is an aging-related ophthalmic disease that not only affects the daily activities but also causes deterioration in the quality of life.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dry', 'eye', 'disease', 'aging']
                 }
             ]
@@ -22654,6 +23254,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Amyloidosis is a plasma cell disorder characterized by the aggregation and deposition of insoluble amyloid fibrils derived from misfolding of monoclonal immunoglobulin light chains usually produced by a plasma cell tumor (see this term).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['amyloidosis', 'plasma', 'cell', 'disorder']
                 }
             ]
@@ -22692,6 +23293,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Francisella tularensis is a zoonotic intracellular pathogen and the causative agent of the debilitating febrile illness tularemia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['francisella', 'tularensis']
                 }
             ]
@@ -22730,6 +23332,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Infections remain a significant cause of mortality in hematopoietic stem cell transplant patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mortality', 'hematopoietic', 'stem', 'cell']
                 }
             ]
@@ -22766,6 +23369,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Acute diverticulitis: Diverticular disease is very common in developed countries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'diverticulitis', 'diverticular', 'disease']
                 }
             ]
@@ -22804,6 +23408,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'diagnosis of cervical cancer in a young woman who wishes to retain her ability to give birth is particularly distressing for both the patient and the health care team.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cervical', 'cancer', 'young', 'woman']
                 }
             ]
@@ -22842,6 +23447,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Gallbladder cancer (GBC) is an uncommon neoplasm in the United States, but one with high mortality rates."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gallbladder', 'cancer', 'gbc']
                 }
             ]
@@ -22880,6 +23486,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intraductal papillary mucinous neoplasms (IPMN) of the pancreas constitute an increasingly recognized entity of cystic pancreatic tumors which are characterized by mucin production and epithelial growth within the pancreatic ducts and show a wide spectrum of morphologic variants.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mucinous', 'neoplasms', 'ipmn', 'pancreas']
                 }
             ]
@@ -22918,6 +23525,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The shortage in energy has given rise to the development of biomass as advanced energy materials.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['development', 'biomass', 'advanced', 'energy']
                 }
             ]
@@ -22956,6 +23564,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The upper gastrointestinal bleeding remains the most frequent emergency in gastroenterology.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['upper', 'gastrointestinal', 'bleeding']
                 }
             ]
@@ -22994,6 +23603,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Posterior reversible encephalopathy syndrome (PRES) is a neurotoxic state accompanied by a unique brain imaging pattern.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['reversible', 'encephalopathy', 'syndrome', 'pres']
                 }
             ]
@@ -23032,6 +23642,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cisplatin is a cancer chemotherapeutic agent whose clinical use is complicated by its dose related kidney toxicity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cisplatin', 'cancer', 'chemotherapeutic', 'agent']
                 }
             ]
@@ -23070,6 +23681,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Restenosis in drug-eluting stents (DESs) occurs infrequently, however, it remains a pervasive clinical problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['restenosis', 'drug', 'eluting', 'stents']
                 }
             ]
@@ -23108,6 +23720,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital myasthenic syndromes (CMS) are a group of heterogeneous inherited disorders caused by mutations in genes encoding proteins essential for the integrity of neuromuscular transmission.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'myasthenic', 'syndromes', 'cms']
                 }
             ]
@@ -23145,6 +23758,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Lumbar spinal stenosis (LSS) is common sequelae of degenerative disorders of spine.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lumbar', 'spinal', 'stenosis', 'lss']
                 }
             ]
@@ -23183,6 +23797,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mucosa-associated lymphoid tissue (MALT) lymphoma is an extranodal indolent lymphoma with histopatholigic features similar to those of marginal zone B-cell lymphomas.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lymphoid', 'tissue', 'malt', 'lymphoma']
                 }
             ]
@@ -23219,6 +23834,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Malignant pleural effusions are an important burden of malignant disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignant', 'pleural', 'effusions', 'important']
                 }
             ]
@@ -23257,6 +23873,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The development of a preventive vaccine to neutralize the highly variable and antigenically diverse human immunodeficiency virus type 1 (HIV-1) has been an indomitable goal.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['type', 'hiv', 'indomitable', 'goal']
                 }
             ]
@@ -23295,6 +23912,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Drug addiction is a complex and highly debilitating disorder affecting the motivational and cognitive control systems of the brain.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['drug', 'addiction', 'complex']
                 }
             ]
@@ -23333,6 +23951,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Anastomotic leakage (AL) is one of the most serious complications of colorectal resection, causing sepsis and reducing overall survival."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anastomotic', 'leakage', 'al', 'complications']
                 }
             ]
@@ -23371,6 +23990,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Treatment of polluted wastewaters from industrial activities has become a source of major concern for the environment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['treatment', 'polluted', 'wastewaters', 'industrial']
                 }
             ]
@@ -23409,6 +24029,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Paget's bone disease is a common disorder affecting approximately 3–4% of the population over 40 and up to 10–11% of the population older than 80 years.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paget', 'bone', 'disease', 'common']
                 }
             ]
@@ -23447,6 +24068,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Xeroderma pigmentosum (XP) is a rare, genetic, autosomal nucleotide excision repair-deficient disease characterized by sun-sensitivity and early appearance of skin and ocular tumors."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['xeroderma', 'pigmentosum', 'xp']
                 }
             ]
@@ -23485,6 +24107,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tuberculous meningitis (TBM) results from the haematogenous dissemination of Mycobacterium tuberculosis from the lung to the brain.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tuberculous', 'meningitis', 'tbm', 'results']
                 }
             ]
@@ -23523,6 +24146,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Obesity strongly affects the prognosis of various malignancies, including breast cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['obesity', 'strongly', 'affects', 'prognosis']
                 }
             ]
@@ -23561,6 +24185,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Erdheim-Chester disease is an idiopathic systemic histiocytosis hystologically different to Langerhans histiocytosis which is characterized by symmetric sclerotic bone lesions, predominantly affecting the diaphyseal and metaphyseal areas of large bones."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['erdheim', 'chester', 'disease', 'idiopathic']
                 }
             ]
@@ -23599,6 +24224,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Social anxiety disorder (SAD), formally known as social phobia, is mainly characterized by fear or anxiety of being negatively judged and evaluated by others and presenting intense crying, fear, and tremors when having a conversation, meeting with strangers in social events (e.g., eating or drinking), and speaking in public."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['social', 'anxiety', 'disorder', 'sad']
                 }
             ]
@@ -23637,6 +24263,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Internet addiction (IA) is a common disorder among adolescents throughout most of the industrialized world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['internet', 'addiction', 'ia']
                 }
             ]
@@ -23679,6 +24306,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Yersinia pestis, the causative agent of plague, has recently diverged from the less virulent enteropathogen Yersinia pseudotuberculosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['virulent', 'enteropathogen', 'yersinia', 'pseudotuberculosis']
                 }
             ]
@@ -23715,6 +24343,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Urinary stone disease is an important morbidity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['urinary', 'stone', 'disease', 'important']
                 }
             ]
@@ -23753,6 +24382,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rosai-Dorfman Disease (RDD) also known as Sinus Histiocytosis With Massive Lymphadenopathy (SHML) is a rare and benign non- Langerhans histiocytosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rosai', 'dorfman', 'disease', 'rdd']
                 }
             ]
@@ -23791,6 +24421,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"After lung transplantation, the major complication limiting the long-term survival of allografts is obliterative bronchiolitis (OB), characterized by chronic rejection."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['survival', 'allografts', 'obliterative', 'bronchiolitis']
                 }
             ]
@@ -23829,6 +24460,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Neuromyelitis optica (NMO, also eponymously known as Devic\'s disease) is an immune-mediated demyelinating disease of the central nervous system that can lead to significant disability."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuromyelitis', 'optica', 'nmo']
                 }
             ]
@@ -23867,6 +24499,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Renal fibrosis is a common pathological feature of all kinds of chronic kidney diseases (CKDs) with uncertain mechanisms.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['renal', 'fibrosis']
                 }
             ]
@@ -23905,6 +24538,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pigmented villonodular synovitis (PVNS) is an uncommon proliferative lesion of synovial tissue.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pigmented', 'villonodular', 'synovitis', 'pvns']
                 }
             ]
@@ -23943,6 +24577,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The incidence of cancer rises with age, with most patients presenting when they are older than 70 years."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'rises', 'age', 'patients']
                 }
             ]
@@ -23981,6 +24616,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Marfan syndrome (MFS, OMIM #154700) is an autosomal dominant connective tissue disorder, clinically presenting with cardinal features of skeletal, ocular, and cardiovascular systems."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['marfan', 'syndrome', 'mfs']
                 }
             ]
@@ -24019,6 +24655,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cerebral venous and sinus thrombosis (CVST) is a rare but life-threatening disease accounting for less than 1% of all strokes and a poor outcome in around 10% of all patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['venous', 'sinus', 'thrombosis', 'cvst']
                 }
             ]
@@ -24057,6 +24694,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Collectively, nematode parasites of domestic ruminants continue to pose the greatest disease problem in grazing livestock systems worldwide, despite the powerful and extensive chemotherapeutic arsenal available for their control."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nematode', 'parasites', 'domestic', 'ruminants']
                 }
             ]
@@ -24094,6 +24732,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Fibromatosis (desmoid tumors) is a rare benign mesenchymatous proliferative process.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fibromatosis', 'desmoid', 'tumors']
                 }
             ]
@@ -24132,6 +24771,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Intensified due to rapid urbanization and global warming-induced high temperature extremes, the urban heat island effect has become a major environmental concern for urban residents."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['urban', 'heat', 'island', 'effect']
                 }
             ]
@@ -24168,6 +24808,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Renal impairment is a common phenomenon in myeloma patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['impairment', 'common', 'phenomenon', 'myeloma']
                 }
             ]
@@ -24206,6 +24847,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Anaplastic large cell lymphomas (ALCLs) comprise a group of CD30-positive non-Hodgkin lymphomas that generally are of T-cell origin and share common morphologic and phenotypic characteristics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['large', 'cell', 'lymphomas', 'alcls']
                 }
             ]
@@ -24244,6 +24886,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Onychomycosis is a common fungal infection of nails which is mainly caused by dermatophyte species and less often by yeasts and non-dermatophyte molds.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['onychomycosis', 'common', 'fungal', 'infection']
                 }
             ]
@@ -24280,6 +24923,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Lymphedema (LE) is a common complication in patients with cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lymphedema']
                 }
             ]
@@ -24318,6 +24962,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Membrane fouling is one of the main obstacles to membrane distillation (MD) applications in desalination and other fields.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['membrane', 'distillation', 'md', 'applications']
                 }
             ]
@@ -24356,6 +25001,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chronic thromboembolic pulmonary hypertension (CTEPH), a rare consequence of an acute pulmonary embolism, is a disease that is underdiagnosed, and surgical pulmonary thromboendarterectomy (PTE) remains the preferred therapy."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['thromboembolic', 'pulmonary', 'hypertension', 'cteph']
                 }
             ]
@@ -24394,6 +25040,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Copper (Cu) is essential for many biological processes, but is toxic when present in excessive amounts."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['copper', 'cu', 'essential', 'biological']
                 }
             ]
@@ -24432,6 +25079,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Burkitt lymphoma (BL) is a highly malignant non-Hodgkin's lymphoma that is closely related to the abnormal expression of genes.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['burkitt', 'lymphoma', 'bl']
                 }
             ]
@@ -24470,6 +25118,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'One severe consequence of radiation therapy in patients with head and neck cancer is persistent salivary gland hypofunction which causes xerostomia and oral infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neck', 'cancer', 'persistent', 'salivary']
                 }
             ]
@@ -24508,6 +25157,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Over just a few years, the Asian fly Drosophila suzukii has invaded several continents and has become a very serious pest of many fruit crops worldwide."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['drosophila', 'suzukii', 'invaded', 'continents']
                 }
             ]
@@ -24546,6 +25196,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Tumor Necrosis Factor (TNF) Related Apoptosis-Inducing Ligand (TRAIL), an immune cytokine of TNF-family, has received much attention in late 1990s as a potential cancer therapeutics due to its selective ability to induce apoptosis in cancer cells."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trail', 'immune', 'cytokine', 'tnf']
                 }
             ]
@@ -24584,6 +25235,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Transitional cell carcinomas of upper urinary tract (uttTCC) constitute 5% to 6% of all urothelial tumors.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['utttcc', 'constitute', 'urothelial', 'tumors']
                 }
             ]
@@ -24622,6 +25274,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Aspiration of foreign body (FB) into the airways is common in children and continues to be a cause for morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['foreign', 'body', 'fb', 'airways']
                 }
             ]
@@ -24660,6 +25313,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Shoulder disorders are a common musculoskeletal problem causing pain and functional loss.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['shoulder', 'disorders', 'common', 'musculoskeletal']
                 }
             ]
@@ -24698,6 +25352,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cystic lymphangioma is a rare benign malformative tumor of lymphatic vessels in various locations.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cystic', 'lymphangioma', 'rare', 'benign']
                 }
             ]
@@ -24736,6 +25391,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Postoperative intra_abdominal adhesions remain an unsolved problem despite significant progress in the surgical procedures themselves.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['postoperative', 'intra', 'abdominal', 'adhesions']
                 }
             ]
@@ -24774,6 +25430,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mycobacterium tuberculosis (MTB), one of the major bacterial pathogens for lethal infectious diseases, is capable of surviving within the phagosomes of host alveolar macrophages; therefore, host genetic variations may alter the susceptibility to MTB."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mycobacterium', 'tuberculosis', 'mtb']
                 }
             ]
@@ -24810,6 +25467,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'The cause of chronic urticaria (CU) remains unidentified in many patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'urticaria', 'cu']
                 }
             ]
@@ -24848,6 +25506,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Selenium (Se) is an essential micronutrient for many organisms, but is also a toxin and environmental pollutant at elevated levels."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['selenium', 'se', 'essential', 'micronutrient']
                 }
             ]
@@ -24886,6 +25545,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Peritoneal carcinomatosis (PC) of gastric origin has a poor prognosis with short survival due to lack of effective therapeutic modalities.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peritoneal', 'carcinomatosis', 'pc', 'gastric']
                 }
             ]
@@ -24924,6 +25584,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Endogenous retroviruses (ERVs) and ERV-like sequences comprise 8% of the human genome.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['endogenous', 'retroviruses', 'ervs']
                 }
             ]
@@ -24962,6 +25623,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Therapeutic measurements to control hepatitis C reinfection afterorthotopic liver transplantation (OLT) still pose many problemsand remain unsatisfactory.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['afterorthotopic', 'liver', 'transplantation', 'olt']
                 }
             ]
@@ -25000,6 +25662,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital hypothyroidism (CH) is most frequently caused by thyroid developmental abnormalities and it has recently been seen to have a familial component.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'hypothyroidism', 'ch', 'frequently']
                 }
             ]
@@ -25038,6 +25701,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The expansion of a repetitive DNA sequence in the C9orf72 gene is the major genetic cause of amyotrophic lateral sclerosis and frontotemporal dementia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuroinflammation', 'expansion', 'repetitive', 'dna']
                 }
             ]
@@ -25076,6 +25740,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Acute compartment syndrome (ACS) is a limb-threatening condition often first diagnosed by emergency physicians.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'compartment', 'syndrome', 'acs']
                 }
             ]
@@ -25114,6 +25779,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Phenylketonuria (PKU) is an inborn metabolic disorder that affects phenylalanine catabolism.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['phenylketonuria', 'pku', 'inborn', 'metabolic']
                 }
             ]
@@ -25152,6 +25818,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Strangulated Inguinal hernia is one of the most common surgical emergencies dealt with by surgeons worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['introductionstrangulated', 'inguinal', 'hernia']
                 }
             ]
@@ -25190,6 +25857,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Stigma affects patients with mental illness, their families and treatment providers."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['stigma', 'affects', 'patients', 'mental']
                 }
             ]
@@ -25228,6 +25896,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Myeloid sarcoma (MS), also known as granulocytic sarcoma or chloroma, is a rare extramedullary tumor composed of immature myeloid cells at different stages of differentiation which can involve any site of the body."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myeloid', 'sarcoma', 'ms']
                 }
             ]
@@ -25266,6 +25935,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Adult-onset Still’s disease (AOSD) is an uncommon systemic inflammatory disease characterized by a spiking fever, an evanescent skin rash, polyarthralgia, and hepatosplenomegaly."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adult', 'onset', 'disease', 'aosd']
                 }
             ]
@@ -25304,6 +25974,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Jaundice is a clinical condition that is often present in pediatric practice and constitutes one of the major issues within the neonatal period and it is either physiological or pathological.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['jaundice', 'clinical']
                 }
             ]
@@ -25342,6 +26013,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Budd-Chiari syndrome (BCS) or hepatic venous outflow obstruction, is a rare and complex clinical entity, with diverse aetiology and a wide range of presentations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['budd', 'chiari', 'syndrome', 'bcs']
                 }
             ]
@@ -25378,6 +26050,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Achalasia is a rare primary motility disorder of the esophagus ',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['achalasia', 'rare', 'primary', 'motility']
                 }
             ]
@@ -25416,6 +26089,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Significant hearing loss is one of the most common major abnormalities present at birth.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['significant', 'hearing', 'loss', 'common']
                 }
             ]
@@ -25458,6 +26132,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Febrile neutropenia (FN) is the most frequent dose-limiting complication of myelosuppressive chemotherapy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neutropenia', 'fn', 'frequent', 'dose']
                 }
             ]
@@ -25496,6 +26171,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Allergic contact dermatitis (ACD) is one of the most common occupational skin diseases (OSDs).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dermatitis', 'acd', 'common', 'occupational']
                 }
             ]
@@ -25534,6 +26210,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cognitive and motor declines are two major geriatric problems often coexisting in older adults.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['geriatric', 'problems', 'coexisting', 'older']
                 }
             ]
@@ -25572,6 +26249,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ovarian hyperstimulation syndrome (OHSS) is considered as one of the significant complications of assisted conception.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ovarian', 'hyperstimulation', 'syndrome', 'ohss']
                 }
             ]
@@ -25610,6 +26288,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Mutations in the presenilin 1 (PS1) gene are the most commonly recognized cause of familial Alzheimer's disease (FAD).",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cause', 'familial', 'alzheimer', 'disease']
                 }
             ]
@@ -25648,6 +26327,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tardive dyskinesia (TD) is a serious side-effect of long-term treatment with neuroleptics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tardive', 'dyskinesia', 'td', 'effect']
                 }
             ]
@@ -25686,6 +26366,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Snakebite is a medical emergency causing considerable morbidity and mortality worldwide, particularly in the tropics."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['snakebite', 'medical', 'emergency', 'causing']
                 }
             ]
@@ -25724,6 +26405,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hantaviruses cause two severe diseases, haemorrhagic fever with renal syndrome in Eurasia and hantavirus pulmonary syndrome in the Americas."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['renal', 'syndrome', 'eurasia', 'hantavirus']
                 }
             ]
@@ -25762,6 +26444,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Violence is an important public health problem among adolescents in the United States.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['violence', 'important', 'public', 'health']
                 }
             ]
@@ -25800,6 +26483,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Peripartum cardiomyopathy (PPCM) is a life-threatening heart failure occurring in the peripartum period.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peripartum', 'cardiomyopathy', 'ppcm']
                 }
             ]
@@ -25838,6 +26522,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Food safety is an issue of global health concern, and contamination occurs due to pollution of the air, water, and soil where food is cultivated, as well as through the use of pesticides."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['food', 'safety', 'issue', 'global']
                 }
             ]
@@ -25876,6 +26561,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Arrhythmogenic right ventricular dysplasia/cardiomyopathy (ARVD/C) is a rare, inherited cardiomyopathy characterized by ventricular arrhythmias, sudden cardiac death, and right ventricular dysfunction."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ventricular', 'dysplasia', 'cardiomyopathy', 'arvd']
                 }
             ]
@@ -25914,6 +26600,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Dysmenorrhoea is the most important under diagnosed and undertreated gynaecologic disorder of all menstrual complaints.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gynaecologic', 'disorder', 'menstrual', 'complaints']
                 }
             ]
@@ -25952,6 +26639,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Epithelioid hemangioendothelioma is a rare vascular malignancy often characterized by a clinically indolent course and delayed diagnosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['epithelioid', 'hemangioendothelioma', 'rare', 'vascular']
                 }
             ]
@@ -25990,6 +26678,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Nonsteroidal anti-inflammatory drugs (NSAIDs), which are globally prescribed, exhibit mainly anti-inflammatory and analgesic effects but also can cause adverse effects including gastrointestinal erosions, ulceration, bleeding, and perforation."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anti', 'inflammatory', 'drugs', 'nsaids']
                 }
             ]
@@ -26028,6 +26717,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Femoroacetabular impingement (FAI) is increasingly being recognized as a cause of hip pain in the young adult.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['femoroacetabular', 'impingement', 'fai', 'increasingly']
                 }
             ]
@@ -26066,6 +26756,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Atypical teratoid/rhabdoid tumor (AT/RT) is uncommon malignant intracranial tumor usually during the first 2 years of life with a male predominance.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['atypical', 'teratoid', 'rhabdoid', 'tumor']
                 }
             ]
@@ -26104,6 +26795,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Diabetic cardiomyopathy (DCM) is a critical complication of diabetes, the accurate pathogenesis of which remains elusive."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetic', 'cardiomyopathy', 'dcm']
                 }
             ]
@@ -26142,6 +26834,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'About 20–40% of patients with diabetes mellitus (DM) suffer from depressive disorders (DD) during the course of their illness.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetes', 'mellitus', 'dm', 'suffer']
                 }
             ]
@@ -26180,6 +26873,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Retinal ganglion cells (RGCs) have been shown to die by apoptosis after damage to their axons caused by optic nerve crush and the death can be reduced by some neurotrophic factors.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['retinal', 'ganglion', 'cells', 'rgcs']
                 }
             ]
@@ -26218,6 +26912,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Congenital disorders of glycosylation (CDG), formerly called carbohydrate-deficient glycoprotein syndromes, constitute a newly identified group of multisystem disorders characterized by defective glycosylation of N-glycosylated proteins."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'disorders', 'glycosylation', 'cdg']
                 }
             ]
@@ -26256,6 +26951,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mycobacterium ulcerans infection is an emerging disease that causes indolent, necrotizing skin lesions known as Buruli ulcer (BU)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mycobacterium', 'ulcerans', 'infection']
                 }
             ]
@@ -26294,6 +26990,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"About 10% of the western population suffers from a specific disability in the acquisition of reading and writing skills, known as developmental dyslexia (DD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['developmental', 'dyslexia', 'dd']
                 }
             ]
@@ -26332,6 +27029,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Retinal vascular occlusion (RVO), including retinal arterial occlusion and retinal vein occlusion, is a common retinal vascular disease that causes visual disturbance."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['retinal', 'vascular', 'occlusion', 'rvo']
                 }
             ]
@@ -26370,6 +27068,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Multisystem inflammatory syndrome in children (MIS-C) associated with coronavirus disease (COVID-19) is a rare and challenging diagnosis requiring early treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['multisystem', 'inflammatory', 'syndrome', 'children']
                 }
             ]
@@ -26408,6 +27107,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Noise is one of the most common worldwide environmental pollutants, especially in occupational fields."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['noise', 'common', 'worldwide', 'environmental']
                 }
             ]
@@ -26450,6 +27150,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Paraneoplastic neurological syndromes are rare diseases affecting less than 0,01 % of the cancerous patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paraneoplastic', 'neurological', 'syndromes', 'rare']
                 }
             ]
@@ -26488,6 +27189,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Management of massive rotator cuff tears in shoulders without glenohumeral arthritis remains problematic for surgeons.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rotator', 'cuff', 'tears', 'shoulders']
                 }
             ]
@@ -26526,6 +27228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Metaplastic breast carcinoma is a rare heterogeneous category of breast cancer, often associated with a poor prognosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metaplastic', 'breast', 'carcinoma', 'rare']
                 }
             ]
@@ -26562,6 +27265,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Actinomycosis is a rare infectious disease caused by Actinobacteria.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['actinomycosis', 'rare', 'infectious', 'disease']
                 }
             ]
@@ -26600,6 +27304,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The frequency of hepatitis C virus (HCV) infection remains high in patients with CKD and plays a detrimental role in mortality in this population, and patients undergoing maintenance dialysis are still at risk of developing HCV infection and HCV disease prevalence of anti-hepatitis C virus (HCV) patients who undergo longterm dialysis are significantly greater than those with normal kidney function."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dialysis', 'risk', 'developing', 'hcv']
                 }
             ]
@@ -26638,6 +27343,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Developmental dysplasia of the hip (DDH) is a complex disorder of hip joint affecting 1‰-5‰ of newborns.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['developmental', 'dysplasia', 'hip', 'ddh']
                 }
             ]
@@ -26676,6 +27382,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vaccines are extremely powerful disease prevention agents and have the potential to save millions of lives.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vaccines', 'extremely', 'powerful']
                 }
             ]
@@ -26714,6 +27421,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rheumatic heart disease (RHD) continues to create havoc in the developing countries even decades after its discovery.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rheumatic', 'heart', 'disease', 'rhd']
                 }
             ]
@@ -26752,6 +27460,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Oral submucous fibrosis (OSF) is a prevalent premalignant condition of the oral cavity, with insidious onset."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['oral', 'submucous', 'fibrosis', 'osf']
                 }
             ]
@@ -26790,6 +27499,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Functional Dyspepsia (FD), defined as chronic symptoms originating from the gastroduodenal region in absence of readily identifiable organic disease, is one of the most common gastrointestinal disorders."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['functional', 'dyspepsia', 'fd', 'defined']
                 }
             ]
@@ -26828,6 +27538,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Changes in temperature associated with climate change can alter species’ distributions, drive adaptive evolution, and, in some cases, cause extinction."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['climate', 'change', 'alter', 'species']
                 }
             ]
@@ -26865,6 +27576,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Patients with chronic kidney disease (CKD) often have the complication of anaemia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['disease', 'ckd', 'complication', 'anaemia']
                 }
             ]
@@ -26903,6 +27615,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although imatinib mesylate (IM) has revolutionized the treatment of chronic myeloid leukemia (CML), some patients develop resistance with progression of leukemia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myeloid', 'leukemia', 'cml']
                 }
             ]
@@ -26941,6 +27654,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Charcot neuropathic arthropathy is a debilitating, rapidly destructive degenerative joint disease that occurs in diabetic, neuropathic midfoot."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['charcot', 'neuropathic', 'arthropathy']
                 }
             ]
@@ -26979,6 +27693,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tumor marker-producing germ cell tumors of the central nervous system are malignant and require radiation and/or chemotherapy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['germ', 'cell', 'tumors', 'central']
                 }
             ]
@@ -27017,6 +27732,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Flooding is a particular hazard in urban areas worldwide due to the increased risks to life and property in these regions.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['flooding', 'particular', 'hazard', 'urban']
                 }
             ]
@@ -27055,6 +27771,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Low birth weight (LBW) continues to be the primary cause of infant morbidity and mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['low', 'birth', 'weight', 'lbw']
                 }
             ]
@@ -27093,6 +27810,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Neural tube defects (NTDs) such as spina bifida and anencephaly are common congenital malformations in humans (1/1,000 births) that result from failure of the neural tube to close during embryogenesis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neural', 'tube', 'defects', 'ntds']
                 }
             ]
@@ -27131,6 +27849,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Coastal wetlands are of great ecological and economic value but face significant degradation and losses because of human activities.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coastal', 'wetlands', 'great', 'ecological']
                 }
             ]
@@ -27169,6 +27888,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Rosacea is a common chronic inflammatory disease of the skin and is associated with a number of etiological causes and inciting factors.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rosacea', 'common', 'chronic', 'inflammatory']
                 }
             ]
@@ -27205,6 +27925,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Zoonotic diseases are leading threats to public health globally.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['zoonotic', 'diseases', 'leading', 'threats']
                 }
             ]
@@ -27243,6 +27964,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mutations in the VHL gene lead to von Hippel_Lindau (VHL) disease, a clinically heterogeneous cancer syndrome."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hippel', 'lindau', 'vhl', 'disease']
                 }
             ]
@@ -27279,6 +28001,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Lewy body dementia (LBD) is emerging as a common cause of degenerative dementia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lewy', 'body', 'dementia', 'lbd']
                 }
             ]
@@ -27317,6 +28040,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Focal segmental glomerulosclerosis (FSGS) is a major cause of idiopathic steroid-resistant nephrotic syndrome (SRNS) and end-stage kidney disease (ESKD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['focal', 'segmental', 'glomerulosclerosis', 'fsgs']
                 }
             ]
@@ -27355,6 +28079,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The cholinergic theory of Alzheimer’s disease (Coyle, Price, and DeLong, 1983) suggests that the selective loss of cholinergic neurons in Alzheimer’s disease results in a relative deficit of acetylcholine in specific regions of the brain that mediate learning and memory functions and require acetylcholine to do so."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['loss', 'cholinergic', 'neurons', 'alzheimer']
                 }
             ]
@@ -27391,6 +28116,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'An anomalous origin for the coronary artery is a rare congenital condition',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anomalous', 'origin', 'coronary', 'artery']
                 }
             ]
@@ -27429,6 +28155,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Sweet syndrome (SS) is a rare autoinflamamtory neutrophilic dermatosis, sometimes associated with hematologic malignancies."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sweet', 'syndrome', 'ss']
                 }
             ]
@@ -27467,6 +28194,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mild cognitive impairment (MCI) is a subtle memory disorder not matching criteria for dementia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mild', 'cognitive', 'impairment', 'mci']
                 }
             ]
@@ -27505,6 +28233,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Locally recurrent rectal cancer (LRRC) after surgery or external beam radiotherapy (EBRT) is a serious challenge for which no standard treatment is defined.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rectal', 'cancer', 'lrrc']
                 }
             ]
@@ -27541,6 +28270,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Cardiac injury has been well recognised as a complication of blunt chest trauma.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['complication', 'blunt', 'chest', 'trauma']
                 }
             ]
@@ -27579,6 +28309,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Idiopathic scoliosis is one of the most common disabling pathologies of children and adolescents.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['idiopathic', 'scoliosis', 'common', 'disabling']
                 }
             ]
@@ -27617,6 +28348,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Many amphibian species are at risk of extinction in their natural habitats due to the presence of the fungal pathogen Batrachochytrium dendrobatidis (Bd).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['amphibian', 'species', 'risk', 'extinction']
                 }
             ]
@@ -27655,6 +28387,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Increased general inflammation in aging inhibits immunity and affects responses to infections Aging is associated with increased morbidity arising from a range of tissue dysfunctions.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inflammation', 'aging', 'inhibits', 'immunity']
                 }
             ]
@@ -27693,6 +28426,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Immunoglobulin A vasculitis (IgA-V), formerly known as Henoch–Schönlein purpura (HSP), is the most common small vessel vasculitis in children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vasculitis', 'iga', 'known', 'henoch']
                 }
             ]
@@ -27731,6 +28465,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Osteopetrosis is a genetically determined bone disease resulting from malfunction of osteoclastic activity, leading to excessive deposition of immature bone."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['osteopetrosis', 'genetically']
                 }
             ]
@@ -27769,6 +28504,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Refugee and immigrant women may face a variety of pre- and post-migration stressors that make them susceptible to mental health disorders and adjustment problems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['refugee', 'immigrant', 'women']
                 }
             ]
@@ -27807,6 +28543,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"After decades of epidemiologic and mechanistic research, anterior cruciate ligament (ACL) injuries are clearly a growing problem among active youth and adults."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cruciate', 'ligament', 'acl', 'injuries']
                 }
             ]
@@ -27845,6 +28582,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cannabis is among the most used illicit substances globally, with medical applications, increased legalization, and shifting social attitudes leading to increased use in recent years."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cannabis', 'used', 'illicit', 'substances']
                 }
             ]
@@ -27883,6 +28621,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Groundwater is the most reliable resource for consumptive uses worldwide, but it is vulnerable to anthropogenic pollution in this post-industrialization era."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['groundwater', 'reliable', 'resource', 'consumptive']
                 }
             ]
@@ -27925,6 +28664,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Angiogenesis plays a dominant role in many pathophysiologic disorders, including cancer."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['angiogenesis', 'plays', 'dominant', 'role']
                 }
             ]
@@ -27961,6 +28701,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Vascular calcification (VC) is an inducement of many cardiovascular diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vascular', 'calcification', 'vc', 'inducement']
                 }
             ]
@@ -27999,6 +28740,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hypophosphatasia (HPP) is a genetic disease caused by one or several mutations in ALPL gene encoding the tissue-nonspecific alkaline phosphatase affecting the mineralization process.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hypophosphatasia', 'hpp', 'genetic', 'disease']
                 }
             ]
@@ -28041,6 +28783,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Displaced and unstable fractures of the proximal humerus are notoriously difficult to manage.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['unstable', 'fractures', 'proximal', 'humerus']
                 }
             ]
@@ -28079,6 +28822,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Paracoccidioidomycosis (PCM) is endemic in Latin America and in countries like Brazil it carries a high mortality rate.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paracoccidioidomycosis', 'pcm', 'endemic', 'latin']
                 }
             ]
@@ -28117,6 +28861,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ectodermal dysplasia (ED) syndrome comprises a large, heterogeneous group of inherited disorders that are defined by primary defects in the development of 2 or more tissues derived from the embryonic ectoderm."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ectodermal', 'dysplasia', 'ed', 'syndrome']
                 }
             ]
@@ -28153,6 +28898,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Poisonings cause considerable morbidity and mortality worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['poisonings', 'cause', 'considerable', 'morbidity']
                 }
             ]
@@ -28191,6 +28937,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic granulomatous disease (CGD) is an inheritable and genetically heterogeneous disease resulting from mutations in different subcomponents of the NADPH oxidase system.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'granulomatous', 'disease', 'cgd']
                 }
             ]
@@ -28229,6 +28976,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Homelessness [and poverty] is rapidly escalating across North America and is associated with dire implications for public health and our health care systems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['homelessness', 'poverty', 'rapidly', 'escalating']
                 }
             ]
@@ -28267,6 +29015,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Dupuytren’s contracture is a fibroproliferative disease whose etiology and pathophysiology are unclear and controversial.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dupuytren', 'contracture', 'fibroproliferative', 'disease']
                 }
             ]
@@ -28305,6 +29054,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'House dust mites have been known as the most important allergen in respiratory allergic diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['important', 'allergen', 'respiratory', 'allergic']
                 }
             ]
@@ -28343,6 +29093,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Maturity-onset diabetes of the young (MODY) is characterized by an autosomal dominant mode of inheritance, early onset of hyperglycemia, and defects of insulin secretion."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetes', 'young', 'mody', 'characterized']
                 }
             ]
@@ -28381,6 +29132,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital cataract is the most common cause of preventable childhood blindness worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'cataract', 'common', 'cause']
                 }
             ]
@@ -28417,6 +29169,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Arthropod_borne viruses (arboviruses) are a growing threat to global health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['arthropod', 'borne', 'viruses', 'arboviruses']
                 }
             ]
@@ -28455,6 +29208,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Femoral bone loss due to periprosthetic fracture, a challenging problem in total hip arthroplasty (THA), is increasingly encountered due to a rise in the number of revision THAs performed."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['femoral', 'bone', 'loss', 'periprosthetic']
                 }
             ]
@@ -28493,6 +29247,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Microcystins (MC) are cyanotoxins occurring globally, known for causing acute hepatotoxicity in humans/animals, tumor promotion in animals and potential carcinogenicity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['microcystins', 'mc', 'cyanotoxins']
                 }
             ]
@@ -28529,6 +29284,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Renal artery stenosis (RAS) is a cause of hypertension and ischemic nephropathy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['renal', 'artery', 'stenosis', 'ras']
                 }
             ]
@@ -28567,6 +29323,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intravascular lymphoma (IVL) is a rare subtype of extranodal diffuse large B-cell lymphoma.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intravascular', 'lymphoma', 'ivl', 'rare']
                 }
             ]
@@ -28609,6 +29366,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"With the steady growth of the human population, food security becomes a prime challenge."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'population', 'food', 'security']
                 }
             ]
@@ -28647,6 +29405,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hepatitis delta virus (HDV) is a defective RNA virus dependent on Hepatitis B virus (HBV) infection for its replication and expression.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatitis', 'delta', 'virus', 'hdv']
                 }
             ]
@@ -28685,6 +29444,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Wolbachia bacteria are common insect endosymbionts transmitted maternally and capable of spreading through insect populations by cytoplasmic incompatibility (CI) when infected males cause embryo death after mating with uninfected females.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wolbachia', 'bacteria', 'common', 'insect']
                 }
             ]
@@ -28723,6 +29483,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hypoglycaemia is a common danger in patients with diabetes, particularly in Type I insulin dependent diabetes mellitus (IDDM)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hypoglycaemia', 'common', 'danger']
                 }
             ]
@@ -28761,6 +29522,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Interstitial cystitis, a chronic disease of the bladder, is characterized by urinary frequency, urgency and suprapubic pain."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['interstitial', 'cystitis', 'chronic', 'disease']
                 }
             ]
@@ -28799,6 +29561,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Neonatal nosocomial infection (NNI) is a major complication of neonatal care, increasing mortality, morbidity and the costs of healthcare."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neonatal', 'nosocomial', 'infection', 'nni']
                 }
             ]
@@ -28837,6 +29600,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Streptococcus pneumoniae is a commensal of the human nasopharynx that can also cause severe antibiotic-resistant infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pneumoniae', 'commensal', 'human', 'nasopharynx']
                 }
             ]
@@ -28873,6 +29637,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Pollution of phenol compounds is a serious problem for the environment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pollution', 'phenol']
                 }
             ]
@@ -28911,6 +29676,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ependymoma accounts for 5–10% of all childhood CNS tumors and less than 5% of intracranial tumors in adults.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['childhood', 'cns', 'tumors', 'intracranial']
                 }
             ]
@@ -28949,6 +29715,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Development of drug resistance is considered a major cause for failure of antiretroviral therapy in human immunodeficiency virus type 1 (HIV_1)_infected patients adherent to treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['failure', 'antiretroviral', 'therapy', 'human']
                 }
             ]
@@ -28987,6 +29754,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Problem gambling is of serious public, social and clinical concern, especially so because ease of access to different types of gambling is increasing."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gambling', 'public', 'social', 'clinical']
                 }
             ]
@@ -29025,6 +29793,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Severe fever with thrombocytopenia syndrome (SFTS) is an emerging infectious disease that was caused by a novel bunyavirus, SFTSV."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fever', 'thrombocytopenia', 'syndrome', 'sfts']
                 }
             ]
@@ -29063,6 +29832,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Primary hyperhidrosis, excessive focal sweating is a common disease equally affecting men and women."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hyperhidrosis', 'excessive', 'focal', 'sweating']
                 }
             ]
@@ -29101,6 +29871,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Spontaneous coronary artery dissection (SCAD) is a rare cause of acute coronary syndrome.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coronary', 'artery', 'dissection', 'scad']
                 }
             ]
@@ -29139,6 +29910,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lesbian, gay, bisexual, and transgender (LGBT) populations face a range of health disparities that all health care systems must address."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lgbt', 'populations']
                 }
             ]
@@ -29181,6 +29953,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Exposure to formaldehyde, a known air toxic, is associated with cancer and lung disease."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['formaldehyde', 'known', 'air', 'toxic']
                 }
             ]
@@ -29217,6 +29990,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Sporotrichosis is a neglected fungal infection caused by Sporothrix spp.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sporotrichosis', 'neglected', 'fungal', 'infection']
                 }
             ]
@@ -29253,6 +30027,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Essential tremor (ET) is among the most prevalent movement disorders.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['essential', 'tremor', 'et', 'prevalent']
                 }
             ]
@@ -29295,6 +30070,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Postoperative cognitive dysfunction (POCD) is recognized as a complication in the elderly after cardiac surgery.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['postoperative', 'cognitive', 'dysfunction', 'pocd']
                 }
             ]
@@ -29333,6 +30109,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Kimura's disease (KD) is a rare chronic inflammatory disease of subcutaneous tissues and occurs predominantly in head and neck region.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['kimura', 'disease', 'kd']
                 }
             ]
@@ -29371,6 +30148,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Serotonin syndrome (SS) is a drug_induced, potentially fatal, clinical syndrome resulting from drugs that have serotonergic properties."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['serotonin', 'syndrome', 'ss', 'drug']
                 }
             ]
@@ -29413,6 +30191,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'CONGENITAL SYPHILIS (CS) IS A sentinel public health event because of its devastating consequences and persistence throughout the United States.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'syphilis', 'cs']
                 }
             ]
@@ -29451,6 +30230,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Methylmercury (MeHg), an environmental neurotoxicant, induces site-specific toxicity in the brain."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['methylmercury', 'mehg', 'environmental', 'neurotoxicant']
                 }
             ]
@@ -29489,6 +30269,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Myelofibrosis (MF) is currently the myeloproliferative disorder with the most severe prognosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['purposemyelofibrosis', 'mf', 'currently', 'myeloproliferative']
                 }
             ]
@@ -29527,6 +30308,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Diffuse Intrinsic Pontine Glioma (DIPG) is a rare, highly aggressive pediatric brain tumor that originates in the pons."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intrinsic', 'pontine', 'glioma', 'dipg']
                 }
             ]
@@ -29565,6 +30347,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Solid pseudopapillary neoplasm (SPN) of the pancreas is a rare neoplasm of low malignant potential that mostly affect young women.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pseudopapillary', 'neoplasm', 'spn', 'pancreas']
                 }
             ]
@@ -29603,6 +30386,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mutations in the Retinitis Pigmentosa GTPase Regulator (RPGR) cause X-linked RP (XLRP), an untreatable, inherited retinal dystrophy that leads to premature blindness."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['xlrp', 'untreatable', 'inherited', 'retinal']
                 }
             ]
@@ -29641,6 +30425,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Silicosis remains one of the most severe pulmonary fibrotic diseases worldwide, caused by chronic exposure to silica dust."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['silicosis', 'remains', 'severe', 'pulmonary']
                 }
             ]
@@ -29679,6 +30464,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"To overcome serious clinical problems caused by large bone defects, various approaches to bone regeneration have been researched, including tissue engineering, biomaterials, stem cells and drug screening."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['approaches', 'bone', 'regeneration', 'researched']
                 }
             ]
@@ -29716,6 +30502,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Hairy cell leukemia (HCL) shows unique clinicopathological and biological features.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hairy', 'cell', 'leukemia', 'hcl']
                 }
             ]
@@ -29754,6 +30541,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Corneal disease, especially infective keratitis, is one of the major causes of visual impairment and blindness in developing countries."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['corneal', 'disease']
                 }
             ]
@@ -29792,6 +30580,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Oral disease is frequently associated with viral and environmental exposures and oral hygiene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['viral', 'environmental', 'exposures', 'oral']
                 }
             ]
@@ -29828,6 +30617,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Scabies is a common parasitosis of the skin caused by Sarcoptes scabiei hominis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['skin', 'caused', 'sarcoptes', 'scabiei']
                 }
             ]
@@ -29866,6 +30656,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'A substantial proportion of cancer cases present with a metastatic tumor and require further testing to determine the primary site; many of these are never fully diagnosed and remain cancer of unknown primary origin (CUP).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['remain', 'cancer', 'unknown', 'primary']
                 }
             ]
@@ -29904,6 +30695,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Localised Neuropathic Pain (LNP) is challenging to diagnose and manage in primary care.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['localised', 'neuropathic', 'pain', 'lnp']
                 }
             ]
@@ -29942,6 +30734,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Counterfeit and/or imitation medicines are becoming a major health problem not only in developing countries but also in wealthier countries.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['imitation', 'medicines', 'major', 'health']
                 }
             ]
@@ -29978,6 +30771,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Haemodialysis vascular access dysfunction is currently a huge clinical problem.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['haemodialysis', 'vascular', 'access', 'dysfunction']
                 }
             ]
@@ -30016,6 +30810,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cervical spondylotic myelopathy represents a debilitating disorder, often resulting in significant neurological impairment over time."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cervical', 'spondylotic', 'myelopathy', 'represents']
                 }
             ]
@@ -30054,6 +30849,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vasculitis are a heterogeneous group of disorders characterized by inflammation of the blood vessels of different caliber and sometimes fibrinoid necrosis with vessel wall destruction.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vasculitis']
                 }
             ]
@@ -30092,6 +30888,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Acute intermittent porphyria (AIP) is a metabolic disease with an autosomal dominant inheritance, with porphobilinogen (PBG) deaminase as the deficient enzyme in heme biosynthetic pathway at cytosolic subcellular locations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['porphyria', 'aip', 'metabolic', 'disease']
                 }
             ]
@@ -30130,6 +30927,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'variety of organic and inorganic pollutants in water environments pose threats to human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['organic', 'inorganic', 'pollutants', 'water']
                 }
             ]
@@ -30168,6 +30966,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Gram-negative bacteria produce lipopolysaccharide (LPS), the endotoxin that causes septic shock and is a leading cause of death in critically ill patients."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lps', 'endotoxin', 'causes', 'septic']
                 }
             ]
@@ -30206,6 +31005,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Medium chain acyl-CoA dehydrogenase deficiency (MCADD) is a disorder of mitochondrial fatty acid oxidation and is one of the most common inborn errors of metabolism.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coa', 'dehydrogenase', 'deficiency', 'mcadd']
                 }
             ]
@@ -30244,6 +31044,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Placental malaria (PM) is associated with adverse pregnancy outcomes including low birth weight (LBW).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['placental', 'malaria', 'pm', 'associated']
                 }
             ]
@@ -30282,6 +31083,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Overcrowding in U.S. emergency departments (ED) is a growing national problem that results in delayed or obstructed care and costs taxpayers billions of dollars each year.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['overcrowding', 'emergency', 'departments', 'ed']
                 }
             ]
@@ -30320,6 +31122,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Antibody-mediated rejection due to anti-donor HLA antibodies is a cause of chronic rejection and poor graft survival.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rejection', 'anti', 'donor', 'hla']
                 }
             ]
@@ -30358,6 +31161,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic prostatitis/chronic pelvic pain syndrome (CP/CPPS) causes substantial morbidity afflicting approximately 10% of adult males.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pelvic', 'pain', 'syndrome', 'cp']
                 }
             ]
@@ -30396,6 +31200,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although cardiovascular diseases are less prevalent in premenopausal women than in men, their occurrence in women increases at the onset of menopause, and the loss of female sex hormones contributes to the striking increase in cardiovascular morbidity and mortality in postmenopausal women."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cardiovascular', 'diseases', 'prevalent', 'premenopausal']
                 }
             ]
@@ -30434,6 +31239,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cleidocranial dysplasia (CCD) is a rare congenital disorder characterized by skeletal and dental anomalies.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cleidocranial', 'dysplasia', 'ccd', 'rare']
                 }
             ]
@@ -30472,6 +31278,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Violence in the workplace, including violence toward staff from patients and families as well as lateral violence, has become a serious safety issue for hospitals in the United States."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['violence', 'safety', 'issue', 'hospitals']
                 }
             ]
@@ -30510,6 +31317,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Non-suicidal self-injury (NSSI), the intentional destruction of one\'s own body tissue without the conscious intent to die, is a significant health concern among adolescents, however, there are few psychosocial interventions designed to treat NSSI."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['suicidal', 'self', 'injury', 'nssi']
                 }
             ]
@@ -30548,6 +31356,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Menopausal women experience physical and hormonal changes so that it often causes problems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['menopausal', 'women', 'experience']
                 }
             ]
@@ -30584,6 +31393,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Dysphagia is a debilitating condition with widespread consequences.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dysphagia', 'debilitating', 'condition', 'widespread']
                 }
             ]
@@ -30622,6 +31432,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Histoplasmosis is an important systemic fungal infection, particularly among immunocompromised individuals, who may develop a progressive disseminated form which is often fatal if it is untreated."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['histoplasmosis', 'important', 'systemic', 'fungal']
                 }
             ]
@@ -30660,6 +31471,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Often referred to as the “last frontier” in percutaneous coronary intervention (PCI), chronic total occlusion (CTO) is amongst the most challenging and technically demanding lesions treated by the interventionist."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['percutaneous', 'coronary', 'intervention', 'pci']
                 }
             ]
@@ -30698,6 +31510,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Isolated left ventricular noncompaction (LVNC) is a rare cardiomyopathy characterized by excessive and prominent trabeculations associated with deep recesses that communicate with the ventricular cavity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ventricular', 'noncompaction', 'lvnc', 'rare']
                 }
             ]
@@ -30736,6 +31549,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Peptic ulcer is a serious disease with a high incidence of occurrence in our community.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peptic', 'ulcer', 'disease']
                 }
             ]
@@ -30774,6 +31588,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Klinefelter\'s syndrome, the most common sex disorder associated with chromosomal aberrations, is characterized by a plethora of clinical features."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['klinefelter', 'syndrome', 'common']
                 }
             ]
@@ -30812,6 +31627,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Individuals with type 2 diabetes mellitus (T2DM) are at increased risk of developing cardiovascular disease (CVD), possibly associated with elevated plasma free fatty acid concentrations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diabetes', 'mellitus', 't2dm', 'increased']
                 }
             ]
@@ -30850,6 +31666,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Chordoma is a rare, slow-growing malignant bone tumor originating from the remains of the notochord and predominantly affecting the axial skeleton (especially the sacrum and occipital region)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chordoma', 'rare', 'slow', 'growing']
                 }
             ]
@@ -30888,6 +31705,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Tongue squamous cell carcinoma (TSCC) is a major subtype of head and neck squamous cell carcinoma (HNSCC), which is an intractable cancer with a poor prognosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['carcinoma', 'tscc']
                 }
             ]
@@ -30926,6 +31744,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Fly ash, generated during the combustion of coal for energy production, is an industrial by-product which is recognized as an environmental pollutant."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['fly', 'ash', 'generated', 'combustion']
                 }
             ]
@@ -30964,6 +31783,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Infections caused by dermatophytes, Trichophyton rubrum in particular, are among the most common diseases in humans."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infections', 'caused', 'dermatophytes', 'trichophyton']
                 }
             ]
@@ -31002,6 +31822,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Klippel-Trenaunay syndrome is a rare congenital malformation characterized by a large angiomatous nevus, hypertrophy of soft tissue and/or overgrowth of bone, and venous varicosities."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['klippel', 'trenaunay', 'syndrome']
                 }
             ]
@@ -31040,6 +31861,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hyponatremia is the most common and by far underestimated electrolyte disorder in clinical practice.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['underestimated', 'electrolyte', 'disorder', 'clinical']
                 }
             ]
@@ -31076,6 +31898,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Corrosion is a crucial worldwide problem that strongly affects metals.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['corrosion', 'crucial', 'worldwide', 'problem']
                 }
             ]
@@ -31112,6 +31935,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Uveitis is an inflammation of the uvea which may result in blindness.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inflammation', 'uvea', 'result', 'blindness']
                 }
             ]
@@ -31148,6 +31972,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Many people worldwide live with a disability, i.e. limitations in functioning."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['people', 'worldwide', 'live', 'disability']
                 }
             ]
@@ -31186,6 +32011,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The flavivirus genus has several organisms responsible for generating various diseases in humans.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['flavivirus', 'genus', 'organisms', 'responsible']
                 }
             ]
@@ -31224,6 +32050,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Ventricular septal rupture is a rare complication of acute myocardial infarction and has a high mortality.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ventricular', 'septal', 'rupture', 'rare']
                 }
             ]
@@ -31262,6 +32089,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Survivors of childhood and adolescent cancer are at risk for long-term effects of disease and treatment.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['survivors', 'childhood', 'adolescent', 'cancer']
                 }
             ]
@@ -31300,6 +32128,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Giant intracranial aneurysms pose significant technical problems for the neurosurgical team.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['giant', 'intracranial', 'aneurysms']
                 }
             ]
@@ -31338,6 +32167,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Rickettsial diseases, such as Rocky Mountain spotted fever, pose a public health threat because of humans\' interrelationship with common arthropod species, such as ticks, mites, fleas, and lice."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['rickettsial', 'diseases']
                 }
             ]
@@ -31376,6 +32206,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Accidents, the majority of which can be prevented, are a significant cause of morbidity and mortality in children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cause', 'morbidity', 'mortality', 'children']
                 }
             ]
@@ -31414,6 +32245,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Paratuberculosis, or Johne\'s disease, is a chronic, granulomatous, gastrointestinal tract disease of cattle and other ruminants caused by the bacterium Mycobacterium avium, subspecies paratuberculosis (MAP)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['paratuberculosis', 'johne', 'disease']
                 }
             ]
@@ -31452,6 +32284,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cerebral arteriovenous malformations (AVMs) are a common congenital vascular anomaly, which often present in both children and adults."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cerebral', 'arteriovenous', 'malformations', 'avms']
                 }
             ]
@@ -31490,6 +32323,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hepatic hemangiomas (HH) and focal nodular hyperplasia (FNH) are, by far singly and combined together, the most frequently occurring benign liver lesions."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatic', 'hemangiomas', 'hh', 'focal']
                 }
             ]
@@ -31528,6 +32362,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The Peutz–Jeghers Syndrome (PJS) is an autosomal dominant polyposis disorder with increased risk of multiple cancers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['peutz', 'jeghers', 'syndrome', 'pjs']
                 }
             ]
@@ -31566,6 +32401,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Exposure to excessive manganese (Mn) causes manganism, a progressive neurodegenerative disorder similar to idiopathic Parkinson’s disease (IPD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mn', 'causes', 'manganism']
                 }
             ]
@@ -31604,6 +32440,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Diamond-Blackfan anemia is a congenital hypoproliferative anemia known to be associated with diverse physical anomalies affecting the thumb, craniofacial bones, urogenital system, and heart; prematurity; and fetal demise."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diamond', 'blackfan', 'anemia', 'congenital']
                 }
             ]
@@ -31644,6 +32481,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Elder abuse is a pervasive public health issue.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['elder', 'abuse', 'pervasive', 'public']
                 }
             ]
@@ -31682,6 +32520,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Polyarteritis nodosa (PAN) is a vasculitis, which often involves small and medium sized visceral arteries."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['polyarteritis', 'nodosa', 'pan', 'vasculitis']
                 }
             ]
@@ -31720,6 +32559,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Craniopharyngiomas are benign intracranial tumors located in the sellar and suprasellar region.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['craniopharyngiomas', 'benign', 'intracranial', 'tumors']
                 }
             ]
@@ -31758,6 +32598,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Parents have been vulnerable to psychological distress during the COVID-19 pandemic due to the disruptions in social support including restricted connections to support networks and loss of access to healthcare, schools and day care centers, and community services."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['parents', 'vulnerable', 'psychological', 'distress']
                 }
             ]
@@ -31796,6 +32637,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"With the increasing overall survival of cancer patients due to recent discoveries in oncology, the incidence of side effects is also rising, and along with secondary malignancies, cardiotoxicity is one of the most concerning side effects, affecting the quality of life of cancer survivors."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignancies', 'cardiotoxicity', 'concerning', 'effects']
                 }
             ]
@@ -31834,6 +32676,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Krabbe disease (KD) is an autosomal recessive disorder caused by mutations in the galactocerebrosidase (GALC) gene resulting in neuro-inflammation and defective myelination in the central and peripheral nervous systems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['krabbe', 'disease', 'kd']
                 }
             ]
@@ -31872,6 +32715,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Exposure to environmental chemicals with estrogenic activity during the early stage of pregnancy can seriously affect embryonic development and the maintenance of pregnancy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['exposure', 'environmental', 'chemicals', 'estrogenic']
                 }
             ]
@@ -31910,6 +32754,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pelvic fracture (PF) is the second-most prevalent cause of mortality after brain trauma among multiple trauma patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pelvic', 'fracture', 'pf']
                 }
             ]
@@ -31948,6 +32793,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Wiskott-Aldrich syndrome (WAS) is a fully penetrant X-linked recessive disorder characterized by thrombocytopenia with small platelets, eczema, and defects of both T-cell and B-cell immunity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wiskott', 'aldrich', 'syndrome']
                 }
             ]
@@ -31986,6 +32832,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Malnutrition is a major cause of hospitalization for residents of long-term care facilities (LTC).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malnutrition', 'major', 'cause', 'hospitalization']
                 }
             ]
@@ -32024,6 +32871,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Uterine carcinosarcoma (UCS) accounts for approximately 15% of uterine cancer-associated deaths in the United States.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['uterine', 'carcinosarcoma', 'ucs', 'accounts']
                 }
             ]
@@ -32062,6 +32910,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Myopia is an important cause of visual disability throughout the world, and in its higher forms, it is also an important cause of blindness."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myopia', 'important', 'cause', 'visual']
                 }
             ]
@@ -32100,6 +32949,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Adipose tissue inflammation plays a role in atherosclerosis and type 2 diabetes (T2DM).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adipose', 'tissue', 'inflammation']
                 }
             ]
@@ -32138,6 +32988,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Anti-N-Mmethyl-D-aspartate receptor encephalitis is an autoimmune disease of the central nervous system with prominent neurologic and psychiatric features.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mmethyl', 'aspartate', 'receptor', 'encephalitis']
                 }
             ]
@@ -32176,6 +33027,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Tendon disorders are a significant cause of pain and morbidity amongst athletes, workers and the general public."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tendon', 'disorders']
                 }
             ]
@@ -32212,6 +33064,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Drowning is one of the leading causes of death in children.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['objectives', 'drowning', 'leading', 'causes']
                 }
             ]
@@ -32248,6 +33101,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Thyroid disorders are among the common endocrine problems in pregnant women.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['endocrine', 'problems', 'pregnant', 'women']
                 }
             ]
@@ -32286,6 +33140,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Pregnancy-associated breast cancer, although most commonly defined as breast cancer diagnosed during pregnancy or_≤1 year following delivery, knows a variety of definitions, likely related to the diversity of reported clinicopathological features and prognosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pregnancy', 'associated', 'breast', 'cancer']
                 }
             ]
@@ -32324,6 +33179,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pelvic inflammatory disease (PID) is characterized by infection and inflammation of the upper genital tract in women and can cause significant reproductive health sequelae for women.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pelvic', 'inflammatory', 'disease', 'pid']
                 }
             ]
@@ -32362,6 +33218,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hepatorenal syndrome (HRS) is a serious complication of liver cirrhosis with poor survival in the absence of liver transplantation (LT).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatorenal', 'syndrome', 'hrs']
                 }
             ]
@@ -32400,6 +33257,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Congenital anomalies of the kidney and urinary tract are part of a family of diseases with different anatomical origins.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['congenital', 'anomalies', 'kidney', 'urinary']
                 }
             ]
@@ -32436,6 +33294,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Coronavirus is an enveloped virus with positive-sense single-stranded RNA.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coronavirus', 'enveloped', 'virus', 'positive']
                 }
             ]
@@ -32474,6 +33333,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hutchinson–Gilford progeria syndrome (HGPS) is a rare genetic disease with widespread phenotypic features resembling premature aging.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hutchinson', 'gilford', 'progeria', 'syndrome']
                 }
             ]
@@ -32512,6 +33372,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Neurological manifestations are a significant complication of coronavirus disease (COVID-19), but underlying mechanisms aren\'t well understood."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['covid', '19', 'underlying', 'mechanisms']
                 }
             ]
@@ -32550,6 +33411,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cerebral autosomal dominant arteriopathy with subcortical infarcts and leukoencephalopathy (CADASIL) is a hereditary condition with onset in mid-adulthood and is associated with mutations in the Notch-3 gene.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infarcts', 'leukoencephalopathy', 'cadasil', 'hereditary']
                 }
             ]
@@ -32588,6 +33450,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Body dysmorphic disorder (BDD) is characterized by a recurrent preoccupation with a potential defect or flaw of one’s physical appearance that are often tended to be neutralized by an excessive checking or by taking big effort to hide or “fix” the suspected deficit.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['body', 'dysmorphic', 'disorder', 'bdd']
                 }
             ]
@@ -32626,6 +33489,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Primary hyperoxaluria Type 1 is a rare autosomal recessive inborn error of glyoxylate metabolism, caused by a deficiency of the liver-specific enzyme alanine:glyoxylate aminotransferase."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hyperoxaluria', 'type', 'rare', 'autosomal']
                 }
             ]
@@ -32662,6 +33526,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Persistent hyperglycemia in diabetes causes endothelial cell dysfunction.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hyperglycemia', 'diabetes', 'causes', 'endothelial']
                 }
             ]
@@ -32700,6 +33565,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cassava mosaic disease (CMD) caused by cassava begomoviruses is the major constraint to cassava production in Africa.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cmd', 'caused', 'cassava', 'begomoviruses']
                 }
             ]
@@ -32738,6 +33604,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Glomus tumor is a rare mesenchymal neoplasm originating from the modified smooth muscle cells of the glomus body.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['glomus', 'tumor', 'rare', 'mesenchymal']
                 }
             ]
@@ -32774,6 +33641,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Inherited cardiomyopathies are a frequent cause of heart failure.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inherited', 'cardiomyopathies']
                 }
             ]
@@ -32812,6 +33680,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although relatively rare in Western countries, penile cancer is associated with high morbidity and mortality."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['western', 'countries', 'penile', 'cancer']
                 }
             ]
@@ -32850,6 +33719,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Iodine deficiency is a major public-health problem throughout the world, especially for pregnant women, and it is considered the most common cause of preventable intellectual impairment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['iodine', 'deficiency', 'major', 'public']
                 }
             ]
@@ -32888,6 +33758,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lichen sclerosus (LS) is a chronic relapsing, inflammatory skin disorder usually involving the anogenital region of both sexes lacking a resolutive therapy."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lichen', 'sclerosus', 'ls']
                 }
             ]
@@ -32926,6 +33797,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Breast cancer frequently metastasizes to bone, in which tumor cells receive signals from the bone marrow microenvironment."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metastasizes', 'bone', 'tumor', 'cells']
                 }
             ]
@@ -32964,6 +33836,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Thrombotic microangiopathies (TMAs) represent a heterogeneous group of diseases characterized by a microangiopathic hemolytic anemia, peripheral thrombocytopenia, and organ failure of variable severity."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['thrombotic', 'microangiopathies', 'tmas', 'represent']
                 }
             ]
@@ -33000,6 +33873,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Mature cystic teratomas form approximately 20% of all ovarian tumours.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mature', 'cystic', 'teratomas', 'form']
                 }
             ]
@@ -33038,6 +33912,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tumor necrosis factor-alpha (TNF-alpha) is a potent immunomediator and proinflammatory cytokine that has been implicated in the pathogenesis of a large number of human diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['necrosis', 'factor', 'alpha', 'tnf']
                 }
             ]
@@ -33076,6 +33951,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The tumors of the pineal region represent a significant challenge in terms of patient selection and surgical approach.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tumors', 'pineal', 'region']
                 }
             ]
@@ -33114,6 +33990,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Malaria is a major public health problem and an important cause of maternal and infant morbidity in sub-Saharan Africa, including Ethiopia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundmalaria', 'major', 'public', 'health']
                 }
             ]
@@ -33152,6 +34029,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Thrombosis in the context of Cardiovascular disease (CVD) affects mainly the blood vessels supplying the heart, brain and peripheries and it is the leading cause of death worldwide."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['thrombosis', 'context', 'cardiovascular', 'disease']
                 }
             ]
@@ -33190,6 +34068,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Misregulation of the canonical Wnt/_-catenin pathway and aberrant activation of Wnt signaling target genes are common in colorectal cancer (CRC) and contribute to cancer progression.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['wnt', 'catenin', 'pathway', 'aberrant']
                 }
             ]
@@ -33228,6 +34107,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Nocardia is a genus of pathogens that most commonly afflict immunocompromised hosts but may be an emerging infection among persons with bronchiectasis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nocardia', 'genus', 'pathogens', 'commonly']
                 }
             ]
@@ -33266,6 +34146,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tracheoesophageal fistula (TEF) is a rare but life-threatening complication after esophagectomy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['backgroundtracheoesophageal', 'fistula', 'tef']
                 }
             ]
@@ -33304,6 +34185,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Kikuchi-Fujimoto disease (KFD), also known as histiocytic necrotizing lymphadenitis, is a benign, self-limiting disorder with unknown etiology."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['kikuchi', 'fujimoto', 'disease', 'kfd']
                 }
             ]
@@ -33342,6 +34224,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hybrid organic–inorganic halide perovskites have emerged as a disruptive technology in a number of fields, and recently, there has been increased interest in developing nanostructured perovskite materials, due to their extremely high photoluminescence quantum yields, optical absorption, and tolerance for defects."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['organic', 'inorganic', 'halide', 'perovskites']
                 }
             ]
@@ -33380,6 +34263,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Disasters cause significant loss of life, injuries and sufferings, destruction of properties, and displacement of people."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['disasters', 'cause', 'significant', 'loss']
                 }
             ]
@@ -33418,6 +34302,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intestinal ischaemia_reperfusion (I/R) injury can result in acute lung injury due to ischaemia and hypoxia.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intestinal', 'ischaemia', 'reperfusion', 'injury']
                 }
             ]
@@ -33456,6 +34341,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Colonic volvulus (CV) is an uncommon disease which may present clinically as an intestinal obstruction or occlusion.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['colonic', 'volvulus', 'cv']
                 }
             ]
@@ -33494,6 +34380,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Salivary ductal carcinomas (SDCs) are extremely rare and aggressive malignancies, accounting for approximately 6% of all salivary gland malignancies."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['salivary', 'ductal', 'carcinomas', 'sdcs']
                 }
             ]
@@ -33532,6 +34419,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cardiogenic shock is one of the leading causes of death following acute myocardial infarction affecting 10% of patients with large myocardial infarcts with a subsequent mortality rate of 50%.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cardiogenic', 'shock', 'leading', 'causes']
                 }
             ]
@@ -33568,6 +34456,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Granular cell tumors (GCTs) are uncommon neoplasm.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['granular', 'cell', 'tumors', 'gcts']
                 }
             ]
@@ -33606,6 +34495,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Streptococcus pyogenes (group A streptococcus) colonizes skin and throat tissues resulting in a range of benign and serious human diseases.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['streptococcus', 'pyogenes']
                 }
             ]
@@ -33644,6 +34534,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Entamoeba histolytica is a protozoan intestinal parasite that causes amoebic colitis and amoebic liver abscess.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['entamoeba', 'histolytica', 'protozoan', 'intestinal']
                 }
             ]
@@ -33682,6 +34573,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Maternal human immunodeficiency virus (HIV) infection has been shown to leave profound and lasting impacts on the HIV-exposed uninfected (HEU) infant, including increased mortality and morbidity, immunological changes, and developmental delays compared to their HIV-unexposed (HU) counterparts."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['maternal', 'human', 'immunodeficiency', 'virus']
                 }
             ]
@@ -33720,6 +34612,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Large granular lymphocyte (LGL) leukemia is a spectrum of rare clonal lymphoproliferative disorders, all of which involve expansion of large granular lymphocytes."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['granular', 'lymphocyte', 'lgl', 'leukemia']
                 }
             ]
@@ -33758,6 +34651,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pituitary apoplexy occurring after surgery is a rare but life-threatening acute clinical condition that follows extensive hemorrhagenous necrosis within a pituitary adenoma.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pituitary', 'apoplexy', 'occurring', 'surgery']
                 }
             ]
@@ -33796,6 +34690,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"""Ecstasy"" (3,4-methylenedioxymethamphetamine or MDMA) is a widely abused recreational drug, reported to produce neurotoxic effects, both in laboratory animals and in humans."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ecstasy', 'methylenedioxymethamphetamine', 'mdma']
                 }
             ]
@@ -33832,6 +34727,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Traumatic dental injuries are a major cause of morbidity among children.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['traumatic', 'dental', 'injuries']
                 }
             ]
@@ -33870,6 +34766,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Benzo[a]pyrene (BaP) is a potentially genotoxic and cytotoxic environmental pollutant.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['benzo', 'pyrene', 'bap']
                 }
             ]
@@ -33906,6 +34803,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Hyperinsulinism is the most common cause of hypoglycemia in early infancy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cause', 'hypoglycemia', 'early', 'infancy']
                 }
             ]
@@ -33944,6 +34842,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pyogenic liver abscess (PLA) is an uncommon but potentially life_threatening condition.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pyogenic', 'liver', 'abscess', 'pla']
                 }
             ]
@@ -33982,6 +34881,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Signet ring cell (SRC) carcinoma of the stomach is characterized by its poor prognosis and potential to infiltrate the wall of stomach, although survival studies comparing carcinomas with and without SRC features have yielded inconsistent results."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cell', 'src', 'carcinoma', 'stomach']
                 }
             ]
@@ -34020,6 +34920,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Myeloid-derived suppressor cells (MDSC) and tumor-associated macrophages (TAM) contribute to cancer-related inflammation and tumor progression.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['macrophages', 'tam', 'contribute', 'cancer']
                 }
             ]
@@ -34058,6 +34959,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Lithium metal batteries have been considerably limited by the problems of uncontrolled dendritic lithium formation and the highly reactive nature of lithium with electrolytes.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['uncontrolled', 'dendritic', 'lithium', 'formation']
                 }
             ]
@@ -34096,6 +34998,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tracheal stenosis is an uncommon but serious complication of prolonged intubation and tracheostomy patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tracheal', 'stenosis', 'uncommon', 'complication']
                 }
             ]
@@ -34134,6 +35037,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Autoimmune pancreatitis (AIP) is a type of chronic pancreatitis featured by swelling of pancreas, narrowing of pancreatic duct, elevation of serum IgG4, and/or presence of several autoantibodies [1–3]."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autoimmune', 'pancreatitis', 'aip']
                 }
             ]
@@ -34172,6 +35076,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The COVID-19 pandemic has impacted individuals across the world, and in particular, dramatically affected the experience of pregnancy and childbirth for many expectant mothers."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pandemic', 'impacted', 'individuals', 'world']
                 }
             ]
@@ -34210,6 +35115,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Forest and woodland vulnerability to tree mortality in response to future drought and warmer temperatures is emerging as a potentially critical impact of global change (1).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['woodland', 'vulnerability', 'tree', 'mortality']
                 }
             ]
@@ -34252,6 +35158,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Sulfur dioxide (SO(2)) emission from coal-burning power plants and refinery operations has been implicated as a cause of acid rain and other air pollution related problems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sulfur', 'dioxide', 'emission']
                 }
             ]
@@ -34292,6 +35199,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Syncope is a commonly encountered and challenging problem in medical practice.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['syncope', 'commonly', 'encountered', 'challenging']
                 }
             ]
@@ -34330,6 +35238,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Psychiatric disorders in adolescents comprise an important social problem relevant to almost all healthcare professionals.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['psychiatric', 'disorders', 'adolescents', 'comprise']
                 }
             ]
@@ -34368,6 +35277,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Uncontrolled bleeding is the first leading cause of preventable death in the battlefield and the 2nd cause of mortality in civil accidents.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['uncontrolled', 'bleeding']
                 }
             ]
@@ -34406,6 +35316,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Coccidiosis, an intestinal infection caused by intracellular protozoan parasites belonging to several different species of Eimeria, seriously impairs the growth and feed utilization of livestock and poultry."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['coccidiosis', 'intestinal', 'infection']
                 }
             ]
@@ -34444,6 +35355,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Improvement of the bioavailability of poorly soluble medicinal substances is currently one of the major challenges for pharmaceutical industry.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bioavailability', 'poorly', 'soluble', 'medicinal']
                 }
             ]
@@ -34482,6 +35394,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Canine mammary gland tumors (CMGTs) are the most frequent types of cancer in bitches and proposed as a model of human breast cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['canine', 'mammary', 'gland', 'tumors']
                 }
             ]
@@ -34520,6 +35433,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hypospadias is congenital penis abnormalities in children who are commonly encountered.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hypospadias', 'congenital', 'penis', 'abnormalities']
                 }
             ]
@@ -34558,6 +35472,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'ST-segment elevation myocardial infarction (STEMI) poses unique challenges to cardiologists because short- and long-term therapeutic plans occur rapidly and often with limited information.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['elevation', 'myocardial', 'infarction', 'stemi']
                 }
             ]
@@ -34596,6 +35511,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'central issue in nitric oxide (NO) research is to understand how NO can act in some settings as a servoregulator and in others as a cytotoxin.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nitric', 'oxide', 'research', 'understand']
                 }
             ]
@@ -34634,6 +35550,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Idiopathic hypereosinophilic syndrome (HES) is a rare multisystem condition characterized by dysregulated overproduction of eosinophils.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['idiopathic', 'hypereosinophilic', 'syndrome', 'hes']
                 }
             ]
@@ -34672,6 +35589,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Eosinophilic granuloma (EG) represents a local form of Langerhans cell histiocytosis that occurs mostly in children.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['eosinophilic', 'granuloma', 'represents']
                 }
             ]
@@ -34710,6 +35628,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The degree of left ventricular (LV) impairment is an important determinant of long term outcome in patients with coronary artery disease (CAD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['left', 'ventricular', 'lv', 'impairment']
                 }
             ]
@@ -34746,6 +35665,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Acute viral myocarditis is an uncommon inflammatory disease of the myocardium.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acute', 'viral', 'myocarditis', 'uncommon']
                 }
             ]
@@ -34784,6 +35704,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Progressive supranuclear palsy (PSP) is a heterogeneous progressive neurodegenerative disease characterized by onset after 50 years old, Parkinson\'s syndrome, early development of postural instability, absence or transient reaction to levodopa drugs, neuropsychological disorders, dysphagia and dysarthria and eye movement disorders."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['progressive', 'supranuclear', 'palsy', 'psp']
                 }
             ]
@@ -34822,6 +35743,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Noonan syndrome (NS) is a heterogeneous genetic disease that affects many parts of the body.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['noonan', 'syndrome', 'ns']
                 }
             ]
@@ -34860,6 +35782,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hirschsprung disease (HSCR; megacolon, congenital aganglionosis) is a congenital disorder characterized by the absence of ganglion cells along variable segments of the gut."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hirschsprung', 'disease', 'hscr', 'megacolon']
                 }
             ]
@@ -34898,6 +35821,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hypertension is a major cause of morbidity and mortality in African and other black populations.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['morbidity', 'mortality', 'blacks', 'related']
                 }
             ]
@@ -34936,6 +35860,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Dyskeratosis congenita (DC) is an inherited bone marrow failure syndrome and the prototypic telomere biology disorder (TBD).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dyskeratosis', 'congenita', 'dc', 'inherited']
                 }
             ]
@@ -34974,6 +35899,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'One of the disturbing problems of pediatric practice is that of the child with persistent or recurring respiratory tract infections.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['recurring', 'respiratory', 'tract', 'infections']
                 }
             ]
@@ -35012,6 +35938,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"HELLP syndrome is a specific complication of pregnancy characterized by hemolysis, elevated liver enzymes and low platelet count."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hellp', 'syndrome', 'specific']
                 }
             ]
@@ -35050,6 +35977,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Freezing of gait (FoG), a paroxysmal gait disturbance commonly experienced by patients with Parkinson’s disease (PD), is characterized by sudden episodes of inability to generate effective forward stepping."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['freezing', 'gait', 'fog', 'paroxysmal']
                 }
             ]
@@ -35088,6 +36016,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Postoperative respiratory complications have multiple etiologies, are commonly occurring, and are potentially life-threatening complications of anesthesia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['postoperative', 'respiratory', 'complications', 'multiple']
                 }
             ]
@@ -35126,6 +36055,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Myofascial pain syndrome (MPS) is a frequently encountered cause of chronic pain for patients in both primary and specialty clinics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['myofascial', 'pain', 'syndrome', 'mps']
                 }
             ]
@@ -35164,6 +36094,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The coronavirus pandemic has disproportionally impacted racial and ethnic minority communities in the United States.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pandemic', 'disproportionally', 'impacted', 'racial']
                 }
             ]
@@ -35202,6 +36133,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Hailey-Hailey disease (HHD) or familial benign chronic pemphigus is a dermatosis with an autosomal dominant inheritance characterized by full penetrance and variable expressivity: from individual resembling eczema lesions to extensive lesions of the skin.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hailey', 'disease', 'hhd']
                 }
             ]
@@ -35240,6 +36172,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although there is an observed decline in the number of new psychoactive substances entering the drug market, this phenomenon is still a significant public health problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['number', 'new', 'psychoactive', 'substances']
                 }
             ]
@@ -35276,6 +36209,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Chromosomal instability is the major form of genomic instability in cancer cells.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['genomic', 'instability', 'cancer', 'cells']
                 }
             ]
@@ -35314,6 +36248,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Epithelial–mesenchymal transition (EMT) contributes to the progression and metastasis of cancer cells and is associated with a more invasive phenotype of cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['introductionepithelial', 'mesenchymal', 'transition', 'emt']
                 }
             ]
@@ -35350,6 +36285,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Plasmablastic lymphoma is a unique AIDS-related lymphoma.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['plasmablastic', 'lymphoma', 'unique', 'aids']
                 }
             ]
@@ -35388,6 +36324,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neonatal respiratory distress syndrome (RDS) is a very important dangerous disease in neonates and is accompanied by neonatal complications and death.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['respiratory', 'distress', 'syndrome', 'rds']
                 }
             ]
@@ -35426,6 +36363,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Axial neck pain is a common issue leading to patient discomfort and substantial cost to the health-care system and the society.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['context', 'axial', 'neck', 'pain']
                 }
             ]
@@ -35462,6 +36400,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Ectopic pregnancies are a serious gynaecological emergency that can be fatal.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ectopic', 'pregnancies', 'gynaecological', 'emergency']
                 }
             ]
@@ -35500,6 +36439,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cowden syndrome (CS) is an autosomal dominant disorder associated with the development of hamartomas and benign tumors in a variety of tissues, including the skin, thyroid, breast, endometrium, and brain."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cowden', 'syndrome', 'cs']
                 }
             ]
@@ -35538,6 +36478,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The wide use of municipal sanitary landfills has drawn attention to the leaching effluent generated, this may be problematic to the site\'s environment, whether by infiltration or other contaminating modes."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['sanitary', 'landfills', 'drawn', 'attention']
                 }
             ]
@@ -35574,6 +36515,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Infantile myofibroma is the most common fibrous tumor in infancy.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infantile', 'myofibroma', 'common', 'fibrous']
                 }
             ]
@@ -35612,6 +36554,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"recent years, concerns have increased about the adverse effects on health and the environment of polybrominated diphenyl ethers (PBDEs), especially BDE-209, the most widely PBDE used globally."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['polybrominated', 'diphenyl', 'ethers', 'pbdes']
                 }
             ]
@@ -35650,6 +36593,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Autoimmune polyendocrine syndrome type 1 (APS1) is an autosomal recessive disorder, which is caused by mutations in a single gene, called autoimmune regulator (AIRE)1,2 ."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['polyendocrine', 'syndrome', 'type', 'aps1']
                 }
             ]
@@ -35688,6 +36632,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Fetal and neonatal alloimmune thrombocytopenia (FNAIT) is one of the major causes of thrombocytopenia in healthy newborns.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neonatal', 'alloimmune', 'thrombocytopenia', 'fnait']
                 }
             ]
@@ -35726,6 +36671,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Calciphylaxis (calcific uremic arteriolopathy) is a poorly understood and highly morbid syndrome of both vascular calcification and skin necrosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['calciphylaxis', 'calcific', 'uremic', 'arteriolopathy']
                 }
             ]
@@ -35764,6 +36710,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Combustion of traditional biomass fuels and coal has been found to be associated with exposure to particulates and volatile organic compounds (VOCs) and cause a series of adverse health effects.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['exposure', 'particulates', 'volatile', 'organic']
                 }
             ]
@@ -35802,6 +36749,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Zinc (Zn) is an essential nutrient and its deˆciency causes growth retardation, immunodeˆciency, and neuronal degeneration."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['zinc', 'zn', 'essential', 'nutrient']
                 }
             ]
@@ -35838,6 +36786,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: '"Premature ovarian failure (POF) is common, affecting approximately 1% of women."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['premature', 'ovarian', 'failure', 'pof']
                 }
             ]
@@ -35876,6 +36825,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Primitive neuroectodermal tumors of the central nervous system (CNS-PNETs) are highly malignant neoplasms posing diagnostic challenge due to a lack of defining molecular markers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuroectodermal', 'tumors', 'central', 'nervous']
                 }
             ]
@@ -35914,6 +36864,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"_-site amyloid precursor protein (APP) cleaving enzyme 1 (BACE1) initiates the production of _-amyloid (A_), the major constituent of amyloid plaques in Alzheimer’s disease (AD)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['bace1', 'initiates', 'production', 'amyloid']
                 }
             ]
@@ -35952,6 +36903,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Joubert syndrome (JS) is a rare, recessively inherited neurodevelopmental disorder characterized by a distinctive mid_hindbrain malformation."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['joubert', 'syndrome', 'js']
                 }
             ]
@@ -35990,6 +36942,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Hepatitis B virus (HBV) subgenotypes Ba, C1 (Cs), and C2 (Ce) are the most prevalent HBV variants in China."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['hepatitis', 'virus', 'hbv', 'subgenotypes']
                 }
             ]
@@ -36028,6 +36981,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Skin cancer constitutes the most frequently reported post-transplant malignancy in solid organ transplant recipients (OTR) worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['malignancy', 'solid', 'organ', 'transplant']
                 }
             ]
@@ -36066,6 +37020,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Developing p-type photocathodes for direct hydrogen generation is an attractive challenge in photoelectrochemical (PEC) water splitting.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['photocathodes', 'direct', 'hydrogen', 'generation']
                 }
             ]
@@ -36104,6 +37059,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pelvic floor disorders including stress urinary incontinence and pelvic organ prolapse represent a challenge for gynecologists or urogynecologists.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['incontinence', 'pelvic', 'organ', 'prolapse']
                 }
             ]
@@ -36140,6 +37096,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Fascioliasis is a zoonotic infection caused by Fasciola hepatica.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infection', 'caused', 'fasciola', 'hepatica']
                 }
             ]
@@ -36178,6 +37135,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vascular leiomyoma is a benign tumor of smooth muscle that originates in blood vessels and occurs mainly on the limbs.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vascular', 'leiomyoma', 'benign', 'tumor']
                 }
             ]
@@ -36216,6 +37174,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic pruritus is a major and distressing symptom of many cutaneous and systemic diseases and can significantly impair the patient’s quality of life.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'pruritus']
                 }
             ]
@@ -36254,6 +37213,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Deoxynivalenol (DON) is a common mycotoxin that contaminates cereals and their by-products.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['common', 'mycotoxin', 'contaminates', 'cereals']
                 }
             ]
@@ -36292,6 +37252,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Metastatic colorectal cancer (MCRC) patients treated with cetuximab invariably develop resistance, which is driven by the emergence of mutations in the extracellular domain (ECD) of EGFR in a subset of tumors."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metastatic', 'colorectal', 'cancer', 'mcrc']
                 }
             ]
@@ -36330,6 +37291,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Williams syndrome (WS), also referred to as Williams_Beuren syndrome (WBS), is a relatively rare genetic disorder affecting _1/10,000 persons."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['williams', 'syndrome', 'ws']
                 }
             ]
@@ -36368,6 +37330,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Conventional agriculture strongly alters soil quality due to industrial practices that often have negative effects on soil life.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alters', 'soil', 'quality', 'industrial']
                 }
             ]
@@ -36406,6 +37369,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The incidence of noncommunicable diseases (NCDs) has increased over the last few decades, and one of the major contributors to this is lifestyle, especially diet."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['noncommunicable', 'diseases', 'ncds', 'increased']
                 }
             ]
@@ -36444,6 +37408,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Disseminated intravascular coagulation (DIC) is a secondary phenomenon in many pathophysiologic states.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['disseminated', 'intravascular', 'coagulation', 'dic']
                 }
             ]
@@ -36482,6 +37447,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Alcohol consumption among college students has become an increasing problem that requires attention from college administrators, staff, and researchers."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['alcohol', 'consumption', 'college', 'students']
                 }
             ]
@@ -36520,6 +37486,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Viral nervous necrosis (VNN) virus produces great mortalities in fish having susceptible and reservoir species between the most important marine aquaculture species.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['nervous', 'necrosis', 'vnn', 'virus']
                 }
             ]
@@ -36558,6 +37525,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Infection with human parvovirus B19 causes fifth disease, acute and chronic red cell aplasia, fetal hydrops, arthropathy, and other disorders."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['human', 'parvovirus', 'b19', 'causes']
                 }
             ]
@@ -36596,6 +37564,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Along with the ever growing awareness among the scientific community and the general public that concussion is a serious health care issue at all levels of sport, with potentially devastating long term health effects, the number of concussion surveillance clinical monitoring programs has significantly increased internationally over the past 10–15 years."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['concussion', 'surveillance', 'clinical', 'monitoring']
                 }
             ]
@@ -36634,6 +37603,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Pilocytic astrocytomas are tumors of the central nervous system mostly during the first two decades of life.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pilocytic', 'astrocytomas', 'tumors']
                 }
             ]
@@ -36672,6 +37642,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Secondary bacterial coinfections are ranked as a leading cause of hospitalization and morbidity associated with influenza.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['secondary', 'bacterial', 'coinfections', 'ranked']
                 }
             ]
@@ -36710,6 +37681,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The presence of large amounts of reactive oxygen species (ROS) leads to oxidative stress that can damage cell membranes, lead to DNA breakage and cause inactivation of free radical scavenger enzymes, eventually resulting in skin damage."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ros', 'leads', 'oxidative', 'stress']
                 }
             ]
@@ -36748,6 +37720,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Classic galactosemia (OMIM #230400) is an autosomal recessive disorder caused by homozygous or compound heterozygous pathogenic variants in the galactose-1-phosphate uridylyltransferase gene ( GALT ; 606999) on chromosome 9p13.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['galactosemia', 'omim', '230400', 'autosomal']
                 }
             ]
@@ -36786,6 +37759,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Molluscum contagiosum (MC) is a common, benign, viral infection of the skin and mucous membranes that generally affects children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['molluscum', 'contagiosum', 'mc']
                 }
             ]
@@ -36824,6 +37798,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The matrix metalloproteinases (MMPs) have been associated with tumor cell invasion and metastasis of human cancers by mediating the degradation of extracellular matrix components.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['matrix', 'metalloproteinases', 'mmps']
                 }
             ]
@@ -36860,6 +37835,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Extracranial carotid artery stenosis is a leading cause of ischemic stroke.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['extracranial', 'carotid', 'artery', 'stenosis']
                 }
             ]
@@ -36896,6 +37872,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Trichinellosis is a serious foodborne zoonotic disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['trichinellosis', 'foodborne', 'zoonotic', 'disease']
                 }
             ]
@@ -36934,6 +37911,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The spread of plasmid-mediated colistin resistance has posed a serious threat to public health owing to its effects on the emergence of pandrug-resistant bacteria.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['plasmid', 'mediated', 'colistin', 'resistance']
                 }
             ]
@@ -36972,6 +37950,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         "Leber's hereditary optic neuropathy (LHON)-plus is a maternally inherited genetic disorder of young males and characterized by severe progressive vision loss with other neurological and systemic symptoms.",
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['leber', 'hereditary', 'optic', 'neuropathy']
                 }
             ]
@@ -37010,6 +37989,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Neuroleptic malignant syndrome (NMS) is a rare potentially fatal adverse reaction to neuroleptics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['neuroleptic', 'malignant', 'syndrome', 'nms']
                 }
             ]
@@ -37046,6 +38026,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Angiomyolipoma is a distinctive benign neoplasm of the renal origin.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['angiomyolipoma', 'distinctive', 'benign', 'neoplasm']
                 }
             ]
@@ -37084,6 +38065,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Severe acute respiratory syndrome-associated coronavirus (SARS-CoV) mediates attachment, receptor engagement and entry via its spike glycoprotein (S)."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['associated', 'coronavirus', 'sars', 'cov']
                 }
             ]
@@ -37122,6 +38104,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Severe abdominal pain is a common complaint encountered by primary care and emergency room physicians.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['abdominal', 'pain', 'common', 'complaint']
                 }
             ]
@@ -37160,6 +38143,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Excessive application of chemical fertilizers can lead to serious environmental problems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['excessive', 'application', 'chemical', 'fertilizers']
                 }
             ]
@@ -37198,6 +38182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Efficient and safe delivery of siRNA in vivo is the biggest roadblock to clinical translation of RNA interference (RNAi)-based therapeutics.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['interference', 'rnai', 'based', 'therapeutics']
                 }
             ]
@@ -37236,6 +38221,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Relapsing polychondritis (RP) is a rare condition defined by recurrent inflammation of cartilaginous tissue and systemic manifestations.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['relapsing', 'polychondritis', 'rp']
                 }
             ]
@@ -37274,6 +38260,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Biliary atresia (BA) is a progressive fibro-obliterative cholangiopathy affecting the extra- and intrahepatic biliary tree to various degrees and resulting in obstructive bile flow, cholestasis and icterus in neonates."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['biliary', 'atresia', 'ba']
                 }
             ]
@@ -37312,6 +38299,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Ocular trauma is a major cause of vision loss, particularly among younger patient populations."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['ocular', 'trauma', 'major', 'cause']
                 }
             ]
@@ -37350,6 +38338,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Marburg virus (Marburg marburgvirus; MARV) causes sporadic outbreaks of Marburg hemorrhagic fever (MHF) in Africa.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['marburg', 'marburgvirus', 'marv', 'causes']
                 }
             ]
@@ -37388,6 +38377,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"In patients with acquired immunodeficiency syndrome (AIDS), mycobacterial diseases are leading opportunistic infections."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['immunodeficiency', 'syndrome', 'aids', 'mycobacterial']
                 }
             ]
@@ -37426,6 +38416,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Exercise-induced laryngeal obstructions (EILOs) cause exercise-related respiratory symptoms (ERRS) and are important differential diagnoses to exercise-induced asthma.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['exercise', 'induced', 'laryngeal', 'obstructions']
                 }
             ]
@@ -37464,6 +38455,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Gorham_Stout syndrome is a rare disease characterized by progressive osteolysis leading to disappearance of the bone.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['gorham', 'stout', 'syndrome']
                 }
             ]
@@ -37502,6 +38494,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Industrialization and urbanization reflects in the energy demand consequences of that the world is constantly facing challenges toward the hazardous emissions from various industries and transportation systems.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['urbanization', 'reflects', 'energy', 'demand']
                 }
             ]
@@ -37540,6 +38533,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vulvovaginal candidiasis (VVC) is one of the most frequent infections affecting women worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vulvovaginal', 'candidiasis', 'vvc']
                 }
             ]
@@ -37578,6 +38572,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Children with Down syndrome (DS) have a 500-fold increased risk of Acute Megakaryoblastic Leukemia (DS-AMKL).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['megakaryoblastic', 'leukemia', 'ds', 'amkl']
                 }
             ]
@@ -37616,6 +38611,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Environmental contamination by radionuclides particularly uranium is a serious problem at many contaminated sites worldwide.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['contamination', 'radionuclides', 'particularly', 'uranium']
                 }
             ]
@@ -37654,6 +38650,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Granulomatosis with polyangiitis (GPA), previously known as Wegener\'s granulomatosis (WG), is a systemic disorder that involves both granulomatosis and polyangiitis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['granulomatosis', 'polyangiitis', 'gpa']
                 }
             ]
@@ -37692,6 +38689,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Metabolic alterations that are critical for cancer cell growth and metastasis are one of the key hallmarks of cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['metabolic', 'alterations', 'critical', 'cancer']
                 }
             ]
@@ -37728,6 +38726,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'HIV infection and AIDS are having a major and growing impact on women’s lives.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['aids', 'having', 'major', 'growing']
                 }
             ]
@@ -37766,6 +38765,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Tinea infections are very common skin disorders caused by dermatophytes that have the unique ability to invade tissue containing keratin.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['tinea', 'infections', 'common', 'skin']
                 }
             ]
@@ -37804,6 +38804,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Glucose-6 Phosphate Dehydrogenase (G6PD) Deficiency is one of the commonest inherited enzyme abnormalities in humans, caused by many mutations that reduce the stability of the enzyme and its level as red cells progress in age."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['dehydrogenase', 'g6pd', 'deficiency']
                 }
             ]
@@ -37842,6 +38843,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The immune reconstitution inflammatory syndrome (IRIS) in HIV-infected patients initiating antiretroviral therapy (ART) results from restored immunity to specific infectious or non-infectious antigens.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['inflammatory', 'syndrome', 'iris', 'hiv']
                 }
             ]
@@ -37880,6 +38882,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The co-occurrence of psychiatric conditions and substance abuse presents significant challenges for behavioral healthcare providers.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['psychiatric', 'conditions', 'substance', 'abuse']
                 }
             ]
@@ -37916,6 +38919,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Brachial plexus injuries represent devastating injuries with a poor prognosis.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['brachial', 'plexus', 'injuries', 'represent']
                 }
             ]
@@ -37954,6 +38958,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The development of cisplatin resistance in human cancers is controlled by multiple genes and leads to therapeutic failure.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cisplatin', 'resistance', 'human', 'cancers']
                 }
             ]
@@ -37991,6 +38996,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Patent ductus arteriosus (PDA) is a common type of congenital cardiovascular lesion.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['patent', 'ductus', 'arteriosus', 'pda']
                 }
             ]
@@ -38029,6 +39035,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Stroke and stroke-like episodes are frequent complications in mitochondriopathy, particularly in MELAS syndrome (mitochondrial myopathy, encephalopathy, lactic acidosis and stroke like episodes) which is a disorder of the mitochondrial oxidative metabolism in diverse cell types."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['episodes', 'frequent', 'complications', 'mitochondriopathy']
                 }
             ]
@@ -38067,6 +39074,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Portal vein tumor thrombus (PVTT) in hepatocellular carcinoma (HCC) is a common entity.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['thrombus', 'pvtt', 'hepatocellular', 'carcinoma']
                 }
             ]
@@ -38103,6 +39111,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Anemia is a common condition in patients with gastrointestinal cancer.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['anemia', 'common', 'condition', 'patients']
                 }
             ]
@@ -38140,6 +39149,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Campylobacter species are a well-recognized but rare cause of bloodstream infection.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['campylobacter', 'species', 'recognized', 'rare']
                 }
             ]
@@ -38178,6 +39188,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Unregulated cell growth, a major hallmark of cancer, is coupled with telomere shortening."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cancer', 'coupled', 'telomere', 'shortening']
                 }
             ]
@@ -38216,6 +39227,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The severe dependence of oxygen reduction reaction (ORR) in fuel cells on platinum (Pt)-based catalysts greatly limits the process of their commercialization.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['platinum', 'pt', 'based', 'catalysts']
                 }
             ]
@@ -38254,6 +39266,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Leukocyte adhesion deficiency (LAD) is a genetic disease characterized clinically by severe bacterial infections, and biochemically by a deficiency in the surface expression of the CD11/CD18 leukocyte integrins."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['leukocyte', 'adhesion', 'deficiency', 'lad']
                 }
             ]
@@ -38292,6 +39305,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Although rubber has been used in thousands of products for over a century, only recently has allergy to latex been recognized as a significant medical problem."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['recently', 'allergy', 'latex']
                 }
             ]
@@ -38334,6 +39348,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Food waste management has been a global challenge with significant economic and environmental impacts.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['food', 'waste', 'management', 'global']
                 }
             ]
@@ -38372,6 +39387,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Endoplasmic reticulum (ER) stress is involved in a wide range of pathological circumstances including neurodegenerative disorders, diabetes mellitus, ischemic injury, cancers, atherosclerosis, inflammation, infection, toxicity of chemicals and metals, and psychotic diseases."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['endoplasmic', 'reticulum', 'er', 'stress']
                 }
             ]
@@ -38410,6 +39426,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The serious side effects and complications related to the lifelong use of immunosuppressors in organ transplantation have fueled research into their possible minimization.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['use', 'immunosuppressors', 'organ', 'transplantation']
                 }
             ]
@@ -38448,6 +39465,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cerebral cavernous malformation is a vascular disease of the brain causing headaches, seizures, and cerebral hemorrhage."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cerebral', 'cavernous', 'malformation']
                 }
             ]
@@ -38486,6 +39504,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Activation of the phosphatidylinositol 3-kinase (PI3K)/AKT pathway is a common phenomenon in cancer due to multiple mechanisms, including mutation of PI3KCA, loss or mutation of PTEN, or over-expression of receptor tyrosine kinases."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['phosphatidylinositol', 'kinase', 'pi3k', 'akt']
                 }
             ]
@@ -38524,6 +39543,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cornelia de Lange syndrome (CdLS) is described as a congenital disease characterized by delayed growth, mental-motor retardation, typical face appearance, thick eyebrows meeting at the midline, micrognathia, thin lips, micromelia, dental problems, and malformations in the systems such as cardiac, gastrointestinal, genitourinary, and musculoskeletal systems."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cornelia', 'lange', 'syndrome', 'cdls']
                 }
             ]
@@ -38562,6 +39582,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Medicinal plants have been used as traditional treatments for numerous human diseases for thousands of years and in many parts of the world.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['medicinal', 'plants', 'used', 'traditional']
                 }
             ]
@@ -38598,6 +39619,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Diesel exhaust (DE) is a major air pollutant in urban areas.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['diesel', 'exhaust', 'major', 'air']
                 }
             ]
@@ -38636,6 +39658,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cerebrovascular disease in persons between 15 and 45 years of age is on the rise and represents a diagnostic challenge.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cerebrovascular', 'disease', 'persons', '15']
                 }
             ]
@@ -38674,6 +39697,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Severe forms of growth hormone insensitivity (GHI) are characterized by extreme short stature, dysmorphism, and metabolic anomalies."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['growth', 'hormone', 'insensitivity', 'ghi']
                 }
             ]
@@ -38712,6 +39736,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Medication errors involving patients receiving the wrong medicines, the wrong dosages or failure to take medicines according to the prescribed schedule are a substantial threat to patient safety."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['medication', 'errors', 'involving', 'patients']
                 }
             ]
@@ -38750,6 +39775,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Cancer patients are regularly affected by malnutrition which often leads to a worsened quality of life and activity in daily living, more side effects and complications during anticancer treatment and shorter survival times."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['patients', 'regularly', 'affected', 'malnutrition']
                 }
             ]
@@ -38788,6 +39814,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"MPTP (1-methyl-4-phenyl-1,2,3,6-tetrahydropyridine) causes a Parkinson\'s disease-like syndrome."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['phenyl', 'tetrahydropyridine', 'causes', 'parkinson']
                 }
             ]
@@ -38826,6 +39853,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Patients with critical limb ischemia usually have severe atherosclerotic disease and are at a high risk of limb loss as well as major adverse cardiovascular events.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['patients', 'critical', 'limb', 'ischemia']
                 }
             ]
@@ -38864,6 +39892,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vascular graft infection is a feared complication with high mortality and morbidity rates.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vascular', 'graft', 'infection', 'feared']
                 }
             ]
@@ -38902,6 +39931,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Lymphoepithelioma_like carcinoma (LELC), best known to occur in the nasopharynx, can arise in a variety of sites, such as the salivary gland, thymus, lung, stomach, skin and uroepithelium."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lymphoepithelioma', 'like', 'carcinoma', 'lelc']
                 }
             ]
@@ -38940,6 +39970,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Traumatic brain edema is one of the most common problems encountered in neurosurgical practice and it leads to morbidity and mortality via increased intracranial pressure.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['traumatic', 'brain', 'edema']
                 }
             ]
@@ -38976,6 +40007,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Stunting is a global health problem.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['stunting', 'global', 'health', 'problem']
                 }
             ]
@@ -39014,6 +40046,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Increasing cases related to the pathogenicity of Enterovirus D68 (EV-D68) have made it a growing worldwide public health concern, especially due to increased severe respiratory illness and acute flaccid myelitis (AFM) in children."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['pathogenicity', 'enterovirus', 'd68', 'ev']
                 }
             ]
@@ -39052,6 +40085,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Mycoplasma genitalium is an emerging cause of sexually transmitted infections (STIs) and has been implicated in non-gonococcal urethritis in men and cervicitis in woman.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mycoplasma', 'genitalium', 'emerging']
                 }
             ]
@@ -39090,6 +40124,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'It is generally acknowledged that the vast majority of serious mental disorders have significant genetic contributions that manifest complex inheritance patterns.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mental', 'disorders', 'significant', 'genetic']
                 }
             ]
@@ -39126,6 +40161,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Cyclooxygenase-2 (COX-2) is selectively overexpressed in colorectal tumours.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cyclooxygenase', 'cox', 'selectively', 'overexpressed']
                 }
             ]
@@ -39164,6 +40200,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Adherence is increasingly recognized as an important determinant of successful HIV treatment (also called antiretroviral therapy [ART]).',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['adherence', 'increasingly', 'recognized', 'important']
                 }
             ]
@@ -39202,6 +40239,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Sudden infant death syndrome (SIDS) remains the leading cause of postneonatal death in the United States, accounting for more than 2000 infant deaths each year."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infant', 'death', 'syndrome', 'sids']
                 }
             ]
@@ -39240,6 +40278,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Given the severe implications of climate change and ocean acidification (OA) for marine ecosystems, there is an urgent need to quantify ecosystem function in present_day conditions to determine the impacts of future changes in environmental conditions."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['acidification', 'oa', 'marine', 'ecosystems']
                 }
             ]
@@ -39276,6 +40315,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Moisture damage is a major factor in the deterioration of asphalt pavements.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['deterioration', 'asphalt', 'pavements']
                 }
             ]
@@ -39314,6 +40354,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Lassa fever (LF) causes annual outbreaks in endemic regions with high mortality of symptomatic patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['lassa', 'fever']
                 }
             ]
@@ -39352,6 +40393,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Protein aggregation is a pathologic hallmark of familial amyotrophic lateral sclerosis caused by mutations in the Cu, Zn superoxide dismutase gene."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['familial', 'amyotrophic', 'lateral', 'sclerosis']
                 }
             ]
@@ -39390,6 +40432,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Primary nocturnal enuresis is the most frequent urinary system complaint among pediatric patients.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['primary', 'nocturnal', 'enuresis']
                 }
             ]
@@ -39428,6 +40471,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Cardiac fibrosis is a pathological remodeling response to myocardial infarction (MI) and impairs cardiac contractility.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cardiac', 'fibrosis']
                 }
             ]
@@ -39466,6 +40510,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The words ""palliative care"" can be threatening for many patients, particularly for those who do not understand what they mean."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['words', 'palliative', 'care', 'threatening']
                 }
             ]
@@ -39504,6 +40549,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Intrahepatic cholestasis of pregnancy (ICP) is the most frequent pregnancy-specific liver disease.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['intrahepatic', 'cholestasis', 'pregnancy', 'icp']
                 }
             ]
@@ -39542,6 +40588,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Drought is a major cause of yield loss in rain-fed rice (Oryza sativa L.), grown on over 40 million ha in Asia."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['loss', 'rain', 'fed', 'rice']
                 }
             ]
@@ -39580,6 +40627,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Juvenile myoclonic epilepsy is the most common idiopathic generalized epilepsy, characterized by frequent myoclonic jerks, generalized tonic-clonic seizures and, less commonly, absences."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['juvenile', 'myoclonic', 'epilepsy', 'common']
                 }
             ]
@@ -39618,6 +40666,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Chronic venous insufficiency (CVI) is an underestimated public health problem involving the lower limbs.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['chronic', 'venous', 'insufficiency', 'cvi']
                 }
             ]
@@ -39656,6 +40705,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '" Vitamin B12 deficiency has been associated with certain serious disorders such as megaloblastic anemia as well as cardiovascular, neurological, and psychological disorders."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vitamin', 'b12', 'deficiency']
                 }
             ]
@@ -39694,6 +40744,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'The emergence and prevalence of metallo-_-lactamases (M_Ls)-mediated bacterial resistance has seriously threatened the global health today.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['prevalence', 'metallo', 'lactamases', 'm_ls']
                 }
             ]
@@ -39732,6 +40783,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The health status of Australia\'s indigenous people remains the worst of any subgroup within the population, and there is little evidence of any significant improvement over the past two decades, a situation unprecedented on a world scale."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['indigenous', 'people', 'remains', 'worst']
                 }
             ]
@@ -39770,6 +40822,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Melasma, as a pigmentation disorder, induces significant stress to the patients and its recurrent nature remains a challenge in clinical practice."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['melasma', 'pigmentation', 'disorder', 'induces']
                 }
             ]
@@ -39808,6 +40861,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Despite extensive research on the relationship between depression and coronary artery disease (CAD) after an acute coronary syndrome (ACS), causal interpretations are still difficult."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['depression', 'coronary', 'artery', 'disease']
                 }
             ]
@@ -39846,6 +40900,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Autophagy, the process of “selfeating” within cells, has been controversial in cancer since it was first linked to the disease in 1999."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['autophagy', 'process', 'selfeating', 'cells']
                 }
             ]
@@ -39884,6 +40939,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"Mutations in GJB2, encoding connexin 26 (CX26), are causally related to autosomal recessive form of non-syndromic hearing loss (NSHL) at the DFNB1 locus and autosomal dominant NSHL at the DFNA3 locus."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['mutations', 'gjb2', 'encoding', 'connexin']
                 }
             ]
@@ -39920,6 +40976,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     licence: 'CC_BY',
                     description: 'Infections of the respiratory tract are perhaps the most common human ailments.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['infections', 'respiratory', 'tract', 'common']
                 }
             ]
@@ -39958,6 +41015,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Vector-borne diseases (VBDs) are globally widespread arthropod-transmitted diseases with a significant impact on animal and human health.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['vector', 'borne', 'diseases', 'vbds']
                 }
             ]
@@ -39996,6 +41054,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"The Burkholderia cepacia complex (Bcc) is a group of 17 closely related species of the _-proteobacteria subdivision that emerged in the 1980s as important human pathogens, especially to patients suffering from cystic fibrosis."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['burkholderia', 'cepacia', 'complex', 'bcc']
                 }
             ]
@@ -40034,6 +41093,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         '"T-cell acute lymphoblastic leukemia (T-ALL) is an aggressive malignancy largely caused by aberrant activation of the TAL1/SCL, LMO1/2, and NOTCH1 oncogenes."',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['cell', 'acute', 'lymphoblastic', 'leukemia']
                 }
             ]
@@ -40072,6 +41132,7 @@ const problems: Prisma.PublicationCreateInput[] = [
                     description:
                         'Long-term graft survival is an ongoing challenge in the field of islet transplantation.',
                     currentStatus: 'LIVE',
+					isLatestLiveVersion: true,
                     keywords: ['islet', 'transplantation']
                 }
             ]

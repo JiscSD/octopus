@@ -93,7 +93,7 @@ export const updateDOI = async (
 
     const currentVersion = publication.versions[0];
 
-    if (!currentVersion.isCurrent) {
+    if (!currentVersion.isLatestVersion) {
         throw Error('Supplied version is not current');
     }
 

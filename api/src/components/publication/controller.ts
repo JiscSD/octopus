@@ -409,7 +409,7 @@ export const getPDF = async (
         });
     }
 
-    if (!publication.versions.some((version) => version.currentStatus === 'LIVE')) {
+    if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
         return response.json(403, {
             message: 'Publication needs to be LIVE in order to generate a PDF version of it.'
         });
@@ -435,9 +435,7 @@ export const getPDF = async (
         // generate new PDF
         try {
             // We know the publication has at least one LIVE version.
-            const latestPublishedVersion =
-                publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
-                publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+            const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
 
             if (!latestPublishedVersion) {
                 throw Error('Unable to get latest published version from supplied object');

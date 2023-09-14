@@ -6,7 +6,7 @@ const updateDoi = async (): Promise<void> => {
         where: {
             versions: {
                 some: {
-                    isCurrent: true,
+                    isLatestVersion: true,
                     currentStatus: 'LIVE'
                 }
             }
@@ -14,7 +14,7 @@ const updateDoi = async (): Promise<void> => {
         include: {
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 },
                 include: {
                     user: {
@@ -108,7 +108,7 @@ const updateDoi = async (): Promise<void> => {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -121,7 +121,7 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isCurrent: true
+                                    isLatestVersion: true
                                 },
                                 select: {
                                     title: true,
@@ -150,7 +150,7 @@ const updateDoi = async (): Promise<void> => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
+                                isLatestVersion: true,
                                 currentStatus: 'LIVE'
                             }
                         }
@@ -163,7 +163,7 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isCurrent: true
+                                    isLatestVersion: true
                                 },
                                 select: {
                                     title: true,

@@ -53,7 +53,7 @@ export const createFlag = async (
     try {
         const publication = await publicationService.get(event.pathParameters.id);
 
-        if (!publication || !publication.versions.some((version) => version.currentStatus === 'LIVE')) {
+        if (!publication || !publication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(404, {
                 message: 'Cannot flag that a publication that does not exist, or has never been LIVE'
             });
@@ -61,9 +61,7 @@ export const createFlag = async (
 
         // Latest published version (the version presented when someone tries to raise a flag) is either current version,
         // or if that's not LIVE, the version before, as we've already confirmed that the publication has been live at some point.
-        const latestPublishedVersion =
-            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
-            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
 
         if (!latestPublishedVersion) {
             throw Error('Unable to find latest published version');
@@ -166,9 +164,7 @@ export const createFlagComment = async (
         const publication = flag.publication;
 
         // The user attempting to leave a comment is not the flag creator or the publication owner.
-        const latestPublishedVersion =
-            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
-            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
 
         if (!latestPublishedVersion) {
             throw Error('Could not get latest published version of publication');
@@ -256,9 +252,7 @@ export const resolveFlag = async (
 
         const publication = flag.publication;
 
-        const latestPublishedVersion =
-            publication.versions.find((version) => version.isCurrent && version.currentStatus === 'LIVE') ||
-            publication.versions.find((version) => version.versionNumber === publication.versions.length - 1);
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
 
         if (!latestPublishedVersion) {
             throw Error('Could not get latest published version of publication');

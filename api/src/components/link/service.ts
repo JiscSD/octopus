@@ -40,7 +40,7 @@ export const get = async (id: string) => {
                     id: true,
                     versions: {
                         select: {
-                            isCurrent: true,
+                            isLatestVersion: true,
                             currentStatus: true,
                             publicationStatus: true,
                             user: true
@@ -53,7 +53,7 @@ export const get = async (id: string) => {
                     id: true,
                     versions: {
                         select: {
-                            isCurrent: true,
+                            isLatestVersion: true,
                             currentStatus: true,
                             publicationStatus: true,
                             user: true
