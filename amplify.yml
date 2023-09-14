@@ -21,3 +21,5 @@ applications:
         paths:
           - node_modules/**/*
     appRoot: ui
+
+
