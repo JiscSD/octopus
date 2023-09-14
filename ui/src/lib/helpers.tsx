@@ -567,5 +567,10 @@ export const laggy: Middleware = (useSWRNext) => {
 export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
 
 export const htmlToText = (htmlString: string): string => {
-    return new DOMParser().parseFromString(htmlString, 'text/html').documentElement.textContent || '';
+    // Remove tables first, as text inside them is unlikely to make any sense
+    const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
+    while (htmlDoc.querySelector('table')) {
+        htmlDoc.querySelector('table')?.remove();
+    }
+    return htmlDoc.documentElement.textContent || '';
 };
