@@ -33,6 +33,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                         metadata
                     }
                 }
+            },
+            metadata: {
+                title: Config.urls.browsePublications.title,
+                description: Config.urls.browsePublications.description
             }
         }
     };
@@ -50,8 +54,6 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.browsePublications.description} />
                 <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
-                <meta name="og:title" content={Config.urls.browsePublications.title} key="og:title" />
-                <meta name="og:description" content={Config.urls.browsePublications.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.browsePublications.canonical} />
                 <title>{Config.urls.browsePublications.title}</title>
             </Head>

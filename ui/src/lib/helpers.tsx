@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
+import parse from 'node-html-parser';
 
 import * as luxon from 'luxon';
 import * as Config from '@config';
@@ -568,9 +569,19 @@ export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, 
 
 export const htmlToText = (htmlString: string): string => {
     // Remove tables first, as text inside them is unlikely to make any sense
-    const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
-    while (htmlDoc.querySelector('table')) {
-        htmlDoc.querySelector('table')?.remove();
+    if (typeof window !== 'undefined') {
+        // Use DOMParser if running in browser
+        const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
+        while (htmlDoc.querySelector('table')) {
+            htmlDoc.querySelector('table')?.remove();
+        }
+        return htmlDoc.documentElement.textContent || '';
+    } else {
+        // Server-side fallback method
+        const htmlDoc = parse(htmlString);
+        while (htmlDoc.querySelector('table')) {
+            htmlDoc.querySelector('table')?.remove();
+        }
+        return htmlDoc.rawText || '';
     }
-    return htmlDoc.documentElement.textContent || '';
 };

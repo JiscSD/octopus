@@ -4,7 +4,7 @@ import client from '@contentfulClient';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { documentToReactComponents, Options } from '@contentful/rich-text-react-renderer';
-import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES, MARKS, Block, Inline } from '@contentful/rich-text-types';
 import { Entry, EntrySkeletonType } from 'contentful';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 
@@ -142,6 +142,12 @@ export const getStaticPaths: Types.GetStaticPaths = async () => {
     };
 };
 
+const trimDescription = (content: Block | Inline): string => {
+    const descriptionMaxLength = 155;
+    const text = documentToPlainTextString(content).trim();
+    return text.length > descriptionMaxLength ? `${text.slice(0, descriptionMaxLength).trim()}...` : text;
+};
+
 export const getStaticProps: Types.GetStaticProps = async ({ params }) => {
     const { slug } = params as { slug: string };
 
@@ -151,7 +157,11 @@ export const getStaticProps: Types.GetStaticProps = async ({ params }) => {
 
         return {
             props: {
-                blog
+                blog,
+                metadata: {
+                    title: Helpers.truncateString(`${blog.fields.title} - ${Config.urls.base.title}`, 70),
+                    description: Helpers.truncateString(trimDescription(blog.fields.content as Block | Inline), 200)
+                }
             },
             // - attempt to re-generate the page every 10 seconds when a request comes in
             // - useful to show blog updates while writing it
@@ -166,7 +176,13 @@ export const getStaticProps: Types.GetStaticProps = async ({ params }) => {
     }
 };
 
-type Props = { blog: Entry<EntrySkeletonType<Types.BlogFields>, undefined, string> };
+type Props = {
+    blog: Entry<EntrySkeletonType<Types.BlogFields>, undefined, string>;
+    metadata: {
+        title: string;
+        description: string;
+    };
+};
 
 const IndividualBlogPage: NextPage<Props> = (props) => {
     const router = useRouter();
@@ -175,21 +191,15 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
     const { canGoBack } = router.query as { canGoBack: string };
 
     const description = React.useMemo(() => {
-        const descriptionMaxLength = 155;
-        const text = documentToPlainTextString(content).trim();
-        return text.length > descriptionMaxLength ? `${text.slice(0, descriptionMaxLength).trim()}...` : text;
+        return trimDescription(content);
     }, [content]);
-
-    const pageTitle = `${title} - ${Config.urls.base.title}`;
 
     return (
         <>
             <Head>
-                <title>{pageTitle}</title>
+                <title>{props.metadata.title}</title>
                 <meta name="description" content={description} />
                 <meta name="keywords" content={Config.urls.blog.keywords.join(', ')} />
-                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} key="og:title" />
-                <meta name="og:description" content={Helpers.truncateString(description, 200)} key="og:description" />
                 <link rel="canonical" href={Config.urls.base.host + router.asPath} />
             </Head>
 

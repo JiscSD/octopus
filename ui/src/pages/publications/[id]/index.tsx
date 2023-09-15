@@ -69,7 +69,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             userToken: token || '',
             bookmarkId,
             publicationId: publication.id,
-            protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus)
+            protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus),
+            metadata: {
+                title: Helpers.truncateString(`${publication.title} - ${Config.urls.viewPublication.title}`, 70),
+                description: Helpers.truncateString(Helpers.htmlToText(publication.content), 200)
+            }
         }
     };
 };
@@ -404,8 +408,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             <Head>
                 <meta name="description" content={publicationData.description || ''} />
                 <meta name="keywords" content={publicationData.keywords?.join(', ') || ''} />
-                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} key="og:title" />
-                <meta name="og:description" content={Helpers.truncateString(contentText, 200)} key="og:description" />
                 <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publicationData.id}`} />
                 <title>{pageTitle}</title>
             </Head>

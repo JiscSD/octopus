@@ -15,12 +15,23 @@ import '../styles/globals.css';
 
 type CustomProps = {
     protectedPage?: boolean;
+    metadata?: {
+        title?: string;
+        description?: string;
+    };
 };
 
 const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
     const [mounted, setMounted] = useState(false);
     const { user } = Stores.useAuthStore();
     const { darkMode } = Stores.usePreferencesStore();
+
+    const metadata = {
+        title: pageProps.metadata?.title ? pageProps.metadata.title : 'Octopus',
+        description: pageProps.metadata?.description
+            ? pageProps.metadata.description
+            : 'Free, fast and fair: the global primary research record where researchers publish their work in full detail.'
+    };
 
     // check authentication client side
     Hooks.useAuthCheck(pageProps.protectedPage || false);
@@ -40,12 +51,8 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
         <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <meta
-                    name="og:description"
-                    content="Free, fast and fair: the global primary research record where researchers publish their work in full detail."
-                    key="og:description"
-                />
-                <meta name="og:title" content="Octopus" key="og:title" />
+                <meta name="og:description" content={metadata.description} />
+                <meta name="og:title" content={metadata.title} />
             </Head>
 
             <NextProgressBar
