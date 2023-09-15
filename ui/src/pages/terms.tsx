@@ -11,6 +11,8 @@ const Terms: Types.NextPage = (): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.terms.description} />
                 <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
+                <meta name="og:title" content={Config.urls.terms.title} key="og:title" />
+                <meta name="og:description" content={Config.urls.terms.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.terms.canonical} />
                 <title>{Config.urls.terms.title}</title>
             </Head>

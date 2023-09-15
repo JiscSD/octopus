@@ -254,6 +254,8 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
+                <meta name="og:title" content={Config.urls.search.title} key="og:title" />
+                <meta name="og:description" content={Config.urls.search.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.search.canonical} />
                 <title>{Config.urls.search.title}</title>
             </Head>

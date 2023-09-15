@@ -11,6 +11,8 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.accessibility.description} />
                 <meta name="keywords" content={Config.urls.accessibility.keywords.join(', ')} />
+                <meta name="og:title" content={Config.urls.accessibility.title} key="og:title" />
+                <meta name="og:description" content={Config.urls.accessibility.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.accessibility.canonical} />
                 <title>{Config.urls.accessibility.title}</title>
             </Head>

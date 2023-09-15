@@ -196,6 +196,8 @@ const OctopusAims: NextPage = (): React.ReactElement => (
         <Head>
             <meta name="description" content={Config.urls.octopusAims.description} />
             <meta name="keywords" content={Config.urls.octopusAims.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.octopusAims.title} key="og:title" />
+            <meta name="og:description" content={Config.urls.octopusAims.description} key="og:description" />
             <link rel="canonical" href={Config.urls.octopusAims.canonical} />
             <title>{Config.urls.octopusAims.title}</title>
         </Head>

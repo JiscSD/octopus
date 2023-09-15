@@ -180,14 +180,16 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
         return text.length > descriptionMaxLength ? `${text.slice(0, descriptionMaxLength).trim()}...` : text;
     }, [content]);
 
+    const pageTitle = `${title} - ${Config.urls.base.title}`;
+
     return (
         <>
             <Head>
-                <title>
-                    {title} - {Config.urls.base.title}
-                </title>
+                <title>{pageTitle}</title>
                 <meta name="description" content={description} />
                 <meta name="keywords" content={Config.urls.blog.keywords.join(', ')} />
+                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} key="og:title" />
+                <meta name="og:description" content={Helpers.truncateString(description, 200)} key="og:description" />
                 <link rel="canonical" href={Config.urls.base.host + router.asPath} />
             </Head>
 
