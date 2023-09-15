@@ -16,11 +16,6 @@ const AppDocument = () => (
 
             <meta property="og:url" content="https://octopus.ac" />
             <meta property="og:type" content="website" />
-            <meta property="og:title" content="Octopus" />
-            <meta
-                property="og:description"
-                content="Octopus is a new way to register research. It is the place to publish the version of record, enabling peer review and quality assessment and allowing the academic community to build upon the latest work."
-            />
             <meta property="og:image" content="https://octopus.ac/meta/og-image.jpg" />
             <meta
                 property="og:image:alt"
