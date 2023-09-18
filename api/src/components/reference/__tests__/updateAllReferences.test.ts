@@ -8,13 +8,13 @@ describe('update all references', () => {
 
     test('User can update all references from their own draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publications/publication-interpretation-draft/reference')
+            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '123456789' })
             .send([
                 {
                     id: '04',
                     location: 'http://octopus.ac',
-                    publicationId: 'publication-interpretation-draft',
+                    publicationVersionId: 'publication-interpretation-draft-v1',
                     text: '<p>Reference 1</p>',
                     type: 'TEXT'
                 }
@@ -25,13 +25,13 @@ describe('update all references', () => {
 
     test('User must be the author of the publication to update the references', async () => {
         const reference = await testUtils.agent
-            .put('/publications/publication-interpretation-draft/reference')
+            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '987654321' })
             .send([
                 {
                     id: '04',
                     location: 'http://octopus.ac',
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     text: '<p>Reference 1</p>',
                     type: 'TEXT'
                 }
@@ -42,13 +42,13 @@ describe('update all references', () => {
 
     test('The author can only update the references for a draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publications/publication-real-world-application-live/reference')
+            .put('/publicationVersions/publication-real-world-application-live-v1/reference')
             .query({ apiKey: '123456789' })
             .send([
                 {
                     id: '04',
                     location: 'http://octopus.ac',
-                    publicationId: 'publication-real-world-application-live',
+                    publicationVersionId: 'publication-real-world-application-live-v1',
                     text: '<p>Reference 1</p>',
                     type: 'TEXT'
                 }
@@ -62,25 +62,27 @@ describe('update all references', () => {
             {
                 id: '04',
                 location: 'http://octopus.ac',
-                publicationId: 'publication-interpretation-draft',
+                publicationVersionId: 'publication-interpretation-draft-v1',
                 text: '<p>Reference 1</p>',
                 type: 'TEXT'
             },
             {
                 id: '05',
                 location: 'http://google.com',
-                publicationId: 'publication-interpretation-draft',
+                publicationVersionId: 'publication-interpretation-draft-v1',
                 text: '<p>Reference 2</p>',
                 type: 'TEXT'
             }
         ];
 
         const reference = await testUtils.agent
-            .put('/publications/publication-interpretation-draft/reference')
+            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '123456789' })
             .send(newReferencesArray);
 
-        const checkReference = await testUtils.agent.get('/publications/publication-interpretation-draft/reference');
+        const checkReference = await testUtils.agent.get(
+            '/publicationVersions/publication-interpretation-draft-v1/reference'
+        );
 
         expect(reference.body.count).toEqual(2);
         expect(checkReference.body).toEqual(newReferencesArray);

@@ -69,7 +69,8 @@ model PublicationVersion {
     id                                 String                 @id @default(cuid())
     versionOf                          String
     versionNumber                      Int
-    isCurrent                          Boolean                @default(true)
+    isLatestVersion                    Boolean                @default(true)
+    isLatestLiveVersion                Boolean                @default(false)
     publication                        Publication            @relation(fields: [versionOf], references: [id], onDelete: Cascade)
     createdBy                          String
     createdAt                          DateTime               @default(now())
@@ -99,24 +100,24 @@ model PublicationVersion {
 }
 
 model References {
-    id                   String        @id
+    id                   String             @id
     type                 ReferenceType
     text                 String
     location             String?
-    publicationVersionId String?
-    publicationVersion   PublicationVersion?   @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
-    id                   String  @id @default(cuid())
+    id                   String             @id @default(cuid())
     name                 String
     country              String
     city                 String
     link                 String
     ror                  String?
-    createdAt            DateTime    @default(now())
-    publicationVersionId String?
-    publicationVersion   PublicationVersion?   @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Links {
@@ -132,28 +133,28 @@ model Links {
 }
 
 model PublicationStatus {
-    id            String                @id @default(cuid())
-    status        PublicationStatusEnum
-    createdAt     DateTime              @default(now())
-    publicationVersionId String?
-    publicationVersion PublicationVersion? @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    id                   String                @id @default(cuid())
+    status               PublicationStatusEnum
+    createdAt            DateTime              @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model CoAuthors {
-    id                       String      @id @default(cuid())
+    id                       String             @id @default(cuid())
     email                    String
-    code                     String      @default(cuid())
-    confirmedCoAuthor        Boolean     @default(false)
-    approvalRequested        Boolean     @default(false)
+    code                     String             @default(cuid())
+    confirmedCoAuthor        Boolean            @default(false)
+    approvalRequested        Boolean            @default(false)
     linkedUser               String?
-    position                 Int         @default(0)
-    createdAt                DateTime    @default(now())
+    position                 Int                @default(0)
+    createdAt                DateTime           @default(now())
     reminderDate             DateTime?
     affiliations             Json[]
-    isIndependent            Boolean     @default(false)
-    user                     User?       @relation(fields: [linkedUser], references: [id])
-    publicationVersion       PublicationVersion? @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
-    publicationVersionId     String?
+    isIndependent            Boolean            @default(false)
+    user                     User?              @relation(fields: [linkedUser], references: [id])
+    publicationVersion       PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    publicationVersionId     String
 
     // This @@unique needs to be disabled for the migration step because the fields involved must be mandatory.
     // It needs to be reinstated after migration with publicationVersionId, not publicationId.

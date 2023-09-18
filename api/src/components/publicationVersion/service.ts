@@ -69,24 +69,6 @@ export const get = async (id: string) => {
     return publicationVersion;
 };
 
-export const getCurrentVersionIdForPublication = async (publicationId: string) => {
-    const currentVersion = await client.prisma.publicationVersion.findFirst({
-        where: {
-            versionOf: publicationId,
-            isCurrent: true
-        },
-        select: {
-            id: true
-        }
-    });
-
-    if (!currentVersion) {
-        throw Error('Current version not found for publication');
-    }
-
-    return currentVersion.id;
-};
-
 export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
     const query = {
         where: {
@@ -130,4 +112,14 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
     const updatedPublication = await client.prisma.publicationVersion.update(query);
 
     return updatedPublication;
+};
+
+export const validateConflictOfInterest = (version: I.PublicationVersion) => {
+    if (version.conflictOfInterestStatus) {
+        if (!version.conflictOfInterestText?.length) return false;
+    } else if (version.conflictOfInterestStatus === null) {
+        return false;
+    }
+
+    return true;
 };

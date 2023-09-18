@@ -19,7 +19,7 @@ describe('Link co-author', () => {
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-hypothesis-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationVersionId: 'publication-hypothesis-draft-v1' }
         });
 
         expect(dbLink?.linkedUser).toEqual('test-user-7');
@@ -37,7 +37,7 @@ describe('Link co-author', () => {
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-problem-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationVersionId: 'publication-problem-draft-v1' }
         });
 
         expect(dbLink).toEqual(null);

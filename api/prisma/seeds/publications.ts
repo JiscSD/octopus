@@ -42,6 +42,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication PROBLEM-LIVE',
                 content: 'Publication PROBLEM-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -75,6 +76,19 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         country: 'country',
                         city: 'city',
                         link: 'https://example.com'
+                    }
+                }
+            }
+        },
+        publicationFlags: {
+            create: {
+                id: 'publication-problem-live-flag',
+                createdBy: 'test-user-2',
+                category: 'PLAGIARISM',
+                flagComments: {
+                    create: {
+                        createdBy: 'test-user-2',
+                        comment: 'This is a comment'
                     }
                 }
             }
@@ -254,6 +268,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication HYPOTHESIS-LIVE',
                 content: 'Publication HYPOTHESIS-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -261,6 +276,20 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
                         { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
                     ]
+                }
+            }
+        },
+        publicationFlags: {
+            create: {
+                id: 'publication-hypothesis-live-flag',
+                createdBy: 'test-user-2',
+                category: 'PLAGIARISM',
+                resolved: true,
+                flagComments: {
+                    create: {
+                        createdBy: 'test-user-2',
+                        comment: 'This is a comment'
+                    }
                 }
             }
         }
@@ -311,6 +340,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication PROTOCOL-LIVE',
                 content: 'Publication PROTOCOL-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -373,6 +403,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication DATA-LIVE',
                 content: 'Publication DATA-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -412,6 +443,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication ANALYSIS-LIVE',
                 content: 'Publication ANALYSIS-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -464,6 +496,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication INTERPRETATION-LIVE',
                 content: 'Publication INTERPRETATION-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -502,6 +535,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication REAL_WORLD_APPLICATION-LIVE',
                 content: 'Publication REAL_WORLD_APPLICATION-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: {
@@ -568,6 +602,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         doi: '10.82259/cty5-2g23',
         type: 'HYPOTHESIS',
         linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        linkedFrom: { create: { publicationFrom: 'publication-data-live' } },
         versions: {
             create: {
                 id: 'publication-hypothesis-live-problem-live-v1',
@@ -575,6 +610,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication HYPOTHESIS-LIVE',
                 content: 'Publication HYPOTHESIS-LIVE',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 user: { connect: { id: 'test-user-1' } },
                 publicationStatus: { create: [{ status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
@@ -669,6 +705,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content:
                     'This is an automatically-generated topic, produced in order to provide authors with a place to attach new Problem publications',
                 currentStatus: 'LIVE',
+				isLatestLiveVersion: true,
                 user: { connect: { id: 'octopus' } },
                 publicationStatus: {
                     create: [

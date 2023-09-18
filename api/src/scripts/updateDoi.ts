@@ -6,17 +6,27 @@ const updateDoi = async (): Promise<void> => {
         where: {
             versions: {
                 some: {
-                    isCurrent: true,
-                    currentStatus: 'LIVE'
+                    isLatestLiveVersion: true
                 }
             }
         },
         include: {
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestLiveVersion: true
                 },
                 include: {
+                    user: {
+                        select: {
+                            id: true,
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true
+                        }
+                    },
                     publicationStatus: {
                         select: {
                             status: true,
@@ -92,24 +102,12 @@ const updateDoi = async (): Promise<void> => {
                     }
                 }
             },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
             linkedTo: {
                 where: {
                     publicationToRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -121,26 +119,26 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isCurrent: true
+                                    isLatestLiveVersion: true
                                 },
                                 select: {
                                     title: true,
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             },
                             type: true,
-                            doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            }
+                            doi: true
                         }
                     }
                 }
@@ -150,8 +148,7 @@ const updateDoi = async (): Promise<void> => {
                     publicationFromRef: {
                         versions: {
                             some: {
-                                isCurrent: true,
-                                currentStatus: 'LIVE'
+                                isLatestLiveVersion: true
                             }
                         }
                     }
@@ -163,26 +160,26 @@ const updateDoi = async (): Promise<void> => {
                             id: true,
                             versions: {
                                 where: {
-                                    isCurrent: true
+                                    isLatestLiveVersion: true
                                 },
                                 select: {
                                     title: true,
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             },
                             type: true,
-                            doi: true,
-                            user: {
-                                select: {
-                                    id: true,
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            }
+                            doi: true
                         }
                     }
                 }
@@ -198,19 +195,12 @@ const updateDoi = async (): Promise<void> => {
         }
     });
 
-    // Simplify publications
-    const simplifiedPublications = publications.map((publication) => {
-        // Discard versionOf field from current version
-        const { versionOf, ...versionRest } = publication.versions[0];
-
-        return { ...versionRest, versionId: versionRest.id, ...publication };
-    });
-
     let index = 1;
 
-    for (const publication of simplifiedPublications) {
-        await helpers.updateDOI(publication.doi, publication, publication.References).catch((err) => console.log(err));
-        console.log(`No: ${index}. ${publication.title} doi updated (${publication.doi})`);
+    for (const publication of publications) {
+        const references = publication.versions[0].References;
+        await helpers.updateDOI(publication.doi, publication, references).catch((err) => console.log(err));
+        console.log(`No: ${index}. ${publication.versions[0].title} doi updated (${publication.doi})`);
         index++;
     }
 };

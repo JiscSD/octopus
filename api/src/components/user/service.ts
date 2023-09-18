@@ -140,11 +140,18 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
 
     const where: Prisma.PublicationWhereInput = {
         OR: [
-            { createdBy: id },
             {
                 versions: {
                     some: {
-                        isCurrent: true,
+                        isLatestVersion: true,
+                        createdBy: id
+                    }
+                }
+            },
+            {
+                versions: {
+                    some: {
+                        isLatestVersion: true,
                         coAuthors: {
                             some: {
                                 linkedUser: id
@@ -156,7 +163,7 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         ],
         versions: {
             some: {
-                isCurrent: true,
+                isLatestVersion: true,
                 currentStatus: {
                     in: statuses
                 }
@@ -172,15 +179,15 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
             id: true,
             type: true,
             doi: true,
-            createdBy: true,
-            createdAt: true,
-            updatedAt: true,
             url_slug: true,
             versions: {
                 where: {
-                    isCurrent: true
+                    isLatestVersion: true
                 },
                 select: {
+                    createdBy: true,
+                    createdAt: true,
+                    updatedAt: true,
                     title: true,
                     publishedDate: true,
                     currentStatus: true,

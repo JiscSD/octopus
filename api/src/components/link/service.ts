@@ -1,11 +1,10 @@
 import * as client from 'lib/client';
 
-export const create = async (fromPublicationId: string, toPublicationId: string, toPublicationVersionId: string) => {
+export const create = async (fromPublicationId: string, toPublicationId: string) => {
     const link = await client.prisma.links.create({
         data: {
             publicationFrom: fromPublicationId,
-            publicationTo: toPublicationId,
-            linkToVersion: toPublicationVersionId
+            publicationTo: toPublicationId
         }
     });
 
@@ -39,14 +38,12 @@ export const get = async (id: string) => {
             publicationFromRef: {
                 select: {
                     id: true,
-                    user: true,
                     versions: {
-                        where: {
-                            isCurrent: true
-                        },
                         select: {
+                            isLatestVersion: true,
                             currentStatus: true,
-                            publicationStatus: true
+                            publicationStatus: true,
+                            user: true
                         }
                     }
                 }
@@ -54,11 +51,12 @@ export const get = async (id: string) => {
             publicationToRef: {
                 select: {
                     id: true,
-                    user: true,
                     versions: {
                         select: {
+                            isLatestVersion: true,
                             currentStatus: true,
-                            publicationStatus: true
+                            publicationStatus: true,
+                            user: true
                         }
                     }
                 }
@@ -69,26 +67,7 @@ export const get = async (id: string) => {
         }
     });
 
-    if (!link || link.publicationFromRef.versions === undefined || link.publicationToRef.versions === undefined) {
-        throw Error('Insufficient data to format full link');
-    }
-
-    // Put currentStatus and publicationStatus at level above for convenience
-    const simplifiedLink = {
-        ...link,
-        publicationFromRef: {
-            ...link?.publicationFromRef,
-            currentStatus: link?.publicationFromRef.versions[0].currentStatus,
-            publicationStatus: link?.publicationFromRef.versions[0].publicationStatus
-        },
-        publicationToRef: {
-            ...link?.publicationToRef,
-            currentStatus: link?.publicationToRef.versions[0].currentStatus,
-            publicationStatus: link?.publicationToRef.versions[0].publicationStatus
-        }
-    };
-
-    return simplifiedLink;
+    return link;
 };
 
 export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {

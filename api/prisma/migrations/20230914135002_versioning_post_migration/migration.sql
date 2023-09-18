@@ -26,6 +26,10 @@
   - You are about to drop the column `publicationId` on the `PublicationStatus` table. All the data in the column will be lost.
   - You are about to drop the column `publicationId` on the `References` table. All the data in the column will be lost.
   - A unique constraint covering the columns `[publicationVersionId,email]` on the table `CoAuthors` will be added. If there are existing duplicate values, this will fail.
+  - Made the column `publicationVersionId` on table `CoAuthors` required. This step will fail if there are existing NULL values in that column.
+  - Made the column `publicationVersionId` on table `Funders` required. This step will fail if there are existing NULL values in that column.
+  - Made the column `publicationVersionId` on table `PublicationStatus` required. This step will fail if there are existing NULL values in that column.
+  - Made the column `publicationVersionId` on table `References` required. This step will fail if there are existing NULL values in that column.
 
 */
 -- DropForeignKey
@@ -44,10 +48,12 @@ ALTER TABLE "PublicationStatus" DROP CONSTRAINT "PublicationStatus_publicationId
 ALTER TABLE "References" DROP CONSTRAINT "References_publicationId_fkey";
 
 -- AlterTable
-ALTER TABLE "CoAuthors" DROP COLUMN "publicationId";
+ALTER TABLE "CoAuthors" DROP COLUMN "publicationId",
+ALTER COLUMN "publicationVersionId" SET NOT NULL;
 
 -- AlterTable
-ALTER TABLE "Funders" DROP COLUMN "publicationId";
+ALTER TABLE "Funders" DROP COLUMN "publicationId",
+ALTER COLUMN "publicationVersionId" SET NOT NULL;
 
 -- AlterTable
 ALTER TABLE "Publication" DROP COLUMN "conflictOfInterestStatus",
@@ -72,10 +78,12 @@ DROP COLUMN "title",
 DROP COLUMN "updatedAt";
 
 -- AlterTable
-ALTER TABLE "PublicationStatus" DROP COLUMN "publicationId";
+ALTER TABLE "PublicationStatus" DROP COLUMN "publicationId",
+ALTER COLUMN "publicationVersionId" SET NOT NULL;
 
 -- AlterTable
-ALTER TABLE "References" DROP COLUMN "publicationId";
+ALTER TABLE "References" DROP COLUMN "publicationId",
+ALTER COLUMN "publicationVersionId" SET NOT NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CoAuthors_publicationVersionId_email_key" ON "CoAuthors"("publicationVersionId", "email");

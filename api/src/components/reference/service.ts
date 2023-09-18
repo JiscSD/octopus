@@ -1,35 +1,22 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
 
-export const getAllByPublication = async (publicationId: string) => {
-    // References are attached to the version. By default, get the current version's references.
-    const latestVersion = await client.prisma.publicationVersion.findFirst({
+export const getAllByPublicationVersion = async (publicationVersionId: string) => {
+    return await client.prisma.references.findMany({
         where: {
-            versionOf: publicationId,
-            isCurrent: true
-        },
-        select: {
-            id: true
+            publicationVersionId
         }
     });
-    const references = await client.prisma.references.findMany({
-        where: {
-            publicationVersionId: latestVersion?.id
-        }
-    });
-
-    return references;
 };
 
-export const updateAll = async (publicationVersionId, data) => {
+export const updateAll = async (publicationVersionId: string, data: I.UpdateReferencesBody) => {
     await client.prisma.references.deleteMany({
         where: {
             publicationVersionId
         }
     });
 
-    const created = await client.prisma.references.createMany({
+    return await client.prisma.references.createMany({
         data
     });
-
-    return created;
 };
