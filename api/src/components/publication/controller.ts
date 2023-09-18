@@ -104,13 +104,18 @@ export const deletePublication = async (
             });
         }
 
-        const firstVersion = publication.versions.find((version) => version.versionNumber === 1);
-
-        if (!firstVersion) {
-            throw Error('Unable to get first version');
+        // If there has been more than one version of a publication, we can't delete it.
+        if (publication.versions.length > 1) {
+            return response.json(403, {
+                message: 'A publication can not be deleted if there is more than one version of it.'
+            });
+        } else if (!publication.versions || publication.versions.length === 0) {
+            throw Error('Could not get versions for publication');
         }
 
-        if (firstVersion.user.id !== event.user.id) {
+        const version = publication.versions[0];
+
+        if (version.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to delete this publication.'
             });
@@ -119,12 +124,9 @@ export const deletePublication = async (
         // The logic here is a bit odd, but the currentStatus and publicationStatus array are not intrinsically linked
         // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
         // has only ever been draft.
-        // Also, for us to delete a publication, there must only have been one version of it.
         if (
-            firstVersion.currentStatus !== 'DRAFT' ||
-            (firstVersion.publicationStatus &&
-                !firstVersion.publicationStatus.every((status) => status.status !== 'LIVE')) ||
-            publication.versions.length > 1
+            version.currentStatus !== 'DRAFT' ||
+            (version.publicationStatus && !version.publicationStatus.every((status) => status.status !== 'LIVE'))
         ) {
             return response.json(403, {
                 message: 'A publication can only be deleted if it is currently a draft and has never been LIVE.'
