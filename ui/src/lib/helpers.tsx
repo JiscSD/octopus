@@ -2,8 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
-import parse from 'node-html-parser';
 
+import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -578,10 +578,8 @@ export const htmlToText = (htmlString: string): string => {
         return htmlDoc.documentElement.textContent || '';
     } else {
         // Server-side fallback method
-        const htmlDoc = parse(htmlString);
-        while (htmlDoc.querySelector('table')) {
-            htmlDoc.querySelector('table')?.remove();
-        }
-        return htmlDoc.rawText || '';
+        const $ = cheerio.load(htmlString);
+        $('table').remove();
+        return $(':root').text() || '';
     }
 };
