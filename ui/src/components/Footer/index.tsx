@@ -5,6 +5,9 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
 import * as SolidIcons from '@heroicons/react/24/solid';
+import dynamic from 'next/dynamic';
+
+const ScrollTopNoSSR = dynamic(() => import('../ScrollToTop'), { ssr: false });
 
 type Props = {
     waves: boolean;
@@ -149,7 +152,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     </div>
                 </div>
             </div>
-            <Components.ScrollToTop />
+            <ScrollTopNoSSR />
         </footer>
     </>
 );

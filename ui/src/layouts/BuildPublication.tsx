@@ -408,225 +408,216 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             <Components.Header fixed={false} hasBorder={false} />
             <div className="w-full border-t border-grey-100 dark:border-grey-400"></div>
             <main className="container flex min-h-screen px-8">
-                {lg ? (
-                    <aside
-                        className={`flex w-full max-w-[30%] flex-col justify-between border-r border-transparent bg-teal-700 pt-10 transition-all duration-300 dark:border-grey-400 2xl:max-w-[25%]`}
-                    >
-                        <ul className="sticky top-0 min-h-[600px] space-y-2">
-                            {props.steps.map((step, index) => (
-                                <li key={step.title}>
-                                    <button
-                                        onClick={() => props.setStep(index)}
-                                        className={`flex w-full items-center space-x-4 py-4 pl-8 pr-4 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
-                                            index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
-                                        }`}
-                                    >
-                                        {step.icon}
-                                        <span className="-mb-1 grow">{step.title}</span>
-                                        {completenessIcons[step.status]}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="px-8 pb-8">
-                            <span className="block font-montserrat text-sm text-white-100">Need help?</span>
-                            <span className="block font-montserrat text-xs text-white-100">
-                                Check out our{' '}
-                                <Components.Link openNew={true} href="/faq" className="underline">
-                                    FAQs
-                                </Components.Link>
-                            </span>
-                        </div>
-                    </aside>
-                ) : (
-                    <>
-                        <ClickAwayListener onClickAway={() => setShowSideBar(false)}>
-                            <aside
-                                className={`${
-                                    showSideBar ? 'translate-x-0' : '-translate-x-full'
-                                } fixed inset-0 z-20 flex w-[80%] max-w-[20rem] flex-col justify-between border-r border-transparent bg-teal-700 py-10 transition-transform duration-300 dark:border-grey-400`}
-                            >
-                                <Components.IconButton
-                                    title="Toggle side bar"
-                                    className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-b border-r border-t border-grey-400 bg-teal-700"
-                                    icon={
-                                        showSideBar ? (
-                                            <OutlineIcons.ArrowLeftIcon className="h-6 w-6 text-white-50" />
-                                        ) : (
-                                            <OutlineIcons.ArrowRightIcon className="h-6 w-6 text-white-50" />
-                                        )
-                                    }
-                                    onClick={() => setShowSideBar((prevState) => !prevState)}
-                                />
+                <aside
+                    className={`hidden w-full max-w-[30%] flex-col justify-between border-r border-transparent bg-teal-700 pt-10 transition-all duration-300 dark:border-grey-400 lg:flex 2xl:max-w-[25%]`}
+                >
+                    <ul className="sticky top-0 min-h-[600px] space-y-2">
+                        {props.steps.map((step, index) => (
+                            <li key={step.title}>
+                                <button
+                                    onClick={() => props.setStep(index)}
+                                    className={`flex w-full items-center space-x-4 py-4 pl-8 pr-4 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
+                                        index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
+                                    }`}
+                                >
+                                    {step.icon}
+                                    <span className="-mb-1 grow">{step.title}</span>
+                                    {completenessIcons[step.status]}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="px-8 pb-8">
+                        <span className="block font-montserrat text-sm text-white-100">Need help?</span>
+                        <span className="block font-montserrat text-xs text-white-100">
+                            Check out our{' '}
+                            <Components.Link openNew={true} href="/faq" className="underline">
+                                FAQs
+                            </Components.Link>
+                        </span>
+                    </div>
+                </aside>
 
-                                <div className="flex h-full flex-col justify-between overflow-y-auto">
-                                    <ul className="space-y-2">
-                                        {props.steps.map((step, index) => (
-                                            <li key={step.title}>
-                                                <button
-                                                    onClick={() => {
-                                                        props.setStep(index);
-                                                        setShowSideBar(false);
-                                                    }}
-                                                    className={`flex w-full items-center space-x-4 py-4 pl-8 pr-4 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
-                                                        index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
-                                                    }`}
-                                                >
-                                                    {step.icon}
-                                                    <span className="-mb-1 grow">{step.title}</span>
-                                                    {completenessIcons[step.status]}
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <div className="px-8 pt-10">
-                                        <span className="block font-montserrat text-sm text-white-100">Need help?</span>
-                                        <span className="block font-montserrat text-xs text-white-100">
-                                            Check out our{' '}
-                                            <Components.Link openNew={true} href="/faq" className="underline">
-                                                FAQs
-                                            </Components.Link>
-                                        </span>
-                                    </div>
+                <div className="lg:hidden">
+                    <ClickAwayListener onClickAway={() => setShowSideBar(false)}>
+                        <aside
+                            className={`${
+                                showSideBar ? 'translate-x-0' : '-translate-x-full'
+                            } fixed inset-0 z-20 flex w-[80%] max-w-[20rem] flex-col justify-between border-r border-transparent bg-teal-700 py-10 transition-transform duration-300 dark:border-grey-400`}
+                        >
+                            <Components.IconButton
+                                title="Toggle side bar"
+                                className="absolute -right-8 top-[50vh] rounded-br rounded-tr border-b border-r border-t border-grey-400 bg-teal-700"
+                                icon={
+                                    showSideBar ? (
+                                        <OutlineIcons.ArrowLeftIcon className="h-6 w-6 text-white-50" />
+                                    ) : (
+                                        <OutlineIcons.ArrowRightIcon className="h-6 w-6 text-white-50" />
+                                    )
+                                }
+                                onClick={() => setShowSideBar((prevState) => !prevState)}
+                            />
+
+                            <div className="flex h-full flex-col justify-between overflow-y-auto">
+                                <ul className="space-y-2">
+                                    {props.steps.map((step, index) => (
+                                        <li key={step.title}>
+                                            <button
+                                                onClick={() => {
+                                                    props.setStep(index);
+                                                    setShowSideBar(false);
+                                                }}
+                                                className={`flex w-full items-center space-x-4 py-4 pl-8 pr-4 text-left font-montserrat font-medium text-white-100 underline decoration-transparent decoration-2 outline-0 ring-inset transition-colors duration-150 focus:ring-2 focus:ring-yellow-400 dark:text-grey-50 dark:hover:text-white-50 ${
+                                                    index === props.currentStep ? 'bg-teal-600 text-white-50' : ''
+                                                }`}
+                                            >
+                                                {step.icon}
+                                                <span className="-mb-1 grow">{step.title}</span>
+                                                {completenessIcons[step.status]}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="px-8 pt-10">
+                                    <span className="block font-montserrat text-sm text-white-100">Need help?</span>
+                                    <span className="block font-montserrat text-xs text-white-100">
+                                        Check out our{' '}
+                                        <Components.Link openNew={true} href="/faq" className="underline">
+                                            FAQs
+                                        </Components.Link>
+                                    </span>
                                 </div>
-                            </aside>
-                        </ClickAwayListener>
+                            </div>
+                        </aside>
+                    </ClickAwayListener>
 
-                        <div
-                            hidden={!showSideBar}
-                            className="overlay fixed inset-0 z-10 bg-grey-800 opacity-75 transition-opacity dark:bg-grey-900"
-                        ></div>
-                    </>
-                )}
+                    <div
+                        hidden={!showSideBar}
+                        className="overlay fixed inset-0 z-10 bg-grey-800 opacity-75 transition-opacity dark:bg-grey-900"
+                    ></div>
+                </div>
+
                 <section className="w-full border-grey-100 py-8 transition-colors duration-500 dark:border-grey-400 lg:max-w-[70%] lg:py-8 lg:pl-8 xl:py-12 xl:pl-16 2xl:max-w-[75%]">
                     <div className="mb-12 flex flex-wrap items-center justify-between gap-8">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
                             {Helpers.formatPublicationType(store.type)}
                         </span>
-                        <div className="flex items-center justify-end gap-8 xl:w-full xl:justify-between 2xl:w-auto 2xl:justify-end">
-                            {xl ? (
-                                <>
-                                    <div className="flex gap-4">
-                                        <Components.Button
-                                            title={
-                                                isReadyToPreview
-                                                    ? 'Preview'
-                                                    : 'Publication must contain a title and main text before previewing'
-                                            }
-                                            onClick={handlePreview}
-                                            disabled={!isReadyToPreview}
-                                            endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
-                                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                        >
-                                            Preview
-                                        </Components.Button>
-                                        {hasUnconfirmedCoAuthors ? (
-                                            <Components.Button
-                                                title="Request Approval"
-                                                onClick={() => setRequestApprovalModalVisibility(true)}
-                                                disabled={!isReadyRequestApproval}
-                                                endIcon={
-                                                    <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
-                                                }
-                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            />
-                                        ) : (
-                                            <Components.Button
-                                                title="Publish"
-                                                onClick={() => setPublishModalVisibility(true)}
-                                                disabled={!isReadyToPublish}
-                                                endIcon={
-                                                    <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
-                                                }
-                                                className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            />
-                                        )}
-                                        <Components.Button
-                                            title="Save"
-                                            onClick={() => setSaveModalVisibility(true)}
-                                            className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
-                                        />
-                                        <Components.Button
-                                            title="Delete draft"
-                                            onClick={() => setDeleteModalVisibility(true)}
-                                            className="children:border-0"
-                                            endIcon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
-                                        />
-                                    </div>
-                                    <div className="flex gap-8">
-                                        <Components.Button
-                                            className="children:border-0"
-                                            disabled={props.currentStep <= 0}
-                                            startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                            onClick={() => props.setStep((prevState: number) => prevState - 1)}
-                                            title="Previous"
-                                        />
+                        <div className="hidden items-center justify-end gap-8 xl:flex xl:w-full xl:justify-between 2xl:w-auto 2xl:justify-end">
+                            <div className="flex gap-4">
+                                <Components.Button
+                                    title={
+                                        isReadyToPreview
+                                            ? 'Preview'
+                                            : 'Publication must contain a title and main text before previewing'
+                                    }
+                                    onClick={handlePreview}
+                                    disabled={!isReadyToPreview}
+                                    endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
+                                    className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                >
+                                    Preview
+                                </Components.Button>
+                                {hasUnconfirmedCoAuthors ? (
+                                    <Components.Button
+                                        title="Request Approval"
+                                        onClick={() => setRequestApprovalModalVisibility(true)}
+                                        disabled={!isReadyRequestApproval}
+                                        endIcon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />}
+                                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                    />
+                                ) : (
+                                    <Components.Button
+                                        title="Publish"
+                                        onClick={() => setPublishModalVisibility(true)}
+                                        disabled={!isReadyToPublish}
+                                        endIcon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />}
+                                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                    />
+                                )}
+                                <Components.Button
+                                    title="Save"
+                                    onClick={() => setSaveModalVisibility(true)}
+                                    className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                    endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
+                                />
+                                <Components.Button
+                                    title="Delete draft"
+                                    onClick={() => setDeleteModalVisibility(true)}
+                                    className="children:border-0"
+                                    endIcon={<OutlineIcons.TrashIcon className="h-5 w-5 text-teal-600" />}
+                                />
+                            </div>
+                            <div className="flex gap-8">
+                                <Components.Button
+                                    className="children:border-0"
+                                    disabled={props.currentStep <= 0}
+                                    startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                    title="Previous"
+                                />
 
-                                        <Components.Button
-                                            className="children:border-0"
-                                            disabled={props.currentStep >= props.steps.length - 1}
-                                            endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                                            onClick={() => props.setStep((prevState: number) => prevState + 1)}
-                                            title="Next"
-                                        />
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="flex gap-4">
-                                        <Components.IconButton
-                                            icon={<OutlineIcons.EyeIcon className="h-5 w-5" />}
-                                            disabled={!isReadyToPreview}
-                                            title={
-                                                isReadyToPreview
-                                                    ? 'Preview'
-                                                    : 'Publication must contain a title and main text before previewing'
-                                            }
-                                            onClick={handlePreview}
-                                        />
-                                        {hasUnconfirmedCoAuthors ? (
-                                            <Components.IconButton
-                                                title="Request Approval"
-                                                icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
-                                                disabled={!isReadyRequestApproval}
-                                                onClick={() => setRequestApprovalModalVisibility(true)}
-                                            />
-                                        ) : (
-                                            <Components.IconButton
-                                                title="Publish"
-                                                icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
-                                                disabled={!isReadyToPublish}
-                                                onClick={() => setPublishModalVisibility(true)}
-                                            />
-                                        )}
-                                        <Components.IconButton
-                                            title="Save"
-                                            icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
-                                            onClick={() => setSaveModalVisibility(true)}
-                                        />
-                                        <Components.IconButton
-                                            title="Delete draft"
-                                            icon={<OutlineIcons.TrashIcon className="h-5 w-5" />}
-                                            onClick={() => setDeleteModalVisibility(true)}
-                                        />
-                                    </div>
-                                    <div className="flex gap-8">
-                                        <Components.IconButton
-                                            title="Previous"
-                                            icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-500" />}
-                                            disabled={props.currentStep <= 0}
-                                            onClick={() => props.setStep((prevState: number) => prevState - 1)}
-                                        />
-                                        <Components.IconButton
-                                            title="Next"
-                                            icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500" />}
-                                            disabled={props.currentStep >= props.steps.length - 1}
-                                            onClick={() => props.setStep((prevState: number) => prevState + 1)}
-                                        />
-                                    </div>
-                                </>
-                            )}
+                                <Components.Button
+                                    className="children:border-0"
+                                    disabled={props.currentStep >= props.steps.length - 1}
+                                    endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                    onClick={() => props.setStep((prevState: number) => prevState + 1)}
+                                    title="Next"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-8 xl:hidden xl:w-full xl:justify-between 2xl:w-auto 2xl:justify-end">
+                            <div className="flex gap-4">
+                                <Components.IconButton
+                                    icon={<OutlineIcons.EyeIcon className="h-5 w-5" />}
+                                    disabled={!isReadyToPreview}
+                                    title={
+                                        isReadyToPreview
+                                            ? 'Preview'
+                                            : 'Publication must contain a title and main text before previewing'
+                                    }
+                                    onClick={handlePreview}
+                                />
+                                {hasUnconfirmedCoAuthors ? (
+                                    <Components.IconButton
+                                        title="Request Approval"
+                                        icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
+                                        disabled={!isReadyRequestApproval}
+                                        onClick={() => setRequestApprovalModalVisibility(true)}
+                                    />
+                                ) : (
+                                    <Components.IconButton
+                                        title="Publish"
+                                        icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
+                                        disabled={!isReadyToPublish}
+                                        onClick={() => setPublishModalVisibility(true)}
+                                    />
+                                )}
+                                <Components.IconButton
+                                    title="Save"
+                                    icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
+                                    onClick={() => setSaveModalVisibility(true)}
+                                />
+                                <Components.IconButton
+                                    title="Delete draft"
+                                    icon={<OutlineIcons.TrashIcon className="h-5 w-5" />}
+                                    onClick={() => setDeleteModalVisibility(true)}
+                                />
+                            </div>
+                            <div className="flex gap-8">
+                                <Components.IconButton
+                                    title="Previous"
+                                    icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-500" />}
+                                    disabled={props.currentStep <= 0}
+                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                />
+                                <Components.IconButton
+                                    title="Next"
+                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500" />}
+                                    disabled={props.currentStep >= props.steps.length - 1}
+                                    onClick={() => props.setStep((prevState: number) => prevState + 1)}
+                                />
+                            </div>
                         </div>
                     </div>
                     {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
@@ -638,40 +629,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     <div className="mb-12">{props.children}</div>
                     {/* bottom next and back nav buttons */}
                     <div className="flex items-center justify-end space-x-8 ">
-                        {xl ? (
-                            <>
-                                <Components.Button
-                                    title="Save"
-                                    onClick={() => setSaveModalVisibility(true)}
-                                    className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                                    endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
-                                />
-                                <Components.Button
-                                    className="children:border-0"
-                                    disabled={props.currentStep <= 0}
-                                    startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
-                                    title="Previous"
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <Components.IconButton
-                                    icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
-                                    title="Save"
-                                    onClick={() => setSaveModalVisibility(true)}
-                                />
-                                <Components.IconButton
-                                    disabled={props.currentStep <= 0}
-                                    icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4" />}
-                                    title="Previous"
-                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
-                                />
-                            </>
-                        )}
-
-                        {props.steps.length - 1 === props.currentStep ? (
-                            xl ? (
+                        <div className="hidden items-center justify-end space-x-8 xl:flex">
+                            <Components.Button
+                                title="Save"
+                                onClick={() => setSaveModalVisibility(true)}
+                                className="rounded border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                                endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
+                            />
+                            <Components.Button
+                                className="children:border-0"
+                                disabled={props.currentStep <= 0}
+                                startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
+                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                title="Previous"
+                            />
+                            {props.steps.length - 1 === props.currentStep && (
                                 <>
                                     <Components.Button
                                         title={
@@ -708,7 +680,22 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         />
                                     )}
                                 </>
-                            ) : (
+                            )}
+                        </div>
+
+                        <div className="flex items-center justify-end space-x-8 xl:hidden">
+                            <Components.IconButton
+                                icon={<ReactIconsFA.FaRegSave className="h-5 w-5" />}
+                                title="Save"
+                                onClick={() => setSaveModalVisibility(true)}
+                            />
+                            <Components.IconButton
+                                disabled={props.currentStep <= 0}
+                                icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4" />}
+                                title="Previous"
+                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                            />
+                            {props.steps.length - 1 === props.currentStep && (
                                 <>
                                     <Components.IconButton
                                         disabled={!isReadyToPreview}
@@ -737,28 +724,33 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         />
                                     )}
                                 </>
-                            )
-                        ) : xl ? (
-                            <Components.Button
-                                className="children:border-0"
-                                disabled={props.currentStep >= props.steps.length - 1}
-                                endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                                title="Next"
-                                onClick={() => {
-                                    props.setStep((prevState: number) => prevState + 1);
-                                    Helpers.scrollTopSmooth();
-                                }}
-                            />
-                        ) : (
-                            <Components.IconButton
-                                disabled={props.currentStep >= props.steps.length - 1}
-                                icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4" />}
-                                title="Next"
-                                onClick={() => {
-                                    props.setStep((prevState: number) => prevState + 1);
-                                    Helpers.scrollTopSmooth();
-                                }}
-                            />
+                            )}
+                        </div>
+
+                        {props.currentStep < props.steps.length - 1 && (
+                            <>
+                                <Components.Button
+                                    className="hidden children:border-0 xl:flex"
+                                    disabled={props.currentStep >= props.steps.length - 1}
+                                    endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
+                                    title="Next"
+                                    onClick={() => {
+                                        props.setStep((prevState: number) => prevState + 1);
+                                        Helpers.scrollTopSmooth();
+                                    }}
+                                />
+
+                                <Components.IconButton
+                                    className="xl:hidden"
+                                    disabled={props.currentStep >= props.steps.length - 1}
+                                    icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4" />}
+                                    title="Next"
+                                    onClick={() => {
+                                        props.setStep((prevState: number) => prevState + 1);
+                                        Helpers.scrollTopSmooth();
+                                    }}
+                                />
+                            </>
                         )}
                     </div>
                 </section>

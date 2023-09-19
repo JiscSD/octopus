@@ -22,7 +22,6 @@ type CustomProps = {
 };
 
 const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
-    const [mounted, setMounted] = useState(false);
     const { user } = Stores.useAuthStore();
     const { darkMode } = Stores.usePreferencesStore();
 
@@ -40,15 +39,12 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
     Hooks.useMatomoNext();
 
     useEffect(() => {
-        setMounted(true);
-
-        return () => {
-            setMounted(false);
-        };
+        Stores.usePreferencesStore.persist.rehydrate();
+        Stores.useAuthStore.persist.rehydrate();
     }, []);
 
     return process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' ? (
-        mounted && <Components.Maintenance />
+        <Components.Maintenance />
     ) : (
         <Contexts.ConfirmationModalProvider>
             <Head>
@@ -63,25 +59,23 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
                 options={{ showSpinner: false, minimum: 0.3, easing: 'ease-in', speed: 200 }}
             />
 
-            {mounted && (
-                <SWR.SWRConfig
-                    value={{
-                        fetcher: (resource) => api.get(resource, user?.token).then((res) => res.data),
-                        onError: (error) => {
-                            console.error(error);
-                        }
-                    }}
-                >
-                    <Framer.MotionConfig reducedMotion="user">
-                        <div className={darkMode ? 'dark' : ''}>
-                            <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
-                                <Components.Toast />
-                                <Component {...pageProps} />
-                            </div>
+            <SWR.SWRConfig
+                value={{
+                    fetcher: (resource) => api.get(resource, user?.token).then((res) => res.data),
+                    onError: (error) => {
+                        console.error(error);
+                    }
+                }}
+            >
+                <Framer.MotionConfig reducedMotion="user">
+                    <div className={darkMode ? 'dark' : ''}>
+                        <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
+                            <Components.Toast />
+                            <Component {...pageProps} />
                         </div>
-                    </Framer.MotionConfig>
-                </SWR.SWRConfig>
-            )}
+                    </div>
+                </Framer.MotionConfig>
+            </SWR.SWRConfig>
         </Contexts.ConfirmationModalProvider>
     );
 };
