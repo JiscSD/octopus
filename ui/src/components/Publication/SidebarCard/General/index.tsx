@@ -40,7 +40,10 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                     Published:
                 </span>
-                <time className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                <time
+                    className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                    suppressHydrationWarning
+                >
                     {Helpers.formatDate(props.publication.publishedDate)}
                 </time>
             </div>

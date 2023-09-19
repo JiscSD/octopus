@@ -26,8 +26,6 @@ export { default as MockupFlow } from './MockupFlow';
 export { default as Modal } from './Modal';
 export { default as ModalButton } from './Modal/Button';
 export { default as Nav } from './Nav';
-export { default as NavDesktop } from './Nav/Desktop';
-export { default as NavMobile } from './Nav/Mobile';
 export { default as ORCIDLogInButton } from './ORCID/LogInButton';
 export { default as Overlay } from './Overlay';
 export { default as PageSubTitle } from './PageSubTitle';
