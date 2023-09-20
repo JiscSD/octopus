@@ -222,7 +222,7 @@ describe('Update publication status', () => {
 
         // request co-authors approvals
         const requestApprovalsResponse = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors/request-approval')
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors/request-approval')
             .query({
                 apiKey: '000000005'
             });

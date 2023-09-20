@@ -1119,7 +1119,7 @@ test.describe('Publication flow + co-authors', () => {
         await deletePublication(page);
 
         // reject co-author invite
-        await rejectCoAuthorInvitation(browser, Helpers.user2, true, 'This publication does not exist.');
+        await rejectCoAuthorInvitation(browser, Helpers.user2, true, 'This publication version does not exist.');
 
         await page.close();
     });
@@ -1186,7 +1186,7 @@ test.describe('Publication flow + co-authors', () => {
             browser,
             Helpers.user2,
             true,
-            'This publication is LIVE and therefore cannot be edited.'
+            'This publication version is LIVE and therefore cannot be edited.'
         );
 
         await page.close();

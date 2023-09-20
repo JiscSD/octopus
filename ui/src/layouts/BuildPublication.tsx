@@ -165,7 +165,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 language: store.language,
                 conflictOfInterestStatus: store.conflictOfInterestStatus,
                 conflictOfInterestText: store.conflictOfInterestText,
-                affiliationStatement: store.affiliationsStatement,
                 fundersStatement: store.funderStatement
             };
 
@@ -187,21 +186,21 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             // update references for this publication
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/reference`,
+                `${Config.endpoints.publicationVersions}/${props.publication.versionId}/reference`,
                 store.references,
                 props.token
             );
 
-            // update co-authors for this publications - should really be put
+            // update co-authors for this publications
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/coauthors`,
+                `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors`,
                 store.coAuthors,
                 props.token
             );
 
             // update author affiliations
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/my-affiliations`,
+                `${Config.endpoints.publicationVersions}/${props.publication.versionId}/my-affiliations`,
                 { affiliations: store.authorAffiliations, isIndependent: store.isIndependentAuthor },
                 props.token
             );
@@ -257,7 +256,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             // request co-authors approvals
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+                `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors/request-approval`,
                 {},
                 props.token
             );

@@ -4,6 +4,7 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 import * as api from '@api';
 import * as Components from '@components';
+import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 import * as I from '@interfaces';
@@ -78,6 +79,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
     const publicationId = Stores.usePublicationCreationStore((state) => state.id);
+    const versionId = Stores.usePublicationCreationStore((state) => state.versionId);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [loading, setLoading] = React.useState(false);
@@ -134,7 +136,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
         const newAuthor = {
             id: createId(),
-            publicationId: publicationId,
+            publicationVersionId: versionId,
             email: coAuthor,
             linkedUser: null,
             approvalRequested: false,
@@ -146,7 +148,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         authorsArray.push(newAuthor);
         updateCoAuthors(authorsArray);
         setLoading(false);
-    }, [coAuthors, coAuthor, publicationId, updateCoAuthors]);
+    }, [coAuthors, coAuthor, versionId, updateCoAuthors]);
 
     const deleteCoAuthor = async (coAuthorId: string) => {
         updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
@@ -156,7 +158,10 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         setLoading(true);
 
         try {
-            const response = await api.get(`/publications/${publicationId}/coauthors`, user?.token);
+            const response = await api.get(
+                `${Config.endpoints.publicationVersions}/${versionId}/coauthors`,
+                user?.token
+            );
             updateCoAuthors(response.data);
             setLoading(false);
         } catch {

@@ -44,6 +44,8 @@ export type PublicationCreationStoreType = {
     setError: (error: string | null) => void;
     id: string;
     updateId: (id: string) => void;
+    versionId: string;
+    updateVersionId: (versionId: string) => void;
     title: string;
     updateTitle: (title: string) => void;
     type: PublicationType;

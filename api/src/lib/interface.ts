@@ -15,6 +15,9 @@ import {
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 
+// Helpful utility - make one property optional e.g. PartialBy<Publication, 'title'>
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
 export {
     ImageExtension,
     Languages,
@@ -166,7 +169,13 @@ export type PublicationWithVersionAttached = Exclude<
     null
 >;
 
-export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
+export type PublicationVersionWithPublication = Exclude<
+    Prisma.PromiseReturnType<typeof publicationVersionService.get>,
+    null
+>;
+
+// An interface that will fit versions gotten directly from publicationVersionService, or from the versions attribute on a publication.
+export type PublicationVersion = PartialBy<PublicationVersionWithPublication, 'publication'>;
 
 /**
  * @description Links
@@ -391,7 +400,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
     isIndependent: boolean;

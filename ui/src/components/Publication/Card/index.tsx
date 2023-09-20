@@ -25,7 +25,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 approvalRequested: false,
                 confirmedCoAuthor: true,
                 email: correspondingUser.email || '',
-                publicationId: props.publication.id,
+                publicationVersionId: props.publication.versionId,
                 linkedUser: correspondingUser.id,
                 isIndependent: true,
                 affiliations: [],

@@ -73,6 +73,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
     const {
         id: publicationId,
         updateDescription,
+        versionId,
         keywords,
         updateKeywords,
         content,
@@ -109,7 +110,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             const newReference = getTransformedReference(
                 {
                     id: createId(),
-                    publicationId,
+                    publicationVersionId: versionId,
                     type: 'TEXT',
                     text: currentParagraph,
                     location: null
@@ -269,7 +270,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                                     setSelectedReferenceIndex(index);
                                                                     setSelectedReference({
                                                                         id: createId(), // generate new id
-                                                                        publicationId,
+                                                                        publicationVersionId: versionId,
                                                                         text: '',
                                                                         type: 'TEXT',
                                                                         location: null

@@ -11,9 +11,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let email: string | null = null;
     let code: string | null = null;
     let approve = null;
-    let publication: string | null = null;
+    let publicationId: string | null = null;
+    let versionId: string | null = null;
 
-    if (!context.query.code || !context.query.email || !context.query.approve || !context.query.publication) {
+    if (
+        !context.query.code ||
+        !context.query.email ||
+        !context.query.approve ||
+        !context.query.publicationId ||
+        !context.query.versionId
+    ) {
         return {
             props: {
                 message: 'Invalid link.'
@@ -24,7 +31,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     email = Array.isArray(context.query.email) ? context.query.email[0] : context.query.email;
     code = Array.isArray(context.query.code) ? context.query.code[0] : context.query.code;
     approve = Array.isArray(context.query.approve) ? context.query.approve[0] : context.query.approve;
-    publication = Array.isArray(context.query.publication) ? context.query.publication[0] : context.query.publication;
+    publicationId = Array.isArray(context.query.publicationId)
+        ? context.query.publicationId[0]
+        : context.query.publicationId;
+    versionId = Array.isArray(context.query.versionId) ? context.query.versionId[0] : context.query.versionId;
 
     if (!['true', 'false'].includes(approve)) {
         return {
@@ -38,7 +48,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         return Helpers.withServerSession(async (context) => {
             try {
                 await api.patch(
-                    `/publications/${publication}/link-coauthor`,
+                    `/publicationVersions/${versionId}/link-coauthor`,
                     {
                         email,
                         code,
@@ -66,13 +76,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             }
 
             return {
-                redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publication}` }
+                redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publicationId}` }
             };
         })(context);
     }
 
     try {
-        await api.patch(`/publications/${publication}/link-coauthor`, {
+        await api.patch(`/publicationVersions/${versionId}/link-coauthor`, {
             email,
             code,
             approve: false
