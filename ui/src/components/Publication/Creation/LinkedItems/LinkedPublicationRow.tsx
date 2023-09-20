@@ -17,6 +17,8 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
         props.deleteLink(props.link.id);
     };
 
+    const latestVersion = props.link.publicationToRef.versions[0];
+
     return (
         <tr key={props.link.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -25,14 +27,14 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                         {Helpers.formatPublicationType(props.link.publicationToRef.type)}
                     </span>
                     <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.link.publicationToRef.title}
+                        {latestVersion.title}
                     </p>
                     <div className="flex items-center space-x-2">
                         <span className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {Helpers.formatDate(props.link.publicationToRef.publishedDate)},
+                            {Helpers.formatDate(latestVersion.publishedDate)},
                         </span>
                         <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {props.link.publicationToRef.user.firstName[0]}. {props.link.publicationToRef.user.lastName}
+                            {latestVersion.user.firstName[0]}. {latestVersion.user.lastName}
                         </span>
                     </div>
                 </div>

@@ -166,7 +166,15 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -196,7 +204,15 @@ export const getWithVersionMerged = async (id: string, versionNumber?: number) =
                                     publishedDate: true,
                                     currentStatus: true,
                                     description: true,
-                                    keywords: true
+                                    keywords: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                            firstName: true,
+                                            lastName: true,
+                                            orcid: true
+                                        }
+                                    }
                                 }
                             }
                         }

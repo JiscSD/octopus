@@ -102,7 +102,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const { data: references = [] } = useSWR<Interfaces.Reference[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/reference`,
+        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/reference`,
         (url) => api.get(url, props.userToken).then(({ data }) => data),
         {
             fallbackData: []
@@ -123,16 +123,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const isBookmarkButtonVisible = useMemo(() => {
         if (!user || !publicationData) {
             return false;
-        }
-
-        const isCoAuthor = publicationData.coAuthors.some((author) => author.id == user.id);
-        const isOwner = user.id === publicationData.createdBy;
-
-        if (!isCoAuthor && !isOwner) {
+        } else {
             return true;
         }
-
-        return false;
     }, [publicationData, user]);
     const topics = publicationData?.topics || [];
 
@@ -191,7 +184,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             setApprovalError('');
             try {
                 await api.patch(
-                    `/publications/${publicationData?.id}/coauthor-confirmation`,
+                    `/publicationVersions/${publicationData?.versionId}/coauthor-confirmation`,
                     {
                         confirm
                     },
@@ -356,7 +349,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 approvalRequested: false,
                 confirmedCoAuthor: true,
                 email: correspondingUser.email || '',
-                publicationId: publicationData.id,
+                publicationVersionId: publicationData.versionId,
                 linkedUser: correspondingUser.id,
                 isIndependent: true,
                 affiliations: [],

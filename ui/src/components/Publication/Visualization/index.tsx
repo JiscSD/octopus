@@ -17,7 +17,7 @@ interface BoxEntry {
     authorFirstName: string;
     authorLastName: string;
     publishedDate: string;
-    authors: Pick<Interfaces.CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+    authors: Pick<Interfaces.CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
     pointers: string[];
 }
 
@@ -125,23 +125,27 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
 
     if (publication.type === type) {
         // Push the selected publication first
-        publications.push({
-            id: publication.id,
-            title: publication.title,
-            type: publication.type,
-            createdBy: publication.createdBy,
-            publishedDate: publication.publishedDate,
-            authorFirstName: publication.user.firstName,
-            authorLastName: publication.user.lastName,
-            authors: publication.coAuthors,
-            pointers: linkedFrom
-                .filter(
-                    (linkedPublication) =>
-                        linkedPublication.type !== 'PEER_REVIEW' &&
-                        linkedPublication.parentPublication === publication.id
-                )
-                .map((publication) => publication.id) // get the ids of all direct child publications
-        });
+        const latestVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+
+        if (latestVersion) {
+            publications.push({
+                id: publication.id,
+                title: latestVersion.title,
+                type: publication.type,
+                createdBy: latestVersion.createdBy,
+                publishedDate: latestVersion.publishedDate,
+                authorFirstName: latestVersion.user.firstName,
+                authorLastName: latestVersion.user.lastName,
+                authors: latestVersion.coAuthors,
+                pointers: linkedFrom
+                    .filter(
+                        (linkedPublication) =>
+                            linkedPublication.type !== 'PEER_REVIEW' &&
+                            linkedPublication.parentPublication === publication.id
+                    )
+                    .map((publication) => publication.id) // get the ids of all direct child publications
+            });
+        }
     }
 
     // ignore publications above 'PROBLEM'

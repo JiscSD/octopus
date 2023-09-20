@@ -33,7 +33,7 @@ const Link: React.FC<Props> = (props) => (
             href={`${Config.urls.viewPublication.path}/${props.publicationRef.id}`}
             className="block w-fit rounded text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
         >
-            <span className="block font-normal leading-relaxed">{props.publicationRef.title}</span>
+            <span className="block font-normal leading-relaxed">{props.publicationRef.versions[0].title}</span>
         </Components.Link>
     </div>
 );

@@ -88,7 +88,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 try {
                     // update publication authors
                     await api.put(
-                        `${Config.endpoints.publications}/${props.publication.id}/coauthors`,
+                        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors`,
                         newAuthorsArray,
                         Helpers.getJWT()
                     );
@@ -96,7 +96,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     // request approval again
                     // this will trigger an invitation email for the new author
                     await api.put(
-                        `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+                        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors/request-approval`,
                         {},
                         Helpers.getJWT()
                     );
@@ -130,7 +130,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             setSendingReminder(true);
             try {
                 await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/coauthors/${author.id}/approval-reminder`,
+                    `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors/${author.id}/approval-reminder`,
                     {},
                     Helpers.getJWT()
                 );

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import * as I from 'interface';
 import * as response from 'lib/response';
-import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 import * as userService from 'user/service';
 import * as coAuthorService from 'coauthor/service';
 import * as Helpers from 'lib/helpers';
@@ -14,27 +14,25 @@ export const updateAffiliations = async (
     try {
         const isIndependent = event.body.isIndependent;
         const affiliations = event.body.affiliations;
-        const publicationId = event.pathParameters.id;
+        const publicationVersionId = event.pathParameters.id;
         // Get publication with current version
-        const publication = await publicationService.getWithVersion(publicationId);
+        const version = await publicationVersionService.get(publicationVersionId);
 
         //check that the publication exists
-        if (!publication) {
+        if (!version) {
             return response.json(404, {
                 message: 'This publication does not exist.'
             });
         }
 
-        const currentVersion = publication.versions[0];
-
         //check if publication is LIVE
-        if (currentVersion.currentStatus === 'LIVE') {
+        if (version.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: 'You cannot add affiliations to a LIVE publication.'
             });
         }
 
-        const coAuthor = currentVersion.coAuthors.find((author) => author.linkedUser === event.user.id);
+        const coAuthor = version.coAuthors.find((author) => author.linkedUser === event.user.id);
 
         // check if this user is an author on this publication's current version
         if (!coAuthor) {
@@ -44,14 +42,14 @@ export const updateAffiliations = async (
         }
 
         // while the publication status is DRAFT, only the corresponding author can update his/her affiliations
-        if (currentVersion.currentStatus === 'DRAFT' && coAuthor.linkedUser !== currentVersion.createdBy) {
+        if (version.currentStatus === 'DRAFT' && coAuthor.linkedUser !== version.createdBy) {
             return response.json(403, {
                 message: 'You cannot add affiliations while the publication is being edited.'
             });
         }
 
         // enforce adding affiliations if co-author is not independent
-        if (currentVersion.currentStatus === 'LOCKED' && !isIndependent && !affiliations.length) {
+        if (version.currentStatus === 'LOCKED' && !isIndependent && !affiliations.length) {
             return response.json(403, {
                 message: 'Please fill out your affiliation information.'
             });
@@ -65,7 +63,7 @@ export const updateAffiliations = async (
         }
 
         // check if coauthor (beside the corresponding one) has already approved this publication
-        if (coAuthor.linkedUser !== currentVersion.createdBy && coAuthor.confirmedCoAuthor) {
+        if (coAuthor.linkedUser !== version.createdBy && coAuthor.confirmedCoAuthor) {
             return response.json(403, {
                 message: 'You cannot change your affiliation information while the publication has been approved.'
             });

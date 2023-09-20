@@ -56,6 +56,13 @@ export const get = async (id: string) => {
                 }
             },
             publications: {
+                where: {
+                    versions: {
+                        some: {
+                            isLatestLiveVersion: true
+                        }
+                    }
+                },
                 select: {
                     id: true,
                     versions: {

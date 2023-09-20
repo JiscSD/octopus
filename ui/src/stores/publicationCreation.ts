@@ -25,6 +25,7 @@ let store: any = (set: (params: any) => void) => ({
         set(() => {
             return {
                 id: '',
+                versionId: '',
                 title: '',
                 type: Config.values.octopusInformation.publications.PROBLEM.id,
                 content: '',
@@ -51,6 +52,10 @@ let store: any = (set: (params: any) => void) => ({
     // ID
     id: '',
     updateId: (id: string) => set(() => ({ id })),
+
+    // Version ID
+    versionId: '',
+    updateVersionId: (versionId: string) => set(() => ({ versionId })),
 
     // Title
     title: '',

@@ -350,7 +350,7 @@ export const updateStatus = async (
 
         // now that the publication is LIVE, we store in opensearch
         await publicationService.createOpenSearchRecord({
-            id: updatedVersion.id,
+            id: publicationId,
             type: updatedVersion.publication.type,
             title: updatedVersion.title,
             licence: updatedVersion.licence,
