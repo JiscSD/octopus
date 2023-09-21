@@ -48,36 +48,38 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                 </div>
             )}
 
-            <header
-                className={`text-grey-800 transition-colors duration-500  print:hidden  ${
-                    props.fixed && 'lg:fixed lg:left-0 lg:top-0 lg:z-20 lg:w-full'
-                }`}
-            >
-                <div className="container mx-auto px-8">
-                    <div
-                        className={`flex items-center justify-between py-6 transition-colors duration-500 ${
-                            props.hasBorder ? 'border-b border-grey-200 dark:border-grey-400' : ''
-                        }`}
-                    >
-                        <Components.Link
-                            href={Config.urls.home.path}
-                            className="flex max-h-[42px] items-center border-transparent"
+            {process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== 'true' && (
+                <header
+                    className={`text-grey-800 transition-colors duration-500  print:hidden  ${
+                        props.fixed && 'lg:fixed lg:left-0 lg:top-0 lg:z-20 lg:w-full'
+                    }`}
+                >
+                    <div className="container mx-auto px-8">
+                        <div
+                            className={`flex items-center justify-between py-6 transition-colors duration-500 ${
+                                props.hasBorder ? 'border-b border-grey-200 dark:border-grey-400' : ''
+                            }`}
                         >
-                            {isDarkMode ? (
-                                <Assets.LogoDark height={150} width={150} />
-                            ) : (
-                                <Assets.LogoLight height={150} width={150} />
-                            )}
-                        </Components.Link>
-                        <div className="flex items-center space-x-3 lg:space-x-4">
-                            <Components.Search />
-                            <Components.Nav />
-                            {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />}
-                            <Components.EnableDarkMode />
+                            <Components.Link
+                                href={Config.urls.home.path}
+                                className="flex max-h-[42px] items-center border-transparent"
+                            >
+                                {isDarkMode ? (
+                                    <Assets.LogoDark height={150} width={150} />
+                                ) : (
+                                    <Assets.LogoLight height={150} width={150} />
+                                )}
+                            </Components.Link>
+                            <div className="flex items-center space-x-3 lg:space-x-4">
+                                <Components.Search />
+                                <Components.Nav />
+                                {!user && <Components.ORCIDLogInButton currentPath={router.asPath} />}
+                                <Components.EnableDarkMode />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </header>
+                </header>
+            )}
         </>
     );
 };
