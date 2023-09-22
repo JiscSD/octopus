@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
 
+import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -568,9 +569,17 @@ export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, 
 
 export const htmlToText = (htmlString: string): string => {
     // Remove tables first, as text inside them is unlikely to make any sense
-    const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
-    while (htmlDoc.querySelector('table')) {
-        htmlDoc.querySelector('table')?.remove();
+    if (typeof window !== 'undefined') {
+        // Use DOMParser if running in browser
+        const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
+        while (htmlDoc.querySelector('table')) {
+            htmlDoc.querySelector('table')?.remove();
+        }
+        return htmlDoc.documentElement.textContent || '';
+    } else {
+        // Server-side fallback method
+        const $ = cheerio.load(htmlString);
+        $('table').remove();
+        return $(':root').text() || '';
     }
-    return htmlDoc.documentElement.textContent || '';
 };

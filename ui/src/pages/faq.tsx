@@ -6,6 +6,7 @@ import { NextPage } from 'next';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type Props = {
     faqContents: [{ href: string; title: string; content: string }];
@@ -150,13 +151,22 @@ const faqContents = [
     }
 ];
 
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.faq.title,
+                description: Config.urls.faq.description
+            }
+        }
+    };
+};
+
 const Faq: NextPage<Props> = (props): JSX.Element => (
     <>
         <Head>
             <meta name="description" content={Config.urls.faq.description} />
             <meta name="keywords" content={Config.urls.faq.keywords.join(', ')} />
-            <meta name="og:title" content={Config.urls.faq.title} key="og:title" />
-            <meta name="og:description" content={Config.urls.faq.description} key="og:description" />
             <link rel="canonical" href={Config.urls.faq.canonical} />
             <title>{Config.urls.faq.title}</title>
         </Head>
