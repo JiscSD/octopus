@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { PagesProgressBar as NextProgressBar } from 'next-nprogress-bar';
+import NextProgressBar from 'next-nprogress-bar';
 
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
