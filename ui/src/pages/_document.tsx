@@ -16,22 +16,15 @@ const AppDocument = () => (
 
             <meta property="og:url" content="https://octopus.ac" />
             <meta property="og:type" content="website" />
-            <meta property="og:title" content="Octopus" />
+            <meta property="og:image" content="https://octopus.ac/meta/og-image.jpg" />
             <meta
-                property="og:description"
-                content="Octopus is a new way to register research. It is the place to publish the version of record, enabling peer review and quality assessment and allowing the academic community to build upon the latest work."
+                property="og:image:alt"
+                content="Octopus logo and tagline: A new way to publish your work that's fast, free and fair."
             />
-            <meta property="og:image" content="/meta/og-image.jpg" />
 
             <meta name="twitter:card" content="summary_large_image" />
             <meta property="twitter:domain" content="https://octopus.ac" />
             <meta property="twitter:url" content="https://twitter.com/science_octopus" />
-            <meta name="twitter:title" content="Octopus" />
-            <meta
-                name="twitter:description"
-                content="Octopus is a new way to register research. It is the place to publish the version of record, enabling peer review and quality assessment and allowing the academic community to build upon the latest work."
-            />
-            <meta name="twitter:image" content="/meta/og-image.jpg"></meta>
         </NextDocument.Head>
         <body className="overflow-x-hidden font-inter antialiased">
             <NextDocument.Main />

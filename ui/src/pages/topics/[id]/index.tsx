@@ -109,12 +109,16 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    const pageTitle = `${topic.title} - ${Config.urls.viewTopic.title}`;
+
     return (
         <>
             <Head>
                 <meta name="description" content={Config.values.topicDescription} />
+                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} key="og:title" />
+                <meta name="og:description" content={Config.values.topicDescription} key="og:description" />
                 <link rel="canonical" href={`${Config.urls.viewTopic.canonical}/${topic.id}`} />
-                <title>{`${topic.title} - ${Config.urls.viewTopic.title}`}</title>
+                <title>{pageTitle}</title>
             </Head>
             <Layouts.Topic fixedHeader={false}>
                 <section className="col-span-9 text-grey-800 dark:text-grey-100">
