@@ -232,7 +232,7 @@ export const link = async (
             // check if this was the last co-author who denied their involvement
             if (version.coAuthors.length === 2) {
                 // this means only the creator remained and we can safely update publication status back to DRAFT
-                // to avoid publication being LOCKED without co-authors
+                // to avoid version being LOCKED without co-authors
                 await publicationVersionService.updateStatus(version.id, 'DRAFT');
             }
 
@@ -474,7 +474,7 @@ export const sendApprovalReminder = async (
         });
     }
 
-    // Can only send reminder on publications that have been locked for review
+    // Can only send reminder on publication versions that have been locked for review
     if (version.currentStatus !== 'LOCKED') {
         return response.json(403, {
             message: 'A reminder is not able to be sent unless approval is being requested'
