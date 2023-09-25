@@ -5,14 +5,23 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.privacy.title,
+                description: Config.urls.privacy.description
+            }
+        }
+    };
+};
+
 const Privacy: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>
                 <meta name="description" content={Config.urls.privacy.description} />
                 <meta name="keywords" content={Config.urls.privacy.keywords.join(', ')} />
-                <meta name="og:title" content={Config.urls.privacy.title} key="og:title" />
-                <meta name="og:description" content={Config.urls.privacy.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.privacy.canonical} />
                 <title>{Config.urls.privacy.title}</title>
             </Head>

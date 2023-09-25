@@ -13,10 +13,12 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.36.2",
+        "@types/node": "^18.17.1"
+    },
     "dependencies": {
-        "@playwright/test": "^1.38.0",
-        "@types/node": "^18.17.15",
-        "@paralleldrive/cuid2": "^2.2.2",
+        "@paralleldrive/cuid2": "^2.2.1",
         "dotenv": "^16.3.1"
     }
 }

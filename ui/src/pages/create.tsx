@@ -18,7 +18,11 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             publicationForID,
             publicationType,
             protectedPage: true,
-            topicId
+            topicId,
+            metadata: {
+                title: Config.urls.createPublication.title,
+                description: Config.urls.createPublication.description
+            }
         }
     };
 });
@@ -82,8 +86,6 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
             <Head>
                 <meta name="description" content={Config.urls.createPublication.description} />
                 <meta name="keywords" content={Config.urls.createPublication.keywords.join(', ')} />
-                <meta name="og:title" content={Config.urls.createPublication.title} key="og:title" />
-                <meta name="og:description" content={Config.urls.createPublication.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.createPublication.canonical} />
                 <title>{Config.urls.createPublication.title}</title>
             </Head>
