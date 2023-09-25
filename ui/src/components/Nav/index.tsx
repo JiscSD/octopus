@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import * as Components from '@components';
 import * as Router from 'next/router';
@@ -14,13 +14,13 @@ const Nav: React.FC = (): React.ReactElement => {
 
     const router = Router.useRouter();
 
-    const handleLogOut = async () => {
+    const handleLogOut = useCallback(async () => {
         await router.push({
             pathname: `${Config.urls.home.path}`
         });
         Helpers.clearJWT();
         setUser(null);
-    };
+    }, [router, setUser]);
 
     const items = useMemo(() => {
         const menuItems: Interfaces.NavMenuItem[] = [
@@ -29,24 +29,38 @@ const Nav: React.FC = (): React.ReactElement => {
                 value: Config.urls.browsePublications.path
             },
             {
-                label: 'Blog',
-                value: Config.urls.blog.path
+                label: 'About',
+                value: '#about',
+                subItems: [
+                    {
+                        label: 'Learn More',
+                        value: Config.urls.about.path
+                    },
+                    // {
+                    //     label: 'Report',
+                    //     value: Config.urls.researchCultureReport.path
+                    // },
+                    {
+                        label: 'News and Updates',
+                        value: Config.urls.blog.path
+                    },
+                    {
+                        label: 'Our Aims',
+                        value: Config.urls.octopusAims.path
+                    }
+                ]
             },
             {
                 label: 'How To',
-                value: '',
+                value: '#how-to',
                 subItems: [
-                    {
-                        label: 'FAQ',
-                        value: Config.urls.faq.path
-                    },
                     {
                         label: 'Author Guide',
                         value: Config.urls.authorGuide.path
                     },
                     {
-                        label: 'Our Aims',
-                        value: Config.urls.octopusAims.path
+                        label: 'FAQ',
+                        value: Config.urls.faq.path
                     }
                 ]
             },
@@ -72,7 +86,7 @@ const Nav: React.FC = (): React.ReactElement => {
                     },
                     {
                         label: 'Log out',
-                        value: '#',
+                        value: '#log-out',
                         onClick: () => handleLogOut()
                     }
                 ]
@@ -80,7 +94,7 @@ const Nav: React.FC = (): React.ReactElement => {
         }
 
         return menuItems;
-    }, [user]);
+    }, [handleLogOut, user]);
 
     return isDesktop ? <Components.NavDesktop items={items} /> : <Components.NavMobile items={items} />;
 };

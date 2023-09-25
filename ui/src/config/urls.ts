@@ -263,6 +263,15 @@ const urls = {
         documentTitle: `The Octopus Blog - ${base.title}`,
         keywords: ['blog', 'Octopus blog'],
         canonical: `${base.host}/blog`
+    },
+    researchCultureReport: {
+        path: '/research-culture-report',
+        title: 'Research Culture Report',
+        description:
+            'Explore Octopus: Transforming Academic Research Culture. Discover how the University of Bristol report highlights challenges in academia and how Octopus is reshaping research incentives to foster collaboration and quality.',
+        documentTitle: `Research Culture Report - ${base.title}`,
+        keywords: ['research', 'culture', 'report'],
+        canonical: `${base.host}/research-culture-report`
     }
 };
 
