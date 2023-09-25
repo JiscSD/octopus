@@ -3,9 +3,9 @@ import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 const baseJSONResponse = (statusCode, body) => ({
   body: JSON.stringify(body),
   headers: {
-      'Content-Type': 'application/json'
+    "Content-Type": "application/json",
   },
-  statusCode
+  statusCode,
 });
 
 export const handler = async (event) => {
@@ -23,32 +23,47 @@ export const handler = async (event) => {
     );
     const publication = await publicationResponse.json();
 
-    console.log('Fetched publication: ', JSON.stringify(publication));
+    console.log("Fetched publication: ", JSON.stringify(publication));
+
+    // If publication was written by Science Octopus (seed data), don't send.
+    if (publication.user && publication.user.id === "octopus") {
+      console.log("Publication author is Octopus user, ignoring");
+      return baseJSONResponse(
+        200,
+        "Publication author is Octopus user, ignoring"
+      );
+    }
 
     const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
 
-    console.log('PDF metadata: ', JSON.stringify(pdfMetadata));
+    console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
 
     const apiResponse = await postToPubrouter(pdfMetadata);
 
-    console.log('Pubrouter response: ', apiResponse);
+    console.log("Pubrouter response: ", apiResponse);
 
     // Check the API response and handle failures
     if (apiResponse.status === "success") {
-      return baseJSONResponse(200, "Successfully submitted to publication router");
+      return baseJSONResponse(
+        200,
+        "Successfully submitted to publication router"
+      );
     } else {
       // Retry once
-      console.log('First attempt failed; retrying');
+      console.log("First attempt failed; retrying");
       const retry = await postToPubrouter(pdfMetadata);
       if (retry.status === "success") {
-        return baseJSONResponse(200, "Successfully submitted to publication router");
+        return baseJSONResponse(
+          200,
+          "Successfully submitted to publication router"
+        );
       } else {
         await sendFailureEmail(JSON.stringify(retry), event, publicationId);
         return baseJSONResponse(500, "Failed to submit to publication router");
       }
     }
   } catch (error) {
-    console.log('Error uploading to pubrouter: ', error.message);
+    console.log("Error uploading to pubrouter: ", error.message);
     await sendFailureEmail(error, event, publicationId);
     return baseJSONResponse(500, "Error submitting to publication router");
   }
@@ -58,13 +73,15 @@ const postToPubrouter = async (pdfMetadata) => {
   // We use a different API key per publication type.
   const apiKeys = JSON.parse(process.env.PUBROUTER_API_KEYS);
   if (!Object.keys(apiKeys).includes(pdfMetadata.metadata.article.type)) {
-    throw new Error(`Publication type "${pdfMetadata.metadata.article.type}" not found in API keys object`);
+    throw new Error(
+      `Publication type "${pdfMetadata.metadata.article.type}" not found in API keys object`
+    );
   } else {
     const apiKey = apiKeys[pdfMetadata.metadata.article.type];
     // Temporarily using the validation endpoint, instead of the notification one
     const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`;
     // const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
-  
+
     const response = await fetch(apiEndpoint, {
       method: "POST",
       headers: {
@@ -72,7 +89,7 @@ const postToPubrouter = async (pdfMetadata) => {
       },
       body: JSON.stringify(pdfMetadata),
     });
-  
+
     return response.json();
   }
 };
@@ -105,10 +122,10 @@ const sendFailureEmail = async (error, event, publicationId) => {
 const mapPublicationToMetadata = (publication, pdfUrl) => {
   const formatAuthor = (author) => {
     return {
-      type: (author.linkedUser === publication.user.id) ? "corresp" : "author",
+      type: author.linkedUser === publication.user.id ? "corresp" : "author",
       name: {
         firstname: author.user.firstName,
-        surname: author.user.lastName || '',
+        surname: author.user.lastName || "",
         fullname: `${author.user.lastName && author.user.lastName + ", "}${
           author.user.firstName
         }`,
@@ -121,17 +138,27 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       ],
       affiliations: author.affiliations?.map((affiliation) => ({
         identifier: [
-          ...(
-            affiliation.organization['disambiguated-organization'] &&
-            affiliation.organization['disambiguated-organization']['disambiguation-source'] === 'ROR'
-          ) ? [{
-            type: "ROR",
-            id: affiliation.organization['disambiguated-organization']['disambiguated-organization-identifier']
-          }] : [],
-          ...affiliation.url ? [{
-            type: "Link",
-            id: affiliation.url
-          }] : [],
+          ...(affiliation.organization["disambiguated-organization"] &&
+          affiliation.organization["disambiguated-organization"][
+            "disambiguation-source"
+          ] === "ROR"
+            ? [
+                {
+                  type: "ROR",
+                  id: affiliation.organization["disambiguated-organization"][
+                    "disambiguated-organization-identifier"
+                  ],
+                },
+              ]
+            : []),
+          ...(affiliation.url
+            ? [
+                {
+                  type: "Link",
+                  id: affiliation.url,
+                },
+              ]
+            : []),
         ],
         org: affiliation.organization.name,
         city: affiliation.organization.address.city,
@@ -168,10 +195,12 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         type: publication.type,
         version: "VOR",
         language: [publication.language],
-        identifier: [{
-          type: "doi",
-          id: publication.doi
-        }],
+        identifier: [
+          {
+            type: "doi",
+            id: publication.doi,
+          },
+        ],
       },
       author: publication.coAuthors?.map((author) => formatAuthor(author)),
       publication_date: {
