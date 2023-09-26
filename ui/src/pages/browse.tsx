@@ -33,6 +33,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                         metadata
                     }
                 }
+            },
+            metadata: {
+                title: Config.urls.browsePublications.title,
+                description: Config.urls.browsePublications.description
             }
         }
     };

@@ -109,7 +109,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             fallback: {
                 [swrKey]: searchResults
             },
-            error
+            error,
+            metadata: {
+                title: Config.urls.search.title,
+                description: Config.urls.search.description
+            }
         }
     };
 };

@@ -480,6 +480,14 @@ const formatPDFDate = (date: Date): string => {
     return `${day}<sup>${nthNumber}</sup> ${month} ${year}`;
 };
 
+export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): string => {
+    const organization = affiliation.organization;
+
+    return `${organization.name}: ${organization.address.city}, ${
+        organization.address.region ? `${organization.address.region}, ` : ''
+    }${organization.address.country}`;
+};
+
 export const createPublicationHTMLTemplate = (
     publication: I.PublicationWithVersionAttached,
     references: I.Reference[]
@@ -526,6 +534,28 @@ export const createPublicationHTMLTemplate = (
             affiliations: []
         });
     }
+
+    // Get array of all affiliations from all authors
+    const allAffiliations = authors
+        .map((author) => author.affiliations)
+        .flat() as unknown as I.MappedOrcidAffiliation[];
+    const allAffiliationsWithNames = allAffiliations.map((affiliation) => ({
+        ...affiliation,
+        name: formatAffiliationName(affiliation)
+    })) as I.AffiliationWithFormattedName[];
+
+    // De-duplicate affiliations based on their name
+    const seen = new Set();
+    const uniqueAffiliations = allAffiliationsWithNames.filter((affiliation) => {
+        const duplicate = seen.has(affiliation.name);
+        seen.add(affiliation.name);
+
+        return !duplicate;
+    });
+    // Sort affiliations by name
+    const affiliations = uniqueAffiliations.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+    });
 
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
     const base64InterSemiBold = fs.readFileSync('assets/fonts/Inter-SemiBold.ttf', { encoding: 'base64' });
@@ -752,6 +782,24 @@ export const createPublicationHTMLTemplate = (
 
             <div id="main-text">
                 ${mainText}
+            </div>
+
+            <div class="section affiliations">
+                <h5 class="section-title">Affiliations</h5>
+                ${
+                    affiliations.length
+                        ? affiliations
+                              .map(
+                                  (affiliation) =>
+                                      '<p>' +
+                                      (affiliation.url
+                                          ? `<a href="${affiliation.url}">${affiliation.name}</a>`
+                                          : affiliation.name) +
+                                      '</p>'
+                              )
+                              .join('')
+                        : '<p>No affiliations have been specified for this publication.</p>'
+                }
             </div>
 
             <div class="section references">

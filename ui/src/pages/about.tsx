@@ -7,6 +7,7 @@ import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type CardItemProps = {
     title: string;
@@ -42,6 +43,17 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
             {props.children}
         </Framer.motion.div>
     );
+};
+
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.about.title,
+                description: Config.urls.about.description
+            }
+        }
+    };
 };
 
 const About: NextPage = (): React.ReactElement => (

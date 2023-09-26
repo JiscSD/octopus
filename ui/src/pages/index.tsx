@@ -34,7 +34,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             latest,
-            errors
+            errors,
+            metadata: {
+                title: Config.urls.home.title,
+                description: Config.urls.home.description
+            }
         }
     };
 };

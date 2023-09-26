@@ -921,3 +921,5 @@ export const HTMLStylesTiptapEditor = `
 
 export const topicDescription =
     'This is a research topic created to provide authors with a place to attach new problem publications.';
+
+export const blogContentType = 'octopusBlog';

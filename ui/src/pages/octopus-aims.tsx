@@ -7,6 +7,7 @@ import parse from 'html-react-parser';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type ItemProps = {
     header: string;
@@ -190,6 +191,17 @@ const CategorySidebar: React.FC<SidebarProps> = (props): JSX.Element => (
         ))}
     </div>
 );
+
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.octopusAims.title,
+                description: Config.urls.octopusAims.description
+            }
+        }
+    };
+};
 
 const OctopusAims: NextPage = (): React.ReactElement => (
     <>

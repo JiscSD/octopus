@@ -35,12 +35,12 @@ let store: any = (set: (params: any) => void) => ({
                 affiliationsStatement: '',
                 affiliations: [],
                 keywords: [],
-                licence: Config.values.octopusInformation.licences.CC_BY.value,
                 language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
                 references: [],
                 conflictOfInterestStatus: undefined,
                 conflictOfInterestText: '',
                 linkTo: [],
+                topics: [],
                 ethicalStatement: null,
                 ethicalStatementFreeText: null,
                 dataAccessStatement: null,
@@ -81,10 +81,6 @@ let store: any = (set: (params: any) => void) => ({
     keywords: [],
     updateKeywords: (keywords: string[]) => set(() => ({ keywords })),
 
-    // Licence
-    licence: Config.values.octopusInformation.licences.CC_BY.value,
-    updateLicence: (licence: Types.LicenceType) => set(() => ({ licence })),
-
     language: Config.values.octopusInformation.languages.find((entry) => entry.code === 'en'),
     updateLanguage: (language: Types.Languages) => set(() => ({ language })),
 
@@ -97,6 +93,10 @@ let store: any = (set: (params: any) => void) => ({
     // Links
     linkTo: [],
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => set(() => ({ linkTo })),
+
+    // Topics
+    topics: [],
+    updateTopics: (topics: Interfaces.BaseTopic[]) => set(() => ({ topics })),
 
     // Ethical statement
     ethicalStatement: null,

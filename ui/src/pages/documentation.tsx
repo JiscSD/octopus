@@ -6,6 +6,17 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.documentation.title,
+                description: Config.urls.documentation.description
+            }
+        }
+    };
+};
+
 const Documentation: Types.NextPage = (): React.ReactElement => (
     <>
         <Head>

@@ -15,7 +15,8 @@
             "@helpers": ["./src/lib/helpers"],
             "@api": ["./src/lib/api"],
             "@documentation": ["./src/lib/documentation"],
-            "@contexts": ["./src/contexts"]
+            "@contexts": ["./src/contexts"],
+            "@contentfulClient": ["./src/lib/contentfulClient"]
         }
     }
 }
