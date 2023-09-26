@@ -6,41 +6,41 @@ describe('Request co-authors approvals', () => {
         await testUtils.testSeed();
     });
 
-    test('Can request approvals only if the publication is DRAFT or LOCKED', async () => {
-        const draftPublicationResponse = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors/request-approval')
+    test('Can request approvals only if the publication version is DRAFT or LOCKED', async () => {
+        const draftPublicationVersionResponse = await testUtils.agent
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors/request-approval')
             .query({ apiKey: '000000005' });
 
-        expect(draftPublicationResponse.status).toEqual(200);
+        expect(draftPublicationVersionResponse.status).toEqual(200);
 
-        const lockedPublicationResponse = await testUtils.agent
-            .put('/publications/publication-problem-locked/coauthors/request-approval')
+        const lockedPublicationVersionResponse = await testUtils.agent
+            .put('/publicationVersions/publication-problem-locked-v1/coauthors/request-approval')
             .query({ apiKey: '000000005' });
 
-        expect(lockedPublicationResponse.status).toEqual(200);
+        expect(lockedPublicationVersionResponse.status).toEqual(200);
     });
 
-    test('Cannot request approvals for a LIVE publication', async () => {
-        const livePublicationResponse = await testUtils.agent
-            .put('/publications/publication-problem-live/coauthors/request-approval')
+    test('Cannot request approvals for a LIVE publication version', async () => {
+        const livePublicationVersionResponse = await testUtils.agent
+            .put('/publicationVersions/publication-problem-live-v1/coauthors/request-approval')
             .query({ apiKey: '123456789' });
 
-        expect(livePublicationResponse.status).toEqual(403);
+        expect(livePublicationVersionResponse.status).toEqual(403);
     });
 
     test('Cannot request approvals if user is not the creator', async () => {
-        const draftPublicationResponse = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors/request-approval')
+        const draftPublicationVersionResponse = await testUtils.agent
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors/request-approval')
             .query({ apiKey: '000000006' });
 
-        expect(draftPublicationResponse.status).toEqual(403);
+        expect(draftPublicationVersionResponse.status).toEqual(403);
     });
 
     test('Cannot request approvals if publication has no-coauthors', async () => {
-        const draftPublicationResponse = await testUtils.agent
-            .put('/publications/publication-2/coauthors/request-approval')
+        const draftPublicationVersionResponse = await testUtils.agent
+            .put('/publicationVersions/publication-2-v1/coauthors/request-approval')
             .query({ apiKey: '987654321' });
 
-        expect(draftPublicationResponse.status).toEqual(403);
+        expect(draftPublicationVersionResponse.status).toEqual(403);
     });
 });

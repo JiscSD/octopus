@@ -283,12 +283,12 @@ export const updateStatus = async (
 
         if (currentStatus === 'DRAFT') {
             if (newStatus === 'LOCKED') {
-                // check if publication actually has co-authors
+                // check if publication version actually has co-authors
                 if (currentVersion.coAuthors.length === 1) {
                     return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
                 }
 
-                // check if publication is ready to be LOCKED
+                // check if publication version is ready to be LOCKED
                 if (!publicationService.isReadyToLock(publication)) {
                     return response.json(403, {
                         message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
@@ -338,9 +338,9 @@ export const updateStatus = async (
 
         const updatedVersion = await publicationVersionService.updateStatus(currentVersion.id, newStatus);
 
-        // now that the publication is LIVE, we store in opensearch
+        // now that the publication version is LIVE, add/update the opensearch record
         await publicationService.createOpenSearchRecord({
-            id: updatedVersion.id,
+            id: publicationId,
             type: updatedVersion.publication.type,
             title: updatedVersion.title,
             licence: updatedVersion.licence,
@@ -353,7 +353,7 @@ export const updateStatus = async (
 
         const references = await referenceService.getAllByPublicationVersion(updatedVersion.id);
 
-        // Publication is live, so update the DOI
+        // Publication version is live, so update the DOI
         await helpers.updateDOI(publication.doi, publication, references);
 
         // send message to the pdf generation queue

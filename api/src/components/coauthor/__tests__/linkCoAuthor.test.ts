@@ -7,9 +7,9 @@ describe('Link co-author', () => {
         await testUtils.testSeed();
     });
 
-    test('Link a co-author to a publication (allow)', async () => {
+    test('Link a co-author to a publication version (allow)', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-hypothesis-draft/link-coauthor')
+            .patch('/publicationVersions/publication-hypothesis-draft-v1/link-coauthor')
             .query({ apiKey: '000000007' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -25,9 +25,9 @@ describe('Link co-author', () => {
         expect(dbLink?.linkedUser).toEqual('test-user-7');
     });
 
-    test('Link a co-author to a publication (do not allow) with authentication', async () => {
+    test('Link a co-author to a publication version (do not allow) with authentication', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -43,9 +43,9 @@ describe('Link co-author', () => {
         expect(dbLink).toEqual(null);
     });
 
-    test('Link a co-author to a publication (do not allow) without authentication', async () => {
+    test('Link a co-author to a publication version (do not allow) without authentication', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -58,7 +58,7 @@ describe('Link co-author', () => {
 
     test('Cannot link as co-author if you are the creator', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000005' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -71,7 +71,7 @@ describe('Link co-author', () => {
 
     test('Cannot link co-author if user has already been linked as another co-author', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000006' })
             .send({
                 email: 'test-user-6@jisc.ac.uk',
@@ -84,7 +84,7 @@ describe('Link co-author', () => {
 
     test('Cannot override co-authorship', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'test-user-6@jisc.ac.uk',
@@ -99,7 +99,7 @@ describe('Link co-author', () => {
     test('Cannot link co-author with a different email address', async () => {
         // trying to accept invitation with a user which is not a co-author
         const response = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000004' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -112,7 +112,7 @@ describe('Link co-author', () => {
 
         // trying to accept invitation with a different co-author account
         const response2 = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publicationVersions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000008' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',

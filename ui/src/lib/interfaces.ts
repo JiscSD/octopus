@@ -25,16 +25,16 @@ export interface PublicationStatus {
 
 export interface PublicationRef {
     id: string;
-    title: string;
-    publishedDate: string;
-    currentStatus: PublicationStatus;
     type: Types.PublicationType;
-    user: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        orcid: string;
-    };
+    doi: string;
+    versions: {
+        title: string;
+        publishedDate: string;
+        currentStatus: PublicationStatus;
+        description: string;
+        keywords: string[];
+        user: User;
+    }[];
     linkedTo: LinkTo[];
     linkedFrom: LinkFrom[];
 }
@@ -51,29 +51,72 @@ export interface LinkFrom {
 
 export interface CorePublication {
     id: string;
-    title: string;
     type: Types.PublicationType;
     doi: string | null;
+    url_slug: string;
+    linkedFrom: LinkFrom[];
+    linkedTo: LinkTo[];
+    topics: BaseTopic[];
+    publicationFlags: Flag[];
+}
+
+export interface PublicationVersion {
+    id: string;
+    versionOf: string;
+    versionNumber: number;
+    isLatestVersion: boolean;
+    isLatestLiveVersion: boolean;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+    currentStatus: Types.PublicationStatuses;
+    publishedDate: string;
+    title: string;
+    licence: Types.LicenceType;
+    conflictOfInterestStatus: boolean | undefined;
+    conflictOfInterestText: string | null;
+    ethicalStatement: string;
+    ethicalStatementFreeText: string | null;
+    dataPermissionsStatement: string | null;
+    dataPermissionsStatementProvidedBy: string | null;
+    dataAccessStatement: string | null;
+    selfDeclaration: boolean;
+    description: string;
+    keywords: string[];
+    content: string;
+    language: Types.Languages;
+    fundersStatement: string | null;
+    user: User;
+    publicationStatus: PublicationStatus[];
+    funders: Funder[];
+    coAuthors: CoAuthor[];
+}
+
+export interface PublicationWithVersions extends CorePublication {
+    versions: PublicationVersion[];
+}
+
+// The form of publication generally expected by the UI, with versionable data merged into the object.
+export interface Publication extends CorePublication {
+    versionId: string;
+    versionNumber: number;
+    isLatestVersion: boolean;
+    isLatestLiveVersion: boolean;
+    title: string;
     description: string;
     keywords: string[];
     createdBy: string;
     createdAt: string;
     updatedAt: string;
-    publishedDate: string;
     currentStatus: Types.PublicationStatuses;
-    url_slug: string;
+    publishedDate: string;
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
     ethicalStatement: string;
     ethicalStatementFreeText: string | null;
-}
-
-export interface Publication extends CorePublication {
     publicationStatus: PublicationStatus[];
     user: User;
-    linkedFrom: LinkFrom[];
-    linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
@@ -83,11 +126,7 @@ export interface Publication extends CorePublication {
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
-    affiliations: Affiliations[];
-    affiliationStatement: string | null;
-    publicationFlags: Flag[];
     references: Reference[];
-    topics: BaseTopic[];
 }
 
 export interface Link {
@@ -122,7 +161,7 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
-    publicationId: string;
+    publicationVersionId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
@@ -134,7 +173,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
     affiliations: MappedOrcidAffiliation[];
@@ -375,7 +414,6 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
-    affiliationStatement?: string | null;
 }
 
 export interface CreationStep {

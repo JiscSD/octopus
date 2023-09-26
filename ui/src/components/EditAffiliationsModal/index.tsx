@@ -33,7 +33,7 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
     useSWR(
         !props.autoUpdate || isValidating || error
             ? null
-            : `${Config.endpoints.publications}/${props.author.publicationId}/my-affiliations`,
+            : `${Config.endpoints.publicationVersions}/${props.author.publicationVersionId}/my-affiliations`,
         (url) => {
             const updatedAuthorAffiliations = orcidAffiliations.filter((affiliation) =>
                 authorAffiliations.some(({ id }) => affiliation.id === id)
@@ -73,7 +73,7 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
         try {
             // update author affiliations
             await api.put(
-                `${Config.endpoints.publications}/${props.author.publicationId}/my-affiliations`,
+                `${Config.endpoints.publicationVersions}/${props.author.publicationVersionId}/my-affiliations`,
                 { affiliations: authorAffiliations, isIndependent: isIndependentAuthor },
                 Helpers.getJWT()
             );

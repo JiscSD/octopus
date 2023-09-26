@@ -7,9 +7,9 @@ describe('create coauthor', () => {
         await testUtils.testSeed();
     });
 
-    test('Update co-authors for a specific publication', async () => {
+    test('Update co-authors for a specific publication version', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors')
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
@@ -34,12 +34,12 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author with duplicate email', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors')
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'email@test.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -47,7 +47,7 @@ describe('create coauthor', () => {
                 },
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'email@test.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -55,7 +55,7 @@ describe('create coauthor', () => {
                 },
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'fake-email@domain.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -63,7 +63,7 @@ describe('create coauthor', () => {
                 },
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'fake-email@test.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -73,14 +73,14 @@ describe('create coauthor', () => {
         expect(coauthor.status).toEqual(400);
     });
 
-    test('Cannot create a co-author record if the user is not the author of a publication', async () => {
+    test('Cannot create a co-author record if the user is not the author of the publication version', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-draft/coauthors')
+            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '987654321' })
             .send([
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -91,14 +91,14 @@ describe('create coauthor', () => {
         expect(coauthor.status).toEqual(403);
     });
 
-    test('Cannot create a co-author record on a publication that does not exist', async () => {
+    test('Cannot create a co-author record on a publication version that does not exist', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/non-existent-publication/coauthors')
+            .put('/publicationVersions/non-existent-publication-version/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {
                     id: createId(),
-                    publicationId: 'non-existent-publication',
+                    publicationVersionId: 'non-existent-publication-v1',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
                     approvalRequested: false,
@@ -109,14 +109,14 @@ describe('create coauthor', () => {
         expect(coauthor.status).toEqual(404);
     });
 
-    test('Cannot create a co-author record on a publication that is live', async () => {
+    test('Cannot create a co-author record on a publication version that is live', async () => {
         const coauthor = await testUtils.agent
-            .put('/publications/publication-problem-live/coauthors')
+            .put('/publicationVersions/publication-problem-live-v1/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-live',
+                    publicationVersionId: 'publication-problem-live-v1',
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
                     approvalRequested: false,

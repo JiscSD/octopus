@@ -189,7 +189,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const fetchAndSetReferences = React.useCallback(async () => {
         if (props.draftedPublication.id) {
             try {
-                const response = await api.get(`/publications/${props.draftedPublication.id}/reference`, props.token);
+                const response = await api.get(
+                    `/publicationVersions/${props.draftedPublication.versionId}/reference`,
+                    props.token
+                );
                 store.updateReferences(response.data);
             } catch (err) {
                 // todo: improve error handling
@@ -201,7 +204,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const fetchAndSetAuthors = React.useCallback(async () => {
         if (props.draftedPublication.id) {
             try {
-                const response = await api.get(`/publications/${props.draftedPublication.id}/coauthors`, props.token);
+                const response = await api.get(
+                    `${Config.endpoints.publicationVersions}/${props.draftedPublication.versionId}/coauthors`,
+                    props.token
+                );
                 store.updateCoAuthors(response.data);
             } catch (err) {
                 // todo: improve error handling
@@ -218,6 +224,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     React.useEffect(() => {
         if (props.draftedPublication.id) {
             store.updateId(props.draftedPublication.id);
+        }
+
+        if (props.draftedPublication.versionId) {
+            store.updateVersionId(props.draftedPublication.versionId);
         }
 
         if (props.draftedPublication.title) {
@@ -288,7 +298,6 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         store.updateAuthorAffiliations(correspondingAuthor?.affiliations || []);
         store.updateIsIndependentAuthor(correspondingAuthor?.isIndependent || false);
 
-        store.updateAffiliationsStatement(props.draftedPublication.affiliationStatement);
         store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
     }, []);
 

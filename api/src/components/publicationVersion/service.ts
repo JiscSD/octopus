@@ -8,6 +8,16 @@ export const get = async (id: string) => {
             id
         },
         include: {
+            publication: {
+                select: {
+                    id: true,
+                    type: true,
+                    doi: true,
+                    linkedTo: true,
+                    linkedFrom: true,
+                    topics: true
+                }
+            },
             publicationStatus: {
                 select: {
                     status: true,
@@ -81,7 +91,10 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
                     status
                 }
             },
-            ...(status === 'LIVE' && { publishedDate: new Date().toISOString() })
+            ...(status === 'LIVE' && {
+                publishedDate: new Date().toISOString(),
+                isLatestLiveVersion: true
+            })
         },
         include: {
             publicationStatus: {
