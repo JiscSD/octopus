@@ -129,10 +129,8 @@ export interface Publication extends CorePublication {
     references: Reference[];
 }
 
-export interface LinkedToPublication {
+export interface Link {
     id: string;
-    childPublication: string;
-    childPublicationType: Types.PublicationType;
     type: Types.PublicationType;
     title: string;
     publishedDate: string;
@@ -140,25 +138,21 @@ export interface LinkedToPublication {
     createdBy: string;
     authorFirstName: string;
     authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
 }
 
-export interface LinkedFromPublication {
-    id: string;
+export interface LinkedToPublication extends Link {
+    childPublication: string;
+    childPublicationType: Types.PublicationType;
+}
+
+export interface LinkedFromPublication extends Link {
     parentPublication: string;
-    type: Types.PublicationType;
     parentPublicationType: Types.PublicationType;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
-    createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
 }
 
 export interface PublicationWithLinks {
-    publication: PublicationWithVersions;
+    publication: Link;
     linkedTo: LinkedToPublication[];
     linkedFrom: LinkedFromPublication[];
 }

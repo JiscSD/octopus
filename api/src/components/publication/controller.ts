@@ -372,14 +372,15 @@ export const getLinksForPublication = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const data = await publicationService.getLinksForPublication(event.pathParameters.id);
+        const { publication, linkedFrom, linkedTo } = await publicationService.getLinksForPublication(
+            event.pathParameters.id
+        );
 
-        // If publication doesn't exist or has no LIVE version
-        if (!data.publication || !data.publication.versions.some((version) => version.isLatestLiveVersion)) {
+        if (!publication) {
             return response.json(404, { message: 'Not found.' });
         }
 
-        return response.json(200, data);
+        return response.json(200, { publication, linkedFrom, linkedTo });
     } catch (err) {
         console.log(err);
 

@@ -4,7 +4,6 @@ import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
-import { Links } from '@prisma/client';
 import { Browser, launch } from 'puppeteer-core';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
@@ -1024,8 +1023,26 @@ export const isReadyToLock = (publication: I.PublicationWithVersionAttached): bo
     return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
 
-export const getLinksForPublication = async (id: string) => {
+export const getLinksForPublication = async (id: string): Promise<I.PublicationWithLinks> => {
     const publication = await get(id);
+
+    if (!publication) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
+
+    const latestLiveVersion = publication?.versions.find((version) => version.isLatestLiveVersion);
+
+    if (!latestLiveVersion) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
 
     /*
      * This set of queries provides two result sets:
@@ -1042,16 +1059,16 @@ export const getLinksForPublication = async (id: string) => {
      * 2. To limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
      */
 
-    const linkedTo: Links[] = await client.prisma.$queryRaw`
+    const linkedTo = await client.prisma.$queryRaw<I.LinkedToPublication[]>`
         WITH RECURSIVE to_left AS (
             SELECT "Links"."publicationFrom" "childPublication",
                    "Links"."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
-                   "pto_latest_version".title,
-                   "pto_first_version"."createdBy",
-                   "pto_latest_version"."publishedDate",
-                   "pto_latest_version"."currentStatus",
+                   "pto_version".title,
+                   "pto_version"."createdBy",
+                   "pto_version"."publishedDate",
+                   "pto_version"."currentStatus",
                    "pto_user"."firstName" "authorFirstName",
                    "pto_user"."lastName" "authorLastName"
 
@@ -1062,16 +1079,12 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
 
-              LEFT JOIN "PublicationVersion" AS pto_latest_version
-              ON "pto".id = "pto_latest_version"."versionOf"
-              AND "pto_latest_version"."isLatestVersion" = 't'
-
-              LEFT JOIN "PublicationVersion" AS pto_first_version
-              ON "pto".id = "pto_first_version"."versionOf"
-              AND "pto_first_version"."versionNumber" = 1
+              LEFT JOIN "PublicationVersion" AS pto_version
+              ON "pto".id = "pto_version"."versionOf"
+              AND "pto_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "User" AS pto_user
-              ON "pto_first_version"."createdBy" = "pto_user"."id"
+              ON "pto_version"."createdBy" = "pto_user"."id"
 
             WHERE "Links"."publicationFrom" = ${id}
 
@@ -1081,10 +1094,10 @@ export const getLinksForPublication = async (id: string) => {
                    l."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
-                   "pto_latest_version".title,
-                   "pto_first_version"."createdBy",
-                   "pto_latest_version"."publishedDate",
-                   "pto_latest_version"."currentStatus",
+                   "pto_version".title,
+                   "pto_version"."createdBy",
+                   "pto_version"."publishedDate",
+                   "pto_version"."currentStatus",
                    "pto_user"."firstName" "authorFirstName",
                    "pto_user"."lastName" "authorLastName"
 
@@ -1098,16 +1111,12 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
 
-              LEFT JOIN "PublicationVersion" AS pto_latest_version
-              ON "pto".id = "pto_latest_version"."versionOf"
-              AND "pto_latest_version"."isLatestVersion" = 't'
-
-              LEFT JOIN "PublicationVersion" AS pto_first_version
-              ON "pto".id = "pto_first_version"."versionOf"
-              AND "pto_first_version"."versionNumber" = 1
+              LEFT JOIN "PublicationVersion" AS pto_version
+              ON "pto".id = "pto_version"."versionOf"
+              AND "pto_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "User" AS pto_user
-              ON "pto_first_version"."createdBy" = "pto_user"."id"
+              ON "pto_version"."createdBy" = "pto_user"."id"
         )
         
         SELECT * FROM to_left
@@ -1116,16 +1125,16 @@ export const getLinksForPublication = async (id: string) => {
             AND "currentStatus" = 'LIVE';
     `;
 
-    const linkedFrom: Links[] = await client.prisma.$queryRaw`
+    const linkedFrom = await client.prisma.$queryRaw<I.LinkedFromPublication[]>`
         WITH RECURSIVE to_right AS (
             SELECT "Links"."publicationFrom" "id",
                    "Links"."publicationTo" "parentPublication",
                    "pfrom".type,
                    "pto".type "parentPublicationType",
-                   "pfrom_latest_version"."title",
-                   "pfrom_first_version"."createdBy",
-                   "pfrom_latest_version"."publishedDate",
-                   "pfrom_latest_version"."currentStatus",
+                   "pfrom_version"."title",
+                   "pfrom_version"."createdBy",
+                   "pfrom_version"."publishedDate",
+                   "pfrom_version"."currentStatus",
                    "pfrom_user"."firstName" "authorFirstName",
                    "pfrom_user"."lastName" "authorLastName"
 
@@ -1133,19 +1142,15 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "Links"."publicationFrom"
 
-              LEFT JOIN "PublicationVersion" AS pfrom_latest_version
-              ON "pfrom".id = "pfrom_latest_version"."versionOf"
-              AND "pfrom_latest_version"."isLatestVersion" = 't'
-
-              LEFT JOIN "PublicationVersion" AS pfrom_first_version
-              ON "pfrom".id = "pfrom_first_version"."versionOf"
-              AND "pfrom_first_version"."versionNumber" = 1
+              LEFT JOIN "PublicationVersion" AS pfrom_version
+              ON "pfrom".id = "pfrom_version"."versionOf"
+              AND "pfrom_version"."isLatestVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
 
               LEFT JOIN "User" AS pfrom_user
-              ON "pfrom_first_version"."createdBy" = "pfrom_user"."id"
+              ON "pfrom_version"."createdBy" = "pfrom_user"."id"
 
             WHERE "Links"."publicationTo" = ${id}
 
@@ -1155,10 +1160,10 @@ export const getLinksForPublication = async (id: string) => {
                    l."publicationTo" "parentPublication",
                    "pfrom".type,
                    "pto".type "parentPublicationType",
-                   "pfrom_latest_version"."title",
-                   "pfrom_first_version"."createdBy",
-                   "pfrom_latest_version"."publishedDate",
-                   "pfrom_latest_version"."currentStatus",
+                   "pfrom_version"."title",
+                   "pfrom_version"."createdBy",
+                   "pfrom_version"."publishedDate",
+                   "pfrom_version"."currentStatus",
                    "pfrom_user"."firstName" "authorFirstName",
                    "pfrom_user"."lastName" "authorLastName"
               FROM "Links" l
@@ -1168,19 +1173,15 @@ export const getLinksForPublication = async (id: string) => {
               LEFT JOIN "Publication" AS pfrom
               ON "pfrom".id = "l"."publicationFrom"
 
-              LEFT JOIN "PublicationVersion" AS pfrom_latest_version
-              ON "pfrom".id = "pfrom_latest_version"."versionOf"
-              AND "pfrom_latest_version"."isLatestVersion" = 't'
-
-              LEFT JOIN "PublicationVersion" AS pfrom_first_version
-              ON "pfrom".id = "pfrom_first_version"."versionOf"
-              AND "pfrom_first_version"."versionNumber" = 1
+              LEFT JOIN "PublicationVersion" AS pfrom_version
+              ON "pfrom".id = "pfrom_version"."versionOf"
+              AND "pfrom_version"."isLatestVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
 
               LEFT JOIN "User" AS pfrom_user
-              ON "pfrom_first_version"."createdBy" = "pfrom_user"."id"
+              ON "pfrom_version"."createdBy" = "pfrom_user"."id"
 
               WHERE "pto"."type" != 'PROBLEM'
         )
@@ -1191,62 +1192,75 @@ export const getLinksForPublication = async (id: string) => {
            AND "currentStatus" = 'LIVE';
     `;
 
-    const linkedPublications = await client.prisma.publication.findMany({
+    const publicationIds = linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id));
+
+    // get coAuthors for each latest LIVE version of each publication
+    const versions = await client.prisma.publicationVersion.findMany({
         where: {
-            id: {
-                in: linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id))
+            isLatestLiveVersion: true,
+            versionOf: {
+                in: publicationIds
             }
         },
         select: {
-            id: true,
-            versions: {
-                where: {
-                    isLatestVersion: true
-                },
-                include: {
-                    coAuthors: {
+            versionOf: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    user: {
                         select: {
-                            id: true,
-                            linkedUser: true,
-                            publicationVersionId: true,
-                            user: {
-                                select: {
-                                    orcid: true,
-                                    firstName: true,
-                                    lastName: true
-                                }
-                            }
-                        },
-                        orderBy: {
-                            position: 'asc'
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
                         }
                     }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             }
-        },
-        orderBy: {
-            type: 'asc'
         }
     });
 
     // add authors to 'linkedTo' publications
     linkedTo.forEach((link) => {
+        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+
         Object.assign(link, {
-            // This comes from the versions array, however we should only get one back because
-            // we are filtering it down to versions that have isLatestVersion = true. So we access it at [0].
-            authors: linkedPublications.find((publication) => publication.id === link.id)?.versions[0].coAuthors || []
+            authors
         });
     });
 
     // add authors to 'linkedFrom' publications
     linkedFrom.forEach((link) => {
+        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+
         Object.assign(link, {
-            authors: linkedPublications.find((publication) => publication.id === link.id)?.versions[0].coAuthors || []
+            authors
         });
     });
 
     return {
-        publication,
+        publication: {
+            id: publication.id,
+            type: publication.type,
+            title: latestLiveVersion.title || '',
+            createdBy: latestLiveVersion.createdBy,
+            currentStatus: latestLiveVersion.currentStatus,
+            publishedDate: latestLiveVersion.publishedDate?.toISOString() || '',
+            authorFirstName: latestLiveVersion.user.firstName,
+            authorLastName: latestLiveVersion.user.lastName || '',
+            authors: latestLiveVersion.coAuthors.map((author) => ({
+                id: author.id,
+                linkedUser: author.linkedUser,
+                user: {
+                    orcid: author.user?.orcid || '',
+                    firstName: author.user?.firstName || '',
+                    lastName: author.user?.lastName || ''
+                }
+            }))
+        },
         linkedTo,
         linkedFrom
     };
