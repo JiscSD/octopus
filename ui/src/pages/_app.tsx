@@ -47,7 +47,9 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
         };
     }, []);
 
-    return (
+    return process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' ? (
+        mounted && <Components.Maintenance />
+    ) : (
         <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
