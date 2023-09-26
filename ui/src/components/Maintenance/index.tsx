@@ -10,7 +10,6 @@ const Maintenance: React.FC = () => (
             <meta name="robots" content="noindex, nofollow" key="robots" />
             <title>Site under maintenance</title>
         </Head>
-        <Components.Header />
         <main>
             <section className="container mx-auto grid grid-cols-1 px-8 pt-8 lg:gap-4 lg:pt-48">
                 <h1 className="mx-auto mb-8 mt-8 block text-center font-montserrat text-6xl font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white-50 lg:mb-4 lg:mt-2 lg:leading-none">
