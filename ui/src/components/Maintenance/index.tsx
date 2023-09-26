@@ -1,7 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
 
-import * as Assets from '@assets';
 import * as Components from '@components';
 
 const Maintenance: React.FC = () => (
@@ -16,8 +15,10 @@ const Maintenance: React.FC = () => (
                     Site under maintenance
                 </h1>
                 <p className="mx-auto text-center font-inter text-2xl text-teal-900 transition-colors duration-500 dark:text-white-50 lg:mb-32">
-                    {process.env.NEXT_PUBLIC_MAINTENANCE_MESSAGE ||
-                        'Octopus is currently offline for maintenance. It should be back online soon, so please try again later.'}
+                    {process.env.NEXT_PUBLIC_MAINTENANCE_MESSAGE &&
+                    process.env.NEXT_PUBLIC_MAINTENANCE_MESSAGE !== 'null'
+                        ? process.env.NEXT_PUBLIC_MAINTENANCE_MESSAGE
+                        : 'Octopus is currently offline for maintenance. It should be back online soon, so please try again later.'}
                 </p>
             </section>
         </main>

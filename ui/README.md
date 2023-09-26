@@ -54,6 +54,15 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ---
 
+## Maintenance mode
+
+To put the site into maintenance mode, each request will render a page with a maintenance message, set the following environment variables:
+- NEXT_PUBLIC_MAINTENANCE_MODE: if `true`, the maintenance page will render for each request.
+- NEXT_PUBLIC_MAINTENANCE_MESSAGE: if the value is not set or `null`, a default message will be shown on the maintenance page. Otherwise, the value of this variable will be shown.
+
+Note that if you change the value of environment variables on AWS Amplify, the app version will need to be redeployed for them to be picked up.
+
+---
 ## Testing
 
 End-to-end tests use [Playwright](https://playwright.dev/).
