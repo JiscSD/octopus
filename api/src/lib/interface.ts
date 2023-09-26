@@ -5,7 +5,8 @@ import {
     PublicationFlagCategoryEnum,
     PublicationType,
     Role,
-    BookmarkType
+    BookmarkType,
+    PublicationStatusEnum
 } from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
@@ -174,6 +175,34 @@ export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publica
 export interface CreateLinkBody {
     to: string;
     from: string;
+}
+
+export interface Link {
+    id: string;
+    type: PublicationType;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatusEnum;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+}
+
+export interface LinkedToPublication extends Link {
+    childPublication: string;
+    childPublicationType: PublicationType;
+}
+
+export interface LinkedFromPublication extends Link {
+    parentPublication: string;
+    parentPublicationType: PublicationType;
+}
+
+export interface PublicationWithLinks {
+    publication: Link | null;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
 }
 
 /**
