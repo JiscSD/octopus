@@ -6,7 +6,6 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
-import * as Axios from 'axios';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {
