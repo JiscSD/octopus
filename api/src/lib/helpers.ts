@@ -549,6 +549,26 @@ export const createPublicationHTMLTemplate = (
         return a.name.localeCompare(b.name);
     });
 
+    // Store the numbers (their index in the ordered "affiliations" array) of an author's affiliations
+    // with the author. Then, we can write them alongside the author's name in superscript.
+    const authorsWithAffiliationNumbers = authors.map((author) => {
+        const authorAffiliations = author.affiliations as unknown as I.MappedOrcidAffiliation[];
+        const affiliationNumbers = authorAffiliations
+            .map(
+                (affiliation) =>
+                    affiliations.findIndex((orderedAffiliation) => orderedAffiliation.id === affiliation.id) + 1
+            )
+            .sort()
+            // Remove any zeros. These would arise when the number of the affiliation can't be found.
+            .filter((number) => number !== 0)
+            .join(', ');
+
+        return {
+            ...author,
+            affiliationNumbers
+        };
+    });
+
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
     const base64InterSemiBold = fs.readFileSync('assets/fonts/Inter-SemiBold.ttf', { encoding: 'base64' });
     const base64InterBold = fs.readFileSync('assets/fonts/Inter-Bold.ttf', { encoding: 'base64' });
@@ -742,10 +762,12 @@ export const createPublicationHTMLTemplate = (
         <body>
         <h1 id="title">${title}</h1>
             <p class="metadata">
-                <strong>Authors:</strong> ${authors
+                <strong>Authors:</strong> ${authorsWithAffiliationNumbers
                     .map(
                         (author) =>
-                            `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${author.user?.firstName} ${author.user?.lastName}</a>`
+                            `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${author.user?.firstName} ${author.user?.lastName}` +
+                            (author.affiliationNumbers.length ? '<sup>' + author.affiliationNumbers + '</sup>' : '') +
+                            '</a>'
                     )
                     .join(', ')}
             </p>
@@ -778,16 +800,18 @@ export const createPublicationHTMLTemplate = (
                 <h5 class="section-title">Affiliations</h5>
                 ${
                     affiliations.length
-                        ? affiliations
+                        ? '<ol>' +
+                          affiliations
                               .map(
                                   (affiliation) =>
-                                      '<p>' +
+                                      '<li>' +
                                       (affiliation.url
                                           ? `<a href="${affiliation.url}">${affiliation.name}</a>`
                                           : affiliation.name) +
-                                      '</p>'
+                                      '</li>'
                               )
-                              .join('')
+                              .join('') +
+                          '</ol>'
                         : '<p>No affiliations have been specified for this publication.</p>'
                 }
             </div>

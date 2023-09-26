@@ -28,6 +28,15 @@ export const handler = async (event) => {
 
     console.log("Fetched publication: ", JSON.stringify(publication));
 
+    // If publication was written by Science Octopus (seed data), don't send.
+    if (publication.user && publication.user.id === "octopus") {
+      console.log("Publication author is Octopus user, ignoring");
+      return baseJSONResponse(
+        200,
+        "Publication author is Octopus user, ignoring"
+      );
+    }
+
     const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
 
     console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
