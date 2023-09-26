@@ -12,6 +12,9 @@ export const handler = async (event) => {
   const bucket = event.Records[0].s3.bucket.name;
   const key = event.Records[0].s3.object.key;
 
+  // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
+  const validate = true;
+
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
   const publicationId = key.replace(/\.pdf$/, "");
@@ -38,12 +41,16 @@ export const handler = async (event) => {
 
     console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
 
-    const apiResponse = await postToPubrouter(pdfMetadata);
+    const apiResponse = await postToPubrouter(pdfMetadata, validate);
 
     console.log("Pubrouter response: ", apiResponse);
 
     // Check the API response and handle failures
-    if (apiResponse.status === "success") {
+    // If validating, don't retry on a validation failure.
+    if (
+      apiResponse.status === "success" ||
+      (validate && apiResponse.summary.startsWith("Validation failed"))
+    ) {
       return baseJSONResponse(
         200,
         "Successfully submitted to publication router"
@@ -51,7 +58,7 @@ export const handler = async (event) => {
     } else {
       // Retry once
       console.log("First attempt failed; retrying");
-      const retry = await postToPubrouter(pdfMetadata);
+      const retry = await postToPubrouter(pdfMetadata, validate);
       if (retry.status === "success") {
         return baseJSONResponse(
           200,
@@ -69,7 +76,7 @@ export const handler = async (event) => {
   }
 };
 
-const postToPubrouter = async (pdfMetadata) => {
+const postToPubrouter = async (pdfMetadata, validate = false) => {
   // We use a different API key per publication type.
   const apiKeys = JSON.parse(process.env.PUBROUTER_API_KEYS);
   if (!Object.keys(apiKeys).includes(pdfMetadata.metadata.article.type)) {
@@ -79,8 +86,9 @@ const postToPubrouter = async (pdfMetadata) => {
   } else {
     const apiKey = apiKeys[pdfMetadata.metadata.article.type];
     // Temporarily using the validation endpoint, instead of the notification one
-    const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`;
-    // const apiEndpoint = `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
+    const apiEndpoint = validate
+      ? `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`
+      : `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
 
     const response = await fetch(apiEndpoint, {
       method: "POST",
