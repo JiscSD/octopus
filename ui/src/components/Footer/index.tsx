@@ -50,38 +50,69 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
                     </h3>
                 </div>
-                {/** Links */}
-                <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
-                    <Components.Link href={Config.urls.browsePublications.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Browse</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.createPublication.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Publish</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.about.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">About</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">FAQs</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.getInvolved.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Get involved</h3>
-                    </Components.Link>
-                </div>
-                {/** Links */}
-                <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
-                    <Components.Link href={Config.urls.terms.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Terms</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.privacy.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Privacy</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.accessibility.path} className="mb-1 block max-w-fit p-1 ">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                            Accessibility
-                        </h3>
-                    </Components.Link>
-                </div>
+                {
+                    /** Links */
+                    process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== 'true' && (
+                        <>
+                            <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
+                                <Components.Link
+                                    href={Config.urls.browsePublications.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Browse
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.createPublication.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Publish
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.about.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        About
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        FAQs
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.getInvolved.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Get involved
+                                    </h3>
+                                </Components.Link>
+                            </div>
+                            <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
+                                <Components.Link href={Config.urls.terms.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Terms
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.privacy.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Privacy
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.accessibility.path}
+                                    className="mb-1 block max-w-fit p-1 "
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Accessibility
+                                    </h3>
+                                </Components.Link>
+                            </div>
+                        </>
+                    )
+                }
                 {/** Socket */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
                     <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white-50 dark:text-teal-200">
