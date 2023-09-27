@@ -1,6 +1,14 @@
 import * as Interfaces from '@interfaces';
+import * as Contentful from 'contentful';
 
-export type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
+export type {
+    GetServerSideProps,
+    GetServerSidePropsContext,
+    GetServerSidePropsResult,
+    NextPage,
+    GetStaticProps,
+    GetStaticPaths
+} from 'next';
 
 export type { AppProps } from 'next/app';
 export type { AxiosError } from 'axios';
@@ -56,8 +64,6 @@ export type PublicationCreationStoreType = {
     updateDescription: (description: string) => void;
     keywords: string;
     updateKeywords: (keywords: string) => void;
-    licence: LicenceType;
-    updateLicence: (licence: LicenceType) => void;
     language: Languages;
     updateLanguage: (language: Languages) => void;
     conflictOfInterestStatus: boolean | undefined;
@@ -66,6 +72,8 @@ export type PublicationCreationStoreType = {
     updateConflictOfInterestText: (conflictOfInterestText: string) => void;
     linkTo: Interfaces.LinkTo[];
     updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
+    topics: Interfaces.BaseTopic[];
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
     ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
     updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
@@ -322,7 +330,7 @@ export type Languages =
 export type PublicationCreationStep =
     | 'KEY_INFORMATION'
     | 'AFFILIATIONS'
-    | 'LINKED_PUBLICATIONS'
+    | 'LINKED_ITEMS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
@@ -336,4 +344,13 @@ export type CreationSteps = {
 
 export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
 
+export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
+
 export type BookmarkType = 'PUBLICATION' | 'TOPIC';
+
+export type BlogFields = {
+    title: Contentful.EntryFields.Text;
+    author: Contentful.EntryFields.Text;
+    content: Contentful.EntryFields.RichText;
+    slug: Contentful.EntryFields.Text;
+};

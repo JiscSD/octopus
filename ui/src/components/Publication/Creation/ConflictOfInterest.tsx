@@ -6,7 +6,7 @@ import * as Stores from '@stores';
 import * as Types from '@types';
 
 /**
- * @description Edit Licence, COI & soon to be description & keywords
+ * @description Edit conflict of interest status
  */
 const ConflictOfInterest: React.FC = (): React.ReactElement => {
     const conflictOfInterestStatus = Stores.usePublicationCreationStore(

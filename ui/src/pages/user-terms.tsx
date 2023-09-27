@@ -6,6 +6,7 @@ import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type PageSectionProps = {
     children: React.ReactNode;
@@ -35,6 +36,17 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
             {props.children}
         </p>
     );
+};
+
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.userTerms.title,
+                description: Config.urls.userTerms.description
+            }
+        }
+    };
 };
 
 const UserTerms: NextPage = (): React.ReactElement => (

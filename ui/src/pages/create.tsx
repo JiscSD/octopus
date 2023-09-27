@@ -18,7 +18,11 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             publicationForID,
             publicationType,
             protectedPage: true,
-            topicId
+            topicId,
+            metadata: {
+                title: Config.urls.createPublication.title,
+                description: Config.urls.createPublication.description
+            }
         }
     };
 });
@@ -51,6 +55,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 {
                     title,
                     type: publicationType,
+                    licence: Config.values.octopusInformation.licences.CC_BY.value, // This is no longer editable - save hard-coded value
                     topicIds: props.topicId ? [props.topicId] : []
                 },
                 Helpers.getJWT()

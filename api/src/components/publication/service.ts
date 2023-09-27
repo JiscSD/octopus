@@ -4,6 +4,7 @@ import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
+import { Prisma } from '@prisma/client';
 import { Browser, launch } from 'puppeteer-core';
 
 import { PutObjectCommand } from '@aws-sdk/client-s3';
@@ -76,6 +77,10 @@ export const getAllByIds = async (ids: Array<string>) => {
 };
 
 export const updateCurrentVersion = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
+    // Only if topics are passed, format them in a way that prisma can understand.
+    // This will overwrite existing topics with those whose IDs were passed in updateContent.
+    const { topics, ...dataRest } = updateContent;
+
     // Updates will always be made to the current version.
     const currentVersion = await client.prisma.publicationVersion.findFirst({
         where: {
@@ -86,14 +91,24 @@ export const updateCurrentVersion = async (id: string, updateContent: I.UpdatePu
             id: true
         }
     });
-    const updatedPublication = await client.prisma.publicationVersion.update({
+    const updatedVersion = await client.prisma.publicationVersion.update({
         where: {
             id: currentVersion?.id
         },
-        data: updateContent
+        data: dataRest
     });
 
-    return updatedPublication;
+    // If topics were supplied, update them on the publication (TODO: do this separately like links)
+    await client.prisma.publication.update({
+        where: {
+            id
+        },
+        data: {
+            ...(!!updateContent.topics && { topics: { set: updateContent.topics.map((topicId) => ({ id: topicId })) } })
+        }
+    });
+
+    return updatedVersion;
 };
 
 export const isIdInUse = async (id: string) => {
@@ -957,7 +972,8 @@ export const isReadyToPublish = (publication: I.PublicationWithVersionAttached):
 
     const version = publication.versions[0];
 
-    const hasAtLeastOneLinkTo = publication.linkedTo !== undefined && publication.linkedTo.length > 0;
+    const hasAtLeastOneLinkOrTopic =
+        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
     const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
@@ -971,7 +987,7 @@ export const isReadyToPublish = (publication: I.PublicationWithVersionAttached):
     );
 
     return (
-        hasAtLeastOneLinkTo &&
+        hasAtLeastOneLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
@@ -989,7 +1005,8 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAt
         return false;
     }
 
-    const hasAtLeastOneLinkTo = publication.linkedTo !== undefined && publication.linkedTo.length > 0;
+    const hasAtLeastOneLinkOrTopic =
+        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
     const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
@@ -1001,7 +1018,7 @@ export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAt
     );
 
     return (
-        hasAtLeastOneLinkTo &&
+        hasAtLeastOneLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
@@ -1331,14 +1348,14 @@ export const generatePDF = async (publication: I.PublicationWithVersionAttached)
     }
 };
 
-export const getResearchTopics = async () => {
+export const getResearchTopics = async (additionalFilters: Prisma.PublicationWhereInput = {}) => {
     const publications = await client.prisma.publication.findMany({
         where: {
             type: 'PROBLEM',
             OR: [
                 {
-                    linkedTo: {
-                        none: {} // god problem will be converted to a god topic
+                    id: {
+                        equals: 'why' // god problem will be converted to a god topic
                     }
                 },
                 {
@@ -1360,7 +1377,8 @@ export const getResearchTopics = async () => {
                         none: {}
                     }
                 }
-            }
+            },
+            ...additionalFilters
         },
         include: {
             versions: {

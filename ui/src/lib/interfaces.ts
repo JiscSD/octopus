@@ -403,7 +403,6 @@ export interface PublicationUpdateRequestBody extends JSON {
     content: string;
     description: string;
     keywords: string[];
-    licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
     conflictOfInterestStatus: boolean | undefined;

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
 
+import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -13,8 +14,13 @@ import { Middleware } from 'swr';
 /**
  * @description Truncates a string
  */
-export const truncateString = (value: string, length: number): string => {
-    return value.length ? (length < value.length ? `${value.substring(0, length)}...` : value) : value;
+export const truncateString = (string: string, length: number): string => {
+    const trimmedString = string.trim();
+    if (length <= 3) {
+        return '...';
+    }
+    const sliceLength = length - 3;
+    return trimmedString.length > sliceLength ? trimmedString.slice(0, sliceLength).trimEnd() + '...' : trimmedString;
 };
 
 /**
@@ -379,7 +385,7 @@ export const getTabCompleteness = (
     steps.forEach((step) => {
         switch (step.id) {
             case 'KEY_INFORMATION':
-                if (store.title && store.licence) {
+                if (store.title) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
@@ -392,8 +398,8 @@ export const getTabCompleteness = (
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
-            case 'LINKED_PUBLICATIONS':
-                if (store.linkTo?.length) {
+            case 'LINKED_ITEMS':
+                if (store.linkTo?.length || store.topics?.length) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
@@ -560,3 +566,20 @@ export const laggy: Middleware = (useSWRNext) => {
 
 // helper to scroll top smooth - using setTimeout to ensure event loop executes this after any state updates so it doesn't get interrupted
 export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+
+export const htmlToText = (htmlString: string): string => {
+    // Remove tables first, as text inside them is unlikely to make any sense
+    if (typeof window !== 'undefined') {
+        // Use DOMParser if running in browser
+        const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
+        while (htmlDoc.querySelector('table')) {
+            htmlDoc.querySelector('table')?.remove();
+        }
+        return htmlDoc.documentElement.textContent || '';
+    } else {
+        // Server-side fallback method
+        const $ = cheerio.load(htmlString);
+        $('table').remove();
+        return $(':root').text() || '';
+    }
+};

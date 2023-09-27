@@ -169,7 +169,6 @@ export const PageModel = {
         unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
-            licence: 'select#licence',
             rorID: 'input[name=ror]',
             addAffiliationButton: 'button[aria-label="Add affiliation"]:enabled',
             manualAffiliationSelect: 'input#manual',
@@ -178,10 +177,13 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
-        linkedPub: {
-            input: 'input[placeholder="Search for publications"]',
+        linkedItems: {
+            entityTypeSelect: 'select#linked-entity-type',
+            publicationInput: 'input[placeholder="Search for publications"]',
+            topicInput: 'input[placeholder="Search for topics"]',
             addLink: 'button[aria-label="Add link"]',
-            deleteLink: 'td > button[title="Delete"]'
+            deletePublicationLink: '#linked-publication-table > tbody > tr > td > button[title="Delete"]',
+            deleteTopicLink: '#linked-topic-table > tbody > tr > td > button[title="Delete"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',
@@ -220,6 +222,18 @@ export const PageModel = {
     topic: {
         createProblemLink: 'a:has-text("Write a linked Research Problem")',
         addBookmark: '[title="Bookmark this topic"]',
-        removeBookmark: '[title="Remove bookmark"]',
+        removeBookmark: '[title="Remove bookmark"]'
+    },
+    blog: {
+        pageTitle: 'h1:has-text("The Octopus Blog")',
+        pageDescription: 'h2:has-text("Stay up to date with the latest from the Octopus team")',
+        followOnTwitter: 'a:has-text("Follow Octopus on Twitter")',
+        paginationInfo: '#pagination-info',
+        nextButton: 'button:has-text("Next")',
+        prevButton: 'button:has-text("Previous")',
+        blogCard: '.blog-card',
+        blogCardTitle: '.blog-card-title',
+        blogCardText: '.blog-card-text',
+        blogCardFooter: '.blog-card-footer'
     }
 };

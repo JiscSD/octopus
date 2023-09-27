@@ -42,6 +42,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             searchType,
             fallback: {
                 [topicsUrl]: fallbackData
+            },
+            metadata: {
+                title: Config.urls.search.title.replace('publications', 'topics'),
+                description: Config.urls.search.description
             }
         }
     };
@@ -51,6 +55,10 @@ type Props = {
     error: string | null;
     searchType: Types.SearchType;
     fallback: { [key: string]: Interfaces.TopicsPaginatedResults };
+    metadata: {
+        title: string;
+        description: string;
+    };
 };
 
 const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -99,7 +107,7 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
                 <meta name="description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{Config.urls.search.title.replace('publications', 'topics')}</title>
+                <title>{props.metadata.title}</title>
             </Head>
 
             <Layouts.Standard>

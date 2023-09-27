@@ -5,6 +5,17 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.accessibility.title,
+                description: Config.urls.accessibility.description
+            }
+        }
+    };
+};
+
 const Accessibility: Types.NextPage = (): React.ReactElement => {
     return (
         <>
