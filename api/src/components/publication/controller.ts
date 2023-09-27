@@ -486,3 +486,61 @@ export const getResearchTopics = async (): Promise<I.JSONResponse> => {
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const updateTopics = async (
+    event: I.AuthenticatedAPIRequest<
+        I.UpdatePublicationTopicsRequestBody,
+        undefined,
+        I.UpdatePublicationTopicsPathParams
+    >
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.id);
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'This publication does not exist.'
+            });
+        }
+
+        const latestVersion = publication.versions.find((version) => version.isLatestVersion);
+
+        if (!latestVersion) {
+            throw Error('Unable to get latest version');
+        }
+
+        if (latestVersion.user.id !== event.user.id) {
+            return response.json(403, {
+                message: 'You do not have permission to update topics for this publication.'
+            });
+        }
+
+        if (latestVersion.currentStatus !== 'DRAFT') {
+            return response.json(400, {
+                message: 'You can not change topics while the publication has no active draft version.'
+            });
+        }
+
+        if (publication.type !== 'PROBLEM') {
+            return response.json(400, {
+                message: 'You can not supply topics for a publication that is not a problem.'
+            });
+        }
+
+        // Disallow if the publication currently has at least one topic, but this
+        // operation would leave it with neither any topics nor linked publications
+        if (publication.topics.length && !event.body.length && !publication.linkedTo.length) {
+            return response.json(400, {
+                message: 'A publication can not be left without topics or linked publications.'
+            });
+        }
+
+        const updateTopics = await publicationService.updateTopics(event.pathParameters.id, event.body);
+
+        return response.json(200, updateTopics);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

@@ -1460,3 +1460,18 @@ export const getResearchTopics = async () => {
 
     return mergedPublications;
 };
+
+// Overwrite existing topics with those whose IDs were passed.
+export const updateTopics = async (id: string, topics: string[]) => {
+    // Format topics in a way that prisma can understand.
+    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
+
+    await client.prisma.publication.update({
+        where: {
+            id
+        },
+        data: {
+            topics: topicsUpdateInput
+        }
+    });
+};

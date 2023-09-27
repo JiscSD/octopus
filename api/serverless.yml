@@ -513,3 +513,11 @@ functions:
                   path: ${self:custom.versions.v1}/topics
                   method: GET
                   cors: true
+    updatePublicationTopics:
+        handler: src/components/publication/routes.updateTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/topics
+                  method: PUT
+                  cors: true
+                  

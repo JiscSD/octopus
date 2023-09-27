@@ -141,7 +141,11 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
-    topics?: string[];
+}
+
+export type UpdatePublicationTopicsRequestBody = Array<string>;
+export interface UpdatePublicationTopicsPathParams {
+    id: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
