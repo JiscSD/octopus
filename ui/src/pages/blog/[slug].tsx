@@ -90,8 +90,7 @@ const renderOptions: Options = {
             );
         },
         [BLOCKS.EMBEDDED_ENTRY]: (node) => {
-            const { title, slug, author, content } = node.data.target.fields as Types.BlogFields;
-            const { createdAt } = node.data.target.sys;
+            const { title, slug, author, content, publishedDate } = node.data.target.fields as Types.BlogFields;
 
             return (
                 <Components.Link
@@ -103,7 +102,7 @@ const renderOptions: Options = {
                         title={title}
                         content={content}
                         author={author}
-                        createdAt={Helpers.formatDate(createdAt)}
+                        publishedDate={publishedDate}
                     />
                 </Components.Link>
             );
@@ -186,8 +185,8 @@ type Props = {
 
 const IndividualBlogPage: NextPage<Props> = (props) => {
     const router = useRouter();
-    const { title, author, content } = props.blog.fields;
-    const { createdAt } = props.blog.sys;
+    const { title, author, content, publishedDate } = props.blog.fields;
+
     const { canGoBack } = router.query as { canGoBack: string };
 
     const description = React.useMemo(() => {
@@ -216,7 +215,7 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
                             <Components.PageTitle text={title} className="!mb-4" />
                             <Components.PageSubTitle
                                 className="text-base font-medium"
-                                text={`Written by ${author} on ${Helpers.formatDate(createdAt)}`}
+                                text={`Written by ${author} on ${Helpers.formatDate(publishedDate)}`}
                             />
                             <div className="dark:text-white-50">
                                 {documentToReactComponents(content, renderOptions)}

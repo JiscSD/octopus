@@ -1,10 +1,9 @@
 import * as Types from '@types';
+import * as Helpers from '@helpers';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 import { useMemo } from 'react';
 
-type Props = Pick<Types.BlogFields, 'title' | 'author' | 'content'> & {
-    createdAt: string;
-};
+type Props = Pick<Types.BlogFields, 'title' | 'author' | 'content' | 'publishedDate'>;
 
 const BlogCard: React.FC<Props> = (props) => {
     const shortBlogText = useMemo(() => {
@@ -22,7 +21,7 @@ const BlogCard: React.FC<Props> = (props) => {
                     {shortBlogText}
                 </div>
                 <p className="blog-card-footer text-xs font-medium tracking-wide text-grey-800 transition-colors dark:text-grey-100">
-                    By {props.author} | {props.createdAt}
+                    By {props.author} | {Helpers.formatDate(props.publishedDate)}
                 </p>
             </div>
         </div>

@@ -351,4 +351,5 @@ export type BlogFields = {
     author: Contentful.EntryFields.Text;
     content: Contentful.EntryFields.RichText;
     slug: Contentful.EntryFields.Text;
+    publishedDate: Contentful.EntryFields.Date;
 };

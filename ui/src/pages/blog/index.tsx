@@ -27,8 +27,9 @@ export const getStaticProps: Types.GetStaticProps = async () => {
 const Blog: NextPage = (): JSX.Element => {
     const router = useRouter();
     const skip = Number(router.query.skip) || 0;
-    const { data, error, isLoading } = useSWR(`${skip}`, () =>
-        client.getEntries({ limit: 18, skip, order: ['-sys.createdAt'] })
+    const { data, error, isLoading } = useSWR(
+        `${skip}`,
+        () => client.getEntries({ limit: 18, skip, order: ['-fields.publishedDate'], content_type: 'octopusBlog' }) // the content_type is required when ordering by custom fields
     );
 
     const handleGoNext = async () => {
@@ -97,7 +98,6 @@ const Blog: NextPage = (): JSX.Element => {
                     <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
                         {data?.items.map((blog) => {
                             const blogFields = blog.fields as Types.BlogFields;
-                            const createdAt = Helpers.formatDate(blog.sys.createdAt);
 
                             return (
                                 <Components.Link
@@ -109,7 +109,7 @@ const Blog: NextPage = (): JSX.Element => {
                                         title={blogFields.title}
                                         content={blogFields.content}
                                         author={blogFields.author}
-                                        createdAt={createdAt}
+                                        publishedDate={blogFields.publishedDate}
                                     />
                                 </Components.Link>
                             );
