@@ -42,6 +42,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             searchType,
             fallback: {
                 [topicsUrl]: fallbackData
+            },
+            metadata: {
+                title: Config.urls.search.title.replace('publications', 'topics'),
+                description: Config.urls.search.description
             }
         }
     };
@@ -51,6 +55,10 @@ type Props = {
     error: string | null;
     searchType: Types.SearchType;
     fallback: { [key: string]: Interfaces.TopicsPaginatedResults };
+    metadata: {
+        title: string;
+        description: string;
+    };
 };
 
 const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -93,17 +101,13 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
         Helpers.scrollTopSmooth();
     };
 
-    const pageTitle = Config.urls.search.title.replace('publications', 'topics');
-
     return (
         <>
             <Head>
                 <meta name="description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
-                <meta name="og:title" content={pageTitle} key="og:title" />
-                <meta name="og:description" content={Config.urls.search.description} key="og:description" />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{pageTitle}</title>
+                <title>{props.metadata.title}</title>
             </Head>
 
             <Layouts.Standard>

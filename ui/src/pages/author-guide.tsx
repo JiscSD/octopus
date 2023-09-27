@@ -6,6 +6,7 @@ import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type PageSectionProps = {
     children: React.ReactNode;
@@ -37,13 +38,22 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
     );
 };
 
+export const getStaticProps: Types.GetStaticProps = async () => {
+    return {
+        props: {
+            metadata: {
+                title: Config.urls.authorGuide.title,
+                description: Config.urls.authorGuide.description
+            }
+        }
+    };
+};
+
 const AuthorGuide: NextPage = (): React.ReactElement => (
     <>
         <Head>
             <meta name="description" content={Config.urls.authorGuide.description} />
             <meta name="keywords" content={Config.urls.authorGuide.keywords.join(', ')} />
-            <meta name="og:title" content={Config.urls.authorGuide.title} key="og:title" />
-            <meta name="og:description" content={Config.urls.authorGuide.description} key="og:description" />
             <link rel="canonical" href={Config.urls.authorGuide.canonical} />
             <title>{Config.urls.authorGuide.title}</title>
         </Head>
