@@ -77,10 +77,6 @@ export const getAllByIds = async (ids: Array<string>) => {
 };
 
 export const updateCurrentVersion = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
-    // Only if topics are passed, format them in a way that prisma can understand.
-    // This will overwrite existing topics with those whose IDs were passed in updateContent.
-    const { topics, ...dataRest } = updateContent;
-
     // Updates will always be made to the current version.
     const currentVersion = await client.prisma.publicationVersion.findFirst({
         where: {
@@ -95,17 +91,7 @@ export const updateCurrentVersion = async (id: string, updateContent: I.UpdatePu
         where: {
             id: currentVersion?.id
         },
-        data: dataRest
-    });
-
-    // If topics were supplied, update them on the publication (TODO: do this separately like links)
-    await client.prisma.publication.update({
-        where: {
-            id
-        },
-        data: {
-            ...(!!updateContent.topics && { topics: { set: updateContent.topics.map((topicId) => ({ id: topicId })) } })
-        }
+        data: updateContent
     });
 
     return updatedVersion;
@@ -1466,4 +1452,19 @@ export const getResearchTopics = async (additionalFilters: Prisma.PublicationWhe
     });
 
     return mergedPublications;
+};
+
+// Overwrite existing topics with those whose IDs were passed.
+export const updateTopics = async (id: string, topics: string[]) => {
+    // Format topics in a way that prisma can understand.
+    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
+
+    await client.prisma.publication.update({
+        where: {
+            id
+        },
+        data: {
+            topics: topicsUpdateInput
+        }
+    });
 };

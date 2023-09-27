@@ -715,7 +715,26 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
-    }
+    },
+    {
+        id: 'publication-problem-draft-with-topic',
+        doi: '10.82259/jd4t-d451',
+        type: 'PROBLEM',
+        topics: {
+            connect: { id: 'test-topic-1' }
+        },
+        versions: {
+            create: {
+                id: 'publication-problem-draft-with-topic-v1',
+                versionNumber: 1,
+                title: 'Problem with topic',
+                content: '<p>This is the content</p>',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-10' } },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2023-09-27T13:37:00.599Z' }] }
+            }
+        }
+    },
 ];
 
 export default publicationSeeds;
