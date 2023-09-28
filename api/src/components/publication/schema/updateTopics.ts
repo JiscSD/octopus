@@ -1,10 +1,17 @@
 import * as I from 'interface';
 
 const updateTopicsSchema: I.Schema = {
-    type: 'array',
-    items: {
-        type: 'string'
-    }
+    type: 'object',
+    properties: {
+        topics: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
+    },
+    required: ['topics'],
+    additionalProperties: false
 };
 
 export default updateTopicsSchema;

@@ -527,15 +527,7 @@ export const updateTopics = async (
             });
         }
 
-        // Disallow if the publication currently has at least one topic, but this
-        // operation would leave it with neither any topics nor linked publications
-        if (publication.topics.length && !event.body.length && !publication.linkedTo.length) {
-            return response.json(400, {
-                message: 'A publication can not be left without topics or linked publications.'
-            });
-        }
-
-        const updateTopics = await publicationService.updateTopics(event.pathParameters.id, event.body);
+        const updateTopics = await publicationService.updateTopics(event.pathParameters.id, event.body.topics);
 
         return response.json(200, updateTopics);
     } catch (error) {
