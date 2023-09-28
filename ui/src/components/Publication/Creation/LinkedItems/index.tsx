@@ -159,11 +159,7 @@ const Links: React.FC = (): React.ReactElement => {
                 />
             )}
             {!error && !!topics.length && (
-                <Components.LinkedItemTable
-                    deleteLink={deleteTopicLink}
-                    entities={topics}
-                    entityType="TOPIC"
-                />
+                <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
             {!error && !linkTos.length && !topics.length && (
                 <Components.Alert

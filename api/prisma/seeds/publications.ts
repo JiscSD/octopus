@@ -715,7 +715,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
-    },
+    }
 ];
 
 export default publicationSeeds;

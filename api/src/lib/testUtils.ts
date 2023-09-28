@@ -21,15 +21,15 @@ export const testSeed = async (): Promise<void> => {
         });
     }
 
-    for (const topic of seeds.topicsDevSeedData) {
-        await client.prisma.topic.create({
-            data: topic
-        });
-    }
-
     for (const publication of seeds.publications) {
         await client.prisma.publication.create({
             data: publication
+        });
+    }
+
+    for (const topic of seeds.topicsDevSeedData) {
+        await client.prisma.topic.create({
+            data: topic
         });
     }
 
