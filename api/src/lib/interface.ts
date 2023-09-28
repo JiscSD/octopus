@@ -143,7 +143,9 @@ export interface UpdatePublicationRequestBody {
     selfDeclaration?: boolean;
 }
 
-export type UpdatePublicationTopicsRequestBody = Array<string>;
+export interface UpdatePublicationTopicsRequestBody {
+    topics: string[];
+}
 export interface UpdatePublicationTopicsPathParams {
     id: string;
 }

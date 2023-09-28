@@ -57,8 +57,8 @@ const Links: React.FC = (): React.ReactElement => {
         if (user) {
             try {
                 // Update publication's topic IDs with current list minus ID to delete
-                await api.patch(
-                    '/publications/' + currentPublicationId,
+                await api.put(
+                    `/publications/${currentPublicationId}/topics`,
                     {
                         topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
                     },
@@ -159,7 +159,11 @@ const Links: React.FC = (): React.ReactElement => {
                 />
             )}
             {!error && !!topics.length && (
-                <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
+                <Components.LinkedItemTable
+                    deleteLink={deleteTopicLink}
+                    entities={topics}
+                    entityType="TOPIC"
+                />
             )}
             {!error && !linkTos.length && !topics.length && (
                 <Components.Alert
