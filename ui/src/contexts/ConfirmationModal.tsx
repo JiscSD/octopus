@@ -59,11 +59,7 @@ const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
             {children}
             <Components.Modal
                 open={open}
-                setOpen={(open: boolean) => {
-                    if (!open) {
-                        handleCancelAction();
-                    }
-                }}
+                onClose={handleCancelAction}
                 icon={icon}
                 title={title}
                 positiveButtonText={positiveButtonText}

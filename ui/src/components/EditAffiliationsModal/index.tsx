@@ -128,7 +128,6 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                     </HeadlessUI.Transition.Child>
 
                     <HeadlessUI.Transition.Child
-                        as={React.Fragment}
                         enter="ease-out duration-300"
                         enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         enterTo="opacity-100 translate-y-0 sm:scale-100"
@@ -136,79 +135,85 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all sm:px-8 sm:py-6 sm:align-middle xl:max-w-5xl">
-                            <HeadlessUI.Dialog.Title
-                                as="h3"
-                                className="pb-8 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"
-                            >
-                                Choose your affiliation(s) for this publication
-                            </HeadlessUI.Dialog.Title>
-
-                            <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                The following affiliations are present on{' '}
-                                <Components.Link
-                                    href={`https://orcid.org/my-orcid?orcid=${props.author?.user?.orcid}`}
-                                    openNew
-                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                        <div className={
+                            (isUpdating ? "sm:pb-6" : "px-4 pt-5 sm:px-8 sm:py-6") + 
+                            "relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 pb-4 text-left align-bottom shadow-xl transition-all sm:align-middle xl:max-w-5xl"
+                        }>
+                            <Components.ModalBarLoader loading={isUpdating} />
+                            <div className={isUpdating ? 'px-4 sm:px-8' : ''}>
+                                <HeadlessUI.Dialog.Title
+                                    as="h3"
+                                    className="pb-8 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"
                                 >
-                                    your ORCID® profile
-                                </Components.Link>
-                                . To add a new affiliation, please enter it on{' '}
-                                <Components.Link
-                                    href={`https://orcid.org/my-orcid?orcid=${props.author?.user?.orcid}`}
-                                    openNew
-                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
-                                >
-                                    your ORCID profile
-                                </Components.Link>
-                                .
-                            </p>
+                                    Choose your affiliation(s) for this publication
+                                </HeadlessUI.Dialog.Title>
 
-                            <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                <Components.Link
-                                    href="https://support.orcid.org/hc/en-us/sections/360002054993-Assert-your-affiliations"
-                                    openNew
-                                    className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
-                                >
-                                    Click here
-                                </Components.Link>{' '}
-                                to learn more about adding affiliations to ORCID.
-                            </p>
+                                <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                    The following affiliations are present on{' '}
+                                    <Components.Link
+                                        href={`https://orcid.org/my-orcid?orcid=${props.author?.user?.orcid}`}
+                                        openNew
+                                        className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                    >
+                                        your ORCID® profile
+                                    </Components.Link>
+                                    . To add a new affiliation, please enter it on{' '}
+                                    <Components.Link
+                                        href={`https://orcid.org/my-orcid?orcid=${props.author?.user?.orcid}`}
+                                        openNew
+                                        className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                    >
+                                        your ORCID profile
+                                    </Components.Link>
+                                    .
+                                </p>
 
-                            <div className="pt-8">
-                                <Components.AuthorAffiliations
-                                    scrollHeight={400}
-                                    loading={!orcidAffiliations.length && isValidating}
-                                    availableAffiliations={orcidAffiliations}
-                                    selectedAffiliations={authorAffiliations}
-                                    isIndependentAuthor={isIndependentAuthor}
-                                    onIndependentAuthorChange={setIsIndependentAuthor}
-                                    onSelectionChange={setAuthorAffiliations}
-                                />
-                            </div>
+                                <p className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                    <Components.Link
+                                        href="https://support.orcid.org/hc/en-us/sections/360002054993-Assert-your-affiliations"
+                                        openNew
+                                        className="text-teal-600 underline transition-colors duration-500 dark:text-teal-400"
+                                    >
+                                        Click here
+                                    </Components.Link>{' '}
+                                    to learn more about adding affiliations to ORCID.
+                                </p>
 
-                            {confirmAffiliationsError && (
-                                <Components.Alert severity="ERROR" title={confirmAffiliationsError} className="mt-4" />
-                            )}
+                                <div className="pt-8">
+                                    <Components.AuthorAffiliations
+                                        scrollHeight={400}
+                                        loading={!orcidAffiliations.length && isValidating}
+                                        availableAffiliations={orcidAffiliations}
+                                        selectedAffiliations={authorAffiliations}
+                                        isIndependentAuthor={isIndependentAuthor}
+                                        onIndependentAuthorChange={setIsIndependentAuthor}
+                                        onSelectionChange={setAuthorAffiliations}
+                                    />
+                                </div>
 
-                            <div className="mt-8 flex gap-4 lg:justify-end">
-                                <Components.ModalButton
-                                    disabled={isUpdating || (!authorAffiliations.length && !isIndependentAuthor)}
-                                    className="mt-0 lg:w-fit"
-                                    onClick={handleConfirmAffiliations}
-                                    text={'Confirm Affiliations'}
-                                    title={'Confirm Affiliations'}
-                                    actionType="POSITIVE"
-                                />
-                                <Components.ModalButton
-                                    ref={cancelButtonRef}
-                                    className="mt-0 lg:w-fit"
-                                    onClick={handleCancelChanges}
-                                    text={'Cancel Changes'}
-                                    title={'Cancel Changes'}
-                                    actionType="NEGATIVE"
-                                    disabled={isUpdating}
-                                />
+                                {confirmAffiliationsError && (
+                                    <Components.Alert severity="ERROR" title={confirmAffiliationsError} className="mt-4" />
+                                )}
+
+                                <div className="mt-8 flex gap-4 lg:justify-end">
+                                    <Components.ModalButton
+                                        disabled={isUpdating || (!authorAffiliations.length && !isIndependentAuthor)}
+                                        className="mt-0 lg:w-fit"
+                                        onClick={handleConfirmAffiliations}
+                                        text={'Confirm Affiliations'}
+                                        title={'Confirm Affiliations'}
+                                        actionType="POSITIVE"
+                                    />
+                                    <Components.ModalButton
+                                        ref={cancelButtonRef}
+                                        className="mt-0 lg:w-fit"
+                                        onClick={handleCancelChanges}
+                                        text={'Cancel Changes'}
+                                        title={'Cancel Changes'}
+                                        actionType="NEGATIVE"
+                                        disabled={isUpdating}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </HeadlessUI.Transition.Child>
