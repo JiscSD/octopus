@@ -1466,12 +1466,17 @@ export const updateTopics = async (id: string, topics: string[]) => {
     // Format topics in a way that prisma can understand.
     const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
 
-    await client.prisma.publication.update({
+    const updateTopics = await client.prisma.publication.update({
         where: {
             id
         },
         data: {
             topics: topicsUpdateInput
+        },
+        include: {
+            topics: true
         }
     });
+
+    return updateTopics.topics;
 };
