@@ -13,6 +13,11 @@ describe('Update publication topics', () => {
             .send({ topics: ['test-topic-1'] });
 
         expect(updateTopicsRequest.status).toEqual(200);
+        expect(updateTopicsRequest.body.length).toEqual(1);
+        expect(updateTopicsRequest.body[0]).toMatchObject({
+            id: "test-topic-1",
+            title: "Test topic"
+        });
     });
 
     test('Cannot update topics when publication type is not problem', async () => {
