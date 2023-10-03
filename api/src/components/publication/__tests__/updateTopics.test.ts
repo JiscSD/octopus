@@ -15,8 +15,8 @@ describe('Update publication topics', () => {
         expect(updateTopicsRequest.status).toEqual(200);
         expect(updateTopicsRequest.body.length).toEqual(1);
         expect(updateTopicsRequest.body[0]).toMatchObject({
-            id: "test-topic-1",
-            title: "Test topic"
+            id: 'test-topic-1',
+            title: 'Test topic'
         });
     });
 
