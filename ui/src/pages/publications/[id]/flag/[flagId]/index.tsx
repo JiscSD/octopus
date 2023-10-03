@@ -160,7 +160,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
         setSubmitting(false);
     };
 
-    const onCloseResolveModal = () => { setShowResolveModal(false) };
+    const onCloseResolveModal = () => {
+        setShowResolveModal(false);
+    };
 
     return (
         <>

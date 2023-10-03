@@ -135,12 +135,11 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className={
-                            (isUpdating ? "sm:pb-6" : "px-4 pt-5 sm:px-8 sm:py-6") + 
-                            "relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 pb-4 text-left align-bottom shadow-xl transition-all sm:align-middle xl:max-w-5xl"
-                        }>
+                        <div
+                            className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 pb-4 text-left align-bottom shadow-xl transition-all sm:align-middle xl:max-w-5xl"
+                        >
                             <Components.ModalBarLoader loading={isUpdating} />
-                            <div className={isUpdating ? 'px-4 sm:px-8' : ''}>
+                            <div className="px-4 sm:px-8 pt-5 sm:py-6">
                                 <HeadlessUI.Dialog.Title
                                     as="h3"
                                     className="pb-8 text-center font-montserrat text-lg font-medium leading-6 text-grey-900"
@@ -192,7 +191,11 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                                 </div>
 
                                 {confirmAffiliationsError && (
-                                    <Components.Alert severity="ERROR" title={confirmAffiliationsError} className="mt-4" />
+                                    <Components.Alert
+                                        severity="ERROR"
+                                        title={confirmAffiliationsError}
+                                        className="mt-4"
+                                    />
                                 )}
 
                                 <div className="mt-8 flex gap-4 lg:justify-end">

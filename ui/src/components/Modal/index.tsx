@@ -52,14 +52,9 @@ const Modal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div
-                            className={
-                                (loading ? 'sm:pb-6' : 'px-4 pt-5 sm:px-8 sm:py-6') +
-                                ' xl:max-w-2 relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 pb-4 text-left align-bottom shadow-xl transition-all sm:align-middle lg:max-w-xl'
-                            }
-                        >
+                        <div className="xl:max-w-2 relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 text-left align-bottom shadow-xl transition-all sm:align-middle lg:max-w-xl">
                             <Components.ModalBarLoader loading={loading} />
-                            <div className={loading ? 'px-4 sm:px-8' : ''}>
+                            <div className="px-4 pb-4 pt-5 sm:px-8 sm:py-6">
                                 <div>
                                     {!!props.icon && (
                                         <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full">

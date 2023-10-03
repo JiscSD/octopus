@@ -256,7 +256,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setPublishModalLoading(false);
     }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
 
-    const onClosePublishModal = () => { setPublishModalVisibility(false) };
+    const onClosePublishModal = () => {
+        setPublishModalVisibility(false);
+    };
 
     const requestApproval = useCallback(async () => {
         setRequestApprovalModalLoading(true);
@@ -288,7 +290,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setRequestApprovalModalLoading(false);
     }, [saveCurrent, store]);
 
-    const onCloseRequestApprovalModal = () => { setRequestApprovalModalVisibility(false) };
+    const onCloseRequestApprovalModal = () => {
+        setRequestApprovalModalVisibility(false);
+    };
 
     // Option selected from modal
     const save = useCallback(async () => {
@@ -308,7 +312,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setSaveModalLoading(false);
     }, [saveCurrent, store]);
 
-    const onCloseSaveModal = () => { setSaveModalVisibility(false) };
+    const onCloseSaveModal = () => {
+        setSaveModalVisibility(false);
+    };
 
     // Option selected from modal
     const deleteExit = useCallback(async () => {
@@ -338,7 +344,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setDeleteModalLoading(false);
     }, [props.publication.id, props.token, router, setToast, store, user]);
 
-    const onCloseDeleteModal = () => { setDeleteModalVisibility(false) };
+    const onCloseDeleteModal = () => {
+        setDeleteModalVisibility(false);
+    };
 
     const handlePreview = useCallback(async () => {
         try {

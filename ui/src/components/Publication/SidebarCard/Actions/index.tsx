@@ -82,7 +82,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         }
     }, [showRedFlagModal]);
 
-    const onCloseRedFlagModal = () => { setShowRedFlagModal(false) };
+    const onCloseRedFlagModal = () => {
+        setShowRedFlagModal(false);
+    };
 
     return (
         <>
