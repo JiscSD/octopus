@@ -1,10 +1,10 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
 
-The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/)
+The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/).
 
 ## Prerequisites
 
--   Install [Node](https://github.com/nodejs/node) `v14` (`v14.18.1` or greater).
+-   Install [Node](https://github.com/nodejs/node) `v18`.
 -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
 -   Install [Docker](https://docs.docker.com/get-docker).
 -   Install [Serverless](https://www.serverless.com).
@@ -18,12 +18,12 @@ Create a `.env` file inside `~/api` using `cp .env.example .env`.
 
 Make sure to update the values within to match your environment.
 
-**Changes to .env file**
+#### Changes to .env file
 When adding a new item to the .env file, make sure to update the environment variables in the docker-compose.yml file so the API tests can access them.
 
 ### AWS Credentials File
 
-You will need a octopus credential profile to run locally, this can be populated with dummy data presented below:
+You will need an octopus credential profile to run locally. This can be populated with the dummy data below:
 
 ```bash
 [octopus]
@@ -65,9 +65,9 @@ To view the UI, you will also need to start the UI Next.js application. More inf
 
 ---
 
-# Prisma
+## Prisma
 
-## Commands
+### Commands
 
 Whenever a change is made to the Prisma Schema you must run `npx prisma generate` in order for the Prisma Client to update.  
 If you do not run this, the application code will break as the client will not reflect the latest schema.
@@ -93,6 +93,18 @@ You can then apply the changes made by the new migration using the two commands 
 More information on migrations in Prisma can be found here: [Prisma Migrate Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate/).
 
 ---
+## Opensearch
+
+This provides a search index for publications. Locally, it runs in a docker container, and on AWS it runs as a [dedicated service](https://aws.amazon.com/opensearch-service/). Other searchable models such as authors and topics aren't stored in opensearch - their search functions use prisma.
+
+The field mapping of the index is not explicitly defined; it is set automatically when a document is inserted into it.
+
+## Reindexing
+There is a script which deletes and recreates the publications index, inserting a document into it for each live publication. This can be run from the api directory with `npm run reindex`.
+
+A similar process happens when the database is seeded. After publications are inserted into the database, they are also fed into a blank opensearch index.
+
+---
 
 ## Technologies
 
@@ -104,6 +116,10 @@ More information on migrations in Prisma can be found here: [Prisma Migrate Docu
 ### ORM
 
 -   [Prisma](https://www.prisma.io/)
+
+### Search
+
+-   [Opensearch](https://opensearch.org/)
 
 ### Libraries
 
