@@ -59,11 +59,9 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
             try {
                 setSearch('');
                 setSelectedTopic(null);
-                await api.patch(
-                    '/publications/' + currentPublicationId,
-                    {
-                        topics: [...currentTopicIds, selectedTopic.id]
-                    },
+                await api.put(
+                    `/publications/${currentPublicationId}/topics`,
+                    { topics: [...currentTopicIds, selectedTopic.id] },
                     user.token
                 );
             } catch (err) {

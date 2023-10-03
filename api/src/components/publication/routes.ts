@@ -55,3 +55,9 @@ export const getPDF = middy(publicationController.getPDF)
 export const getResearchTopics = middy(publicationController.getResearchTopics).use(
     middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
 );
+
+export const updateTopics = middy(publicationController.updateTopics)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(publicationSchema.updateTopics, 'body'));

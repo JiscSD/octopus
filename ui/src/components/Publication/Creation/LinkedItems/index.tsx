@@ -57,8 +57,8 @@ const Links: React.FC = (): React.ReactElement => {
         if (user) {
             try {
                 // Update publication's topic IDs with current list minus ID to delete
-                await api.patch(
-                    '/publications/' + currentPublicationId,
+                await api.put(
+                    `/publications/${currentPublicationId}/topics`,
                     {
                         topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
                     },
