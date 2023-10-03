@@ -32,12 +32,3 @@ variable "rds_performance_insights_retention_period" {
 variable "elasticsearch_instance_size" {
   type = string
 }
-
-variable "email_addresses" {
-  type = map(list(string))
-}
-
-variable "slack_channel_email" {
-  type = string
-  sensitive = true
-}

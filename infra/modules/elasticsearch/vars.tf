@@ -11,5 +11,5 @@ variable "private_subnet_ids" {
 }
 
 variable "instance_size" {
-    type = string
+  type = string
 }
