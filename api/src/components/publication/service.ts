@@ -440,6 +440,10 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                       connect: e.topicIds.map((topicId) => ({ id: topicId }))
                   }
                 : undefined
+        },
+        include: {
+            topics: true,
+            versions: true
         }
     });
 

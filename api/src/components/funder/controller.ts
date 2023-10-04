@@ -43,7 +43,7 @@ export const destroy = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.get(event.pathParameters.id, 'latest');
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
 
         //check that the publication version exists
         if (!publicationVersion) {

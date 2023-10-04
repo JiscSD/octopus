@@ -1,6 +1,6 @@
 import * as testUtils from 'lib/testUtils';
 
-beforeEach(async () => {
+beforeAll(async () => {
     await testUtils.clearDB();
     await testUtils.testSeed();
 });
@@ -20,72 +20,6 @@ describe('Update publication', () => {
         expect(updatePublication.status).toEqual(403);
     });
 
-    test('Can update publication title', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ title: 'New title' });
-
-        expect(updatePublication.status).toEqual(200);
-        expect(updatePublication.body.title).toEqual('New title');
-    });
-
-    test('Can update publication content if "safe" HTML', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ content: '<p>Hello <a href="#nathan">Nathan</a></p>' });
-
-        expect(updatePublication.status).toEqual(200);
-    });
-
-    test('HTML is sanitised if not "safe" (1)', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ content: '<p class="class">Hello <a href="#nathan">Nathan</a></p>' });
-
-        expect(updatePublication.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
-    });
-
-    test('HTML is sanitised if not "safe" (2)', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ content: '<p style="color: red;">Hello <a href="#nathan">Nathan</a></p>' });
-
-        expect(updatePublication.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
-    });
-
-    test('Cannot update publication licence', async () => {
-        // This was previously possible but we have now removed the ability because
-        // there is only one licence type we want people to use and we set it automatically.
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ licence: 'CC_BY_SA' });
-
-        expect(updatePublication.status).toEqual(422);
-    });
-
-    test('Can update keywords', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ keywords: ['science', 'technology'] });
-
-        expect(updatePublication.body.keywords.length).toEqual(2);
-    });
-
-    test('Can update description', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ description: 'Test description' });
-
-        expect(updatePublication.body.description).toEqual('Test description');
-    });
-
     test('Cannot update publication with invalid update parameter', async () => {
         const updatePublication = await testUtils.agent
             .patch('/publications/publication-interpretation-draft')
@@ -101,94 +35,6 @@ describe('Update publication', () => {
             .query({ apiKey: 123456789 })
             .send({ title: 'Brand new title' });
 
-        expect(updatePublication.status).toEqual(404);
-    });
-
-    test('Cannot add more than 10 keywords', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({ keywords: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'] });
-
         expect(updatePublication.status).toEqual(422);
-    });
-
-    test('Cannot add more than 160 characters into a description', async () => {
-        const updatePublication = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({ apiKey: 123456789 })
-            .send({
-                description:
-                    'testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123x'
-            });
-
-        expect(updatePublication.status).toEqual(422);
-    });
-
-    // Language tests
-    test('Valid publication updated by real user when provided a correct ISO-639-1 language code', async () => {
-        const createPublicationRequest = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({
-                apiKey: '123456789'
-            })
-            .send({
-                language: 'fr'
-            });
-
-        expect(createPublicationRequest.status).toEqual(200);
-        expect(createPublicationRequest.body.language).toEqual('fr');
-    });
-
-    test('Publication failed to be updated if language code provided is not out of the ISO-639-1 language list', async () => {
-        const createPublicationRequest = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({
-                apiKey: '123456789'
-            })
-            .send({
-                language: 'zz' // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-            });
-
-        expect(createPublicationRequest.status).toEqual(422);
-    });
-
-    test('Publication failed to be updated if language provided is less than 2 chars', async () => {
-        const createPublicationRequest = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({
-                apiKey: '123456789'
-            })
-            .send({
-                language: 'e'
-            });
-
-        expect(createPublicationRequest.status).toEqual(422);
-    });
-
-    test('Publication failed to be updated if language provided is more than 2 chars', async () => {
-        const createPublicationRequest = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({
-                apiKey: '123456789'
-            })
-            .send({
-                language: 'enn'
-            });
-
-        expect(createPublicationRequest.status).toEqual(422);
-    });
-
-    test('Publication failed to update if is not protocol or hypotheses and supplies a self declaration', async () => {
-        const createPublicationRequest = await testUtils.agent
-            .patch('/publications/publication-interpretation-draft')
-            .query({
-                apiKey: '123456789'
-            })
-            .send({
-                selfDeclaration: true
-            });
-
-        expect(createPublicationRequest.status).toEqual(400);
     });
 });

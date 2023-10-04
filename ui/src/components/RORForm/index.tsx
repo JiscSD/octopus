@@ -29,7 +29,7 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
         setIsLoading(true);
         try {
             await api.destroy(
-                `${Config.endpoints.publications}/${publicationVersion.versionOf}/funders/${id}`,
+                `${Config.endpoints.publicationVersions}/${publicationVersion.id}/funders/${id}`,
                 user?.token
             );
 
@@ -189,7 +189,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
-                `${Config.endpoints.publications}/${publicationVersion.versionOf}/funders`,
+                `${Config.endpoints.publicationVersions}/${publicationVersion.id}/funders`,
                 {
                     name,
                     country,

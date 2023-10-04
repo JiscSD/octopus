@@ -464,14 +464,14 @@ functions:
         handler: src/components/funder/routes.create
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/funders
+                  path: ${self:custom.versions.v1}/versions/{id}/funders
                   method: POST
                   cors: true
     deleteFunder:
         handler: src/components/funder/routes.destroy
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
+                  path: ${self:custom.versions.v1}/versions/{id}/funders/{funder}
                   method: DELETE
                   cors: true
     # References

@@ -5,8 +5,8 @@ beforeEach(async () => {
     await testUtils.testSeed();
 });
 
-describe('Update publication status', () => {
-    test('User with permissions can update their publication to LIVE from DRAFT (after creating a link)', async () => {
+describe('Update publication version status', () => {
+    test('User with permissions can update their publication version to LIVE from DRAFT (after creating a link)', async () => {
         const updatePublicationAttemptOne = await testUtils.agent
             .put('/versions/publication-analysis-draft-v1/status/LIVE')
             .query({
@@ -35,106 +35,106 @@ describe('Update publication status', () => {
         expect(updatePublicationAttemptTwo.status).toEqual(200);
     });
 
-    test('User with permissions can update their publication to LIVE from DRAFT', async () => {
-        const updatedPublication = await testUtils.agent
+    test('User with permissions can update their publication version to LIVE from DRAFT', async () => {
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-hypothesis-draft-problem-live-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(200);
+        expect(updatedPublicationVersion.status).toEqual(200);
     });
 
     test('User with permissions cannot update their publication to DRAFT from LIVE', async () => {
-        const updatedPublication = await testUtils.agent
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-live-v1/status/DRAFT')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(403);
+        expect(updatedPublicationVersion.status).toEqual(403);
     });
 
     test('User without permissions cannot update their publication to LIVE from DRAFT', async () => {
-        const updatedPublication = await testUtils.agent
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-hypothesis-draft-problem-live-v1/status/LIVE')
             .query({
                 apiKey: '987654321'
             });
 
-        expect(updatedPublication.status).toEqual(403);
+        expect(updatedPublicationVersion.status).toEqual(403);
     });
 
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no content.', async () => {
-        const updatedPublication = await testUtils.agent
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-draft-no-content-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(403);
+        expect(updatedPublicationVersion.status).toEqual(403);
     });
 
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no licence.', async () => {
-        const updatedPublication = await testUtils.agent
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-hypothesis-draft-v1/status/LIVE')
             .query({
                 apiKey: '000000005'
             });
 
-        expect(updatedPublication.status).toEqual(403);
+        expect(updatedPublicationVersion.status).toEqual(403);
     });
 
-    test('User with permissions can update their publication to LIVE from DRAFT and a publishedDate is created', async () => {
-        const updatedPublication = await testUtils.agent
+    test('User with permissions can update their publication version to LIVE from DRAFT and a publishedDate is created', async () => {
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-hypothesis-draft-problem-live-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(200);
-        expect(updatedPublication.body.message).toEqual('Publication is now LIVE.');
+        expect(updatedPublicationVersion.status).toEqual(200);
+        expect(updatedPublicationVersion.body.message).toEqual('Publication is now LIVE.');
     });
 
     // COI tests
     test('User with permissions cannot update their publication to LIVE if they have a conflict of interest, but have not provided coi text', async () => {
-        const updatedPublication = await testUtils.agent
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-draft-with-coi-but-no-text-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(403);
+        expect(updatedPublicationVersion.status).toEqual(403);
     });
 
-    test('User with permissions can update their publication to LIVE with a conflict of interest, if they have provided text', async () => {
-        const updatedPublication = await testUtils.agent
+    test('User with permissions can update their publication version to LIVE with a conflict of interest, if they have provided text', async () => {
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-draft-with-coi-with-text-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(200);
+        expect(updatedPublicationVersion.status).toEqual(200);
     });
 
-    test('User with permissions can update their publication to LIVE if they have no conflict of interest & have not provided text', async () => {
-        const updatedPublication = await testUtils.agent
+    test('User with permissions can update their publication version to LIVE if they have no conflict of interest & have not provided text', async () => {
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-draft-with-no-coi-with-no-text-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(200);
+        expect(updatedPublicationVersion.status).toEqual(200);
     });
 
-    test('User with permissions can update their publication to LIVE if they have no conflict of interest & have provided text', async () => {
-        const updatedPublication = await testUtils.agent
+    test('User with permissions can update their publication version to LIVE if they have no conflict of interest & have provided text', async () => {
+        const updatedPublicationVersion = await testUtils.agent
             .put('/versions/publication-problem-draft-with-no-coi-with-text-v1/status/LIVE')
             .query({
                 apiKey: '123456789'
             });
 
-        expect(updatedPublication.status).toEqual(200);
+        expect(updatedPublicationVersion.status).toEqual(200);
     });
 
     test('Publication owner can publish if all co-authors are confirmed', async () => {
@@ -165,7 +165,7 @@ describe('Update publication status', () => {
             apiKey: '000000005'
         });
 
-        expect(getPublicationStatus.body.currentStatus).toEqual('DRAFT');
+        expect(getPublicationStatus.body.versions[0].currentStatus).toEqual('DRAFT');
     });
 
     test('User other than the owner (does not have permission) cannot publish if co-authors all approved', async () => {
@@ -184,7 +184,7 @@ describe('Update publication status', () => {
             apiKey: '000000005'
         });
 
-        expect(getPublicationStatus.body.currentStatus).toEqual('DRAFT');
+        expect(getPublicationStatus.body.versions[0].currentStatus).toEqual('DRAFT');
     });
 
     test('Publication owner cannot update publication status to LOCKED if there are no co-authors', async () => {
