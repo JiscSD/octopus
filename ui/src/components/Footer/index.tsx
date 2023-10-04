@@ -123,4 +123,4 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
     </>
 );
 
-export default Footer;
+export default React.memo(Footer);

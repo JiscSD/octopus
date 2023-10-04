@@ -7,7 +7,7 @@ import * as Types from '@types';
 
 type LinkedEntityTableProps = {
     deleteLink: (id: string) => void;
-    entities: Interfaces.LinkTo[] | Interfaces.BaseTopic[];
+    entities: Interfaces.LinkedToPublication[] | Interfaces.BaseTopic[];
     entityType: Types.LinkedEntityType;
 };
 
@@ -31,11 +31,11 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
                             </tr>
                         </thead>
                         <tbody className="my-4 divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                            {props.entities.map((entity) => {
-                                return props.entityType === 'PUBLICATION' ? (
+                            {props.entities.map((entity) =>
+                                'type' in entity ? (
                                     <Components.LinkedPublicationRow
                                         key={entity.id}
-                                        link={entity as Interfaces.LinkTo}
+                                        link={entity}
                                         deleteLink={props.deleteLink}
                                     />
                                 ) : (
@@ -44,8 +44,8 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
                                         topic={entity as Interfaces.BaseTopic}
                                         deleteTopic={props.deleteLink}
                                     />
-                                );
-                            })}
+                                )
+                            )}
                         </tbody>
                     </table>
                 </div>

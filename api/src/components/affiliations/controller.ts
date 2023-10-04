@@ -16,7 +16,7 @@ export const updateAffiliations = async (
         const affiliations = event.body.affiliations;
         const publicationVersionId = event.pathParameters.id;
         // Get publication version
-        const version = await publicationVersionService.get(publicationVersionId);
+        const version = await publicationVersionService.getById(publicationVersionId);
 
         // Check that the version exists
         if (!version) {

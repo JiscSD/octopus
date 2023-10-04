@@ -16,7 +16,7 @@ interface BoxEntry {
     authorFirstName: string;
     authorLastName: string;
     publishedDate: string;
-    authors: Interfaces.Link['authors'];
+    authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
 }
 

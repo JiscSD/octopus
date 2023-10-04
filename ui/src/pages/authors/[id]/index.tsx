@@ -16,10 +16,10 @@ const pageSize = 10;
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=0&limit=${pageSize}`;
+    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/versions?offset=0&limit=${pageSize}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
-    let firstUserPublicationsPage: Interfaces.UserPublicationsPage | null = null;
+    let firstUserPublicationsPage: Interfaces.UserPublicationVersionsResult | null = null;
     let error: string | null = null;
 
     try {
@@ -58,7 +58,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 type Props = {
     user: Interfaces.User;
     userPublicationsUrl: string;
-    fallbackData: Interfaces.UserPublicationsPage | null;
+    fallbackData: Interfaces.UserPublicationVersionsResult | null;
     metadata: {
         title: string;
     };
@@ -67,7 +67,7 @@ type Props = {
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
 
-    const { data, setSize } = useSWRInfinite(
+    const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationVersionsResult>(
         (pageIndex, prevPageData) => {
             if (pageIndex === 0) {
                 return props.userPublicationsUrl;
@@ -95,7 +95,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     );
 
-    const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
+    const userPublicationVersions = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
     return (
         <>
@@ -186,26 +186,26 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
-                    {userPublications.length ? (
+                    {userPublicationVersions.length ? (
                         <div className="rouned-md relative lg:w-2/3">
-                            {userPublications.map((publication: Interfaces.Publication, index) => {
-                                if (index <= userPublications.length) {
+                            {userPublicationVersions.map((publicationVersion, index) => {
+                                if (index <= userPublicationVersions.length) {
                                     let classes = '';
 
                                     if (index === 0) {
                                         classes += 'rounded-t-lg ';
                                     }
 
-                                    if (index === userPublications.length - 1) {
+                                    if (index === userPublicationVersions.length - 1) {
                                         classes += 'rounded-b-lg';
                                     }
 
-                                    publication.user = props.user;
+                                    publicationVersion.user = props.user;
 
                                     return (
-                                        <Components.Delay key={publication.id} delay={50}>
+                                        <Components.Delay key={publicationVersion.id} delay={50}>
                                             <Components.PublicationSearchResult
-                                                publication={publication}
+                                                publicationVersion={publicationVersion}
                                                 className={classes}
                                             />
                                         </Components.Delay>

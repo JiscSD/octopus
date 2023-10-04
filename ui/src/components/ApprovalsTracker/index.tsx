@@ -16,12 +16,12 @@ import { KeyedMutator } from 'swr';
 import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     isPublishing: boolean;
     onPublish: () => void;
     onError: (message: string) => void;
     onEditAffiliations: () => void;
-    refreshPublicationData: KeyedMutator<Interfaces.Publication>;
+    refreshPublicationVersionData: KeyedMutator<Interfaces.PublicationVersion>;
 };
 
 const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
@@ -53,7 +53,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             return setAuthorEmailError('Please enter a valid email address');
         }
 
-        if (props.publication.coAuthors.some((author) => author.email.toLowerCase() === email)) {
+        if (props.publicationVersion.coAuthors.some((author) => author.email.toLowerCase() === email)) {
             return setAuthorEmailError('Email already added as an author');
         }
 
@@ -76,19 +76,19 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 const newAuthor = {
                     id: createId(),
                     email,
-                    publicationId: props.publication.id,
+                    publicationId: props.publicationVersion.publication.id,
                     approvalRequested: false,
                     confirmedCoAuthor: false
                 };
 
-                const newAuthorsArray = props.publication.coAuthors.map((author) =>
+                const newAuthorsArray = props.publicationVersion.coAuthors.map((author) =>
                     author.email === selectedAuthorEmail ? newAuthor : author
                 );
 
                 try {
                     // update publication authors
                     await api.put(
-                        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors`,
+                        `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors`,
                         newAuthorsArray,
                         Helpers.getJWT()
                     );
@@ -96,13 +96,13 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     // request approval again
                     // this will trigger an invitation email for the new author
                     await api.put(
-                        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors/request-approval`,
+                        `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors/request-approval`,
                         {},
                         Helpers.getJWT()
                     );
 
                     // get updated publication data
-                    await props.refreshPublicationData();
+                    await props.refreshPublicationVersionData();
 
                     // clear out any errors
                     setAuthorEmailError('');
@@ -130,11 +130,11 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
             setSendingReminder(true);
             try {
                 await api.post(
-                    `${Config.endpoints.publicationVersions}/${props.publication.versionId}/coauthors/${author.id}/approval-reminder`,
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors/${author.id}/approval-reminder`,
                     {},
                     Helpers.getJWT()
                 );
-                await props.refreshPublicationData();
+                await props.refreshPublicationVersionData();
             } catch (error) {
                 props.onError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
             }
@@ -143,13 +143,13 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
     };
 
     const remainingApprovalsCount = useMemo(
-        () => props.publication.coAuthors.filter((author) => !author.confirmedCoAuthor).length,
-        [props.publication.coAuthors]
+        () => props.publicationVersion.coAuthors.filter((author) => !author.confirmedCoAuthor).length,
+        [props.publicationVersion.coAuthors]
     );
 
     const isCorrespondingUser = useMemo(
-        () => props.publication.createdBy === user?.id,
-        [props.publication.createdBy, user?.id]
+        () => props.publicationVersion.createdBy === user?.id,
+        [props.publicationVersion.createdBy, user?.id]
     );
 
     return (
@@ -191,7 +191,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-grey-100 bg-white-50 duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                        {props.publication.coAuthors.map((author) => {
+                        {props.publicationVersion.coAuthors.map((author) => {
                             const affiliations = Helpers.getSortedAffiliations(author.affiliations).map(
                                 (affiliation) => affiliation.organization.name
                             );
@@ -219,7 +219,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     <td className="whitespace-nowrap px-6 py-4  text-sm text-grey-900 duration-500 dark:text-white-50">
                                         {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
                                             <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
-                                        ) : author.linkedUser === props.publication.createdBy ? (
+                                        ) : author.linkedUser === props.publicationVersion.createdBy ? (
                                             <>Corresponding author</>
                                         ) : author.confirmedCoAuthor ? (
                                             <span className="text-green-500 dark:text-green-300">Approved</span>

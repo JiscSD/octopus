@@ -76,10 +76,9 @@ const onBeforeDragStart = (start: DragStart) => {
 };
 
 const CoAuthor: React.FC = (): React.ReactElement => {
-    const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
+    const coAuthors = Stores.usePublicationCreationStore((state) => state.publicationVersion.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const versionId = Stores.usePublicationCreationStore((state) => state.versionId);
+    const versionId = Stores.usePublicationCreationStore((state) => state.publicationVersion.id);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [loading, setLoading] = React.useState(false);
@@ -167,7 +166,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         } catch {
             setLoading(false);
         }
-    }, [publicationId, updateCoAuthors, user?.token]);
+    }, [updateCoAuthors, user?.token, versionId]);
 
     return (
         <div className="space-y-12 2xl:space-y-16">

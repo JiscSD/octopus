@@ -8,7 +8,6 @@ export { default as Delay } from './Delay';
 export { default as EnableDarkMode } from './EnableDarkMode';
 export { default as ExtendedLink } from './ExtendedLink';
 export { default as FaqSidebar } from './Faq/Sidebar';
-export { default as FeaturedCollection } from './FeaturedCollection';
 export { default as FileUpload } from './FileUpload';
 export { default as FlagComment } from './Flag/Comment';
 export { default as FlagNewComment } from './Flag/NewComment';

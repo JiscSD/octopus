@@ -132,88 +132,70 @@ export const get = async (id: string, isAccountOwner = false) => {
     return user;
 };
 
-export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+export const getPublicationVersions = async (
+    id: string,
+    params: I.UserPublicationVersionsFilters,
+    isAccountOwner: boolean
+) => {
     const { offset, limit, orderBy, orderDirection } = params;
 
     // Account owners can retrieve their DRAFT publications also
     const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
 
-    const where: Prisma.PublicationWhereInput = {
+    const where: Prisma.PublicationVersionWhereInput = {
         OR: [
             {
-                versions: {
-                    some: {
-                        isLatestVersion: true,
-                        createdBy: id
-                    }
-                }
+                createdBy: id
             },
             {
-                versions: {
+                coAuthors: {
                     some: {
-                        isLatestVersion: true,
-                        coAuthors: {
-                            some: {
-                                linkedUser: id
-                            }
-                        }
+                        linkedUser: id
                     }
                 }
             }
         ],
-        versions: {
-            some: {
-                isLatestVersion: true,
-                currentStatus: {
-                    in: statuses
-                }
-            }
-        }
+        currentStatus: {
+            in: statuses
+        },
+        ...(isAccountOwner ? { isLatestVersion: true } : { isLatestLiveVersion: true })
     };
 
-    const userPublications = await client.prisma.publication.findMany({
+    const userPublicationVersions = await client.prisma.publicationVersion.findMany({
         skip: offset,
         take: limit,
         where,
-        select: {
-            id: true,
-            type: true,
-            doi: true,
-            url_slug: true,
-            versions: {
-                where: {
-                    isLatestVersion: true
-                },
+        include: {
+            publication: {
                 select: {
-                    createdBy: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    title: true,
-                    publishedDate: true,
-                    currentStatus: true,
-                    licence: true,
-                    content: true,
-                    coAuthors: {
+                    id: true,
+                    type: true,
+                    doi: true,
+                    url_slug: true
+                }
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    id: true,
+                    orcid: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    user: {
                         select: {
-                            id: true,
-                            approvalRequested: true,
-                            confirmedCoAuthor: true,
-                            code: true,
-                            email: true,
-                            publicationVersionId: true,
-                            linkedUser: true,
-                            user: {
-                                select: {
-                                    orcid: true,
-                                    firstName: true,
-                                    lastName: true
-                                }
-                            }
-                        },
-                        orderBy: {
-                            position: 'asc'
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
                         }
                     }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             }
         },
@@ -225,21 +207,9 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
                 : undefined
     });
 
-    // Simplify publications
-    const simplifiedPublications = userPublications.map((publication) => {
-        const simplifiedPublication = {
-            ...publication,
-            ...publication.versions[0]
-        };
-        // Discard versions field
-        const { versions, ...simplifiedPublicationRest } = simplifiedPublication;
+    const totalUserPublications = await client.prisma.publicationVersion.count({ where });
 
-        return simplifiedPublicationRest;
-    });
-
-    const totalUserPublications = await client.prisma.publication.count({ where });
-
-    return { offset, limit, total: totalUserPublications, results: simplifiedPublications };
+    return { offset, limit, total: totalUserPublications, results: userPublicationVersions };
 };
 
 export const getUserList = async () => {

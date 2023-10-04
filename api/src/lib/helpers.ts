@@ -84,22 +84,21 @@ export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
 
 export const updateDOI = async (
     doi: string,
-    publication: I.PublicationWithVersionAttached,
+    publicationVersion: I.PublicationVersion,
+    linkedTo: I.LinkedToPublication[],
     references: I.Reference[]
 ): Promise<I.DOIResponse> => {
-    if (!publication) {
+    if (!publicationVersion) {
         throw Error('Publication not found');
     }
 
-    const currentVersion = publication.versions[0];
-
-    if (!currentVersion.isLatestVersion) {
+    if (!publicationVersion.isLatestVersion) {
         throw Error('Supplied version is not current');
     }
 
     const creators: I.DataCiteCreator[] = [];
 
-    currentVersion.coAuthors.forEach((author) => {
+    publicationVersion.coAuthors.forEach((author) => {
         if (author.user) {
             creators.push(
                 createCreatorObject({
@@ -112,10 +111,10 @@ export const updateDOI = async (
         }
     });
 
-    const linkedPublications = publication.linkedTo.map((relatedIdentifier) => ({
-        relatedIdentifier: relatedIdentifier.publicationToRef.doi,
+    const linkedPublications = linkedTo.map((link) => ({
+        relatedIdentifier: link.doi,
         relatedIdentifierType: 'DOI',
-        relationType: relatedIdentifier.publicationToRef.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
+        relationType: link.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
     }));
 
     const doiReferences = references.map((reference) => {
@@ -157,13 +156,13 @@ export const updateDOI = async (
     });
 
     // check if the creator of this version of the publication is not listed as an author
-    if (!currentVersion.coAuthors.find((author) => author.linkedUser === currentVersion.createdBy)) {
+    if (!publicationVersion.coAuthors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
         // add creator to authors list as first author
         creators?.unshift(
             createCreatorObject({
-                firstName: currentVersion.user.firstName,
-                lastName: currentVersion.user.lastName,
-                orcid: currentVersion.user.orcid,
+                firstName: publicationVersion.user.firstName,
+                lastName: publicationVersion.user.lastName,
+                orcid: publicationVersion.user.orcid,
                 affiliations: []
             })
         );
@@ -174,7 +173,7 @@ export const updateDOI = async (
             types: 'doi',
             attributes: {
                 event: 'publish',
-                url: `${process.env.BASE_URL}/publications/${publication.id}`,
+                url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}`,
                 doi: doi,
                 identifiers: [
                     {
@@ -185,22 +184,22 @@ export const updateDOI = async (
                 creators,
                 titles: [
                     {
-                        title: currentVersion.title,
+                        title: publicationVersion.title,
                         lang: 'en'
                     }
                 ],
                 publisher: 'Octopus',
-                publicationYear: currentVersion.createdAt.getFullYear(),
+                publicationYear: publicationVersion.createdAt.getFullYear(),
                 contributors: [
                     {
-                        name: `${currentVersion.user.lastName} ${currentVersion.user.firstName}`,
+                        name: `${publicationVersion.user.lastName} ${publicationVersion.user.firstName}`,
                         contributorType: 'ContactPerson',
                         nameType: 'Personal',
-                        givenName: currentVersion.user.firstName,
-                        familyName: currentVersion.user.lastName,
+                        givenName: publicationVersion.user.firstName,
+                        familyName: publicationVersion.user.lastName,
                         nameIdentifiers: [
                             {
-                                nameIdentifier: currentVersion.user.orcid,
+                                nameIdentifier: publicationVersion.user.orcid,
                                 nameIdentifierScheme: 'ORCID',
                                 schemeUri: 'https://orcid.org/'
                             }
@@ -210,11 +209,11 @@ export const updateDOI = async (
                 language: 'en',
                 types: {
                     resourceTypeGeneral: 'Other',
-                    resourceType: publication.type
+                    resourceType: publicationVersion.publication.type
                 },
                 relatedIdentifiers: allReferencesWithDOI,
                 relatedItems: otherReferences,
-                fundingReferences: currentVersion.funders.map((funder) => ({
+                fundingReferences: publicationVersion.funders.map((funder) => ({
                     funderName: funder.name,
                     funderReference: funder.ror || funder.link,
                     funderIdentifierType: funder.ror ? 'ROR' : 'Other'
@@ -489,13 +488,10 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
 };
 
 export const createPublicationHTMLTemplate = (
-    publication: I.PublicationWithVersionAttached,
-    references: I.Reference[]
+    publicationVersion: I.PublicationVersion,
+    references: I.Reference[],
+    linkedTo: I.LinkedToPublication[]
 ): string => {
-    const { type, doi, linkedTo } = publication;
-
-    const currentVersion = publication.versions[0];
-
     const {
         title,
         content,
@@ -510,7 +506,7 @@ export const createPublicationHTMLTemplate = (
         dataPermissionsStatementProvidedBy,
         dataAccessStatement,
         selfDeclaration
-    } = currentVersion;
+    } = publicationVersion;
 
     // cheerio uses htmlparser2
     // parsing the publication content can sometimes help with unpaired opening/closing tags
@@ -519,16 +515,16 @@ export const createPublicationHTMLTemplate = (
     const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
 
     // If corresponding author is not found in coauthors list, and we have the necessary fields, mock them up
-    if (!authors.find((author) => author.linkedUser === currentVersion.createdBy)) {
+    if (!authors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
         authors.unshift({
-            id: currentVersion.createdBy,
+            id: publicationVersion.createdBy,
             approvalRequested: false,
             confirmedCoAuthor: true,
             createdAt: new Date(),
-            email: currentVersion.user.email || '',
-            linkedUser: currentVersion.createdBy,
-            publicationVersionId: currentVersion.id,
-            user: currentVersion.user,
+            email: publicationVersion.user.email || '',
+            linkedUser: publicationVersion.createdBy,
+            publicationVersionId: publicationVersion.id,
+            user: publicationVersion.user,
             reminderDate: null,
             isIndependent: true,
             affiliations: []
@@ -758,12 +754,12 @@ export const createPublicationHTMLTemplate = (
                     .join(', ')}
             </p>
             <p class="metadata">
-                <strong>Publication Type:</strong> ${formatPublicationType(type)}
+                <strong>Publication Type:</strong> ${formatPublicationType(publicationVersion.publication.type)}
             </p>
             <p class="metadata">
                 <strong>Publication Date:</strong> ${
-                    currentVersion.publishedDate
-                        ? formatPDFDate(currentVersion.publishedDate)
+                    publicationVersion.publishedDate
+                        ? formatPDFDate(publicationVersion.publishedDate)
                         : formatPDFDate(new Date())
                 }
             </p>
@@ -775,8 +771,8 @@ export const createPublicationHTMLTemplate = (
             </p>
             <p class="metadata">
                 <strong>DOI:</strong> 
-                <a href="${process.env.BASE_URL}/publications/${publication.id}">
-                    ${doi}
+                <a href="${process.env.BASE_URL}/publications/${publicationVersion.publication.id}">
+                    ${publicationVersion.publication.doi}
                 </a>
             </p>
 
@@ -827,7 +823,7 @@ export const createPublicationHTMLTemplate = (
                             ${linkedTo
                                 .map(
                                     (link) =>
-                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.publicationToRef.id}">${link.publicationToRef.versions[0].title}</a></p>`
+                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.id}">${link.title}</a></p>`
                                 )
                                 .join('')}
                         </div>`
@@ -835,11 +831,11 @@ export const createPublicationHTMLTemplate = (
             }
 
             ${
-                selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(type)
+                selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(publicationVersion.publication.type)
                     ? ` <div class="section">
                             <h5 class="section-title">Data access statement</h5>
                             ${
-                                type === 'PROTOCOL'
+                                publicationVersion.publication.type === 'PROTOCOL'
                                     ? '<p>Data has not yet been collected according to this method/protocol.</p>'
                                     : '<p>Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)</p>'
                             }
@@ -910,20 +906,19 @@ export const createPublicationHTMLTemplate = (
     return htmlTemplate;
 };
 
-export const createPublicationHeaderTemplate = (publication: I.PublicationWithVersionAttached): string => {
-    const currentVersion = publication.versions[0];
-    const authors = currentVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
+export const createPublicationHeaderTemplate = (publicationVersion: I.PublicationVersion): string => {
+    const authors = publicationVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
 
-    if (!authors.find((author) => author.linkedUser === currentVersion.createdBy)) {
+    if (!authors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
         authors.unshift({
-            id: currentVersion.createdBy,
+            id: publicationVersion.createdBy,
             approvalRequested: false,
             confirmedCoAuthor: true,
             createdAt: new Date(),
-            email: currentVersion.user.email || '',
-            linkedUser: currentVersion.createdBy,
-            publicationVersionId: currentVersion.id,
-            user: currentVersion.user,
+            email: publicationVersion.user.email || '',
+            linkedUser: publicationVersion.createdBy,
+            publicationVersionId: publicationVersion.id,
+            user: publicationVersion.user,
             reminderDate: null,
             isIndependent: true,
             affiliations: []
@@ -966,13 +961,15 @@ export const createPublicationHeaderTemplate = (publication: I.PublicationWithVe
         </span>
         <span>
             Published ${
-                currentVersion.publishedDate ? formatPDFDate(currentVersion.publishedDate) : formatPDFDate(new Date())
+                publicationVersion.publishedDate
+                    ? formatPDFDate(publicationVersion.publishedDate)
+                    : formatPDFDate(new Date())
             }
         </span>
     </div>`;
 };
 
-export const createPublicationFooterTemplate = (publication: I.PublicationWithVersionAttached): string => {
+export const createPublicationFooterTemplate = (publicationVersion: I.PublicationVersion): string => {
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
     const base64OctopusLogo = fs.readFileSync('assets/img/OCTOPUS_LOGO_ILLUSTRATION_WHITE_500PX.svg', {
         encoding: 'base64'
@@ -1026,7 +1023,7 @@ export const createPublicationFooterTemplate = (publication: I.PublicationWithVe
     </style>
     <div class="footer">            
         <div>
-            <span>DOI: <a href="${process.env.BASE_URL}/publications/${publication.id}">${publication.doi}</a></span>
+            <span>DOI: <a href="${process.env.BASE_URL}/publications/${publicationVersion.publication.id}">${publicationVersion.publication.doi}</a></span>
         </div>
         <div>
             Page <span class="pageNumber"></span> of <span class="totalPages"></span>

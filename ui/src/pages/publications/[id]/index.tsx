@@ -19,7 +19,8 @@ import * as Contexts from '@contexts';
 import { useRouter } from 'next/router';
 
 type SidebarCardProps = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
+    linkedFrom: Interfaces.LinkedFromPublication[];
     sectionList: {
         title: string;
         href: string;
@@ -28,23 +29,26 @@ type SidebarCardProps = {
 
 const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
     <div className="w-full space-y-2 rounded bg-white-50 px-6 py-6 shadow transition-colors duration-500 dark:bg-grey-900">
-        <Components.PublicationSidebarCardGeneral publication={props.publication} />
-        <Components.PublicationSidebarCardActions publication={props.publication} />
+        <Components.PublicationSidebarCardGeneral
+            publicationVersion={props.publicationVersion}
+            linkedFrom={props.linkedFrom}
+        />
+        <Components.PublicationSidebarCardActions publicationVersion={props.publicationVersion} />
         <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
     </div>
 );
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
-    let publication: Interfaces.Publication | null = null;
+    let publicationVersion: Interfaces.PublicationVersion | null = null;
     let bookmarkId: string | null = null;
     let error: string | null = null;
 
     const token = Helpers.getJWT(context);
 
     try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}`, token);
-        publication = response.data;
+        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/versions/latest`, token);
+        publicationVersion = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
@@ -57,7 +61,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         console.log(err);
     }
 
-    if (!publication || error) {
+    if (!publicationVersion || error) {
         return {
             notFound: true
         };
@@ -65,21 +69,21 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            publication,
+            publicationVersion,
             userToken: token || '',
             bookmarkId,
-            publicationId: publication.id,
-            protectedPage: ['LOCKED', 'DRAFT'].includes(publication.currentStatus),
+            publicationId: publicationVersion.publication.id,
+            protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
             metadata: {
-                title: Helpers.truncateString(`${publication.title} - ${Config.urls.viewPublication.title}`, 70),
-                description: Helpers.truncateString(Helpers.htmlToText(publication.content), 200)
+                title: Helpers.truncateString(`${publicationVersion.title} - ${Config.urls.viewPublication.title}`, 70),
+                description: Helpers.truncateString(Helpers.htmlToText(publicationVersion.content || ''), 200)
             }
         }
     };
 };
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     publicationId: string;
     bookmarkId: string | null;
     userToken: string;
@@ -99,39 +103,43 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         setBookmarkId(props.bookmarkId);
     }, [props.bookmarkId, props.publicationId]);
 
-    const { data: publicationData, mutate } = useSWR<Interfaces.Publication>(
-        `${Config.endpoints.publications}/${props.publicationId}`,
+    const { data: publicationVersion, mutate } = useSWR<Interfaces.PublicationVersion>(
+        `${Config.endpoints.publications}/${props.publicationId}/versions/latest`,
         (url) => api.get(url, props.userToken).then((data) => data.data),
-        { fallbackData: props.publication }
+        { fallbackData: props.publicationVersion }
     );
 
     const { data: references = [] } = useSWR<Interfaces.Reference[]>(
-        `${Config.endpoints.publicationVersions}/${props.publication.versionId}/reference`,
+        `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/reference`,
         (url) => api.get(url, props.userToken).then(({ data }) => data),
         {
             fallbackData: []
         }
     );
 
-    const peerReviews =
-        publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PEER_REVIEW') || [];
+    const { data: { linkedTo = [], linkedFrom = [] } = {} } = useSWR<Interfaces.PublicationWithLinks>(
+        `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/links?direct=true`,
+        (url) => api.get(url, props.userToken).then(({ data }) => data)
+    );
+
+    const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
     // problems this publication is linked to
-    const parentProblems = publicationData?.linkedTo?.filter((link) => link.publicationToRef.type === 'PROBLEM') || [];
+    const parentProblems = linkedTo.filter((link) => link.type === 'PROBLEM') || [];
 
     // problems linked from this publication
-    const childProblems =
-        publicationData?.linkedFrom?.filter((link) => link.publicationFromRef.type === 'PROBLEM') || [];
+    const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const isBookmarkButtonVisible = useMemo(() => {
-        if (!user || !publicationData) {
+        if (!user || !publicationVersion) {
             return false;
         } else {
             return true;
         }
-    }, [publicationData, user]);
-    const topics = publicationData?.topics || [];
+    }, [publicationVersion, user]);
+
+    const topics = publicationVersion?.publication.topics || [];
 
     const list = [];
 
@@ -140,19 +148,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showParentProblems = Boolean(parentProblems?.length);
     const showTopics = Boolean(topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
-    const showEthicalStatement = publicationData?.type === 'DATA' && Boolean(publicationData.ethicalStatement);
-    const showRedFlags = !!publicationData?.publicationFlags?.length;
+    const showEthicalStatement =
+        publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
+    const showRedFlags = !!publicationVersion?.publication.publicationFlags?.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
     if (showTopics) list.push({ title: 'Linked topics', href: 'topics' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
-    if (publicationData?.dataPermissionsStatement)
+    if (publicationVersion?.dataPermissionsStatement)
         list.push({ title: 'Data permissions statement', href: 'data-permissions-statement' });
-    if (publicationData?.dataAccessStatement)
+    if (publicationVersion?.dataAccessStatement)
         list.push({ title: 'Data access statement', href: 'data-access-statement' });
-    if (publicationData?.selfDeclaration) list.push({ title: 'Self-declaration', href: 'self-declaration' });
+    if (publicationVersion?.selfDeclaration) list.push({ title: 'Self-declaration', href: 'self-declaration' });
     if (showRedFlags) list.push({ title: 'Red flags', href: 'red-flags' });
 
     const sectionList = [
@@ -163,15 +172,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     ];
 
     const currentCoAuthor = React.useMemo(
-        () => publicationData?.coAuthors?.find((coAuthor) => coAuthor.linkedUser === user?.id),
-        [publicationData, user?.id]
+        () => publicationVersion?.coAuthors?.find((coAuthor) => coAuthor.linkedUser === user?.id),
+        [publicationVersion, user?.id]
     );
 
     const alertSeverity = React.useMemo(() => {
-        if (publicationData?.user?.id === user?.id) {
+        if (publicationVersion?.user?.id === user?.id) {
             return 'INFO';
         }
-        if (publicationData?.currentStatus === 'DRAFT') {
+        if (publicationVersion?.currentStatus === 'DRAFT') {
             return 'WARNING';
         }
         if (currentCoAuthor?.confirmedCoAuthor) {
@@ -181,14 +190,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             return 'WARNING';
         }
         return 'INFO';
-    }, [publicationData, user?.id, currentCoAuthor?.confirmedCoAuthor]);
+    }, [publicationVersion, user?.id, currentCoAuthor?.confirmedCoAuthor]);
 
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
             setApprovalError('');
             try {
                 await api.patch(
-                    `/publicationVersions/${publicationData?.versionId}/coauthor-confirmation`,
+                    `/versions/${publicationVersion?.id}/coauthor-confirmation`,
                     {
                         confirm
                     },
@@ -198,7 +207,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 setApprovalError(axios.isAxiosError(err) ? err.response?.data?.message : (err as Error).message);
             }
         },
-        [publicationData?.id, user?.token]
+        [publicationVersion?.id, user?.token]
     );
 
     const onBookmarkHandler = async () => {
@@ -222,7 +231,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     `bookmarks`,
                     {
                         type: 'PUBLICATION',
-                        entityId: publicationData?.id
+                        entityId: publicationVersion?.versionOf
                     },
                     user?.token
                 );
@@ -249,7 +258,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
             try {
                 await api.put(
-                    `${Config.endpoints.publications}/${publicationData?.id}/status/LIVE`,
+                    `${Config.endpoints.publicationVersions}/${publicationVersion?.id}/status/LIVE`,
                     {},
                     Helpers.getJWT()
                 );
@@ -261,7 +270,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 setPublishing(false);
             }
         }
-    }, [confirmation, publicationData?.id, router]);
+    }, [confirmation, publicationVersion?.id, router]);
 
     const handleUnlock = async () => {
         const confirmed = await confirmation(
@@ -275,12 +284,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         if (confirmed) {
             try {
                 await api.put(
-                    `${Config.endpoints.publications}/${publicationData?.id}/status/DRAFT`,
+                    `${Config.endpoints.publicationVersions}/${publicationVersion?.id}/status/DRAFT`,
                     {},
                     Helpers.getJWT()
                 );
 
-                router.push(`${Config.urls.viewPublication.path}/${publicationData?.id}/edit?step=4`);
+                router.push(`${Config.urls.viewPublication.path}/${publicationVersion?.id}/edit?step=4`);
             } catch (err) {
                 const unlockError = err as Interfaces.JSONResponseError;
                 setServerError(unlockError.message);
@@ -324,13 +333,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const activeFlags = React.useMemo(
-        () => publicationData?.publicationFlags?.filter((flag) => !flag.resolved),
-        [publicationData]
+        () => publicationVersion?.publication.publicationFlags?.filter((flag) => !flag.resolved),
+        [publicationVersion]
     );
 
     const inactiveFlags = React.useMemo(
-        () => publicationData?.publicationFlags?.filter((flag) => !!flag.resolved),
-        [publicationData]
+        () => publicationVersion?.publication.publicationFlags?.filter((flag) => !!flag.resolved),
+        [publicationVersion]
     );
 
     const uniqueRedFlagCategoryList = React.useMemo(
@@ -339,21 +348,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const authors = React.useMemo(() => {
-        if (!publicationData) {
+        if (!publicationVersion) {
             return [];
         }
 
-        const authors = [...publicationData.coAuthors];
+        const authors = [...publicationVersion.coAuthors];
 
         // make sure authors list include the corresponding author
-        const correspondingUser = publicationData.user;
+        const correspondingUser = publicationVersion.user;
         if (!authors.find((author) => author.linkedUser === correspondingUser.id)) {
             authors.unshift({
                 id: correspondingUser.id,
                 approvalRequested: false,
                 confirmedCoAuthor: true,
                 email: correspondingUser.email || '',
-                publicationVersionId: publicationData.versionId,
+                publicationVersionId: publicationVersion.id,
                 linkedUser: correspondingUser.id,
                 isIndependent: true,
                 affiliations: [],
@@ -366,7 +375,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
 
         return authors;
-    }, [publicationData]);
+    }, [publicationVersion]);
 
     const confirmedAuthors = useMemo(
         () => authors.filter((author) => author.confirmedCoAuthor && author.user),
@@ -374,8 +383,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const showApprovalsTracker = useMemo(
-        () => publicationData?.currentStatus === 'LOCKED' && authors.some((author) => author.approvalRequested),
-        [authors, publicationData?.currentStatus]
+        () => publicationVersion?.currentStatus === 'LOCKED' && authors.some((author) => author.approvalRequested),
+        [authors, publicationVersion?.currentStatus]
     );
 
     const isReadyForPublish = useMemo(
@@ -384,34 +393,40 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const author = useMemo(
-        () => publicationData?.coAuthors.find((author) => author.linkedUser === user?.id),
-        [publicationData?.coAuthors, user?.id]
+        () => publicationVersion?.coAuthors.find((author) => author.linkedUser === user?.id),
+        [publicationVersion?.coAuthors, user?.id]
     );
 
     const isCorrespondingAuthor = useMemo(
-        () => author?.linkedUser === publicationData?.createdBy,
-        [author?.linkedUser, publicationData?.createdBy]
+        () => author?.linkedUser === publicationVersion?.createdBy,
+        [author?.linkedUser, publicationVersion?.createdBy]
     );
 
-    const pageTitle = publicationData ? `${publicationData.title} - ${Config.urls.viewPublication.title}` : '';
-    const contentText = publicationData ? Helpers.htmlToText(publicationData.content) : '';
+    const pageTitle = publicationVersion ? `${publicationVersion.title} - ${Config.urls.viewPublication.title}` : '';
 
-    return publicationData ? (
+    return publicationVersion ? (
         <>
             <Head>
-                <meta name="description" content={publicationData.description || ''} />
-                <meta name="keywords" content={publicationData.keywords?.join(', ') || ''} />
-                <link rel="canonical" href={`${Config.urls.viewPublication.canonical}/${publicationData.id}`} />
+                <meta name="description" content={publicationVersion.description || ''} />
+                <meta name="keywords" content={publicationVersion.keywords?.join(', ') || ''} />
+                <link
+                    rel="canonical"
+                    href={`${Config.urls.viewPublication.canonical}/${publicationVersion.publication.id}`}
+                />
                 <title>{pageTitle}</title>
             </Head>
 
             <Layouts.Publication
                 fixedHeader={false}
-                publicationId={publicationData.type !== 'PEER_REVIEW' ? publicationData.id : undefined}
+                publicationId={
+                    publicationVersion.publication.type !== 'PEER_REVIEW'
+                        ? publicationVersion.publication.id
+                        : undefined
+                }
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {approvalError && <Components.Alert className="mb-4" severity="ERROR" title={approvalError} />}
-                    {publicationData.currentStatus === 'DRAFT' && (
+                    {publicationVersion.currentStatus === 'DRAFT' && (
                         <>
                             {!isCorrespondingAuthor && (
                                 <Components.Alert
@@ -440,7 +455,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     <Components.Link
                                         openNew={false}
                                         title="Edit publication"
-                                        href={`${Config.urls.viewPublication.path}/${publicationData.id}/edit?step=4`}
+                                        href={`${Config.urls.viewPublication.path}/${publicationVersion.publication.id}/edit?step=4`}
                                         className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
                                     >
                                         <OutlineIcons.PencilSquareIcon className="w-4" />
@@ -453,7 +468,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {showApprovalsTracker && (
                         <Components.ActionBar
-                            publication={publicationData}
+                            publicationVersion={publicationVersion}
                             isCorrespondingAuthor={isCorrespondingAuthor}
                             isReadyForPublish={isReadyForPublish}
                             isPublishing={isPublishing}
@@ -470,12 +485,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {showApprovalsTracker && (
                         <div className="pb-16">
                             <Components.ApprovalsTracker
-                                publication={publicationData}
+                                publicationVersion={publicationVersion}
                                 isPublishing={isPublishing}
                                 onPublish={handlePublish}
                                 onError={setServerError}
                                 onEditAffiliations={handleOpenAffiliationsModal}
-                                refreshPublicationData={mutate}
+                                refreshPublicationVersionData={mutate}
                             />
                         </div>
                     )}
@@ -518,7 +533,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <header>
                         <div className="grid w-full grid-cols-8">
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
-                                {publicationData.title}
+                                {publicationVersion.title}
                             </h1>
                             {isBookmarkButtonVisible && (
                                 <div className="col-span-1 grid justify-items-end">
@@ -568,14 +583,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
 
                         <div className="block lg:hidden">
-                            {publicationData && <SidebarCard publication={publicationData} sectionList={sectionList} />}
+                            {publicationVersion && (
+                                <SidebarCard
+                                    publicationVersion={publicationVersion}
+                                    linkedFrom={linkedFrom}
+                                    sectionList={sectionList}
+                                />
+                            )}
                         </div>
                     </header>
 
                     {/** Full text */}
                     <Components.ContentSection id="main-text" hasBreak isMainText>
                         <div>
-                            <Components.ParseHTML content={publicationData.content ?? ''} />
+                            <Components.ParseHTML content={publicationVersion.content ?? ''} />
                         </div>
                     </Components.ContentSection>
 
@@ -612,10 +633,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 key={link.id}
                                                 className="flex items-center font-semibold leading-3"
                                             >
-                                                <Components.PublicationLink
-                                                    publicationRef={link.publicationToRef}
-                                                    showType={false}
-                                                />
+                                                <Components.PublicationLink link={link} showType={false} />
                                             </Components.ListItem>
                                         ))}
                                     </Components.List>
@@ -635,10 +653,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 key={link.id}
                                                 className="flex items-center font-semibold leading-3"
                                             >
-                                                <Components.PublicationLink
-                                                    publicationRef={link.publicationFromRef}
-                                                    showType={false}
-                                                />
+                                                <Components.PublicationLink link={link} showType={false} />
                                             </Components.ListItem>
                                         ))}
                                     </Components.List>
@@ -672,7 +687,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.ContentSection
                             id="peer-reviews"
                             title={`Peer reviews created from this ${Helpers.formatPublicationType(
-                                publicationData.type
+                                publicationVersion.publication.type
                             )}`}
                             hasBreak
                         >
@@ -682,10 +697,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         key={link.id}
                                         className="flex items-center font-semibold leading-3"
                                     >
-                                        <Components.PublicationLink
-                                            publicationRef={link.publicationFromRef}
-                                            showType={false}
-                                        />
+                                        <Components.PublicationLink link={link} showType={false} />
                                     </Components.ListItem>
                                 ))}
                             </Components.List>
@@ -697,11 +709,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.ContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
                                 <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {parse(publicationData.ethicalStatement)}
+                                    {publicationVersion.ethicalStatement && parse(publicationVersion.ethicalStatement)}
                                 </p>
-                                {!!publicationData.ethicalStatementFreeText && (
+                                {!!publicationVersion.ethicalStatementFreeText && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                        {parse(publicationData.ethicalStatementFreeText)}
+                                        {parse(publicationVersion.ethicalStatementFreeText)}
                                     </p>
                                 )}
                             </>
@@ -709,7 +721,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
 
                     {/* Data permissions statement */}
-                    {!!publicationData.dataPermissionsStatement && (
+                    {!!publicationVersion.dataPermissionsStatement && (
                         <Components.ContentSection
                             id="data-permissions-statement"
                             title="Data permissions statement"
@@ -717,11 +729,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         >
                             <>
                                 <p className="mb-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                    {parse(publicationData.dataPermissionsStatement)}
+                                    {parse(publicationVersion.dataPermissionsStatement)}
                                 </p>
-                                {publicationData.dataPermissionsStatementProvidedBy?.length && (
+                                {publicationVersion.dataPermissionsStatementProvidedBy?.length && (
                                     <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                        {parse(publicationData.dataPermissionsStatementProvidedBy)}
+                                        {parse(publicationVersion.dataPermissionsStatementProvidedBy)}
                                     </p>
                                 )}
                             </>
@@ -729,21 +741,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
 
                     {/* Data access statement */}
-                    {!!publicationData.dataAccessStatement && (
+                    {!!publicationVersion.dataAccessStatement && (
                         <Components.ContentSection id="data-access-statement" title="Data access statement" hasBreak>
                             <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                {parse(publicationData.dataAccessStatement)}
+                                {parse(publicationVersion.dataAccessStatement)}
                             </p>
                         </Components.ContentSection>
                     )}
 
                     {/* Self declaration */}
-                    {publicationData.selfDeclaration && (
+                    {publicationVersion.selfDeclaration && (
                         <Components.ContentSection id="self-declaration" title="Self declaration" hasBreak>
                             <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                                {publicationData.type === 'PROTOCOL' &&
+                                {publicationVersion.publication.type === 'PROTOCOL' &&
                                     'Data has not yet been collected according to this method/protocol.'}
-                                {publicationData.type === 'HYPOTHESIS' &&
+                                {publicationVersion.publication.type === 'HYPOTHESIS' &&
                                     'Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)'}
                             </p>
                         </Components.ContentSection>
@@ -762,7 +774,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             {activeFlags.map((flag) => (
                                                 <Components.FlagPreview
                                                     key={flag.id}
-                                                    publicationId={publicationData.id}
+                                                    publicationId={publicationVersion.publication.id}
                                                     flag={flag}
                                                 />
                                             ))}
@@ -778,7 +790,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                             {inactiveFlags.map((flag) => (
                                                 <Components.FlagPreview
                                                     key={flag.id}
-                                                    publicationId={publicationData.id}
+                                                    publicationId={publicationVersion.publication.id}
                                                     flag={flag}
                                                 />
                                             ))}
@@ -790,21 +802,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
                     {/* Publication funders section */}
                     <Components.ContentSection id="funders" title="Funders" hasBreak>
-                        {!publicationData.funders?.length && !publicationData.fundersStatement ? (
+                        {!publicationVersion.funders?.length && !publicationVersion.fundersStatement ? (
                             <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
                                 No sources of funding have been specified for this{' '}
-                                {Helpers.formatPublicationType(publicationData.type)}.
+                                {Helpers.formatPublicationType(publicationVersion.publication.type)}.
                             </p>
                         ) : (
                             <>
-                                {publicationData.funders?.length ? (
+                                {publicationVersion.funders?.length ? (
                                     <>
                                         <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                            This {Helpers.formatPublicationType(publicationData.type)} has the following
-                                            sources of funding:
+                                            This {Helpers.formatPublicationType(publicationVersion.publication.type)}{' '}
+                                            has the following sources of funding:
                                         </p>
                                         <ul className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                            {publicationData.funders?.map((funder) => {
+                                            {publicationVersion.funders?.map((funder) => {
                                                 return (
                                                     <li key={funder.id} className="ml-7 mt-1 list-disc">
                                                         <a
@@ -820,9 +832,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         </ul>
                                     </>
                                 ) : null}
-                                {publicationData.fundersStatement ? (
+                                {publicationVersion.fundersStatement ? (
                                     <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                                        {parse(publicationData.fundersStatement)}
+                                        {parse(publicationVersion.fundersStatement)}
                                     </p>
                                 ) : null}
                             </>
@@ -832,17 +844,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/** Conflict of interest */}
                     <Components.ContentSection id="coi" title="Conflict of interest">
                         <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                            {publicationData.conflictOfInterestStatus
-                                ? publicationData.conflictOfInterestText
+                            {publicationVersion.conflictOfInterestStatus
+                                ? publicationVersion.conflictOfInterestText
                                 : `This ${Helpers.formatPublicationType(
-                                      publicationData.type
+                                      publicationVersion.publication.type
                                   )} does not have any specified conflicts of interest.`}
                         </p>
                     </Components.ContentSection>
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
-                        <SidebarCard publication={publicationData} sectionList={sectionList} />
+                        <SidebarCard
+                            publicationVersion={publicationVersion}
+                            linkedFrom={linkedFrom}
+                            sectionList={sectionList}
+                        />
                     </div>
                 </aside>
             </Layouts.Publication>

@@ -21,7 +21,7 @@ import * as Helpers from '@helpers';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: Types.SearchType = 'authors';
+    const searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
@@ -83,7 +83,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType?: Types.SearchType;
+    searchType: Types.SearchType;
     query: string | null;
     limit: string | null;
     offset: string | null;
@@ -98,7 +98,6 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
-    const [searchType, setSearchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
@@ -149,10 +148,9 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                 id="search-type"
                                 onChange={(e) => {
                                     const value: Types.SearchType = e.target.value as Types.SearchType;
-                                    setSearchType(value);
                                     router.push(`/search/${value}`);
                                 }}
-                                value={searchType}
+                                value={props.searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >

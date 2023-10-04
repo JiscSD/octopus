@@ -9,24 +9,26 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     className?: string;
 };
 
 const SearchResult: React.FC<Props> = (props): React.ReactElement => {
     const authors = React.useMemo(() => {
-        const authors = props.publication.coAuthors.map(
+        const authors = props.publicationVersion.coAuthors.map(
             (author) => `${author.user?.firstName[0]}. ${author.user?.lastName}`
         );
 
         // make sure authors list include the corresponding author
-        if (!props.publication.coAuthors.find((author) => author.linkedUser === props.publication.user.id)) {
-            const { firstName, lastName } = props.publication.user;
+        if (
+            !props.publicationVersion.coAuthors.find((author) => author.linkedUser === props.publicationVersion.user.id)
+        ) {
+            const { firstName, lastName } = props.publicationVersion.user;
             authors.unshift(`${firstName[0]}. ${lastName}`);
         }
 
         return authors.join(', ');
-    }, [props.publication.coAuthors, props.publication.user]);
+    }, [props.publicationVersion.coAuthors, props.publicationVersion.user]);
 
     return (
         <Framer.motion.div
@@ -36,7 +38,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
             transition={{ type: 'tween', duration: 0.35 }}
         >
             <Components.Link
-                href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                href={`${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`}
                 role="button"
                 className={`
             grid
@@ -68,17 +70,17 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
             >
                 <div className="z-10 col-span-11 w-full">
                     <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400 dark:text-teal-200">
-                        {Helpers.formatPublicationType(props.publication.type)}
+                        {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
                     </span>
                     <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.publication.title}
+                        {props.publicationVersion.title}
                     </h2>
 
                     <div className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
-                        {props.publication.description ? (
-                            <p>{props.publication.description}</p>
-                        ) : props.publication.content ? (
-                            parse(Helpers.truncateString(props.publication.content, 370))
+                        {props.publicationVersion.description ? (
+                            <p>{props.publicationVersion.description}</p>
+                        ) : props.publicationVersion.content ? (
+                            parse(Helpers.truncateString(props.publicationVersion.content, 370))
                         ) : null}
                     </div>
 
@@ -86,8 +88,8 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                         className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
                         title={authors}
                     >
-                        {props.publication.publishedDate
-                            ? `Published ${Helpers.relativeDate(props.publication.publishedDate)}`
+                        {props.publicationVersion.publishedDate
+                            ? `Published ${Helpers.relativeDate(props.publicationVersion.publishedDate)}`
                             : 'Draft'}
                         , by {authors}
                     </span>

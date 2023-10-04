@@ -9,7 +9,7 @@ describe('create coauthor', () => {
 
     test('Update co-authors for a specific publication version', async () => {
         const coauthor = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
+            .put('/versions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
@@ -34,7 +34,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author with duplicate email', async () => {
         const coauthor = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
+            .put('/versions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '000000005' })
             .send([
                 {
@@ -75,7 +75,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record if the user is not the author of the publication version', async () => {
         const coauthor = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/coauthors')
+            .put('/versions/publication-problem-draft-v1/coauthors')
             .query({ apiKey: '987654321' })
             .send([
                 {
@@ -93,7 +93,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication version that does not exist', async () => {
         const coauthor = await testUtils.agent
-            .put('/publicationVersions/non-existent-publication-version/coauthors')
+            .put('/versions/non-existent-publication-version/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -111,7 +111,7 @@ describe('create coauthor', () => {
 
     test('Cannot create a co-author record on a publication version that is live', async () => {
         const coauthor = await testUtils.agent
-            .put('/publicationVersions/publication-problem-live-v1/coauthors')
+            .put('/versions/publication-problem-live-v1/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {

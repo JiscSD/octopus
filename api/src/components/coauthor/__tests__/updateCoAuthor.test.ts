@@ -8,7 +8,7 @@ describe('Update co-author status', () => {
 
     test('Co-author updates their status to true', async () => {
         const coAuthor = await testUtils.agent
-            .patch('/publicationVersions/publication-problem-locked-v1/coauthor-confirmation')
+            .patch('/versions/publication-problem-locked-v1/coauthor-confirmation')
             .query({ apiKey: '000000006' })
             .send({
                 confirm: true
@@ -19,7 +19,7 @@ describe('Update co-author status', () => {
 
     test('Co-author updates their status to false', async () => {
         const coAuthor = await testUtils.agent
-            .patch('/publicationVersions/publication-problem-locked-v1/coauthor-confirmation')
+            .patch('/versions/publication-problem-locked-v1/coauthor-confirmation')
             .query({ apiKey: '000000006' })
             .send({
                 confirm: false
@@ -30,7 +30,7 @@ describe('Update co-author status', () => {
 
     test('Cannot update co-author if not a co-author (1)', async () => {
         const coAuthor = await testUtils.agent
-            .patch('/publicationVersions/publication-problem-locked-v1/coauthor-confirmation')
+            .patch('/versions/publication-problem-locked-v1/coauthor-confirmation')
             .query({ apiKey: '123456789' })
             .send({
                 confirm: true
@@ -41,7 +41,7 @@ describe('Update co-author status', () => {
 
     test('Cannot update co-author if not a co-author (2)', async () => {
         const coAuthor = await testUtils.agent
-            .patch('/publicationVersions/publication-problem-locked-v1/coauthor-confirmation')
+            .patch('/versions/publication-problem-locked-v1/coauthor-confirmation')
             .query({ apiKey: '987654321' })
             .send({
                 confirm: true

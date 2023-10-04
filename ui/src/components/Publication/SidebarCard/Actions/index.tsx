@@ -13,7 +13,7 @@ import * as Types from '@types';
 import * as api from '@api';
 
 type ActionProps = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
 };
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
@@ -40,7 +40,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         try {
             if (redFlagComment.length) {
                 await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/flag`,
+                    `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/flag`,
                     {
                         category: redFlagReason,
                         comment: redFlagComment
@@ -61,7 +61,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 });
 
                 // Mutate original publication
-                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
+                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publicationVersion.publication.id}`);
             } else {
                 setError('You must provide a comment for this red flag.');
             }
@@ -147,7 +147,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             <Components.SectioBreak name="Actions" />
 
             {/** Download options */}
-            {props.publication.currentStatus === 'LIVE' && (
+            {props.publicationVersion.currentStatus === 'LIVE' && (
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
                         Download:
@@ -156,7 +156,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         aria-label="Print"
                         onClick={() => {
                             window.open(
-                                `${Config.endpoints.publications}/${props.publication.id}/pdf?redirectToPreview=true`,
+                                `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/pdf?redirectToPreview=true`,
                                 '_blank'
                             );
                         }}
@@ -169,8 +169,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         aria-label="Download JSON"
                         onClick={() =>
                             Helpers.blobFileDownload(
-                                `${Config.endpoints.publications}/${props.publication.id}`,
-                                `${props.publication.id}.json`
+                                `${Config.endpoints.publications}/${props.publicationVersion.publication.id}`,
+                                `${props.publicationVersion.publication.id}.json`
                             )
                         }
                         className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
@@ -183,10 +183,10 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             {user && user.email ? (
                 <>
                     {/* if the publication is a peer review, no options shall be given to write a linked publication */}
-                    {props.publication.type !== 'PEER_REVIEW' && (
+                    {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
                         <>
                             {Helpers.linkedPublicationTypes[
-                                props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                                props.publicationVersion.publication.type as keyof typeof Helpers.linkedPublicationTypes
                             ].map((item: any) => {
                                 return (
                                     <Components.PublicationSidebarCardActionsButton
@@ -196,7 +196,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                             router.push({
                                                 pathname: `${Config.urls.createPublication.path}`,
                                                 query: {
-                                                    for: props.publication.id,
+                                                    for: props.publicationVersion.publication.id,
                                                     type: item
                                                 }
                                             });
@@ -204,7 +204,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                     />
                                 );
                             })}
-                            {props.publication.user.id !== user.id && (
+                            {props.publicationVersion.user.id !== user.id && (
                                 <>
                                     <Components.PublicationSidebarCardActionsButton
                                         label="Write a review"
@@ -212,7 +212,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                             router.push({
                                                 pathname: `${Config.urls.createPublication.path}`,
                                                 query: {
-                                                    for: props.publication.id,
+                                                    for: props.publicationVersion.publication.id,
                                                     type: 'PEER_REVIEW'
                                                 }
                                             });
@@ -231,7 +231,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 <>
                     <Components.Link
                         href={`${Config.urls.verify.path}?state=${encodeURIComponent(
-                            `${Config.urls.viewPublication.path}/${props.publication.id}`
+                            `${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`
                         )}`}
                         className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >
@@ -242,7 +242,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 <>
                     <Components.Link
                         href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
-                            `${Config.urls.viewPublication.path}/${props.publication.id}`
+                            `${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`
                         )}`}
                         className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                     >

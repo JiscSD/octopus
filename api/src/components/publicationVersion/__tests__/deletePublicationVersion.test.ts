@@ -8,7 +8,7 @@ describe('Delete publications', () => {
     });
 
     test('User can delete their own DRAFT publication', async () => {
-        const getPublication = await testUtils.agent.delete('/publications/publication-problem-draft').query({
+        const getPublication = await testUtils.agent.delete('/versions/publication-problem-draft-v1').query({
             apiKey: '000000005'
         });
 
@@ -24,7 +24,7 @@ describe('Delete publications', () => {
     });
 
     test('User cannot delete their own LIVE publication', async () => {
-        const getPublication = await testUtils.agent.delete('/publications/publication-problem-live').query({
+        const getPublication = await testUtils.agent.delete('/versions/publication-problem-live-v1').query({
             apiKey: '123456789'
         });
 
@@ -40,7 +40,7 @@ describe('Delete publications', () => {
     });
 
     test('User cannot delete a DRAFT publication they did not create', async () => {
-        const getPublication = await testUtils.agent.delete('/publications/publication-problem-draft').query({
+        const getPublication = await testUtils.agent.delete('/versions/publication-problem-draft-v1').query({
             apiKey: '987654321'
         });
 
@@ -48,7 +48,7 @@ describe('Delete publications', () => {
     });
 
     test('User cannot delete a LIVE publication they did not create', async () => {
-        const getPublication = await testUtils.agent.delete('/publications/publication-problem-live').query({
+        const getPublication = await testUtils.agent.delete('/versions/publication-problem-live-v1').query({
             apiKey: '987654321'
         });
 
@@ -56,7 +56,7 @@ describe('Delete publications', () => {
     });
 
     test('Unauthenticated user cannot delete a DRAFT publication they did not create', async () => {
-        const getPublication = await testUtils.agent.delete('/publications/publication-problem-draft');
+        const getPublication = await testUtils.agent.delete('/versions/publication-problem-draft-v1');
 
         expect(getPublication.status).toEqual(401);
     });

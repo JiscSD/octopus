@@ -7,9 +7,7 @@ describe('get references', () => {
     });
 
     test('Any user (unauthenticated) can get the references for a live publication', async () => {
-        const reference = await testUtils.agent.get(
-            '/publicationVersions/publication-real-world-application-live-v1/reference'
-        );
+        const reference = await testUtils.agent.get('/versions/publication-real-world-application-live-v1/reference');
 
         expect(reference.status).toEqual(200);
     });

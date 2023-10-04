@@ -22,7 +22,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    let searchType: Types.SearchType = 'publications';
+    const searchType: Types.SearchType = 'versions';
     let query: string | string[] | null = null;
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
@@ -31,7 +31,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let dateTo: string | string[] | null = null;
 
     // defaults to results
-    let searchResults: { data: Interfaces.Publication[]; metadata: Interfaces.SearchResultMeta } = {
+    let searchResults: { data: Interfaces.PublicationVersion[]; metadata: Interfaces.SearchResultMeta } = {
         data: [],
         metadata: {
             limit: 10,
@@ -72,7 +72,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // ensure the value of the search type is acceptable
     try {
-        const response = await api.search<Interfaces.Publication>(
+        const response = await api.search<Interfaces.PublicationVersion>(
             searchType,
             encodeURIComponent(query || ''),
             limit,
@@ -119,7 +119,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType?: Types.SearchType;
+    searchType: Types.SearchType;
     query: string | null;
     publicationTypes: string | null;
     limit: string | null;
@@ -127,14 +127,13 @@ type Props = {
     dateFrom: string | null;
     dateTo: string | null;
     error: string | null;
-    fallback: { [key: string]: { data: Interfaces.Publication[] } & Interfaces.SearchResultMeta };
+    fallback: { [key: string]: { data: Interfaces.PublicationVersion[] } & Interfaces.SearchResultMeta };
 };
 
 const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
-    const [searchType] = React.useState(props.searchType);
     const [query, setQuery] = React.useState(props.query ? props.query : '');
     const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
@@ -146,7 +145,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const dateFromFormatted = new Date(dateFrom || '');
     const dateToFormatted = new Date(dateTo || '');
 
-    const swrKey = `/${searchType}?search=${encodeURIComponent(query || '')}&type=${
+    const swrKey = `/${props.searchType}?search=${encodeURIComponent(query || '')}&type=${
         publicationTypes || Config.values.publicationTypes.join(',')
     }&limit=${limit || '10'}&offset=${offset || '0'}${
         dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
@@ -156,7 +155,10 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         data: response,
         error,
         isValidating
-    } = useSWR(swrKey, null, { fallback: props.fallback, use: [Helpers.laggy] });
+    } = useSWR<Interfaces.SearchResults<Interfaces.PublicationVersion>>(swrKey, null, {
+        fallback: props.fallback,
+        use: [Helpers.laggy]
+    });
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>
@@ -281,7 +283,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                 name="search-type"
                                 id="search-type"
                                 onChange={(e) => router.push(`/search/${e.target.value}`)}
-                                value={searchType}
+                                value={props.searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
@@ -503,7 +505,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                 {response?.data?.length && (
                                     <>
                                         <div className="rounded">
-                                            {response.data.map((result: any, index: number) => {
+                                            {response.data.map((result, index: number) => {
                                                 let classes = '';
                                                 index === 0 ? (classes += 'rounded-t') : null;
                                                 index === response.data.length - 1
@@ -513,7 +515,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 return (
                                                     <Components.PublicationSearchResult
                                                         key={`publication-${index}-${result.id}`}
-                                                        publication={result}
+                                                        publicationVersion={result}
                                                         className={classes}
                                                     />
                                                 );

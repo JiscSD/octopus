@@ -21,20 +21,22 @@ type RowProps = {
 };
 
 const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const funders = Stores.usePublicationCreationStore((state) => state.funders);
-    const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
-
+    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
     const user = Stores.useAuthStore((state) => state.user);
-
     const [isLoading, setIsLoading] = React.useState(false);
 
     const onDeleteRowHandler = async (id: string) => {
         setIsLoading(true);
         try {
-            await api.destroy(`${Config.endpoints.publications}/${publicationId}/funders/${id}`, user?.token);
+            await api.destroy(
+                `${Config.endpoints.publications}/${publicationVersion.versionOf}/funders/${id}`,
+                user?.token
+            );
 
-            updateFunders(funders.filter((funder) => funder.id !== id));
+            updatePublicationVersion({
+                ...publicationVersion,
+                funders: publicationVersion.funders.filter((funder) => funder.id !== id)
+            });
             setIsLoading(false);
         } catch (err) {
             setIsLoading(false);
@@ -133,13 +135,8 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
 let timeout: NodeJS.Timeout;
 
 const RORForm: React.FC = (props): React.ReactElement => {
-    const funders = Stores.usePublicationCreationStore((state) => state.funders);
-    const updateFunders = Stores.usePublicationCreationStore((state) => state.updateFunders);
+    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
 
-    const funderStatement = Stores.usePublicationCreationStore((state) => state.funderStatement);
-    const updateFunderStatement = Stores.usePublicationCreationStore((state) => state.updateFunderStatement);
-
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [method, setMethod] = React.useState<'ror' | 'manual'>('ror');
@@ -192,7 +189,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
         setSubmitLoading(true);
         try {
             const response = await api.post<Interfaces.Funder>(
-                `${Config.endpoints.publications}/${publicationId}/funders`,
+                `${Config.endpoints.publications}/${publicationVersion.versionOf}/funders`,
                 {
                     name,
                     country,
@@ -203,7 +200,10 @@ const RORForm: React.FC = (props): React.ReactElement => {
                 user?.token
             );
             const createdRorRecord = response.data;
-            updateFunders([...funders, createdRorRecord]);
+            updatePublicationVersion({
+                ...publicationVersion,
+                funders: [...publicationVersion.funders, createdRorRecord]
+            });
             setSubmitLoading(false);
             setName('');
             setCountry('');
@@ -361,7 +361,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
             <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
                 <div className="my-2">
                     <div className="inline-block min-w-full py-2 align-middle">
-                        {funders.length ? (
+                        {publicationVersion.funders.length ? (
                             <div className="mb-6 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent md:rounded-lg">
                                 <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
@@ -384,7 +384,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
-                                        {funders.map((item) => (
+                                        {publicationVersion.funders.map((item) => (
                                             <TableRow item={item} key={item.id} />
                                         ))}
                                     </tbody>
@@ -412,9 +412,14 @@ const RORForm: React.FC = (props): React.ReactElement => {
                                 name="free-text"
                                 className="mb-2 mt-3 w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
                                 placeholder="Enter any details"
-                                value={funderStatement ?? ''}
+                                value={publicationVersion.fundersStatement ?? ''}
                                 rows={5}
-                                onChange={(e) => updateFunderStatement(e.target.value)}
+                                onChange={(e) =>
+                                    updatePublicationVersion({
+                                        ...publicationVersion,
+                                        fundersStatement: e.target.value
+                                    })
+                                }
                             />
                         </div>
                     </div>

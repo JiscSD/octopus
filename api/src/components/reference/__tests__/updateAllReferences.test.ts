@@ -8,7 +8,7 @@ describe('update all references', () => {
 
     test('User can update all references from their own draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/versions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -25,7 +25,7 @@ describe('update all references', () => {
 
     test('User must be the author of the publication to update the references', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/versions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '987654321' })
             .send([
                 {
@@ -42,7 +42,7 @@ describe('update all references', () => {
 
     test('The author can only update the references for a draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-real-world-application-live-v1/reference')
+            .put('/versions/publication-real-world-application-live-v1/reference')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -76,13 +76,11 @@ describe('update all references', () => {
         ];
 
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/versions/publication-interpretation-draft-v1/reference')
             .query({ apiKey: '123456789' })
             .send(newReferencesArray);
 
-        const checkReference = await testUtils.agent.get(
-            '/publicationVersions/publication-interpretation-draft-v1/reference'
-        );
+        const checkReference = await testUtils.agent.get('/versions/publication-interpretation-draft-v1/reference');
 
         expect(reference.body.count).toEqual(2);
         expect(checkReference.body).toEqual(newReferencesArray);

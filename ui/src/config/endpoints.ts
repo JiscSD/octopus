@@ -2,7 +2,7 @@ import * as api from '@api';
 
 const endpoints = {
     publications: `${api.baseURL}/publications`,
-    publicationVersions: `${api.baseURL}/publicationVersions`,
+    publicationVersions: `${api.baseURL}/versions`,
     users: `${api.baseURL}/users`,
     links: `${api.baseURL}/links`,
     authorization: `${api.baseURL}/authorization`,

@@ -18,7 +18,7 @@ import * as api from '@api';
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
     let flag: Interfaces.FlagWithComments | null = null;
-    let publication: Interfaces.Publication | null = null;
+    let publicationVersion: Interfaces.PublicationVersion | null = null;
     let isResolvable = false;
     let isCommentable = false;
     const token = Helpers.getJWT(context);
@@ -29,14 +29,17 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         const flagResponse = await api.get(flagUrl, token);
         flag = flagResponse.data;
 
-        const publicationResponse = await api.get(`${Config.endpoints.publications}/${flag?.publicationId}`, token);
-        publication = publicationResponse.data;
+        const response = await api.get(
+            `${Config.endpoints.publications}/${flag?.publicationId}/versions/latest`,
+            token
+        );
+        publicationVersion = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
 
-    if (!flag || !publication) {
+    if (!flag || !publicationVersion) {
         return {
             notFound: true
         };
@@ -44,7 +47,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     if (decodedToken) {
         // Only the flag creator & publisher can comment
-        if (decodedToken.id === flag.user.id || decodedToken.id === publication.user.id) isCommentable = true;
+        if (decodedToken.id === flag.user.id || decodedToken.id === publicationVersion.user.id) isCommentable = true;
         // Only resolvable if the user is the flag creator
         if (decodedToken.id === flag.user.id && !flag.resolved) isResolvable = true;
     }
@@ -52,7 +55,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             flagId: context.query.flagId,
-            publication,
+            publicationVersion,
             error,
             isCommentable,
             isResolvable,
@@ -66,7 +69,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
 type Props = {
     flagId: string;
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     error: string | null;
     isCommentable: boolean;
     isResolvable: boolean;
@@ -145,7 +148,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
             setShowResolveModal(false);
 
             // Take the user to the publication in question
-            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+            router.push(`${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`);
 
             // Provide a user feedback toast
             setToast({
@@ -166,9 +169,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                 <meta name="description" content={Config.urls.viewFlagThread.description} />
                 <link
                     rel="canonical"
-                    href={`${Config.urls.viewFlagThread.canonical}/${props.publication.id}/flag/${props.flagId}`}
+                    href={`${Config.urls.viewFlagThread.canonical}/${props.publicationVersion.versionOf}/flag/${props.flagId}`}
                 />
-                <title>{`Red flag comment thread - ${props.publication.title}`}</title>
+                <title>{`Red flag comment thread - ${props.publicationVersion.title}`}</title>
             </Head>
 
             <Layouts.Standard fixedHeader={false}>
@@ -214,10 +217,10 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                     />
                                     <h2>
                                         <Components.Link
-                                            href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                                            href={`${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`}
                                             className="text-teal-500 underline"
                                         >
-                                            <>Publication: {props.publication.title}</>
+                                            <>Publication: {props.publicationVersion.title}</>
                                         </Components.Link>
                                     </h2>
 

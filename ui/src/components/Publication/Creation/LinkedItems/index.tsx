@@ -1,12 +1,9 @@
 import React from 'react';
 
 import * as Components from '@components';
-import * as Config from '@config';
 import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Types from '@types';
-
 import * as api from '@api';
 
 /**
@@ -14,14 +11,15 @@ import * as api from '@api';
  */
 const Links: React.FC = (): React.ReactElement => {
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
-    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
-    const updateLinkTo = Stores.usePublicationCreationStore((state) => state.updateLinkTo);
-    const topics = Stores.usePublicationCreationStore((state) => state.topics);
-    const updateTopics = Stores.usePublicationCreationStore((state) => state.updateTopics);
+    const linkedTo = Stores.usePublicationCreationStore((state) => state.linkedTo);
+    const updateLinkedTo = Stores.usePublicationCreationStore((state) => state.updateLinkedTo);
+    const topics = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.topics);
+    const updatePublicationTopics = Stores.usePublicationCreationStore((state) => state.updatePublicationTopics);
+
     const user = Stores.useAuthStore((state) => state.user);
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
+    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
+    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
 
     const [error, setError] = React.useState<string | undefined>();
@@ -29,22 +27,23 @@ const Links: React.FC = (): React.ReactElement => {
 
     const fetchAndSetLinks = async (token: string, entityType: Types.LinkedEntityType) => {
         try {
-            const response = await api.get(`/publications/${currentPublicationId}`, token);
             if (entityType === 'PUBLICATION') {
-                updateLinkTo(response.data.linkedTo);
+                const response = await api.get(`/publications/${currentPublicationId}/links?direct=true`, token);
+                updateLinkedTo(response.data.linkedTo);
             } else {
-                updateTopics(response.data.topics);
+                const response = await api.get(`/publications/${currentPublicationId}`, token);
+                updatePublicationTopics(response.data.topics);
             }
         } catch (err) {
             setError('There was a problem fetching this publication.');
         }
     };
 
-    const deletePublicationLink = async (linkID: string) => {
+    const deletePublicationLink = async (linkId: string) => {
         setError(undefined);
         if (user) {
             try {
-                await api.destroy(`/links/${linkID}`, user.token);
+                await api.destroy(`/links/${linkId}`, user.token);
             } catch (err) {
                 setError('There was a problem removing the link.');
             }
@@ -54,6 +53,7 @@ const Links: React.FC = (): React.ReactElement => {
 
     const deleteTopicLink = async (topicId: string) => {
         setError(undefined);
+
         if (user) {
             try {
                 // Update publication's topic IDs with current list minus ID to delete
@@ -151,17 +151,17 @@ const Links: React.FC = (): React.ReactElement => {
 
             {error && !loading && <Components.Alert severity="ERROR" title={error} allowDismiss />}
 
-            {!error && !!linkTos.length && (
+            {!error && !!linkedTo.length && (
                 <Components.LinkedItemTable
                     deleteLink={deletePublicationLink}
-                    entities={linkTos}
+                    entities={linkedTo}
                     entityType="PUBLICATION"
                 />
             )}
-            {!error && !!topics.length && (
+            {!error && !!topics?.length && (
                 <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
-            {!error && !linkTos.length && !topics.length && (
+            {!error && !linkedTo.length && !topics?.length && (
                 <Components.Alert
                     severity="INFO"
                     title="This publication does not have any linked items."

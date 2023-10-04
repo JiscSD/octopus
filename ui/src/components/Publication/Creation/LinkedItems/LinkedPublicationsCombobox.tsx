@@ -21,20 +21,21 @@ type LinkedPublicationsComboboxProps = {
 const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props): React.ReactElement => {
     const SWRConfig = useSWRConfig();
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
-    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
+    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion?.versionOf);
+    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion?.publication.type);
+    const linkedTos = Stores.usePublicationCreationStore((state) => state.linkedTo);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [search, setSearch] = React.useState('');
-    const [selectedPublication, setSelectedPublication] = React.useState<Interfaces.Publication | null>(null);
+    const [selectedPublicationVersion, setSelectedPublicationVersion] =
+        React.useState<Interfaces.PublicationVersion | null>(null);
 
-    const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
+    const availableLinkTypes = (type && Helpers.publicationsAvailabletoPublication(type)) || [];
     const formattedAsString = availableLinkTypes.join(',');
 
-    const excludedIds = [currentPublicationId, ...linkTos.map((link) => link.publicationToRef.id)];
+    const excludedIds = [currentPublicationId, ...linkedTos.map((link) => link.id)];
 
-    const swrKey = `/publications?type=${formattedAsString}&limit=10${
+    const swrKey = `/versions?type=${formattedAsString}&limit=10${
         search.length > 2 ? `&search=${search}` : ''
     }&exclude=${excludedIds.join(',')}`;
 
@@ -47,7 +48,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
         isValidating
     } = useSWR(swrKey, null, {
         fallback: {
-            '/publications': []
+            '/versions': []
         }
     });
 
@@ -58,14 +59,14 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     const createLink = async () => {
         props.setError(undefined);
         props.setLoading(true);
-        if (selectedPublication && user) {
+        if (selectedPublicationVersion && user) {
             try {
                 setSearch('');
-                setSelectedPublication(null);
+                setSelectedPublicationVersion(null);
                 await api.post(
                     '/links',
                     {
-                        to: selectedPublication.id,
+                        to: selectedPublicationVersion.versionOf,
                         from: currentPublicationId
                     },
                     user.token
@@ -80,13 +81,13 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     };
 
     return (
-        <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
+        <HeadlessUI.Combobox value={selectedPublicationVersion} onChange={setSelectedPublicationVersion}>
             <div className="flex items-center gap-4">
                 <HeadlessUI.Combobox.Input
                     className="w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
                     autoComplete="off"
-                    displayValue={(publication: Interfaces.Publication) => {
-                        return publication?.title || '';
+                    displayValue={(publicationVersion: Interfaces.PublicationVersion) => {
+                        return publicationVersion?.title || '';
                     }}
                     placeholder="Search for publications"
                     onChange={(event) => setSearch(event.target.value)}
@@ -94,7 +95,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                 <Components.Button
                     title="Add link"
                     className="flex-shrink-0"
-                    disabled={isValidating || props.loading || !selectedPublication}
+                    disabled={isValidating || props.loading || !selectedPublicationVersion}
                     onClick={createLink}
                     endIcon={
                         props.loading ? (
@@ -114,27 +115,29 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
             >
                 <HeadlessUI.Combobox.Options className="absolute z-10 mt-2 max-h-96 overflow-scroll rounded bg-white-50 shadow-xl">
                     {!isValidating &&
-                        results.data.map((publication: Interfaces.Publication, index: number) => (
+                        results.data.map((publicationVersion: Interfaces.PublicationVersion, index: number) => (
                             <HeadlessUI.Combobox.Option
-                                key={publication.id}
+                                key={publicationVersion.id}
                                 className={({ active }) =>
                                     `relative cursor-default select-none p-2 text-teal-900 ${
                                         active && 'ring-2 ring-inset ring-yellow-400'
                                     } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
                                 }
-                                value={publication}
+                                value={publicationVersion}
                             >
                                 <div className="space-y-2">
                                     <span className="font-montserrat text-sm font-medium text-teal-600">
-                                        {Helpers.formatPublicationType(publication.type)}
+                                        {Helpers.formatPublicationType(publicationVersion.publication.type)}
                                     </span>
-                                    <p className="text-grey-800">{publication.title}</p>
+                                    <p className="text-grey-800">{publicationVersion.title}</p>
                                     <div className="flex items-center space-x-2">
                                         <span className="text-xs text-grey-700">
-                                            {Helpers.formatDate(publication.publishedDate)},
+                                            {publicationVersion.publishedDate &&
+                                                Helpers.formatDate(publicationVersion.publishedDate)}
+                                            ,
                                         </span>
                                         <span className="text-sm text-grey-700">
-                                            {publication.user.firstName[0]}. {publication.user.lastName}
+                                            {publicationVersion.user.firstName[0]}. {publicationVersion.user.lastName}
                                         </span>
                                     </div>
                                 </div>

@@ -21,11 +21,11 @@ type LinkedTopicsComboboxProps = {
 const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React.ReactElement => {
     const SWRConfig = useSWRConfig();
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
+    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [search, setSearch] = React.useState('');
-    const [selectedTopic, setSelectedTopic] = React.useState<Interfaces.Publication | null>(null);
+    const [selectedTopic, setSelectedTopic] = React.useState<Interfaces.Topic | null>(null);
 
     const currentTopicIds = [...props.topics.map((topic) => topic.id)];
 

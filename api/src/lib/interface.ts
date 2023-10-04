@@ -13,11 +13,7 @@ import {
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
-
-// Helpful utility - make one property optional e.g. PartialBy<Publication, 'title'>
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export {
     ImageExtension,
@@ -116,11 +112,28 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicationLinksPathParams {
+    id: string;
+}
+
+export interface GetPublicationLinksQueryParams {
+    direct?: string;
+}
+
+export interface GetPublicationVersionPathParams {
+    id: string;
+    version: string;
+}
+
 export interface GetSeedDataPublicationsFilters {
     title: string;
 }
 
 export interface UpdatePublicationPathParams {
+    id: string;
+}
+
+export interface UpdatePublicationVersionPathParams {
     id: string;
 }
 
@@ -130,6 +143,10 @@ export interface UpdateStatusPathParams {
 }
 
 export interface UpdatePublicationRequestBody {
+    topics?: string[];
+}
+
+export interface UpdatePublicationVersionRequestBody {
     content?: string;
     title?: string;
     description?: string;
@@ -154,7 +171,7 @@ export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
-export interface PublicationFilters {
+export interface OpenSearchPublicationFilters {
     search?: string;
     limit: number;
     offset: number;
@@ -166,23 +183,7 @@ export interface PublicationFilters {
     orderDirection?: OrderDirection;
 }
 
-export type PublicationWithVersionDataMerged = Exclude<
-    Prisma.PromiseReturnType<typeof publicationService.getWithVersionMerged>,
-    null
->;
-
-export type PublicationWithVersionAttached = Exclude<
-    Prisma.PromiseReturnType<typeof publicationService.getWithVersion>,
-    null
->;
-
-export type PublicationVersionWithPublication = Exclude<
-    Prisma.PromiseReturnType<typeof publicationVersionService.get>,
-    null
->;
-
-// An interface that will fit versions gotten directly from publicationVersionService, or from the versions attribute on a publication.
-export type PublicationVersion = PartialBy<PublicationVersionWithPublication, 'publication'>;
+export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
 
 /**
  * @description Links
@@ -192,9 +193,10 @@ export interface CreateLinkBody {
     from: string;
 }
 
-export interface Link {
+export interface LinkedPublication {
     id: string;
     type: PublicationType;
+    doi: string;
     title: string;
     publishedDate: string;
     currentStatus: PublicationStatusEnum;
@@ -204,18 +206,20 @@ export interface Link {
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
 }
 
-export interface LinkedToPublication extends Link {
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
     childPublication: string;
     childPublicationType: PublicationType;
 }
 
-export interface LinkedFromPublication extends Link {
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
     parentPublication: string;
     parentPublicationType: PublicationType;
 }
 
 export interface PublicationWithLinks {
-    publication: Link | null;
+    publication: LinkedPublication | null;
     linkedTo: LinkedToPublication[];
     linkedFrom: LinkedFromPublication[];
 }
@@ -321,7 +325,7 @@ export interface UpdateUserInformation {
     orcidAccessToken: string;
 }
 
-export interface DeletePublicationPathParams {
+export interface DeletePublicationVersionPathParams {
     id: string;
 }
 
@@ -457,6 +461,7 @@ export interface CreateCoAuthorPathParams {
 
 export interface DeleteCoAuthorPathParams {
     id: string;
+
     coauthor: string;
 }
 
@@ -642,7 +647,7 @@ export interface UpdateAffiliationsBody {
 
 export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
 
-export interface UserPublicationsFilters {
+export interface UserPublicationVersionsFilters {
     offset: number;
     limit: number;
     orderBy?: UserPublicationsOrderBy;
@@ -651,6 +656,7 @@ export interface UserPublicationsFilters {
 
 export interface SendApprovalReminderPathParams {
     id: string;
+
     coauthor: string;
 }
 

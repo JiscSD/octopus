@@ -9,9 +9,7 @@ describe('Request co-authors approvals', () => {
     test('Can send approval reminder only if publication version status is LOCKED', async () => {
         // test LIVE
         const livePublicationVersionResponse = await testUtils.agent
-            .post(
-                '/publicationVersions/publication-problem-live-v1/coauthors/coauthor-test-user-6-problem-live/approval-reminder'
-            )
+            .post('/versions/publication-problem-live-v1/coauthors/coauthor-test-user-6-problem-live/approval-reminder')
             .query({ apiKey: '123456789' });
 
         expect(livePublicationVersionResponse.status).toEqual(403);
@@ -22,7 +20,7 @@ describe('Request co-authors approvals', () => {
         // test DRAFT
         const draftPublicationVersionResponse = await testUtils.agent
             .post(
-                '/publicationVersions/publication-problem-draft-v1/coauthors/coauthor-test-user-7-problem-draft/approval-reminder'
+                '/versions/publication-problem-draft-v1/coauthors/coauthor-test-user-7-problem-draft/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -34,7 +32,7 @@ describe('Request co-authors approvals', () => {
         // test LOCKED
         const lockedPublicationVersionResponse = await testUtils.agent
             .post(
-                '/publicationVersions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -45,7 +43,7 @@ describe('Request co-authors approvals', () => {
     test('Cannot send approval reminder if a co-author already approved', async () => {
         const response = await testUtils.agent
             .post(
-                '/publicationVersions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-2/approval-reminder'
+                '/versions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-2/approval-reminder'
             )
             .query({ apiKey: '123456789' });
 
@@ -56,7 +54,7 @@ describe('Request co-authors approvals', () => {
     test('Cannot send approval reminder to a user which is not a co-author', async () => {
         const response = await testUtils.agent
             .post(
-                '/publicationVersions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-22/approval-reminder'
+                '/versions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-22/approval-reminder'
             )
             .query({ apiKey: '123456789' });
 
@@ -67,7 +65,7 @@ describe('Request co-authors approvals', () => {
     test('Cannot send approval reminder to the same co-author twice', async () => {
         const response1 = await testUtils.agent
             .post(
-                '/publicationVersions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -76,7 +74,7 @@ describe('Request co-authors approvals', () => {
 
         const response2 = await testUtils.agent
             .post(
-                '/publicationVersions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 

@@ -7,7 +7,7 @@ import * as I from 'interface';
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>): Promise<I.JSONResponse> => {
     try {
         // function checks if the user has permission to see it in DRAFT mode
-        const fromPublication = await publicationService.getWithVersion(event.body.from);
+        const fromPublication = await publicationService.get(event.body.from);
 
         // the publication does not exist, is
         // publications that are live cannot have links created.
@@ -17,16 +17,22 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             });
         }
 
-        const fromCurrentVersion = fromPublication.versions[0];
+        const fromLatestVersion = fromPublication.versions.find((version) => version.isLatestVersion);
 
-        if (fromCurrentVersion.currentStatus === 'LIVE') {
+        if (!fromLatestVersion) {
+            return response.json(403, {
+                message: `Cannot find latest version of ${event.body.from}.`
+            });
+        }
+
+        if (fromLatestVersion.currentStatus === 'LIVE') {
             return response.json(403, {
                 message: `Publication with id ${event.body.from} is LIVE.`
             });
         }
 
         // the authenticated user is not the owner of the publication
-        if (fromCurrentVersion.user.id !== event.user.id) {
+        if (fromLatestVersion.user.id !== event.user.id) {
             return response.json(401, { message: 'You do not have permission to create publication links' });
         }
 

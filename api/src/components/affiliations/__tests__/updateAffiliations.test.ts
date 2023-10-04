@@ -69,7 +69,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Corresponding author can add an affiliation to their DRAFT publication', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: orcidTestAffiliations,
@@ -82,7 +82,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Corresponding author needs to add affiliations if not independent before locking the publication', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: [],
@@ -92,7 +92,7 @@ describe('update coAuthor affiliations per publication', () => {
         expect(updateAffiliationsResponse.status).toEqual(200);
 
         const updateStatusResponse = await testUtils.agent
-            .put('/publications/publication-problem-draft/status/LOCKED')
+            .put('/versions/publication-problem-draft-v1/status/LOCKED')
             .query({ apiKey: '000000005' })
             .send();
 
@@ -104,7 +104,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Author needs to fill out affiliations if the publication is LOCKED', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-locked-v1/my-affiliations')
+            .put('/versions/publication-problem-locked-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: [],
@@ -117,7 +117,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('User cannot add affiliations if they are not part of the publication', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '123456789' })
             .send({
                 affiliations: [],
@@ -132,7 +132,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('User cannot add affiliations if the publication is LIVE', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-live-v1/my-affiliations')
+            .put('/versions/publication-problem-live-v1/my-affiliations')
             .query({ apiKey: '123456789' })
             .send({
                 affiliations: [],
@@ -145,7 +145,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Only corresponding author can update his affiliations while the publication is DRAFT', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: orcidTestAffiliations,
@@ -156,7 +156,7 @@ describe('update coAuthor affiliations per publication', () => {
         expect(updateAffiliationsResponse.body.message).toEqual('Successfully updated affiliations.');
 
         const updateAffiliationsResponse2 = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '000000006' })
             .send({
                 affiliations: orcidTestAffiliations,
@@ -171,7 +171,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Cannot add duplicate affiliations', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publicationVersions/publication-problem-draft-v1/my-affiliations')
+            .put('/versions/publication-problem-draft-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: orcidTestAffiliations.concat(orcidTestAffiliations),
