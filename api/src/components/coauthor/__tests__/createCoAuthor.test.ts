@@ -126,4 +126,27 @@ describe('create coauthor', () => {
 
         expect(coauthor.status).toEqual(403);
     });
+
+    test('Co-author email is converted to lower case on save', async () => {
+        await testUtils.agent
+            .put('/publications/publication-data-draft/coauthors')
+            .query({ apiKey: '123456789' })
+            .send([
+                {
+                    id: createId(),
+                    publicationId: 'publication-problem-draft',
+                    email: 'MULTIcaseAddress@emailtest.COM',
+                    linkedUser: null,
+                    approvalRequested: false,
+                    confirmedCoAuthor: false
+                }
+            ]);
+
+        const coAuthors = await testUtils.agent
+            .get('/publications/publication-data-draft/coauthors')
+            .query({ apiKey: '123456789' });
+
+        expect(coAuthors.body.length).toEqual(2); // corresponding author and this new one
+        expect(coAuthors.body[1]).toMatchObject({ email: 'multicaseaddress@emailtest.com' });
+    });
 });
