@@ -7,12 +7,15 @@ type Props = {
 
 const ModalBarLoader: React.FC<Props> = (props) => {
     return (
-        <BarLoader
-            loading={props.loading}
-            color="#4ea5cb"
-            cssOverride={{ width: '100%', position: 'absolute' }}
-            height="0.25rem"
-        />
+        <span role="status">
+            <BarLoader
+                loading={props.loading}
+                color="#4ea5cb"
+                cssOverride={{ width: '100%', position: 'absolute' }}
+                height="0.25rem"
+                aria-label="Loading"
+            />
+        </span>
     );
 };
 
