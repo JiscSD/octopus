@@ -1,5 +1,5 @@
 variable "sns_arn" {
-    type = string
+  type = string
 }
 
 variable "environment" {

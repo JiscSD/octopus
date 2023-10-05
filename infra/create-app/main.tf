@@ -1,6 +1,6 @@
 locals {
-  project_name          = "octopus"
-  environment           = terraform.workspace
+  project_name = "octopus"
+  environment  = terraform.workspace
 }
 
 module "network" {
@@ -49,20 +49,20 @@ module "s3" {
 }
 
 module "ses" {
-    source = "../modules/ses"
-    environment = local.environment
-    email_addresses = var.email_addresses
+  source       = "../modules/ses"
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "sqs" {
-  source = "../modules/sqs"
-  sns_arn = module.sns.arn
+  source      = "../modules/sqs"
+  sns_arn     = module.sns.arn
   environment = local.environment
 }
 
 module "sns" {
-  source = "../modules/sns" 
-  environment = local.environment
-  slack_channel_email = var.slack_channel_email
+  source       = "../modules/sns"
+  environment  = local.environment
+  project_name = local.project_name
 }
 

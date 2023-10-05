@@ -2,9 +2,13 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "default" {}
 
+data "aws_ssm_parameter" "email_addresses" {
+  name = "email_addresses_${var.environment}_${var.project_name}"
+}
 
 locals {
-    account_id = data.aws_caller_identity.current.account_id
+  account_id        = data.aws_caller_identity.current.account_id
+  email_address_map = jsondecode(data.aws_ssm_parameter.email_addresses.value)
 }
 
 
@@ -55,52 +59,52 @@ resource "aws_iam_role" "inbound_email_role" {
     ]
   })
 
-  inline_policy { 
+  inline_policy {
     name = "inbound_email_role_policy"
-    policy = jsonencode ({
-      "Version": "2012-10-17",
-      "Statement": [
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-          "Sid": "VisualEditor0",
-          "Effect": "Allow",
-          "Action": [
+          "Sid" : "VisualEditor0",
+          "Effect" : "Allow",
+          "Action" : [
             "logs:CreateLogStream",
             "logs:CreateLogGroup",
             "logs:PutLogEvents"
           ],
-          "Resource": "*"
+          "Resource" : "*"
         },
         {
-          "Sid": "VisualEditor1",
-          "Effect": "Allow",
-          "Action": [
+          "Sid" : "VisualEditor1",
+          "Effect" : "Allow",
+          "Action" : [
             "s3:GetObject",
             "ses:SendRawEmail"
           ],
-          "Resource": [
+          "Resource" : [
             "arn:aws:s3:::email-forwarding-${var.environment}/*",
             "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
           ]
         }
       ]
-  })
+    })
   }
 }
 
 
 resource "aws_lambda_permission" "ses" {
-  for_each     = var.email_addresses
-  statement_id = aws_lambda_function.forward_mail[each.key].function_name
+  count         = length(keys(local.email_address_map))
+  statement_id  = aws_lambda_function.forward_mail[count.index].function_name
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.forward_mail[each.key].function_name
+  function_name = aws_lambda_function.forward_mail[count.index].function_name
   principal     = "ses.amazonaws.com"
-  source_arn    = "arn:aws:ses:eu-west-1:${local.account_id}:receipt-rule-set/forward-${var.environment}-emails:receipt-rule/action-rule-${replace(each.key, "/@|\\./", "-")}"
+  source_arn    = "arn:aws:ses:eu-west-1:${local.account_id}:receipt-rule-set/forward-${var.environment}-emails:receipt-rule/action-rule-${replace(nonsensitive(element(keys(local.email_address_map), count.index)), "/@|\\./", "-")}"
 }
 
 
 resource "aws_lambda_function" "forward_mail" {
-  for_each         = var.email_addresses
-  function_name    = "mail-${var.environment}-${replace(each.key, "/@|\\./", "-")}"
+  count            = length(keys(local.email_address_map))
+  function_name    = "mail-${var.environment}-${replace(nonsensitive(element(keys(local.email_address_map), count.index)), "/@|\\./", "-")}"
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.8"
   filename         = "${path.module}/forward-mail.zip"
@@ -110,11 +114,11 @@ resource "aws_lambda_function" "forward_mail" {
 
   environment {
     variables = {
-      MailS3Bucket   = "email-forwarding-${var.environment}"
-      MailS3Prefix   = "email/${each.key}"
-      MailSender     = "octopus@mail.octopus.ac"
-      MailRecipient = join(",", each.value)
-      Region         = data.aws_region.default.name
+      MailS3Bucket  = "email-forwarding-${var.environment}"
+      MailS3Prefix  = "email/${nonsensitive(element(keys(local.email_address_map), count.index))}"
+      MailSender    = "octopus@mail.octopus.ac"
+      MailRecipient = join(",", local.email_address_map[element(keys(local.email_address_map), count.index)])
+      Region        = data.aws_region.default.name
     }
   }
 }
@@ -124,26 +128,24 @@ resource "aws_ses_receipt_rule_set" "main" {
 }
 
 resource "aws_ses_receipt_rule" "action_rule" {
-  depends_on    = [aws_lambda_permission.ses]
-  for_each      = var.email_addresses
+  depends_on = [aws_lambda_permission.ses]
+  count      = length(keys(local.email_address_map))
 
   rule_set_name = aws_ses_receipt_rule_set.main.rule_set_name
-  name          = "action-rule-${replace(each.key, "/@|\\./", "-")}"
+  name          = "action-rule-${replace(nonsensitive(element(keys(local.email_address_map), count.index)), "/@|\\./", "-")}"
   enabled       = true
 
   s3_action {
     bucket_name       = "email-forwarding-${var.environment}"
-    object_key_prefix = "email/${each.key}"
-    position        = 1
+    object_key_prefix = "email/${nonsensitive(element(keys(local.email_address_map), count.index))}"
+    position          = 1
   }
-  
-    lambda_action {
-    function_arn     = aws_lambda_function.forward_mail[each.key].arn
+
+  lambda_action {
+    function_arn    = aws_lambda_function.forward_mail[count.index].arn
     invocation_type = "Event"
-    position =  2
+    position        = 2
   }
 
-  recipients = [each.key]
+  recipients = [nonsensitive(element(keys(local.email_address_map), count.index))]
 }
-
-

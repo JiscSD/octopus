@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-    account_id = data.aws_caller_identity.current.account_id
+  account_id = data.aws_caller_identity.current.account_id
 }
 
 data "aws_ssm_parameter" "pubrouter_api_keys" {
@@ -39,8 +39,8 @@ locals {
 }
 
 data "aws_iam_policy_document" "allow_public_access" {
-  
-  for_each = {for idx, bucket in local.buckets: idx => bucket}
+
+  for_each = { for idx, bucket in local.buckets : idx => bucket }
   statement {
     principals {
       type        = "*"
@@ -58,19 +58,19 @@ data "aws_iam_policy_document" "allow_public_access" {
 }
 
 resource "aws_s3_bucket_policy" "allow_public_access" {
-  for_each = {for idx, bucket in local.buckets: idx => bucket}
-  bucket = each.value.id
-  policy = data.aws_iam_policy_document.allow_public_access[each.key].json
+  for_each = { for idx, bucket in local.buckets : idx => bucket }
+  bucket   = each.value.id
+  policy   = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
 resource "aws_lambda_function" "pdf_processing_lambda" {
-  filename      = "${path.module}/pdf-processing-lambda.zip"
-  function_name = "octopus-api-${var.environment}-pdfProcessingLambda"
-  role          = aws_iam_role.pdf_processing_lambda_role.arn
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  filename         = "${path.module}/pdf-processing-lambda.zip"
+  function_name    = "octopus-api-${var.environment}-pdfProcessingLambda"
+  role             = aws_iam_role.pdf_processing_lambda_role.arn
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
   source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
-  timeout       = 10 // if a retry is needed, this function can hit the 3 second default timeout
+  timeout          = 10 // if a retry is needed, this function can hit the 3 second default timeout
 
   environment {
     variables = {
@@ -85,15 +85,15 @@ resource "aws_iam_role" "pdf_processing_lambda_role" {
   name = "octopus_${var.environment}_pdf_processing_lambda_role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Sid": "",
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "lambda.amazonaws.com"
+        "Sid" : "",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
         },
-        "Action": "sts:AssumeRole"
+        "Action" : "sts:AssumeRole"
       }
     ]
   })
