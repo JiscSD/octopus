@@ -66,12 +66,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             let ready = { ready: true, message: '' };
 
-            if (!publicationVersion) {
-                ready = { ready: false, message: 'Publication data not available' };
-
-                return ready;
-            }
-
             if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
             if (
@@ -130,12 +124,6 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             let ready = { ready: true, message: '' };
 
-            if (!publicationVersion) {
-                ready = { ready: false, message: 'Publication data not available' };
-
-                return ready;
-            }
-
             if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
             if (!linkedTo.length && !topics.length)
@@ -183,14 +171,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     // Function called before action is taken, save, exit, preview, publish etc...
     const saveCurrent = useCallback(
         async (message?: string) => {
-            const { publicationVersion, references } = store;
-
-            if (!publicationVersion) {
-                store.setError('Publication data not available.');
-                return;
-            }
-
             store.setError(null);
+            const { publicationVersion, references } = store;
 
             const body: Interfaces.PublicationUpdateRequestBody = {
                 title: publicationVersion.title,
@@ -221,39 +203,42 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 body.selfDeclaration = publicationVersion.selfDeclaration;
             }
 
-            // update current publication version
-            await api.patch(
-                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`,
-                body,
-                props.token
-            );
-
-            // update references for this version
-            await api.put(
-                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/reference`,
-                references,
-                props.token
-            );
-
-            // update co-authors for this version
-            await api.put(
-                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors`,
-                publicationVersion.coAuthors,
-                props.token
-            );
-
             const correspondingAuthor = publicationVersion.coAuthors.find(
                 (author) => author.linkedUser === publicationVersion.createdBy
             );
 
-            // update author affiliations on this version
-            await api.put(
-                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/my-affiliations`,
-                {
-                    affiliations: correspondingAuthor?.affiliations || [],
-                    isIndependent: correspondingAuthor?.isIndependent || false
-                },
-                props.token
+            const promises = [
+                // update current publication version
+                api.patch(`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`, body, props.token),
+                // update references for this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`,
+                    references,
+                    props.token
+                ),
+                // update co-authors for this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors`,
+                    publicationVersion.coAuthors,
+                    props.token
+                ),
+                // update author affiliations on this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/my-affiliations`,
+                    {
+                        affiliations: correspondingAuthor?.affiliations || [],
+                        isIndependent: correspondingAuthor?.isIndependent || false
+                    },
+                    props.token
+                )
+            ];
+
+            await Promise.all(promises).catch((error) =>
+                store.setError(
+                    axios.isAxiosError(error) && typeof error.response?.data?.message === 'string'
+                        ? error.response.data.message
+                        : message
+                )
             );
 
             if (message) {
@@ -405,10 +390,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const isReadyToPreview = useMemo(
         () =>
-            store.publicationVersion &&
-            Boolean(store.publicationVersion.title.trim()) &&
-            store.publicationVersion.content &&
-            !Helpers.isEmptyContent(store.publicationVersion.content),
+            Boolean(
+                store.publicationVersion &&
+                    store.publicationVersion.title.trim() &&
+                    store.publicationVersion.content &&
+                    !Helpers.isEmptyContent(store.publicationVersion.content)
+            ),
         [store.publicationVersion]
     );
 

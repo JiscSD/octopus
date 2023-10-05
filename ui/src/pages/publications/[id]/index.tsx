@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
-import useSWR from 'swr';
-import axios from 'axios';
+import useSWR, { KeyedMutator } from 'swr';
+import axios, { AxiosResponse } from 'axios';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -42,28 +42,41 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
-    let publicationVersion: Interfaces.PublicationVersion | null = null;
-    let bookmarkId: string | null = null;
-    let error: string | null = null;
-
     const token = Helpers.getJWT(context);
 
-    try {
-        const response = await api.get(`${Config.endpoints.publications}/${requestedId}/versions/latest`, token);
-        publicationVersion = response.data;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
-    }
+    // fetch data concurrently
+    const promises: [
+        Promise<Interfaces.PublicationVersion | void>,
+        Promise<Interfaces.BookmarkedEntityData[] | void>,
+        Promise<Interfaces.PublicationWithLinks | void>,
+        Promise<Interfaces.Flag[] | void>,
+        Promise<Interfaces.BaseTopic[] | void>
+    ] = [
+        api
+            .get(`${Config.endpoints.publications}/${requestedId}/versions/latest`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publications}/${requestedId}/links?direct=true`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publications}/${requestedId}/flags`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publications}/${requestedId}/topics`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error))
+    ];
 
-    try {
-        const response = await api.get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token);
-        bookmarkId = response.data && response.data.length === 1 ? response.data[0].id : null;
-    } catch (err) {
-        console.log(err);
-    }
+    const [publicationVersion, bookmarks = [], directLinks, flags = [], topics = []] = await Promise.all(promises);
 
-    if (!publicationVersion || error) {
+    if (!publicationVersion) {
         return {
             notFound: true
         };
@@ -73,9 +86,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             publicationVersion,
             userToken: token || '',
-            bookmarkId,
+            bookmarkId: bookmarks.length ? bookmarks[0].id : null,
             publicationId: publicationVersion.publication.id,
             protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
+            directLinks,
+            flags,
+            topics,
             metadata: {
                 title: Helpers.truncateString(`${publicationVersion.title} - ${Config.urls.viewPublication.title}`, 70),
                 description: Helpers.truncateString(Helpers.htmlToText(publicationVersion.content || ''), 200)
@@ -89,6 +105,9 @@ type Props = {
     publicationId: string;
     bookmarkId: string | null;
     userToken: string;
+    directLinks: Interfaces.PublicationWithLinks;
+    flags: Interfaces.Flag[];
+    topics: Interfaces.BaseTopic[];
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -107,13 +126,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const { data: publicationVersion, mutate } = useSWR<Interfaces.PublicationVersion>(
         `${Config.endpoints.publications}/${props.publicationId}/versions/latest`,
-        (url) => api.get(url, props.userToken).then((data) => data.data),
+        null,
         { fallbackData: props.publicationVersion }
     );
 
     const { data: references = [] } = useSWR<Interfaces.Reference[]>(
-        `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/reference`,
-        (url) => api.get(url, props.userToken).then(({ data }) => data),
+        `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`,
+        null,
         {
             fallbackData: []
         }
@@ -121,15 +140,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const { data: { linkedTo = [], linkedFrom = [] } = {} } = useSWR<Interfaces.PublicationWithLinks>(
         `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/links?direct=true`,
-        (url) => api.get(url, props.userToken).then(({ data }) => data)
+        null,
+        {
+            fallbackData: props.directLinks
+        }
     );
 
     const { data: flags = [] } = useSWR<Interfaces.Flag[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/flags`
+        `${Config.endpoints.publications}/${props.publicationId}/flags`,
+        null,
+        { fallbackData: props.flags }
     );
 
-    const { data: topics = [] } = useSWR<Interfaces.Topic[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/topics`
+    const { data: topics = [] } = useSWR<Interfaces.BaseTopic[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/topics`,
+        null,
+        {
+            fallbackData: props.topics
+        }
     );
 
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];

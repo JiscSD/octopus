@@ -39,8 +39,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         setSubmitting(true);
         try {
             if (redFlagComment.length) {
+                const createFlagEndpoint = `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/flags`;
                 await api.post(
-                    `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/flag`,
+                    createFlagEndpoint,
                     {
                         category: redFlagReason,
                         comment: redFlagComment
@@ -60,8 +61,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     message: 'Your red flag has now been saved.'
                 });
 
-                // Mutate original publication
-                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publicationVersion.publication.id}`);
+                // refetch publication flags
+                SWRConfig.mutate(createFlagEndpoint);
             } else {
                 setError('You must provide a comment for this red flag.');
             }

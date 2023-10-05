@@ -12,6 +12,7 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import useSWR from 'swr';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
@@ -83,7 +84,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     const token = Helpers.getJWT(context);
 
     let publicationId: string | string[] | null = null;
-    let draftVersion: Interfaces.PublicationVersion | null = null;
+    let publicationVersion: Interfaces.PublicationVersion | null = null;
     let step: string | string[] | null = null;
     let error: string | null = null;
 
@@ -96,7 +97,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     if (publicationId) {
         try {
             const response = await api.get(`${Config.endpoints.publications}/${publicationId}/versions/latest`, token);
-            draftVersion = response.data;
+            publicationVersion = response.data;
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             error = message;
@@ -107,24 +108,24 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
         };
     }
 
-    if (draftVersion?.currentStatus === 'LOCKED') {
-        return {
-            redirect: {
-                destination: `${Config.urls.viewPublication.path}/${draftVersion.versionOf}`,
-                permanent: false
-            }
-        };
-    }
-
-    if (draftVersion?.currentStatus !== 'DRAFT') {
+    if (!publicationVersion) {
         return {
             notFound: true
         };
     }
 
+    if (publicationVersion.currentStatus !== 'DRAFT') {
+        return {
+            redirect: {
+                destination: `${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`,
+                permanent: false
+            }
+        };
+    }
+
     return {
         props: {
-            draftVersion,
+            publicationVersion,
             step,
             token,
             error,
@@ -134,7 +135,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 });
 
 type Props = {
-    draftVersion: Interfaces.PublicationVersion;
+    publicationVersion: Interfaces.PublicationVersion;
     step: string;
     token: string;
     error: string | null;
@@ -144,6 +145,19 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const store = Stores.usePublicationCreationStore();
     const { updateReferences, updateLinkedTo, updatePublicationVersion, updateTopics } = store;
+
+    useSWR([`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`, 'edit'], ([url]) =>
+        api.get(url, props.token).then((res) => updateReferences(res.data))
+    );
+
+    useSWR(
+        [`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/links?direct=true`, 'edit'],
+        ([url]) => api.get(url, props.token).then((res) => updateLinkedTo(res.data.linkedTo))
+    );
+
+    useSWR([`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/topics`, 'edit'], ([url]) =>
+        api.get(url, props.token).then((res) => updateTopics(res.data))
+    );
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsByType = React.useMemo(() => {
@@ -155,7 +169,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             steps.CONFLICT_OF_INTEREST,
             steps.FUNDERS
         ];
-        switch (props.draftVersion.publication.type) {
+        switch (props.publicationVersion.publication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
                 arr = [...arr, steps.DATA_STATEMENT, steps.CO_AUTHORS];
                 break;
@@ -169,7 +183,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 arr = [...arr, steps.CO_AUTHORS];
         }
         return arr;
-    }, [props.draftVersion.publication.type]);
+    }, [props.publicationVersion.publication.type]);
 
     const stepsToUse = Helpers.getTabCompleteness(stepsByType, store);
 
@@ -181,61 +195,11 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     }, [props.step, stepsToUse.length]);
 
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
-    const [publicationVersion] = React.useState(props.draftVersion);
-
-    const fetchAndSetReferences = React.useCallback(async () => {
-        if (props.draftVersion.id) {
-            try {
-                const response = await api.get(`/versions/${props.draftVersion.id}/reference`, props.token);
-                updateReferences(response.data);
-            } catch (err) {
-                // todo: improve error handling
-                console.log(err);
-            }
-        }
-    }, [props.draftVersion.id, props.token, updateReferences]);
-
-    const fetchAndSetLinkedTos = React.useCallback(async () => {
-        if (props.draftVersion.versionOf) {
-            try {
-                const response = await api.get(
-                    `${Config.endpoints.publications}/${props.draftVersion.versionOf}/links?direct=true`,
-                    props.token
-                );
-
-                updateLinkedTo(response.data.linkedTo);
-            } catch (err) {
-                // todo: improve error handling
-                console.log(err);
-            }
-        }
-    }, [props.draftVersion.versionOf, props.token, updateLinkedTo]);
-
-    const fetchAndSetTopics = React.useCallback(async () => {
-        if (props.draftVersion.versionOf) {
-            try {
-                const response = await api.get(
-                    `${Config.endpoints.publications}/${props.draftVersion.versionOf}/topics`,
-                    props.token
-                );
-
-                updateTopics(response.data);
-            } catch (err) {
-                // todo: improve error handling
-                console.log(err);
-            }
-        }
-    }, [props.draftVersion.versionOf, props.token, updateTopics]);
+    const [publicationVersion] = React.useState(props.publicationVersion);
 
     React.useEffect(() => {
-        fetchAndSetReferences();
-        fetchAndSetLinkedTos();
-        fetchAndSetTopics();
-    }, [fetchAndSetReferences, fetchAndSetLinkedTos, fetchAndSetTopics]);
-
-    React.useEffect(() => {
-        updatePublicationVersion(props.draftVersion);
-    }, [props.draftVersion, updatePublicationVersion]);
+        updatePublicationVersion(props.publicationVersion);
+    }, [props.publicationVersion, updatePublicationVersion]);
 
     React.useEffect(() => {
         router.push(

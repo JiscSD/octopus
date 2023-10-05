@@ -376,7 +376,7 @@ functions:
         handler: src/components/flag/routes.createFlag
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/flag
+                  path: ${self:custom.versions.v1}/publications/{id}/flags
                   method: POST
                   cors: true
     createFlagComment:
@@ -485,14 +485,14 @@ functions:
         handler: src/components/reference/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/versions/{id}/reference
+                  path: ${self:custom.versions.v1}/versions/{id}/references
                   method: get
                   cors: true
     updateAllReference:
         handler: src/components/reference/routes.updateAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/versions/{id}/reference
+                  path: ${self:custom.versions.v1}/versions/{id}/references
                   method: put
                   cors: true
 

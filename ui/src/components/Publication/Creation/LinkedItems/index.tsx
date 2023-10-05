@@ -5,16 +5,17 @@ import * as Helpers from '@helpers';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Config from '@config';
+import { useSWRConfig } from 'swr';
 
 /**
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
+    const SWRConfig = useSWRConfig();
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
     const linkedTo = Stores.usePublicationCreationStore((state) => state.linkedTo);
-    const updateLinkedTo = Stores.usePublicationCreationStore((state) => state.updateLinkedTo);
     const topics = Stores.usePublicationCreationStore((state) => state.topics);
-    const updateTopics = Stores.usePublicationCreationStore((state) => state.updateTopics);
 
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -25,37 +26,24 @@ const Links: React.FC = (): React.ReactElement => {
     const [error, setError] = React.useState<string | undefined>();
     const [loading, setLoading] = React.useState<boolean>(false);
 
-    const fetchAndSetLinks = useCallback(async () => {
-        try {
-            const response = await api.get(`/publications/${currentPublicationId}/links?direct=true`, user?.token);
-            updateLinkedTo(response.data.linkedTo);
-        } catch (err) {
-            setError('There was a problem fetching linked publications.');
-        }
-    }, [currentPublicationId, updateLinkedTo, user?.token]);
-
-    const fetchAndSetTopics = useCallback(async () => {
-        try {
-            const response = await api.get(`/publications/${currentPublicationId}/topics`, user?.token);
-            updateTopics(response.data);
-        } catch (err) {
-            setError('There was a problem fetching topics.');
-        }
-    }, [currentPublicationId, updateTopics, user?.token]);
-
     const deletePublicationLink = useCallback(
         async (linkId: string) => {
             setError(undefined);
             if (user) {
                 try {
                     await api.destroy(`/links/${linkId}`, user.token);
+
+                    // refetch direct links
+                    await SWRConfig.mutate([
+                        `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
+                        'edit'
+                    ]);
                 } catch (err) {
                     setError('There was a problem removing the link.');
                 }
-                fetchAndSetLinks();
             }
         },
-        [fetchAndSetLinks, user]
+        [SWRConfig, currentPublicationId, user]
     );
 
     const deleteTopicLink = useCallback(
@@ -72,12 +60,15 @@ const Links: React.FC = (): React.ReactElement => {
                         },
                         user.token
                     );
+
+                    // refetch topics
+                    await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
                 } catch (err) {
                     setError('There was a problem removing the topic.');
                 }
             }
         },
-        [currentPublicationId, topics, user]
+        [SWRConfig, currentPublicationId, topics, user]
     );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
@@ -140,7 +131,6 @@ const Links: React.FC = (): React.ReactElement => {
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
-                                fetchAndSetTopics={fetchAndSetTopics}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
@@ -148,7 +138,6 @@ const Links: React.FC = (): React.ReactElement => {
                             />
                         ) : (
                             <Components.LinkedPublicationsCombobox
-                                fetchAndSetLinks={fetchAndSetLinks}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
@@ -181,4 +170,4 @@ const Links: React.FC = (): React.ReactElement => {
     );
 };
 
-export default Links;
+export default React.memo(Links);

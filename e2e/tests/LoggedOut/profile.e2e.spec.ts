@@ -38,7 +38,7 @@ test.describe('Science Octopus profile', () => {
         await expect(page.locator("'Show More'")).toBeVisible();
         await Promise.all([
             page.waitForResponse(
-                (response) => response.url().includes('/users/octopus/publications?offset=10&limit=10') && response.ok()
+                (response) => response.url().includes('/users/octopus/versions?offset=10&limit=10') && response.ok()
             ),
             page.click("'Show More'")
         ]);
@@ -52,7 +52,7 @@ test.describe('Science Octopus profile', () => {
         // press "Show More" button again
         await Promise.all([
             page.waitForResponse(
-                (response) => response.url().includes('/users/octopus/publications?offset=20&limit=10') && response.ok()
+                (response) => response.url().includes('/users/octopus/versions?offset=20&limit=10') && response.ok()
             ),
             page.click("'Show More'")
         ]);

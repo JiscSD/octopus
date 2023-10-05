@@ -7,9 +7,9 @@ import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as api from '@api';
+import * as Config from '@config';
 
 type LinkedPublicationsComboboxProps = {
-    fetchAndSetLinks: () => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
@@ -68,11 +68,15 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                     },
                     user.token
                 );
+
+                // refetch direct links
+                await SWRConfig.mutate([
+                    `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
+                    'edit'
+                ]);
             } catch (err) {
                 props.setError('There was a problem creating the link.');
             }
-            props.fetchAndSetLinks();
-            SWRConfig.mutate(swrKey);
         }
         props.setLoading(false);
     };
@@ -146,4 +150,4 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     );
 };
 
-export default LinkedPublicationsCombobox;
+export default React.memo(LinkedPublicationsCombobox);

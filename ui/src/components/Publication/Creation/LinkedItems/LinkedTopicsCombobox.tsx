@@ -7,9 +7,9 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as api from '@api';
+import * as Config from '@config';
 
 type LinkedTopicsComboboxProps = {
-    fetchAndSetTopics: () => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
@@ -27,9 +27,9 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
 
     const currentTopicIds = [...props.topics.map((topic) => topic.id)];
 
-    const swrKey = `/topics?&limit=10${search.length > 2 ? `&search=${search}` : ''}&exclude=${currentTopicIds.join(
-        ','
-    )}`;
+    const swrKey = `${Config.endpoints.topics}?&limit=10${
+        search.length > 2 ? `&search=${search}` : ''
+    }&exclude=${currentTopicIds.join(',')}`;
 
     const {
         data: data = {
@@ -62,11 +62,12 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
                     { topics: [...currentTopicIds, selectedTopic.id] },
                     user.token
                 );
+
+                // refetch topics
+                await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
             } catch (err) {
                 props.setError('There was a problem adding the topic.');
             }
-            props.fetchAndSetTopics();
-            SWRConfig.mutate(swrKey);
         }
         props.setLoading(false);
     };
@@ -127,4 +128,4 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
     );
 };
 
-export default LinkedTopicsCombobox;
+export default React.memo(LinkedTopicsCombobox);

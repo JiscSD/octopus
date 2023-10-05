@@ -46,7 +46,7 @@ export const publicationFlowLinkedPublication = async (
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
     await page.locator(PageModel.publish.linkedItems.addLink).click();
-    await page.waitForResponse((response) => response.url().includes('/links') && response.ok());
+    await page.waitForResponse((response) => response.url().includes('/links?direct=true') && response.ok());
     await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -337,7 +337,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
 
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
@@ -362,7 +362,7 @@ test.describe('Publication flow', () => {
         await page.keyboard.type('test');
         await page.locator(`[role="option"]:has-text("Test topic")`).click();
         await page.locator(PageModel.publish.linkedItems.addLink).click();
-        await page.waitForResponse((response) => response.url().includes('/publications/') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
         await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
     });
 
@@ -450,7 +450,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, hypothesisPublication);
@@ -490,7 +490,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, methodPublication);
@@ -530,7 +530,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, analysisPublication);
@@ -566,7 +566,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, interpretationPublication);
@@ -606,7 +606,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/reference') && response.ok());
+        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, realWorldApplicationPublication);
@@ -2050,6 +2050,10 @@ test.describe('Publication Flow + File import', () => {
         await page.click('button[title="Save"]:first-of-type');
         await Promise.all([
             page.click('div[role="dialog"] button[aria-label="Save"]'),
+            page.waitForResponse(
+                (response) =>
+                    response.url().includes('/versions') && response.request().method() === 'PATCH' && response.ok()
+            ),
             page.waitForResponse(
                 (response) =>
                     response.url().includes('/publications') && response.request().method() === 'PATCH' && response.ok()
