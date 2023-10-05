@@ -78,7 +78,9 @@ export const updateAll = async (
         const isDuplicate = authorEmails.some((coAuthor, index) => authorEmails.indexOf(coAuthor) != index);
 
         if (isDuplicate) {
-            return response.json(400, { message: 'Duplicate coAuthors' });
+            return response.json(400, {
+                message: 'Duplicate co-authors supplied. Make sure all email addresses are unique.'
+            });
         }
 
         const newCoAuthorsArray = event.body;
@@ -87,7 +89,7 @@ export const updateAll = async (
             (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.email === newCoAuthor.email)
         );
 
-        // check if corresponding author is trying to remove himself
+        // check if corresponding author is trying to remove themselves
         if (removedCoAuthors.some((author) => author.linkedUser === event.user.id)) {
             return response.json(403, {
                 message: 'You are not allowed to remove yourself from the publication.'
