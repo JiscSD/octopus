@@ -169,13 +169,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: POST
                   cors: true
-    updatePublication:
-        handler: src/components/publication/routes.update
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}
-                  method: PATCH
-                  cors: true
     getPublicationLinks:
         handler: src/components/publication/routes.getPublicationLinks
         events:
@@ -542,4 +535,3 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/topics
                   method: PUT
                   cors: true
-                  

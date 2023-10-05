@@ -90,50 +90,6 @@ export const create = async (
     }
 };
 
-export const update = async (
-    event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event.pathParameters.id);
-
-        if (!publication) {
-            return response.json(403, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        const latestVersion = publication.versions.find((version) => version.isLatestVersion);
-
-        if (!latestVersion) {
-            throw Error('Unable to find current version for publication');
-        }
-
-        if (latestVersion.user.id !== event.user.id) {
-            return response.json(403, {
-                message: 'You do not have permission to modify this publication.'
-            });
-        }
-
-        if (latestVersion.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
-        }
-
-        if (event.body.topics !== undefined && publication.type !== 'PROBLEM') {
-            return response.json(400, {
-                message: 'You can not supply topics for a publication that is not a problem.'
-            });
-        }
-
-        const updatedPublication = await publicationService.update(event.pathParameters.id, event.body);
-
-        return response.json(200, updatedPublication);
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
 export const getLinksForPublication = async (
     event: I.APIRequest<undefined, I.GetPublicationLinksQueryParams, I.GetPublicationLinksPathParams>
 ): Promise<I.JSONResponse> => {

@@ -73,22 +73,6 @@ export const getAllByIds = async (ids: Array<string>) => {
     return mergedPublications;
 };
 
-export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
-    const updatedPublication = await client.prisma.publication.update({
-        where: {
-            id
-        },
-        data: {
-            ...(!!updateContent.topics && { topics: { set: updateContent.topics.map((topicId) => ({ id: topicId })) } })
-        },
-        include: {
-            topics: true
-        }
-    });
-
-    return updatedPublication;
-};
-
 export const isIdInUse = async (id: string) => {
     const publication = await client.prisma.publication.count({
         where: {

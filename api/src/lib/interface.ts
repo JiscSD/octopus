@@ -146,10 +146,6 @@ export interface UpdateStatusPathParams {
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
-export interface UpdatePublicationRequestBody {
-    topics?: string[];
-}
-
 export interface UpdatePublicationVersionRequestBody {
     content?: string;
     title?: string;
