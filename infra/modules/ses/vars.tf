@@ -1,7 +1,7 @@
 variable "environment" {
-    type = string
+  type = string
 }
 
-variable "email_addresses" {
-    type = map(list(string))
+variable "project_name" {
+  type = string
 }

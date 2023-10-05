@@ -83,7 +83,7 @@ export const updateAll = (publicationId: string, authors: I.CoAuthor[]) =>
                     publicationId_email: { publicationId, email: author.email }
                 },
                 create: {
-                    email: author.email,
+                    email: author.email.toLowerCase(),
                     approvalRequested: false,
                     confirmedCoAuthor: false,
                     publicationId,
