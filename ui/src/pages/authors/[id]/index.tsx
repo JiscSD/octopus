@@ -200,7 +200,15 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                         classes += 'rounded-b-lg';
                                     }
 
-                                    publicationVersion.user = props.user;
+                                    publicationVersion.user = {
+                                        id: props.user.id,
+                                        createdAt: props.user.createdAt,
+                                        email: props.user.email || '',
+                                        firstName: props.user.firstName,
+                                        lastName: props.user.lastName,
+                                        orcid: props.user.orcid,
+                                        updatedAt: props.user.updatedAt
+                                    };
 
                                     return (
                                         <Components.Delay key={publicationVersion.id} delay={50}>
