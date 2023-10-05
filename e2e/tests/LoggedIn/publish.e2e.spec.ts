@@ -627,9 +627,7 @@ const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
 };
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
-    const responsePromise = page.waitForResponse((res) => res.url().includes('/coauthors') && res.ok());
     await page.locator('aside button:has-text("Co-authors")').click();
-    await responsePromise;
     const row = page.locator('tr', { hasText: user.email });
     await row.locator('button[title="Delete"]').click();
 };
@@ -1989,13 +1987,14 @@ test.describe('Publication flow + co-authors', () => {
         // confirm selected affiliations
         await page.locator('button[title="Confirm Affiliations"]').click();
 
-        const publicationId = page.url().split('/').pop();
+        await page.waitForResponse(
+            (response) =>
+                response.url().includes('/my-affiliations') && response.request().method() === 'PUT' && response.ok()
+        );
 
         await page.waitForResponse(
             (response) =>
-                response.request().method() === 'GET' &&
-                response.url().includes(`/publications/${publicationId}`) &&
-                response.ok()
+                response.request().method() === 'GET' && response.url().includes(`/versions/latest`) && response.ok()
         );
 
         // check approval's tracker table first row includes the selected affiliation title
@@ -2053,10 +2052,6 @@ test.describe('Publication Flow + File import', () => {
             page.waitForResponse(
                 (response) =>
                     response.url().includes('/versions') && response.request().method() === 'PATCH' && response.ok()
-            ),
-            page.waitForResponse(
-                (response) =>
-                    response.url().includes('/publications') && response.request().method() === 'PATCH' && response.ok()
             )
         ]);
 

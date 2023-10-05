@@ -186,6 +186,7 @@ export const getPublicationVersions = async (
                 select: {
                     id: true,
                     linkedUser: true,
+                    confirmedCoAuthor: true,
                     user: {
                         select: {
                             orcid: true,

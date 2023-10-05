@@ -325,7 +325,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     Helpers.getJWT()
                 );
 
-                router.push(`${Config.urls.viewPublication.path}/${publicationVersion?.id}/edit?step=4`);
+                router.push(`${Config.urls.viewPublication.path}/${publicationVersion?.publication.id}/edit?step=4`);
             } catch (err) {
                 const unlockError = err as Interfaces.JSONResponseError;
                 setServerError(unlockError.message);

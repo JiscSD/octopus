@@ -322,23 +322,23 @@ export const validateEmail = (email: string): Boolean => {
 export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
 
 export const getPublicationStatusByAuthor = (
-    publication: Interfaces.PublicationVersion,
+    publicationVersion: Interfaces.PublicationVersion,
     user: Types.UserType | Interfaces.User
 ) => {
-    if (publication.currentStatus === 'LIVE') return 'Live';
+    if (publicationVersion.currentStatus === 'LIVE') return 'Live';
 
-    if (publication.currentStatus === 'DRAFT') {
-        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    if (publicationVersion.currentStatus === 'DRAFT') {
+        return publicationVersion.createdBy === user.id ? 'Draft' : 'Editing in progress';
     }
 
-    if (publication.coAuthors.length > 1) {
-        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+    if (publicationVersion.coAuthors.length > 1) {
+        if (publicationVersion.coAuthors.every((author) => author.confirmedCoAuthor)) {
             return 'Ready to publish';
         }
 
         if (
-            user.id !== publication.createdBy &&
-            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+            user.id !== publicationVersion.createdBy &&
+            publicationVersion.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
         ) {
             return 'Pending your approval';
         }
