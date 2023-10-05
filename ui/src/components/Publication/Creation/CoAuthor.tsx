@@ -83,7 +83,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
-    const [emailDuplicated, SetEmailDuplicated] = React.useState(true);
+    const [emailDuplicated, setEmailDuplicated] = React.useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -104,8 +104,8 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
-        SetEmailDuplicated(true);
-        setCoAuthor(event.target.value?.trim());
+        setEmailDuplicated(false);
+        setCoAuthor(event.target.value);
     };
 
     // Validate email for co author regex to use -
@@ -115,14 +115,15 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         const authorsArray = coAuthors || [];
 
         // check to ensure co-author email is not already in the store/database
-        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthor.toLowerCase());
+        const coAuthorEmail = coAuthor.trim().toLowerCase();
+        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthorEmail);
         if (emailDuplicate) {
-            SetEmailDuplicated(false);
+            setEmailDuplicated(true);
             setLoading(false);
             return;
         }
 
-        const validEmail = Helpers.validateEmail(coAuthor);
+        const validEmail = Helpers.validateEmail(coAuthorEmail);
 
         if (!validEmail) {
             setEmailValidated(false);
@@ -135,7 +136,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         const newAuthor = {
             id: createId(),
             publicationId: publicationId,
-            email: coAuthor,
+            email: coAuthorEmail,
             linkedUser: null,
             approvalRequested: false,
             confirmedCoAuthor: false,
@@ -216,7 +217,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         className="mt-3 w-2/3"
                     />
                 )}
-                {!emailDuplicated && (
+                {emailDuplicated && (
                     <Components.Alert
                         data-testid="email-error"
                         severity="ERROR"
