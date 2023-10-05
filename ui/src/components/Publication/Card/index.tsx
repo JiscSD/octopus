@@ -88,7 +88,8 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                         {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
                     </span>
                     <time className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                        {props.publicationVersion.publishedDate &&
+                            Helpers.formatDate(props.publicationVersion.publishedDate)}
                     </time>
                 </div>
             </div>
