@@ -143,7 +143,7 @@ type Props = {
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const store = Stores.usePublicationCreationStore();
-    const { updateReferences, updateLinkedTo, updatePublicationVersion } = store;
+    const { updateReferences, updateLinkedTo, updatePublicationVersion, updateTopics } = store;
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsByType = React.useMemo(() => {
@@ -211,10 +211,27 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [props.draftVersion.versionOf, props.token, updateLinkedTo]);
 
+    const fetchAndSetTopics = React.useCallback(async () => {
+        if (props.draftVersion.versionOf) {
+            try {
+                const response = await api.get(
+                    `${Config.endpoints.publications}/${props.draftVersion.versionOf}/topics`,
+                    props.token
+                );
+
+                updateTopics(response.data);
+            } catch (err) {
+                // todo: improve error handling
+                console.log(err);
+            }
+        }
+    }, [props.draftVersion.versionOf, props.token, updateTopics]);
+
     React.useEffect(() => {
         fetchAndSetReferences();
         fetchAndSetLinkedTos();
-    }, [fetchAndSetReferences, fetchAndSetLinkedTos]);
+        fetchAndSetTopics();
+    }, [fetchAndSetReferences, fetchAndSetLinkedTos, fetchAndSetTopics]);
 
     React.useEffect(() => {
         updatePublicationVersion(props.draftVersion);

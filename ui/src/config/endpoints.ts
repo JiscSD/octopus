@@ -7,7 +7,7 @@ const endpoints = {
     links: `${api.baseURL}/links`,
     authorization: `${api.baseURL}/authorization`,
     verification: `${api.baseURL}/verification`,
-    flag: `${api.baseURL}/flag`,
+    flags: `${api.baseURL}/flags`,
     bookmarks: `${api.baseURL}/bookmarks`,
     decodeUserToken: `${api.baseURL}/decode-user-token`,
     verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,

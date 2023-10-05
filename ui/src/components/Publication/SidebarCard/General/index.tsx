@@ -10,15 +10,13 @@ import * as Config from '@config';
 type Props = {
     publicationVersion: Interfaces.PublicationVersion;
     linkedFrom: Interfaces.LinkedFromPublication[];
+    flags: Interfaces.Flag[];
 };
 
 const General: React.FC<Props> = (props): React.ReactElement => {
     const peerReviewCount = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW').length;
 
-    const activeFlags = React.useMemo(
-        () => props.publicationVersion.publication.publicationFlags.filter((flag) => !flag.resolved),
-        [props.publicationVersion]
-    );
+    const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
 
     const uniqueRedFlagCategoryList = React.useMemo(
         () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
@@ -40,7 +38,8 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     Published:
                 </span>
                 <time className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                    {props.publicationVersion.publishedDate &&
+                        Helpers.formatDate(props.publicationVersion.publishedDate)}
                 </time>
             </div>
             <div className="flex">

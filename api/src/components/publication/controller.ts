@@ -286,3 +286,17 @@ export const updateTopics = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getPublicationTopics = async (
+    event: I.APIRequest<undefined, undefined, I.GetPublicationTopicsPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const topics = await publicationService.getPublicationTopics(event.pathParameters.id);
+
+        return response.json(200, topics);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

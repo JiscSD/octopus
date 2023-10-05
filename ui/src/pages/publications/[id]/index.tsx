@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 type SidebarCardProps = {
     publicationVersion: Interfaces.PublicationVersion;
     linkedFrom: Interfaces.LinkedFromPublication[];
+    flags: Interfaces.Flag[];
     sectionList: {
         title: string;
         href: string;
@@ -32,6 +33,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
         <Components.PublicationSidebarCardGeneral
             publicationVersion={props.publicationVersion}
             linkedFrom={props.linkedFrom}
+            flags={props.flags}
         />
         <Components.PublicationSidebarCardActions publicationVersion={props.publicationVersion} />
         <Components.PublicationSidebarCardSections sectionList={props.sectionList} />
@@ -122,6 +124,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (url) => api.get(url, props.userToken).then(({ data }) => data)
     );
 
+    const { data: flags = [] } = useSWR<Interfaces.Flag[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/flags`
+    );
+
+    const { data: topics = [] } = useSWR<Interfaces.Topic[]>(
+        `${Config.endpoints.publications}/${props.publicationId}/topics`
+    );
+
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
     // problems this publication is linked to
@@ -139,8 +149,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     }, [publicationVersion, user]);
 
-    const topics = publicationVersion?.publication.topics || [];
-
     const list = [];
 
     const showReferences = Boolean(references?.length);
@@ -150,7 +158,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
-    const showRedFlags = !!publicationVersion?.publication.publicationFlags?.length;
+    const showRedFlags = !!flags.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
@@ -332,15 +340,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [mutate]
     );
 
-    const activeFlags = React.useMemo(
-        () => publicationVersion?.publication.publicationFlags?.filter((flag) => !flag.resolved),
-        [publicationVersion]
-    );
+    const activeFlags = React.useMemo(() => flags.filter((flag) => !flag.resolved), [flags]);
 
-    const inactiveFlags = React.useMemo(
-        () => publicationVersion?.publication.publicationFlags?.filter((flag) => !!flag.resolved),
-        [publicationVersion]
-    );
+    const inactiveFlags = React.useMemo(() => flags.filter((flag) => !!flag.resolved), [flags]);
 
     const uniqueRedFlagCategoryList = React.useMemo(
         () => Array.from(new Set(activeFlags?.map((flag) => flag.category))),
@@ -588,6 +590,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     publicationVersion={publicationVersion}
                                     linkedFrom={linkedFrom}
                                     sectionList={sectionList}
+                                    flags={flags}
                                 />
                             )}
                         </div>
@@ -858,6 +861,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             publicationVersion={publicationVersion}
                             linkedFrom={linkedFrom}
                             sectionList={sectionList}
+                            flags={flags}
                         />
                     </div>
                 </aside>

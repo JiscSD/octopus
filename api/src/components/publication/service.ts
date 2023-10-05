@@ -1136,3 +1136,19 @@ export const updateTopics = async (id: string, topics: string[]) => {
 
     return updateTopics.topics;
 };
+
+export const getPublicationTopics = (id: string) =>
+    client.prisma.topic.findMany({
+        where: {
+            publications: {
+                some: {
+                    id
+                }
+            }
+        },
+        select: {
+            id: true,
+            createdAt: true,
+            title: true
+        }
+    });

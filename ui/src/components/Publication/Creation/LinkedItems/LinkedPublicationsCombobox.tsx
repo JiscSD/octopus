@@ -1,18 +1,15 @@
 import React from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import useSWR, { useSWRConfig } from 'swr';
-
 import * as Components from '@components';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as Types from '@types';
-
 import * as api from '@api';
 
 type LinkedPublicationsComboboxProps = {
-    fetchAndSetLinks: (token: string, entityType: Types.LinkedEntityType) => void;
+    fetchAndSetLinks: () => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
@@ -74,7 +71,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
             } catch (err) {
                 props.setError('There was a problem creating the link.');
             }
-            props.fetchAndSetLinks(user.token, 'PUBLICATION');
+            props.fetchAndSetLinks();
             SWRConfig.mutate(swrKey);
         }
         props.setLoading(false);

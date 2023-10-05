@@ -381,7 +381,7 @@ export const getTabCompleteness = (
     steps: Interfaces.CreationStep[],
     store: Types.PublicationCreationStoreType
 ): Interfaces.CreationStepWithCompletenessStatus[] => {
-    const { publicationVersion, linkedTo } = store;
+    const { publicationVersion, linkedTo, topics } = store;
     const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
     const correspondingAuthor = publicationVersion?.coAuthors.find(
         (author) => author.linkedUser === store.publicationVersion?.createdBy
@@ -404,7 +404,7 @@ export const getTabCompleteness = (
                 }
                 break;
             case 'LINKED_ITEMS':
-                if (linkedTo?.length || publicationVersion?.publication.topics?.length) {
+                if (linkedTo?.length || topics.length) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });

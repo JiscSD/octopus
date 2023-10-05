@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -13,8 +13,8 @@ const Links: React.FC = (): React.ReactElement => {
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
     const linkedTo = Stores.usePublicationCreationStore((state) => state.linkedTo);
     const updateLinkedTo = Stores.usePublicationCreationStore((state) => state.updateLinkedTo);
-    const topics = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.topics);
-    const updatePublicationTopics = Stores.usePublicationCreationStore((state) => state.updatePublicationTopics);
+    const topics = Stores.usePublicationCreationStore((state) => state.topics);
+    const updateTopics = Stores.usePublicationCreationStore((state) => state.updateTopics);
 
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -25,51 +25,60 @@ const Links: React.FC = (): React.ReactElement => {
     const [error, setError] = React.useState<string | undefined>();
     const [loading, setLoading] = React.useState<boolean>(false);
 
-    const fetchAndSetLinks = async (token: string, entityType: Types.LinkedEntityType) => {
+    const fetchAndSetLinks = useCallback(async () => {
         try {
-            if (entityType === 'PUBLICATION') {
-                const response = await api.get(`/publications/${currentPublicationId}/links?direct=true`, token);
-                updateLinkedTo(response.data.linkedTo);
-            } else {
-                const response = await api.get(`/publications/${currentPublicationId}`, token);
-                updatePublicationTopics(response.data.topics);
-            }
+            const response = await api.get(`/publications/${currentPublicationId}/links?direct=true`, user?.token);
+            updateLinkedTo(response.data.linkedTo);
         } catch (err) {
-            setError('There was a problem fetching this publication.');
+            setError('There was a problem fetching linked publications.');
         }
-    };
+    }, [currentPublicationId, updateLinkedTo, user?.token]);
 
-    const deletePublicationLink = async (linkId: string) => {
-        setError(undefined);
-        if (user) {
-            try {
-                await api.destroy(`/links/${linkId}`, user.token);
-            } catch (err) {
-                setError('There was a problem removing the link.');
+    const fetchAndSetTopics = useCallback(async () => {
+        try {
+            const response = await api.get(`/publications/${currentPublicationId}/topics`, user?.token);
+            updateTopics(response.data);
+        } catch (err) {
+            setError('There was a problem fetching topics.');
+        }
+    }, [currentPublicationId, updateTopics, user?.token]);
+
+    const deletePublicationLink = useCallback(
+        async (linkId: string) => {
+            setError(undefined);
+            if (user) {
+                try {
+                    await api.destroy(`/links/${linkId}`, user.token);
+                } catch (err) {
+                    setError('There was a problem removing the link.');
+                }
+                fetchAndSetLinks();
             }
-            fetchAndSetLinks(user.token, 'PUBLICATION');
-        }
-    };
+        },
+        [fetchAndSetLinks, user]
+    );
 
-    const deleteTopicLink = async (topicId: string) => {
-        setError(undefined);
+    const deleteTopicLink = useCallback(
+        async (topicId: string) => {
+            setError(undefined);
 
-        if (user) {
-            try {
-                // Update publication's topic IDs with current list minus ID to delete
-                await api.put(
-                    `/publications/${currentPublicationId}/topics`,
-                    {
-                        topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
-                    },
-                    user.token
-                );
-            } catch (err) {
-                setError('There was a problem removing the topic.');
+            if (user) {
+                try {
+                    // Update publication's topic IDs with current list minus ID to delete
+                    await api.put(
+                        `/publications/${currentPublicationId}/topics`,
+                        {
+                            topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
+                        },
+                        user.token
+                    );
+                } catch (err) {
+                    setError('There was a problem removing the topic.');
+                }
             }
-            fetchAndSetLinks(user.token, 'TOPIC');
-        }
-    };
+        },
+        [currentPublicationId, topics, user]
+    );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
     const isProblem = type === 'PROBLEM';
@@ -131,7 +140,7 @@ const Links: React.FC = (): React.ReactElement => {
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
-                                fetchAndSetLinks={fetchAndSetLinks}
+                                fetchAndSetTopics={fetchAndSetTopics}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}

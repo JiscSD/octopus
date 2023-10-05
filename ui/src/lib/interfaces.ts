@@ -54,8 +54,6 @@ export interface CorePublication {
     type: Types.PublicationType;
     doi: string | null;
     url_slug: string;
-    topics: BaseTopic[];
-    publicationFlags: Flag[];
 }
 
 export interface PublicationVersionUser {
@@ -402,6 +400,7 @@ export interface Flag {
     publicationId: string;
     resolved: boolean;
     createdAt: string;
+    createdBy: string;
     user: Omit<CoreUser, 'email'>;
 }
 
@@ -500,16 +499,16 @@ export interface TopicTranslation {
 export interface BaseTopic {
     id: string;
     title: string;
-    language: Types.Languages;
-    translations: TopicTranslation[];
+    createdAt: string;
 }
 
 export interface Topic extends BaseTopic {
-    createdAt: string;
     updatedAt: string;
+    language: string;
     parents: BaseTopic[];
     children: BaseTopic[];
     publications: TopicPublication[];
+    translations: TopicTranslation[];
 }
 
 export interface TopicsPaginatedResults {

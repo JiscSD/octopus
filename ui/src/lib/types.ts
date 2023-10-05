@@ -50,7 +50,6 @@ export type ToastStoreType = {
 export type PublicationVersionSlice = {
     publicationVersion: Interfaces.PublicationVersion;
     updatePublicationVersion: (publicationVersion: Interfaces.PublicationVersion) => void;
-    updatePublicationTopics: (topics: Interfaces.BaseTopic[]) => void;
     updateAuthorAffiliations: (affiliations: Interfaces.MappedOrcidAffiliation[]) => void;
     updateIsIndependentAuthor: (isIndependent: boolean) => void;
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
@@ -69,12 +68,21 @@ export type ReferencesSlice = {
     resetReferences: () => void;
 };
 
+export type TopicsSlice = {
+    topics: Interfaces.BaseTopic[];
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
+};
+
 export type ErrorSlice = {
     error: string | null;
     setError: (message: string | null) => void;
 };
 
-export type PublicationCreationStoreType = PublicationVersionSlice & LinkedToSlice & ReferencesSlice & ErrorSlice;
+export type PublicationCreationStoreType = PublicationVersionSlice &
+    LinkedToSlice &
+    ReferencesSlice &
+    ErrorSlice &
+    TopicsSlice;
 
 export type JSONValue = unknown;
 

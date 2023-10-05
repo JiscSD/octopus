@@ -198,7 +198,13 @@ functions:
                   path: ${self:custom.versions.v1}/publications/research-topics
                   method: GET
                   cors: true
-
+    getPublicationTopics:
+        handler: src/components/publication/routes.getPublicationTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/topics
+                  method: GET
+                  cors: true
     # Publication Versions
     getPublicationVersion:
         handler: src/components/publicationVersion/routes.get
@@ -363,7 +369,7 @@ functions:
         handler: src/components/flag/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}
+                  path: ${self:custom.versions.v1}/flags/{id}
                   method: GET
                   cors: true
     createFlag:
@@ -377,28 +383,28 @@ functions:
         handler: src/components/flag/routes.createFlagComment
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}/comment
+                  path: ${self:custom.versions.v1}/flags/{id}/comment
                   method: POST
                   cors: true
     resolveFlag:
         handler: src/components/flag/routes.resolveFlag
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}/resolve
+                  path: ${self:custom.versions.v1}/flags/{id}/resolve
                   method: POST
                   cors: true
     getPublicationFlags:
         handler: src/components/flag/routes.getPublicationFlags
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/publication/{id}
+                  path: ${self:custom.versions.v1}/publications/{id}/flags
                   method: GET
                   cors: true
     getUserFlags:
         handler: src/components/flag/routes.getUserFlags
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/user/{id}
+                  path: ${self:custom.versions.v1}/user/{id}/flags
                   method: GET
                   cors: true
     # Images

@@ -137,6 +137,10 @@ export interface UpdatePublicationVersionPathParams {
     id: string;
 }
 
+export interface GetPublicationTopicsPathParams {
+    id: string;
+}
+
 export interface UpdateStatusPathParams {
     id: string;
     status: 'LIVE' | 'DRAFT' | 'LOCKED';

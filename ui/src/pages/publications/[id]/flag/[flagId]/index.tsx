@@ -23,7 +23,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let isCommentable = false;
     const token = Helpers.getJWT(context);
     const decodedToken = token ? await Helpers.getDecodedUserToken(token) : null;
-    const flagUrl = `${Config.endpoints.flag}/${context.query.flagId}`;
+    const flagUrl = `${Config.endpoints.flags}/${context.query.flagId}`;
 
     try {
         const flagResponse = await api.get(flagUrl, token);
@@ -101,7 +101,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
             try {
                 // Post off the comment to the thread
                 await api.post(
-                    `${Config.endpoints.flag}/${props.flagId}/comment`,
+                    `${Config.endpoints.flags}/${props.flagId}/comment`,
                     {
                         comment
                     },
@@ -139,7 +139,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
 
         try {
             // Post off to the resolve endpoint
-            await api.post(`${Config.endpoints.flag}/${props.flagId}/resolve`, {}, user?.token);
+            await api.post(`${Config.endpoints.flags}/${props.flagId}/resolve`, {}, user?.token);
 
             // Inform swr this endpoint has had a mutation, so revalidate
             mutate();

@@ -6,12 +6,10 @@ import useSWR, { useSWRConfig } from 'swr';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as Types from '@types';
-
 import * as api from '@api';
 
 type LinkedTopicsComboboxProps = {
-    fetchAndSetLinks: (token: string, entityType: Types.LinkedEntityType) => void;
+    fetchAndSetTopics: () => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
@@ -67,7 +65,7 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
             } catch (err) {
                 props.setError('There was a problem adding the topic.');
             }
-            props.fetchAndSetLinks(user.token, 'TOPIC');
+            props.fetchAndSetTopics();
             SWRConfig.mutate(swrKey);
         }
         props.setLoading(false);

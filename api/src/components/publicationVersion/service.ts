@@ -15,8 +15,6 @@ export const getById = async (id: string) => {
                     id: true,
                     type: true,
                     doi: true,
-                    topics: true,
-                    publicationFlags: true,
                     url_slug: true
                 }
             },
@@ -97,8 +95,6 @@ export const get = (publicationId: string, version: string | number) =>
                     id: true,
                     type: true,
                     doi: true,
-                    topics: true,
-                    publicationFlags: true,
                     url_slug: true
                 }
             },
@@ -284,10 +280,10 @@ export const isReadyToPublish = async (publicationVersion: I.PublicationVersion)
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 ||
-        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.publication.topics.length !== 0);
+        linkedTo.length !== 0 || (publicationVersion.publication.type === 'PROBLEM' && topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
@@ -324,10 +320,10 @@ export const isReadyToRequestApproval = async (publicationVersion: I.Publication
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 ||
-        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.publication.topics.length !== 0);
+        linkedTo.length !== 0 || (publicationVersion.publication.type === 'PROBLEM' && topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
