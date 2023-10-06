@@ -628,7 +628,7 @@ const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
     const responsePromise = page.waitForResponse((res) => res.url().includes('/coauthors') && res.ok());
-    await page.locator('aside button:has-text("Co-authors")').click();
+    await page.locator('aside button:has-text("Co-authors")').first().click();
     await responsePromise;
     const row = page.locator('tr', { hasText: user.email });
     await row.locator('button[title="Delete"]').click();
@@ -836,7 +836,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 
         // add co-authors
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
         await addCoAuthor(page, Helpers.user3);
 
@@ -919,7 +919,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add one co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // Request approval from co author
@@ -969,7 +969,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user3);
 
         // verify co-author has been added
@@ -1037,7 +1037,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add co-authors
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify authors order into the table
@@ -1121,7 +1121,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1195,7 +1195,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1263,7 +1263,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, true, 'Some conflict of interest text');
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1338,7 +1338,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1400,7 +1400,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1474,14 +1474,14 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
         await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user3);
 
         // verify co-author has been added
@@ -1543,14 +1543,14 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
         await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user3);
 
         // verify co-author has been added
@@ -1629,7 +1629,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1700,7 +1700,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1781,7 +1781,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1845,7 +1845,7 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
@@ -1907,14 +1907,14 @@ test.describe('Publication flow + co-authors', () => {
         await publicationFlowConflictOfInterest(page, false);
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user2);
 
         // verify co-author has been added
         await expect(page.locator(`td:has-text("${Helpers.user2.email}")`)).toBeVisible();
 
         // add co-author
-        await page.locator('aside button:has-text("Co-authors")').click();
+        await page.locator('aside button:has-text("Co-authors")').first().click();
         await addCoAuthor(page, Helpers.user3);
 
         // verify co-author has been added
@@ -1991,12 +1991,17 @@ test.describe('Publication flow + co-authors', () => {
 
         const publicationId = page.url().split('/').pop();
 
-        await page.waitForResponse(
-            (response) =>
-                response.request().method() === 'GET' &&
-                response.url().includes(`/publications/${publicationId}`) &&
-                response.ok()
-        );
+        await Promise.all([
+            page.waitForResponse(
+                (response) =>
+                    response.request().method() === 'PUT' &&
+                    response.url().includes(`/publications/${publicationId}/my-affiliations`)
+            ),
+            page.waitForResponse(
+                (response) =>
+                    response.request().method() === 'GET' && response.url().includes(`/publications/${publicationId}`)
+            )
+        ]);
 
         // check approval's tracker table first row includes the selected affiliation title
         expect(

@@ -13,17 +13,6 @@ import * as Types from '@types';
 import * as Assets from '@assets';
 import * as Helpers from '@helpers';
 
-export const getStaticProps: Types.GetStaticProps = async () => {
-    return {
-        props: {
-            metadata: {
-                title: Config.urls.blog.documentTitle,
-                description: Config.urls.blog.description
-            }
-        }
-    };
-};
-
 const Blog: NextPage = (): JSX.Element => {
     const router = useRouter();
     const skip = Number(router.query.skip) || 0;
@@ -61,10 +50,12 @@ const Blog: NextPage = (): JSX.Element => {
     return (
         <>
             <Head>
+                <title>{Config.urls.blog.documentTitle}</title>
                 <meta name="description" content={Config.urls.blog.description} />
+                <meta name="og:title" content={Config.urls.blog.documentTitle} />
+                <meta name="og:description" content={Config.urls.blog.description} />
                 <meta name="keywords" content={Config.urls.blog.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.blog.canonical} />
-                <title>{Config.urls.blog.documentTitle}</title>
             </Head>
 
             <Layouts.Standard fixedHeader={false}>
