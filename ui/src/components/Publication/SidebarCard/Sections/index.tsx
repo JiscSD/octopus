@@ -8,7 +8,7 @@ type Props = {
 
 const Sections: React.FC<Props> = (props): React.ReactElement => (
     <>
-        <Components.SectioBreak name="Sections" />
+        <Components.SectionBreak name="Sections" />
         {!!props.sectionList && (
             <div className="space-y-2">
                 {props.sectionList.map((section) => (
