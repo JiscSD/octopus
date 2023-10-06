@@ -6,24 +6,15 @@ import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
 
-export const getStaticProps: Types.GetStaticProps = async () => {
-    return {
-        props: {
-            metadata: {
-                title: Config.urls.documentation.title,
-                description: Config.urls.documentation.description
-            }
-        }
-    };
-};
-
 const Documentation: Types.NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.documentation.title}</title>
+            <meta name="og:title" content={Config.urls.documentation.title} />
+            <meta name="og:description" content={Config.urls.documentation.description} />
             <meta name="description" content={Config.urls.documentation.description} />
             <meta name="keywords" content={Config.urls.documentation.keywords.join(', ')} />
             <link rel="canonical" href={Config.urls.documentation.canonical} />
-            <title>{Config.urls.documentation.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={true}>
