@@ -1,11 +1,11 @@
 variable "vpc_id" {
-    type = string
+  type = string
 }
 
 variable "public_subnet" {
-    type = string
+  type = string
 }
 
 variable "environment" {
-    type = string
+  type = string
 }

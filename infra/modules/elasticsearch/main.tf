@@ -97,9 +97,9 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   }
   CONFIG
 
-#   depends_on = [
-#     aws_iam_service_linked_role.elasticsearch
-#   ]
+  #   depends_on = [
+  #     aws_iam_service_linked_role.elasticsearch
+  #   ]
 
 }
 

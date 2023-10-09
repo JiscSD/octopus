@@ -36,21 +36,21 @@ resource "random_string" "db_master_pass" {
 }
 
 resource "aws_db_instance" "rds" {
-  allocated_storage            = var.allocated_storage
-  max_allocated_storage        = var.max_allocated_storage
-  engine                       = "postgres"
-  engine_version               = var.db_version
-  instance_class               = var.instance
-  identifier                   = "${var.project_name}-${var.environment}"
-  username                     = "postgres"
-  password                     = random_string.db_master_pass.result
-  skip_final_snapshot          = true
-  backup_retention_period      = var.backup_retention_period
-  vpc_security_group_ids       = [aws_security_group.database_security_group.id]
-  db_subnet_group_name         = aws_db_subnet_group.database_subnet.name
+  allocated_storage       = var.allocated_storage
+  max_allocated_storage   = var.max_allocated_storage
+  engine                  = "postgres"
+  engine_version          = var.db_version
+  instance_class          = var.instance
+  identifier              = "${var.project_name}-${var.environment}"
+  username                = "postgres"
+  password                = random_string.db_master_pass.result
+  skip_final_snapshot     = true
+  backup_retention_period = var.backup_retention_period
+  vpc_security_group_ids  = [aws_security_group.database_security_group.id]
+  db_subnet_group_name    = aws_db_subnet_group.database_subnet.name
 
-  monitoring_interval    = var.monitoring_interval
-  monitoring_role_arn    = aws_iam_role.rds_enhanced_monitoring.arn
+  monitoring_interval = var.monitoring_interval
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring.arn
 
   performance_insights_enabled          = true
   performance_insights_retention_period = var.performance_insights_retention_period

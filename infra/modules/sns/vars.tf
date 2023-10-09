@@ -2,7 +2,6 @@ variable "environment" {
   type = string
 }
 
-variable "slack_channel_email" {
+variable "project_name" {
   type = string
-  sensitive = true
 }
