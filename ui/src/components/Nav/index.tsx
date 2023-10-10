@@ -289,7 +289,7 @@ const Nav: React.FC = (): React.ReactElement => {
                                                 >
                                                     <HeadlessUI.Menu.Item>
                                                         {({ active }) => (
-                                                           <FlickerLessLink subItem={subItem} active={active}/>
+                                                            <FlickerLessLink subItem={subItem} active={active} />
                                                         )}
                                                     </HeadlessUI.Menu.Item>
                                                 </li>
