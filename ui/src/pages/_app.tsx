@@ -38,6 +38,11 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
         <Contexts.ConfirmationModalProvider>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="og:title" content="Octopus" />
+                <meta
+                    name="og:description"
+                    content="Free, fast and fair: the global primary research record where researchers publish their work in full detail."
+                />
             </Head>
 
             <NextProgressBar
