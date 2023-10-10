@@ -92,6 +92,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             className={`${
                                 props.isSelected ? 'text-teal-50' : 'text-grey-600'
                             } block text-xxs transition-colors duration-500 dark:text-grey-200 2xl:text-xs`}
+                            suppressHydrationWarning
                         >
                             {Helpers.formatDate(props.publishedDate, 'short')}
                         </time>

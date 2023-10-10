@@ -34,11 +34,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             latest,
-            errors,
-            metadata: {
-                title: Config.urls.home.title,
-                description: Config.urls.home.description
-            }
+            errors
         }
     };
 };
@@ -53,10 +49,12 @@ const Home: Types.NextPage<Props> = (props): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.home.title}</title>
                 <meta name="description" content={Config.urls.home.description} />
+                <meta name="og:title" content={Config.urls.home.title} />
+                <meta name="og:description" content={Config.urls.home.description} />
                 <meta name="keywords" content={Config.urls.home.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.home.canonical} />
-                <title>{Config.urls.home.title}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <section className="container mx-auto px-8 py-8 lg:py-24">

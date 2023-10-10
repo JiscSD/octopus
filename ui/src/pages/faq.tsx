@@ -151,24 +151,15 @@ const faqContents = [
     }
 ];
 
-export const getStaticProps: Types.GetStaticProps = async () => {
-    return {
-        props: {
-            metadata: {
-                title: Config.urls.faq.title,
-                description: Config.urls.faq.description
-            }
-        }
-    };
-};
-
 const Faq: NextPage<Props> = (props): JSX.Element => (
     <>
         <Head>
+            <title>{Config.urls.faq.title}</title>
             <meta name="description" content={Config.urls.faq.description} />
+            <meta name="og:title" content={Config.urls.faq.title} />
+            <meta name="og:description" content={Config.urls.faq.description} />
             <meta name="keywords" content={Config.urls.faq.keywords.join(', ')} />
             <link rel="canonical" href={Config.urls.faq.canonical} />
-            <title>{Config.urls.faq.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>

@@ -87,7 +87,10 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                     <span className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
                         {Helpers.formatPublicationType(props.publication.type)}
                     </span>
-                    <time className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                    <time
+                        className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                        suppressHydrationWarning
+                    >
                         {Helpers.formatDate(props.publication.publishedDate)}
                     </time>
                 </div>

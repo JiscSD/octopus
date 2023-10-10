@@ -47,10 +47,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         props: {
             user,
             userPublicationsUrl,
-            fallbackData: firstUserPublicationsPage,
-            metadata: {
-                title: `Author: ${user.orcid} - ${Config.urls.viewUser.title}`
-            }
+            fallbackData: firstUserPublicationsPage
         }
     };
 };
@@ -59,9 +56,6 @@ type Props = {
     user: Interfaces.User;
     userPublicationsUrl: string;
     fallbackData: Interfaces.UserPublicationsPage | null;
-    metadata: {
-        title: string;
-    };
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -97,13 +91,16 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
+    const pageTitle = `Author: ${props.user.orcid} - ${Config.urls.viewUser.title}`;
+
     return (
         <>
             <Head>
+                <title>{pageTitle}</title>
                 <meta name="description" content="" />
                 <meta name="keywords" content="" />
+                <meta name="og:title" content={pageTitle} />
                 <link rel="canonical" href={`${Config.urls.viewUser.canonical}/${props.user.id}`} />
-                <title>{props.metadata.title}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <header className="container mx-auto px-8 py-8 lg:pb-24 lg:pt-16">
