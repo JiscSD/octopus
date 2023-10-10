@@ -37,9 +37,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const [memoizedStore] = useState(store);
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
+    const [saveModalLoading, setSaveModalLoading] = React.useState(false);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
+    const [publishModalLoading, setPublishModalLoading] = React.useState(false);
     const [requestApprovalModalVisibility, setRequestApprovalModalVisibility] = React.useState(false);
+    const [requestApprovalModalLoading, setRequestApprovalModalLoading] = React.useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
+    const [deleteModalLoading, setDeleteModalLoading] = React.useState(false);
     const [showSideBar, setShowSideBar] = useState(false);
     const xl = Hooks.useMediaQuery('(min-width: 1280px)');
     const lg = Hooks.useMediaQuery('(min-width: 1024px)');
@@ -227,6 +231,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
      *              correct step if a field is missing.
      */
     const publish = useCallback(async () => {
+        setPublishModalLoading(true);
         const check = checkRequired(store);
         if (check.ready) {
             store.setError(null);
@@ -248,9 +253,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             store.setError(check.message);
         }
         setPublishModalVisibility(false);
+        setPublishModalLoading(false);
     }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
 
+    const onClosePublishModal = () => {
+        setPublishModalVisibility(false);
+    };
+
     const requestApproval = useCallback(async () => {
+        setRequestApprovalModalLoading(true);
         try {
             // save publication
             await saveCurrent();
@@ -275,12 +286,17 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     : message
             );
         }
-
         setRequestApprovalModalVisibility(false);
+        setRequestApprovalModalLoading(false);
     }, [saveCurrent, store]);
+
+    const onCloseRequestApprovalModal = () => {
+        setRequestApprovalModalVisibility(false);
+    };
 
     // Option selected from modal
     const save = useCallback(async () => {
+        setSaveModalLoading(true);
         try {
             await saveCurrent('Publication successfully saved');
         } catch (err) {
@@ -293,10 +309,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
 
         setSaveModalVisibility(false);
+        setSaveModalLoading(false);
     }, [saveCurrent, store]);
+
+    const onCloseSaveModal = () => {
+        setSaveModalVisibility(false);
+    };
 
     // Option selected from modal
     const deleteExit = useCallback(async () => {
+        setDeleteModalLoading(true);
         try {
             await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
             router.push({
@@ -319,7 +341,12 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
 
         setDeleteModalVisibility(false);
+        setDeleteModalLoading(false);
     }, [props.publication.id, props.token, router, setToast, store, user]);
+
+    const onCloseDeleteModal = () => {
+        setDeleteModalVisibility(false);
+    };
 
     const handlePreview = useCallback(async () => {
         try {
@@ -358,7 +385,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         <>
             <Components.Modal
                 open={saveModalVisibility}
-                setOpen={setSaveModalVisibility}
+                onClose={onCloseSaveModal}
+                loading={saveModalLoading}
                 positiveActionCallback={save}
                 positiveButtonText="Save"
                 cancelButtonText="Cancel"
@@ -371,7 +399,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <Components.Modal
                 open={publishModalVisibility}
-                setOpen={setPublishModalVisibility}
+                onClose={onClosePublishModal}
+                loading={publishModalLoading}
                 positiveActionCallback={publish}
                 positiveButtonText="Yes, save &amp; publish"
                 cancelButtonText="Cancel"
@@ -382,7 +411,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <Components.Modal
                 open={requestApprovalModalVisibility}
-                setOpen={setRequestApprovalModalVisibility}
+                onClose={onCloseRequestApprovalModal}
+                loading={requestApprovalModalLoading}
                 positiveActionCallback={requestApproval}
                 positiveButtonText="Finalise Draft and Send Request"
                 cancelButtonText="Cancel"
@@ -396,7 +426,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             </Components.Modal>
             <Components.Modal
                 open={deleteModalVisibility}
-                setOpen={setDeleteModalVisibility}
+                onClose={onCloseDeleteModal}
+                loading={deleteModalLoading}
                 positiveActionCallback={deleteExit}
                 positiveButtonText="Yes, delete this draft"
                 cancelButtonText="Cancel"
