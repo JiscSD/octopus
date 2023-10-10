@@ -160,6 +160,10 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
         setSubmitting(false);
     };
 
+    const onCloseResolveModal = () => {
+        setShowResolveModal(false);
+    };
+
     return (
         <>
             <Head>
@@ -184,9 +188,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                         {props.isResolvable && (
                             <Components.Modal
                                 open={showResolveModal}
-                                setOpen={setShowResolveModal}
+                                onClose={onCloseResolveModal}
                                 title="Are you sure you want to resolve this red flag?"
-                                disableButtons={submitting}
+                                loading={submitting}
                                 positiveButtonText="Resolve"
                                 positiveActionCallback={resolve}
                                 cancelButtonText="Cancel"

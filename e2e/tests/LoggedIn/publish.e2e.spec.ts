@@ -1999,9 +1999,11 @@ test.describe('Publication flow + co-authors', () => {
         );
 
         // check approval's tracker table first row includes the selected affiliation title
-        expect(
-            await page.locator('table[data-testid="approval-tracker-table"] > tbody > tr').first().innerText()
-        ).toContain(firstSelectedAffiliationTitle.split(':')[0]);
+        await expect(page.locator('table[data-testid="approval-tracker-table"] > tbody > tr')
+                .first()
+                .locator('td')
+                .filter({ hasText: firstSelectedAffiliationTitle.split(':')[0] })
+        ).toBeVisible();
 
         await page.close();
     });

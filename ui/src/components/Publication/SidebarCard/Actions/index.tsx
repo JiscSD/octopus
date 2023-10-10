@@ -24,7 +24,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const setToast = Stores.useToastStore((state) => state.setToast);
 
     // Modals
-    const [showRedFlagModel, setShowRedFlagModel] = React.useState(false);
+    const [showRedFlagModal, setShowRedFlagModal] = React.useState(false);
 
     // State
     const [redFlagReason, setRedFlagReason] = React.useState<Types.RedFlagTypes>('PLAGIARISM');
@@ -48,8 +48,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     user?.token
                 );
 
-                // Close the model
-                setShowRedFlagModel(false);
+                // Close the modal
+                setShowRedFlagModal(false);
 
                 // Mount a new toast for successful response
                 setToast({
@@ -74,29 +74,30 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
 
     // Adds a small delay so the error just instantly jump off the screen
     React.useEffect(() => {
-        if (!showRedFlagModel) {
+        if (!showRedFlagModal) {
             setTimeout(() => {
                 setError(undefined);
                 setRedFlagComment('');
             }, 500);
         }
-    }, [showRedFlagModel]);
+    }, [showRedFlagModal]);
+
+    const onCloseRedFlagModal = () => {
+        setShowRedFlagModal(false);
+    };
 
     return (
         <>
             <Components.Modal
-                open={showRedFlagModel}
-                setOpen={setShowRedFlagModel}
+                open={showRedFlagModal}
+                onClose={onCloseRedFlagModal}
                 positiveActionCallback={saveRedFlag}
+                loading={submitting}
                 positiveButtonText="Submit"
                 cancelButtonText="Cancel"
                 title="Red flag publication"
-                disableButtons={submitting}
             >
                 <>
-                    {!!submitting && (
-                        <Assets.Spinner width={25} height={25} className="absolute right-5 top-5 stroke-teal-500" />
-                    )}
                     <p className="mb-8 mt-4 text-left text-xs text-grey-700">
                         Flag any potential research integrity issues with this publication.
                         <br className="hidden xl:block" />
@@ -219,7 +220,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                             />
                                             <Components.PublicationSidebarCardActionsButton
                                                 label="Flag a concern with this publication"
-                                                onClick={() => setShowRedFlagModel(true)}
+                                                onClick={() => setShowRedFlagModal(true)}
                                             />
                                         </>
                                     )}
