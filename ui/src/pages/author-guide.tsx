@@ -38,24 +38,15 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
     );
 };
 
-export const getStaticProps: Types.GetStaticProps = async () => {
-    return {
-        props: {
-            metadata: {
-                title: Config.urls.authorGuide.title,
-                description: Config.urls.authorGuide.description
-            }
-        }
-    };
-};
-
 const AuthorGuide: NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.authorGuide.title}</title>
             <meta name="description" content={Config.urls.authorGuide.description} />
+            <meta name="og:title" content={Config.urls.authorGuide.title} />
+            <meta name="og:description" content={Config.urls.authorGuide.description} />
             <meta name="keywords" content={Config.urls.authorGuide.keywords.join(', ')} />
             <link rel="canonical" href={Config.urls.authorGuide.canonical} />
-            <title>{Config.urls.authorGuide.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>

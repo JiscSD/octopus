@@ -73,11 +73,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             fallback: {
                 [swrKey]: results
             },
-            error,
-            metadata: {
-                title: Config.urls.search.title.replace('publications', 'authors'),
-                description: Config.urls.search.description
-            }
+            error
         }
     };
 };
@@ -88,10 +84,6 @@ type Props = {
     limit: string | null;
     offset: string | null;
     error: string | null;
-    metadata: {
-        title: string;
-        description: string;
-    };
 };
 
 const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -120,13 +112,17 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
         setOffset(0);
     }, [query, limit]);
 
+    const pageTitle = Config.urls.search.title.replace('publications', 'authors');
+
     return (
         <>
             <Head>
+                <title>{pageTitle}</title>
                 <meta name="description" content={Config.urls.search.description} />
+                <meta name="og:title" content={pageTitle} />
+                <meta name="og:description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{props.metadata.title}</title>
             </Head>
 
             <Layouts.Standard>
