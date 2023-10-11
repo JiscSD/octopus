@@ -10,13 +10,11 @@ export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        // Get the publication with the latest version data merged in to keep it simple for the UI.
         const publication = await publicationService.get(event.pathParameters.id);
 
         if (!publication) {
             return response.json(404, {
-                message:
-                    'Publication is either not found, or you do not have permissions to view it in its current state.'
+                message: 'Publication not found.'
             });
         }
 
@@ -27,6 +25,10 @@ export const get = async (
                 : event.user?.id === version.createdBy ||
                   version.coAuthors.some((author) => author.linkedUser === event.user?.id)
         );
+
+        if (!publication.versions.length) {
+            return response.json(403, { message: "You don't have permissions to view this publication." });
+        }
 
         return response.json(200, publication);
     } catch (err) {
