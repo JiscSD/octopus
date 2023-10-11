@@ -84,6 +84,10 @@ export const get = (publicationId: string, version: string | number) =>
                 ? { versionNumber: Number(version) }
                 : version === 'latest'
                 ? { isLatestVersion: true }
+                : version === 'latestLive'
+                ? {
+                      isLatestLiveVersion: true
+                  }
                 : { id: version })
         },
         include: {

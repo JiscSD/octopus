@@ -18,7 +18,7 @@ export const get = async (
 
         if (!publicationVersion) {
             return response.json(404, {
-                message: 'Publication not found.'
+                message: 'Publication version not found.'
             });
         }
 
@@ -36,7 +36,8 @@ export const get = async (
         }
 
         return response.json(404, {
-            message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
+            message:
+                'Publication version is either not found, or you do not have permissions to view it in its current state.'
         });
     } catch (err) {
         console.log(err);
@@ -86,18 +87,20 @@ export const update = async (
 
         if (!publicationVersion) {
             return response.json(403, {
-                message: 'This publication does not exist.'
+                message: 'This publication version does not exist.'
             });
         }
 
         if (publicationVersion.user.id !== event.user.id) {
             return response.json(403, {
-                message: 'You do not have permission to modify this publication.'
+                message: 'You do not have permission to modify this publication version.'
             });
         }
 
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
+            return response.json(404, {
+                message: 'A publication version that is not in DRAFT state cannot be updated.'
+            });
         }
 
         if (event.body.content) {
