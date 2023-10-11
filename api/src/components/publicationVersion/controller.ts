@@ -178,7 +178,7 @@ export const updateStatus = async (
                 }
 
                 // check if publication version is ready to be LOCKED
-                if (!(await publicationVersionService.isReadyToLock(publicationVersion))) {
+                if (!(await publicationVersionService.checkIsReadyToLock(publicationVersion))) {
                     return response.json(403, {
                         message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
                     });
@@ -191,7 +191,7 @@ export const updateStatus = async (
             }
 
             if (newStatus === 'LIVE') {
-                const isReadyToPublish = await publicationVersionService.isReadyToPublish(publicationVersion);
+                const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
                 if (!isReadyToPublish) {
                     return response.json(403, {
@@ -215,7 +215,7 @@ export const updateStatus = async (
             }
 
             if (newStatus === 'LIVE') {
-                const isReadyToPublish = await publicationVersionService.isReadyToPublish(publicationVersion);
+                const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
                 if (!isReadyToPublish) {
                     return response.json(403, {

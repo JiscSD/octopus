@@ -4,8 +4,8 @@ import * as client from 'lib/client';
 import * as publicationService from 'publication/service';
 import * as Helpers from 'lib/helpers';
 
-export const getById = async (id: string) => {
-    const publicationVersion = client.prisma.publicationVersion.findFirst({
+export const getById = (id: string) =>
+    client.prisma.publicationVersion.findFirst({
         where: {
             id
         },
@@ -75,9 +75,6 @@ export const getById = async (id: string) => {
             }
         }
     });
-
-    return publicationVersion;
-};
 
 export const get = (publicationId: string, version: string | number) =>
     client.prisma.publicationVersion.findFirst({
@@ -274,7 +271,7 @@ export const validateConflictOfInterest = (version: I.PublicationVersion) => {
     return true;
 };
 
-export const isReadyToPublish = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
+export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
     if (!publicationVersion) {
         return false;
     }
@@ -310,7 +307,7 @@ export const isReadyToPublish = async (publicationVersion: I.PublicationVersion)
     );
 };
 
-export const isReadyToRequestApproval = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
+export const checkIsReadyToRequestApprovals = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
     if (!publicationVersion) {
         return false;
     }
@@ -348,7 +345,7 @@ export const isReadyToRequestApproval = async (publicationVersion: I.Publication
     );
 };
 
-export const isReadyToLock = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
+export const checkIsReadyToLock = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
     if (!publicationVersion) {
         return false;
     }
@@ -357,7 +354,7 @@ export const isReadyToLock = async (publicationVersion: I.PublicationVersion): P
         return false;
     }
 
-    const isReadyToRequestApprovals = await isReadyToRequestApproval(publicationVersion);
+    const isReadyToRequestApprovals = await checkIsReadyToRequestApprovals(publicationVersion);
     const hasRequestedApprovals = !!publicationVersion.coAuthors.some((author) => author.approvalRequested);
 
     return isReadyToRequestApprovals && hasRequestedApprovals;

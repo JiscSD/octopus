@@ -394,7 +394,7 @@ export const requestApproval = async (
         }
 
         if (version.currentStatus === 'DRAFT') {
-            const isReadyToRequestApprovals = await publicationVersionService.isReadyToRequestApproval(version);
+            const isReadyToRequestApprovals = await publicationVersionService.checkIsReadyToRequestApprovals(version);
 
             if (!isReadyToRequestApprovals) {
                 return response.json(403, {
