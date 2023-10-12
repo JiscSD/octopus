@@ -634,7 +634,14 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
     };
 };
 
-export const getDirectLinksForPublication = async (id: string): Promise<I.PublicationWithLinks> => {
+export const getDirectLinksForPublication = async (
+    id: string,
+    includeDraft = false
+): Promise<I.PublicationWithLinks> => {
+    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraft
+        ? { isLatestVersion: true }
+        : { isLatestLiveVersion: true };
+
     const publication = await client.prisma.publication.findUnique({
         where: {
             id
@@ -642,7 +649,7 @@ export const getDirectLinksForPublication = async (id: string): Promise<I.Public
         include: {
             versions: {
                 where: {
-                    isLatestVersion: true
+                    ...publicationFilter
                 },
                 include: {
                     coAuthors: {

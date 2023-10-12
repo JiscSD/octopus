@@ -20,8 +20,7 @@ describe('View publications + versions', () => {
             apiKey: '987654321'
         });
 
-        expect(getPublication.status).toEqual(200);
-        expect(getPublication.body.versions.every((version) => version.currentStatus === 'LIVE'));
+        expect(getPublication.status).toEqual(403);
     });
 
     test('Cannot view publication version in DRAFT without API key', async () => {
@@ -29,8 +28,7 @@ describe('View publications + versions', () => {
             apiKey: '987654321'
         });
 
-        expect(getPublication.status).toEqual(200);
-        expect(getPublication.body.versions.some((version) => version.currentStatus === 'DRAFT')).toEqual(false);
+        expect(getPublication.status).toEqual(403);
     });
 
     test.todo('Any user can see a LIVE publication');

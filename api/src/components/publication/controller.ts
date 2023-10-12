@@ -97,10 +97,27 @@ export const getLinksForPublication = async (
 ): Promise<I.JSONResponse> => {
     const publicationId = event.pathParameters.id;
     const directLinks = event.queryStringParameters?.direct === 'true';
+    const user = event.user;
+    let includeDraft = false;
 
     try {
+        if (directLinks) {
+            if (user) {
+                const latestVersion = await publicationVersionService.get(publicationId, 'latest');
+
+                // if latest version is a DRAFT, check if user can see it
+                if (
+                    latestVersion?.currentStatus === 'DRAFT' &&
+                    (user.id === latestVersion?.createdBy ||
+                        latestVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === user.id))
+                ) {
+                    includeDraft = true;
+                }
+            }
+        }
+
         const { publication, linkedFrom, linkedTo } = directLinks
-            ? await publicationService.getDirectLinksForPublication(publicationId)
+            ? await publicationService.getDirectLinksForPublication(publicationId, includeDraft)
             : await publicationService.getLinksForPublication(publicationId);
 
         if (!publication) {

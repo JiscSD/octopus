@@ -280,7 +280,7 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
         return false;
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
     const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =
@@ -320,7 +320,7 @@ export const checkIsReadyToRequestApprovals = async (publicationVersion: I.Publi
         return false;
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
     const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =

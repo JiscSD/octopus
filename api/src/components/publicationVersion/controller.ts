@@ -244,7 +244,7 @@ export const updateStatus = async (
         });
 
         const references = await referenceService.getAllByPublicationVersion(updatedVersion.id);
-        const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+        const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
 
         // Publication version is live, so update the DOI
         await helpers.updateDOI(publicationVersion.publication.doi, publicationVersion, linkedTo, references);
