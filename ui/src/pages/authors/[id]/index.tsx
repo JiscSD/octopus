@@ -16,7 +16,7 @@ const pageSize = 10;
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/versions?offset=0&limit=${pageSize}`;
+    const userPublicationVersionsUrl = `${Config.endpoints.users}/${userId}/versions?offset=0&limit=${pageSize}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
     let firstUserPublicationsPage: Interfaces.UserPublicationVersionsResult | null = null;
@@ -37,7 +37,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(userPublicationsUrl, undefined);
+        const response = await api.get(userPublicationVersionsUrl, undefined);
         firstUserPublicationsPage = response.data;
     } catch (error) {
         console.log(error);
@@ -46,7 +46,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             user,
-            userPublicationsUrl,
+            userPublicationVersionsUrl,
             fallbackData: firstUserPublicationsPage,
             metadata: {
                 title: `Author: ${user.orcid} - ${Config.urls.viewUser.title}`
@@ -57,7 +57,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
 type Props = {
     user: Interfaces.User;
-    userPublicationsUrl: string;
+    userPublicationVersionsUrl: string;
     fallbackData: Interfaces.UserPublicationVersionsResult | null;
     metadata: {
         title: string;
@@ -70,14 +70,14 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationVersionsResult>(
         (pageIndex, prevPageData) => {
             if (pageIndex === 0) {
-                return props.userPublicationsUrl;
+                return props.userPublicationVersionsUrl;
             }
 
             if (prevPageData && !prevPageData.results.length) {
                 return null; // reached the end
             }
 
-            return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
+            return props.userPublicationVersionsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
         },
         async (url) => {
             const response = await api.get(url, undefined);
