@@ -29,10 +29,6 @@ export const getPDF = middy(publicationController.getPDF)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.validator(publicationSchema.getPDF, 'pathParameters'));
 
-export const getResearchTopics = middy(publicationController.getResearchTopics).use(
-    middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
-);
-
 export const updateTopics = middy(publicationController.updateTopics)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())

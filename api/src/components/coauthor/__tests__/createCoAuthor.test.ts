@@ -129,12 +129,12 @@ describe('create coauthor', () => {
 
     test('Co-author email is converted to lower case on save', async () => {
         await testUtils.agent
-            .put('/publications/publication-data-draft/coauthors')
+            .put('/publication-versions/publication-data-draft-v1/coauthors')
             .query({ apiKey: '123456789' })
             .send([
                 {
                     id: createId(),
-                    publicationId: 'publication-problem-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
                     email: 'MULTIcaseAddress@emailtest.COM',
                     linkedUser: null,
                     approvalRequested: false,
@@ -143,7 +143,7 @@ describe('create coauthor', () => {
             ]);
 
         const coAuthors = await testUtils.agent
-            .get('/publications/publication-data-draft/coauthors')
+            .get('/publication-versions/publication-data-draft-v1/coauthors')
             .query({ apiKey: '123456789' });
 
         expect(coAuthors.body.length).toEqual(2); // corresponding author and this new one

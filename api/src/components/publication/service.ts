@@ -6,6 +6,7 @@ import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 import { Browser, launch } from 'puppeteer-core';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { Prisma } from '@prisma/client';
 
 export const isIdInUse = async (id: string) => {
     const publication = await client.prisma.publication.count({
@@ -920,129 +921,6 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
             console.log('Browser closed!');
         }
     }
-};
-
-export const getResearchTopics = async () => {
-    const publications = await client.prisma.publication.findMany({
-        where: {
-            type: 'PROBLEM',
-            OR: [
-                {
-                    id: {
-                        equals: 'why' // god problem will be converted to a god topic
-                    }
-                },
-                {
-                    versions: {
-                        some: {
-                            isLatestVersion: true,
-                            content: {
-                                contains: 'This is an automatically-generated topic'
-                            }
-                        }
-                    }
-                }
-            ],
-            References: {
-                none: {}
-            },
-            ...additionalFilters,
-            versions: {
-                some: {
-                    createdBy: 'octopus',
-                    isLatestVersion: true,
-                    References: {
-                        none: {}
-                    }
-                }
-            }
-        },
-        include: {
-            versions: {
-                where: {
-                    isLatestVersion: true
-                },
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                }
-            },
-            linkedTo: {
-                select: {
-                    id: true,
-                    publicationToRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    user: {
-                                        select: {
-                                            id: true,
-                                            firstName: true,
-                                            lastName: true,
-                                            orcid: true
-                                        }
-                                    },
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            linkedFrom: {
-                select: {
-                    id: true,
-                    publicationFromRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    user: {
-                                        select: {
-                                            id: true,
-                                            firstName: true,
-                                            lastName: true,
-                                            orcid: true
-                                        }
-                                    },
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            PublicationBookmarks: true
-        }
-    });
-
-    // Merge versioned data into the publication records
-    const mergedPublications = publications.map((publication) => {
-        const currentVersion = publication.versions[0];
-
-        return { ...currentVersion, ...publication };
-    });
-
-    return mergedPublications;
 };
 
 // Overwrite existing topics with those whose IDs were passed.

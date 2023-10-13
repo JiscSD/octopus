@@ -627,7 +627,7 @@ const addCoAuthor = async (page: Page, user: Helpers.TestUser) => {
 };
 
 const removeCoAuthor = async (page: Page, user: Helpers.TestUser) => {
-    await page.locator('aside button:has-text("Co-authors")').click();
+    await page.locator('aside button:has-text("Co-authors")').first().click();
     const row = page.locator('tr', { hasText: user.email });
     await row.locator('button[title="Delete"]').click();
 };

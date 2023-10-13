@@ -202,16 +202,6 @@ export const getPDF = async (
         : response.json(200, { pdfUrl });
 };
 
-export const getResearchTopics = async (): Promise<I.JSONResponse> => {
-    try {
-        const researchTopics = await publicationService.getResearchTopics();
-
-        return response.json(200, researchTopics);
-    } catch (error) {
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
 export const updateTopics = async (
     event: I.AuthenticatedAPIRequest<
         I.UpdatePublicationTopicsRequestBody,
