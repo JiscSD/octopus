@@ -40,4 +40,4 @@ const CustomLink = React.forwardRef<LinkRef, Props>((props, ref) => {
 
 CustomLink.displayName = 'CustomLink';
 
-export default CustomLink;
+export default React.memo(CustomLink);

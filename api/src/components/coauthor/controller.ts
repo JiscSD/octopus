@@ -2,16 +2,13 @@ import * as coAuthorService from 'coauthor/service';
 import * as I from 'interface';
 import * as email from 'email';
 import * as response from 'lib/response';
-import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 
 export const get = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const versionId = event.pathParameters.id;
-
-        const version = await publicationVersionService.get(versionId);
+        const version = await publicationVersionService.getById(event.pathParameters.id);
 
         if (!version) {
             return response.json(404, {
@@ -50,8 +47,7 @@ export const updateAll = async (
     event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const versionId = event.pathParameters.id;
-        const version = await publicationVersionService.get(versionId);
+        const version = await publicationVersionService.getById(event.pathParameters.id);
 
         // Does the publication version exist?
         if (!version) {
@@ -132,7 +128,7 @@ export const remove = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.get(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.id);
 
         // Does the publication version exist?
         if (!version) {
@@ -186,7 +182,7 @@ export const link = async (
     event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.ConfirmCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.get(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.id);
 
         if (!version) {
             return response.json(404, {
@@ -298,7 +294,7 @@ export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.get(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.id);
 
         // Does the publication version exist?
         if (!version) {
@@ -377,7 +373,7 @@ export const requestApproval = async (
 ): Promise<I.JSONResponse> => {
     try {
         const versionId = event.pathParameters.id;
-        const version = await publicationVersionService.get(versionId);
+        const version = await publicationVersionService.getById(versionId);
 
         if (!version) {
             return response.json(404, { message: 'Publication version not found' });
@@ -400,35 +396,31 @@ export const requestApproval = async (
         }
 
         if (version.currentStatus === 'DRAFT') {
-            const publication = await publicationService.getWithVersion(version.versionOf, version.versionNumber);
+            const isReadyToRequestApprovals = await publicationVersionService.checkIsReadyToRequestApprovals(version);
 
-            if (publication) {
-                if (!publicationService.isReadyToRequestApproval(publication)) {
-                    return response.json(403, {
-                        message:
-                            'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
+            if (!isReadyToRequestApprovals) {
+                return response.json(403, {
+                    message:
+                        'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                });
+            }
+
+            // check if this version was LOCKED before
+            if (version.publicationStatus.some(({ status }) => status === 'LOCKED')) {
+                // notify linked co-authors about changes
+                const linkedCoAuthors = version.coAuthors.filter(
+                    (author) => author.linkedUser && author.linkedUser !== version.createdBy
+                );
+
+                for (const linkedCoAuthor of linkedCoAuthors) {
+                    await email.notifyCoAuthorsAboutChanges({
+                        coAuthor: { email: linkedCoAuthor.email },
+                        publication: {
+                            title: version.title || '',
+                            url: `${process.env.BASE_URL}/publications/${version.versionOf}`
+                        }
                     });
                 }
-
-                // check if this version was LOCKED before
-                if (version.publicationStatus.some(({ status }) => status === 'LOCKED')) {
-                    // notify linked co-authors about changes
-                    const linkedCoAuthors = version.coAuthors.filter(
-                        (author) => author.linkedUser && author.linkedUser !== version.createdBy
-                    );
-
-                    for (const linkedCoAuthor of linkedCoAuthors) {
-                        await email.notifyCoAuthorsAboutChanges({
-                            coAuthor: { email: linkedCoAuthor.email },
-                            publication: {
-                                title: version.title || '',
-                                url: `${process.env.BASE_URL}/publications/${publication.id}`
-                            }
-                        });
-                    }
-                }
-            } else {
-                throw Error('Could not get details of publication');
             }
         }
 
@@ -465,7 +457,7 @@ export const sendApprovalReminder = async (
 ): Promise<I.JSONResponse> => {
     const { coauthor, id } = event.pathParameters;
 
-    const version = await publicationVersionService.get(id);
+    const version = await publicationVersionService.getById(id);
     const author = await coAuthorService.get(coauthor);
 
     if (!version) {

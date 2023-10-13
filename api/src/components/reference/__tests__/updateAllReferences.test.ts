@@ -8,7 +8,7 @@ describe('update all references', () => {
 
     test('User can update all references from their own draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/publication-versions/publication-interpretation-draft-v1/references')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -25,7 +25,7 @@ describe('update all references', () => {
 
     test('User must be the author of the publication to update the references', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/publication-versions/publication-interpretation-draft-v1/references')
             .query({ apiKey: '987654321' })
             .send([
                 {
@@ -42,7 +42,7 @@ describe('update all references', () => {
 
     test('The author can only update the references for a draft publication', async () => {
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-real-world-application-live-v1/reference')
+            .put('/publication-versions/publication-real-world-application-live-v1/references')
             .query({ apiKey: '123456789' })
             .send([
                 {
@@ -76,12 +76,12 @@ describe('update all references', () => {
         ];
 
         const reference = await testUtils.agent
-            .put('/publicationVersions/publication-interpretation-draft-v1/reference')
+            .put('/publication-versions/publication-interpretation-draft-v1/references')
             .query({ apiKey: '123456789' })
             .send(newReferencesArray);
 
         const checkReference = await testUtils.agent.get(
-            '/publicationVersions/publication-interpretation-draft-v1/reference'
+            '/publication-versions/publication-interpretation-draft-v1/references'
         );
 
         expect(reference.body.count).toEqual(2);

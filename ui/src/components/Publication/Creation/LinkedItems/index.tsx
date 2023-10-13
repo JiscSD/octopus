@@ -1,75 +1,75 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import * as Components from '@components';
-import * as Config from '@config';
 import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 import * as Types from '@types';
-
 import * as api from '@api';
+import * as Config from '@config';
+import { useSWRConfig } from 'swr';
 
 /**
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
+    const SWRConfig = useSWRConfig();
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
-    const linkTos = Stores.usePublicationCreationStore((state) => state.linkTo);
-    const updateLinkTo = Stores.usePublicationCreationStore((state) => state.updateLinkTo);
+    const linkedTo = Stores.usePublicationCreationStore((state) => state.linkedTo);
     const topics = Stores.usePublicationCreationStore((state) => state.topics);
-    const updateTopics = Stores.usePublicationCreationStore((state) => state.updateTopics);
+
     const user = Stores.useAuthStore((state) => state.user);
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
-    const type = Stores.usePublicationCreationStore((state) => state.type);
+    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
+    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
 
     const [error, setError] = React.useState<string | undefined>();
     const [loading, setLoading] = React.useState<boolean>(false);
 
-    const fetchAndSetLinks = async (token: string, entityType: Types.LinkedEntityType) => {
-        try {
-            const response = await api.get(`/publications/${currentPublicationId}`, token);
-            if (entityType === 'PUBLICATION') {
-                updateLinkTo(response.data.linkedTo);
-            } else {
-                updateTopics(response.data.topics);
-            }
-        } catch (err) {
-            setError('There was a problem fetching this publication.');
-        }
-    };
+    const deletePublicationLink = useCallback(
+        async (linkId: string) => {
+            setError(undefined);
+            if (user) {
+                try {
+                    await api.destroy(`/links/${linkId}`, user.token);
 
-    const deletePublicationLink = async (linkID: string) => {
-        setError(undefined);
-        if (user) {
-            try {
-                await api.destroy(`/links/${linkID}`, user.token);
-            } catch (err) {
-                setError('There was a problem removing the link.');
+                    // refetch direct links
+                    await SWRConfig.mutate([
+                        `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
+                        'edit'
+                    ]);
+                } catch (err) {
+                    setError('There was a problem removing the link.');
+                }
             }
-            fetchAndSetLinks(user.token, 'PUBLICATION');
-        }
-    };
+        },
+        [SWRConfig, currentPublicationId, user]
+    );
 
-    const deleteTopicLink = async (topicId: string) => {
-        setError(undefined);
-        if (user) {
-            try {
-                // Update publication's topic IDs with current list minus ID to delete
-                await api.put(
-                    `/publications/${currentPublicationId}/topics`,
-                    {
-                        topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
-                    },
-                    user.token
-                );
-            } catch (err) {
-                setError('There was a problem removing the topic.');
+    const deleteTopicLink = useCallback(
+        async (topicId: string) => {
+            setError(undefined);
+
+            if (user) {
+                try {
+                    // Update publication's topic IDs with current list minus ID to delete
+                    await api.put(
+                        `/publications/${currentPublicationId}/topics`,
+                        {
+                            topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
+                        },
+                        user.token
+                    );
+
+                    // refetch topics
+                    await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
+                } catch (err) {
+                    setError('There was a problem removing the topic.');
+                }
             }
-            fetchAndSetLinks(user.token, 'TOPIC');
-        }
-    };
+        },
+        [SWRConfig, currentPublicationId, topics, user]
+    );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
     const isProblem = type === 'PROBLEM';
@@ -131,7 +131,6 @@ const Links: React.FC = (): React.ReactElement => {
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
-                                fetchAndSetLinks={fetchAndSetLinks}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
@@ -139,7 +138,6 @@ const Links: React.FC = (): React.ReactElement => {
                             />
                         ) : (
                             <Components.LinkedPublicationsCombobox
-                                fetchAndSetLinks={fetchAndSetLinks}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
@@ -151,17 +149,17 @@ const Links: React.FC = (): React.ReactElement => {
 
             {error && !loading && <Components.Alert severity="ERROR" title={error} allowDismiss />}
 
-            {!error && !!linkTos.length && (
+            {!error && !!linkedTo.length && (
                 <Components.LinkedItemTable
                     deleteLink={deletePublicationLink}
-                    entities={linkTos}
+                    entities={linkedTo}
                     entityType="PUBLICATION"
                 />
             )}
-            {!error && !!topics.length && (
+            {!error && !!topics?.length && (
                 <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
-            {!error && !linkTos.length && !topics.length && (
+            {!error && !linkedTo.length && !topics?.length && (
                 <Components.Alert
                     severity="INFO"
                     title="This publication does not have any linked items."
@@ -172,4 +170,4 @@ const Links: React.FC = (): React.ReactElement => {
     );
 };
 
-export default Links;
+export default React.memo(Links);

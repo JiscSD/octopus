@@ -1,12 +1,11 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Components from '@components';
 
 type Props = {
-    link: Interfaces.LinkTo;
+    linkedPublication: Interfaces.LinkedToPublication;
     deleteLink: (id: string) => void;
 };
 
@@ -14,27 +13,25 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const handleClick = () => {
         setLoading(true);
-        props.deleteLink(props.link.id);
+        props.deleteLink(props.linkedPublication.linkId);
     };
 
-    const latestVersion = props.link.publicationToRef.versions[0];
-
     return (
-        <tr key={props.link.id}>
+        <tr key={props.linkedPublication.id}>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-100">
-                        {Helpers.formatPublicationType(props.link.publicationToRef.type)}
+                        {Helpers.formatPublicationType(props.linkedPublication.type)}
                     </span>
                     <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {latestVersion.title}
+                        {props.linkedPublication.title}
                     </p>
                     <div className="flex items-center space-x-2">
                         <span className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {Helpers.formatDate(latestVersion.publishedDate)},
+                            {Helpers.formatDate(props.linkedPublication.publishedDate)},
                         </span>
                         <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {latestVersion.user.firstName[0]}. {latestVersion.user.lastName}
+                            {props.linkedPublication.authorFirstName[0]}. {props.linkedPublication.authorLastName}
                         </span>
                     </div>
                 </div>

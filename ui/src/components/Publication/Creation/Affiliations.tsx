@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import useSWR from 'swr';
 import * as Components from '@components';
 import * as Stores from '@stores';
@@ -10,9 +10,13 @@ import * as api from '@api';
  * @description Edit affiliations
  */
 const Affiliations: React.FC = (): React.ReactElement => {
-    const { versionId, authorAffiliations, updateAuthorAffiliations, isIndependentAuthor, updateIsIndependentAuthor } =
-        Stores.usePublicationCreationStore();
     const { user } = Stores.useAuthStore();
+    const publicationVersion = Stores.usePublicationCreationStore((state) => state.publicationVersion);
+    const updateAuthorAffiliations = Stores.usePublicationCreationStore((state) => state.updateAuthorAffiliations);
+    const updateIsIndependentAuthor = Stores.usePublicationCreationStore((state) => state.updateIsIndependentAuthor);
+    const correspondingAuthor = publicationVersion.coAuthors.find(
+        (author) => author.linkedUser === publicationVersion.createdBy
+    );
 
     const {
         data: orcidAffiliations = [],
@@ -21,14 +25,16 @@ const Affiliations: React.FC = (): React.ReactElement => {
     } = useSWR<Interfaces.MappedOrcidAffiliation[]>('/orcid-affiliations');
 
     useSWR(
-        isValidating || error ? null : `${Config.endpoints.publicationVersions}/${versionId}/my-affiliations`,
+        isValidating || error
+            ? null
+            : `${Config.endpoints.publicationVersions}/${publicationVersion.id}/my-affiliations`,
         (url) => {
             const updatedAuthorAffiliations = orcidAffiliations.filter((affiliation) =>
-                authorAffiliations.some(({ id }) => affiliation.id === id)
+                correspondingAuthor?.affiliations.some(({ id }) => affiliation.id === id)
             );
 
             try {
-                if (JSON.stringify(authorAffiliations) === JSON.stringify(updatedAuthorAffiliations)) {
+                if (JSON.stringify(correspondingAuthor?.affiliations) === JSON.stringify(updatedAuthorAffiliations)) {
                     // there's no need for update
                     return;
                 }
@@ -41,7 +47,7 @@ const Affiliations: React.FC = (): React.ReactElement => {
             // also update author affiliations in DB
             api.put(
                 url,
-                { affiliations: updatedAuthorAffiliations, isIndependent: isIndependentAuthor },
+                { affiliations: updatedAuthorAffiliations, isIndependent: correspondingAuthor?.isIndependent },
                 user?.token
             ).catch((err) => {
                 console.log(err);
@@ -93,9 +99,9 @@ const Affiliations: React.FC = (): React.ReactElement => {
             <Components.AuthorAffiliations
                 loading={isValidating && !orcidAffiliations.length}
                 scrollHeight={700}
-                isIndependentAuthor={isIndependentAuthor}
+                isIndependentAuthor={correspondingAuthor?.isIndependent || false}
                 availableAffiliations={orcidAffiliations}
-                selectedAffiliations={authorAffiliations}
+                selectedAffiliations={correspondingAuthor?.affiliations || []}
                 onSelectionChange={updateAuthorAffiliations}
                 onIndependentAuthorChange={updateIsIndependentAuthor}
             />

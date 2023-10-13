@@ -6,12 +6,10 @@ import useSWR, { useSWRConfig } from 'swr';
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
-import * as Types from '@types';
-
 import * as api from '@api';
+import * as Config from '@config';
 
 type LinkedTopicsComboboxProps = {
-    fetchAndSetLinks: (token: string, entityType: Types.LinkedEntityType) => void;
     setError: (error: string | undefined) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
@@ -21,17 +19,17 @@ type LinkedTopicsComboboxProps = {
 const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React.ReactElement => {
     const SWRConfig = useSWRConfig();
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.id);
+    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [search, setSearch] = React.useState('');
-    const [selectedTopic, setSelectedTopic] = React.useState<Interfaces.Publication | null>(null);
+    const [selectedTopic, setSelectedTopic] = React.useState<Interfaces.Topic | null>(null);
 
     const currentTopicIds = [...props.topics.map((topic) => topic.id)];
 
-    const swrKey = `/topics?&limit=10${search.length > 2 ? `&search=${search}` : ''}&exclude=${currentTopicIds.join(
-        ','
-    )}`;
+    const swrKey = `${Config.endpoints.topics}?&limit=10${
+        search.length > 2 ? `&search=${search}` : ''
+    }&exclude=${currentTopicIds.join(',')}`;
 
     const {
         data: data = {
@@ -64,11 +62,12 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
                     { topics: [...currentTopicIds, selectedTopic.id] },
                     user.token
                 );
+
+                // refetch topics
+                await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
             } catch (err) {
                 props.setError('There was a problem adding the topic.');
             }
-            props.fetchAndSetLinks(user.token, 'TOPIC');
-            SWRConfig.mutate(swrKey);
         }
         props.setLoading(false);
     };
@@ -129,4 +128,4 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
     );
 };
 
-export default LinkedTopicsCombobox;
+export default React.memo(LinkedTopicsCombobox);

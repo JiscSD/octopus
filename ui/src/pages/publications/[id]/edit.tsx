@@ -12,6 +12,7 @@ import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
+import useSWR from 'swr';
 
 const steps: Types.CreationSteps = {
     KEY_INFORMATION: {
@@ -82,23 +83,24 @@ const steps: Types.CreationSteps = {
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);
 
-    let draftedPublicationID: string | string[] | null = null;
-    let draftedPublication: Interfaces.Publication | null = null;
-    let forPublicationID: string | string[] | null = null;
+    let publicationId: string | string[] | null = null;
+    let publicationVersion: Interfaces.PublicationVersion | null = null;
     let step: string | string[] | null = null;
     let error: string | null = null;
 
-    if (context.query.id) draftedPublicationID = context.query.id;
-    if (context.query.for) forPublicationID = context.query.for;
+    if (context.query.id) publicationId = context.query.id;
     if (context.query.step) step = context.query.step;
-    if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
-    if (Array.isArray(draftedPublicationID)) draftedPublicationID = draftedPublicationID[0];
+    if (Array.isArray(publicationId)) publicationId = publicationId[0];
+    if (Array.isArray(publicationId)) publicationId = publicationId[0];
     if (Array.isArray(step)) step = step[0];
 
-    if (draftedPublicationID) {
+    if (publicationId) {
         try {
-            const response = await api.get(`${Config.endpoints.publications}/${draftedPublicationID}`, token);
-            draftedPublication = response.data;
+            const response = await api.get(
+                `${Config.endpoints.publications}/${publicationId}/publication-versions/latest`,
+                token
+            );
+            publicationVersion = response.data;
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             error = message;
@@ -109,25 +111,24 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
         };
     }
 
-    if (draftedPublication?.currentStatus === 'LOCKED') {
-        return {
-            redirect: {
-                destination: `${Config.urls.viewPublication.path}/${draftedPublication.id}`,
-                permanent: false
-            }
-        };
-    }
-
-    if (draftedPublication?.currentStatus !== 'DRAFT') {
+    if (!publicationVersion) {
         return {
             notFound: true
         };
     }
 
+    if (publicationVersion.currentStatus !== 'DRAFT') {
+        return {
+            redirect: {
+                destination: `${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`,
+                permanent: false
+            }
+        };
+    }
+
     return {
         props: {
-            draftedPublication,
-            forPublicationID,
+            publicationVersion,
             step,
             token,
             error,
@@ -137,8 +138,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 });
 
 type Props = {
-    draftedPublication: Interfaces.Publication;
-    forPublicationID: string | null;
+    publicationVersion: Interfaces.PublicationVersion;
     step: string;
     token: string;
     error: string | null;
@@ -147,6 +147,20 @@ type Props = {
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const store = Stores.usePublicationCreationStore();
+    const { updateReferences, updateLinkedTo, updatePublicationVersion, updateTopics } = store;
+
+    useSWR([`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`, 'edit'], ([url]) =>
+        api.get(url, props.token).then((res) => updateReferences(res.data))
+    );
+
+    useSWR(
+        [`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/links?direct=true`, 'edit'],
+        ([url]) => api.get(url, props.token).then((res) => updateLinkedTo(res.data.linkedTo))
+    );
+
+    useSWR([`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/topics`, 'edit'], ([url]) =>
+        api.get(url, props.token).then((res) => updateTopics(res.data))
+    );
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsByType = React.useMemo(() => {
@@ -158,7 +172,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             steps.CONFLICT_OF_INTEREST,
             steps.FUNDERS
         ];
-        switch (props.draftedPublication.type) {
+        switch (props.publicationVersion.publication.type) {
             case Config.values.octopusInformation.publications.DATA.id:
                 arr = [...arr, steps.DATA_STATEMENT, steps.CO_AUTHORS];
                 break;
@@ -172,7 +186,7 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 arr = [...arr, steps.CO_AUTHORS];
         }
         return arr;
-    }, [props.draftedPublication.type]);
+    }, [props.publicationVersion.publication.type]);
 
     const stepsToUse = Helpers.getTabCompleteness(stepsByType, store);
 
@@ -181,123 +195,14 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
         let defaultStep = props.step ? parseInt(props.step) : 0;
         defaultStep = defaultStep <= stepsToUse.length - 1 && defaultStep >= 0 ? defaultStep : 0;
         return defaultStep;
-    }, [props.step]);
+    }, [props.step, stepsToUse.length]);
 
     const [currentStep, setCurrentStep] = React.useState(defaultStep);
-    const [publication] = React.useState(props.draftedPublication);
-
-    const fetchAndSetReferences = React.useCallback(async () => {
-        if (props.draftedPublication.id) {
-            try {
-                const response = await api.get(
-                    `/publicationVersions/${props.draftedPublication.versionId}/reference`,
-                    props.token
-                );
-                store.updateReferences(response.data);
-            } catch (err) {
-                // todo: improve error handling
-                console.log(err);
-            }
-        }
-    }, [props.draftedPublication.id, props.token, store.updateReferences]);
-
-    const fetchAndSetAuthors = React.useCallback(async () => {
-        if (props.draftedPublication.id) {
-            try {
-                const response = await api.get(
-                    `${Config.endpoints.publicationVersions}/${props.draftedPublication.versionId}/coauthors`,
-                    props.token
-                );
-                store.updateCoAuthors(response.data);
-            } catch (err) {
-                // todo: improve error handling
-                console.log(err);
-            }
-        }
-    }, [props.draftedPublication.id, props.token, store.updateCoAuthors]);
+    const [publicationVersion] = React.useState(props.publicationVersion);
 
     React.useEffect(() => {
-        fetchAndSetReferences();
-        fetchAndSetAuthors();
-    }, [fetchAndSetReferences, fetchAndSetAuthors]);
-
-    React.useEffect(() => {
-        if (props.draftedPublication.id) {
-            store.updateId(props.draftedPublication.id);
-        }
-
-        if (props.draftedPublication.versionId) {
-            store.updateVersionId(props.draftedPublication.versionId);
-        }
-
-        if (props.draftedPublication.title) {
-            store.updateTitle(props.draftedPublication.title);
-        }
-
-        if (props.draftedPublication.type) {
-            store.updateType(props.draftedPublication.type);
-        }
-
-        if (props.draftedPublication.description) {
-            store.updateDescription(props.draftedPublication.description);
-        }
-
-        if (props.draftedPublication.keywords.length) {
-            store.updateKeywords(props.draftedPublication.keywords.join(', '));
-        } else {
-            store.updateKeywords('');
-        }
-
-        if (props.draftedPublication.content) {
-            store.updateContent(props.draftedPublication.content);
-        }
-
-        if (props.draftedPublication.language) {
-            store.updateLanguage(props.draftedPublication.language);
-        }
-
-        if (props.draftedPublication.conflictOfInterestText) {
-            store.updateConflictOfInterestText(props.draftedPublication.conflictOfInterestText);
-            store.updateLinkTo(props.draftedPublication.linkedTo);
-        }
-
-        if (props.draftedPublication.ethicalStatement !== null) {
-            store.updateEthicalStatement(props.draftedPublication.ethicalStatement);
-        }
-        if (props.draftedPublication.ethicalStatementFreeText) {
-            store.updateEthicalStatementFreeText(props.draftedPublication.ethicalStatementFreeText);
-        }
-
-        if (props.draftedPublication.selfDeclaration) {
-            store.updateSelfDeclaration(props.draftedPublication.selfDeclaration);
-        }
-
-        if (props.draftedPublication.dataAccessStatement) {
-            store.updateDataAccessStatement(props.draftedPublication.dataAccessStatement);
-        }
-
-        if (props.draftedPublication.dataPermissionsStatement) {
-            store.updateDataPermissionsStatemnt(props.draftedPublication.dataPermissionsStatement);
-        }
-
-        if (props.draftedPublication.dataPermissionsStatementProvidedBy) {
-            store.updateDataPermissionsStatementProvidedBy(props.draftedPublication.dataPermissionsStatementProvidedBy);
-        }
-
-        store.updateLinkTo(props.draftedPublication.linkedTo);
-        store.updateFunders(props.draftedPublication.funders);
-        store.updateFunderStatement(props.draftedPublication.fundersStatement);
-
-        const correspondingAuthor = props.draftedPublication?.coAuthors.find(
-            (author) => author.linkedUser === props.draftedPublication.createdBy
-        );
-
-        store.updateAuthorAffiliations(correspondingAuthor?.affiliations || []);
-        store.updateIsIndependentAuthor(correspondingAuthor?.isIndependent || false);
-
-        store.updateConflictOfInterestStatus(props.draftedPublication.conflictOfInterestStatus);
-        store.updateTopics(props.draftedPublication.topics);
-    }, []);
+        updatePublicationVersion(props.publicationVersion);
+    }, [props.publicationVersion, updatePublicationVersion]);
 
     React.useEffect(() => {
         router.push(
@@ -322,10 +227,10 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
                 steps={stepsToUse}
                 currentStep={currentStep}
                 setStep={setCurrentStep}
-                publication={publication}
+                publicationVersion={publicationVersion}
                 token={props.token}
             >
-                {publication
+                {publicationVersion
                     ? stepsToUse.map(
                           (step, index) =>
                               index === currentStep && (

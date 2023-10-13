@@ -16,7 +16,7 @@ interface BoxEntry {
     authorFirstName: string;
     authorLastName: string;
     publishedDate: string;
-    authors: Pick<Interfaces.CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
 }
 

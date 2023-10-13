@@ -1,74 +1,36 @@
-import htmlToText from 'html-to-text';
 import axios from 'axios';
 import * as s3 from 'lib/s3';
-import * as sqs from 'lib/sqs';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
-import * as referenceService from 'reference/service';
-import * as coAuthorService from 'coauthor/service';
-
-export const getAll = async (
-    event: I.AuthenticatedAPIRequest<undefined, I.PublicationFilters>
-): Promise<I.JSONResponse> => {
-    try {
-        const openSearchPublications = await publicationService.getOpenSearchRecords(event.queryStringParameters);
-
-        const publicationIds = openSearchPublications.body.hits.hits.map((hit) => hit._id as string);
-
-        const publications = await publicationService.getAllByIds(publicationIds);
-
-        const publicationsOrderedBySearch = publicationIds.map((publicationId) =>
-            publications.find((publication) => publication.id === publicationId)
-        );
-
-        return response.json(200, {
-            data: publicationsOrderedBySearch,
-            metadata: {
-                total: openSearchPublications.body.hits.total.value,
-                limit: Number(event.queryStringParameters.limit) || 10,
-                offset: Number(event.queryStringParameters.offset) || 0
-            }
-        });
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
 
 export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        // Get the publication with the latest version data merged in to keep it simple for the UI.
-        const publication = await publicationService.getWithVersionMerged(event.pathParameters.id);
-
-        // anyone can see a LIVE publication
-        if (publication?.currentStatus === 'LIVE') {
-            return response.json(200, publication);
-        }
+        const publication = await publicationService.get(event.pathParameters.id);
 
         if (!publication) {
             return response.json(404, {
-                message:
-                    'Publication is either not found, or you do not have permissions to view it in its current state.'
+                message: 'Publication not found.'
             });
         }
 
-        // only the owner or co-authors can view publications
-        if (
-            event.user?.id === publication.user.id ||
-            publication.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
-        ) {
-            return response.json(200, publication);
+        // only the owner or co-authors can view the DRAFT/LOCKED versions
+        publication.versions = publication.versions.filter((version) =>
+            version.currentStatus === 'LIVE'
+                ? true
+                : event.user?.id === version.createdBy ||
+                  version.coAuthors.some((author) => author.linkedUser === event.user?.id)
+        );
+
+        if (!publication.versions.length) {
+            return response.json(403, { message: "You don't have permissions to view this publication." });
         }
 
-        return response.json(404, {
-            message: 'Publication is either not found, or you do not have permissions to view it in its current state.'
-        });
+        return response.json(200, publication);
     } catch (err) {
         console.log(err);
 
@@ -85,57 +47,6 @@ export const getSeedDataPublications = async (
         return response.json(200, {
             publications
         });
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
-export const deletePublication = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeletePublicationPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event.pathParameters.id);
-
-        if (!publication) {
-            return response.json(403, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        // If there has been more than one version of a publication, we can't delete it.
-        if (publication.versions.length > 1) {
-            return response.json(403, {
-                message: 'A publication can not be deleted if there is more than one version of it.'
-            });
-        } else if (!publication.versions || publication.versions.length === 0) {
-            throw Error('Could not get versions for publication');
-        }
-
-        const version = publication.versions[0];
-
-        if (version.user.id !== event.user.id) {
-            return response.json(403, {
-                message: 'You do not have permission to delete this publication.'
-            });
-        }
-
-        // The logic here is a bit odd, but the currentStatus and publicationStatus array are not intrinsically linked
-        // so to be safe, we are checking that the current status is DRAFT and that the entire history of the publication
-        // has only ever been draft.
-        if (
-            version.currentStatus !== 'DRAFT' ||
-            (version.publicationStatus && !version.publicationStatus.every((status) => status.status !== 'LIVE'))
-        ) {
-            return response.json(403, {
-                message: 'A publication can only be deleted if it is currently a draft and has never been LIVE.'
-            });
-        }
-
-        await publicationService.deletePublication(event.pathParameters.id);
-
-        return response.json(200, { message: `Publication ${event.pathParameters.id} deleted` });
     } catch (err) {
         console.log(err);
 
@@ -181,210 +92,33 @@ export const create = async (
     }
 };
 
-export const updateCurrentVersion = async (
-    event: I.AuthenticatedAPIRequest<I.UpdatePublicationRequestBody, undefined, I.UpdatePublicationPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.getWithVersion(event.pathParameters.id);
-
-        if (!publication) {
-            return response.json(403, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        const currentVersion = publication.versions[0];
-
-        if (!currentVersion) {
-            throw Error('Unable to find current version for publication');
-        }
-
-        if (currentVersion.user.id !== event.user.id) {
-            return response.json(403, {
-                message: 'You do not have permission to modify this publication.'
-            });
-        }
-
-        if (currentVersion.currentStatus !== 'DRAFT') {
-            return response.json(404, { message: 'A publication that is not in DRAFT state cannot be updated.' });
-        }
-
-        if (event.body.content) {
-            event.body.content = helpers.getSafeHTML(event.body.content);
-        }
-
-        if (
-            event.body.selfDeclaration !== undefined &&
-            publication.type !== 'PROTOCOL' &&
-            publication.type !== 'HYPOTHESIS'
-        ) {
-            return response.json(400, {
-                message:
-                    'You can not declare a self declaration for a publication that is not a protocol or hypothesis.'
-            });
-        }
-
-        if (event.body.dataAccessStatement !== undefined && publication.type !== 'DATA') {
-            return response.json(400, {
-                message: 'You can not supply a data access statement on a non data publication.'
-            });
-        }
-
-        if (event.body.dataPermissionsStatement !== undefined && publication.type !== 'DATA') {
-            return response.json(400, {
-                message: 'You can not supply a data permissions statement on a non data publication.'
-            });
-        }
-
-        if (event.body.topics !== undefined && publication.type !== 'PROBLEM') {
-            return response.json(400, {
-                message: 'You can not supply topics for a publication that is not a problem.'
-            });
-        }
-
-        const updateContent = {
-            ...event.body,
-            ...(event.body.content && { content: helpers.getSafeHTML(event.body.content) })
-        };
-
-        const updatedPublication = await publicationService.update(event.pathParameters.id, updateContent);
-
-        return response.json(200, updatedPublication);
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
-export const updateStatus = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateStatusPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const publicationId = event.pathParameters?.id;
-        const publication = await publicationService.getWithVersion(publicationId);
-
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        const currentVersion = publication.versions[0];
-
-        if (currentVersion.createdBy !== event.user.id) {
-            return response.json(403, {
-                message: 'You do not have permission to modify the status of this publication.'
-            });
-        }
-
-        const newStatus = event.pathParameters?.status;
-        const currentStatus = currentVersion.currentStatus;
-
-        if (currentStatus === 'LIVE') {
-            return response.json(403, {
-                message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
-            });
-        }
-
-        if (currentStatus === newStatus) {
-            return response.json(403, { message: `Publication status is already ${newStatus}.` });
-        }
-
-        if (currentStatus === 'DRAFT') {
-            if (newStatus === 'LOCKED') {
-                // check if publication version actually has co-authors
-                if (currentVersion.coAuthors.length === 1) {
-                    return response.json(403, { message: 'Publication cannot be LOCKED without co-authors.' });
-                }
-
-                // check if publication version is ready to be LOCKED
-                if (!publicationService.isReadyToLock(publication)) {
-                    return response.json(403, {
-                        message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
-                    });
-                }
-
-                // Lock publication from editing
-                await publicationVersionService.updateStatus(currentVersion.id, 'LOCKED');
-
-                return response.json(200, { message: 'Publication status updated to LOCKED.' });
-            }
-
-            if (newStatus === 'LIVE') {
-                const isReadyToPublish = publicationService.isReadyToPublish(publication);
-
-                if (!isReadyToPublish) {
-                    return response.json(403, {
-                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
-                    });
-                }
-            }
-        }
-
-        if (currentStatus === 'LOCKED') {
-            if (newStatus === 'DRAFT') {
-                // Update status to 'DRAFT'
-                await publicationVersionService.updateStatus(currentVersion.id, newStatus);
-
-                // Cancel co author approvals
-                await coAuthorService.resetCoAuthors(currentVersion.id);
-
-                return response.json(200, {
-                    message: 'Publication unlocked for editing'
-                });
-            }
-
-            if (newStatus === 'LIVE') {
-                const isReadyToPublish = publicationService.isReadyToPublish(publication);
-
-                if (!isReadyToPublish) {
-                    return response.json(403, {
-                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
-                    });
-                }
-            }
-        }
-
-        const updatedVersion = await publicationVersionService.updateStatus(currentVersion.id, newStatus);
-
-        // now that the publication version is LIVE, add/update the opensearch record
-        await publicationService.createOpenSearchRecord({
-            id: publicationId,
-            type: updatedVersion.publication.type,
-            title: updatedVersion.title,
-            licence: updatedVersion.licence,
-            description: updatedVersion.description,
-            keywords: updatedVersion.keywords,
-            content: updatedVersion.content,
-            publishedDate: updatedVersion.publishedDate,
-            cleanContent: htmlToText.convert(updatedVersion.content)
-        });
-
-        const references = await referenceService.getAllByPublicationVersion(updatedVersion.id);
-
-        // Publication version is live, so update the DOI
-        await helpers.updateDOI(publication.doi, publication, references);
-
-        // send message to the pdf generation queue
-        // currently only on deployed instances while a local solution is developed
-        if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationId);
-
-        return response.json(200, { message: 'Publication is now LIVE.' });
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
 export const getLinksForPublication = async (
-    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
+    event: I.APIRequest<undefined, I.GetPublicationLinksQueryParams, I.GetPublicationLinksPathParams>
 ): Promise<I.JSONResponse> => {
+    const publicationId = event.pathParameters.id;
+    const directLinks = event.queryStringParameters?.direct === 'true';
+    const user = event.user;
+    let includeDraft = false;
+
     try {
-        const { publication, linkedFrom, linkedTo } = await publicationService.getLinksForPublication(
-            event.pathParameters.id
-        );
+        if (directLinks) {
+            if (user) {
+                const latestVersion = await publicationVersionService.get(publicationId, 'latest');
+
+                // if latest version is a DRAFT, check if user can see it
+                if (
+                    latestVersion?.currentStatus === 'DRAFT' &&
+                    (user.id === latestVersion?.createdBy ||
+                        latestVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === user.id))
+                ) {
+                    includeDraft = true;
+                }
+            }
+        }
+
+        const { publication, linkedFrom, linkedTo } = directLinks
+            ? await publicationService.getDirectLinksForPublication(publicationId, includeDraft)
+            : await publicationService.getLinksForPublication(publicationId);
 
         if (!publication) {
             return response.json(404, { message: 'Not found.' });
@@ -438,22 +172,13 @@ export const getPDF = async (
         // generate new PDF
         try {
             // We know the publication has at least one LIVE version.
-            const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+            const latestPublishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
 
             if (!latestPublishedVersion) {
                 throw Error('Unable to get latest published version from supplied object');
             }
 
-            const publicationWithLatestPublishedVersion = await publicationService.getWithVersion(
-                publication.id,
-                latestPublishedVersion.versionNumber
-            );
-
-            if (!publicationWithLatestPublishedVersion) {
-                throw Error('Unable to get latest published version from DB');
-            }
-
-            const newPDFUrl = await publicationService.generatePDF(publicationWithLatestPublishedVersion);
+            const newPDFUrl = await publicationService.generatePDF(latestPublishedVersion);
 
             if (!newPDFUrl) {
                 throw Error('Failed to generate PDF');
@@ -530,6 +255,20 @@ export const updateTopics = async (
         const updateTopics = await publicationService.updateTopics(event.pathParameters.id, event.body.topics);
 
         return response.json(200, updateTopics);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getPublicationTopics = async (
+    event: I.APIRequest<undefined, undefined, I.GetPublicationTopicsPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const topics = await publicationService.getPublicationTopics(event.pathParameters.id);
+
+        return response.json(200, topics);
     } catch (error) {
         console.log(error);
 

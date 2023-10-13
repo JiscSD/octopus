@@ -5,103 +5,7 @@ import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 import { Browser, launch } from 'puppeteer-core';
-
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-
-import * as publicationVersionService from 'publicationVersion/service';
-
-export const getAllByIds = async (ids: Array<string>) => {
-    // Get base publications
-    const publications = await client.prisma.publication.findMany({
-        where: {
-            id: {
-                in: ids
-            }
-        }
-    });
-
-    // Get current versions of these publications
-    const versions = await client.prisma.publicationVersion.findMany({
-        where: {
-            versionOf: {
-                in: ids
-            },
-            isLatestVersion: true
-        },
-        include: {
-            user: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                    id: true,
-                    orcid: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    approvalRequested: true,
-                    confirmedCoAuthor: true,
-                    code: true,
-                    linkedUser: true,
-                    email: true,
-                    publicationVersionId: true,
-                    user: {
-                        select: {
-                            orcid: true,
-                            firstName: true,
-                            lastName: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            }
-        }
-    });
-
-    if (publications.length !== versions.length) {
-        throw Error('Unable to find a current version for all requested publications');
-    }
-
-    // Merge versioned data into the publication records
-    const mergedPublications = publications.map((publication) => {
-        const currentVersion = versions.find((version) => version.versionOf === publication.id);
-
-        return { ...currentVersion, ...publication };
-    });
-
-    return mergedPublications;
-};
-
-export const update = async (id: string, updateContent: I.UpdatePublicationRequestBody) => {
-    // Only if topics are passed, format them in a way that prisma can understand.
-    // This will overwrite existing topics with those whose IDs were passed in updateContent.
-    const { topics, ...dataRest } = updateContent;
-    const data = {
-        ...dataRest,
-        ...(!!updateContent.topics && { topics: { set: updateContent.topics.map((topicId) => ({ id: topicId })) } })
-    };
-
-    const updatedPublication = await client.prisma.publication.update({
-        where: {
-            versionOf: id,
-            isLatestVersion: true
-        },
-        select: {
-            id: true
-        }
-    });
-    const updatedPublication = await client.prisma.publicationVersion.update({
-        where: {
-            id: currentVersion?.id
-        },
-        data
-    });
-
-    return updatedPublication;
-};
 
 export const isIdInUse = async (id: string) => {
     const publication = await client.prisma.publication.count({
@@ -111,375 +15,6 @@ export const isIdInUse = async (id: string) => {
     });
 
     return Boolean(publication);
-};
-
-// For convenience, sometimes we want to present a publication with the data from
-// a particular version inline, disguised as one entity. For example, when we provide it straight to the UI.
-export const getWithVersionMerged = async (id: string, versionNumber?: number) => {
-    // Get the overall publication without versions initially
-    const publication = await client.prisma.publication.findFirst({
-        where: {
-            id
-        },
-        include: {
-            publicationFlags: {
-                select: {
-                    id: true,
-                    category: true,
-                    resolved: true,
-                    createdBy: true,
-                    createdAt: true,
-                    user: {
-                        select: {
-                            id: true,
-                            orcid: true,
-                            firstName: true,
-                            lastName: true,
-                            email: true,
-                            createdAt: true,
-                            updatedAt: true
-                        }
-                    }
-                }
-            },
-            linkedTo: {
-                where: {
-                    publicationToRef: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: true
-                            }
-                        }
-                    }
-                },
-                select: {
-                    id: true,
-                    publicationToRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true,
-                                    user: {
-                                        select: {
-                                            id: true,
-                                            firstName: true,
-                                            lastName: true,
-                                            orcid: true
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            linkedFrom: {
-                where: {
-                    publicationFromRef: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: true
-                            }
-                        }
-                    }
-                },
-                select: {
-                    id: true,
-                    publicationFromRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true,
-                                    user: {
-                                        select: {
-                                            id: true,
-                                            firstName: true,
-                                            lastName: true,
-                                            orcid: true
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    language: true,
-                    translations: true
-                }
-            }
-        }
-    });
-
-    // Get the specified version if we are given a version number, otherwise the current one.
-    const versionWhere = {
-        versionOf: id,
-        ...(versionNumber
-            ? {
-                  versionNumber
-              }
-            : {
-                  isLatestVersion: true
-              })
-    };
-
-    const version = await client.prisma.publicationVersion.findFirst({
-        where: versionWhere,
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            }
-        }
-    });
-
-    if (!version || !publication) {
-        return null;
-    }
-
-    // Discard versionOf field
-    const { versionOf, ...versionRest } = version;
-
-    // Necessary to name version id as versionId because "id" will be overwritten
-    // by spread operator with publication's id
-    return { ...versionRest, versionId: version?.id, ...publication };
-};
-
-// Get a publication with a version attached. By default, the current version.
-export const getWithVersion = async (id: string, versionNumber?: number) => {
-    return await client.prisma.publication.findFirst({
-        where: {
-            id
-        },
-        include: {
-            versions: {
-                where: {
-                    versionOf: id,
-                    ...(versionNumber
-                        ? {
-                              versionNumber
-                          }
-                        : {
-                              isLatestVersion: true
-                          })
-                },
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            orcid: true,
-                            firstName: true,
-                            lastName: true,
-                            email: true,
-                            createdAt: true,
-                            updatedAt: true
-                        }
-                    },
-                    publicationStatus: {
-                        select: {
-                            status: true,
-                            createdAt: true,
-                            id: true
-                        },
-                        orderBy: {
-                            createdAt: 'desc'
-                        }
-                    },
-                    funders: {
-                        select: {
-                            id: true,
-                            city: true,
-                            country: true,
-                            name: true,
-                            link: true,
-                            ror: true
-                        }
-                    },
-                    coAuthors: {
-                        select: {
-                            id: true,
-                            email: true,
-                            linkedUser: true,
-                            publicationVersionId: true,
-                            confirmedCoAuthor: true,
-                            approvalRequested: true,
-                            createdAt: true,
-                            reminderDate: true,
-                            isIndependent: true,
-                            affiliations: true,
-                            user: {
-                                select: {
-                                    firstName: true,
-                                    lastName: true,
-                                    orcid: true
-                                }
-                            }
-                        },
-                        orderBy: {
-                            position: 'asc'
-                        }
-                    }
-                }
-            },
-            publicationFlags: {
-                select: {
-                    id: true,
-                    category: true,
-                    resolved: true,
-                    createdBy: true,
-                    createdAt: true,
-                    user: {
-                        select: {
-                            id: true,
-                            orcid: true,
-                            firstName: true,
-                            lastName: true,
-                            email: true,
-                            createdAt: true,
-                            updatedAt: true
-                        }
-                    }
-                }
-            },
-            linkedTo: {
-                where: {
-                    publicationToRef: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: true
-                            }
-                        }
-                    }
-                },
-                select: {
-                    id: true,
-                    publicationToRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            linkedFrom: {
-                where: {
-                    publicationFromRef: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: true
-                            }
-                        }
-                    }
-                },
-                select: {
-                    id: true,
-                    publicationFromRef: {
-                        select: {
-                            id: true,
-                            type: true,
-                            doi: true,
-                            versions: {
-                                select: {
-                                    title: true,
-                                    publishedDate: true,
-                                    currentStatus: true,
-                                    description: true,
-                                    keywords: true
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    language: true,
-                    translations: true
-                }
-            }
-        }
-    });
 };
 
 export const get = async (id: string) => {
@@ -692,7 +227,7 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
     return publication;
 };
 
-export const getOpenSearchRecords = async (filters: I.PublicationFilters) => {
+export const getOpenSearchPublications = async (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy
         ? {
               [filters.orderBy]: {
@@ -825,123 +360,12 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                 : undefined
         },
         include: {
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    language: true,
-                    translations: true
-                }
-            },
-            versions: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            firstName: true,
-                            lastName: true
-                        }
-                    },
-                    publicationStatus: {
-                        select: {
-                            status: true,
-                            createdAt: true,
-                            id: true
-                        },
-                        orderBy: {
-                            createdAt: 'desc'
-                        }
-                    }
-                }
-            }
+            topics: true,
+            versions: true
         }
     });
 
-    // Return first version data with new publication.
-    const version = await client.prisma.publicationVersion.findFirst({
-        where: {
-            versionOf: doiResponse.data.attributes.suffix
-        },
-        select: {
-            id: true,
-            versionNumber: true,
-            isLatestVersion: true,
-            currentStatus: true,
-            publishedDate: true,
-            title: true,
-            licence: true,
-            conflictOfInterestStatus: true,
-            conflictOfInterestText: true,
-            ethicalStatement: true,
-            ethicalStatementFreeText: true,
-            dataPermissionsStatement: true,
-            dataPermissionsStatementProvidedBy: true,
-            dataAccessStatement: true,
-            selfDeclaration: true,
-            description: true,
-            keywords: true,
-            content: true,
-            language: true,
-            fundersStatement: true,
-            user: {
-                select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            }
-        }
-    });
-
-    if (!version || !publication) {
-        throw Error('Failed to find publication and/or latest version data');
-    }
-
-    return { ...version, versionId: version.id, ...publication };
+    return publication;
 };
 
 export const doesDuplicateFlagExist = async (publication, category, user) => {
@@ -955,79 +379,6 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     });
 
     return flag;
-};
-
-export const isReadyToPublish = (publication: I.PublicationWithVersionAttached): boolean => {
-    if (!publication) {
-        return false;
-    }
-
-    const hasAtLeastOneLinkOrTopic =
-        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
-    const hasFilledRequiredFields =
-        ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
-    const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
-    const hasPublishDate = Boolean(version.publishedDate);
-    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? version.ethicalStatement !== null : true;
-    const isDataAndHasPermissionsStatement =
-        publication.type === 'DATA' ? version.dataPermissionsStatement !== null : true;
-
-    const coAuthorsAreVerified = !!version.coAuthors.every(
-        (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
-    );
-
-    return (
-        hasAtLeastOneLinkOrTopic &&
-        hasFilledRequiredFields &&
-        conflictOfInterest &&
-        !hasPublishDate &&
-        isDataAndHasEthicalStatement &&
-        isDataAndHasPermissionsStatement &&
-        coAuthorsAreVerified &&
-        version.isLatestVersion
-    );
-};
-
-export const isReadyToRequestApproval = (publication: I.PublicationWithVersionAttached): boolean => {
-    const version = publication?.versions[0];
-
-    if (!publication || !version?.isLatestVersion || version?.currentStatus !== 'DRAFT') {
-        return false;
-    }
-
-    const hasAtLeastOneLinkOrTopic =
-        publication.linkedTo.length !== 0 || (publication.type === 'PROBLEM' && publication.topics.length !== 0);
-    const hasFilledRequiredFields =
-        ['title', 'licence'].every((field) => version[field]) && !Helpers.isEmptyContent(version.content || '');
-    const conflictOfInterest = publicationVersionService.validateConflictOfInterest(version);
-    const isDataAndHasEthicalStatement = publication.type === 'DATA' ? version.ethicalStatement !== null : true;
-    const isDataAndHasPermissionsStatement =
-        publication.type === 'DATA' ? version.dataPermissionsStatement !== null : true;
-    const hasConfirmedAffiliations = !!version.coAuthors.some(
-        (author) => author.linkedUser === version.createdBy && (author.isIndependent || author.affiliations.length)
-    );
-
-    return (
-        hasAtLeastOneLinkOrTopic &&
-        hasFilledRequiredFields &&
-        conflictOfInterest &&
-        isDataAndHasEthicalStatement &&
-        isDataAndHasPermissionsStatement &&
-        hasConfirmedAffiliations &&
-        version.isLatestVersion
-    );
-};
-
-export const isReadyToLock = (publication: I.PublicationWithVersionAttached): boolean => {
-    const version = publication?.versions[0];
-
-    if (!publication || version?.currentStatus !== 'DRAFT') {
-        return false;
-    }
-
-    const hasRequestedApprovals = !!version.coAuthors.some((author) => author.approvalRequested);
-
-    return isReadyToRequestApproval(publication) && hasRequestedApprovals;
 };
 
 export const getLinksForPublication = async (id: string): Promise<I.PublicationWithLinks> => {
@@ -1068,10 +419,12 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
     const linkedTo = await client.prisma.$queryRaw<I.LinkedToPublication[]>`
         WITH RECURSIVE to_left AS (
-            SELECT "Links"."publicationFrom" "childPublication",
+            SELECT "Links"."id" "linkId",
+                   "Links"."publicationFrom" "childPublication",
                    "Links"."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
+                   "pto"."doi",
                    "pto_version".title,
                    "pto_version"."createdBy",
                    "pto_version"."publishedDate",
@@ -1097,10 +450,12 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
             UNION ALL
 
-            SELECT l."publicationFrom" "childPublication",
+            SELECT l."id" "linkId",
+                   l."publicationFrom" "childPublication",
                    l."publicationTo" "id",
                    "pfrom".type "childPublicationType",
                    "pto".type,
+                   "pto"."doi",
                    "pto_version".title,
                    "pto_version"."createdBy",
                    "pto_version"."publishedDate",
@@ -1134,9 +489,11 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
     const linkedFrom = await client.prisma.$queryRaw<I.LinkedFromPublication[]>`
         WITH RECURSIVE to_right AS (
-            SELECT "Links"."publicationFrom" "id",
+            SELECT "Links"."id" "linkId",
+                   "Links"."publicationFrom" "id",
                    "Links"."publicationTo" "parentPublication",
                    "pfrom".type,
+                   "pfrom"."doi",
                    "pto".type "parentPublicationType",
                    "pfrom_version"."title",
                    "pfrom_version"."createdBy",
@@ -1163,9 +520,11 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
             UNION ALL
 
-            SELECT l."publicationFrom" "id",
+            SELECT l."id" "linkId",
+                   l."publicationFrom" "id",
                    l."publicationTo" "parentPublication",
                    "pfrom".type,
+                   "pfrom"."doi",
                    "pto".type "parentPublicationType",
                    "pfrom_version"."title",
                    "pfrom_version"."createdBy",
@@ -1252,6 +611,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
         publication: {
             id: publication.id,
             type: publication.type,
+            doi: publication.doi,
             title: latestLiveVersion.title || '',
             createdBy: latestLiveVersion.createdBy,
             currentStatus: latestLiveVersion.currentStatus,
@@ -1273,10 +633,234 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
     };
 };
 
+export const getDirectLinksForPublication = async (
+    id: string,
+    includeDraft = false
+): Promise<I.PublicationWithLinks> => {
+    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraft
+        ? { isLatestVersion: true }
+        : { isLatestLiveVersion: true };
+
+    const publication = await client.prisma.publication.findUnique({
+        where: {
+            id
+        },
+        include: {
+            versions: {
+                where: {
+                    ...publicationFilter
+                },
+                include: {
+                    coAuthors: {
+                        include: {
+                            user: true
+                        }
+                    },
+                    user: true
+                }
+            },
+            linkedTo: {
+                where: {
+                    publicationToRef: {
+                        versions: {
+                            some: {
+                                isLatestLiveVersion: true
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationToRef: {
+                        select: {
+                            id: true,
+                            doi: true,
+                            type: true,
+                            versions: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            linkedFrom: {
+                where: {
+                    publicationFromRef: {
+                        versions: {
+                            some: {
+                                isLatestLiveVersion: true
+                            }
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    publicationFromRef: {
+                        select: {
+                            id: true,
+                            doi: true,
+                            type: true,
+                            versions: {
+                                include: {
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    if (!publication) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
+
+    const latestLiveVersion = publication.versions[0];
+
+    if (!latestLiveVersion) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
+
+    const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
+        const { id: linkId, publicationToRef } = link;
+        const { id, type, versions, doi } = publicationToRef;
+        const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
+
+        return {
+            id,
+            linkId,
+            type,
+            doi,
+            childPublication: publication.id,
+            childPublicationType: publication.type,
+            title: title || '',
+            createdBy,
+            authorFirstName: user.firstName,
+            authorLastName: user.lastName || '',
+            currentStatus,
+            publishedDate: publishedDate?.toISOString() || '',
+            authors: []
+        };
+    });
+
+    const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
+        const { id: linkId, publicationFromRef } = link;
+        const { id, type, versions, doi } = publicationFromRef;
+        const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
+
+        return {
+            id,
+            linkId,
+            type,
+            doi,
+            parentPublication: publication.id,
+            parentPublicationType: publication.type,
+            title: title || '',
+            createdBy,
+            authorFirstName: user.firstName,
+            authorLastName: user.lastName || '',
+            currentStatus,
+            publishedDate: publishedDate?.toISOString() || '',
+            authors: []
+        };
+    });
+
+    const publicationIds = linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id));
+
+    // get coAuthors for each latest LIVE version of each publication
+    const versions = await client.prisma.publicationVersion.findMany({
+        where: {
+            isLatestLiveVersion: true,
+            versionOf: {
+                in: publicationIds
+            }
+        },
+        select: {
+            versionOf: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
+        }
+    });
+
+    // add authors to 'linkedTo' publications
+    linkedTo.forEach((link) => {
+        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+
+        Object.assign(link, {
+            authors
+        });
+    });
+
+    // add authors to 'linkedFrom' publications
+    linkedFrom.forEach((link) => {
+        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+
+        Object.assign(link, {
+            authors
+        });
+    });
+
+    return {
+        publication: {
+            id: publication.id,
+            type: publication.type,
+            doi: publication.doi,
+            title: latestLiveVersion.title || '',
+            createdBy: latestLiveVersion.createdBy,
+            currentStatus: latestLiveVersion.currentStatus,
+            publishedDate: latestLiveVersion.publishedDate?.toISOString() || '',
+            authorFirstName: latestLiveVersion.user.firstName,
+            authorLastName: latestLiveVersion.user.lastName || '',
+            authors: latestLiveVersion.coAuthors.map((author) => ({
+                id: author.id,
+                linkedUser: author.linkedUser,
+                user: {
+                    orcid: author.user?.orcid || '',
+                    firstName: author.user?.firstName || '',
+                    lastName: author.user?.lastName || ''
+                }
+            }))
+        },
+        linkedTo,
+        linkedFrom
+    };
+};
+
+/**
+ *
+ * @TODO - move the PDF service to the publication versions when we start implementing creation of new versions
+ */
+
 // AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
-export const generatePDF = async (publication: I.PublicationWithVersionAttached): Promise<string | null> => {
-    const references = await referenceService.getAllByPublicationVersion(publication.versions[0].id);
-    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publication, references);
+export const generatePDF = async (publicationVersion: I.PublicationVersion): Promise<string | null> => {
+    const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
+    const { linkedTo } = await getDirectLinksForPublication(publicationVersion.versionOf);
+    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publicationVersion, references, linkedTo);
     const isLocal = process.env.STAGE === 'local';
 
     let browser: Browser | null = null;
@@ -1303,23 +887,23 @@ export const generatePDF = async (publication: I.PublicationWithVersionAttached)
             preferCSSPageSize: true,
             printBackground: true,
             displayHeaderFooter: true,
-            headerTemplate: Helpers.createPublicationHeaderTemplate(publication),
-            footerTemplate: Helpers.createPublicationFooterTemplate(publication)
+            headerTemplate: Helpers.createPublicationHeaderTemplate(publicationVersion),
+            footerTemplate: Helpers.createPublicationFooterTemplate(publicationVersion)
         });
 
         // upload pdf to S3
         await s3.client.send(
             new PutObjectCommand({
                 Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
-                Key: `${publication.id}.pdf`,
+                Key: `${publicationVersion.versionOf}.pdf`,
                 ContentType: 'application/pdf',
                 Body: pdf
             })
         );
 
-        console.log('Successfully generated PDF for publicationId: ', publication.id);
+        console.log('Successfully generated PDF for publicationId: ', publicationVersion.versionOf);
 
-        return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publication.id}.pdf`;
+        return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationVersion.versionOf}.pdf`;
     } catch (err) {
         console.error(err);
 
@@ -1480,3 +1064,19 @@ export const updateTopics = async (id: string, topics: string[]) => {
 
     return updateTopics.topics;
 };
+
+export const getPublicationTopics = (id: string) =>
+    client.prisma.topic.findMany({
+        where: {
+            publications: {
+                some: {
+                    id
+                }
+            }
+        },
+        select: {
+            id: true,
+            createdAt: true,
+            title: true
+        }
+    });

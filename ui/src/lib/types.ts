@@ -47,67 +47,48 @@ export type ToastStoreType = {
     clearToast: () => void;
 };
 
-export type PublicationCreationStoreType = {
-    error: null | string;
-    setError: (error: string | null) => void;
-    id: string;
-    updateId: (id: string) => void;
-    versionId: string;
-    updateVersionId: (versionId: string) => void;
-    title: string;
-    updateTitle: (title: string) => void;
-    type: PublicationType;
-    updateType: (type: PublicationType) => void;
-    content: string;
-    updateContent: (content: string) => void;
-    description: string;
-    updateDescription: (description: string) => void;
-    keywords: string;
-    updateKeywords: (keywords: string) => void;
-    language: Languages;
-    updateLanguage: (language: Languages) => void;
-    conflictOfInterestStatus: boolean | undefined;
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean | undefined) => void;
-    conflictOfInterestText: string;
-    updateConflictOfInterestText: (conflictOfInterestText: string) => void;
-    linkTo: Interfaces.LinkTo[];
-    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    topics: Interfaces.BaseTopic[];
-    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
-    ethicalStatement: string | null;
-    ethicalStatementFreeText: string | null;
-    updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
-    updateEthicalStatement: (ethicalStatement: string) => void;
-    dataAccessStatement: string;
-    updateDataAccessStatement: (dataAccessStatement: string | null) => void;
-    dataPermissionsStatement: string | null;
-    updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
-    dataPermissionsStatementProvidedBy: string | null;
-    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string | null) => void;
-    reset: () => void;
-    coAuthors: Interfaces.CoAuthor[];
+export type PublicationVersionSlice = {
+    publicationVersion: Interfaces.PublicationVersion;
+    updatePublicationVersion: (publicationVersion: Interfaces.PublicationVersion) => void;
+    updateAuthorAffiliations: (affiliations: Interfaces.MappedOrcidAffiliation[]) => void;
+    updateIsIndependentAuthor: (isIndependent: boolean) => void;
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
-    funderStatement: string | null;
-    updateFunderStatement: (funderStatement: string | null) => void;
-    funders: Interfaces.Funder[];
-    updateFunders: (funders: Interfaces.Funder[]) => void;
-    authorAffiliations: Interfaces.MappedOrcidAffiliation[];
-    updateAuthorAffiliations: (authorAffiliations: Interfaces.MappedOrcidAffiliation[]) => void;
-    isIndependentAuthor: boolean;
-    updateIsIndependentAuthor: (isIndependentAuthor: boolean) => void;
-    affiliationsStatement: string | null; // need discussion if this is needed anymore
-    updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
-    selfDeclaration: boolean;
-    updateSelfDeclaration: (selfDeclaration: boolean) => void;
+    resetPublicationVersion: () => void;
+};
+
+export type LinkedToSlice = {
+    linkedTo: Interfaces.LinkedToPublication[];
+    updateLinkedTo: (linkedTo: Interfaces.LinkedToPublication[]) => void;
+    resetLinkedTo: () => void;
+};
+
+export type ReferencesSlice = {
     references: Interfaces.Reference[];
     updateReferences: (references: Interfaces.Reference[]) => void;
+    resetReferences: () => void;
 };
+
+export type TopicsSlice = {
+    topics: Interfaces.BaseTopic[];
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
+};
+
+export type ErrorSlice = {
+    error: string | null;
+    setError: (message: string | null) => void;
+};
+
+export type PublicationCreationStoreType = PublicationVersionSlice &
+    LinkedToSlice &
+    ReferencesSlice &
+    ErrorSlice &
+    TopicsSlice;
 
 export type JSONValue = unknown;
 
-export type SearchType = 'publications' | 'authors' | 'topics';
+export type SearchType = 'publication-versions' | 'authors' | 'topics';
 
-export type SearchParameter = Interfaces.Publication | Interfaces.User;
+export type SearchParameter = Interfaces.PublicationVersion | Interfaces.User;
 
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 

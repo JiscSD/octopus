@@ -8,7 +8,6 @@ export { default as Delay } from './Delay';
 export { default as EnableDarkMode } from './EnableDarkMode';
 export { default as ExtendedLink } from './ExtendedLink';
 export { default as FaqSidebar } from './Faq/Sidebar';
-export { default as FeaturedCollection } from './FeaturedCollection';
 export { default as FileUpload } from './FileUpload';
 export { default as FlagComment } from './Flag/Comment';
 export { default as FlagNewComment } from './Flag/NewComment';
@@ -63,7 +62,6 @@ export { default as PublicationSidebarCardSections } from './Publication/Sidebar
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationVisualization } from './Publication/Visualization';
-export { default as RenderLinks } from './RenderLinks';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as RORForm } from './RORForm';
 export { default as ScrollToTop } from './ScrollToTop';
