@@ -32,7 +32,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
 
     const excludedIds = [currentPublicationId, ...linkedTos.map((link) => link.id)];
 
-    const swrKey = `/versions?type=${formattedAsString}&limit=10${
+    const swrKey = `/publication-versions?type=${formattedAsString}&limit=10${
         search.length > 2 ? `&search=${search}` : ''
     }&exclude=${excludedIds.join(',')}`;
 
@@ -45,7 +45,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
         isValidating
     } = useSWR(swrKey, null, {
         fallback: {
-            '/versions': []
+            '/publication-versions': []
         }
     });
 

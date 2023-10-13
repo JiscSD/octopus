@@ -22,7 +22,7 @@ import * as api from '@api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     // defaults to possible query params
-    const searchType: Types.SearchType = 'versions';
+    const searchType: Types.SearchType = 'publication-versions';
     let query: string | string[] | null = null;
     let publicationTypes: string | string[] | null = null;
     let limit: number | string | string[] | null = null;

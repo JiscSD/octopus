@@ -96,7 +96,10 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
     if (publicationId) {
         try {
-            const response = await api.get(`${Config.endpoints.publications}/${publicationId}/versions/latest`, token);
+            const response = await api.get(
+                `${Config.endpoints.publications}/${publicationId}/publication-versions/latest`,
+                token
+            );
             publicationVersion = response.data;
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;

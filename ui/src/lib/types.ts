@@ -86,7 +86,7 @@ export type PublicationCreationStoreType = PublicationVersionSlice &
 
 export type JSONValue = unknown;
 
-export type SearchType = 'versions' | 'authors' | 'topics';
+export type SearchType = 'publication-versions' | 'authors' | 'topics';
 
 export type SearchParameter = Interfaces.PublicationVersion | Interfaces.User;
 

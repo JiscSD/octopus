@@ -30,7 +30,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         flag = flagResponse.data;
 
         const response = await api.get(
-            `${Config.endpoints.publications}/${flag?.publicationId}/versions/latest`,
+            `${Config.endpoints.publications}/${flag?.publicationId}/publication-versions/latest`,
             token
         );
         publicationVersion = response.data;

@@ -39,7 +39,10 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
      */
 
     try {
-        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/versions?limit=999`, token);
+        const response = await api.get(
+            `${Config.endpoints.users}/${currentUser.id}/publication-versions?limit=999`,
+            token
+        );
         userPublicationVersions = response.data.results;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;

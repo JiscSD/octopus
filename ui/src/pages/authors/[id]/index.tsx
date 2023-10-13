@@ -16,7 +16,7 @@ const pageSize = 10;
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationVersionsUrl = `${Config.endpoints.users}/${userId}/versions?offset=0&limit=${pageSize}`;
+    const userPublicationVersionsUrl = `${Config.endpoints.users}/${userId}/publication-versions?offset=0&limit=${pageSize}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
     let firstUserPublicationsPage: Interfaces.UserPublicationVersionsResult | null = null;

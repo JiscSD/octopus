@@ -8,9 +8,11 @@ describe('Delete publication versions', () => {
     });
 
     test('User can delete their own DRAFT publication version', async () => {
-        const deletePublicationVersion = await testUtils.agent.delete('/versions/publication-problem-draft-v1').query({
-            apiKey: '000000005'
-        });
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-draft-v1')
+            .query({
+                apiKey: '000000005'
+            });
 
         expect(deletePublicationVersion.status).toEqual(200);
 
@@ -24,9 +26,11 @@ describe('Delete publication versions', () => {
     });
 
     test('User cannot delete their own LIVE publication version', async () => {
-        const deletePublicationVersion = await testUtils.agent.delete('/versions/publication-problem-live-v1').query({
-            apiKey: '123456789'
-        });
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-live-v1')
+            .query({
+                apiKey: '123456789'
+            });
 
         expect(deletePublicationVersion.status).toEqual(403);
 
@@ -40,23 +44,29 @@ describe('Delete publication versions', () => {
     });
 
     test('User cannot delete a DRAFT publication version they did not create', async () => {
-        const deletePublicationVersion = await testUtils.agent.delete('/versions/publication-problem-draft-v1').query({
-            apiKey: '987654321'
-        });
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-draft-v1')
+            .query({
+                apiKey: '987654321'
+            });
 
         expect(deletePublicationVersion.status).toEqual(403);
     });
 
     test('User cannot delete a LIVE publication version they did not create', async () => {
-        const deletePublicationVersion = await testUtils.agent.delete('/versions/publication-problem-live-v1').query({
-            apiKey: '987654321'
-        });
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-live-v1')
+            .query({
+                apiKey: '987654321'
+            });
 
         expect(deletePublicationVersion.status).toEqual(403);
     });
 
     test('Unauthenticated user cannot delete a DRAFT publication version they did not create', async () => {
-        const deletePublicationVersion = await testUtils.agent.delete('/versions/publication-problem-draft-v1');
+        const deletePublicationVersion = await testUtils.agent.delete(
+            '/publication-versions/publication-problem-draft-v1'
+        );
 
         expect(deletePublicationVersion.status).toEqual(401);
     });

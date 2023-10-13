@@ -35,7 +35,7 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
                                 'type' in entity ? (
                                     <Components.LinkedPublicationRow
                                         key={entity.id}
-                                        link={entity}
+                                        linkedPublication={entity}
                                         deleteLink={props.deleteLink}
                                     />
                                 ) : (

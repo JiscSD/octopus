@@ -7,14 +7,14 @@ beforeEach(async () => {
 
 describe('Update publication version', () => {
     test('Cannot update without permission', async () => {
-        const updatedVersion = await testUtils.agent.patch('/versions/publication-interpretation-draft-v1');
+        const updatedVersion = await testUtils.agent.patch('/publication-versions/publication-interpretation-draft-v1');
 
         expect(updatedVersion.status).toEqual(401);
     });
 
     test('Cannot update with incorrect permissions', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 987654321 });
 
         expect(updatedVersion.status).toEqual(403);
@@ -22,7 +22,7 @@ describe('Update publication version', () => {
 
     test('Can update publication version title', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ title: 'New title' });
 
@@ -32,7 +32,7 @@ describe('Update publication version', () => {
 
     test('Can update publication version content if "safe" HTML', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ content: '<p>Hello <a href="#nathan">Nathan</a></p>' });
 
@@ -41,7 +41,7 @@ describe('Update publication version', () => {
 
     test('HTML is sanitised if not "safe" (1)', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ content: '<p class="class">Hello <a href="#nathan">Nathan</a></p>' });
 
@@ -50,7 +50,7 @@ describe('Update publication version', () => {
 
     test('HTML is sanitised if not "safe" (2)', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ content: '<p style="color: red;">Hello <a href="#nathan">Nathan</a></p>' });
 
@@ -61,7 +61,7 @@ describe('Update publication version', () => {
         // This was previously possible but we have now removed the ability because
         // there is only one licence type we want people to use and we set it automatically.
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ licence: 'CC_BY_SA' });
 
@@ -70,7 +70,7 @@ describe('Update publication version', () => {
 
     test('Can update keywords', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ keywords: ['science', 'technology'] });
 
@@ -79,7 +79,7 @@ describe('Update publication version', () => {
 
     test('Can update description', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ description: 'Test description' });
 
@@ -88,7 +88,7 @@ describe('Update publication version', () => {
 
     test('Cannot update publication version with invalid update parameter', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ doesNotExist: 'invalid-parameter' });
 
@@ -97,7 +97,7 @@ describe('Update publication version', () => {
 
     test('Cannot update LIVE publication', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-real-world-application-live-v1')
+            .patch('/publication-versions/publication-real-world-application-live-v1')
             .query({ apiKey: 123456789 })
             .send({ title: 'Brand new title' });
 
@@ -106,7 +106,7 @@ describe('Update publication version', () => {
 
     test('Cannot add more than 10 keywords', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({ keywords: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'] });
 
@@ -115,7 +115,7 @@ describe('Update publication version', () => {
 
     test('Cannot add more than 160 characters into a description', async () => {
         const updatedVersion = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
             .send({
                 description:
@@ -128,7 +128,7 @@ describe('Update publication version', () => {
     // Language tests
     test('Valid publication updated by real user when provided a correct ISO-639-1 language code', async () => {
         const createPublicationRequest = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({
                 apiKey: '123456789'
             })
@@ -142,7 +142,7 @@ describe('Update publication version', () => {
 
     test('Publication failed to be updated if language code provided is not out of the ISO-639-1 language list', async () => {
         const createPublicationRequest = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({
                 apiKey: '123456789'
             })
@@ -155,7 +155,7 @@ describe('Update publication version', () => {
 
     test('Publication failed to be updated if language provided is less than 2 chars', async () => {
         const createPublicationRequest = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({
                 apiKey: '123456789'
             })
@@ -168,7 +168,7 @@ describe('Update publication version', () => {
 
     test('Publication failed to be updated if language provided is more than 2 chars', async () => {
         const createPublicationRequest = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({
                 apiKey: '123456789'
             })
@@ -181,7 +181,7 @@ describe('Update publication version', () => {
 
     test('Publication failed to update if is not protocol or hypotheses and supplies a self declaration', async () => {
         const createPublicationRequest = await testUtils.agent
-            .patch('/versions/publication-interpretation-draft-v1')
+            .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({
                 apiKey: '123456789'
             })

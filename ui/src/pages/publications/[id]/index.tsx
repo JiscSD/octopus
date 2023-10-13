@@ -53,7 +53,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         Promise<Interfaces.BaseTopic[] | void>
     ] = [
         api
-            .get(`${Config.endpoints.publications}/${requestedId}/versions/latest`, token)
+            .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token)
             .then((res) => res.data)
             .catch((error) => console.log(error)),
         api
@@ -74,7 +74,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             .catch((error) => console.log(error))
     ];
 
-    const [publicationVersion, bookmarks = [], directLinks, flags = [], topics = []] = await Promise.all(promises);
+    const [
+        publicationVersion,
+        bookmarks = [],
+        directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
+        flags = [],
+        topics = []
+    ] = await Promise.all(promises);
 
     if (!publicationVersion) {
         return {
@@ -125,7 +131,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     }, [props.bookmarkId, props.publicationId]);
 
     const { data: publicationVersion, mutate } = useSWR<Interfaces.PublicationVersion>(
-        `${Config.endpoints.publications}/${props.publicationId}/versions/latest`,
+        `${Config.endpoints.publications}/${props.publicationId}/publication-versions/latest`,
         null,
         { fallbackData: props.publicationVersion }
     );
@@ -233,7 +239,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             setApprovalError('');
             try {
                 await api.patch(
-                    `/versions/${publicationVersion?.id}/coauthor-confirmation`,
+                    `/publication-versions/${publicationVersion?.id}/coauthor-confirmation`,
                     {
                         confirm
                     },

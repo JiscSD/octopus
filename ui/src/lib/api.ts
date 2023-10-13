@@ -101,7 +101,7 @@ export const search = async <T extends Types.SearchParameter>(
     search && (params += '&search=' + search);
 
     // publication specific params
-    searchType === 'versions' && publicationType && (params += '&type=' + publicationType);
+    searchType === 'publication-versions' && publicationType && (params += '&type=' + publicationType);
 
     params.includes('&') && (params = params.replace('&', '?'));
 

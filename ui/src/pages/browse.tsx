@@ -12,7 +12,7 @@ import * as api from '@api';
 import * as Interfaces from '@interfaces';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const swrKey = `/versions?limit=5&orderBy=publishedDate&orderDirection=desc`;
+    const swrKey = `/publication-versions?limit=5&orderBy=publishedDate&orderDirection=desc`;
 
     let latest: unknown = [];
     let metadata: unknown = {};

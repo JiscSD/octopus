@@ -48,7 +48,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         return Helpers.withServerSession(async (context) => {
             try {
                 await api.patch(
-                    `/versions/${versionId}/link-coauthor`,
+                    `/publication-versions/${versionId}/link-coauthor`,
                     {
                         email,
                         code,
@@ -82,7 +82,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        await api.patch(`/versions/${versionId}/link-coauthor`, {
+        await api.patch(`/publication-versions/${versionId}/link-coauthor`, {
             email,
             code,
             approve: false

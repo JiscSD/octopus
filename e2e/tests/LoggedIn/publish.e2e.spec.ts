@@ -1994,7 +1994,9 @@ test.describe('Publication flow + co-authors', () => {
 
         await page.waitForResponse(
             (response) =>
-                response.request().method() === 'GET' && response.url().includes(`/versions/latest`) && response.ok()
+                response.request().method() === 'GET' &&
+                response.url().includes(`/publication-versions/latest`) &&
+                response.ok()
         );
 
         // check approval's tracker table first row includes the selected affiliation title
@@ -2051,7 +2053,9 @@ test.describe('Publication Flow + File import', () => {
             page.click('div[role="dialog"] button[aria-label="Save"]'),
             page.waitForResponse(
                 (response) =>
-                    response.url().includes('/versions') && response.request().method() === 'PATCH' && response.ok()
+                    response.url().includes('/publication-versions') &&
+                    response.request().method() === 'PATCH' &&
+                    response.ok()
             )
         ]);
 
