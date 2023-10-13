@@ -25,7 +25,6 @@
         "convertAffiliations": "ts-node prisma/convertAffiliations.ts",
         "insertTestTopics": "ts-node prisma/insertTestTopics.ts",
         "convertResearchTopics": "ts-node -r tsconfig-paths/register prisma/convertResearchTopics.ts",
-        "migrateToVersionedPublications": "ts-node -r tsconfig-paths/register prisma/migrateToVersionedPublications.ts",
         "convertPublicationBookmarks": "ts-node prisma/convertPublicationBookmarks.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
