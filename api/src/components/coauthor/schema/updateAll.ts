@@ -8,7 +8,7 @@ const updateAll: I.Schema = {
             id: {
                 type: 'string'
             },
-            publicationId: {
+            publicationVersionId: {
                 type: 'string'
             },
             email: {

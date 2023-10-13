@@ -7,7 +7,7 @@ import * as Config from '@config';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     isReadyForPublish: boolean;
     isCorrespondingAuthor: boolean;
     isPublishing: boolean;
@@ -22,8 +22,8 @@ const ActionBar: React.FC<Props> = (props) => {
     const { user } = Stores.useAuthStore();
 
     const author = React.useMemo(
-        () => props.publication.coAuthors.find((author) => author.linkedUser === user?.id),
-        [props.publication.coAuthors, user?.id]
+        () => props.publicationVersion.coAuthors.find((author) => author.linkedUser === user?.id),
+        [props.publicationVersion.coAuthors, user?.id]
     );
 
     const sortedAffiliationNames = React.useMemo(
@@ -41,7 +41,7 @@ const ActionBar: React.FC<Props> = (props) => {
             <div className="flex-1">
                 <h4>
                     <strong>Publication status:</strong>{' '}
-                    {user ? Helpers.getPublicationStatusByAuthor(props.publication, user) : ''}
+                    {user ? Helpers.getPublicationStatusByAuthor(props.publicationVersion, user) : ''}
                 </h4>
                 <div className="my-6 flex items-start text-sm">
                     <OutlineIcons.ExclamationCircleIcon className="mr-2 inline max-w-[20px]" />
@@ -57,7 +57,7 @@ const ActionBar: React.FC<Props> = (props) => {
                             <p className="pb-1">This publication is locked for approval.</p>
                             <Components.Link
                                 className="inline w-fit rounded text-teal-600 underline outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-teal-200 dark:decoration-teal-200"
-                                href={`${Config.urls.viewPublication.path}/${props.publication.id}/edit?step=4`}
+                                href={`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}/edit?step=4`}
                                 title="Edit publication"
                                 onClick={async (e) => {
                                     e.preventDefault();
@@ -155,7 +155,7 @@ const ActionBar: React.FC<Props> = (props) => {
                 )}
 
                 {props.isCorrespondingAuthor &&
-                    props.publication.coAuthors.some((author) => !author.confirmedCoAuthor) && (
+                    props.publicationVersion.coAuthors.some((author) => !author.confirmedCoAuthor) && (
                         <div className="mb-4 flex items-start text-sm">
                             <OutlineIcons.ExclamationCircleIcon className="mr-2 inline max-w-[20px] text-red-500" />
                             <p>

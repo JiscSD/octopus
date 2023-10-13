@@ -5,14 +5,15 @@ import {
     PublicationFlagCategoryEnum,
     PublicationType,
     Role,
-    BookmarkType
+    BookmarkType,
+    PublicationStatusEnum
 } from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export {
     ImageExtension,
@@ -111,6 +112,19 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicationLinksPathParams {
+    id: string;
+}
+
+export interface GetPublicationLinksQueryParams {
+    direct?: string;
+}
+
+export interface GetPublicationVersionPathParams {
+    id: string;
+    version: string;
+}
+
 export interface GetSeedDataPublicationsFilters {
     title: string;
 }
@@ -119,17 +133,24 @@ export interface UpdatePublicationPathParams {
     id: string;
 }
 
+export interface UpdatePublicationVersionPathParams {
+    id: string;
+}
+
+export interface GetPublicationTopicsPathParams {
+    id: string;
+}
+
 export interface UpdateStatusPathParams {
     id: string;
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
-export interface UpdatePublicationRequestBody {
+export interface UpdatePublicationVersionRequestBody {
     content?: string;
     title?: string;
     description?: string;
     keywords?: string[];
-    id?: string;
     language?: Languages;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
@@ -137,14 +158,20 @@ export interface UpdatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
-    topics?: string[];
+}
+
+export interface UpdatePublicationTopicsRequestBody {
+    topics: string[];
+}
+export interface UpdatePublicationTopicsPathParams {
+    id: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
-export interface PublicationFilters {
+export interface OpenSearchPublicationFilters {
     search?: string;
     limit: number;
     offset: number;
@@ -156,7 +183,7 @@ export interface PublicationFilters {
     orderDirection?: OrderDirection;
 }
 
-export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
+export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
 
 /**
  * @description Links
@@ -164,6 +191,37 @@ export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicatio
 export interface CreateLinkBody {
     to: string;
     from: string;
+}
+
+export interface LinkedPublication {
+    id: string;
+    type: PublicationType;
+    doi: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatusEnum;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+}
+
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
+    childPublication: string;
+    childPublicationType: PublicationType;
+}
+
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
+    parentPublication: string;
+    parentPublicationType: PublicationType;
+}
+
+export interface PublicationWithLinks {
+    publication: LinkedPublication | null;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
 }
 
 /**
@@ -267,7 +325,7 @@ export interface UpdateUserInformation {
     orcidAccessToken: string;
 }
 
-export interface DeletePublicationPathParams {
+export interface DeletePublicationVersionPathParams {
     id: string;
 }
 
@@ -381,7 +439,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
     isIndependent: boolean;
@@ -403,6 +461,7 @@ export interface CreateCoAuthorPathParams {
 
 export interface DeleteCoAuthorPathParams {
     id: string;
+
     coauthor: string;
 }
 
@@ -486,11 +545,13 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
-    publicationId: string;
+    publicationVersionId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
 }
+
+export type UpdateReferencesBody = Array<Reference>;
 
 export interface CreateReferencePath {
     id: string;
@@ -586,7 +647,7 @@ export interface UpdateAffiliationsBody {
 
 export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
 
-export interface UserPublicationsFilters {
+export interface UserPublicationVersionsFilters {
     offset: number;
     limit: number;
     orderBy?: UserPublicationsOrderBy;
@@ -595,6 +656,7 @@ export interface UserPublicationsFilters {
 
 export interface SendApprovalReminderPathParams {
     id: string;
+
     coauthor: string;
 }
 

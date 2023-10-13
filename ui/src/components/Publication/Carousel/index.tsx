@@ -5,7 +5,7 @@ import * as Components from '@components';
 import * as Interfaces from '@interfaces';
 
 type Props = {
-    publications: Interfaces.Publication[];
+    publicationVersions: Interfaces.PublicationVersion[];
 };
 
 const Carousel: React.FC<Props> = (props): React.ReactElement => {
@@ -27,9 +27,9 @@ const Carousel: React.FC<Props> = (props): React.ReactElement => {
                     ref={container}
                     className="scrollbar flex snap-x snap-mandatory overflow-x-scroll overscroll-y-none scroll-smooth pb-6 pl-[2px] pt-2 sm:snap-none"
                 >
-                    {props.publications.map((publication: Interfaces.Publication, index: number) => (
+                    {props.publicationVersions.map((publicationVersion, index: number) => (
                         <div key={index} className="mr-10 min-w-[300px] snap-center sm:snap-align-none">
-                            <Components.PublicationCard publication={publication} />
+                            <Components.PublicationCard publicationVersion={publicationVersion} />
                         </div>
                     ))}
                 </div>

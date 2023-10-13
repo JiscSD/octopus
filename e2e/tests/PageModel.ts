@@ -117,7 +117,7 @@ export const PageModel = {
             'section > h2:has-text("Works")'
         ],
         showAll: 'button:has-text("Show More")',
-        result: '_react=SearchResult[publication.id="cl3fz14dr0001es6i5ji51rq4"]'
+        result: '_react=SearchResult[publicationVersion.publication.id="cl3fz14dr0001es6i5ji51rq4"]'
     },
     profilePage: {
         employment: 'h2:has-text("Employment")',

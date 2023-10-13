@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const updatedPublicationSchema: I.Schema = {
+const updateStatusSchema: I.Schema = {
     type: 'object',
     properties: {
         status: {
@@ -15,4 +15,4 @@ const updatedPublicationSchema: I.Schema = {
     additionalProperties: false
 };
 
-export default updatedPublicationSchema;
+export default updateStatusSchema;

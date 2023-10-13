@@ -2,7 +2,6 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
 import * as Components from '@components';
 
 type Props = {

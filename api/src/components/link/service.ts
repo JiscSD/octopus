@@ -38,17 +38,27 @@ export const get = async (id: string) => {
             publicationFromRef: {
                 select: {
                     id: true,
-                    user: true,
-                    currentStatus: true,
-                    publicationStatus: true
+                    versions: {
+                        select: {
+                            isLatestVersion: true,
+                            currentStatus: true,
+                            publicationStatus: true,
+                            user: true
+                        }
+                    }
                 }
             },
             publicationToRef: {
                 select: {
                     id: true,
-                    user: true,
-                    currentStatus: true,
-                    publicationStatus: true
+                    versions: {
+                        select: {
+                            isLatestVersion: true,
+                            currentStatus: true,
+                            publicationStatus: true,
+                            user: true
+                        }
+                    }
                 }
             }
         },

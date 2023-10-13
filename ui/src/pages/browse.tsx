@@ -9,9 +9,10 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Interfaces from '@interfaces';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const swrKey = `/publications?limit=5&orderBy=publishedDate&orderDirection=desc`;
+    const swrKey = `/publication-versions?limit=5&orderBy=publishedDate&orderDirection=desc`;
 
     let latest: unknown = [];
     let metadata: unknown = {};
@@ -20,7 +21,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         latest = latestResponse.data.data;
         metadata = latestResponse.data.metadata;
     } catch (error) {
-        // couldn't load the latest publications
+        // couldn't load the latest publication versions
     }
 
     return {
@@ -43,7 +44,7 @@ type Props = {
 };
 
 const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
-    const { data, error } = useSWR(props.swrKey);
+    const { data: results, error } = useSWR<Interfaces.SearchResults<Interfaces.PublicationVersion>>(props.swrKey);
 
     return (
         <>
@@ -102,7 +103,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                     </aside>
                     <article className="lg:col-span-6">
                         <div className="mb-16">
-                            {!error && data && <Components.LatestPublications publications={data.data} />}
+                            {!error && results && <Components.LatestPublications publicationVersions={results.data} />}
                         </div>
                     </article>
                 </section>

@@ -25,7 +25,7 @@ type BuildPublicationProps = {
     steps: Interfaces.CreationStepWithCompletenessStatus[];
     currentStep: number;
     setStep: any; // Can be a page number or a callback of its own
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     token: string;
     children: React.ReactNode;
 };
@@ -52,7 +52,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     // If I save a publication then go to create a new, my old data is still in the store, we dont want this
     React.useEffect(() => {
         return () => {
-            memoizedStore.reset();
+            memoizedStore.resetPublicationVersion();
+            memoizedStore.resetLinkedTo();
+            memoizedStore.resetReferences();
         };
     }, [memoizedStore]);
 
@@ -64,32 +66,35 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const checkRequired = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            const { publicationVersion, linkedTo, topics } = store;
+
             let ready = { ready: true, message: '' };
-            if (!store.title) ready = { ready: false, message: 'You must provide a title' };
-            if (!store.content) ready = { ready: false, message: 'You must provide main text' };
+
+            if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
+            if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
             if (
-                (store.type === 'PROBLEM' && !store.linkTo?.length && !store.topics?.length) ||
-                (store.type !== 'PROBLEM' && !store.linkTo?.length)
+                (publicationVersion.publication.type === 'PROBLEM' && !linkedTo.length && !topics.length) ||
+                (publicationVersion.publication.type !== 'PROBLEM' && !store.linkedTo?.length)
             )
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
-            if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            if (publicationVersion.conflictOfInterestStatus && !publicationVersion.conflictOfInterestText?.length) {
                 ready = {
                     ready: false,
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
-            if (store.conflictOfInterestStatus === null) {
+            if (publicationVersion.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
-            if (store.type === Config.values.octopusInformation.publications.DATA.id) {
-                if (store.ethicalStatement === null)
+            if (publicationVersion.publication.type === Config.values.octopusInformation.publications.DATA.id) {
+                if (publicationVersion.ethicalStatement === null)
                     ready = { ready: false, message: 'You must select an ethical statement option' };
-                if (store.dataPermissionsStatement === null)
+                if (publicationVersion.dataPermissionsStatement === null)
                     ready = { ready: false, message: 'You must select a data permissions option' };
                 if (
-                    !store.dataPermissionsStatementProvidedBy &&
-                    store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+                    !publicationVersion.dataPermissionsStatementProvidedBy &&
+                    publicationVersion.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
                 )
                     ready = {
                         ready: false,
@@ -97,11 +102,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     };
             }
 
-            if (!store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+            if (!publicationVersion.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
                 ready = { ready: false, message: 'All co-authors must be verified.' };
             }
 
-            if (!(store.authorAffiliations.length || store.isIndependentAuthor)) {
+            const correspondingAuthor = publicationVersion.coAuthors.find(
+                (author) => author.linkedUser === publicationVersion.createdBy
+            );
+
+            if (!(correspondingAuthor?.affiliations.length || correspondingAuthor?.isIndependent)) {
                 ready = {
                     ready: false,
                     message: 'You must add your affiliations or confirm if you are an independent author.'
@@ -115,36 +124,43 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const checkRequiredApproval = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
+            const { publicationVersion, linkedTo, topics } = store;
+
             let ready = { ready: true, message: '' };
-            if (!store.title) ready = { ready: false, message: 'You must provide a title' };
-            if (!store.content) ready = { ready: false, message: 'You must provide main text' };
-            if (!store.linkTo?.length && !store.topics?.length)
+
+            if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
+            if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
+            if (!linkedTo.length && !topics.length)
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
-            if (store.conflictOfInterestStatus && !store.conflictOfInterestText.length) {
+            if (publicationVersion.conflictOfInterestStatus && !publicationVersion.conflictOfInterestText?.length) {
                 ready = {
                     ready: false,
                     message: 'You have selected there is a conflict of interest, please provide a reason.'
                 };
             }
-            if (store.conflictOfInterestStatus === null) {
+            if (publicationVersion.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
-            if (store.type === Config.values.octopusInformation.publications.DATA.id) {
-                if (store.ethicalStatement === null)
+            if (publicationVersion.publication.type === Config.values.octopusInformation.publications.DATA.id) {
+                if (publicationVersion.ethicalStatement === null)
                     ready = { ready: false, message: 'You must select an ethical statement option' };
-                if (store.dataPermissionsStatement === null)
+                if (publicationVersion.dataPermissionsStatement === null)
                     ready = { ready: false, message: 'You must select a data permissions option' };
                 if (
-                    !store.dataPermissionsStatementProvidedBy &&
-                    store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
+                    !publicationVersion.dataPermissionsStatementProvidedBy &&
+                    publicationVersion.dataPermissionsStatement === Config.values.dataPermissionsOptions[0]
                 )
                     ready = {
                         ready: false,
                         message: 'You must provide details of who gave permission for the data collection and sharing'
                     };
             }
-            if (!(store.authorAffiliations.length || store.isIndependentAuthor)) {
+            const correspondingAuthor = publicationVersion.coAuthors.find(
+                (author) => author.linkedUser === publicationVersion.createdBy
+            );
+
+            if (!(correspondingAuthor?.affiliations.length || correspondingAuthor?.isIndependent)) {
                 ready = {
                     ready: false,
                     message: 'You must add your affiliations or confirm if you are an independent author.'
@@ -160,54 +176,73 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const saveCurrent = useCallback(
         async (message?: string) => {
             store.setError(null);
+            const { publicationVersion, references } = store;
 
             const body: Interfaces.PublicationUpdateRequestBody = {
-                title: store.title,
-                content: store.content,
-                description: store.description,
-                keywords: Helpers.formatKeywords(store.keywords),
-                language: store.language,
-                conflictOfInterestStatus: store.conflictOfInterestStatus,
-                conflictOfInterestText: store.conflictOfInterestText,
-                affiliationStatement: store.affiliationsStatement,
-                fundersStatement: store.funderStatement
+                title: publicationVersion.title,
+                content: publicationVersion.content,
+                description: publicationVersion.description,
+                keywords: publicationVersion.keywords,
+                language: publicationVersion.language,
+                conflictOfInterestStatus: publicationVersion.conflictOfInterestStatus,
+                conflictOfInterestText: publicationVersion.conflictOfInterestText,
+                fundersStatement: publicationVersion.fundersStatement
             };
 
-            if (store.type === 'DATA') {
-                body.ethicalStatement = store.ethicalStatement;
-                body.ethicalStatementFreeText = store.ethicalStatement !== null ? store.ethicalStatementFreeText : null;
-                body.dataAccessStatement = store.dataAccessStatement;
-                if (store.dataPermissionsStatement?.length) {
-                    body.dataPermissionsStatement = store.dataPermissionsStatement;
-                    body.dataPermissionsStatementProvidedBy = store.dataPermissionsStatementProvidedBy;
+            if (publicationVersion.publication.type === 'DATA') {
+                body.ethicalStatement = publicationVersion.ethicalStatement;
+                body.ethicalStatementFreeText =
+                    publicationVersion.ethicalStatement !== null ? publicationVersion.ethicalStatementFreeText : null;
+                body.dataAccessStatement = publicationVersion.dataAccessStatement;
+                if (publicationVersion.dataPermissionsStatement?.length) {
+                    body.dataPermissionsStatement = publicationVersion.dataPermissionsStatement;
+                    body.dataPermissionsStatementProvidedBy = publicationVersion.dataPermissionsStatementProvidedBy;
                 }
             }
 
-            if (store.type === 'PROTOCOL' || store.type === 'HYPOTHESIS') {
-                body.selfDeclaration = store.selfDeclaration;
+            if (
+                publicationVersion.publication.type === 'PROTOCOL' ||
+                publicationVersion.publication.type === 'HYPOTHESIS'
+            ) {
+                body.selfDeclaration = publicationVersion.selfDeclaration;
             }
 
-            await api.patch(`${Config.endpoints.publications}/${props.publication.id}`, body, props.token);
-
-            // update references for this publication
-            await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/reference`,
-                store.references,
-                props.token
+            const correspondingAuthor = publicationVersion.coAuthors.find(
+                (author) => author.linkedUser === publicationVersion.createdBy
             );
 
-            // update co-authors for this publications - should really be put
-            await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/coauthors`,
-                store.coAuthors,
-                props.token
-            );
+            const promises = [
+                // update current publication version
+                api.patch(`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`, body, props.token),
+                // update references for this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`,
+                    references,
+                    props.token
+                ),
+                // update co-authors for this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors`,
+                    publicationVersion.coAuthors,
+                    props.token
+                ),
+                // update author affiliations on this version
+                api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/my-affiliations`,
+                    {
+                        affiliations: correspondingAuthor?.affiliations || [],
+                        isIndependent: correspondingAuthor?.isIndependent || false
+                    },
+                    props.token
+                )
+            ];
 
-            // update author affiliations
-            await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/my-affiliations`,
-                { affiliations: store.authorAffiliations, isIndependent: store.isIndependentAuthor },
-                props.token
+            await Promise.all(promises).catch((error) =>
+                store.setError(
+                    axios.isAxiosError(error) && typeof error.response?.data?.message === 'string'
+                        ? error.response.data.message
+                        : message
+                )
             );
 
             if (message) {
@@ -220,7 +255,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 });
             }
         },
-        [props.publication?.id, props.token, setToast, store]
+        [props.publicationVersion.id, props.token, setToast, store]
     );
 
     /**
@@ -237,9 +272,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             store.setError(null);
             try {
                 await saveCurrent();
-                await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LIVE`, {}, props.token);
+                await api.put(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/status/LIVE`,
+                    {},
+                    props.token
+                );
                 router.push({
-                    pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                    pathname: `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
                 });
             } catch (err) {
                 const { message } = err as Interfaces.JSONResponseError;
@@ -254,7 +293,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
         setPublishModalVisibility(false);
         setPublishModalLoading(false);
-    }, [checkRequired, props.publication.id, props.token, router, saveCurrent, store]);
+    }, [
+        checkRequired,
+        props.publicationVersion.id,
+        props.publicationVersion.versionOf,
+        props.token,
+        router,
+        saveCurrent,
+        store
+    ]);
 
     const onClosePublishModal = () => {
         setPublishModalVisibility(false);
@@ -268,16 +315,20 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             // request co-authors approvals
             await api.put(
-                `${Config.endpoints.publications}/${props.publication.id}/coauthors/request-approval`,
+                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors/request-approval`,
                 {},
                 props.token
             );
 
             // update publication status to LOCKED
-            await api.put(`${Config.endpoints.publications}/${props.publication.id}/status/LOCKED`, {}, props.token);
+            await api.put(
+                `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/status/LOCKED`,
+                {},
+                props.token
+            );
 
             // redirect to publication page
-            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+            router.push(`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(
@@ -288,7 +339,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         }
         setRequestApprovalModalVisibility(false);
         setRequestApprovalModalLoading(false);
-    }, [saveCurrent, store]);
+    }, [props.publicationVersion.id, props.publicationVersion.publication.id, props.token, router, saveCurrent, store]);
 
     const onCloseRequestApprovalModal = () => {
         setRequestApprovalModalVisibility(false);
@@ -320,7 +371,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const deleteExit = useCallback(async () => {
         setDeleteModalLoading(true);
         try {
-            await api.destroy(`${Config.endpoints.publications}/${props.publication.id}`, props.token);
+            await api.destroy(`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`, props.token);
             router.push({
                 pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
             });
@@ -342,7 +393,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
         setDeleteModalVisibility(false);
         setDeleteModalLoading(false);
-    }, [props.publication.id, props.token, router, setToast, store, user]);
+    }, [props.publicationVersion.id, props.token, router, setToast, store, user]);
 
     const onCloseDeleteModal = () => {
         setDeleteModalVisibility(false);
@@ -352,7 +403,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         try {
             await saveCurrent();
             router.push({
-                pathname: `${Config.urls.viewPublication.path}/${props.publication.id}`
+                pathname: `${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`
             });
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
@@ -362,11 +413,17 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     : message
             );
         }
-    }, [props.publication?.id, router, saveCurrent, store]);
+    }, [props.publicationVersion.publication.id, router, saveCurrent, store]);
 
     const isReadyToPreview = useMemo(
-        () => Boolean(store.title.trim()) && !Helpers.isEmptyContent(store.content),
-        [store.content, store.title]
+        () =>
+            Boolean(
+                store.publicationVersion &&
+                    store.publicationVersion.title.trim() &&
+                    store.publicationVersion.content &&
+                    !Helpers.isEmptyContent(store.publicationVersion.content)
+            ),
+        [store.publicationVersion]
     );
 
     const isReadyToPublish = useMemo(
@@ -379,7 +436,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequiredApproval, isReadyToPreview, store]
     );
 
-    const hasUnconfirmedCoAuthors = !store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor);
+    const hasUnconfirmedCoAuthors = !store.publicationVersion?.coAuthors.every(
+        (coAuthor) => coAuthor.confirmedCoAuthor
+    );
 
     return (
         <>
@@ -531,7 +590,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 <section className="w-full border-grey-100 py-8 transition-colors duration-500 dark:border-grey-400 lg:max-w-[70%] lg:py-8 lg:pl-8 xl:py-12 xl:pl-16 2xl:max-w-[75%]">
                     <div className="mb-12 flex flex-wrap items-center justify-between gap-8">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                            {Helpers.formatPublicationType(store.type)}
+                            {store.publicationVersion &&
+                                Helpers.formatPublicationType(store.publicationVersion.publication.type)}
                         </span>
                         <div className="hidden items-center justify-end gap-8 xl:flex xl:w-full xl:justify-between 2xl:w-auto 2xl:justify-end">
                             <div className="flex gap-4">

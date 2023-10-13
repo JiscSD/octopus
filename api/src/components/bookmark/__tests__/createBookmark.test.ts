@@ -42,24 +42,6 @@ describe('Create a bookmark', () => {
         expect(bookmark.status).toEqual(404);
     });
 
-    test('Cannot create a publication bookmark if the user is the author of the publication', async () => {
-        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '123456789' }).send({
-            type: 'PUBLICATION',
-            entityId: 'publication-problem-live'
-        });
-
-        expect(bookmark.status).toEqual(401);
-    });
-
-    test('Cannot create a publication bookmark if the user is a coauthor of the publication', async () => {
-        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000006' }).send({
-            type: 'PUBLICATION',
-            entityId: 'publication-problem-live'
-        });
-
-        expect(bookmark.status).toEqual(401);
-    });
-
     test('Cannot create a bookmark on a publication that is not live', async () => {
         const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000003' }).send({
             type: 'PUBLICATION',

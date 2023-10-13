@@ -6,68 +6,68 @@ describe('Request co-authors approvals', () => {
         await testUtils.testSeed();
     });
 
-    test('Can send approval reminder only if publication status is LOCKED', async () => {
+    test('Can send approval reminder only if publication version status is LOCKED', async () => {
         // test LIVE
-        const livePublicationResponse = await testUtils.agent
+        const livePublicationVersionResponse = await testUtils.agent
             .post(
-                '/publications/publication-problem-live/coauthors/coauthor-test-user-6-problem-live/approval-reminder'
+                '/publication-versions/publication-problem-live-v1/coauthors/coauthor-test-user-6-problem-live/approval-reminder'
             )
             .query({ apiKey: '123456789' });
 
-        expect(livePublicationResponse.status).toEqual(403);
-        expect(livePublicationResponse.body.message).toEqual(
+        expect(livePublicationVersionResponse.status).toEqual(403);
+        expect(livePublicationVersionResponse.body.message).toEqual(
             'A reminder is not able to be sent unless approval is being requested'
         );
 
         // test DRAFT
-        const draftPublicationResponse = await testUtils.agent
+        const draftPublicationVersionResponse = await testUtils.agent
             .post(
-                '/publications/publication-problem-draft/coauthors/coauthor-test-user-7-problem-draft/approval-reminder'
+                '/publication-versions/publication-problem-draft-v1/coauthors/coauthor-test-user-7-problem-draft/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
-        expect(draftPublicationResponse.status).toEqual(403);
-        expect(draftPublicationResponse.body.message).toEqual(
+        expect(draftPublicationVersionResponse.status).toEqual(403);
+        expect(draftPublicationVersionResponse.body.message).toEqual(
             'A reminder is not able to be sent unless approval is being requested'
         );
 
         // test LOCKED
-        const lockedPublicationResponse = await testUtils.agent
+        const lockedPublicationVersionResponse = await testUtils.agent
             .post(
-                '/publications/publication-problem-locked/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
-        expect(lockedPublicationResponse.status).toEqual(200);
-        expect(lockedPublicationResponse.body.message).toEqual('Reminder sent to test-user-7@jisc.ac.uk');
+        expect(lockedPublicationVersionResponse.status).toEqual(200);
+        expect(lockedPublicationVersionResponse.body.message).toEqual('Reminder sent to test-user-7@jisc.ac.uk');
     });
 
     test('Cannot send approval reminder if a co-author already approved', async () => {
         const response = await testUtils.agent
             .post(
-                '/publications/locked-publication-problem-confirmed-co-authors/coauthors/test-user-2/approval-reminder'
+                '/publication-versions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-2/approval-reminder'
             )
             .query({ apiKey: '123456789' });
 
         expect(response.status).toEqual(400);
-        expect(response.body.message).toEqual('This author has already approved this publication');
+        expect(response.body.message).toEqual('This author has already approved this publication version');
     });
 
     test('Cannot send approval reminder to a user which is not a co-author', async () => {
         const response = await testUtils.agent
             .post(
-                '/publications/locked-publication-problem-confirmed-co-authors/coauthors/test-user-22/approval-reminder'
+                '/publication-versions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-22/approval-reminder'
             )
             .query({ apiKey: '123456789' });
 
         expect(response.status).toEqual(404);
-        expect(response.body.message).toEqual('This author does not exist on this publication');
+        expect(response.body.message).toEqual('This author does not exist on this publication version');
     });
 
     test('Cannot send approval reminder to the same co-author twice', async () => {
         const response1 = await testUtils.agent
             .post(
-                '/publications/publication-problem-locked/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -76,7 +76,7 @@ describe('Request co-authors approvals', () => {
 
         const response2 = await testUtils.agent
             .post(
-                '/publications/publication-problem-locked/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 

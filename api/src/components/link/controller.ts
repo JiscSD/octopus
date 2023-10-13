@@ -11,14 +11,28 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
 
         // the publication does not exist, is
         // publications that are live cannot have links created.
-        if (!fromPublication || fromPublication?.currentStatus === 'LIVE') {
+        if (!fromPublication) {
             return response.json(404, {
-                message: `Publication with id ${event.body.to} is either LIVE or does not exist.`
+                message: `Publication with id ${event.body.from} is either LIVE or does not exist.`
+            });
+        }
+
+        const fromLatestVersion = fromPublication.versions.find((version) => version.isLatestVersion);
+
+        if (!fromLatestVersion) {
+            return response.json(403, {
+                message: `Cannot find latest version of ${event.body.from}.`
+            });
+        }
+
+        if (fromLatestVersion.currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: `Publication with id ${event.body.from} is LIVE.`
             });
         }
 
         // the authenticated user is not the owner of the publication
-        if (fromPublication.user.id !== event.user.id) {
+        if (fromLatestVersion.user.id !== event.user.id) {
             return response.json(401, { message: 'You do not have permission to create publication links' });
         }
 
@@ -31,9 +45,16 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         const toPublication = await publicationService.get(event.body.to);
 
         // toPublication does not exist in a LIVE state
-        if (!toPublication || toPublication.currentStatus !== 'LIVE') {
+        if (!toPublication) {
             return response.json(404, {
-                message: `Publication with id ${event.body.to} is either not LIVE or does not exist.`
+                message: `Publication with id ${event.body.to} does not exist.`
+            });
+        }
+
+        // Check if publication to be linked to has a live version
+        if (!toPublication.versions.some((version) => version.isLatestLiveVersion)) {
+            return response.json(403, {
+                message: `Publication with id ${event.body.to} is not LIVE.`
             });
         }
 
@@ -75,16 +96,18 @@ export const deleteLink = async (
             return response.json(404, { message: 'Link not found' });
         }
 
+        const fromCurrentVersion = link.publicationFromRef.versions.find((version) => version.isLatestVersion);
+
         if (
-            link.publicationFromRef.currentStatus !== 'DRAFT' ||
-            !link.publicationFromRef.publicationStatus.every((status) => status.status !== 'LIVE')
+            fromCurrentVersion?.currentStatus !== 'DRAFT' ||
+            !fromCurrentVersion.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
             return response.json(404, {
-                message: 'A link can only be deleted if is currently a draft and has never been LIVE.'
+                message: 'A link can only be deleted if it has been made from a publication currently in draft state.'
             });
         }
 
-        if (link.publicationFromRef.user.id !== event.user.id) {
+        if (fromCurrentVersion?.user.id !== event.user.id) {
             return response.json(403, { message: 'You do not have permissions to delete this link' });
         }
 
