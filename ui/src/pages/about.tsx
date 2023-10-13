@@ -45,24 +45,15 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
     );
 };
 
-export const getStaticProps: Types.GetStaticProps = async () => {
-    return {
-        props: {
-            metadata: {
-                title: Config.urls.about.title,
-                description: Config.urls.about.description
-            }
-        }
-    };
-};
-
 const About: NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.about.title}</title>
             <meta name="description" content={Config.urls.about.description} />
             <meta name="keywords" content={Config.urls.about.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.about.title} />
+            <meta name="og:description" content={Config.urls.about.description} />
             <link rel="canonical" href={Config.urls.about.canonical} />
-            <title>{Config.urls.about.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>

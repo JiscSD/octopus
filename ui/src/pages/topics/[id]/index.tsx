@@ -44,11 +44,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             topic,
-            bookmarkId,
-            metadata: {
-                title: Helpers.truncateString(`${topic.title} - ${Config.urls.viewTopic.title}`, 70),
-                description: Config.values.topicDescription
-            }
+            bookmarkId
         }
     };
 };
@@ -56,10 +52,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 type Props = {
     topic: Interfaces.Topic;
     bookmarkId: string | null;
-    metadata: {
-        title: string;
-        description: string;
-    };
 };
 
 const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -117,12 +109,16 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    const pageTitle = `${topic.title} - ${Config.urls.viewTopic.title}`;
+
     return (
         <>
             <Head>
+                <title>{pageTitle}</title>
                 <meta name="description" content={Config.values.topicDescription} />
+                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} />
+                <meta name="og:description" content={Config.values.topicDescription} />
                 <link rel="canonical" href={`${Config.urls.viewTopic.canonical}/${topic.id}`} />
-                <title>{props.metadata.title}</title>
             </Head>
             <Layouts.Topic fixedHeader={false}>
                 <section className="col-span-9 text-grey-800 dark:text-grey-100">

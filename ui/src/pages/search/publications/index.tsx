@@ -109,11 +109,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             fallback: {
                 [swrKey]: searchResults
             },
-            error,
-            metadata: {
-                title: Config.urls.search.title,
-                description: Config.urls.search.description
-            }
+            error
         }
     };
 };
@@ -256,10 +252,12 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.search.title}</title>
                 <meta name="description" content={Config.urls.search.description} />
+                <meta name="og:title" content={Config.urls.search.title} />
+                <meta name="og:description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{Config.urls.search.title}</title>
             </Head>
 
             <Layouts.Standard>

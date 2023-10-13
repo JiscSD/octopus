@@ -156,11 +156,7 @@ export const getStaticProps: Types.GetStaticProps = async ({ params }) => {
 
         return {
             props: {
-                blog,
-                metadata: {
-                    title: Helpers.truncateString(`${blog.fields.title} - ${Config.urls.base.title}`, 70),
-                    description: Helpers.truncateString(trimDescription(blog.fields.content as Block | Inline), 200)
-                }
+                blog
             },
             // - attempt to re-generate the page every 10 seconds when a request comes in
             // - useful to show blog updates while writing it
@@ -177,10 +173,6 @@ export const getStaticProps: Types.GetStaticProps = async ({ params }) => {
 
 type Props = {
     blog: Entry<EntrySkeletonType<Types.BlogFields>, undefined, string>;
-    metadata: {
-        title: string;
-        description: string;
-    };
 };
 
 const IndividualBlogPage: NextPage<Props> = (props) => {
@@ -193,11 +185,15 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
         return trimDescription(content);
     }, [content]);
 
+    const pageTitle = `${title} - ${Config.urls.base.title}`;
+
     return (
         <>
             <Head>
-                <title>{props.metadata.title}</title>
+                <title>{pageTitle}</title>
                 <meta name="description" content={description} />
+                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} />
+                <meta name="og:description" content={Helpers.truncateString(description, 200)} />
                 <meta name="keywords" content={Config.urls.blog.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.base.host + router.asPath} />
             </Head>
