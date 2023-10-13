@@ -154,7 +154,11 @@ export const getFlag = async (id: string) => {
         include: {
             publication: {
                 include: {
-                    user: true
+                    versions: {
+                        include: {
+                            user: true
+                        }
+                    }
                 }
             }
         }

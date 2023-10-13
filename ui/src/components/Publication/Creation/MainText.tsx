@@ -70,19 +70,8 @@ const getTransformedReference = (reference: Interfaces.Reference, textContent: s
 };
 
 const MainText: React.FC = (): React.ReactElement | null => {
-    const {
-        id: publicationId,
-        updateDescription,
-        keywords,
-        updateKeywords,
-        content,
-        description,
-        updateContent,
-        language,
-        updateLanguage,
-        references,
-        updateReferences
-    } = Stores.usePublicationCreationStore();
+    const { publicationVersion, updatePublicationVersion, references, updateReferences } =
+        Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
     const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
     const isAddingReference = useMemo(() => selectedReferenceIndex !== null, [selectedReferenceIndex]);
@@ -109,7 +98,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
             const newReference = getTransformedReference(
                 {
                     id: createId(),
-                    publicationId,
+                    publicationVersionId: publicationVersion.id,
                     type: 'TEXT',
                     text: currentParagraph,
                     location: null
@@ -119,6 +108,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
             referencesArray.push(newReference);
         }
+
         updateReferences(referencesArray);
     };
 
@@ -149,13 +139,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
         [handleCloseReferenceModal, isAddingReference, references, selectedReferenceIndex, updateReferences]
     );
 
+    const updateContent = useCallback(
+        (htmlString: string) => updatePublicationVersion({ ...publicationVersion, content: htmlString }),
+        [publicationVersion, updatePublicationVersion]
+    );
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div data-testid="main-text">
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                {publicationId && (
+                {publicationVersion.id && (
                     <Components.TextEditor
-                        defaultContent={content}
+                        defaultContent={publicationVersion.content || ''}
                         contentChangeHandler={updateContent}
                         references={references}
                     />
@@ -171,13 +166,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     name="language"
                     id="language"
                     aria-labelledby="language-label"
-                    onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
+                    onChange={(e) =>
+                        updatePublicationVersion({ ...publicationVersion, language: e.target.value as Types.Languages })
+                    }
                     className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
-                    defaultValue={
-                        Config.values.octopusInformation.languages.find((entry) => entry.code === language)?.code ||
-                        'en'
-                    }
+                    value={publicationVersion.language || 'en'}
                 >
                     {Config.values.octopusInformation.languages.map((entry) => (
                         <option key={entry.code} value={entry.code}>
@@ -269,7 +263,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                                     setSelectedReferenceIndex(index);
                                                                     setSelectedReference({
                                                                         id: createId(), // generate new id
-                                                                        publicationId,
+                                                                        publicationVersionId: publicationVersion.id,
                                                                         text: '',
                                                                         type: 'TEXT',
                                                                         location: null
@@ -363,13 +357,15 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     required
                     rows={3}
                     maxLength={160}
-                    value={description}
-                    onChange={(e) => updateDescription(e.target.value)}
+                    value={publicationVersion.description || ''}
+                    onChange={(e) => updatePublicationVersion({ ...publicationVersion, description: e.target.value })}
                     id="short-description"
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
-                    <span className="text-xs text-grey-500 dark:text-white-50">{description.length} / 160</span>
+                    <span className="text-xs text-grey-500 dark:text-white-50">
+                        {publicationVersion.description?.length || 0} / 160
+                    </span>
                 </div>
             </div>
 
@@ -386,13 +382,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     title="Keywords"
                     required
                     rows={5}
-                    value={keywords}
-                    onChange={(e) => updateKeywords(e.target.value)}
+                    defaultValue={publicationVersion.keywords.join(', ')}
+                    onBlur={(e) => {
+                        updatePublicationVersion({
+                            ...publicationVersion,
+                            keywords: Helpers.formatKeywords(e.target.value)
+                        });
+                    }}
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
                     <span className="text-xs text-grey-500 dark:text-white-50">
-                        {Helpers.formatKeywords(keywords).length} / 10
+                        {publicationVersion?.keywords.length} / 10
                     </span>
                 </div>
             </div>
@@ -407,4 +408,4 @@ const MainText: React.FC = (): React.ReactElement | null => {
     );
 };
 
-export default MainText;
+export default React.memo(MainText);

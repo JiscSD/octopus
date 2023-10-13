@@ -13,7 +13,7 @@ import * as Types from '@types';
 import * as api from '@api';
 
 type ActionProps = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
 };
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
@@ -39,8 +39,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         setSubmitting(true);
         try {
             if (redFlagComment.length) {
+                const createFlagEndpoint = `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/flags`;
                 await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/flag`,
+                    createFlagEndpoint,
                     {
                         category: redFlagReason,
                         comment: redFlagComment
@@ -60,8 +61,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     message: 'Your red flag has now been saved.'
                 });
 
-                // Mutate original publication
-                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
+                // refetch publication flags
+                SWRConfig.mutate(createFlagEndpoint);
             } else {
                 setError('You must provide a comment for this red flag.');
             }
@@ -145,7 +146,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 </>
             </Components.Modal>
 
-            {props.publication.currentStatus === 'LIVE' && (
+            {props.publicationVersion.currentStatus === 'LIVE' && (
                 <>
                     <Components.SectionBreak name="Actions" />
                     {/** Download options */}
@@ -157,7 +158,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             aria-label="Print"
                             onClick={() => {
                                 window.open(
-                                    `${Config.endpoints.publications}/${props.publication.id}/pdf?redirectToPreview=true`,
+                                    `${Config.endpoints.publications}/${props.publicationVersion.versionOf}/pdf?redirectToPreview=true`,
                                     '_blank'
                                 );
                             }}
@@ -170,8 +171,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             aria-label="Download JSON"
                             onClick={() =>
                                 Helpers.blobFileDownload(
-                                    `${Config.endpoints.publications}/${props.publication.id}`,
-                                    `${props.publication.id}.json`
+                                    `${Config.endpoints.publications}/${props.publicationVersion.versionOf}`,
+                                    `${props.publicationVersion.versionOf}.json`
                                 )
                             }
                             className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
@@ -183,10 +184,11 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     {user && user.email ? (
                         <>
                             {/* if the publication is a peer review, no options shall be given to write a linked publication */}
-                            {props.publication.type !== 'PEER_REVIEW' && (
+                            {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
                                 <>
                                     {Helpers.linkedPublicationTypes[
-                                        props.publication.type as keyof typeof Helpers.linkedPublicationTypes
+                                        props.publicationVersion.publication
+                                            .type as keyof typeof Helpers.linkedPublicationTypes
                                     ].map((item: any) => {
                                         return (
                                             <Components.PublicationSidebarCardActionsButton
@@ -196,7 +198,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                                     router.push({
                                                         pathname: `${Config.urls.createPublication.path}`,
                                                         query: {
-                                                            for: props.publication.id,
+                                                            for: props.publicationVersion.versionOf,
                                                             type: item
                                                         }
                                                     });
@@ -204,7 +206,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                             />
                                         );
                                     })}
-                                    {props.publication.user.id !== user.id && (
+                                    {props.publicationVersion.user.id !== user.id && (
                                         <>
                                             <Components.PublicationSidebarCardActionsButton
                                                 label="Write a review"
@@ -212,7 +214,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                                     router.push({
                                                         pathname: `${Config.urls.createPublication.path}`,
                                                         query: {
-                                                            for: props.publication.id,
+                                                            for: props.publicationVersion.versionOf,
                                                             type: 'PEER_REVIEW'
                                                         }
                                                     });
@@ -231,7 +233,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         <>
                             <Components.Link
                                 href={`${Config.urls.verify.path}?state=${encodeURIComponent(
-                                    `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
                                 )}`}
                                 className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                             >
@@ -242,7 +244,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                         <>
                             <Components.Link
                                 href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
-                                    `${Config.urls.viewPublication.path}/${props.publication.id}`
+                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
                                 )}`}
                                 className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                             >

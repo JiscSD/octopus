@@ -8,18 +8,15 @@ import * as Helpers from '@helpers';
 import * as Config from '@config';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
+    linkedFrom: Interfaces.LinkedFromPublication[];
+    flags: Interfaces.Flag[];
 };
 
 const General: React.FC<Props> = (props): React.ReactElement => {
-    const peerReviewCount = props.publication.linkedFrom.filter(
-        (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
-    ).length;
+    const peerReviewCount = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW').length;
 
-    const activeFlags = React.useMemo(
-        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
-        [props.publication]
-    );
+    const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
 
     const uniqueRedFlagCategoryList = React.useMemo(
         () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
@@ -33,28 +30,31 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     Publication type:
                 </span>
                 <span className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {Helpers.formatPublicationType(props.publication.type)}
+                    {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
                 </span>
             </div>
-            <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Published:
-                </span>
-                <time
-                    className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
-                    suppressHydrationWarning
-                >
-                    {Helpers.formatDate(props.publication.publishedDate)}
-                </time>
-            </div>
+            {props.publicationVersion.publishedDate && (
+                <div className="flex">
+                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        Published:
+                    </span>
+                    <time
+                        className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                        suppressHydrationWarning
+                    >
+                        {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                    </time>
+                </div>
+            )}
             <div className="flex">
                 <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                     Language:
                 </span>
                 <span className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {
-                        Config.values.octopusInformation.languages.find((l) => l.code === props.publication.language)
-                            ?.name
+                        Config.values.octopusInformation.languages.find(
+                            (l) => l.code === props.publicationVersion.language
+                        )?.name
                     }
                 </span>
             </div>
@@ -63,13 +63,13 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     Licence:
                 </span>
                 <Components.Link
-                    href={Config.values.octopusInformation.licences[props.publication.licence].link}
+                    href={Config.values.octopusInformation.licences[props.publicationVersion.licence].link}
                     title="licence"
                     openNew={true}
                     className=" text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                 >
                     <div className="flex items-center">
-                        {Config.values.octopusInformation.licences[props.publication.licence].nicename}
+                        {Config.values.octopusInformation.licences[props.publicationVersion.licence].nicename}
                         <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                     </div>
                 </Components.Link>
@@ -80,16 +80,16 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     DOI:
                 </span>
                 <Components.Link
-                    href={`https://doi.org/${props.publication.doi}`}
-                    ariaLabel={`DOI link: https://doi.org/${props.publication.doi}`}
+                    href={`https://doi.org/${props.publicationVersion.publication.doi}`}
+                    ariaLabel={`DOI link: https://doi.org/${props.publicationVersion.publication.doi}`}
                     className="flex w-full items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
-                    <p className="break-words break-all">https://doi.org/{props.publication.doi}</p>
+                    <p className="break-words break-all">https://doi.org/{props.publicationVersion.publication.doi}</p>
                     <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                 </Components.Link>
             </div>
-            {props.publication.type !== 'PEER_REVIEW' && (
+            {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                         Peer reviews: ({peerReviewCount})

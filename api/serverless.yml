@@ -148,13 +148,6 @@ functions:
     seedOpenSearch:
         handler: src/lib/testUtils.openSearchSeed
     # Publications
-    getPublications:
-        handler: src/components/publication/routes.getAll
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications
-                  method: GET
-                  cors: true
     getPublication:
         handler: src/components/publication/routes.get
         events:
@@ -176,27 +169,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications
                   method: POST
                   cors: true
-    updateStatus:
-        handler: src/components/publication/routes.updateStatus
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/status/{status}
-                  method: PUT
-                  cors: true
-    updatePublication:
-        handler: src/components/publication/routes.update
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}
-                  method: PATCH
-                  cors: true
-    deletePublication:
-        handler: src/components/publication/routes.deletePublication
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}
-                  method: DELETE
-                  cors: true
     getPublicationLinks:
         handler: src/components/publication/routes.getPublicationLinks
         events:
@@ -212,12 +184,48 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
-    getResearchTopics:
-        handler: src/components/publication/routes.getResearchTopics
+    getPublicationTopics:
+        handler: src/components/publication/routes.getPublicationTopics
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/research-topics
+                  path: ${self:custom.versions.v1}/publications/{id}/topics
                   method: GET
+                  cors: true
+    # Publication Versions
+    getPublicationVersion:
+        handler: src/components/publicationVersion/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version} # {version} can be a version id, number or "latest"
+                  method: GET
+                  cors: true
+    getIndexedPublicationVersions:
+        handler: src/components/publicationVersion/routes.getAll
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publication-versions
+                  method: GET
+                  cors: true
+    updatePublicationVersion:
+        handler: src/components/publicationVersion/routes.update
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publication-versions/{id}
+                  method: PATCH
+                  cors: true
+    updateStatus:
+        handler: src/components/publicationVersion/routes.updateStatus
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/status/{status}
+                  method: PUT
+                  cors: true
+    deleteVersion:
+        handler: src/components/publicationVersion/routes.deleteVersion
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publication-versions/{id}
+                  method: DELETE
                   cors: true
     # Users
     getUsers:
@@ -234,11 +242,11 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: GET
                   cors: true
-    getUserPublications:
-        handler: src/components/user/routes.getPublications
+    getUserPublicationVersions:
+        handler: src/components/user/routes.getPublicationVersions
         events:
             - http:
-                  path: ${self:custom.versions.v1}/users/{id}/publications
+                  path: ${self:custom.versions.v1}/users/{id}/publication-versions
                   method: GET
                   cors: true
 
@@ -298,91 +306,91 @@ functions:
         handler: src/components/coauthor/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthors
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthors
                   method: GET
                   cors: true
     updateAll:
         handler: src/components/coauthor/routes.updateAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthors
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthors
                   method: PUT
                   cors: true
     deleteCoAuthor:
         handler: src/components/coauthor/routes.remove
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthors/{coauthor}
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthors/{coauthor}
                   method: DELETE
                   cors: true
     linkCoAuthor:
         handler: src/components/coauthor/routes.link
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/link-coauthor
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/link-coauthor
                   method: PATCH
                   cors: true
     updateCoAuthorConfirmation:
         handler: src/components/coauthor/routes.updateConfirmation
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthor-confirmation
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthor-confirmation
                   method: PATCH
                   cors: true
     requestApproval:
         handler: src/components/coauthor/routes.requestApproval
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthors/request-approval
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthors/request-approval
                   method: PUT
                   cors: true
     sendApprovalReminder:
         handler: src/components/coauthor/routes.sendApprovalReminder
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/coauthors/{coauthor}/approval-reminder
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/coauthors/{coauthor}/approval-reminder
                   method: POST
                   cors: true
     getFlag:
         handler: src/components/flag/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}
+                  path: ${self:custom.versions.v1}/flags/{id}
                   method: GET
                   cors: true
     createFlag:
         handler: src/components/flag/routes.createFlag
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/flag
+                  path: ${self:custom.versions.v1}/publications/{id}/flags
                   method: POST
                   cors: true
     createFlagComment:
         handler: src/components/flag/routes.createFlagComment
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}/comment
+                  path: ${self:custom.versions.v1}/flags/{id}/comment
                   method: POST
                   cors: true
     resolveFlag:
         handler: src/components/flag/routes.resolveFlag
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/{id}/resolve
+                  path: ${self:custom.versions.v1}/flags/{id}/resolve
                   method: POST
                   cors: true
     getPublicationFlags:
         handler: src/components/flag/routes.getPublicationFlags
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/publication/{id}
+                  path: ${self:custom.versions.v1}/publications/{id}/flags
                   method: GET
                   cors: true
     getUserFlags:
         handler: src/components/flag/routes.getUserFlags
         events:
             - http:
-                  path: ${self:custom.versions.v1}/flag/user/{id}
+                  path: ${self:custom.versions.v1}/user/{id}/flags
                   method: GET
                   cors: true
     # Images
@@ -448,14 +456,14 @@ functions:
         handler: src/components/funder/routes.create
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/funders
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/funders
                   method: POST
                   cors: true
     deleteFunder:
         handler: src/components/funder/routes.destroy
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/funders/{funder}
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/funders/{funder}
                   method: DELETE
                   cors: true
     # References
@@ -463,14 +471,14 @@ functions:
         handler: src/components/reference/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/references
                   method: get
                   cors: true
     updateAllReference:
         handler: src/components/reference/routes.updateAll
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/reference
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/references
                   method: put
                   cors: true
 
@@ -479,7 +487,7 @@ functions:
         handler: src/components/affiliations/routes.updateAffiliations
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/my-affiliations
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/my-affiliations
                   method: PUT
                   cors: true
 
@@ -512,4 +520,11 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/topics
                   method: GET
+                  cors: true
+    updatePublicationTopics:
+        handler: src/components/publication/routes.updateTopics
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/topics
+                  method: PUT
                   cors: true

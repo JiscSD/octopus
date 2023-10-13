@@ -322,23 +322,23 @@ export const validateEmail = (email: string): Boolean => {
 export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
 
 export const getPublicationStatusByAuthor = (
-    publication: Interfaces.Publication | Interfaces.UserPublication,
+    publicationVersion: Interfaces.PublicationVersion,
     user: Types.UserType | Interfaces.User
 ) => {
-    if (publication.currentStatus === 'LIVE') return 'Live';
+    if (publicationVersion.currentStatus === 'LIVE') return 'Live';
 
-    if (publication.currentStatus === 'DRAFT') {
-        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    if (publicationVersion.currentStatus === 'DRAFT') {
+        return publicationVersion.createdBy === user.id ? 'Draft' : 'Editing in progress';
     }
 
-    if (publication.coAuthors.length > 1) {
-        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+    if (publicationVersion.coAuthors.length > 1) {
+        if (publicationVersion.coAuthors.every((author) => author.confirmedCoAuthor)) {
             return 'Ready to publish';
         }
 
         if (
-            user.id !== publication.createdBy &&
-            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+            user.id !== publicationVersion.createdBy &&
+            publicationVersion.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
         ) {
             return 'Pending your approval';
         }
@@ -381,32 +381,41 @@ export const getTabCompleteness = (
     steps: Interfaces.CreationStep[],
     store: Types.PublicationCreationStoreType
 ): Interfaces.CreationStepWithCompletenessStatus[] => {
+    const { publicationVersion, linkedTo, topics } = store;
     const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
+    const correspondingAuthor = publicationVersion?.coAuthors.find(
+        (author) => author.linkedUser === store.publicationVersion?.createdBy
+    );
+
     steps.forEach((step) => {
         switch (step.id) {
             case 'KEY_INFORMATION':
-                if (store.title) {
+                if (publicationVersion?.title) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'AFFILIATIONS':
-                if (store.authorAffiliations.length || store.isIndependentAuthor) {
+                if (correspondingAuthor?.affiliations.length || correspondingAuthor?.isIndependent) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'LINKED_ITEMS':
-                if (store.linkTo?.length || store.topics?.length) {
+                if (linkedTo?.length || topics.length) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
                 }
                 break;
             case 'MAIN_TEXT':
-                if (!isEmptyContent(store.content) && store.language) {
+                if (
+                    publicationVersion?.content &&
+                    !isEmptyContent(publicationVersion?.content) &&
+                    publicationVersion.language
+                ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
@@ -414,8 +423,9 @@ export const getTabCompleteness = (
                 break;
             case 'CONFLICT_OF_INTEREST':
                 if (
-                    (store.conflictOfInterestStatus && store.conflictOfInterestText.length) ||
-                    store.conflictOfInterestStatus === false
+                    (publicationVersion?.conflictOfInterestStatus &&
+                        publicationVersion?.conflictOfInterestText?.length) ||
+                    publicationVersion?.conflictOfInterestStatus === false
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
@@ -423,7 +433,7 @@ export const getTabCompleteness = (
                 }
                 break;
             case 'CO_AUTHORS':
-                if (store.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+                if (publicationVersion?.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
@@ -435,10 +445,10 @@ export const getTabCompleteness = (
                 break;
             case 'DATA_STATEMENT':
                 if (
-                    store.ethicalStatement &&
-                    (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
-                        (store.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
-                            store.dataPermissionsStatementProvidedBy))
+                    publicationVersion?.ethicalStatement &&
+                    (publicationVersion?.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
+                        (publicationVersion?.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
+                            publicationVersion?.dataPermissionsStatementProvidedBy))
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {

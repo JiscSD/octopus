@@ -20,7 +20,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
-    let userPublications: Interfaces.UserPublication[] = [];
+    let userPublicationVersions: Interfaces.PublicationVersion[] = [];
     let error: string | null = null;
 
     // fetch the current user
@@ -39,8 +39,11 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
      */
 
     try {
-        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token);
-        userPublications = response.data.results;
+        const response = await api.get(
+            `${Config.endpoints.users}/${currentUser.id}/publication-versions?limit=999`,
+            token
+        );
+        userPublicationVersions = response.data.results;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
@@ -49,7 +52,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     return {
         props: {
             user,
-            userPublications,
+            userPublicationVersions,
             protectedPage: true
         }
     };
@@ -57,7 +60,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.UserPublication[];
+    userPublicationVersions: Interfaces.PublicationVersion[];
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -67,17 +70,17 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
 
-    const livePublications = React.useMemo(
-        () => props.userPublications.filter((publication) => publication.currentStatus === 'LIVE'),
-        [props.userPublications]
+    const livePublicationVersions = React.useMemo(
+        () => props.userPublicationVersions.filter((publicationVersion) => publicationVersion.currentStatus === 'LIVE'),
+        [props.userPublicationVersions]
     );
 
-    const draftPublications = React.useMemo(
+    const draftPublicationVersions = React.useMemo(
         () =>
-            props.userPublications.filter(
+            props.userPublicationVersions.filter(
                 (publication) => publication.currentStatus === 'DRAFT' || publication.currentStatus === 'LOCKED'
             ),
-        [props.userPublications]
+        [props.userPublicationVersions]
     );
 
     const handleRevokeAccess = useCallback(async () => {
@@ -196,19 +199,22 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Draft publications
                     </h2>
-                    {draftPublications.length ? (
+                    {draftPublicationVersions.length ? (
                         <div className="relative space-y-4 xl:w-2/3">
-                            {draftPublications.map((publication: Interfaces.UserPublication) => (
+                            {draftPublicationVersions.map((publicationVersion) => (
                                 <Components.Link
-                                    key={publication.id}
+                                    key={publicationVersion.id}
                                     href={
-                                        props.user.id === publication.createdBy
-                                            ? `${Config.urls.viewPublication.path}/${publication.id}/edit`
-                                            : `${Config.urls.viewPublication.path}/${publication.id}/`
+                                        props.user.id === publicationVersion.createdBy
+                                            ? `${Config.urls.viewPublication.path}/${publicationVersion.versionOf}/edit?step=0`
+                                            : `${Config.urls.viewPublication.path}/${publicationVersion.versionOf}/`
                                     }
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
+                                    <Components.PublicationSimpleResult
+                                        publicationVersion={publicationVersion}
+                                        user={props.user}
+                                    />
                                 </Components.Link>
                             ))}
                         </div>
@@ -225,15 +231,18 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Live publications
                     </h2>
-                    {livePublications.length ? (
+                    {livePublicationVersions.length ? (
                         <div className="relative space-y-4 xl:w-2/3">
-                            {livePublications.map((publication: Interfaces.UserPublication) => (
+                            {livePublicationVersions.map((publicationVersion) => (
                                 <Components.Link
-                                    key={publication.id}
-                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                    key={publicationVersion.id}
+                                    href={`${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`}
                                     className="mb-5 flex "
                                 >
-                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
+                                    <Components.PublicationSimpleResult
+                                        publicationVersion={publicationVersion}
+                                        user={props.user}
+                                    />
                                 </Components.Link>
                             ))}
                         </div>

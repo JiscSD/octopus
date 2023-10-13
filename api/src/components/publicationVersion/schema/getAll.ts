@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const getAllSchema: I.JSONSchemaType<I.PublicationFilters> = {
+const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
     type: 'object',
     properties: {
         type: {
@@ -48,4 +48,4 @@ const getAllSchema: I.JSONSchemaType<I.PublicationFilters> = {
     additionalProperties: false
 };
 
-export default getAllSchema;
+export default getAll;

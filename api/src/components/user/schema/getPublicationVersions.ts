@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
+const getPublicationVersionsSchema: I.JSONSchemaType<I.UserPublicationVersionsFilters> = {
     type: 'object',
     properties: {
         offset: {
@@ -27,4 +27,4 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
     required: []
 };
 
-export default getPublicationsSchema;
+export default getPublicationVersionsSchema;

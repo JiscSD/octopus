@@ -1,4 +1,6 @@
-const userSeeds = [
+import { Prisma } from '@prisma/client';
+
+const userSeeds: Prisma.UserCreateInput[] = [
     {
         id: 'test-user-1b-victoria-allen',
         orcid: '0001',

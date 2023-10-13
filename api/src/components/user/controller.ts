@@ -35,8 +35,8 @@ export const get = async (
     }
 };
 
-export const getPublications = async (
-    event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
+export const getPublicationVersions = async (
+    event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationVersionsFilters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
@@ -47,13 +47,13 @@ export const getPublications = async (
             return response.json(400, { message: 'User not found' });
         }
 
-        const userPublications = await userService.getPublications(
+        const userPublicationVersions = await userService.getPublicationVersions(
             event.pathParameters.id,
             event.queryStringParameters,
             isAccountOwner
         );
 
-        return response.json(200, userPublications);
+        return response.json(200, userPublicationVersions);
     } catch (err) {
         console.log(err);
 

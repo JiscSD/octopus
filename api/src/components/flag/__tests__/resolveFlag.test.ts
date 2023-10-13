@@ -7,7 +7,7 @@ describe('Resolve a flag', () => {
     });
 
     test('The flagger can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '987654321'
         });
 
@@ -15,7 +15,7 @@ describe('Resolve a flag', () => {
     });
 
     test('Only the flagger or super user can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '123456789'
         });
 
@@ -23,7 +23,7 @@ describe('Resolve a flag', () => {
     });
 
     test('A super user can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '000000004'
         });
 
@@ -31,7 +31,7 @@ describe('Resolve a flag', () => {
     });
 
     test('An unrelated user cannot resolve a flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-problem-live-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '000000003'
         });
 
@@ -39,7 +39,7 @@ describe('Resolve a flag', () => {
     });
 
     test('You cannot resolve a flag that has already been resolved', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-hypothesis-live-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-hypothesis-live-flag/resolve').query({
             apiKey: '987654321'
         });
 
@@ -47,7 +47,7 @@ describe('Resolve a flag', () => {
     });
 
     test('You can only resolve a flag that exists', async () => {
-        const resolveFlag = await testUtils.agent.post('/flag/publication-does-not-exist-flag/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-does-not-exist-flag/resolve').query({
             apiKey: '987654321'
         });
 

@@ -205,29 +205,30 @@ type NotifyCoAuthor = {
     userFirstName: string;
     userLastName: string | null;
     coAuthor: string;
-    publicationId: string | null;
-    publicationTitle: string | null;
+    publicationId: string;
+    versionId: string;
+    publicationTitle: string;
     code: string;
 };
 
 export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => {
     const html = `
-    <p>${options.userFirstName} ${options?.userLastName} has added you as an author of the following publication on Octopus:</p>
+    <p>${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus:</p>
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
     <p>Please use the button below to confirm that you are involved with the publication and review the draft to ensure you are happy with it:</p> 
     <br>
-    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true'>Confirm & Review Publication</a></p>
+    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=true'>Confirm & Review Publication</a></p>
     <br>
     <p>If you are not an author of this publication, please click the button below:</p>
     <br>
-    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false'>I am not an author</a></p>
+    <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=false'>I am not an author</a></p>
     </br>
     <p>An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.</p>
     `;
 
-    const text = `${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus: ${options.publicationTitle}. To confirm your involvement, and see a preview of the publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=true . If you are not an author of this publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publication=${options.publicationId}&approve=false . An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
+    const text = `${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus: ${options.publicationTitle}. To confirm your involvement, and see a preview of the publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=true . If you are not an author of this publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=false . An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
         html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),
@@ -583,6 +584,7 @@ type SendApprovalReminder = {
         id: string;
         title: string;
         creator: string;
+        versionId: string;
     };
 };
 
@@ -594,16 +596,16 @@ export const sendApprovalReminder = async (options: SendApprovalReminder): Promi
         <br>
         <p>Please use the button below to confirm that you are involved with the publication and review the draft to ensure you are happy with it:</p> 
         <br>
-        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true'>Confirm & Review Publication</a></p>
+        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=true'>Confirm & Review Publication</a></p>
         <br>
         <p>If you are not an author of this publication, please click the button below:</p>
         <br>
-        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false'>I am not an author</a></p>
+        <p style="text-align: center;"><a style="${styles.button}" href='${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=false'>I am not an author</a></p>
         </br>
         <p>An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.</p>
     `;
 
-    const text = `${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus: ${options.publication.title}. To confirm your involvement, and see a preview of the publication, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publication=${options.publication.id}&approve=false. An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
+    const text = `${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus: ${options.publication.title}. To confirm your involvement, and see a preview of the publication, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=false. An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
         html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),

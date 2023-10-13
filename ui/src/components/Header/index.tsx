@@ -82,4 +82,4 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Header;
+export default React.memo(Header);
