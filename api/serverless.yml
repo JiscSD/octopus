@@ -196,7 +196,7 @@ functions:
         handler: src/components/publicationVersion/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version} # {version} can be a version id, number or "latest"
+                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version} # {version} can be a version id, number, "latest" or "latestLive"
                   method: GET
                   cors: true
     getIndexedPublicationVersions:
