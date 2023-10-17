@@ -348,14 +348,13 @@ export const updateConfirmation = async (
                     version.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
             });
         } else {
-            // notify main author about rejection
-            await email.notifyCoAuthorRejection({
-                coAuthor: {
-                    email: event.user.email || ''
-                },
+            // notify corresponding author about cancelled approval
+            await email.notifyCoAuthorCancelledApproval({
                 publication: {
+                    id: version.versionOf,
                     title: version.title || '',
-                    authorEmail: version.user.email || ''
+                    authorEmail: version.user.email || '',
+                    url: `${process.env.BASE_URL}/publications/${version.versionOf}`
                 }
             });
         }
