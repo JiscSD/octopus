@@ -81,7 +81,7 @@ export const createFlag = async (
 
         if (doesDuplicateFlagExist) {
             return response.json(400, {
-                message: 'An unresolved flag created by you, for this publication and category already exists.'
+                message: 'An unresolved flag created by you for this publication and category already exists.'
             });
         }
 

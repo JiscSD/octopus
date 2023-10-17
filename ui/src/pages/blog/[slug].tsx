@@ -177,7 +177,8 @@ type Props = {
 
 const IndividualBlogPage: NextPage<Props> = (props) => {
     const router = useRouter();
-    const { title, author, content, publishedDate } = props.blog.fields;
+    const { title, author, content } = props.blog.fields;
+    const [publishedDate, setPublishedDate] = React.useState(String(props.blog.fields.publishedDate));
 
     const { canGoBack } = router.query as { canGoBack: string };
 
@@ -186,6 +187,13 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
     }, [content]);
 
     const pageTitle = `${title} - ${Config.urls.base.title}`;
+
+    // This is required to ensure that we don't encounter hydration errors when we format the published
+    // date on the client. Normally we use suppressHydrationWarning but that only works one level down,
+    // and we're passing the value to a subcomponent.
+    React.useEffect(() => {
+        setPublishedDate(Helpers.formatDate(props.blog.fields.publishedDate));
+    }, [props.blog.fields.publishedDate]);
 
     return (
         <>
@@ -211,7 +219,7 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
                             <Components.PageTitle text={title} className="!mb-4" />
                             <Components.PageSubTitle
                                 className="text-base font-medium"
-                                text={`Written by ${author} on ${Helpers.formatDate(publishedDate)}`}
+                                text={`Written by ${author} on ${publishedDate}`}
                             />
                             <div className="dark:text-white-50">
                                 {documentToReactComponents(content, renderOptions)}

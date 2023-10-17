@@ -230,7 +230,10 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
 
                                     <p className="text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                         This publication was red flagged on{' '}
-                                        <span className="italic">{Helpers.formatDate(data.createdAt)}</span>, by{' '}
+                                        <time className="italic" suppressHydrationWarning>
+                                            {Helpers.formatDate(data.createdAt)}
+                                        </time>
+                                        , by{' '}
                                         <Components.Link
                                             href={`${Config.urls.viewUser.path}/${data.user.id}`}
                                             className="text-teal-500 underline"
