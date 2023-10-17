@@ -56,18 +56,40 @@ export const get = async (id: string) => {
                 }
             },
             publications: {
+                where: {
+                    versions: {
+                        some: {
+                            isLatestLiveVersion: true
+                        }
+                    }
+                },
                 select: {
                     id: true,
-                    title: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
+                    versions: {
+                        where: {
+                            isLatestLiveVersion: true
+                        },
+                        select: {
+                            title: true
+                        }
+                    }
                 }
             }
         }
     });
 
-    return topic;
+    // Squash publication data
+    const simplifiedTopic = topic
+        ? {
+              ...topic,
+              publications: topic?.publications.map((publication) => ({
+                  id: publication.id,
+                  title: publication.versions[0].title
+              }))
+          }
+        : topic;
+
+    return simplifiedTopic;
 };
 
 export const getPaginatedResults = async (filters: I.TopicsFilters) => {

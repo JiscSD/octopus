@@ -6,7 +6,6 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
-import * as Axios from 'axios';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {
@@ -17,7 +16,7 @@ interface BoxEntry {
     authorFirstName: string;
     authorLastName: string;
     publishedDate: string;
-    authors: Pick<Interfaces.CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+    authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
 }
 
@@ -125,15 +124,16 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
 
     if (publication.type === type) {
         // Push the selected publication first
+
         publications.push({
             id: publication.id,
             title: publication.title,
             type: publication.type,
             createdBy: publication.createdBy,
             publishedDate: publication.publishedDate,
-            authorFirstName: publication.user.firstName,
-            authorLastName: publication.user.lastName,
-            authors: publication.coAuthors,
+            authorFirstName: publication.authorFirstName,
+            authorLastName: publication.authorLastName,
+            authors: publication.authors,
             pointers: linkedFrom
                 .filter(
                     (linkedPublication) =>

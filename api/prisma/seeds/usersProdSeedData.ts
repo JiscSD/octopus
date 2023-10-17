@@ -1,4 +1,6 @@
-const userSeeds = [
+import { Prisma } from '@prisma/client';
+
+const userSeeds: Prisma.UserCreateInput[] = [
     {
         id: 'octopus',
         orcid: 'XXXX-XXXX-XXXX-XXXX',
@@ -7,7 +9,7 @@ const userSeeds = [
         email: 'octopus@jisc.ac.uk',
         locked: false,
         apiKey: process.env.OCTOPUS_API_KEY
-    },
+    }
 ];
 
 export default userSeeds;

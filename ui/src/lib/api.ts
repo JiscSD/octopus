@@ -92,7 +92,7 @@ export const search = async <T extends Types.SearchParameter>(
     offset: number | null = null,
     publicationType?: string | null
 ): Promise<Interfaces.SearchResults<T>> => {
-    let endpoint: string = searchType === 'authors' ? Config.endpoints.users : Config.endpoints.publications;
+    let endpoint: string = searchType === 'authors' ? Config.endpoints.users : Config.endpoints.publicationVersions;
     let params: string = '';
 
     // Global search params
@@ -101,7 +101,7 @@ export const search = async <T extends Types.SearchParameter>(
     search && (params += '&search=' + search);
 
     // publication specific params
-    searchType === 'publications' && publicationType && (params += '&type=' + publicationType);
+    searchType === 'publication-versions' && publicationType && (params += '&type=' + publicationType);
 
     params.includes('&') && (params = params.replace('&', '?'));
 

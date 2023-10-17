@@ -132,15 +132,21 @@ export const get = async (id: string, isAccountOwner = false) => {
     return user;
 };
 
-export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+export const getPublicationVersions = async (
+    id: string,
+    params: I.UserPublicationVersionsFilters,
+    isAccountOwner: boolean
+) => {
     const { offset, limit, orderBy, orderDirection } = params;
 
     // Account owners can retrieve their DRAFT publications also
     const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
 
-    const where: Prisma.PublicationWhereInput = {
+    const where: Prisma.PublicationVersionWhereInput = {
         OR: [
-            { createdBy: id },
+            {
+                createdBy: id
+            },
             {
                 coAuthors: {
                     some: {
@@ -151,35 +157,36 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
         ],
         currentStatus: {
             in: statuses
-        }
+        },
+        ...(isAccountOwner ? { isLatestVersion: true } : { isLatestLiveVersion: true })
     };
 
-    const userPublications = await client.prisma.publication.findMany({
+    const userPublicationVersions = await client.prisma.publicationVersion.findMany({
         skip: offset,
         take: limit,
         where,
-        select: {
-            id: true,
-            title: true,
-            type: true,
-            doi: true,
-            createdBy: true,
-            createdAt: true,
-            updatedAt: true,
-            publishedDate: true,
-            currentStatus: true,
-            url_slug: true,
-            licence: true,
-            content: true,
+        include: {
+            publication: {
+                select: {
+                    id: true,
+                    type: true,
+                    doi: true,
+                    url_slug: true
+                }
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    id: true,
+                    orcid: true
+                }
+            },
             coAuthors: {
                 select: {
                     id: true,
-                    approvalRequested: true,
-                    confirmedCoAuthor: true,
-                    code: true,
-                    email: true,
-                    publicationId: true,
                     linkedUser: true,
+                    confirmedCoAuthor: true,
                     user: {
                         select: {
                             orcid: true,
@@ -201,9 +208,9 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
                 : undefined
     });
 
-    const totalUserPublications = await client.prisma.publication.count({ where });
+    const totalUserPublications = await client.prisma.publicationVersion.count({ where });
 
-    return { offset, limit, total: totalUserPublications, results: userPublications };
+    return { offset, limit, total: totalUserPublications, results: userPublicationVersions };
 };
 
 export const getUserList = async () => {

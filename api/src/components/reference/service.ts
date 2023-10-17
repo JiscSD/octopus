@@ -1,25 +1,22 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
 
-export const getAllByPublication = async (publicationId: string) => {
-    const references = await client.prisma.references.findMany({
+export const getAllByPublicationVersion = async (publicationVersionId: string) => {
+    return await client.prisma.references.findMany({
         where: {
-            publicationId
+            publicationVersionId
         }
     });
-
-    return references;
 };
 
-export const updateAll = async (publicationId, data) => {
+export const updateAll = async (publicationVersionId: string, data: I.UpdateReferencesBody) => {
     await client.prisma.references.deleteMany({
         where: {
-            publicationId
+            publicationVersionId
         }
     });
 
-    const created = await client.prisma.references.createMany({
+    return await client.prisma.references.createMany({
         data
     });
-
-    return created;
 };

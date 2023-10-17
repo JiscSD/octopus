@@ -8,7 +8,7 @@ const updateAll: I.Schema = {
             id: {
                 type: 'string'
             },
-            publicationId: {
+            publicationVersionId: {
                 type: 'string'
             },
             type: {
@@ -22,7 +22,7 @@ const updateAll: I.Schema = {
                 type: 'string'
             }
         },
-        required: ['type', 'text', 'id', 'publicationId'],
+        required: ['type', 'text', 'id', 'publicationVersionId'],
         additionalProperties: false
     }
 };

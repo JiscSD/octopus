@@ -33,6 +33,9 @@
             "publication/*": [
                 "src/components/publication/*"
             ],
+            "publicationVersion/*": [
+                "src/components/publicationVersion/*"
+            ],
             "user/*": [
                 "src/components/user/*"
             ],

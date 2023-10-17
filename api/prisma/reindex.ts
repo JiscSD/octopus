@@ -2,7 +2,7 @@ import htmlToText from 'html-to-text';
 
 import * as client from '../src/lib/client';
 
-const reindex = async () => {
+const reindex = async (): Promise<void> => {
     const doesIndexExists = await client.search.indices.exists({
         index: 'publications'
     });
@@ -15,31 +15,48 @@ const reindex = async () => {
 
     const pubs = await client.prisma.publication.findMany({
         where: {
-            currentStatus: 'LIVE'
+            versions: {
+                some: {
+                    isLatestLiveVersion: true
+                }
+            }
+        },
+        include: {
+            versions: {
+                where: {
+                    isLatestLiveVersion: true
+                }
+            }
         }
     });
 
     console.log(`reindexing ${pubs.length}`);
 
     for (const pub of pubs) {
-        await client.search.create({
-            index: 'publications',
-            id: pub.id,
-            body: {
+        const latestLiveVersion = pub.versions[0];
+
+        if (latestLiveVersion) {
+            await client.search.create({
+                index: 'publications',
                 id: pub.id,
-                type: pub.type,
-                title: pub.title,
-                licence: pub.licence,
-                description: pub.description,
-                keywords: pub.keywords,
-                content: pub.content,
-                language: 'en',
-                currentStatus: pub.currentStatus,
-                publishedDate: pub.publishedDate,
-                cleanContent: htmlToText.convert(pub.content)
-            }
-        });
+                body: {
+                    id: pub.id,
+                    type: pub.type,
+                    title: latestLiveVersion.title,
+                    licence: latestLiveVersion.licence,
+                    description: latestLiveVersion.description,
+                    keywords: latestLiveVersion.keywords,
+                    content: latestLiveVersion.content,
+                    language: 'en',
+                    currentStatus: latestLiveVersion.currentStatus,
+                    publishedDate: latestLiveVersion.publishedDate,
+                    cleanContent: htmlToText.convert(latestLiveVersion.content)
+                }
+            });
+        }
     }
 };
 
-reindex();
+reindex()
+    .then(() => console.log('Completed reindex'))
+    .catch((error) => console.log('Error while reindexing: ', error));

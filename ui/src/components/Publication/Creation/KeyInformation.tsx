@@ -9,7 +9,7 @@ import * as Types from '@types';
  * @description Edit title
  */
 const KeyInformation: React.FC = (): React.ReactElement => {
-    const { title, updateTitle } = Stores.usePublicationCreationStore();
+    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -24,8 +24,8 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                     aria-labelledby="title-label"
                     required
                     type="text"
-                    value={title}
-                    onChange={(e) => updateTitle(e.target.value)}
+                    value={publicationVersion.title}
+                    onChange={(e) => updatePublicationVersion({ ...publicationVersion, title: e.target.value })}
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
                 />
             </div>

@@ -25,16 +25,16 @@ export interface PublicationStatus {
 
 export interface PublicationRef {
     id: string;
-    title: string;
-    publishedDate: string;
-    currentStatus: PublicationStatus;
     type: Types.PublicationType;
-    user: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        orcid: string;
-    };
+    doi: string;
+    versions: {
+        title: string;
+        publishedDate: string;
+        currentStatus: PublicationStatus;
+        description: string;
+        keywords: string[];
+        user: User;
+    }[];
     linkedTo: LinkTo[];
     linkedFrom: LinkFrom[];
 }
@@ -51,29 +51,78 @@ export interface LinkFrom {
 
 export interface CorePublication {
     id: string;
-    title: string;
     type: Types.PublicationType;
     doi: string | null;
+    url_slug: string;
+}
+
+export interface PublicationVersionUser {
+    id: string;
+    orcid: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+}
+export interface PublicationVersion {
+    id: string;
+    versionOf: string;
+    versionNumber: number;
+    isLatestVersion: boolean;
+    isLatestLiveVersion: boolean;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+    currentStatus: Types.PublicationStatuses;
+    publishedDate: string | null;
+    title: string;
+    licence: Types.LicenceType;
+    conflictOfInterestStatus: boolean | null;
+    conflictOfInterestText: string | null;
+    ethicalStatement: string | null;
+    ethicalStatementFreeText: string | null;
+    dataPermissionsStatement: string | null;
+    dataPermissionsStatementProvidedBy: string | null;
+    dataAccessStatement: string | null;
+    selfDeclaration: boolean;
+    description: string | null;
+    keywords: string[];
+    content: string | null;
+    language: Types.Languages;
+    fundersStatement: string | null;
+    user: PublicationVersionUser;
+    publicationStatus: PublicationStatus[];
+    funders: Funder[];
+    coAuthors: CoAuthor[];
+    publication: CorePublication;
+}
+
+export interface PublicationWithVersions extends CorePublication {
+    versions: PublicationVersion[];
+}
+
+// The form of publication generally expected by the UI, with versionable data merged into the object.
+export interface Publication extends CorePublication {
+    versionId: string;
+    versionNumber: number;
+    isLatestVersion: boolean;
+    isLatestLiveVersion: boolean;
+    title: string;
     description: string;
     keywords: string[];
     createdBy: string;
     createdAt: string;
     updatedAt: string;
-    publishedDate: string;
     currentStatus: Types.PublicationStatuses;
-    url_slug: string;
+    publishedDate: string;
     licence: Types.LicenceType;
     content: string;
     language: Types.Languages;
     ethicalStatement: string;
     ethicalStatementFreeText: string | null;
-}
-
-export interface Publication extends CorePublication {
     publicationStatus: PublicationStatus[];
     user: User;
-    linkedFrom: LinkFrom[];
-    linkedTo: LinkTo[];
     conflictOfInterestStatus: boolean | undefined;
     conflictOfInterestText: string | null;
     dataAccessStatement: string | null;
@@ -83,43 +132,36 @@ export interface Publication extends CorePublication {
     coAuthors: CoAuthor[];
     funders: Funder[];
     fundersStatement: string | null;
-    affiliations: Affiliations[];
-    affiliationStatement: string | null;
-    publicationFlags: Flag[];
     references: Reference[];
-    topics: BaseTopic[];
 }
 
-export interface LinkedToPublication {
+export interface LinkedPublication {
     id: string;
+    type: Types.PublicationType;
+    doi: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+}
+
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
     childPublication: string;
     childPublicationType: Types.PublicationType;
-    type: Types.PublicationType;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
-    createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
 }
 
-export interface LinkedFromPublication {
-    id: string;
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
     parentPublication: string;
-    type: Types.PublicationType;
     parentPublicationType: Types.PublicationType;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
-    createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
 }
 
 export interface PublicationWithLinks {
-    publication: Publication;
+    publication: LinkedPublication;
     linkedTo: LinkedToPublication[];
     linkedFrom: LinkedFromPublication[];
 }
@@ -128,7 +170,7 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
-    publicationId: string;
+    publicationVersionId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
@@ -140,7 +182,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
     affiliations: MappedOrcidAffiliation[];
@@ -193,11 +235,11 @@ export interface CoreUser {
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
-    publications: Publication[];
+    publicationVersions: PublicationVersion[];
     works: WorksRecord[];
 }
 
-export interface SearchResults<T extends Publication | User> {
+export interface SearchResults<T extends PublicationVersion | User> {
     data: T[];
     metadata: SearchResultMeta;
 }
@@ -358,6 +400,7 @@ export interface Flag {
     publicationId: string;
     resolved: boolean;
     createdAt: string;
+    createdBy: string;
     user: Omit<CoreUser, 'email'>;
 }
 
@@ -367,20 +410,19 @@ export interface FlagWithComments extends Flag {
 
 export interface PublicationUpdateRequestBody extends JSON {
     title: string;
-    content: string;
-    description: string;
+    content: string | null;
+    description: string | null;
     keywords: string[];
     fundersStatement?: string | null;
     language: Types.Languages;
-    conflictOfInterestStatus: boolean | undefined;
-    conflictOfInterestText: string;
+    conflictOfInterestStatus: boolean | null;
+    conflictOfInterestText: string | null;
     ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
-    affiliationStatement?: string | null;
 }
 
 export interface CreationStep {
@@ -395,27 +437,11 @@ export interface CreationStepWithCompletenessStatus extends CreationStep {
     status: Types.TabCompletionStatus;
 }
 
-export interface UserPublication {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
-    publishedDate: string | null;
-    doi: string;
-    title: string | null;
-    type: Types.PublicationType;
-    currentStatus: Types.PublicationStatuses;
-    url_slug: string;
-    licence: Types.LicenceType;
-    content: string | null;
-    coAuthors: CoAuthor[];
-}
-
-export interface UserPublicationsPage {
+export interface UserPublicationVersionsResult {
     offset: number;
     limit: number;
     total: number;
-    results: UserPublication[];
+    results: PublicationVersion[];
 }
 
 export interface OrcidAffiliationDate {
@@ -473,16 +499,16 @@ export interface TopicTranslation {
 export interface BaseTopic {
     id: string;
     title: string;
-    language: Types.Languages;
-    translations: TopicTranslation[];
+    createdAt: string;
 }
 
 export interface Topic extends BaseTopic {
-    createdAt: string;
     updatedAt: string;
+    language: string;
     parents: BaseTopic[];
     children: BaseTopic[];
     publications: TopicPublication[];
+    translations: TopicTranslation[];
 }
 
 export interface TopicsPaginatedResults {

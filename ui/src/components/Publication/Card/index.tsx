@@ -8,24 +8,24 @@ import * as Config from '@config';
 import * as Assets from '@assets';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     bodyClassName?: string;
     buttonClassName?: string;
 };
 
 const Card: React.FC<Props> = (props): React.ReactElement => {
     const authors = React.useMemo(() => {
-        const authors = props.publication.coAuthors.filter((author) => author.confirmedCoAuthor && author.user);
+        const authors = props.publicationVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.user);
 
         // make sure authors list include the corresponding author
-        const correspondingUser = props.publication.user;
+        const correspondingUser = props.publicationVersion.user;
         if (!authors.find((author) => author.linkedUser === correspondingUser.id)) {
             authors.unshift({
                 id: correspondingUser.id,
                 approvalRequested: false,
                 confirmedCoAuthor: true,
                 email: correspondingUser.email || '',
-                publicationId: props.publication.id,
+                publicationVersionId: props.publicationVersion.id,
                 linkedUser: correspondingUser.id,
                 isIndependent: true,
                 affiliations: [],
@@ -38,7 +38,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
         }
 
         return authors;
-    }, [props.publication]);
+    }, [props.publicationVersion]);
 
     const authorNames = React.useMemo(
         () => authors.map((author) => `${author.user?.firstName[0]}. ${author.user?.lastName}`).join(', '),
@@ -51,9 +51,9 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 className={`rounded-t-lg border-b border-teal-500 bg-white-50 p-4 transition-colors duration-500 dark:bg-grey-700 ${props.bodyClassName}`}
             >
                 <p className="mb-4 mt-2 block min-h-[6rem] font-montserrat text-lg font-bold leading-snug text-grey-900 transition-colors duration-500 dark:text-white-50 lg:min-h-[7rem] 2xl:text-xl">
-                    {props.publication.title.length > 80
-                        ? Helpers.truncateString(props.publication.title, 69)
-                        : props.publication.title}
+                    {props.publicationVersion.title.length > 80
+                        ? Helpers.truncateString(props.publicationVersion.title, 69)
+                        : props.publicationVersion.title}
                 </p>
                 <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap" title={authorNames}>
@@ -85,18 +85,20 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 </span>
                 <div className="flex items-center justify-between">
                     <span className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        {Helpers.formatPublicationType(props.publication.type)}
+                        {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
                     </span>
+
                     <time
                         className="text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
                         suppressHydrationWarning
                     >
-                        {Helpers.formatDate(props.publication.publishedDate)}
+                        {props.publicationVersion.publishedDate &&
+                            Helpers.formatDate(props.publicationVersion.publishedDate)}
                     </time>
                 </div>
             </div>
             <Components.Link
-                href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                href={`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`}
                 className={`flex w-full items-center justify-center rounded-b-lg bg-white-50 p-4 font-montserrat font-medium tracking-tight outline-0 transition-colors duration-500 hover:bg-grey-50 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 print:hidden ${props.buttonClassName}`}
             >
                 <span className="mr-4 text-sm text-teal-600 dark:text-teal-300">View this publication</span>

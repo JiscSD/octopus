@@ -1,50 +1,11 @@
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
-import * as api from '@api';
 
-interface Errors {
-    latest: null | string;
-}
-
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const errors: Errors = {
-        latest: null
-    };
-
-    let latest: unknown = [];
-    try {
-        const latestResponse = await api.search<Interfaces.Publication>(
-            'publications',
-            null,
-            10,
-            0,
-            Config.values.publicationTypes.join()
-        );
-        latest = latestResponse.data;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        errors.latest = message;
-    }
-
-    return {
-        props: {
-            latest,
-            errors
-        }
-    };
-};
-
-type Props = {
-    latest: Interfaces.Publication[];
-    errors: Errors;
-};
-
-const Home: Types.NextPage<Props> = (props): React.ReactElement => {
+const Home: Types.NextPage = (props): React.ReactElement => {
     console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>

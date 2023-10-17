@@ -2,7 +2,7 @@ import middy from '@middy/core';
 
 import * as I from 'interface';
 import * as response from 'lib/response';
-import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 
 const checkOwnership = (): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2 & Record<string, I.User>> = async (
@@ -16,14 +16,18 @@ const checkOwnership = (): middy.MiddlewareObj => {
                 return response.json(401, { message: 'Please enter either a valid apiKey or bearer token.' });
             }
 
-            const publicationId = request.event.pathParameters?.id;
+            const publicationVersionId = request.event.pathParameters?.id;
 
-            if (publicationId) {
-                const publication = await publicationService.get(publicationId);
+            if (publicationVersionId) {
+                const publicationVersion = await publicationVersionService.getById(publicationVersionId);
 
-                if (publication && publication.createdBy !== user.id) {
+                if (!publicationVersion) {
+                    return response.json(404, 'Publication version not found.');
+                }
+
+                if (publicationVersion.createdBy !== user.id) {
                     return response.json(403, {
-                        message: 'User is not the author of this publication.'
+                        message: 'User is not the author of this publication version.'
                     });
                 }
             }

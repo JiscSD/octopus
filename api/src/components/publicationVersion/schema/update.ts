@@ -1,7 +1,7 @@
 import * as I from 'interface';
 import * as H from 'lib/helpers';
 
-const updatePublicationSchema: I.Schema = {
+const updatePublicationVersionSchema: I.Schema = {
     type: 'object',
     properties: {
         title: {
@@ -56,15 +56,9 @@ const updatePublicationSchema: I.Schema = {
         },
         affiliationStatement: {
             type: 'string'
-        },
-        topics: {
-            type: 'array',
-            items: {
-                type: 'string'
-            }
         }
     },
     additionalProperties: false
 };
 
-export default updatePublicationSchema;
+export default updatePublicationVersionSchema;

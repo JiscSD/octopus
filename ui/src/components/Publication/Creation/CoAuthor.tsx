@@ -4,6 +4,7 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 import * as api from '@api';
 import * as Components from '@components';
+import * as Config from '@config';
 import * as Stores from '@stores';
 import * as Helpers from '@helpers';
 import * as I from '@interfaces';
@@ -75,9 +76,9 @@ const onBeforeDragStart = (start: DragStart) => {
 };
 
 const CoAuthor: React.FC = (): React.ReactElement => {
-    const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
+    const coAuthors = Stores.usePublicationCreationStore((state) => state.publicationVersion.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
+    const versionId = Stores.usePublicationCreationStore((state) => state.publicationVersion.id);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [loading, setLoading] = React.useState(false);
@@ -135,8 +136,8 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
         const newAuthor = {
             id: createId(),
-            publicationId: publicationId,
             email: coAuthorEmail,
+            publicationVersionId: versionId,
             linkedUser: null,
             approvalRequested: false,
             confirmedCoAuthor: false,
@@ -147,7 +148,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         authorsArray.push(newAuthor);
         updateCoAuthors(authorsArray);
         setLoading(false);
-    }, [coAuthors, coAuthor, publicationId, updateCoAuthors]);
+    }, [coAuthors, coAuthor, versionId, updateCoAuthors]);
 
     const deleteCoAuthor = async (coAuthorId: string) => {
         updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
@@ -157,13 +158,16 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         setLoading(true);
 
         try {
-            const response = await api.get(`/publications/${publicationId}/coauthors`, user?.token);
+            const response = await api.get(
+                `${Config.endpoints.publicationVersions}/${versionId}/coauthors`,
+                user?.token
+            );
             updateCoAuthors(response.data);
             setLoading(false);
         } catch {
             setLoading(false);
         }
-    }, [publicationId, updateCoAuthors, user?.token]);
+    }, [updateCoAuthors, user?.token, versionId]);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
