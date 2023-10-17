@@ -8,6 +8,8 @@ const baseJSONResponse = (statusCode, body) => ({
   statusCode,
 });
 
+// When a PDF is put into the S3 bucket, take the publication ID from the PDF filename, get the latest live
+// version of that publication, and format its metadata into a specific JSON format before sending that to pubrouter.
 export const handler = async (event) => {
   const bucket = event.Records[0].s3.bucket.name;
   const key = event.Records[0].s3.object.key;
@@ -20,16 +22,19 @@ export const handler = async (event) => {
   const publicationId = key.replace(/\.pdf$/, "");
 
   try {
-    const publicationResponse = await fetch(
-      `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}`,
+    const publicationVersionResponse = await fetch(
+      `https://${process.env.ENVIRONMENT}.api.octopus.ac/v1/publications/${publicationId}/publication-versions/latestLive`,
       { method: "GET" }
     );
-    const publication = await publicationResponse.json();
+    const publicationVersion = await publicationVersionResponse.json();
 
-    console.log("Fetched publication: ", JSON.stringify(publication));
+    console.log(
+      "Fetched publication version: ",
+      JSON.stringify(publicationVersion)
+    );
 
     // If publication was written by Science Octopus (seed data), don't send.
-    if (publication.user && publication.user.id === "octopus") {
+    if (publicationVersion.user && publicationVersion.user.id === "octopus") {
       console.log("Publication author is Octopus user, ignoring");
       return baseJSONResponse(
         200,
@@ -37,7 +42,10 @@ export const handler = async (event) => {
       );
     }
 
-    const pdfMetadata = mapPublicationToMetadata(publication, pdfUrl);
+    const pdfMetadata = mapPublicationVersionToMetadata(
+      publicationVersion,
+      pdfUrl
+    );
 
     console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
 
@@ -127,10 +135,11 @@ const sendFailureEmail = async (error, event, publicationId) => {
   return client.send(command);
 };
 
-const mapPublicationToMetadata = (publication, pdfUrl) => {
+const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
   const formatAuthor = (author) => {
     return {
-      type: author.linkedUser === publication.user.id ? "corresp" : "author",
+      type:
+        author.linkedUser === publicationVersion.user.id ? "corresp" : "author",
       name: {
         firstname: author.user.firstName,
         surname: author.user.lastName || "",
@@ -175,7 +184,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
     };
   };
 
-  const formattedPublicationDate = publication.createdAt.slice(0, 10);
+  const formattedPublicationDate = publicationVersion.createdAt.slice(0, 10);
 
   return {
     provider: {
@@ -199,18 +208,20 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
         ],
       },
       article: {
-        title: publication.title,
-        type: publication.type,
+        title: publicationVersion.title,
+        type: publicationVersion.publication.type,
         version: "VOR",
-        language: [publication.language],
+        language: [publicationVersion.language],
         identifier: [
           {
             type: "doi",
-            id: publication.doi,
+            id: publicationVersion.publication.doi,
           },
         ],
       },
-      author: publication.coAuthors?.map((author) => formatAuthor(author)),
+      author: publicationVersion.coAuthors?.map((author) =>
+        formatAuthor(author)
+      ),
       publication_date: {
         date: formattedPublicationDate,
         year: formattedPublicationDate.slice(0, 4),
@@ -219,7 +230,7 @@ const mapPublicationToMetadata = (publication, pdfUrl) => {
       },
       accepted_date: formattedPublicationDate,
       publication_status: "Published",
-      funding: publication.funders?.map((funder) => ({
+      funding: publicationVersion.funders?.map((funder) => ({
         name: funder.name,
         identifier: [
           {
