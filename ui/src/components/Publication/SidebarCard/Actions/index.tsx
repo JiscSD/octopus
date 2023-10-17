@@ -12,6 +12,8 @@ import * as Assets from '@assets';
 import * as Types from '@types';
 import * as api from '@api';
 
+import axios from 'axios';
+
 type ActionProps = {
     publicationVersion: Interfaces.PublicationVersion;
 };
@@ -68,7 +70,11 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             }
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
+            setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
         setSubmitting(false);
     };
