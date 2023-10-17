@@ -647,3 +647,31 @@ export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutC
         subject: 'Changes have been made to a publication that you are an author on'
     });
 };
+
+type NotifyCoAuthorCancelledApproval = {
+    publication: {
+        id: string;
+        title: string;
+        authorEmail: string;
+        url: string;
+    };
+};
+
+export const notifyCoAuthorCancelledApproval = async (options: NotifyCoAuthorCancelledApproval): Promise<void> => {
+    const html = `
+                <p>A co-author had previously approved your publication, <strong><i>${options.publication.title}</i></strong>, but has now changed their mind, indicating that changes might be needed.</p>
+                <br>
+                <p style="text-align: center;"><a style="${styles.button}" href="${options.publication.url}">View publication</a></p>
+                <br>
+                <p>This author’s approval is required before publishing. Please discuss whether any further changes are needed with the author.</p>
+            `;
+
+    const text = `A co-author had previously approved your publication, ${options.publication.title}, but has now changed their mind, indicating that changes might be needed. You can view the publication following this link: ${options.publication.url}. This author’s approval is required before publishing. Please discuss whether any further changes are needed with the author.`;
+
+    await send({
+        html: standardHTMLEmailTemplate('A co-author has cancelled their approval', html),
+        text,
+        to: options.publication.authorEmail,
+        subject: 'A co-author has cancelled their approval'
+    });
+};
