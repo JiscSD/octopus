@@ -32,7 +32,9 @@ jobs:
         run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for API and DB to be ready
-        run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailhog:8025 -wait tcp://localstack:4566 -timeout 120s
+        run: docker exec -t api-test dockerize
+        wait-on: "tcp://db:5432, tcp://api-test:4003, tcp://mailhog:8025, tcp://localstack:4566"
+        wait-on-timeout: 120
 
       - name: Run test suite
         working-directory: ./api
