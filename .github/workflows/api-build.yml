@@ -20,7 +20,7 @@ jobs:
 
       - name: Run tsc to check for typescript errors
         working-directory: ./api
-        run: npx tsc
+        run: tsc
 
   prettier:
     timeout-minutes: 10
