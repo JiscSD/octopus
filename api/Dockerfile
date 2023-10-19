@@ -22,6 +22,7 @@ RUN mkdir /root/.aws && echo '[octopus-docker]\naws_access_key_id=setkey\naws_se
 RUN mkdir -p /app
 WORKDIR /app
 COPY package.json /app
+COPY package-lock.json /app
 
 # Only npm install if we're not using act or GH Actions (where we cache)
 # ARG RUNNER
