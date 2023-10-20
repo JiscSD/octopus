@@ -133,8 +133,11 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                     <p className="text-grey-800">{publicationVersion.title}</p>
                                     <div className="flex items-center space-x-2">
                                         <span className="text-xs text-grey-700">
-                                            {publicationVersion.publishedDate &&
-                                                Helpers.formatDate(publicationVersion.publishedDate)}
+                                            {publicationVersion.publishedDate && (
+                                                <time suppressHydrationWarning>
+                                                    {Helpers.formatDate(publicationVersion.publishedDate)}
+                                                </time>
+                                            )}
                                             ,
                                         </span>
                                         <span className="text-sm text-grey-700">

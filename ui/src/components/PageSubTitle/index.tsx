@@ -3,6 +3,7 @@ import React from 'react';
 type Props = {
     text: string;
     className?: string;
+    suppressHydrationWarning?: boolean;
 };
 
 const PageSubTitle: React.FC<Props> = (props): React.ReactElement => (
@@ -10,6 +11,7 @@ const PageSubTitle: React.FC<Props> = (props): React.ReactElement => (
         className={`mx-auto mb-8 block font-montserrat text-3xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100 ${
             props.className ?? ''
         }`}
+        suppressHydrationWarning={props.suppressHydrationWarning}
     >
         {props.text}
     </h2>
