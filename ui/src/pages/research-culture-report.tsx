@@ -19,7 +19,11 @@ const ResearchCultureReport: Types.NextPage = (): React.ReactElement => {
 
             <Layouts.Standard>
                 <section className="container mx-auto px-8 pb-10 pt-10 text-grey-800 transition-colors duration-500 dark:text-white-100 lg:gap-4 lg:pt-20">
-                    <Components.PageTitle className="mb-8" text={Config.urls.researchCultureReport.title} />
+                    <Components.PageTitle
+                        className="mb-8"
+                        text={`New report questions impact of
+publishing on research culture`}
+                    />
                     <h2 className="flex space-x-1 pb-16 font-montserrat text-xl font-normal">
                         Open research publishing platforms could be an important mechanism for reform
                     </h2>
@@ -40,16 +44,16 @@ const ResearchCultureReport: Types.NextPage = (): React.ReactElement => {
                         <br />
                         <p>Their findings are published in a report which can be accessed here:</p>
                         <br />
-                        <p>
-                            <a
-                                className="underline"
+                        <br />
+                        <p className="text-center">
+                            <Components.Link
+                                className="rounded-lg border-transparent bg-grey-700 p-4 font-medium text-white-50 decoration-teal-500 underline-offset-2 outline-0 transition-colors duration-500 hover:bg-grey-600 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:px-4"
                                 title="Report"
                                 href="https://doi.org/10.5281/zenodo.8165704"
-                                target="_blank"
-                                rel="noreferrer noopener"
+                                openNew
                             >
                                 Read the report
-                            </a>
+                            </Components.Link>
                         </p>
                     </div>
                     <br />
