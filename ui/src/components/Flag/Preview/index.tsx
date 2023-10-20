@@ -33,7 +33,7 @@ const Preview: React.FC<Props> = (props) => (
         </span>
         <span className="ml-6 text-sm text-grey-600 transition-colors duration-500 dark:text-grey-100">
             Flagged by {props.flag.user.firstName} {props.flag.user.lastName},{' '}
-            {Helpers.formatDate(props.flag.createdAt)}
+            <time suppressHydrationWarning>{Helpers.formatDate(props.flag.createdAt)}</time>
         </span>
     </Components.Link>
 );

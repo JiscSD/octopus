@@ -212,6 +212,7 @@ const IndividualBlogPage: NextPage<Props> = (props) => {
                             <Components.PageSubTitle
                                 className="text-base font-medium"
                                 text={`Written by ${author} on ${Helpers.formatDate(publishedDate)}`}
+                                suppressHydrationWarning
                             />
                             <div className="dark:text-white-50">
                                 {documentToReactComponents(content, renderOptions)}

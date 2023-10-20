@@ -218,7 +218,12 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                     </td>
                                     <td className="whitespace-nowrap px-6 py-4  text-sm text-grey-900 duration-500 dark:text-white-50">
                                         {isCorrespondingUser && !author.linkedUser && author.reminderDate ? (
-                                            <>Reminder sent at {Helpers.formatDateTime(author.reminderDate, 'short')}</>
+                                            <>
+                                                Reminder sent at{' '}
+                                                <time suppressHydrationWarning>
+                                                    {Helpers.formatDateTime(author.reminderDate, 'short')}
+                                                </time>
+                                            </>
                                         ) : author.linkedUser === props.publicationVersion.createdBy ? (
                                             <>Corresponding author</>
                                         ) : author.confirmedCoAuthor ? (
