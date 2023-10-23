@@ -42,11 +42,17 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                     </span>
                     {props.publicationVersion.publishedDate ? (
                         <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                            Published: {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                            Published:{' '}
+                            <time suppressHydrationWarning>
+                                {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                            </time>
                         </span>
                     ) : (
                         <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                            Last updated: {Helpers.formatDate(props.publicationVersion.updatedAt)}
+                            Last updated:{' '}
+                            <time suppressHydrationWarning>
+                                {Helpers.formatDate(props.publicationVersion.updatedAt)}
+                            </time>
                         </span>
                     )}
                 </div>

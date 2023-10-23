@@ -21,7 +21,7 @@ const BlogCard: React.FC<Props> = (props) => {
                     {shortBlogText}
                 </div>
                 <p className="blog-card-footer text-xs font-medium tracking-wide text-grey-800 transition-colors dark:text-grey-100">
-                    By {props.author} | {Helpers.formatDate(props.publishedDate)}
+                    By {props.author} | <time suppressHydrationWarning>{Helpers.formatDate(props.publishedDate)}</time>
                 </p>
             </div>
         </div>
