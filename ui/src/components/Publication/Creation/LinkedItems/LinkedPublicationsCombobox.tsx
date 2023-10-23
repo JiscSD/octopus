@@ -125,6 +125,11 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                     } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
                                 }
                                 value={publicationVersion}
+                                title={
+                                    publicationVersion.content
+                                        ? Helpers.truncateString(Helpers.htmlToText(publicationVersion.content), 220)
+                                        : ''
+                                }
                             >
                                 <div className="space-y-2">
                                     <span className="font-montserrat text-sm font-medium text-teal-600">
