@@ -1096,7 +1096,10 @@ export const mapOrcidAffiliationSummary = (
     organization: summary.organization,
     createdAt: summary['created-date'].value,
     updatedAt: summary['last-modified-date'].value,
-    source: { name: summary.source['source-name'].value, orcid: summary.source['source-orcid'].path },
+    source: {
+        name: summary.source['source-name'].value,
+        orcid: summary.source['source-orcid']?.path || summary.source['source-client-id']?.path || ''
+    },
     url: summary.url ? summary.url.value : undefined
 });
 
