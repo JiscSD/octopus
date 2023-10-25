@@ -277,7 +277,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     {},
                     props.token
                 );
-                router.push({
+                await router.push({
                     pathname: `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
                 });
             } catch (err) {
@@ -328,7 +328,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             );
 
             // redirect to publication page
-            router.push(`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`);
+            await router.push(`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             store.setError(
@@ -372,9 +372,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         setDeleteModalLoading(true);
         try {
             await api.destroy(`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`, props.token);
-            router.push({
+            await router.push({
                 pathname: user ? `${Config.urls.viewUser.path}/${user?.id}` : Config.urls.browsePublications.path
             });
+
             setToast({
                 visible: true,
                 dismiss: true,
@@ -402,7 +403,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const handlePreview = useCallback(async () => {
         try {
             await saveCurrent();
-            router.push({
+            await router.push({
                 pathname: `${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`
             });
         } catch (err) {

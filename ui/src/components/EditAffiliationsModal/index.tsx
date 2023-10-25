@@ -12,7 +12,7 @@ type Props = {
     open: boolean;
     author: Interfaces.CoAuthor;
     autoUpdate: boolean;
-    onClose: (revalidate?: boolean) => void;
+    onClose: (revalidate?: boolean) => Promise<void>;
 };
 
 const EditAffiliationsModal: React.FC<Props> = (props) => {
@@ -78,7 +78,7 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                 Helpers.getJWT()
             );
 
-            props.onClose(true);
+            await props.onClose(true);
         } catch (error) {
             setConfirmAffiliationsError(
                 axios.isAxiosError(error) && typeof error.response?.data?.message === 'string'
@@ -90,8 +90,12 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
         setIsUpdating(false);
     }, [authorAffiliations, isIndependentAuthor, props]);
 
-    const handleCancelChanges = React.useCallback(() => {
-        props.onClose();
+    const handleCancelChanges = React.useCallback(async () => {
+        if (isUpdating) {
+            return;
+        }
+
+        await props.onClose();
         // wait for modal transition and reset selection
         setTimeout(() => {
             setAuthorAffiliations(
@@ -103,8 +107,9 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                 })
             );
             setIsIndependentAuthor(props.author.isIndependent);
+            setConfirmAffiliationsError('');
         }, 200);
-    }, [orcidAffiliations, props]);
+    }, [isUpdating, orcidAffiliations, props]);
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
