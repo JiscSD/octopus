@@ -66,10 +66,10 @@ const Nav: React.FC = (): React.ReactElement => {
                         label: 'Learn More',
                         value: Config.urls.about.path
                     },
-                    // {
-                    //     label: 'Report',
-                    //     value: Config.urls.researchCultureReport.path
-                    // },
+                    {
+                        label: 'Report',
+                        value: Config.urls.researchCultureReport.path
+                    },
                     {
                         label: 'News and Updates',
                         value: Config.urls.blog.path
