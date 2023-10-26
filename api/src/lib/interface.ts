@@ -731,12 +731,16 @@ export interface OrcidAffiliationSummary {
         value: number;
     };
     source: {
-        'source-orcid': {
+        'source-orcid'?: {
             uri: string;
             path: string;
             host: string;
         };
-        'source-client-id'?: string;
+        'source-client-id'?: {
+            uri: string;
+            path: string;
+            host: string;
+        };
         'source-name': {
             value: string;
         };
