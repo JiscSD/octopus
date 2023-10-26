@@ -26,7 +26,7 @@ const Modal: React.FC<Props> = (props) => {
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto"
                 initialFocus={cancelButtonRef}
-                onClose={props.onClose}
+                onClose={loading ? () => {} : props.onClose}
             >
                 <div className="flex min-h-full items-center justify-center text-center">
                     <HeadlessUI.Transition.Child
