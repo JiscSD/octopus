@@ -379,9 +379,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const handleOpenAffiliationsModal = React.useCallback(() => setIsEditingAffiliations(true), []);
 
     const handleCloseAffiliationsModal = React.useCallback(
-        (revalidate?: boolean) => {
+        async (revalidate?: boolean) => {
             if (revalidate) {
-                mutate();
+                await mutate();
             }
             setIsEditingAffiliations(false);
         },
