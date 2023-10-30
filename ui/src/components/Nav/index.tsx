@@ -67,7 +67,7 @@ const Nav: React.FC = (): React.ReactElement => {
                         value: Config.urls.about.path
                     },
                     {
-                        label: 'Report',
+                        label: 'Research Culture Report',
                         value: Config.urls.researchCultureReport.path
                     },
                     {
