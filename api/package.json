@@ -27,6 +27,7 @@
         "convertResearchTopics": "ts-node -r tsconfig-paths/register prisma/convertResearchTopics.ts",
         "convertPublicationBookmarks": "ts-node prisma/convertPublicationBookmarks.ts",
         "removeResearchTopicProblems": "ts-node -r tsconfig-paths/register prisma/removeResearchTopicProblems.ts",
+        "createVersionedDOIs": "ts-node -r tsconfig-paths/register prisma/createVersionedDOIs.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",

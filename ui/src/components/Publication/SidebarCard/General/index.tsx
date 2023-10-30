@@ -74,21 +74,44 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </Components.Link>
             </div>
+            {/**
+             * @TODO - remove stage check when the versioned DOIs are released
+             */}
+            {['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!) && props.publicationVersion.doi && (
+                <div className="flex w-full flex-wrap whitespace-normal">
+                    <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        DOI (This Version):
+                    </span>
+                    <Components.Link
+                        href={`https://doi.org/${props.publicationVersion.doi}`}
+                        ariaLabel={`DOI link: https://doi.org/${props.publicationVersion.doi}`}
+                        className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                        openNew={true}
+                    >
+                        <p className="break-words break-all">https://doi.org/{props.publicationVersion.doi}</p>
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
+                    </Components.Link>
+                </div>
+            )}
 
-            <div className="flex w-full whitespace-normal">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    DOI:
+            <div className="flex w-full flex-wrap whitespace-normal">
+                <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                    {/**
+                     * @TODO - remove stage check when the versioned DOIs are released
+                     */}
+                    {['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!) ? 'DOI (All Versions):' : 'DOI:'}
                 </span>
                 <Components.Link
                     href={`https://doi.org/${props.publicationVersion.publication.doi}`}
                     ariaLabel={`DOI link: https://doi.org/${props.publicationVersion.publication.doi}`}
-                    className="flex w-full items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                    className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
                     <p className="break-words break-all">https://doi.org/{props.publicationVersion.publication.doi}</p>
-                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
+                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
                 </Components.Link>
             </div>
+
             {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
                 <div className="flex">
                     <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">

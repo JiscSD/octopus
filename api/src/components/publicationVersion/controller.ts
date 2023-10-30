@@ -4,7 +4,6 @@ import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
 import * as coAuthorService from 'coauthor/service';
-import * as referenceService from 'reference/service';
 import * as helpers from 'lib/helpers';
 import * as sqs from 'lib/sqs';
 
@@ -228,7 +227,16 @@ export const updateStatus = async (
             }
         }
 
-        const updatedVersion = await publicationVersionService.updateStatus(publicationVersion.id, newStatus);
+        // create version DOI
+        const publicationVersionDOI = await helpers.createPublicationVersionDOI(publicationVersion);
+
+        // update version status first so that published date is available for Open Search
+        await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
+
+        // update version DOI into DB
+        const updatedVersion = await publicationVersionService.update(publicationVersion.id, {
+            doi: publicationVersionDOI.data.attributes.doi
+        });
 
         // now that the publication version is LIVE, add/update the opensearch record
         await publicationService.createOpenSearchRecord({
@@ -243,11 +251,8 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedVersion.content)
         });
 
-        const references = await referenceService.getAllByPublicationVersion(updatedVersion.id);
-        const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
-
-        // Publication version is live, so update the DOI
-        await helpers.updateDOI(publicationVersion.publication.doi, publicationVersion, linkedTo, references);
+        // Publication version is live, so update the canonical DOI with this version info
+        await helpers.updatePublicationDOI(publicationVersion.publication.doi, updatedVersion);
 
         // send message to the pdf generation queue
         // currently only on deployed instances while a local solution is developed

@@ -1,3 +1,7 @@
+/**
+ * This page is a temporary copy of /publications/[id] page and will be only available on local and int stages until we release versioning work on prod
+ * If trying to access this page on prod, the user will be redirected back to the /publications/[id]
+ */
 import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
@@ -42,19 +46,21 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
-    const token = Helpers.getJWT(context);
+    const versionId = context.query.versionId;
 
     /**
      * TODO - remove this when we decide to deploy versioned DOIs & creating new versions on prod
      */
-    if (['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!)) {
+    if (!['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!)) {
         return {
             redirect: {
-                destination: `/publications/${requestedId}/versions/latest`, // this url might change in OC-391
+                destination: `/publications/${requestedId}`,
                 permanent: false
             }
         };
     }
+
+    const token = Helpers.getJWT(context);
 
     // fetch data concurrently
     const promises: [
@@ -65,7 +71,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         Promise<Interfaces.BaseTopic[] | void>
     ] = [
         api
-            .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token)
+            .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
             .then((res) => res.data)
             .catch((error) => console.log(error)),
         api
@@ -139,7 +145,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     }, [props.bookmarkId, props.publicationId]);
 
     const { data: publicationVersion, mutate } = useSWR<Interfaces.PublicationVersion>(
-        `${Config.endpoints.publications}/${props.publicationId}/publication-versions/latest`,
+        `${Config.endpoints.publications}/${props.publicationId}/publication-versions/${props.publicationVersion.id}`,
         null,
         { fallbackData: props.publicationVersion }
     );
@@ -373,9 +379,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const handleOpenAffiliationsModal = React.useCallback(() => setIsEditingAffiliations(true), []);
 
     const handleCloseAffiliationsModal = React.useCallback(
-        async (revalidate?: boolean) => {
+        (revalidate?: boolean) => {
             if (revalidate) {
-                await mutate();
+                mutate();
             }
             setIsEditingAffiliations(false);
         },
