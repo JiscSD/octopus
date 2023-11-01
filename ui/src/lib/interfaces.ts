@@ -151,12 +151,14 @@ export interface LinkedPublication {
 
 export interface LinkedToPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     parentPublication: string;
     parentPublicationType: Types.PublicationType;
 }

@@ -416,6 +416,14 @@ export const deleteVersion = async (publicationVersion: I.PublicationVersion) =>
             }
         });
 
+        // delete draft links for this version
+        await client.prisma.links.deleteMany({
+            where: {
+                publicationFrom: publicationVersion.versionOf,
+                draft: true
+            }
+        });
+
         // get previous version
         const previousVersion = await client.prisma.publicationVersion.findFirst({
             where: {

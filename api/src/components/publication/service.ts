@@ -423,6 +423,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT "Links"."id" "linkId",
                    "Links"."publicationFrom" "childPublication",
                    "Links"."publicationTo" "id",
+                   "Links".draft,
                    "pfrom".type "childPublicationType",
                    "pto".type,
                    "pto"."doi",
@@ -454,6 +455,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT l."id" "linkId",
                    l."publicationFrom" "childPublication",
                    l."publicationTo" "id",
+                   l."draft",
                    "pfrom".type "childPublicationType",
                    "pto".type,
                    "pto"."doi",
@@ -493,6 +495,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT "Links"."id" "linkId",
                    "Links"."publicationFrom" "id",
                    "Links"."publicationTo" "parentPublication",
+                   "Links".draft,
                    "pfrom".type,
                    "pfrom"."doi",
                    "pto".type "parentPublicationType",
@@ -524,6 +527,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT l."id" "linkId",
                    l."publicationFrom" "id",
                    l."publicationTo" "parentPublication",
+                   l."draft",
                    "pfrom".type,
                    "pfrom"."doi",
                    "pto".type "parentPublicationType",
@@ -672,6 +676,7 @@ export const getDirectLinksForPublication = async (
                 },
                 select: {
                     id: true,
+                    draft: true,
                     publicationToRef: {
                         select: {
                             id: true,
@@ -698,6 +703,7 @@ export const getDirectLinksForPublication = async (
                 },
                 select: {
                     id: true,
+                    draft: true,
                     publicationFromRef: {
                         select: {
                             id: true,
@@ -734,12 +740,13 @@ export const getDirectLinksForPublication = async (
     }
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
-        const { id: linkId, publicationToRef } = link;
+        const { id: linkId, publicationToRef, draft } = link;
         const { id, type, versions, doi } = publicationToRef;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
             id,
+            draft,
             linkId,
             type,
             doi,
@@ -756,12 +763,13 @@ export const getDirectLinksForPublication = async (
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
-        const { id: linkId, publicationFromRef } = link;
+        const { id: linkId, publicationFromRef, draft } = link;
         const { id, type, versions, doi } = publicationFromRef;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
             id,
+            draft,
             linkId,
             type,
             doi,

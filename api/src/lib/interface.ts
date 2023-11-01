@@ -208,12 +208,14 @@ export interface LinkedPublication {
 
 export interface LinkedToPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: PublicationType;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     parentPublication: string;
     parentPublicationType: PublicationType;
 }

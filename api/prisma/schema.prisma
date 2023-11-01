@@ -129,6 +129,7 @@ model Links {
     updatedAt          DateTime    @updatedAt
     publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
     publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+    draft              Boolean     @default(true)
 
     @@unique([publicationFrom, publicationTo])
 }
