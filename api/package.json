@@ -29,6 +29,7 @@
         "removeResearchTopicProblems": "ts-node -r tsconfig-paths/register prisma/removeResearchTopicProblems.ts",
         "createVersionedDOIs": "ts-node -r tsconfig-paths/register prisma/createVersionedDOIs.ts",
         "updateLinksStatus": "ts-node -r tsconfig-paths/register prisma/updateLinksStatus.ts",
+        "migrateTopicsFromPubsToVersions": "ts-node -r tsconfig-paths/register prisma/migrateTopicsFromPubsToVersions.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",

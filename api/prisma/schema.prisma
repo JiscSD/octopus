@@ -98,6 +98,7 @@ model PublicationVersion {
     References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
+    topics                             Topic[]
 }
 
 model References {
@@ -195,15 +196,15 @@ model PublicationBookmarks {
 }
 
 model Topic {
-    id           String             @id @default(cuid())
-    title        String
-    language     Languages          @default(en)
-    translations TopicTranslation[]
-    createdAt    DateTime           @default(now())
-    updatedAt    DateTime           @updatedAt
-    parents      Topic[]            @relation("TopicHierarchy")
-    children     Topic[]            @relation("TopicHierarchy")
-    publications Publication[]
+    id                      String             @id @default(cuid())
+    title                   String
+    language                Languages          @default(en)
+    translations            TopicTranslation[]
+    createdAt               DateTime           @default(now())
+    updatedAt               DateTime           @updatedAt
+    parents                 Topic[]            @relation("TopicHierarchy")
+    children                Topic[]            @relation("TopicHierarchy")
+    publicationVersions     PublicationVersion[]
 }
 
 model Bookmark {
