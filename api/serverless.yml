@@ -184,13 +184,7 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
-    getPublicationTopics:
-        handler: src/components/publication/routes.getPublicationTopics
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/topics
-                  method: GET
-                  cors: true
+
     # Publication Versions
     getPublicationVersion:
         handler: src/components/publicationVersion/routes.get
@@ -520,11 +514,4 @@ functions:
             - http:
                   path: ${self:custom.versions.v1}/topics
                   method: GET
-                  cors: true
-    updatePublicationTopics:
-        handler: src/components/publication/routes.updateTopics
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/topics
-                  method: PUT
                   cors: true

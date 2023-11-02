@@ -1,61 +1,73 @@
 import * as I from 'interface';
 import * as H from 'lib/helpers';
 
-const updatePublicationVersionSchema: I.Schema = {
+const updatePublicationVersionSchema: I.JSONSchemaType<I.UpdatePublicationVersionRequestBody> = {
     type: 'object',
     properties: {
         title: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         content: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         description: {
             type: 'string',
-            maxLength: 160
+            maxLength: 160,
+            nullable: true
         },
         keywords: {
             type: 'array',
             items: { type: 'string' },
-            maxItems: 10
-        },
-        id: {
-            type: 'string'
+            maxItems: 10,
+            nullable: true
         },
         conflictOfInterestStatus: {
-            type: 'boolean'
+            type: 'boolean',
+            nullable: true
         },
         conflictOfInterestText: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         language: {
             type: 'string',
-            enum: H.octopusInformation.languages
+            enum: H.octopusInformation.languages,
+            nullable: true
         },
         ethicalStatement: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         ethicalStatementFreeText: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         dataPermissionsStatement: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         dataPermissionsStatementProvidedBy: {
             type: 'string',
             nullable: true
         },
         dataAccessStatement: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
         selfDeclaration: {
-            type: 'boolean'
+            type: 'boolean',
+            nullable: true
         },
         fundersStatement: {
-            type: 'string'
+            type: 'string',
+            nullable: true
         },
-        affiliationStatement: {
-            type: 'string'
+        topics: {
+            type: 'array',
+            items: { type: 'string' },
+            nullable: true
         }
     },
     additionalProperties: false

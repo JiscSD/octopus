@@ -6,20 +6,24 @@ import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Config from '@config';
-import { useSWRConfig } from 'swr';
 
 /**
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
-    const SWRConfig = useSWRConfig();
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
-    const linkedTo = Stores.usePublicationCreationStore((state) => state.linkedTo);
-    const topics = Stores.usePublicationCreationStore((state) => state.topics);
+    const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo } = Stores.usePublicationCreationStore(
+        (state) => ({
+            publicationVersionId: state.publicationVersion.id,
+            topics: state.publicationVersion.topics,
+            updateTopics: state.updateTopics,
+            linkedTo: state.linkedTo,
+            updateLinkedTo: state.updateLinkedTo
+        })
+    );
 
     const user = Stores.useAuthStore((state) => state.user);
 
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
     const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
 
@@ -33,17 +37,14 @@ const Links: React.FC = (): React.ReactElement => {
                 try {
                     await api.destroy(`/links/${linkId}`, user.token);
 
-                    // refetch direct links
-                    await SWRConfig.mutate([
-                        `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
-                        'edit'
-                    ]);
+                    // update linked publications in the UI
+                    updateLinkedTo(linkedTo.filter((link) => link.linkId !== linkId));
                 } catch (err) {
                     setError('There was a problem removing the link.');
                 }
             }
         },
-        [SWRConfig, currentPublicationId, user]
+        [linkedTo, updateLinkedTo, user]
     );
 
     const deleteTopicLink = useCallback(
@@ -53,22 +54,22 @@ const Links: React.FC = (): React.ReactElement => {
             if (user) {
                 try {
                     // Update publication's topic IDs with current list minus ID to delete
-                    await api.put(
-                        `/publications/${currentPublicationId}/topics`,
+                    await api.patch(
+                        `${Config.endpoints.publicationVersions}/${publicationVersionId}`,
                         {
-                            topics: [...topics.map((topic) => topic.id).filter((id) => id !== topicId)]
+                            topics: topics.filter((topic) => topic.id !== topicId).map((topic) => topic.id)
                         },
                         user.token
                     );
 
-                    // refetch topics
-                    await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
+                    // update topics in the UI
+                    updateTopics(topics.filter((topic) => topic.id !== topicId));
                 } catch (err) {
                     setError('There was a problem removing the topic.');
                 }
             }
         },
-        [SWRConfig, currentPublicationId, topics, user]
+        [publicationVersionId, topics, updateTopics, user]
     );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"

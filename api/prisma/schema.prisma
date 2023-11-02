@@ -53,16 +53,15 @@ model Images {
 }
 
 model Publication {
-    id                   String                 @id @default(cuid())
-    url_slug             String                 @unique @default(cuid())
-    type                 PublicationType
-    doi                  String
-    publicationFlags     PublicationFlags[]
-    PublicationBookmarks PublicationBookmarks[]
-    linkedTo             Links[]                @relation("from")
-    linkedFrom           Links[]                @relation("to")
-    topics               Topic[]
-    versions             PublicationVersion[]
+    id                                 String                 @id @default(cuid())
+    url_slug                           String                 @unique @default(cuid())
+    type                               PublicationType
+    doi                                String
+    publicationFlags                   PublicationFlags[]
+    PublicationBookmarks               PublicationBookmarks[]
+    linkedTo                           Links[]                @relation("from")
+    linkedFrom                         Links[]                @relation("to")
+    versions                           PublicationVersion[]
 }
 
 model PublicationVersion {

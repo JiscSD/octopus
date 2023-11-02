@@ -63,7 +63,7 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
     const topic = props.topic;
     const showChildren = Boolean(topic.children.length);
     const showParents = Boolean(topic.parents.length);
-    const showPublications = Boolean(topic.publications.length);
+    const showPublications = Boolean(topic.publicationVersions.length);
 
     useEffect(() => {
         setBookmarkId(props.bookmarkId);
@@ -237,13 +237,13 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
                         <div className="border-t border-grey-200">
                             <Components.ContentSection id="publications" title="Research problems linked to this topic">
                                 <Components.List ordered={false}>
-                                    {topic.publications.map((publication) => (
-                                        <Components.ListItem key={publication.id}>
+                                    {topic.publicationVersions.map((publicationVersion) => (
+                                        <Components.ListItem key={publicationVersion.versionOf}>
                                             <Components.Link
-                                                href={`${Config.urls.viewPublication.path}/${publication.id}`}
+                                                href={`${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`}
                                                 className="mb-2 text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                                             >
-                                                {publication.title}
+                                                {publicationVersion.title}
                                             </Components.Link>
                                         </Components.ListItem>
                                     ))}

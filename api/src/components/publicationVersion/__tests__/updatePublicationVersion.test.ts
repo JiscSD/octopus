@@ -101,7 +101,7 @@ describe('Update publication version', () => {
             .query({ apiKey: 123456789 })
             .send({ title: 'Brand new title' });
 
-        expect(updatedVersion.status).toEqual(404);
+        expect(updatedVersion.status).toEqual(403);
     });
 
     test('Cannot add more than 10 keywords', async () => {

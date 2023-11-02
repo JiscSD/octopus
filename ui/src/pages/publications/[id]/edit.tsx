@@ -82,34 +82,30 @@ const steps: Types.CreationSteps = {
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);
+    const publicationId = context.query.id as string;
+    const step = (context.query.step as string) || Object.keys(steps)[0];
 
-    let publicationId: string | string[] | null = null;
-    let publicationVersion: Interfaces.PublicationVersion | null = null;
-    let step: string | string[] | null = null;
-    let error: string | null = null;
+    const promises: [
+        Promise<Interfaces.PublicationVersion | void>,
+        Promise<Interfaces.Reference[] | void>,
+        Promise<Interfaces.PublicationWithLinks | void>
+    ] = [
+        api
+            .get(`${Config.endpoints.publications}/${publicationId}/publication-versions/latest`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publicationVersions}/${publicationId}/references`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publications}/${publicationId}/links?direct=true`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error))
+    ];
 
-    if (context.query.id) publicationId = context.query.id;
-    if (context.query.step) step = context.query.step;
-    if (Array.isArray(publicationId)) publicationId = publicationId[0];
-    if (Array.isArray(publicationId)) publicationId = publicationId[0];
-    if (Array.isArray(step)) step = step[0];
-
-    if (publicationId) {
-        try {
-            const response = await api.get(
-                `${Config.endpoints.publications}/${publicationId}/publication-versions/latest`,
-                token
-            );
-            publicationVersion = response.data;
-        } catch (err) {
-            const { message } = err as Interfaces.JSONResponseError;
-            error = message;
-        }
-    } else {
-        return {
-            notFound: true
-        };
-    }
+    const [publicationVersion, references = [], directLinks = { publication: null, linkedTo: [], linkedFrom: [] }] =
+        await Promise.all(promises);
 
     if (!publicationVersion) {
         return {
@@ -129,9 +125,10 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     return {
         props: {
             publicationVersion,
+            references,
+            directLinks,
             step,
             token,
-            error,
             protectedPage: true
         }
     };
@@ -139,6 +136,8 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     publicationVersion: Interfaces.PublicationVersion;
+    references: Interfaces.Reference[];
+    directLinks: Interfaces.PublicationWithLinks;
     step: string;
     token: string;
     error: string | null;
@@ -147,20 +146,7 @@ type Props = {
 const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     const store = Stores.usePublicationCreationStore();
-    const { updateReferences, updateLinkedTo, updatePublicationVersion, updateTopics } = store;
-
-    useSWR([`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/references`, 'edit'], ([url]) =>
-        api.get(url, props.token).then((res) => updateReferences(res.data))
-    );
-
-    useSWR(
-        [`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/links?direct=true`, 'edit'],
-        ([url]) => api.get(url, props.token).then((res) => updateLinkedTo(res.data.linkedTo))
-    );
-
-    useSWR([`${Config.endpoints.publications}/${props.publicationVersion.versionOf}/topics`, 'edit'], ([url]) =>
-        api.get(url, props.token).then((res) => updateTopics(res.data))
-    );
+    const { updateReferences, updateLinkedTo, updatePublicationVersion } = store;
 
     // Choose which flow steps/pages to include based on the publication type
     const stepsByType = React.useMemo(() => {
@@ -203,6 +189,14 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     React.useEffect(() => {
         updatePublicationVersion(props.publicationVersion);
     }, [props.publicationVersion, updatePublicationVersion]);
+
+    React.useEffect(() => {
+        updateReferences(props.references);
+    }, [props.references, updateReferences]);
+
+    React.useEffect(() => {
+        updateLinkedTo(props.directLinks.linkedTo);
+    }, [props.directLinks.linkedTo, updateLinkedTo]);
 
     React.useEffect(() => {
         router.push(

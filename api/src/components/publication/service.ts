@@ -80,6 +80,13 @@ export const get = async (id: string) => {
                         orderBy: {
                             position: 'asc'
                         }
+                    },
+                    topics: {
+                        select: {
+                            id: true,
+                            title: true,
+                            createdAt: true
+                        }
                     }
                 }
             },
@@ -161,14 +168,6 @@ export const get = async (id: string) => {
                             }
                         }
                     }
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    language: true,
-                    translations: true
                 }
             }
         }
@@ -351,18 +350,27 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                             confirmedCoAuthor: true,
                             approvalRequested: false
                         }
-                    }
+                    },
+                    topics: e.topicIds?.length
+                        ? {
+                              connect: e.topicIds.map((topicId) => ({ id: topicId }))
+                          }
+                        : undefined
                 }
-            },
-            topics: e.topicIds?.length
-                ? {
-                      connect: e.topicIds.map((topicId) => ({ id: topicId }))
-                  }
-                : undefined
+            }
         },
         include: {
-            topics: true,
-            versions: true
+            versions: {
+                include: {
+                    topics: {
+                        select: {
+                            id: true,
+                            title: true,
+                            createdAt: true
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -930,39 +938,3 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
         }
     }
 };
-
-// Overwrite existing topics with those whose IDs were passed.
-export const updateTopics = async (id: string, topics: string[]) => {
-    // Format topics in a way that prisma can understand.
-    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
-
-    const updateTopics = await client.prisma.publication.update({
-        where: {
-            id
-        },
-        data: {
-            topics: topicsUpdateInput
-        },
-        include: {
-            topics: true
-        }
-    });
-
-    return updateTopics.topics;
-};
-
-export const getPublicationTopics = (id: string) =>
-    client.prisma.topic.findMany({
-        where: {
-            publications: {
-                some: {
-                    id
-                }
-            }
-        },
-        select: {
-            id: true,
-            createdAt: true,
-            title: true
-        }
-    });

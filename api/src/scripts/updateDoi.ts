@@ -16,7 +16,6 @@ const updatePublicationDOIs = async (): Promise<void> => {
                     id: true,
                     type: true,
                     doi: true,
-                    topics: true,
                     publicationFlags: true,
                     url_slug: true
                 }
@@ -74,6 +73,13 @@ const updatePublicationDOIs = async (): Promise<void> => {
                     email: true,
                     createdAt: true,
                     updatedAt: true
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
                 }
             }
         }

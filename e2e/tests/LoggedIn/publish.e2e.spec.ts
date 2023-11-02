@@ -286,7 +286,8 @@ interface PublicationTestType {
 
 export const checkPublication = async (page: Page, publication: PublicationTestType) => {
     // Wait for page to be loaded - viz will try to fetch links
-    await page.waitForResponse((response) => response.url().includes('/links'));
+    await page.waitForLoadState('networkidle');
+
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
         `aside span:has-text("${publication.language}")`,
@@ -337,7 +338,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
+        await page.waitForLoadState('networkidle');
         await page.locator(PageModel.publish.publishButton).click();
 
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
@@ -412,8 +413,8 @@ test.describe('Publication flow', () => {
         );
 
         const json = JSON.parse(await response.text());
-        expect(json.topics.length === 1);
-        expect(json.topics[0].title === 'Test topic');
+        expect(json.versions[0].topics.length === 1);
+        expect(json.versions[0].topics[0].title === 'Test topic');
     });
 
     test('Create a hypothesis (standard publication)', async ({ browser }) => {
@@ -450,7 +451,6 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, hypothesisPublication);
@@ -490,7 +490,6 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, methodPublication);
@@ -530,7 +529,7 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
+
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, analysisPublication);
@@ -566,7 +565,6 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, interpretationPublication);
@@ -606,7 +604,6 @@ test.describe('Publication flow', () => {
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, realWorldApplicationPublication);
@@ -1997,7 +1994,7 @@ test.describe('Publication flow + co-authors', () => {
             page.waitForResponse(
                 (response) =>
                     response.request().method() === 'GET' &&
-                    response.url().includes(`/publication-versions/`) &&
+                    response.url().includes(`/publication-versions`) &&
                     response.ok()
             )
         ]);

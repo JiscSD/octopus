@@ -97,6 +97,7 @@ export interface PublicationVersion {
     funders: Funder[];
     coAuthors: CoAuthor[];
     publication: CorePublication;
+    topics: BaseTopic[];
 }
 
 export interface PublicationWithVersions extends CorePublication {
@@ -487,9 +488,10 @@ export interface MappedOrcidAffiliation {
     url: string | null;
 }
 
-export interface TopicPublication {
+export interface TopicPublicationVersion {
     id: string;
     title: string;
+    versionOf: string;
 }
 
 export interface TopicTranslation {
@@ -510,7 +512,7 @@ export interface Topic extends BaseTopic {
     language: string;
     parents: BaseTopic[];
     children: BaseTopic[];
-    publications: TopicPublication[];
+    publicationVersions: TopicPublicationVersion[];
     translations: TopicTranslation[];
 }
 

@@ -84,19 +84,19 @@ export const update = async (
         const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
 
         if (!publicationVersion) {
-            return response.json(403, {
+            return response.json(404, {
                 message: 'This publication version does not exist.'
             });
         }
 
         if (publicationVersion.user.id !== event.user.id) {
             return response.json(403, {
-                message: 'You do not have permission to modify this publication version.'
+                message: 'You do not have permission to update topics for this publication version.'
             });
         }
 
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(404, {
+            return response.json(403, {
                 message: 'A publication version that is not in DRAFT state cannot be updated.'
             });
         }
@@ -128,7 +128,18 @@ export const update = async (
             });
         }
 
-        await publicationVersionService.update(event.pathParameters.id, event.body);
+        const { topics } = event.body;
+
+        if (topics && publicationVersion.publication.type !== 'PROBLEM') {
+            return response.json(400, {
+                message: 'You can not supply topics for a publication that is not a problem.'
+            });
+        }
+
+        await publicationVersionService.update(event.pathParameters.id, {
+            ...event.body,
+            topics: topics ? { set: topics.map((topicId) => ({ id: topicId })) } : undefined
+        });
 
         const updatedPublicationVersion = await publicationVersionService.getById(event.pathParameters.id);
 

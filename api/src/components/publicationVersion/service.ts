@@ -72,6 +72,13 @@ export const getById = (id: string) =>
                     createdAt: true,
                     updatedAt: true
                 }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
+                }
             }
         }
     });
@@ -152,6 +159,13 @@ export const get = (publicationId: string, version: string | number) =>
                     email: true,
                     createdAt: true,
                     updatedAt: true
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
                 }
             }
         }
@@ -278,6 +292,13 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
                     createdAt: true,
                     updatedAt: true
                 }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
+                }
             }
         }
     });
@@ -317,10 +338,10 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
-    const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 || (publicationVersion.publication.type === 'PROBLEM' && topics.length !== 0);
+        linkedTo.length !== 0 ||
+        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
@@ -357,10 +378,10 @@ export const checkIsReadyToRequestApprovals = async (publicationVersion: I.Publi
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
-    const topics = await publicationService.getPublicationTopics(publicationVersion.versionOf);
 
     const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 || (publicationVersion.publication.type === 'PROBLEM' && topics.length !== 0);
+        linkedTo.length !== 0 ||
+        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
@@ -448,3 +469,39 @@ export const deleteVersion = async (publicationVersion: I.PublicationVersion) =>
         }
     }
 };
+
+// Overwrite existing topics with those whose IDs were passed.
+export const updateTopics = async (id: string, topics: string[]) => {
+    // Format topics in a way that prisma can understand.
+    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
+
+    const updateTopics = await client.prisma.publicationVersion.update({
+        where: {
+            id
+        },
+        data: {
+            topics: topicsUpdateInput
+        },
+        include: {
+            topics: true
+        }
+    });
+
+    return updateTopics.topics;
+};
+
+export const getTopics = (id: string) =>
+    client.prisma.topic.findMany({
+        where: {
+            publicationVersions: {
+                some: {
+                    id
+                }
+            }
+        },
+        select: {
+            id: true,
+            createdAt: true,
+            title: true
+        }
+    });
