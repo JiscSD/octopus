@@ -67,6 +67,7 @@ model Publication {
 
 model PublicationVersion {
     id                                 String                @id @default(cuid())
+    doi                                String?
     versionOf                          String
     versionNumber                      Int
     isLatestVersion                    Boolean               @default(true)
