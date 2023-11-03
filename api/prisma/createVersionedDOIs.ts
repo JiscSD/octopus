@@ -93,18 +93,17 @@ const createVersionedDOIs = async (): Promise<number> => {
 
         console.log(`Successfully created version ${version.versionNumber} DOI: ${versionDOI}`);
 
-        // update publication "HasVersion" with the created DOI
-        console.log(`Updating canonical DOI: ${version.publication.doi} "HasVersion" with version DOI: ${versionDOI}`);
-        await helpers.updatePublicationDOI(version.publication.doi, version);
-
-        console.log(`Successfully updated canonical DOI: ${version.publication.doi}`);
-
         // update version DOI
         console.log(`Updating version DOI: ${versionDOI} in DB`);
-
-        await publicationVersionService.update(version.id, {
+        const updatedVersion = await publicationVersionService.update(version.id, {
             doi: versionDOI
         });
+
+        // update publication "HasVersion" with the created DOI
+        console.log(`Updating canonical DOI: ${version.publication.doi} "HasVersion" with version DOI: ${versionDOI}`);
+        await helpers.updatePublicationDOI(version.publication.doi, updatedVersion);
+
+        console.log(`Successfully updated canonical DOI: ${version.publication.doi}`);
 
         createdVersionDOIsCount += 1;
         console.log(); // new line
