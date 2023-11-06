@@ -67,6 +67,7 @@ export interface PublicationVersionUser {
 }
 export interface PublicationVersion {
     id: string;
+    doi?: string;
     versionOf: string;
     versionNumber: number;
     isLatestVersion: boolean;

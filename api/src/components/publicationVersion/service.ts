@@ -209,16 +209,81 @@ export const getAllByPublicationIds = async (ids: string[]) => {
     return latestVersions;
 };
 
-export const update = (id: string, updateContent: I.UpdatePublicationVersionRequestBody) =>
+export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =>
     client.prisma.publicationVersion.update({
         where: {
             id
         },
-        data: updateContent
+        data,
+        include: {
+            publication: {
+                select: {
+                    id: true,
+                    type: true,
+                    doi: true,
+                    url_slug: true
+                }
+            },
+            publicationStatus: {
+                select: {
+                    status: true,
+                    createdAt: true,
+                    id: true
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            funders: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    email: true,
+                    linkedUser: true,
+                    publicationVersionId: true,
+                    confirmedCoAuthor: true,
+                    approvalRequested: true,
+                    createdAt: true,
+                    reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            orcid: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            }
+        }
     });
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
-    const query = {
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) =>
+    client.prisma.publicationVersion.update({
         where: {
             id
         },
@@ -233,37 +298,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
                 publishedDate: new Date().toISOString(),
                 isLatestLiveVersion: true
             })
-        },
-        include: {
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: Prisma.SortOrder.desc
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true
-                }
-            },
-            publication: {
-                select: {
-                    type: true
-                }
-            }
         }
-    };
-
-    const updatedPublication = await client.prisma.publicationVersion.update(query);
-
-    return updatedPublication;
-};
+    });
 
 export const validateConflictOfInterest = (version: I.PublicationVersion) => {
     if (version.conflictOfInterestStatus) {
