@@ -36,10 +36,12 @@ export const get = async (
         config
             ? {
                   ...config,
-                  ...(token && { headers: {
-                    ...config.headers,
-                    ...headers
-                  } })
+                  ...(token && {
+                      headers: {
+                          ...config.headers,
+                          ...headers
+                      }
+                  })
               }
             : token
             ? { headers }
