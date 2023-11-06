@@ -34,9 +34,8 @@ export const get = async (
             return response.json(200, publicationVersion);
         }
 
-        return response.json(404, {
-            message:
-                'Publication version is either not found, or you do not have permissions to view it in its current state.'
+        return response.json(403, {
+            message: 'You do not have permission to view this publication version.'
         });
     } catch (err) {
         console.log(err);

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -58,15 +58,18 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch data concurrently
     const promises: [
-        Promise<Interfaces.PublicationVersion | void>,
+        Promise<AxiosResponse<Interfaces.PublicationVersion> | void>,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
         Promise<Interfaces.Flag[] | void>,
         Promise<Interfaces.BaseTopic[] | void>
     ] = [
         api
-            .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token)
-            .then((res) => res.data)
+            .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token, {
+                // We need to know the return code of this request if it is 403/404 so we can redirect,
+                // so this stops it from being caught and not checkable in the following code.
+                validateStatus: (status) => [403, 404].includes(status) || (status >= 200 && status < 300)
+            })
             .catch((error) => console.log(error)),
         api
             .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
@@ -87,12 +90,32 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     ];
 
     const [
-        publicationVersion,
+        publicationVersionResponse,
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
         topics = []
     ] = await Promise.all(promises);
+
+    if (publicationVersionResponse) {
+        // If anonymous user doesn't have access, redirect to login.
+        if (!token && publicationVersionResponse.status === 403) {
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(context.resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+        // If logged in user doesn't have access or version is not found, return notFound.
+        if ((token && publicationVersionResponse.status === 403) || publicationVersionResponse.status === 404) {
+            return {
+                notFound: true
+            };
+        }
+    }
+
+    const publicationVersion = publicationVersionResponse?.data;
 
     if (!publicationVersion) {
         return {

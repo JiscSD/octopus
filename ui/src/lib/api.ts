@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
 import * as Interfaces from '@interfaces';
 import * as Config from '@config';
@@ -22,14 +22,29 @@ const api = axios.create({
     baseURL
 });
 
-export const get = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+export const get = async (
+    url: string,
+    token: string | undefined,
+    config?: AxiosRequestConfig
+): Promise<AxiosResponse> => {
     const headers = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
+        Authorization: `Bearer ${token}`
     };
 
-    const response = await api.get(url, token ? headers : undefined);
+    const response = await api.get(
+        url,
+        config
+            ? {
+                  ...config,
+                  ...(token && { headers: {
+                    ...config.headers,
+                    ...headers
+                  } })
+              }
+            : token
+            ? { headers }
+            : undefined
+    );
     return response;
 };
 
