@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import Xarrow from 'react-xarrows';
+import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows';
 import useSWR from 'swr';
 
 import * as Components from '@components';
@@ -26,6 +26,10 @@ type BoxProps = BoxEntry & {
 };
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
+    const updateXarrow = useXarrow();
+    useEffect(() => {
+        updateXarrow();
+    }, []);
     // pick main author to display on visualization box
     const mainAuthor = useMemo(() => {
         const correspondingAuthor = {
@@ -334,20 +338,6 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
         }
     }
 
-    const boxes = filteredPublicationTypes.map((type) => {
-        const boxEntriesOfType = boxEntries[type];
-        const boxesOfType = boxEntriesOfType
-            ? boxEntriesOfType.map((boxEntry) => (
-                  <Box isSelected={props.publicationId == boxEntry.id} key={boxEntry.id} {...boxEntry} />
-              ))
-            : [];
-        return (
-            <div key={type} className="space-y-4 p-1">
-                {boxesOfType}
-            </div>
-        );
-    });
-
     return (
         <section className="container mb-8 px-8 pt-8 lg:pt-16">
             <div className="overflow-hidden" ref={visualizationHeaderRef}>
@@ -366,7 +356,29 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     className="sm:scrollbar min-h-[16rem] overflow-x-auto overflow-y-hidden"
                     ref={visualizationWrapperRef}
                 >
-                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">{data && boxes}</div>
+                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
+                        {data && (
+                            <Xwrapper>
+                                {filteredPublicationTypes.map((type) => {
+                                    const boxEntriesOfType = boxEntries[type];
+                                    const boxesOfType = boxEntriesOfType
+                                        ? boxEntriesOfType.map((boxEntry) => (
+                                              <Box
+                                                  isSelected={props.publicationId == boxEntry.id}
+                                                  key={boxEntry.id}
+                                                  {...boxEntry}
+                                              />
+                                          ))
+                                        : [];
+                                    return (
+                                        <div key={type} className="space-y-4 p-1">
+                                            {boxesOfType}
+                                        </div>
+                                    );
+                                })}
+                            </Xwrapper>
+                        )}
+                    </div>
                 </div>
             </div>
         </section>
