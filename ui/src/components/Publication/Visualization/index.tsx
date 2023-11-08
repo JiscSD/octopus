@@ -6,6 +6,7 @@ import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
+import * as Types from '@types';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {
@@ -118,90 +119,50 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
     );
 };
 
-const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: string) => {
-    const { publication, linkedTo, linkedFrom } = data;
-    const publications: BoxEntry[] = [];
+const sortPublicationsByPublicationDate = (publications: Interfaces.LinkedPublication[]) => {
+    return publications.sort((a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf());
+};
 
-    if (publication.type === type) {
-        // Push the selected publication first
-
-        publications.push({
-            id: publication.id,
-            title: publication.title,
-            type: publication.type,
-            createdBy: publication.createdBy,
-            publishedDate: publication.publishedDate,
-            authorFirstName: publication.authorFirstName,
-            authorLastName: publication.authorLastName,
-            authors: publication.authors,
-            pointers: linkedFrom
-                .filter(
-                    (linkedPublication) =>
-                        linkedPublication.type !== 'PEER_REVIEW' &&
-                        linkedPublication.parentPublication === publication.id
-                )
-                .map((publication) => publication.id) // get the ids of all direct child publications
-        });
-    }
-
-    // ignore publications above 'PROBLEM'
-    if (publication.type !== 'PROBLEM') {
-        // Loop through all parent publications
-        for (const linkedPublication of linkedTo) {
-            if (
-                linkedPublication.type === type &&
-                !publications.find((publication) => publication.id === linkedPublication.id)
-            ) {
-                publications.push({
-                    id: linkedPublication.id,
-                    title: linkedPublication.title,
-                    type: linkedPublication.type,
-                    createdBy: linkedPublication.createdBy,
-                    authorFirstName: linkedPublication.authorFirstName,
-                    authorLastName: linkedPublication.authorLastName,
-                    authors: linkedPublication.authors,
-                    publishedDate: linkedPublication.publishedDate,
-                    pointers: linkedTo
-                        .filter(
-                            (publication) =>
-                                publication.type !== 'PEER_REVIEW' && publication.id === linkedPublication.id
-                        )
-                        .map((publication) => publication.childPublication) // get the ids of all direct child publications
-                });
+/**
+ * Sort an array of publications so that the parents/children (in list a) of a publication (in list b)
+ * appear close to it in the visualisation.
+ * Because of the way we get data from the API, both lists will consist of the same type:
+ * LinkedToPublication or LinkedFromPublication.
+ * @param a The list of publications to sort
+ * @param b The list of publications to sort them in relation to (these should be of the type immediately before
+ * or after those in "a")
+ * @returns a sorted list of publications
+ */
+const getOrderedLinkedPublications = (
+    a: Interfaces.LinkedPublication[],
+    b: Interfaces.LinkedPublication[]
+): Interfaces.LinkedPublication[] => {
+    const types = Config.values.publicationTypes;
+    // Confirm that the type of publications in list a immediately follows or precedes the type of publications in list b
+    const aFollowsB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) - 1));
+    const aPrecedesB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) + 1));
+    if (!(aFollowsB || aPrecedesB)) {
+        console.log('Type mismatch! Abandoning.');
+        return [];
+    } else {
+        const aSorted: Interfaces.LinkedPublication[] = [];
+        // For each publication in "b"
+        for (const bPub of b) {
+            const aPubs = sortPublicationsByPublicationDate(
+                // Pick the publications from "a" that are parents of the "b" publication...
+                aPrecedesB
+                    ? a.filter((aPub) => (aPub as Interfaces.LinkedToPublication).childPublication === bPub.id)
+                    : // Or children, if we're working the other way
+                      a.filter((aPub) => (aPub as Interfaces.LinkedFromPublication).parentPublication === bPub.id)
+            );
+            for (const aPub of aPubs) {
+                if (!aSorted.find((sortedAPub) => sortedAPub.id === aPub.id)) {
+                    aSorted.push(aPub);
+                }
             }
         }
+        return aSorted;
     }
-
-    // ignore publications below 'REAL_WORLD_APPLICATION'
-    if (publication.type !== 'REAL_WORLD_APPLICATION') {
-        // Loop through all child publications
-        for (const linkedPublication of linkedFrom) {
-            if (
-                linkedPublication.type === type &&
-                !publications.find((publication) => publication.id === linkedPublication.id)
-            ) {
-                publications.push({
-                    id: linkedPublication.id,
-                    title: linkedPublication.title,
-                    type: linkedPublication.type,
-                    createdBy: linkedPublication.createdBy,
-                    authorFirstName: linkedPublication.authorFirstName,
-                    authorLastName: linkedPublication.authorLastName,
-                    publishedDate: linkedPublication.publishedDate,
-                    authors: linkedPublication.authors,
-                    pointers: linkedFrom
-                        .filter(
-                            (publication) =>
-                                publication.type !== 'PEER_REVIEW' &&
-                                publication.parentPublication === linkedPublication.id
-                        )
-                        .map((publication) => publication.id) // get the ids of all direct child publications
-                });
-            }
-        }
-    }
-
-    return publications;
 };
 
 type VisualizationProps = {
@@ -242,6 +203,151 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
         []
     );
 
+    const boxEntries: {
+        [key in Types.PublicationType]?: BoxEntry[];
+    } = {};
+    if (data) {
+        // Order publications by type, neatly, so that chains are displayed without crossing over where possible.
+        const { publication: selectedPublication, linkedTo, linkedFrom } = data;
+        const publicationsByType: {
+            [key in Types.PublicationType]?: (
+                | Interfaces.LinkedToPublication
+                | Interfaces.LinkedFromPublication
+                | Interfaces.LinkedPublication
+            )[];
+        } = {};
+        // For the selected publication's type, we only need the selected publication.
+        publicationsByType[selectedPublication.type] = [selectedPublication];
+        // Process parents by type, proceeding away from the selected publication's type.
+        const orderedParents: {
+            [key in Types.PublicationType]?: Interfaces.LinkedToPublication[];
+        } = {};
+        let parentTypeIdx = filteredPublicationTypes.indexOf(selectedPublication.type) - 1;
+        // For each type, going backwards towards PROBLEM, starting with the one before the selected publication's type...
+        while (parentTypeIdx >= 0) {
+            const type = filteredPublicationTypes[parentTypeIdx];
+            const publicationsOfType = linkedTo.filter((linkedPublication) => linkedPublication.type === type);
+
+            // Sort parents.
+            // For the type immediately before the selected publication's type, just order parents by publication date, descending.
+            if (parentTypeIdx === filteredPublicationTypes.indexOf(selectedPublication.type) - 1) {
+                orderedParents[type] = sortPublicationsByPublicationDate(
+                    publicationsOfType
+                ) as Interfaces.LinkedToPublication[];
+            } else {
+                // For types further along the chain, use custom ordering.
+                const precedingType = filteredPublicationTypes[parentTypeIdx + 1];
+                const precedingTypePublicationsOrdered = orderedParents[precedingType];
+                if (precedingTypePublicationsOrdered !== undefined) {
+                    orderedParents[type] = getOrderedLinkedPublications(
+                        publicationsOfType,
+                        precedingTypePublicationsOrdered
+                    ) as Interfaces.LinkedToPublication[];
+                }
+            }
+            parentTypeIdx--;
+        }
+        Object.assign(publicationsByType, orderedParents);
+
+        const orderedChildren: {
+            [key in Types.PublicationType]?: Interfaces.LinkedFromPublication[];
+        } = {};
+        let childTypeIdx = filteredPublicationTypes.indexOf(selectedPublication.type) + 1;
+        // For each type, going forwards towards REAL_WORLD_APPLICATION, starting with the one after the selected publication's type...
+        while (childTypeIdx <= filteredPublicationTypes.indexOf('REAL_WORLD_APPLICATION')) {
+            const type = filteredPublicationTypes[childTypeIdx];
+            const publicationsOfType = linkedFrom.filter((linkedPublication) => linkedPublication.type === type);
+
+            // Sort child publications.
+            // For the type immediately after the selected publication's type, just order children by publication date, descending.
+            if (childTypeIdx === filteredPublicationTypes.indexOf(selectedPublication.type) + 1) {
+                orderedChildren[type] = publicationsOfType.sort(
+                    (a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
+                );
+            } else {
+                // For types further along the chain, order them to keep the visualisation as neat as we can.
+                // Pass the publications of the type we want to sort, and the (sorted) publications of the type before that.
+                const precedingType = filteredPublicationTypes[childTypeIdx - 1];
+                const precedingTypePublicationsOrdered = orderedChildren[precedingType];
+                if (precedingTypePublicationsOrdered !== undefined) {
+                    orderedChildren[type] = getOrderedLinkedPublications(
+                        publicationsOfType,
+                        precedingTypePublicationsOrdered
+                    ) as Interfaces.LinkedFromPublication[];
+                }
+            }
+            childTypeIdx++;
+        }
+        Object.assign(publicationsByType, orderedChildren);
+        // Set up the data we need to render a box for each publication.
+        for (const type of filteredPublicationTypes) {
+            const publicationsOfType = publicationsByType[type];
+            const boxEntriesOfType: BoxEntry[] = [];
+            if (publicationsOfType !== undefined) {
+                for (const publication of publicationsOfType) {
+                    // Get ids of children of this publication in the chain to which we will render a pointer arrow.
+                    const pointers =
+                        // This is the selected publication or its descendant, so get children from linkedFrom.
+                        type === selectedPublication.type ||
+                        filteredPublicationTypes.indexOf(type) >
+                            filteredPublicationTypes.indexOf(selectedPublication.type)
+                            ? [
+                                  ...new Set(
+                                      linkedFrom
+                                          .filter(
+                                              (child) =>
+                                                  child.type !== 'PEER_REVIEW' &&
+                                                  child.parentPublication === publication.id
+                                          )
+                                          .map((child) => child.id)
+                                  )
+                              ]
+                            : // This is a direct parent, so point only to the selected publication.
+                            filteredPublicationTypes.indexOf(type) ===
+                              filteredPublicationTypes.indexOf(selectedPublication.type) - 1
+                            ? [selectedPublication.id]
+                            : // This is an ancestor, so get children from linkedTo.
+                              [
+                                  ...new Set(
+                                      linkedTo
+                                          .filter(
+                                              (parent) => parent.type !== 'PEER_REVIEW' && parent.id === publication.id
+                                          )
+                                          .map((parent) => parent.childPublication)
+                                  )
+                              ];
+
+                    boxEntriesOfType.push({
+                        id: publication.id,
+                        title: publication.title,
+                        type: publication.type,
+                        createdBy: publication.createdBy,
+                        publishedDate: publication.publishedDate,
+                        authorFirstName: publication.authorFirstName,
+                        authorLastName: publication.authorLastName,
+                        authors: publication.authors,
+                        pointers
+                    });
+                }
+            }
+            boxEntries[type] = boxEntriesOfType;
+        }
+    }
+
+    const boxes = filteredPublicationTypes.map((type) => {
+        const boxEntriesOfType = boxEntries[type];
+        const boxesOfType = boxEntriesOfType
+            ? boxEntriesOfType.map((boxEntry) => (
+                  <Box isSelected={props.publicationId == boxEntry.id} key={boxEntry.id} {...boxEntry} />
+              ))
+            : [];
+        return (
+            <div key={type} className="space-y-4 p-1">
+                {boxesOfType}
+            </div>
+        );
+    });
+
     return (
         <section className="container mb-8 px-8 pt-8 lg:pt-16">
             <div className="overflow-hidden" ref={visualizationHeaderRef}>
@@ -260,20 +366,7 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     className="sm:scrollbar min-h-[16rem] overflow-x-auto overflow-y-hidden"
                     ref={visualizationWrapperRef}
                 >
-                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
-                        {data &&
-                            filteredPublicationTypes.map((type) => (
-                                <div key={type} className="space-y-4 p-1">
-                                    {getPublicationsByType(data, type).map((publication) => (
-                                        <Box
-                                            isSelected={props.publicationId == publication.id}
-                                            key={publication.id}
-                                            {...publication}
-                                        />
-                                    ))}
-                                </div>
-                            ))}
-                    </div>
+                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">{data && boxes}</div>
                 </div>
             </div>
         </section>
