@@ -85,27 +85,21 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     const publicationId = context.query.id as string;
     const step = (context.query.step as string) || Object.keys(steps)[0];
 
-    const promises: [
-        Promise<Interfaces.PublicationVersion | void>,
-        Promise<Interfaces.Reference[] | void>,
-        Promise<Interfaces.PublicationWithLinks | void>
-    ] = [
+    const promises: [Promise<Interfaces.PublicationVersion | void>, Promise<Interfaces.PublicationWithLinks | void>] = [
         api
             .get(`${Config.endpoints.publications}/${publicationId}/publication-versions/latest`, token)
             .then((res) => res.data)
             .catch((error) => console.log(error)),
-        api
-            .get(`${Config.endpoints.publicationVersions}/${publicationId}/references`, token)
-            .then((res) => res.data)
-            .catch((error) => console.log(error)),
+
         api
             .get(`${Config.endpoints.publications}/${publicationId}/links?direct=true`, token)
             .then((res) => res.data)
             .catch((error) => console.log(error))
     ];
 
-    const [publicationVersion, references = [], directLinks = { publication: null, linkedTo: [], linkedFrom: [] }] =
-        await Promise.all(promises);
+    const [publicationVersion, directLinks = { publication: null, linkedTo: [], linkedFrom: [] }] = await Promise.all(
+        promises
+    );
 
     if (!publicationVersion) {
         return {
@@ -121,6 +115,11 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             }
         };
     }
+
+    const references = await api
+        .get(`${Config.endpoints.publicationVersions}/${publicationVersion.id}/references`, token)
+        .then((res) => res.data)
+        .catch((error) => console.log(error));
 
     return {
         props: {

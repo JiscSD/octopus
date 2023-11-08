@@ -427,6 +427,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
+    topics?: string[];
 }
 
 export interface CreationStep {
@@ -505,6 +506,7 @@ export interface BaseTopic {
     id: string;
     title: string;
     createdAt: string;
+    draft?: boolean;
 }
 
 export interface Topic extends BaseTopic {

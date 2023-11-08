@@ -1,7 +1,9 @@
 import { Prisma } from '@prisma/client';
+import { createId } from '@paralleldrive/cuid2';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as publicationService from 'publication/service';
+import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
 
 export const getById = (id: string) =>
@@ -303,8 +305,8 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
         }
     });
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum) =>
-    client.prisma.publicationVersion.update({
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
+    const updatedVersion = await client.prisma.publicationVersion.update({
         where: {
             id
         },
@@ -321,6 +323,33 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
             })
         }
     });
+
+    if (status === 'LIVE') {
+        // update "draft" links
+        await client.prisma.links.updateMany({
+            where: {
+                publicationFrom: updatedVersion.versionOf,
+                draft: true
+            },
+            data: {
+                draft: false
+            }
+        });
+
+        if (updatedVersion.versionNumber > 1) {
+            // updated previous version "isLatestLiveVersion"
+            await client.prisma.publicationVersion.updateMany({
+                where: {
+                    versionOf: updatedVersion.versionOf,
+                    versionNumber: updatedVersion.versionNumber - 1
+                },
+                data: {
+                    isLatestLiveVersion: false
+                }
+            });
+        }
+    }
+};
 
 export const validateConflictOfInterest = (version: I.PublicationVersion) => {
     if (version.conflictOfInterestStatus) {
@@ -470,38 +499,100 @@ export const deleteVersion = async (publicationVersion: I.PublicationVersion) =>
     }
 };
 
-// Overwrite existing topics with those whose IDs were passed.
-export const updateTopics = async (id: string, topics: string[]) => {
-    // Format topics in a way that prisma can understand.
-    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
+export const create = async (previousVersion: I.PublicationVersion, user: I.User) => {
+    const newVersionNumber = previousVersion.versionNumber + 1;
+    const previousVersionReferences = await referenceService.getAllByPublicationVersion(previousVersion.id);
+    const previousVersionCoAuthors = previousVersion.coAuthors.map((coAuthor, index) =>
+        coAuthor.linkedUser === user.id
+            ? {
+                  linkedUser: user.id,
+                  email: user.email ?? '',
+                  confirmedCoAuthor: true,
+                  approvalRequested: false,
+                  affiliations: coAuthor.affiliations,
+                  isIndependent: coAuthor.isIndependent,
+                  position: index
+              }
+            : {
+                  email: coAuthor.email,
+                  position: index
+              }
+    );
 
-    const updateTopics = await client.prisma.publicationVersion.update({
-        where: {
-            id
-        },
+    // create new version based on the previous one
+    const newPublicationVersion = await client.prisma.publicationVersion.create({
         data: {
-            topics: topicsUpdateInput
-        },
-        include: {
-            topics: true
-        }
-    });
-
-    return updateTopics.topics;
-};
-
-export const getTopics = (id: string) =>
-    client.prisma.topic.findMany({
-        where: {
-            publicationVersions: {
-                some: {
-                    id
+            id: `${previousVersion.versionOf}-v${newVersionNumber}`,
+            versionOf: previousVersion.versionOf,
+            versionNumber: newVersionNumber,
+            title: previousVersion.title,
+            licence: previousVersion.licence,
+            description: previousVersion.description,
+            keywords: previousVersion.keywords,
+            content: previousVersion.content,
+            language: previousVersion.language,
+            ethicalStatement: previousVersion.ethicalStatement,
+            ethicalStatementFreeText: previousVersion.ethicalStatementFreeText,
+            dataPermissionsStatement: previousVersion.dataPermissionsStatement,
+            dataPermissionsStatementProvidedBy: previousVersion.dataPermissionsStatementProvidedBy,
+            dataAccessStatement: previousVersion.dataAccessStatement,
+            selfDeclaration: previousVersion.selfDeclaration,
+            fundersStatement: previousVersion.fundersStatement,
+            conflictOfInterestStatus: previousVersion.conflictOfInterestStatus,
+            conflictOfInterestText: previousVersion.conflictOfInterestText,
+            createdBy: user.id,
+            publicationStatus: {
+                create: {
+                    status: 'DRAFT'
+                }
+            },
+            coAuthors: {
+                // add co authors from the previous version
+                createMany: {
+                    data: previousVersionCoAuthors
+                }
+            },
+            // add topics from previous version
+            topics: previousVersion.topics.length
+                ? {
+                      connect: previousVersion.topics.map((topic) => ({ id: topic.id }))
+                  }
+                : undefined,
+            // add references from the previous version
+            References: {
+                createMany: {
+                    data: previousVersionReferences.map((reference) => ({
+                        id: createId(),
+                        text: reference.text,
+                        type: reference.type,
+                        location: reference.location
+                    }))
+                }
+            },
+            // add funders from previous version
+            funders: {
+                createMany: {
+                    data: previousVersion.funders.map((funder) => ({
+                        ror: funder.ror,
+                        city: funder.city,
+                        country: funder.country,
+                        link: funder.link,
+                        name: funder.name
+                    }))
                 }
             }
-        },
-        select: {
-            id: true,
-            createdAt: true,
-            title: true
         }
     });
+
+    // change previous version "isLatestVersion" to false
+    await client.prisma.publicationVersion.update({
+        where: {
+            id: previousVersion.id
+        },
+        data: {
+            isLatestVersion: false
+        }
+    });
+
+    return newPublicationVersion;
+};

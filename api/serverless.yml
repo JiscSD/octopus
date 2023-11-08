@@ -186,6 +186,13 @@ functions:
                   cors: true
 
     # Publication Versions
+    createPublicationVersion:
+        handler: src/components/publicationVersion/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions
+                  method: POST
+                  cors: true
     getPublicationVersion:
         handler: src/components/publicationVersion/routes.get
         events:

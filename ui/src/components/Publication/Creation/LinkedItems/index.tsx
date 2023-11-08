@@ -6,33 +6,34 @@ import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
 import * as Config from '@config';
+import axios from 'axios';
 
 /**
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
-    const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo } = Stores.usePublicationCreationStore(
-        (state) => ({
+    const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo, error, setError } =
+        Stores.usePublicationCreationStore((state) => ({
             publicationVersionId: state.publicationVersion.id,
             topics: state.publicationVersion.topics,
             updateTopics: state.updateTopics,
             linkedTo: state.linkedTo,
-            updateLinkedTo: state.updateLinkedTo
-        })
-    );
+            updateLinkedTo: state.updateLinkedTo,
+            error: state.error,
+            setError: state.setError
+        }));
 
     const user = Stores.useAuthStore((state) => state.user);
 
     const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
 
-    const [error, setError] = React.useState<string | undefined>();
     const [loading, setLoading] = React.useState<boolean>(false);
 
     const deletePublicationLink = useCallback(
         async (linkId: string) => {
-            setError(undefined);
+            setError(null);
             if (user) {
                 try {
                     await api.destroy(`/links/${linkId}`, user.token);
@@ -44,12 +45,12 @@ const Links: React.FC = (): React.ReactElement => {
                 }
             }
         },
-        [linkedTo, updateLinkedTo, user]
+        [linkedTo, setError, updateLinkedTo, user]
     );
 
     const deleteTopicLink = useCallback(
         async (topicId: string) => {
-            setError(undefined);
+            setError(null);
 
             if (user) {
                 try {
@@ -65,11 +66,13 @@ const Links: React.FC = (): React.ReactElement => {
                     // update topics in the UI
                     updateTopics(topics.filter((topic) => topic.id !== topicId));
                 } catch (err) {
-                    setError('There was a problem removing the topic.');
+                    setError(
+                        axios.isAxiosError(err) ? err.response?.data.message : 'There was a problem removing the topic.'
+                    );
                 }
             }
         },
-        [publicationVersionId, topics, updateTopics, user]
+        [publicationVersionId, setError, topics, updateTopics, user]
     );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
@@ -148,16 +151,14 @@ const Links: React.FC = (): React.ReactElement => {
                 </div>
             </div>
 
-            {error && !loading && <Components.Alert severity="ERROR" title={error} allowDismiss />}
-
-            {!error && !!linkedTo.length && (
+            {!!linkedTo.length && (
                 <Components.LinkedItemTable
                     deleteLink={deletePublicationLink}
                     entities={linkedTo}
                     entityType="PUBLICATION"
                 />
             )}
-            {!error && !!topics?.length && (
+            {!!topics?.length && (
                 <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
             )}
             {!error && !linkedTo.length && !topics?.length && (

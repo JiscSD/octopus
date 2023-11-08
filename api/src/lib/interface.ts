@@ -324,6 +324,10 @@ export interface DeletePublicationVersionPathParams {
     id: string;
 }
 
+export interface CreatePublicationVersionPathParams {
+    id: string;
+}
+
 export interface DeleteLinkPathParams {
     id: string;
 }

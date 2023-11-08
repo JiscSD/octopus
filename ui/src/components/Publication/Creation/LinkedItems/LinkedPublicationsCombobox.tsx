@@ -10,7 +10,7 @@ import * as api from '@api';
 import * as Config from '@config';
 
 type LinkedPublicationsComboboxProps = {
-    setError: (error: string | undefined) => void;
+    setError: (error: string | null) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
 };
@@ -55,7 +55,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     }
 
     const createLink = async () => {
-        props.setError(undefined);
+        props.setError(null);
         props.setLoading(true);
         if (selectedPublicationVersion && user) {
             try {

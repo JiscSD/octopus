@@ -10,7 +10,7 @@ import * as api from '@api';
 import * as Config from '@config';
 
 type LinkedTopicsComboboxProps = {
-    setError: (error: string | undefined) => void;
+    setError: (error: string | null) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
     topics: Interfaces.BaseTopic[];
@@ -52,7 +52,7 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
     }
 
     const addTopic = async () => {
-        props.setError(undefined);
+        props.setError(null);
         props.setLoading(true);
         if (selectedTopic && user) {
             try {

@@ -1,5 +1,5 @@
-import * as s3 from 'lib/s3';
 import chromium from '@sparticuz/chromium';
+import * as s3 from 'lib/s3';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
@@ -88,6 +88,9 @@ export const get = async (id: string) => {
                             createdAt: true
                         }
                     }
+                },
+                orderBy: {
+                    versionNumber: 'asc'
                 }
             },
             publicationFlags: {
@@ -227,6 +230,9 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
     return publication;
 };
 
+export const deleteOpenSearchRecord = (publicationId: string) =>
+    client.search.delete({ index: 'publications', id: publicationId });
+
 export const getOpenSearchPublications = async (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy
         ? {
@@ -318,6 +324,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
             // Create first version when publication is created
             versions: {
                 create: {
+                    id: doiResponse.data.attributes.suffix + '-v1',
                     versionNumber: 1,
                     title: e.title,
                     licence: e.licence,
@@ -390,7 +397,10 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
-export const getLinksForPublication = async (id: string): Promise<I.PublicationWithLinks> => {
+export const getLinksForPublication = async (
+    id: string,
+    includeDraftVersion = false
+): Promise<I.PublicationWithLinks> => {
     const publication = await get(id);
 
     if (!publication) {
@@ -401,9 +411,11 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
         };
     }
 
-    const latestLiveVersion = publication?.versions.find((version) => version.isLatestLiveVersion);
+    const latestVersion = publication?.versions.find((version) =>
+        includeDraftVersion ? version.isLatestVersion : version.isLatestLiveVersion
+    );
 
-    if (!latestLiveVersion) {
+    if (!latestVersion) {
         return {
             publication: null,
             linkedFrom: [],
@@ -520,7 +532,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestVersion" = TRUE
+              AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
@@ -554,7 +566,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestVersion" = TRUE
+              AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
@@ -625,13 +637,13 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             id: publication.id,
             type: publication.type,
             doi: publication.doi,
-            title: latestLiveVersion.title || '',
-            createdBy: latestLiveVersion.createdBy,
-            currentStatus: latestLiveVersion.currentStatus,
-            publishedDate: latestLiveVersion.publishedDate?.toISOString() || '',
-            authorFirstName: latestLiveVersion.user.firstName,
-            authorLastName: latestLiveVersion.user.lastName || '',
-            authors: latestLiveVersion.coAuthors.map((author) => ({
+            title: latestVersion.title || '',
+            createdBy: latestVersion.createdBy,
+            currentStatus: latestVersion.currentStatus,
+            publishedDate: latestVersion.publishedDate?.toISOString() || '',
+            authorFirstName: latestVersion.user.firstName,
+            authorLastName: latestVersion.user.lastName || '',
+            authors: latestVersion.coAuthors.map((author) => ({
                 id: author.id,
                 linkedUser: author.linkedUser,
                 user: {
@@ -648,9 +660,9 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
 export const getDirectLinksForPublication = async (
     id: string,
-    includeDraft = false
+    includeDraftVersion = false
 ): Promise<I.PublicationWithLinks> => {
-    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraft
+    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraftVersion
         ? { isLatestVersion: true }
         : { isLatestLiveVersion: true };
 
@@ -674,6 +686,7 @@ export const getDirectLinksForPublication = async (
             },
             linkedTo: {
                 where: {
+                    draft: includeDraftVersion ? undefined : includeDraftVersion,
                     publicationToRef: {
                         versions: {
                             some: {
@@ -691,6 +704,9 @@ export const getDirectLinksForPublication = async (
                             doi: true,
                             type: true,
                             versions: {
+                                where: {
+                                    isLatestLiveVersion: true
+                                },
                                 include: {
                                     user: true
                                 }
@@ -701,6 +717,7 @@ export const getDirectLinksForPublication = async (
             },
             linkedFrom: {
                 where: {
+                    draft: includeDraftVersion ? undefined : includeDraftVersion,
                     publicationFromRef: {
                         versions: {
                             some: {
@@ -718,6 +735,9 @@ export const getDirectLinksForPublication = async (
                             doi: true,
                             type: true,
                             versions: {
+                                where: {
+                                    isLatestLiveVersion: true
+                                },
                                 include: {
                                     user: true
                                 }

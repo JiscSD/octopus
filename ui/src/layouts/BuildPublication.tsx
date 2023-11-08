@@ -191,6 +191,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 fundersStatement: publicationVersion.fundersStatement
             };
 
+            if (publicationVersion.publication.type === 'PROBLEM') {
+                body.topics = publicationVersion.topics.map((topic) => topic.id);
+            }
+
             if (publicationVersion.publication.type === 'DATA') {
                 body.ethicalStatement = publicationVersion.ethicalStatement;
                 body.ethicalStatementFreeText =
