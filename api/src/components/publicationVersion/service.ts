@@ -505,8 +505,8 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
     const previousVersionCoAuthors = previousVersion.coAuthors.map((coAuthor, index) =>
         coAuthor.linkedUser === user.id
             ? {
-                  linkedUser: user.id,
                   email: user.email ?? '',
+                  linkedUser: user.id,
                   confirmedCoAuthor: true,
                   approvalRequested: false,
                   affiliations: coAuthor.affiliations,
@@ -518,6 +518,19 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                   position: index
               }
     );
+
+    if (!previousVersionCoAuthors.find((coAuthor) => coAuthor.linkedUser === user.id)) {
+        // enforce adding the new corresponding author to coAuthors list - mainly used for seed data eg. tests..
+        previousVersionCoAuthors.unshift({
+            email: user.email ?? '',
+            linkedUser: user.id,
+            confirmedCoAuthor: true,
+            approvalRequested: false,
+            affiliations: [],
+            isIndependent: false,
+            position: 0
+        });
+    }
 
     // create new version based on the previous one
     const newPublicationVersion = await client.prisma.publicationVersion.create({
@@ -579,6 +592,78 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                         link: funder.link,
                         name: funder.name
                     }))
+                }
+            }
+        },
+        include: {
+            publication: {
+                select: {
+                    id: true,
+                    type: true,
+                    doi: true,
+                    url_slug: true
+                }
+            },
+            publicationStatus: {
+                select: {
+                    status: true,
+                    createdAt: true,
+                    id: true
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            },
+            funders: {
+                select: {
+                    id: true,
+                    city: true,
+                    country: true,
+                    name: true,
+                    link: true,
+                    ror: true
+                }
+            },
+            coAuthors: {
+                select: {
+                    id: true,
+                    email: true,
+                    linkedUser: true,
+                    publicationVersionId: true,
+                    confirmedCoAuthor: true,
+                    approvalRequested: true,
+                    createdAt: true,
+                    reminderDate: true,
+                    isIndependent: true,
+                    affiliations: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            orcid: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    orcid: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
                 }
             }
         }
