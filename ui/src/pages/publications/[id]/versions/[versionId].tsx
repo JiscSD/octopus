@@ -190,7 +190,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const isBookmarkButtonVisible = useMemo(() => {
-        if (!user || !publicationVersion) {
+        if (!user || !publicationVersion || (publicationVersion && publicationVersion.currentStatus !== 'LIVE')) {
             return false;
         } else {
             return true;
