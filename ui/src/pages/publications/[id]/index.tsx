@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -58,7 +58,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch data concurrently
     const promises: [
-        Promise<Interfaces.PublicationVersion | void>,
+        Promise<
+            | { publicationVersion: Interfaces.PublicationVersion; versionRequestError: null }
+            | { publicationVersion: null; versionRequestError: { status: number; message: string } }
+        >,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
         Promise<Interfaces.Flag[] | void>,
@@ -66,8 +69,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token)
-            .then((res) => res.data)
-            .catch((error) => console.log(error)),
+            .then((res) => ({ publicationVersion: res.data, versionRequestError: null }))
+            .catch((error) => {
+                console.log(error);
+                const status = error.response.status;
+                const message = error.response.data.message;
+
+                return { publicationVersion: null, versionRequestError: { status, message } };
+            }),
         api
             .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
             .then((res) => res.data)
@@ -87,31 +96,47 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     ];
 
     const [
-        publicationVersion,
+        { publicationVersion, versionRequestError },
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
         topics = []
     ] = await Promise.all(promises);
 
-    if (!publicationVersion) {
+    if (versionRequestError) {
+        const status = versionRequestError.status;
+        if (status === 404 || (token && status === 403)) {
+            return {
+                notFound: true
+            };
+        } else if (status === 403) {
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(context.resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+    }
+
+    if (publicationVersion) {
+        return {
+            props: {
+                publicationVersion,
+                userToken: token || '',
+                bookmarkId: bookmarks.length ? bookmarks[0].id : null,
+                publicationId: publicationVersion.publication.id,
+                protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
+                directLinks,
+                flags,
+                topics
+            }
+        };
+    } else {
         return {
             notFound: true
         };
     }
-
-    return {
-        props: {
-            publicationVersion,
-            userToken: token || '',
-            bookmarkId: bookmarks.length ? bookmarks[0].id : null,
-            publicationId: publicationVersion.publication.id,
-            protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
-            directLinks,
-            flags,
-            topics
-        }
-    };
 };
 
 type Props = {
