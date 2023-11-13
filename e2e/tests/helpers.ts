@@ -189,7 +189,7 @@ export const clickFirstPublication = async (page: Page): Promise<void> => {
     await firstPublication.click();
 
     // expect URL to contain publication path
-    await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}`);
+    await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}/versions/latest`);
 };
 
 export const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {
