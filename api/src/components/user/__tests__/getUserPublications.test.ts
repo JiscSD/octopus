@@ -12,14 +12,14 @@ describe('Get a given users publication versions', () => {
             .query({ apiKey: 123456789, offset: 0, limit: 100 });
 
         expect(versions.status).toEqual(200);
-        expect(versions.body.results.length).toEqual(20);
+        expect(versions.body.results.length).toEqual(21);
     });
 
     test('Unauthenticated user can only view live versions', async () => {
         const versions = await testUtils.agent.get('/users/test-user-1/publication-versions');
 
         expect(versions.status).toEqual(200);
-        expect(versions.body.results.length).toEqual(8);
+        expect(versions.body.results.length).toEqual(9);
     });
 
     test('An authenticated user can only view live versions of another user', async () => {
@@ -28,7 +28,7 @@ describe('Get a given users publication versions', () => {
             .query({ apiKey: 987654321 });
 
         expect(versions.status).toEqual(200);
-        expect(versions.body.results.length).toEqual(8);
+        expect(versions.body.results.length).toEqual(9);
     });
 
     test('Error message returned for a user that does not exist', async () => {
