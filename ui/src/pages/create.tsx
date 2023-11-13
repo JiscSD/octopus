@@ -41,8 +41,10 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
     const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');
     const [confirmed, setConfirmed] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
+    const [createPublicationLoading, setCreatePublicationLoading] = React.useState(false);
 
     const createPublication = async () => {
+        setCreatePublicationLoading(true);
         setError(null);
 
         try {
@@ -74,6 +76,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
+            setCreatePublicationLoading(false);
         }
     };
 
@@ -213,7 +216,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     </label>
                     <Components.Button
                         title="Create this publication"
-                        disabled={!publicationType || !title.length || !confirmed}
+                        disabled={!publicationType || !title.length || !confirmed || createPublicationLoading}
                         onClick={createPublication}
                         endIcon={
                             <OutlineIcons.ArrowSmallRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
