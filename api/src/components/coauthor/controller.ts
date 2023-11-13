@@ -269,18 +269,16 @@ export const link = async (
             });
         }
 
-        // check if the user email is the same as the one the invitation has been sent to
-        if (event.user.email !== coAuthorByEmail.email) {
-            const isCoAuthor = version.coAuthors.some((coAuthor) => coAuthor.email === event.user?.email); // check that this user is a coAuthor
-
-            return response.json(isCoAuthor ? 403 : 404, {
-                message: isCoAuthor
-                    ? 'Your email address does not match the one to which the invitation has been sent.'
-                    : 'You are not currently listed as an author on this draft'
-            });
-        }
-
         await coAuthorService.linkUser(event.user.id, version.id, event.body.email, event.body.code);
+
+        // The email of the linked user may not match the email the invitation was sent to
+        // (e.g. user manages their orcid account with a different email to their work email).
+        // In this case, we need to update the coauthor's email field because it becomes outdated.
+        if (event.user.email !== coAuthorByEmail.email) {
+            // We already check that the logged in user's email is not already a coauthor on this version,
+            // so this is safe.
+            await coAuthorService.update(coAuthorByEmail.id, { email: event.user.email });
+        }
 
         return response.json(200, 'Linked user account');
     } catch (err) {

@@ -1997,7 +1997,7 @@ test.describe('Publication flow + co-authors', () => {
             page.waitForResponse(
                 (response) =>
                     response.request().method() === 'GET' &&
-                    response.url().includes(`/publication-versions/latest`) &&
+                    response.url().includes(`/publication-versions/`) &&
                     response.ok()
             )
         ]);
