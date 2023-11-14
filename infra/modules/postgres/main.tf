@@ -14,11 +14,11 @@ resource "aws_security_group" "database_security_group" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Access from VPN"
+    description = "Access from VPC"
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   tags = {
