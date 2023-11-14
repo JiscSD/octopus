@@ -183,13 +183,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isBookmarkButtonVisible = useMemo(() => {
-        if (user && publicationVersion?.currentStatus === 'LIVE') {
-            return false;
-        } else {
-            return true;
-        }
-    }, [publicationVersion, user]);
+    const isBookmarkButtonVisible = useMemo(
+        () => user && publicationVersion?.currentStatus === 'LIVE',
+        [publicationVersion, user]
+    );
 
     const list = [];
 
