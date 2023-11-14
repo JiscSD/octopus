@@ -3,13 +3,15 @@ locals {
   environment  = terraform.workspace
 }
 
+data "aws_ssm_parameter" "vpc_cidr_block" {
+  name = "vpc_cidr_block_${local.environment}_${local.project_name}"
+}
+
 module "network" {
-  source          = "../modules/network"
-  cidr_block      = "10.0.0.0/16"
-  public_subnets  = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.100.0/24", "10.0.101.0/24", "10.0.102.0/24"]
-  environment     = local.environment
-  project_name    = local.project_name
+  source       = "../modules/network"
+  cidr_block   = data.aws_ssm_parameter.vpc_cidr_block.value
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "bastion" {
@@ -24,6 +26,7 @@ module "postgres" {
   private_subnet_ids                    = module.network.private_subnet_ids
   environment                           = local.environment
   vpc_id                                = module.network.vpc_id
+  vpc_cidr_block                        = data.aws_ssm_parameter.vpc_cidr_block.value
   allocated_storage                     = var.rds_allocated_storage
   max_allocated_storage                 = var.rds_max_allocated_storage
   instance                              = var.rds_instance
@@ -39,6 +42,7 @@ module "elasticsearch" {
   private_subnet_ids = module.network.private_subnet_ids
   environment        = local.environment
   vpc_id             = module.network.vpc_id
+  vpc_cidr_block     = data.aws_ssm_parameter.vpc_cidr_block.value
   instance_size      = var.elasticsearch_instance_size
 }
 

@@ -1,5 +1,18 @@
 data "aws_availability_zones" "available" {}
 
+data "aws_ssm_parameter" "public_subnets" {
+  name = "vpc_public_subnets_${var.environment}_${var.project_name}"
+}
+
+data "aws_ssm_parameter" "private_subnets" {
+  name = "vpc_private_subnets_${var.environment}_${var.project_name}"
+}
+
+locals {
+  public_subnets_map  = jsondecode(data.aws_ssm_parameter.public_subnets.value)
+  private_subnets_map = jsondecode(data.aws_ssm_parameter.private_subnets.value)
+}
+
 resource "aws_vpc" "main" {
   cidr_block           = var.cidr_block
   enable_dns_support   = true
@@ -24,7 +37,7 @@ resource "aws_internet_gateway" "igw" {
 # AZ 1
 resource "aws_subnet" "public_az1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[0]
+  cidr_block        = local.public_subnets_map[0]
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -33,7 +46,7 @@ resource "aws_subnet" "public_az1" {
 }
 resource "aws_subnet" "private_az1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[0]
+  cidr_block        = local.private_subnets_map[0]
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -44,7 +57,7 @@ resource "aws_subnet" "private_az1" {
 # AZ 2
 resource "aws_subnet" "public_az2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[1]
+  cidr_block        = local.public_subnets_map[1]
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -53,7 +66,7 @@ resource "aws_subnet" "public_az2" {
 }
 resource "aws_subnet" "private_az2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[1]
+  cidr_block        = local.private_subnets_map[1]
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -64,7 +77,7 @@ resource "aws_subnet" "private_az2" {
 # AZ 3
 resource "aws_subnet" "public_az3" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[2]
+  cidr_block        = local.public_subnets_map[2]
   availability_zone = data.aws_availability_zones.available.names[2]
 
   tags = {
@@ -73,7 +86,7 @@ resource "aws_subnet" "public_az3" {
 }
 resource "aws_subnet" "private_az3" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[2]
+  cidr_block        = local.private_subnets_map[2]
   availability_zone = data.aws_availability_zones.available.names[2]
 
   tags = {
