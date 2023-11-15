@@ -104,36 +104,65 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
             }
         },
         versions: {
-            create: {
-                id: 'publication-problem-live-2-v1',
-                doi: '10.82259/cty5-2g03',
-                versionNumber: 1,
-                title: 'Publication PROBLEM-LIVE 2',
-                content: 'Publication PROBLEM-LIVE 2',
-                currentStatus: 'LIVE',
-                isLatestLiveVersion: true,
-                publishedDate: '2022-01-22T15:51:42.523Z',
-                user: { connect: { id: 'test-user-1' } },
-                publicationStatus: {
-                    create: [
-                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
-                        { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
-                    ]
+            create: [
+                {
+                    id: 'publication-problem-live-2-v1',
+                    doi: '10.82259/cty5-2g03',
+                    versionNumber: 1,
+                    title: 'Publication PROBLEM-LIVE 2',
+                    content: 'Publication PROBLEM-LIVE 2',
+                    currentStatus: 'LIVE',
+                    isLatestLiveVersion: true,
+                    isLatestVersion: false,
+                    publishedDate: '2022-01-22T15:51:42.523Z',
+                    user: { connect: { id: 'test-user-1' } },
+                    publicationStatus: {
+                        create: [
+                            { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                            { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
+                        ]
+                    },
+                    coAuthors: {
+                        create: [
+                            {
+                                email: 'test-user-1@jisc.ac.uk',
+                                code: 'test-code-user-1',
+                                confirmedCoAuthor: true,
+                                isIndependent: true,
+                                linkedUser: 'test-user-1'
+                            }
+                        ]
+                    },
+                    conflictOfInterestStatus: false
                 },
-                coAuthors: {
-                    create: [
-                        {
-                            id: 'coauthor-test-user-1-problem-live-2',
-                            email: 'test-user-1@jisc.ac.uk',
-                            code: 'test-code-user-1',
-                            confirmedCoAuthor: true,
-                            isIndependent: true,
-                            linkedUser: 'test-user-1'
-                        }
-                    ]
-                },
-                conflictOfInterestStatus: false
-            }
+                {
+                    id: 'publication-problem-live-2-v2',
+                    doi: '10.82259/cty5-2g03',
+                    versionNumber: 2,
+                    title: 'Publication PROBLEM-LIVE 2',
+                    content: 'Publication PROBLEM-LIVE 2',
+                    currentStatus: 'DRAFT',
+                    isLatestLiveVersion: false,
+                    isLatestVersion: true,
+                    publishedDate: null,
+                    user: { connect: { id: 'test-user-1' } },
+                    publicationStatus: {
+                        create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }]
+                    },
+                    coAuthors: {
+                        create: [
+                            {
+                                email: 'test-user-1@jisc.ac.uk',
+                                code: 'test-code-user-1',
+                                confirmedCoAuthor: true,
+                                isIndependent: true,
+                                linkedUser: 'test-user-1'
+                            }
+                        ]
+                    },
+                    conflictOfInterestStatus: false
+                }
+            ]
         }
     },
     {

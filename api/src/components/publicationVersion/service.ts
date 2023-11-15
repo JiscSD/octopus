@@ -337,7 +337,7 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
         });
 
         if (updatedVersion.versionNumber > 1) {
-            // updated previous version "isLatestLiveVersion"
+            // update previous version "isLatestLiveVersion"
             await client.prisma.publicationVersion.updateMany({
                 where: {
                     versionOf: updatedVersion.versionOf,

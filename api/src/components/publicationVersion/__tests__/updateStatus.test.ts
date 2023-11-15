@@ -259,20 +259,9 @@ describe('Update publication version status', () => {
         // seed OpenSearch records first
         await testUtils.openSearchSeed();
 
-        // create a new version
-        const newPublicationVersion = await testUtils.agent
-            .post('/publications/publication-problem-live-2/publication-versions')
-            .query({
-                apiKey: '123456789'
-            });
-
-        expect(newPublicationVersion.status).toEqual(201);
-        expect(newPublicationVersion.body.currentStatus).toEqual('DRAFT');
-        expect(newPublicationVersion.body.doi).toEqual(null); // DOI is only generated when the new version goes LIVE
-
         // publish the newest created version
         const publishNewVersion = await testUtils.agent
-            .put(`/publication-versions/${newPublicationVersion.body.id}/status/LIVE`)
+            .put(`/publication-versions/publication-problem-live-2-v2/status/LIVE`)
             .query({
                 apiKey: '123456789'
             });
@@ -285,6 +274,7 @@ describe('Update publication version status', () => {
         );
 
         expect(newestPublishedVersion.status).toEqual(200);
+        expect(newestPublishedVersion.body.id).toEqual('publication-problem-live-2-v2');
         expect(newestPublishedVersion.body.currentStatus).toEqual('LIVE');
         expect(newestPublishedVersion.body.doi).not.toEqual(null); // the new version now has a DOI generated
         expect(typeof newestPublishedVersion.body.doi).toBe('string');
