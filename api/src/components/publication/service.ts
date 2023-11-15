@@ -397,6 +397,54 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
     return flag;
 };
 
+const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) => {
+    return publications.sort((a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf());
+};
+
+/**
+ * Sort an array of publications so that the parents/children (in list a) of a publication (in list b)
+ * appear close to it in the visualisation.
+ * Because of the way we get data from the API, both lists will consist of the same type:
+ * LinkedToPublication or LinkedFromPublication.
+ * @param a The list of publications to sort
+ * @param b The list of publications to sort them in relation to (these should be of the type immediately before
+ * or after those in "a")
+ * @returns a sorted list of publications
+ */
+const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPublication[]): I.LinkedPublication[] => {
+    const types = Helpers.octopusInformation.publications;
+    // Confirm that the type of publications in list a immediately follows or precedes the type of publications in list b
+    const aFollowsB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) - 1));
+    const aPrecedesB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) + 1));
+
+    if (!(aFollowsB || aPrecedesB)) {
+        console.log('Type mismatch! Abandoning.');
+
+        return [];
+    } else {
+        const aSorted: I.LinkedPublication[] = [];
+
+        // For each publication in "b"
+        for (const bPub of b) {
+            const aByPublicationDate = sortPublicationsByPublicationDate(
+                // Pick the publications from "a" that are parents of the "b" publication...
+                aPrecedesB
+                    ? a.filter((aPub) => (aPub as I.LinkedToPublication).childPublication === bPub.id)
+                    : // Or children, if we're working the other way
+                      a.filter((aPub) => (aPub as I.LinkedFromPublication).parentPublication === bPub.id)
+            );
+
+            for (const aPub of aByPublicationDate) {
+                if (!aSorted.find((sortedAPub) => sortedAPub.id === aPub.id)) {
+                    aSorted.push(aPub);
+                }
+            }
+        }
+
+        return aSorted;
+    }
+};
+
 export const getLinksForPublication = async (
     id: string,
     includeDraftVersion = false
@@ -504,7 +552,7 @@ export const getLinksForPublication = async (
               ON "pto_version"."createdBy" = "pto_user"."id"
         )
         
-        SELECT * FROM to_left
+        SELECT DISTINCT * FROM to_left
         WHERE "type" != "childPublicationType"
             AND CAST("type" AS text) != ${publication?.type}
             AND "currentStatus" = 'LIVE';
@@ -576,7 +624,7 @@ export const getLinksForPublication = async (
 
               WHERE "pto"."type" != 'PROBLEM'
         )
-        SELECT *
+        SELECT DISTINCT *
           FROM to_right
          WHERE "type" != "parentPublicationType"
            AND "type" != 'PROBLEM'
@@ -632,6 +680,78 @@ export const getLinksForPublication = async (
         });
     });
 
+    // Sorting - this is a custom order to make the visualisation neater.
+    // Process parents by type, proceeding away from the selected publication's type.
+    const filteredPublicationTypes = Helpers.octopusInformation.publications.filter((type) => type !== 'PEER_REVIEW');
+    const orderedParents: I.LinkedToPublication[] = [];
+    let parentTypeIdx = filteredPublicationTypes.indexOf(publication.type) - 1;
+
+    // For each type, going backwards towards PROBLEM, starting with the one before the selected publication's type...
+    while (parentTypeIdx >= 0) {
+        const type = filteredPublicationTypes[parentTypeIdx];
+        const publicationsOfType = linkedTo.filter((linkedPublication) => linkedPublication.type === type);
+
+        // Sort parents.
+        // For the type immediately before the selected publication's type, just order parents by publication date, descending.
+        if (parentTypeIdx === filteredPublicationTypes.indexOf(publication.type) - 1) {
+            orderedParents.push(...(sortPublicationsByPublicationDate(publicationsOfType) as I.LinkedToPublication[]));
+        } else {
+            // For types further along the chain, use custom ordering.
+            const precedingType = filteredPublicationTypes[parentTypeIdx + 1];
+            const precedingTypePublicationsOrdered = orderedParents.filter(
+                (orderedParents) => orderedParents.type === precedingType
+            );
+
+            if (precedingTypePublicationsOrdered !== undefined) {
+                orderedParents.push(
+                    ...(getOrderedLinkedPublications(
+                        publicationsOfType,
+                        precedingTypePublicationsOrdered
+                    ) as I.LinkedToPublication[])
+                );
+            }
+        }
+
+        parentTypeIdx--;
+    }
+
+    const orderedChildren: I.LinkedFromPublication[] = [];
+    let childTypeIdx = filteredPublicationTypes.indexOf(publication.type) + 1;
+
+    // For each type, going forwards towards REAL_WORLD_APPLICATION, starting with the one after the selected publication's type...
+    while (childTypeIdx <= filteredPublicationTypes.indexOf('REAL_WORLD_APPLICATION')) {
+        const type = filteredPublicationTypes[childTypeIdx];
+        const publicationsOfType = linkedFrom.filter((linkedPublication) => linkedPublication.type === type);
+
+        // Sort child publications.
+        // For the type immediately after the selected publication's type, just order children by publication date, descending.
+        if (childTypeIdx === filteredPublicationTypes.indexOf(publication.type) + 1) {
+            orderedChildren.push(
+                ...publicationsOfType.sort(
+                    (a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
+                )
+            );
+        } else {
+            // For types further along the chain, order them to keep the visualisation as neat as we can.
+            // Pass the publications of the type we want to sort, and the (sorted) publications of the type before that.
+            const precedingType = filteredPublicationTypes[childTypeIdx - 1];
+            const precedingTypePublicationsOrdered = orderedChildren.filter(
+                (orderedChild) => orderedChild.type === precedingType
+            );
+
+            if (precedingTypePublicationsOrdered !== undefined) {
+                orderedChildren.push(
+                    ...(getOrderedLinkedPublications(
+                        publicationsOfType,
+                        precedingTypePublicationsOrdered
+                    ) as I.LinkedFromPublication[])
+                );
+            }
+        }
+
+        childTypeIdx++;
+    }
+
     return {
         publication: {
             id: publication.id,
@@ -653,8 +773,8 @@ export const getLinksForPublication = async (
                 }
             }))
         },
-        linkedTo,
-        linkedFrom
+        linkedTo: orderedParents,
+        linkedFrom: orderedChildren
     };
 };
 
