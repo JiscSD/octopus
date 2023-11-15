@@ -257,7 +257,7 @@ describe('Update publication version', () => {
 
         expect(updateTopicsRequest.status).toEqual(403);
         expect(updateTopicsRequest.body.message).toEqual(
-            'You do not have permission to update topics for this publication version.'
+            'You do not have permission to modify this publication version.'
         );
     });
 });

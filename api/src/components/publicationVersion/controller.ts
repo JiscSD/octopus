@@ -117,7 +117,7 @@ export const update = async (
 
         if (publicationVersion.user.id !== event.user.id) {
             return response.json(403, {
-                message: 'You do not have permission to update topics for this publication version.'
+                message: 'You do not have permission to modify this publication version.'
             });
         }
 
