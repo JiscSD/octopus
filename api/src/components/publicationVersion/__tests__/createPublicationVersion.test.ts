@@ -60,12 +60,15 @@ describe('Create new publication versions', () => {
 
     test('User cannot create a new publication version if they are not an author on the latest version.', async () => {
         const newPublicationVersion = await testUtils.agent
-            .post('/publications/publication-data-draft/publication-versions')
+            .post('/publications/publication-data-live/publication-versions')
             .query({
                 apiKey: '000000005'
             });
 
         expect(newPublicationVersion.status).toEqual(403);
+        expect(newPublicationVersion.body.message).toEqual(
+            'You do not have permission to create a new version for this publication.'
+        );
     });
 
     test('Previous version "isLatestVersion=true" becomes "isLatestVersion=false" when creating a new version', async () => {
