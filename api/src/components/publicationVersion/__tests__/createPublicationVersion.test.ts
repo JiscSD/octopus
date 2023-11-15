@@ -42,6 +42,9 @@ describe('Create new publication versions', () => {
         expect(newPublicationVersion.body.title).toEqual(oldPublicationVersion.body.title);
         expect(newPublicationVersion.body.content).toEqual(oldPublicationVersion.body.content);
         expect(newPublicationVersion.body.topics.length).toEqual(oldPublicationVersion.body.topics.length);
+        expect(JSON.stringify(newPublicationVersion.body.topics)).toEqual(
+            JSON.stringify(oldPublicationVersion.body.topics)
+        );
         expect(newPublicationVersion.body.publication.type).toEqual(oldPublicationVersion.body.publication.type);
     });
 
