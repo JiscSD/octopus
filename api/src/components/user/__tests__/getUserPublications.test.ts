@@ -12,7 +12,7 @@ describe('Get a given users publication versions', () => {
             .query({ apiKey: 123456789, offset: 0, limit: 100 });
 
         expect(versions.status).toEqual(200);
-        expect(versions.body.results.length).toEqual(21);
+        expect(versions.body.results.length).toEqual(22);
     });
 
     test('Unauthenticated user can only view live versions', async () => {
