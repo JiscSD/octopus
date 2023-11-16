@@ -824,6 +824,7 @@ export interface UserEmployment {
     organisation: string;
 }
 
+// Topics
 export interface TopicTranslation {
     language: Languages;
     value: string;
@@ -857,3 +858,9 @@ export interface TopicsPaginatedResults {
         createdAt: Date;
     }[];
 }
+
+// Events
+/**
+ * @todo remove once functionality has been tested.
+ */
+export type EventType = 'dummy';
