@@ -10,6 +10,7 @@ import * as Types from '@types';
 import * as api from '@api';
 import * as Contexts from '@contexts';
 import * as Hooks from '@hooks';
+import * as Helpers from '@helpers';
 
 import '../styles/globals.css';
 
@@ -53,7 +54,7 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
 
             <SWR.SWRConfig
                 value={{
-                    fetcher: (resource) => api.get(resource, user?.token).then((res) => res.data),
+                    fetcher: (resource) => api.get(resource, Helpers.getJWT()).then((res) => res.data),
                     onError: (error) => {
                         console.error(error);
                     }

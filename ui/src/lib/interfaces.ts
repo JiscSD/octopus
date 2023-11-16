@@ -97,6 +97,7 @@ export interface PublicationVersion {
     funders: Funder[];
     coAuthors: CoAuthor[];
     publication: CorePublication;
+    topics: BaseTopic[];
 }
 
 export interface PublicationWithVersions extends CorePublication {
@@ -151,12 +152,14 @@ export interface LinkedPublication {
 
 export interface LinkedToPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     parentPublication: string;
     parentPublicationType: Types.PublicationType;
 }
@@ -424,6 +427,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
+    topics?: string[];
 }
 
 export interface CreationStep {
@@ -485,9 +489,10 @@ export interface MappedOrcidAffiliation {
     url: string | null;
 }
 
-export interface TopicPublication {
+export interface TopicPublicationVersion {
     id: string;
     title: string;
+    versionOf: string;
 }
 
 export interface TopicTranslation {
@@ -501,6 +506,7 @@ export interface BaseTopic {
     id: string;
     title: string;
     createdAt: string;
+    draft?: boolean;
 }
 
 export interface Topic extends BaseTopic {
@@ -508,7 +514,7 @@ export interface Topic extends BaseTopic {
     language: string;
     parents: BaseTopic[];
     children: BaseTopic[];
-    publications: TopicPublication[];
+    publicationVersions: TopicPublicationVersion[];
     translations: TopicTranslation[];
 }
 

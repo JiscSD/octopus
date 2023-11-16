@@ -141,24 +141,28 @@ export const getPublicationVersions = async (
 
     // Account owners can retrieve their DRAFT publications also
     const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
+    const latestVersionFilter = isAccountOwner
+        ? { OR: [{ isLatestVersion: true }, { isLatestLiveVersion: true }] } // co-authors can see LIVE and DRAFT versions
+        : { isLatestLiveVersion: true };
 
     const where: Prisma.PublicationVersionWhereInput = {
         OR: [
             {
-                createdBy: id
+                createdBy: id,
+                ...latestVersionFilter
             },
             {
                 coAuthors: {
                     some: {
                         linkedUser: id
                     }
-                }
+                },
+                ...latestVersionFilter
             }
         ],
         currentStatus: {
             in: statuses
-        },
-        ...(isAccountOwner ? { isLatestVersion: true } : { isLatestLiveVersion: true })
+        }
     };
 
     const userPublicationVersions = await client.prisma.publicationVersion.findMany({

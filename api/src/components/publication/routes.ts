@@ -28,13 +28,3 @@ export const getPDF = middy(publicationController.getPDF)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.validator(publicationSchema.getPDF, 'pathParameters'));
-
-export const updateTopics = middy(publicationController.updateTopics)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication())
-    .use(middleware.validator(publicationSchema.updateTopics, 'body'));
-
-export const getPublicationTopics = middy(publicationController.getPublicationTopics).use(
-    middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
-);
