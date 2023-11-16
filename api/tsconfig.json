@@ -72,6 +72,9 @@
             "bookmark/*": [
                 "src/components/bookmark/*"
             ],
+            "event/*": [
+                "src/components/event/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],
