@@ -96,6 +96,10 @@ export const deleteLink = async (
             return response.json(404, { message: 'Link not found' });
         }
 
+        if (!link.draft) {
+            return response.json(403, { message: 'You are not allowed to delete inherited Links.' });
+        }
+
         const fromCurrentVersion = link.publicationFromRef.versions.find((version) => version.isLatestVersion);
 
         if (

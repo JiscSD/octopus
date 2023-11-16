@@ -26,17 +26,43 @@ export const get = async (
             return response.json(200, publicationVersion);
         }
 
-        // only the owner or co-authors can view publications
+        // only the owner or co-authors can view a DRAFT publication version
         if (
-            event.user?.id === publicationVersion.user.id ||
-            publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
+            !(
+                event.user?.id === publicationVersion.user.id ||
+                publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
+            )
         ) {
-            return response.json(200, publicationVersion);
+            // if client requested the "latest" version but user doesn't have permissions to see it
+            // return the latest published version instead, if exists
+            if (version === 'latest' && publicationVersion.versionNumber > 1) {
+                const latestPublishedVersion = await publicationVersionService.get(id, 'latestLive');
+
+                return response.json(200, latestPublishedVersion);
+            }
+
+            return response.json(403, {
+                message: 'You do not have permission to view this publication version.'
+            });
         }
 
-        return response.json(403, {
-            message: 'You do not have permission to view this publication version.'
-        });
+        // map "draft" topics before sending the response to the client
+        let inheritedTopicIds: string[] = [];
+
+        if (publicationVersion.versionNumber > 1) {
+            const latestPublishedVersion = await publicationVersionService.get(id, 'latestLive');
+
+            if (latestPublishedVersion) {
+                inheritedTopicIds = latestPublishedVersion.topics.map((topic) => topic.id);
+            }
+        }
+
+        publicationVersion.topics = publicationVersion.topics.map((topic) => ({
+            ...topic,
+            draft: !inheritedTopicIds.includes(topic.id)
+        }));
+
+        return response.json(200, publicationVersion);
     } catch (err) {
         console.log(err);
 
@@ -84,7 +110,7 @@ export const update = async (
         const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
 
         if (!publicationVersion) {
-            return response.json(403, {
+            return response.json(404, {
                 message: 'This publication version does not exist.'
             });
         }
@@ -96,7 +122,7 @@ export const update = async (
         }
 
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(404, {
+            return response.json(403, {
                 message: 'A publication version that is not in DRAFT state cannot be updated.'
             });
         }
@@ -128,9 +154,44 @@ export const update = async (
             });
         }
 
-        await publicationVersionService.update(event.pathParameters.id, event.body);
+        const { topics: topicIds } = event.body;
+        let inheritedTopicIds: string[] = [];
+
+        if (topicIds && publicationVersion.publication.type !== 'PROBLEM') {
+            return response.json(400, {
+                message: 'You can not supply topics for a publication that is not a problem.'
+            });
+        }
+
+        // prevent user from deleting inherited topics
+        if (topicIds && publicationVersion.versionNumber > 1) {
+            const latestPublishedVersion = await publicationVersionService.get(
+                publicationVersion.versionOf,
+                'latestLive'
+            );
+
+            if (latestPublishedVersion) {
+                inheritedTopicIds = latestPublishedVersion.topics.map((topic) => topic.id);
+
+                if (inheritedTopicIds.some((topicId) => !topicIds.includes(topicId))) {
+                    return response.json(403, { message: 'You are not allowed to delete inherited topics.' });
+                }
+            }
+        }
+
+        await publicationVersionService.update(event.pathParameters.id, {
+            ...event.body,
+            topics: topicIds ? { set: topicIds.map((topicId) => ({ id: topicId })) } : undefined
+        });
 
         const updatedPublicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+
+        if (updatedPublicationVersion) {
+            updatedPublicationVersion.topics = updatedPublicationVersion.topics.map((topic) => ({
+                ...topic,
+                draft: !inheritedTopicIds.includes(topic.id)
+            }));
+        }
 
         return response.json(200, updatedPublicationVersion);
     } catch (err) {
@@ -226,18 +287,46 @@ export const updateStatus = async (
             }
         }
 
-        // create version DOI
-        const publicationVersionDOI = await helpers.createPublicationVersionDOI(publicationVersion);
+        let previousPublicationVersion: I.PublicationVersion | null = null;
 
-        // update version status first so that published date is available for Open Search
+        if (publicationVersion.versionNumber > 1) {
+            previousPublicationVersion = await publicationVersionService.get(
+                publicationVersion.versionOf,
+                publicationVersion.versionNumber - 1
+            );
+        }
+
+        // create new version DOI
+        const newPublicationVersionDOI = await helpers.createPublicationVersionDOI(
+            publicationVersion,
+            previousPublicationVersion?.doi as string
+        );
+
+        if (previousPublicationVersion && previousPublicationVersion.doi) {
+            // update previous version DOI
+            await helpers.updatePreviousPublicationVersionDOI(
+                previousPublicationVersion,
+                newPublicationVersionDOI.data.attributes.doi
+            );
+        }
+
+        // update version status first so that published date is available for Open Search record
         await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
 
-        // update version DOI into DB
+        // update the new version DOI into DB
         const updatedVersion = await publicationVersionService.update(publicationVersion.id, {
-            doi: publicationVersionDOI.data.attributes.doi
+            doi: newPublicationVersionDOI.data.attributes.doi
         });
 
-        // now that the publication version is LIVE, add/update the opensearch record
+        // update the canonical DOI with this new published version info
+        await helpers.updatePublicationDOI(publicationVersion.publication.doi, updatedVersion);
+
+        if (previousPublicationVersion) {
+            // delete old OpenSearch record
+            await publicationService.deleteOpenSearchRecord(updatedVersion.versionOf);
+        }
+
+        // create new record
         await publicationService.createOpenSearchRecord({
             id: updatedVersion.versionOf,
             type: updatedVersion.publication.type,
@@ -249,9 +338,6 @@ export const updateStatus = async (
             publishedDate: updatedVersion.publishedDate,
             cleanContent: htmlToText.convert(updatedVersion.content)
         });
-
-        // Publication version is live, so update the canonical DOI with this version info
-        await helpers.updatePublicationDOI(publicationVersion.publication.doi, updatedVersion);
 
         // send message to the pdf generation queue
         // currently only on deployed instances while a local solution is developed
@@ -299,6 +385,59 @@ export const deleteVersion = async (
         await publicationVersionService.deleteVersion(publicationVersion);
 
         return response.json(200, { message: `Publication version ${event.pathParameters.id} has been deleted` });
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const create = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreatePublicationVersionPathParams>
+): Promise<I.JSONResponse> => {
+    /**
+     * @TODO - remove stage check when ready to go in production
+     */
+    if (!['local', 'int'].includes(process.env.STAGE!)) {
+        return response.json(403, 'This feature is not available yet in the current environment.');
+    }
+
+    const publicationId = event.pathParameters.id;
+
+    try {
+        // take the latest publication version
+        const latestPublicationVersion = await publicationVersionService.get(publicationId, 'latest');
+
+        if (!latestPublicationVersion) {
+            return response.json(404, {
+                message: 'Publication not found.'
+            });
+        }
+
+        // check if latest version is published
+        if (latestPublicationVersion.currentStatus !== 'LIVE') {
+            return response.json(403, {
+                message:
+                    'You cannot create a new version while the latest version of this publication has not been published yet.'
+            });
+        }
+
+        // check if user is a co-author or the creator of the latest version
+        if (
+            !(
+                latestPublicationVersion.user.id === event.user.id ||
+                latestPublicationVersion.coAuthors.some((author) => author.linkedUser === event.user.id)
+            )
+        ) {
+            return response.json(403, {
+                message: 'You do not have permission to create a new version for this publication.'
+            });
+        }
+
+        // create new version importing data from the latest one
+        const newPublicationVersion = await publicationVersionService.create(latestPublicationVersion, event.user);
+
+        return response.json(201, newPublicationVersion);
     } catch (err) {
         console.log(err);
 

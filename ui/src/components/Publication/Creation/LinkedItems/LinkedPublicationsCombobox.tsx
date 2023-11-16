@@ -1,5 +1,5 @@
 import React from 'react';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
@@ -10,18 +10,19 @@ import * as api from '@api';
 import * as Config from '@config';
 
 type LinkedPublicationsComboboxProps = {
-    setError: (error: string | undefined) => void;
+    setError: (error: string | null) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
 };
 
 const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props): React.ReactElement => {
-    const SWRConfig = useSWRConfig();
-
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion?.versionOf);
-    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion?.publication.type);
-    const linkedTos = Stores.usePublicationCreationStore((state) => state.linkedTo);
     const user = Stores.useAuthStore((state) => state.user);
+    const { currentPublicationId, type, linkedTo, updateLinkedTo } = Stores.usePublicationCreationStore((state) => ({
+        currentPublicationId: state.publicationVersion.versionOf,
+        type: state.publicationVersion.publication.type,
+        linkedTo: state.linkedTo,
+        updateLinkedTo: state.updateLinkedTo
+    }));
 
     const [search, setSearch] = React.useState('');
     const [selectedPublicationVersion, setSelectedPublicationVersion] =
@@ -30,7 +31,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     const availableLinkTypes = (type && Helpers.publicationsAvailabletoPublication(type)) || [];
     const formattedAsString = availableLinkTypes.join(',');
 
-    const excludedIds = [currentPublicationId, ...linkedTos.map((link) => link.id)];
+    const excludedIds = [currentPublicationId, ...linkedTo.map((link) => link.id)];
 
     const swrKey = `/publication-versions?type=${formattedAsString}&limit=10${
         search.length > 2 ? `&search=${search}` : ''
@@ -54,7 +55,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     }
 
     const createLink = async () => {
-        props.setError(undefined);
+        props.setError(null);
         props.setLoading(true);
         if (selectedPublicationVersion && user) {
             try {
@@ -70,10 +71,12 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                 );
 
                 // refetch direct links
-                await SWRConfig.mutate([
+                const response = await api.get(
                     `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
-                    'edit'
-                ]);
+                    user.token
+                );
+
+                updateLinkedTo(response.data.linkedTo);
             } catch (err) {
                 props.setError('There was a problem creating the link.');
             }

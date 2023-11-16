@@ -233,18 +233,34 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
                     {livePublicationVersions.length ? (
                         <div className="relative space-y-4 xl:w-2/3">
-                            {livePublicationVersions.map((publicationVersion) => (
-                                <Components.Link
-                                    key={publicationVersion.id}
-                                    href={`${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`}
-                                    className="mb-5 flex "
-                                >
-                                    <Components.PublicationSimpleResult
-                                        publicationVersion={publicationVersion}
-                                        user={props.user}
-                                    />
-                                </Components.Link>
-                            ))}
+                            {livePublicationVersions.map((publicationVersion) => {
+                                const canCreateNewVersion =
+                                    publicationVersion.isLatestVersion &&
+                                    !draftPublicationVersions.some(
+                                        (version) => version.versionOf === publicationVersion.versionOf
+                                    );
+
+                                const canEditNewVersion = draftPublicationVersions.some(
+                                    (version) =>
+                                        version.versionOf === publicationVersion.versionOf &&
+                                        version.createdBy === props.user.id
+                                );
+
+                                return (
+                                    <Components.Link
+                                        key={publicationVersion.id}
+                                        href={`${Config.urls.viewPublication.path}/${publicationVersion.versionOf}`}
+                                        className="mb-5 flex "
+                                    >
+                                        <Components.PublicationSimpleResult
+                                            publicationVersion={publicationVersion}
+                                            user={props.user}
+                                            canCreateNewVersion={canCreateNewVersion}
+                                            canEditNewVersion={canEditNewVersion}
+                                        />
+                                    </Components.Link>
+                                );
+                            })}
                         </div>
                     ) : (
                         <Components.Alert

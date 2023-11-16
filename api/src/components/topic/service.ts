@@ -32,8 +32,8 @@ export const create = async (e: I.CreateTopicRequestBody) => {
     return topic;
 };
 
-export const get = async (id: string) => {
-    const topic = await client.prisma.topic.findFirst({
+export const get = (id: string) =>
+    client.prisma.topic.findFirst({
         where: {
             id
         },
@@ -55,42 +55,18 @@ export const get = async (id: string) => {
                     translations: true
                 }
             },
-            publications: {
+            publicationVersions: {
                 where: {
-                    versions: {
-                        some: {
-                            isLatestLiveVersion: true
-                        }
-                    }
+                    isLatestLiveVersion: true
                 },
                 select: {
                     id: true,
-                    versions: {
-                        where: {
-                            isLatestLiveVersion: true
-                        },
-                        select: {
-                            title: true
-                        }
-                    }
+                    title: true,
+                    versionOf: true
                 }
             }
         }
     });
-
-    // Squash publication data
-    const simplifiedTopic = topic
-        ? {
-              ...topic,
-              publications: topic?.publications.map((publication) => ({
-                  id: publication.id,
-                  title: publication.versions[0].title
-              }))
-          }
-        : topic;
-
-    return simplifiedTopic;
-};
 
 export const getPaginatedResults = async (filters: I.TopicsFilters) => {
     const { offset = 0, limit = 10, search = '', exclude = '' } = filters;
