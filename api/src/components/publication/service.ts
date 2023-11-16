@@ -1,5 +1,5 @@
-import * as s3 from 'lib/s3';
 import chromium from '@sparticuz/chromium';
+import * as s3 from 'lib/s3';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as referenceService from 'reference/service';
@@ -80,7 +80,17 @@ export const get = async (id: string) => {
                         orderBy: {
                             position: 'asc'
                         }
+                    },
+                    topics: {
+                        select: {
+                            id: true,
+                            title: true,
+                            createdAt: true
+                        }
                     }
+                },
+                orderBy: {
+                    versionNumber: 'asc'
                 }
             },
             publicationFlags: {
@@ -162,14 +172,6 @@ export const get = async (id: string) => {
                         }
                     }
                 }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    language: true,
-                    translations: true
-                }
             }
         }
     });
@@ -227,6 +229,9 @@ export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
 
     return publication;
 };
+
+export const deleteOpenSearchRecord = (publicationId: string) =>
+    client.search.delete({ index: 'publications', id: publicationId });
 
 export const getOpenSearchPublications = async (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy
@@ -319,6 +324,7 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
             // Create first version when publication is created
             versions: {
                 create: {
+                    id: doiResponse.data.attributes.suffix + '-v1',
                     versionNumber: 1,
                     title: e.title,
                     licence: e.licence,
@@ -351,18 +357,27 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
                             confirmedCoAuthor: true,
                             approvalRequested: false
                         }
-                    }
+                    },
+                    topics: e.topicIds?.length
+                        ? {
+                              connect: e.topicIds.map((topicId) => ({ id: topicId }))
+                          }
+                        : undefined
                 }
-            },
-            topics: e.topicIds?.length
-                ? {
-                      connect: e.topicIds.map((topicId) => ({ id: topicId }))
-                  }
-                : undefined
+            }
         },
         include: {
-            topics: true,
-            versions: true
+            versions: {
+                include: {
+                    topics: {
+                        select: {
+                            id: true,
+                            title: true,
+                            createdAt: true
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -430,7 +445,10 @@ const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPubli
     }
 };
 
-export const getLinksForPublication = async (id: string): Promise<I.PublicationWithLinks> => {
+export const getLinksForPublication = async (
+    id: string,
+    includeDraftVersion = false
+): Promise<I.PublicationWithLinks> => {
     const publication = await get(id);
 
     if (!publication) {
@@ -441,9 +459,11 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
         };
     }
 
-    const latestLiveVersion = publication?.versions.find((version) => version.isLatestLiveVersion);
+    const latestVersion = publication?.versions.find((version) =>
+        includeDraftVersion ? version.isLatestVersion : version.isLatestLiveVersion
+    );
 
-    if (!latestLiveVersion) {
+    if (!latestVersion) {
         return {
             publication: null,
             linkedFrom: [],
@@ -471,6 +491,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT "Links"."id" "linkId",
                    "Links"."publicationFrom" "childPublication",
                    "Links"."publicationTo" "id",
+                   "Links".draft,
                    "pfrom".type "childPublicationType",
                    "pto".type,
                    "pto"."doi",
@@ -502,6 +523,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT l."id" "linkId",
                    l."publicationFrom" "childPublication",
                    l."publicationTo" "id",
+                   l."draft",
                    "pfrom".type "childPublicationType",
                    "pto".type,
                    "pto"."doi",
@@ -541,6 +563,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT "Links"."id" "linkId",
                    "Links"."publicationFrom" "id",
                    "Links"."publicationTo" "parentPublication",
+                   "Links".draft,
                    "pfrom".type,
                    "pfrom"."doi",
                    "pto".type "parentPublicationType",
@@ -557,7 +580,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestVersion" = TRUE
+              AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "Links"."publicationTo"
@@ -572,6 +595,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             SELECT l."id" "linkId",
                    l."publicationFrom" "id",
                    l."publicationTo" "parentPublication",
+                   l."draft",
                    "pfrom".type,
                    "pfrom"."doi",
                    "pto".type "parentPublicationType",
@@ -590,7 +614,7 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestVersion" = TRUE
+              AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
               ON "pto".id = "l"."publicationTo"
@@ -733,13 +757,13 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
             id: publication.id,
             type: publication.type,
             doi: publication.doi,
-            title: latestLiveVersion.title || '',
-            createdBy: latestLiveVersion.createdBy,
-            currentStatus: latestLiveVersion.currentStatus,
-            publishedDate: latestLiveVersion.publishedDate?.toISOString() || '',
-            authorFirstName: latestLiveVersion.user.firstName,
-            authorLastName: latestLiveVersion.user.lastName || '',
-            authors: latestLiveVersion.coAuthors.map((author) => ({
+            title: latestVersion.title || '',
+            createdBy: latestVersion.createdBy,
+            currentStatus: latestVersion.currentStatus,
+            publishedDate: latestVersion.publishedDate?.toISOString() || '',
+            authorFirstName: latestVersion.user.firstName,
+            authorLastName: latestVersion.user.lastName || '',
+            authors: latestVersion.coAuthors.map((author) => ({
                 id: author.id,
                 linkedUser: author.linkedUser,
                 user: {
@@ -756,9 +780,9 @@ export const getLinksForPublication = async (id: string): Promise<I.PublicationW
 
 export const getDirectLinksForPublication = async (
     id: string,
-    includeDraft = false
+    includeDraftVersion = false
 ): Promise<I.PublicationWithLinks> => {
-    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraft
+    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraftVersion
         ? { isLatestVersion: true }
         : { isLatestLiveVersion: true };
 
@@ -782,6 +806,7 @@ export const getDirectLinksForPublication = async (
             },
             linkedTo: {
                 where: {
+                    draft: includeDraftVersion ? undefined : includeDraftVersion,
                     publicationToRef: {
                         versions: {
                             some: {
@@ -792,12 +817,16 @@ export const getDirectLinksForPublication = async (
                 },
                 select: {
                     id: true,
+                    draft: true,
                     publicationToRef: {
                         select: {
                             id: true,
                             doi: true,
                             type: true,
                             versions: {
+                                where: {
+                                    isLatestLiveVersion: true
+                                },
                                 include: {
                                     user: true
                                 }
@@ -808,6 +837,7 @@ export const getDirectLinksForPublication = async (
             },
             linkedFrom: {
                 where: {
+                    draft: includeDraftVersion ? undefined : includeDraftVersion,
                     publicationFromRef: {
                         versions: {
                             some: {
@@ -818,12 +848,16 @@ export const getDirectLinksForPublication = async (
                 },
                 select: {
                     id: true,
+                    draft: true,
                     publicationFromRef: {
                         select: {
                             id: true,
                             doi: true,
                             type: true,
                             versions: {
+                                where: {
+                                    isLatestLiveVersion: true
+                                },
                                 include: {
                                     user: true
                                 }
@@ -854,12 +888,13 @@ export const getDirectLinksForPublication = async (
     }
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
-        const { id: linkId, publicationToRef } = link;
+        const { id: linkId, publicationToRef, draft } = link;
         const { id, type, versions, doi } = publicationToRef;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
             id,
+            draft,
             linkId,
             type,
             doi,
@@ -876,12 +911,13 @@ export const getDirectLinksForPublication = async (
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
-        const { id: linkId, publicationFromRef } = link;
+        const { id: linkId, publicationFromRef, draft } = link;
         const { id, type, versions, doi } = publicationFromRef;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
             id,
+            draft,
             linkId,
             type,
             doi,
@@ -1042,39 +1078,3 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
         }
     }
 };
-
-// Overwrite existing topics with those whose IDs were passed.
-export const updateTopics = async (id: string, topics: string[]) => {
-    // Format topics in a way that prisma can understand.
-    const topicsUpdateInput = { set: topics.map((topicId) => ({ id: topicId })) };
-
-    const updateTopics = await client.prisma.publication.update({
-        where: {
-            id
-        },
-        data: {
-            topics: topicsUpdateInput
-        },
-        include: {
-            topics: true
-        }
-    });
-
-    return updateTopics.topics;
-};
-
-export const getPublicationTopics = (id: string) =>
-    client.prisma.topic.findMany({
-        where: {
-            publications: {
-                some: {
-                    id
-                }
-            }
-        },
-        select: {
-            id: true,
-            createdAt: true,
-            title: true
-        }
-    });

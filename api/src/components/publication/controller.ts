@@ -98,27 +98,25 @@ export const getLinksForPublication = async (
     const publicationId = event.pathParameters.id;
     const directLinks = event.queryStringParameters?.direct === 'true';
     const user = event.user;
-    let includeDraft = false;
+    let includeDraftVersion = false;
 
     try {
-        if (directLinks) {
-            if (user) {
-                const latestVersion = await publicationVersionService.get(publicationId, 'latest');
+        if (user) {
+            const latestVersion = await publicationVersionService.get(publicationId, 'latest');
 
-                // if latest version is a DRAFT, check if user can see it
-                if (
-                    latestVersion?.currentStatus === 'DRAFT' &&
-                    (user.id === latestVersion?.createdBy ||
-                        latestVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === user.id))
-                ) {
-                    includeDraft = true;
-                }
+            // if latest version is a DRAFT, check if user can see it
+            if (
+                latestVersion?.currentStatus !== 'LIVE' &&
+                (user.id === latestVersion?.createdBy ||
+                    latestVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === user.id))
+            ) {
+                includeDraftVersion = true;
             }
         }
 
         const { publication, linkedFrom, linkedTo } = directLinks
-            ? await publicationService.getDirectLinksForPublication(publicationId, includeDraft)
-            : await publicationService.getLinksForPublication(publicationId);
+            ? await publicationService.getDirectLinksForPublication(publicationId, includeDraftVersion)
+            : await publicationService.getLinksForPublication(publicationId, includeDraftVersion);
 
         if (!publication) {
             return response.json(404, { message: 'Not found.' });
@@ -200,68 +198,4 @@ export const getPDF = async (
               }
           }
         : response.json(200, { pdfUrl });
-};
-
-export const updateTopics = async (
-    event: I.AuthenticatedAPIRequest<
-        I.UpdatePublicationTopicsRequestBody,
-        undefined,
-        I.UpdatePublicationTopicsPathParams
-    >
-): Promise<I.JSONResponse> => {
-    try {
-        const publication = await publicationService.get(event.pathParameters.id);
-
-        if (!publication) {
-            return response.json(404, {
-                message: 'This publication does not exist.'
-            });
-        }
-
-        const latestVersion = publication.versions.find((version) => version.isLatestVersion);
-
-        if (!latestVersion) {
-            throw Error('Unable to get latest version');
-        }
-
-        if (latestVersion.user.id !== event.user.id) {
-            return response.json(403, {
-                message: 'You do not have permission to update topics for this publication.'
-            });
-        }
-
-        if (latestVersion.currentStatus !== 'DRAFT') {
-            return response.json(400, {
-                message: 'You can not change topics while the publication has no active draft version.'
-            });
-        }
-
-        if (publication.type !== 'PROBLEM') {
-            return response.json(400, {
-                message: 'You can not supply topics for a publication that is not a problem.'
-            });
-        }
-
-        const updateTopics = await publicationService.updateTopics(event.pathParameters.id, event.body.topics);
-
-        return response.json(200, updateTopics);
-    } catch (error) {
-        console.log(error);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
-};
-
-export const getPublicationTopics = async (
-    event: I.APIRequest<undefined, undefined, I.GetPublicationTopicsPathParams>
-): Promise<I.JSONResponse> => {
-    try {
-        const topics = await publicationService.getPublicationTopics(event.pathParameters.id);
-
-        return response.json(200, topics);
-    } catch (error) {
-        console.log(error);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
 };

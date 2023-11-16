@@ -70,8 +70,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         >,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
-        Promise<Interfaces.Flag[] | void>,
-        Promise<Interfaces.BaseTopic[] | void>
+        Promise<Interfaces.Flag[] | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
@@ -93,10 +92,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             .catch((error) => console.log(error)),
         api
             .get(`${Config.endpoints.publications}/${requestedId}/flags`, token)
-            .then((res) => res.data)
-            .catch((error) => console.log(error)),
-        api
-            .get(`${Config.endpoints.publications}/${requestedId}/topics`, token)
             .then((res) => res.data)
             .catch((error) => console.log(error))
     ];
@@ -197,14 +192,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.flags }
     );
 
-    const { data: topics = [] } = useSWR<Interfaces.BaseTopic[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/topics`,
-        null,
-        {
-            fallbackData: props.topics
-        }
-    );
-
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
     // problems this publication is linked to
@@ -227,7 +214,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showReferences = Boolean(references?.length);
     const showChildProblems = Boolean(childProblems?.length);
     const showParentProblems = Boolean(parentProblems?.length);
-    const showTopics = Boolean(topics?.length);
+    const showTopics = Boolean(publicationVersion?.topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
@@ -747,7 +734,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             hasBreak
                         >
                             <Components.List ordered={false}>
-                                {topics.map((topic) => (
+                                {publicationVersion.topics.map((topic) => (
                                     <Components.ListItem key={topic.id}>
                                         <Components.Link
                                             href={`${Config.urls.viewTopic.path}/${topic.id}`}

@@ -66,14 +66,16 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const checkRequired = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            const { publicationVersion, linkedTo, topics } = store;
+            const { publicationVersion, linkedTo } = store;
 
             let ready = { ready: true, message: '' };
 
             if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
             if (
-                (publicationVersion.publication.type === 'PROBLEM' && !linkedTo.length && !topics.length) ||
+                (publicationVersion.publication.type === 'PROBLEM' &&
+                    !linkedTo.length &&
+                    !publicationVersion.topics.length) ||
                 (publicationVersion.publication.type !== 'PROBLEM' && !store.linkedTo?.length)
             )
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
@@ -124,13 +126,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
     const checkRequiredApproval = useCallback(
         (store: Types.PublicationCreationStoreType): { ready: boolean; message: string } => {
-            const { publicationVersion, linkedTo, topics } = store;
+            const { publicationVersion, linkedTo } = store;
 
             let ready = { ready: true, message: '' };
 
             if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
-            if (!linkedTo.length && !topics.length)
+            if (!linkedTo.length && !publicationVersion.topics.length)
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
 
             if (publicationVersion.conflictOfInterestStatus && !publicationVersion.conflictOfInterestText?.length) {
@@ -188,6 +190,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 conflictOfInterestText: publicationVersion.conflictOfInterestText,
                 fundersStatement: publicationVersion.fundersStatement
             };
+
+            if (publicationVersion.publication.type === 'PROBLEM') {
+                body.topics = publicationVersion.topics.map((topic) => topic.id);
+            }
 
             if (publicationVersion.publication.type === 'DATA') {
                 body.ethicalStatement = publicationVersion.ethicalStatement;

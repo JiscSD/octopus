@@ -1,7 +1,7 @@
 import React from 'react';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 
 import * as Components from '@components';
 import * as Interfaces from '@interfaces';
@@ -10,16 +10,17 @@ import * as api from '@api';
 import * as Config from '@config';
 
 type LinkedTopicsComboboxProps = {
-    setError: (error: string | undefined) => void;
+    setError: (error: string | null) => void;
     loading: boolean;
     setLoading: (isLoading: boolean) => void;
     topics: Interfaces.BaseTopic[];
 };
 
 const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React.ReactElement => {
-    const SWRConfig = useSWRConfig();
-
-    const currentPublicationId = Stores.usePublicationCreationStore((state) => state.publicationVersion.versionOf);
+    const { publicationVersionId, updateTopics } = Stores.usePublicationCreationStore((state) => ({
+        publicationVersionId: state.publicationVersion.id,
+        updateTopics: state.updateTopics
+    }));
     const user = Stores.useAuthStore((state) => state.user);
 
     const [search, setSearch] = React.useState('');
@@ -51,20 +52,20 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
     }
 
     const addTopic = async () => {
-        props.setError(undefined);
+        props.setError(null);
         props.setLoading(true);
         if (selectedTopic && user) {
             try {
                 setSearch('');
                 setSelectedTopic(null);
-                await api.put(
-                    `/publications/${currentPublicationId}/topics`,
+                const response = await api.patch(
+                    `${Config.endpoints.publicationVersions}/${publicationVersionId}`,
                     { topics: [...currentTopicIds, selectedTopic.id] },
                     user.token
                 );
 
-                // refetch topics
-                await SWRConfig.mutate([`${Config.endpoints.publications}/${currentPublicationId}/topics`, 'edit']);
+                // update topics
+                updateTopics(response.data.topics);
             } catch (err) {
                 props.setError('There was a problem adding the topic.');
             }

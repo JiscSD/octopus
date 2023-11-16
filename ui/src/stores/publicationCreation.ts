@@ -46,7 +46,8 @@ const initialPublicationVersion: Interfaces.PublicationVersion = {
         email: '',
         createdAt: '',
         updatedAt: ''
-    }
+    },
+    topics: []
 };
 
 const createPublicationVersionSlice: StateCreator<Types.PublicationVersionSlice> = (set) => ({
@@ -77,6 +78,13 @@ const createPublicationVersionSlice: StateCreator<Types.PublicationVersionSlice>
                 coAuthors
             }
         })),
+    updateTopics: (topics) =>
+        set((state) => ({
+            publicationVersion: {
+                ...state.publicationVersion,
+                topics
+            }
+        })),
     resetPublicationVersion: () => set({ publicationVersion: initialPublicationVersion })
 });
 
@@ -97,17 +105,11 @@ const createErrorSlice: StateCreator<Types.ErrorSlice> = (set) => ({
     setError: (error) => set({ error })
 });
 
-const createTopicsSlice: StateCreator<Types.TopicsSlice> = (set) => ({
-    topics: [],
-    updateTopics: (topics) => set({ topics })
-});
-
 const usePublicationCreationStore = create<Types.PublicationCreationStoreType>()((...args) => ({
     ...createPublicationVersionSlice(...args),
     ...createLinkedToSlice(...args),
     ...createReferencesSlice(...args),
-    ...createErrorSlice(...args),
-    ...createTopicsSlice(...args)
+    ...createErrorSlice(...args)
 }));
 
 export default usePublicationCreationStore;

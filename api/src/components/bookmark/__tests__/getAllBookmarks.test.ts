@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('Get multiple bookmarks', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });

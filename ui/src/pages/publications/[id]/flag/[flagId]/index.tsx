@@ -112,7 +112,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                 setComment('');
 
                 // Inform swr this endpoint has had a mutation, so revalidate
-                mutate();
+                await mutate();
 
                 // Provide a user feedback toast
                 setToast({
@@ -142,7 +142,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
             await api.post(`${Config.endpoints.flags}/${props.flagId}/resolve`, {}, user?.token);
 
             // Inform swr this endpoint has had a mutation, so revalidate
-            mutate();
+            await mutate();
 
             // Close the modal
             setShowResolveModal(false);

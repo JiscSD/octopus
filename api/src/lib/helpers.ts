@@ -1,9 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
 import * as I from 'interface';
 import * as referenceService from 'reference/service';
 import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
 import { licences } from './enum';
 import { webcrypto } from 'crypto';
 
@@ -84,187 +85,32 @@ export const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
         /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi //eslint-disable-line
     ) || [];
 
-export const updatePublicationDOI = async (
-    doi: string,
-    latestPublicationVersion: I.PublicationVersion
-): Promise<I.DOIResponse> => {
-    if (!latestPublicationVersion) {
-        throw Error('Publication not found');
-    }
-
-    if (!latestPublicationVersion.isLatestVersion) {
-        throw Error('Supplied version is not current');
-    }
-
-    const references = await referenceService.getAllByPublicationVersion(latestPublicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(
-        latestPublicationVersion.versionOf,
-        true
-    );
-
-    const creators: I.DataCiteCreator[] = [];
-
-    latestPublicationVersion.coAuthors.forEach((author) => {
-        if (author.user) {
-            creators.push(
-                createCreatorObject({
-                    firstName: author.user.firstName,
-                    lastName: author.user.lastName,
-                    orcid: author.user.orcid,
-                    affiliations: author.affiliations as unknown as I.MappedOrcidAffiliation[]
-                })
-            );
-        }
-    });
-
-    const linkedPublicationDOIs = linkedTo.map((link) => ({
-        relatedIdentifier: link.doi,
-        relatedIdentifierType: 'DOI',
-        relationType: link.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
-    }));
-
-    const referenceDOIs = references
-        .map((reference) => {
-            if (reference.type !== 'DOI' || !reference.location) return;
-
-            const doi = getFullDOIsStrings(reference.location);
-
-            return {
-                relatedIdentifier: doi[0],
-                relatedIdentifierType: 'DOI',
-                relationType: 'References'
-            };
-        })
-        .filter((reference) => reference);
-
-    const publicationVersionDOIs = [
-        {
-            relatedIdentifier: latestPublicationVersion.doi,
-            relatedIdentifierType: 'DOI',
-            relationType: 'HasVersion',
-            resourceTypeGeneral: latestPublicationVersion.publication.type === 'PEER_REVIEW' ? 'PeerReview' : 'Other'
-        }
-    ];
-
-    const otherReferences = references
-        .map((reference) => {
-            if (reference.type === 'DOI') return;
-
-            const mutatedReference = {
-                titles: [
-                    {
-                        title: reference.text.replace(/(<([^>]+)>)/gi, '')
-                    }
-                ],
-                relationType: 'References',
-                relatedItemType: 'Other'
-            };
-
-            return reference.location
-                ? {
-                      ...mutatedReference,
-                      relatedItemIdentifier: {
-                          relatedItemIdentifier: reference.location,
-                          relatedItemIdentifierType: 'URL'
-                      }
-                  }
-                : mutatedReference;
-        })
-        .filter((reference) => reference);
-
-    // check if the creator of this version of the publication is not listed as an author
-    if (
-        !latestPublicationVersion.coAuthors.find((author) => author.linkedUser === latestPublicationVersion.createdBy)
-    ) {
-        // add creator to authors list as first author
-        creators?.unshift(
-            createCreatorObject({
-                firstName: latestPublicationVersion.user.firstName,
-                lastName: latestPublicationVersion.user.lastName,
-                orcid: latestPublicationVersion.user.orcid,
-                affiliations: []
-            })
-        );
-    }
-
-    const payload = {
-        data: {
-            types: 'doi',
-            attributes: {
-                event: 'publish',
-                url: `${process.env.BASE_URL}/publications/${latestPublicationVersion.versionOf}`,
-                doi: doi,
-                identifiers: [
-                    {
-                        identifier: `https://doi.org/${doi}`,
-                        identifierType: 'DOI'
-                    }
-                ],
-                creators,
-                titles: [
-                    {
-                        title: latestPublicationVersion.title,
-                        lang: 'en'
-                    }
-                ],
-                publisher: 'Octopus',
-                publicationYear: latestPublicationVersion.createdAt.getFullYear(),
-                contributors: [
-                    {
-                        name: `${latestPublicationVersion.user.lastName} ${latestPublicationVersion.user.firstName}`,
-                        contributorType: 'ContactPerson',
-                        nameType: 'Personal',
-                        givenName: latestPublicationVersion.user.firstName,
-                        familyName: latestPublicationVersion.user.lastName,
-                        nameIdentifiers: [
-                            {
-                                nameIdentifier: latestPublicationVersion.user.orcid,
-                                nameIdentifierScheme: 'ORCID',
-                                schemeUri: 'https://orcid.org/'
-                            }
-                        ]
-                    }
-                ],
-                language: 'en',
-                types: {
-                    resourceTypeGeneral: 'Other',
-                    resourceType: latestPublicationVersion.publication.type
-                },
-                relatedIdentifiers: [...linkedPublicationDOIs, ...referenceDOIs, ...publicationVersionDOIs],
-                relatedItems: otherReferences,
-                fundingReferences: latestPublicationVersion.funders.map((funder) => ({
-                    funderName: funder.name,
-                    funderReference: funder.ror || funder.link,
-                    funderIdentifierType: funder.ror ? 'ROR' : 'Other'
-                }))
-            }
-        }
-    };
-
-    const doiRes = await axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT as string}/${doi}`, payload, {
-        auth: {
-            username: process.env.DATACITE_USER as string,
-            password: process.env.DATACITE_PASSWORD as string
-        }
-    });
-
-    return doiRes.data;
-};
-
-export const createPublicationVersionDOI = async (publicationVersion: I.PublicationVersion): Promise<I.DOIResponse> => {
-    if (!publicationVersion) {
-        throw Error('Publication not found');
-    }
-
-    if (!publicationVersion.isLatestVersion) {
-        throw Error('Supplied version is not current');
-    }
+export const createDOIPayload = async (
+    data:
+        | {
+              payloadType: 'canonical';
+              doi: string;
+              publicationVersion: I.PublicationVersion;
+              oldPublicationVersionDOIs: string[];
+          }
+        | {
+              payloadType: 'newVersion';
+              publicationVersion: I.PublicationVersion;
+              previousPublicationVersionDOI?: string;
+          }
+        | {
+              payloadType: 'previousVersion';
+              publicationVersion: I.PublicationVersion;
+              newPublicationVersionDOI: string;
+              previousPublicationVersionDOI?: string;
+          }
+): Promise<Record<string, unknown>> => {
+    const { payloadType, publicationVersion } = data;
 
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
     const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
 
     const creators: I.DataCiteCreator[] = [];
-
     publicationVersion.coAuthors.forEach((author) => {
         if (author.user) {
             creators.push(
@@ -277,59 +123,6 @@ export const createPublicationVersionDOI = async (publicationVersion: I.Publicat
             );
         }
     });
-
-    const linkedPublicationDOIs = linkedTo.map((link) => ({
-        relatedIdentifier: link.doi,
-        relatedIdentifierType: 'DOI',
-        relationType: link.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
-    }));
-
-    const referenceDOIs = references
-        .map((reference) => {
-            if (reference.type !== 'DOI' || !reference.location) return;
-
-            const doi = getFullDOIsStrings(reference.location);
-
-            return {
-                relatedIdentifier: doi[0],
-                relatedIdentifierType: 'DOI',
-                relationType: 'References'
-            };
-        })
-        .filter((reference) => reference);
-
-    const publicationDOI = {
-        relatedIdentifier: publicationVersion.publication.doi,
-        relatedIdentifierType: 'DOI',
-        relationType: 'IsVersionOf', // these relationTypes will be updated once we provide functionality to create new versions
-        resourceTypeGeneral: publicationVersion.publication.type === 'PEER_REVIEW' ? 'PeerReview' : 'Other'
-    };
-
-    const otherReferences = references
-        .map((reference) => {
-            if (reference.type === 'DOI') return;
-
-            const mutatedReference = {
-                titles: [
-                    {
-                        title: reference.text.replace(/(<([^>]+)>)/gi, '')
-                    }
-                ],
-                relationType: 'References',
-                relatedItemType: 'Other'
-            };
-
-            return reference.location
-                ? {
-                      ...mutatedReference,
-                      relatedItemIdentifier: {
-                          relatedItemIdentifier: reference.location,
-                          relatedItemIdentifierType: 'URL'
-                      }
-                  }
-                : mutatedReference;
-        })
-        .filter((reference) => reference);
 
     // check if the creator of this version of the publication is not listed as an author
     if (!publicationVersion.coAuthors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
@@ -344,13 +137,57 @@ export const createPublicationVersionDOI = async (publicationVersion: I.Publicat
         );
     }
 
+    const linkedPublicationDOIs = linkedTo.map((link) => ({
+        relatedIdentifier: link.doi,
+        relatedIdentifierType: 'DOI',
+        relationType: link.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
+    }));
+
+    const referenceDOIs = references
+        .filter((reference) => reference.type === 'DOI' && reference.location)
+        .map((reference) => {
+            const doi = getFullDOIsStrings(reference.location as string);
+
+            return {
+                relatedIdentifier: doi[0],
+                relatedIdentifierType: 'DOI',
+                relationType: 'References'
+            };
+        });
+
+    const otherReferences = references
+        .filter((reference) => reference.type !== 'DOI')
+        .map((reference) => {
+            const mutatedReference = {
+                titles: [
+                    {
+                        title: reference.text.replace(/(<([^>]+)>)/gi, '')
+                    }
+                ],
+                relationType: 'References',
+                relatedItemType: 'Other'
+            };
+
+            return reference.location
+                ? {
+                      ...mutatedReference,
+                      relatedItemIdentifier: {
+                          relatedItemIdentifier: reference.location,
+                          relatedItemIdentifierType: 'URL'
+                      }
+                  }
+                : mutatedReference;
+        });
+
     const payload = {
         data: {
-            types: 'dois',
+            type: 'dois',
             attributes: {
-                prefix: process.env.DOI_PREFIX,
                 event: 'publish',
-                url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/${publicationVersion.versionNumber}`,
+                url:
+                    payloadType === 'canonical'
+                        ? `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}`
+                        : `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/${publicationVersion.versionNumber}`,
                 creators,
                 titles: [
                     {
@@ -381,26 +218,219 @@ export const createPublicationVersionDOI = async (publicationVersion: I.Publicat
                     resourceTypeGeneral: publicationVersion.publication.type === 'PEER_REVIEW' ? 'PeerReview' : 'Other',
                     resourceType: publicationVersion.publication.type
                 },
-                relatedIdentifiers: [...linkedPublicationDOIs, ...referenceDOIs, publicationDOI],
+                relatedIdentifiers: [...linkedPublicationDOIs, ...referenceDOIs],
                 relatedItems: otherReferences,
                 fundingReferences: publicationVersion.funders.map((funder) => ({
                     funderName: funder.name,
-                    funderReference: funder.ror || funder.link,
+                    funderIdentifier: funder.ror || funder.link,
                     funderIdentifierType: funder.ror ? 'ROR' : 'Other'
-                })),
-                version: publicationVersion.versionNumber
+                }))
             }
         }
     };
 
-    const doi = await axios.post<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT}`, payload, {
+    switch (payloadType) {
+        case 'newVersion': {
+            const { previousPublicationVersionDOI } = data;
+
+            const publicationVersionDOIs = [
+                {
+                    relatedIdentifier: publicationVersion.publication.doi,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsVersionOf',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                }
+            ];
+
+            if (previousPublicationVersionDOI) {
+                publicationVersionDOIs.push({
+                    relatedIdentifier: previousPublicationVersionDOI,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsNewVersionOf',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                });
+            }
+
+            Object.assign(payload.data.attributes, {
+                prefix: process.env.DOI_PREFIX,
+                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs],
+                version: publicationVersion.versionNumber
+            });
+
+            break;
+        }
+
+        case 'previousVersion': {
+            const { newPublicationVersionDOI, previousPublicationVersionDOI } = data;
+
+            const publicationVersionDOIs = [
+                {
+                    relatedIdentifier: publicationVersion.publication.doi,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsVersionOf',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                },
+                {
+                    relatedIdentifier: newPublicationVersionDOI,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsPreviousVersionOf',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                }
+            ];
+
+            if (previousPublicationVersionDOI) {
+                publicationVersionDOIs.push({
+                    relatedIdentifier: previousPublicationVersionDOI,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsNewVersionOf',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                });
+            }
+
+            Object.assign(payload.data.attributes, {
+                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs],
+                version: publicationVersion.versionNumber
+            });
+
+            break;
+        }
+
+        default: {
+            // canonical
+            const { oldPublicationVersionDOIs } = data;
+
+            const publicationVersionDOIs = [...oldPublicationVersionDOIs, publicationVersion.doi].map((doi) => ({
+                relatedIdentifier: doi,
+                relatedIdentifierType: 'DOI',
+                relationType: 'HasVersion',
+                resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+            }));
+
+            Object.assign(payload.data.attributes, {
+                doi: data.doi,
+                identifiers: [
+                    {
+                        identifier: `https://doi.org/${data.doi}`,
+                        identifierType: 'DOI'
+                    }
+                ],
+                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs]
+            });
+        }
+    }
+
+    return payload;
+};
+
+export const updateDOI = (doi: string, payload: Record<string, unknown>): Promise<AxiosResponse<I.DOIResponse>> =>
+    axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT}/${doi}`, payload, {
         auth: {
             username: process.env.DATACITE_USER as string,
             password: process.env.DATACITE_PASSWORD as string
         }
     });
 
-    return doi.data;
+export const createDOI = (payload: Record<string, unknown>): Promise<AxiosResponse<I.DOIResponse>> =>
+    axios.post<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT}`, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+
+export const updatePublicationDOI = async (
+    doi: string,
+    latestPublicationVersion: I.PublicationVersion
+): Promise<I.DOIResponse> => {
+    if (!latestPublicationVersion.isLatestVersion) {
+        throw Error('Supplied version is not current');
+    }
+
+    if (!latestPublicationVersion.doi) {
+        throw Error("Supplied version doesn't have a valid DOI.");
+    }
+
+    const oldPublicationVersionDOIs: string[] = [];
+
+    if (latestPublicationVersion.versionNumber > 1) {
+        // get all the other versions DOIs for this publication
+        const publication = await publicationService.get(latestPublicationVersion.versionOf);
+
+        if (publication) {
+            publication.versions
+                .filter((version) => version.id !== latestPublicationVersion.id)
+                .forEach((version) => {
+                    if (version.doi) {
+                        oldPublicationVersionDOIs.push(version.doi);
+                    }
+                });
+        }
+    }
+
+    const payload = await createDOIPayload({
+        payloadType: 'canonical',
+        doi,
+        publicationVersion: latestPublicationVersion,
+        oldPublicationVersionDOIs
+    });
+
+    const response = await updateDOI(doi, payload);
+
+    return response.data;
+};
+
+export const createPublicationVersionDOI = async (
+    publicationVersion: I.PublicationVersion,
+    previousPublicationVersionDOI?: string
+): Promise<I.DOIResponse> => {
+    if (!publicationVersion.isLatestVersion) {
+        throw Error('Supplied version is not current');
+    }
+
+    const payload = await createDOIPayload({
+        payloadType: 'newVersion',
+        publicationVersion,
+        previousPublicationVersionDOI
+    });
+
+    const response = await createDOI(payload);
+
+    return response.data;
+};
+
+export const updatePreviousPublicationVersionDOI = async (
+    previousPublicationVersion: I.PublicationVersion,
+    newPublicationVersionDOI: string
+): Promise<I.DOIResponse> => {
+    if (!previousPublicationVersion.doi) {
+        throw Error("Supplied version doesn't have a valid DOI");
+    }
+
+    let previousVersionDoi: string | undefined;
+
+    // check if there's a previous version of this previous version
+    if (previousPublicationVersion.versionNumber > 1) {
+        // get the previous version DOI of this previous version
+        const previousVersion = await publicationVersionService.get(
+            previousPublicationVersion.versionOf,
+            previousPublicationVersion.versionNumber - 1
+        );
+
+        if (previousVersion?.doi) {
+            previousVersionDoi = previousVersion.doi;
+        }
+    }
+
+    const payload = await createDOIPayload({
+        payloadType: 'previousVersion',
+        newPublicationVersionDOI,
+        publicationVersion: previousPublicationVersion,
+        previousPublicationVersionDOI: previousVersionDoi
+    });
+
+    const response = await updateDOI(previousPublicationVersion.doi, payload);
+
+    return response.data;
 };
 
 export const octopusInformation: I.OctopusInformation = {

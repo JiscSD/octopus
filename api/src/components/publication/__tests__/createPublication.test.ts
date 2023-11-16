@@ -274,6 +274,6 @@ describe('Create publication', () => {
             });
 
         expect(createPublicationRequest.status).toEqual(201);
-        expect(createPublicationRequest.body.topics[0].title).toEqual('Test topic');
+        expect(createPublicationRequest.body.versions[0].topics[0].title).toEqual('Test topic');
     });
 });

@@ -53,6 +53,7 @@ export type PublicationVersionSlice = {
     updateAuthorAffiliations: (affiliations: Interfaces.MappedOrcidAffiliation[]) => void;
     updateIsIndependentAuthor: (isIndependent: boolean) => void;
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
     resetPublicationVersion: () => void;
 };
 
@@ -68,21 +69,12 @@ export type ReferencesSlice = {
     resetReferences: () => void;
 };
 
-export type TopicsSlice = {
-    topics: Interfaces.BaseTopic[];
-    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
-};
-
 export type ErrorSlice = {
     error: string | null;
     setError: (message: string | null) => void;
 };
 
-export type PublicationCreationStoreType = PublicationVersionSlice &
-    LinkedToSlice &
-    ReferencesSlice &
-    ErrorSlice &
-    TopicsSlice;
+export type PublicationCreationStoreType = PublicationVersionSlice & LinkedToSlice & ReferencesSlice & ErrorSlice;
 
 export type JSONValue = unknown;
 
