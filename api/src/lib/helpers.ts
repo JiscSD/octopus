@@ -1329,3 +1329,66 @@ export const generateOTP = (length = 10): string => {
 
     return OTP;
 };
+
+/**
+ *
+ * @param fieldsParam - string of the form: "id,type,versions(id,title,createdAt,user)"
+ * @param data - data to build the partial response from
+ * @returns partial data
+ *
+ * Only works for 2 levels deep
+ */
+export const buildPartialResponse = <T extends object>(fieldsParam: string, data: T): Partial<T> => {
+    const partialResponse: Partial<T> = {};
+
+    // extract fields with nested properties inside like "versions(id,title,currentStatus) etc..."
+    const nestedFieldMatches = fieldsParam.match(/([a-zA-Z]+)\(([a-zA-Z,]+)\)/g)?.filter((match) => match) || [];
+
+    // get top level fields by removing matched nested fields
+    const topLevelFields = nestedFieldMatches.reduce(
+        (previousValue, currentValue) => previousValue.replace(currentValue, ''),
+        fieldsParam
+    );
+
+    // add top level fields
+    topLevelFields.split(',').forEach((field) => {
+        if (field in data) {
+            partialResponse[field] = data[field];
+        }
+    });
+
+    // add nested fields
+    nestedFieldMatches.forEach((match) => {
+        const parts = match.split('('); // separate field name from it's nested fields inside parenthesis
+        const fieldName = parts[0];
+
+        if (fieldName in data) {
+            const nestedFields = parts[1].split(')')[0].split(','); // split nested field names inside parenthesis
+
+            if (Array.isArray(data[fieldName])) {
+                partialResponse[fieldName] = data[fieldName].map((item) => {
+                    const partialData: Partial<T> = {};
+
+                    nestedFields.forEach((nestedField) => {
+                        if (nestedField in item) {
+                            partialData[nestedField] = item[nestedField];
+                        }
+                    });
+
+                    return partialData;
+                });
+            } else {
+                const partialData: Partial<T> = {};
+                nestedFields.forEach((nestedField) => {
+                    if (nestedField in data[fieldName]) {
+                        partialData[nestedField] = data[fieldName][nestedField];
+                    }
+                });
+
+                partialResponse[fieldName] = partialData;
+            }
+        }
+    });
+
+    return partialResponse;
+};
