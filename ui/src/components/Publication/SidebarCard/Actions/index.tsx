@@ -64,7 +64,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 });
 
                 // refetch publication flags
-                SWRConfig.mutate(createFlagEndpoint);
+                await SWRConfig.mutate(createFlagEndpoint);
             } else {
                 setError('You must provide a comment for this red flag.');
             }

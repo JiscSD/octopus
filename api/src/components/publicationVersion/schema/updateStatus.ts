@@ -1,11 +1,11 @@
 import * as I from 'interface';
 
-const updateStatusSchema: I.Schema = {
+const updateStatusSchema: I.JSONSchemaType<I.UpdateStatusPathParams> = {
     type: 'object',
     properties: {
         status: {
             type: 'string',
-            enum: <I.PublicationStatusEnum[]>['LIVE', 'DRAFT', 'LOCKED']
+            enum: ['LIVE', 'DRAFT', 'LOCKED']
         },
         id: {
             type: 'string'

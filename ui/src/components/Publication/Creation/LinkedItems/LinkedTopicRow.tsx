@@ -6,14 +6,15 @@ import * as Components from '@components';
 
 type Props = {
     topic: Interfaces.BaseTopic;
-    deleteTopic: (id: string) => void;
+    deleteTopic: (id: string) => Promise<void>;
 };
 
 const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
-    const handleClick = () => {
+    const handleClick = async () => {
         setLoading(true);
-        props.deleteTopic(props.topic.id);
+        await props.deleteTopic(props.topic.id);
+        setLoading(false);
     };
 
     return (
@@ -22,29 +23,43 @@ const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
                 <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">{props.topic.title}</p>
             </td>
             <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                {loading ? (
-                    <Components.IconButton
-                        className="p-2"
-                        title="Refresh"
-                        icon={
-                            <OutlineIcons.ArrowPathIcon
-                                className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                aria-hidden="true"
-                            />
-                        }
-                        onClick={handleClick}
-                    />
+                {props.topic.draft ? (
+                    loading ? (
+                        <Components.IconButton
+                            className="p-2"
+                            title="Refresh"
+                            icon={
+                                <OutlineIcons.ArrowPathIcon
+                                    className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                    aria-hidden="true"
+                                />
+                            }
+                            onClick={handleClick}
+                        />
+                    ) : (
+                        <Components.IconButton
+                            className="p-2"
+                            title="Delete"
+                            icon={
+                                <OutlineIcons.TrashIcon
+                                    className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400"
+                                    aria-hidden="true"
+                                />
+                            }
+                            onClick={handleClick}
+                        />
+                    )
                 ) : (
                     <Components.IconButton
                         className="p-2"
-                        title="Delete"
+                        disabled
+                        title="Deletion forbidden as topic is inherited from previous version"
                         icon={
-                            <OutlineIcons.TrashIcon
+                            <OutlineIcons.NoSymbolIcon
                                 className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400"
                                 aria-hidden="true"
                             />
                         }
-                        onClick={handleClick}
                     />
                 )}
             </td>

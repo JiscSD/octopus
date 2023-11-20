@@ -135,7 +135,7 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
 let timeout: NodeJS.Timeout;
 
 const RORForm: React.FC = (props): React.ReactElement => {
-    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
+    const { publicationVersion, updatePublicationVersion, setError } = Stores.usePublicationCreationStore();
 
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -211,6 +211,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
             setLink('');
             setRor('');
         } catch (err) {
+            setError(axios.isAxiosError(err) ? err.response?.data.message : (err as Error).message);
             setSubmitLoading(false);
         }
     };
