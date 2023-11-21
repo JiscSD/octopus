@@ -26,10 +26,7 @@ type BoxProps = BoxEntry & {
 };
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
-    const updateXarrow = useXarrow();
-    useEffect(() => {
-        updateXarrow();
-    }, [updateXarrow]);
+    useXarrow();
     // pick main author to display on visualization box
     const mainAuthor = useMemo(() => {
         const correspondingAuthor = {
