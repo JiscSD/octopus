@@ -644,13 +644,9 @@ export interface UpdateAffiliationsBody {
     isIndependent: boolean;
 }
 
-export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
-
-export interface UserPublicationVersionsFilters {
+export interface UserPublicationsFilters {
     offset: number;
     limit: number;
-    orderBy?: UserPublicationsOrderBy;
-    orderDirection?: OrderDirection;
 }
 
 export interface SendApprovalReminderPathParams {
