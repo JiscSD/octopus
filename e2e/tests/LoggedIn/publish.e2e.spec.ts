@@ -282,7 +282,7 @@ const realWorldApplicationPublication: PublicationTestType = {
 
 export const checkPublication = async (page: Page, publication: PublicationTestType, authors: Helpers.TestUser[]) => {
     // Wait for page to be loaded - viz will try to fetch links
-    await page.waitForLoadState('networkidle');
+    await page.waitForResponse((response) => response.url().includes('/links') && response.ok());
 
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
@@ -646,18 +646,18 @@ test.describe('Publication flow', () => {
         // create v2 and invite a co-author
         await page.locator('[data-testid="username-button"]').click();
         await page.locator('a:has-text("My Account")').click();
-        await page.locator('h2:has-text("Live publications")').waitFor();
+        await page.locator('h2:has-text("Publications")').waitFor();
 
         // check latest live publication
         await page.locator(`a[href="/publications/${publicationId}"]`).waitFor();
-        let livePublicationLocator = page.locator(`a[href="/publications/${publicationId}"]`);
+        let publicationContainer = await page.getByTestId('publication-' + publicationId);
 
         // check "Create new version" button is visible
-        const createNewVersionButton = 'button:has-text("Create new version")';
-        await expect(livePublicationLocator.locator(createNewVersionButton)).toBeVisible();
+        const createNewVersionButton = 'button:has-text("Create Draft Version")';
+        await expect(publicationContainer.locator(createNewVersionButton)).toBeVisible();
 
         // create new version
-        await livePublicationLocator.locator(createNewVersionButton).click();
+        await publicationContainer.locator(createNewVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -707,17 +707,17 @@ test.describe('Publication flow', () => {
         // create v3 as co-author
         await page.locator('[data-testid="username-button"]').click();
         await page.locator('a:has-text("My Account")').click();
-        await page.locator('h2:has-text("Live publications")').waitFor();
+        await page.locator('h2:has-text("Publications")').waitFor();
 
         // check latest live publication
         await expect(page.locator(`a[href="/publications/${publicationId}"]`)).toBeVisible();
-        livePublicationLocator = page.locator(`a[href="/publications/${publicationId}"]`);
+        publicationContainer = await page.getByTestId('publication-' + publicationId);
 
         // check "Create new version" button is visible
-        await expect(livePublicationLocator.locator(createNewVersionButton)).toBeVisible();
+        await expect(publicationContainer.locator(createNewVersionButton)).toBeVisible();
 
         // create new version
-        await livePublicationLocator.locator(createNewVersionButton).click();
+        await publicationContainer.locator(createNewVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -862,7 +862,8 @@ const verifyLastEmailNotification = async (browser: Browser, user: Helpers.TestU
 export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
     browser: Browser,
     user: Helpers.TestUser,
-    publicationTitle: string
+    publicationTitle: string,
+    publicationId: string
 ) => {
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -874,13 +875,14 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
     await page.locator(PageModel.header.usernameButton).click();
     await page.locator(PageModel.header.myProfileButton).click();
 
-    await expect(page.locator(PageModel.myProfile.draftPublicationHeader)).toHaveText('Draft publications');
+    await expect(page.locator(PageModel.myProfile.publicationHeader)).toHaveText('Publications');
 
-    // Confirm publication states: Ready to publish
-    await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
+    // Confirm publication state: Ready to publish
+    const publicationContainer = await page.getByTestId('publication-' + publicationId);
+    await expect(publicationContainer).toContainText('Ready to publish');
 
-    // // Confirm publication is showed as draft
-    await page.locator(`a:has-text("${publicationTitle}")`).click();
+    // Confirm publication is shown as draft
+    await publicationContainer.locator(`a:has-text("View Draft")`).click();
     await expect(page.locator('button[title="Cancel your approval"]')).toBeVisible();
     await expect(page.locator(`h1:has-text("${publicationTitle}")`)).toHaveText(publicationTitle);
 
@@ -890,7 +892,8 @@ export const verifyPublicationIsDisplayedAsDraftForCoAuthor = async (
 export const verifyPublicationIsDisplayedAsLiveForCoAuthor = async (
     browser: Browser,
     user: Helpers.TestUser,
-    publicationTitle: string
+    publicationTitle: string,
+    publicationId: string
 ) => {
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -903,7 +906,10 @@ export const verifyPublicationIsDisplayedAsLiveForCoAuthor = async (
     await page.locator(PageModel.header.myProfileButton).click();
 
     // Confirm publication is showed as live
-    await page.locator(`a:has-text("${publicationTitle}")`).click();
+    const publicationContainer = await page.getByTestId('publication-' + publicationId);
+    await expect(publicationContainer).toContainText('Published on: ');
+
+    await publicationContainer.locator(`a:has-text("View")`).click();
     await expect(page.locator('button[title="Cancel your approval"]')).not.toBeVisible();
     await expect(page.locator(`h1:has-text("${publicationTitle}")`)).toHaveText(publicationTitle);
 
@@ -1507,6 +1513,8 @@ test.describe('Publication flow + co-authors', () => {
         const publicationTitle = publicationWithCoAuthors.uniqueTitle;
         await createPublication(page, publicationTitle, publicationWithCoAuthors.type);
 
+        const publicationId = page.url().split('/').slice(-2)[0];
+
         // fill 'Key information' tab
         await publicationFlowKeyInformation(page);
 
@@ -1545,7 +1553,7 @@ test.describe('Publication flow + co-authors', () => {
         await confirmCoAuthorInvitation(browser, Helpers.user2);
 
         // verify the publication is displayed as draft on co-author profile
-        await verifyPublicationIsDisplayedAsDraftForCoAuthor(browser, Helpers.user2, publicationTitle);
+        await verifyPublicationIsDisplayedAsDraftForCoAuthor(browser, Helpers.user2, publicationTitle, publicationId);
 
         // refresh corresponding author page
         await page.reload();
@@ -1553,10 +1561,11 @@ test.describe('Publication flow + co-authors', () => {
         // verify the status is set to 'ready to publish' for this publication
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myProfileButton).click();
-        await expect(page.locator(`a:has-text("${publicationTitle}")`)).toContainText('Ready to publish');
+        const publicationContainer = await page.getByTestId('publication-' + publicationId);
+        await expect(publicationContainer).toContainText('Ready to publish');
 
         // go back to publication
-        await page.locator(`a:has-text("${publicationTitle}")`).click();
+        await publicationContainer.locator(`a:has-text("View Draft")`).click();
 
         // publish the new publication
         await page.locator(PageModel.publish.publishButtonTracker).click();
@@ -1566,7 +1575,7 @@ test.describe('Publication flow + co-authors', () => {
         ]);
 
         // verify publication is displayed as live on co-author profile
-        await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle);
+        await verifyPublicationIsDisplayedAsLiveForCoAuthor(browser, Helpers.user2, publicationTitle, publicationId);
 
         await page.close();
     });

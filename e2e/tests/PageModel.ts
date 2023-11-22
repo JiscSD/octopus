@@ -135,7 +135,7 @@ export const PageModel = {
     confirmEmail: {},
     myProfile: {
         liveAuthorPageButton: 'a:has-text("View my public author page")',
-        draftPublicationHeader: 'h2:has-text("Draft publications")'
+        publicationHeader: 'h2:has-text("Publications")'
     },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
