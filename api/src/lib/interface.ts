@@ -112,6 +112,10 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicatonQueryParams {
+    fields?: string;
+}
+
 export interface GetPublicationLinksPathParams {
     id: string;
 }

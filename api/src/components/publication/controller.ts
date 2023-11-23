@@ -7,10 +7,11 @@ import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 
 export const get = async (
-    event: I.APIRequest<undefined, undefined, I.GetPublicationPathParams>
+    event: I.APIRequest<undefined, I.GetPublicatonQueryParams, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.id);
+        const fields = event.queryStringParameters?.fields;
 
         if (!publication) {
             return response.json(404, {
@@ -30,7 +31,7 @@ export const get = async (
             return response.json(403, { message: "You don't have permissions to view this publication." });
         }
 
-        return response.json(200, publication);
+        return response.json(200, fields ? helpers.buildPartialResponse(fields, publication) : publication);
     } catch (err) {
         console.log(err);
 

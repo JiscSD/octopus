@@ -732,6 +732,7 @@ type AccountPagePublicationState =
     | 'pending coauthor approval'
     | 'pending your approval'
     | 'approved'
+    | 'published once'
     | 'published'
     | 'own new version'
     | "coauthor's new version"
@@ -769,9 +770,14 @@ const checkPublicationOnAccountPage = async (
         case 'approved':
             await expect(publicationContainer).toContainText('Status: Ready to publish');
             break;
-        case 'published':
+        case 'published once':
             await expect(publicationContainer).toContainText('1 published version');
             await expect(publicationContainer).toContainText('New draft not created');
+            await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
+            await expect(publicationContainer).toContainText('Published on: ');
+            await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
+            break;
+        case 'published':
             await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
             await expect(publicationContainer).toContainText('Published on: ');
             await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
@@ -1439,7 +1445,7 @@ test.describe('Publication flow + co-authors', () => {
         await Promise.all([page.waitForNavigation(), page.locator('button[aria-label="Yes"]').click()]);
 
         // Check published details
-        await checkPublicationOnAccountPage(page, { id: publicationId }, 'published', true);
+        await checkPublicationOnAccountPage(page, { id: publicationId }, 'published once', true);
 
         // Create new version as co-author
         await page2.reload();
@@ -2095,22 +2101,13 @@ test.describe('Publication flow + co-authors', () => {
 
         // get publication id from url and deduct canonical DOI
         const publicationId = page.url().split('/').slice(-3)[0];
+        const publicationTestId = 'publication-' + publicationId;
 
         // create v2 and invite a co-author
-        await page.locator('[data-testid="username-button"]').click();
-        await page.locator('a:has-text("My Account")').click();
-        await page.locator('h2:has-text("Publications")').waitFor();
+        await checkPublicationOnAccountPage(page, { id: publicationId }, 'published once', true);
 
-        // check latest live publication
-        await page.locator(`a[href="/publications/${publicationId}"]`).waitFor();
-        let publicationContainer = await page.getByTestId('publication-' + publicationId);
-
-        // check "Create draft version" button is visible
-        const createDraftVersionButton = 'button:has-text("Create Draft Version")';
-        await expect(publicationContainer.locator(createDraftVersionButton)).toBeVisible();
-
-        // create new draft version
-        await publicationContainer.locator(createDraftVersionButton).click();
+        // create new version
+        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2158,19 +2155,10 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user2.fullName);
 
         // create v3 as co-author
-        await page.locator('[data-testid="username-button"]').click();
-        await page.locator('a:has-text("My Account")').click();
-        await page.locator('h2:has-text("Publications")').waitFor();
-
-        // check latest live publication
-        await expect(page.locator(`a[href="/publications/${publicationId}"]`)).toBeVisible();
-        publicationContainer = await page.getByTestId('publication-' + publicationId);
-
-        // check "Create new version" button is visible
-        await expect(publicationContainer.locator(createDraftVersionButton)).toBeVisible();
+        await checkPublicationOnAccountPage(page, { id: publicationId }, 'published', true);
 
         // create new version
-        await publicationContainer.locator(createDraftVersionButton).click();
+        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2184,6 +2172,39 @@ test.describe('Publication flow + co-authors', () => {
 
         // remove initial corresponding author
         await removeCoAuthor(page, Helpers.user1);
+
+        // preview the the new version
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
+
+        // check v3 DRAFT
+        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
+        await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
+
+        // switch between versions
+        await page.click(PageModel.publish.versionsAccordionButton);
+        await expect(page.locator('#versions-accordion p:has-text("Version 3: Currently viewed")')).toBeVisible();
+        expect(page.url()).toContain('/versions/latest');
+
+        // switch to v2
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/2');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 2: Currently viewed")')).toBeVisible();
+
+        // switch to v1
+        await page.locator('#versions-accordion a').nth(1).click();
+        await page.waitForURL('**/versions/1');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 1: Currently viewed")')).toBeVisible();
+
+        // switch back to v3
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/3');
+
+        // go back to edit page
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.waitForURL('**/edit?**');
 
         // check publish button is now enabled
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
