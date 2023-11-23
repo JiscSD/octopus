@@ -732,6 +732,39 @@ test.describe('Publication flow', () => {
         // remove initial corresponding author
         await removeCoAuthor(page, Helpers.user1);
 
+        // preview the the new version
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
+
+        // check v3 DRAFT
+        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
+        await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
+
+        // switch between versions
+        await page.click(PageModel.publish.versionsAccordionButton);
+        await expect(page.locator('#versions-accordion p:has-text("Version 3: Currently viewed")')).toBeVisible();
+        expect(page.url()).toContain('/versions/latest');
+
+        // switch to v2
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/2');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 2: Currently viewed")')).toBeVisible();
+
+        // switch to v1
+        await page.locator('#versions-accordion a').nth(1).click();
+        await page.waitForURL('**/versions/1');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 1: Currently viewed")')).toBeVisible();
+
+        // switch back to v3
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/3');
+
+        // go back to edit page
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.waitForURL('**/edit?**');
+
         // check publish button is now enabled
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
 

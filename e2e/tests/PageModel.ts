@@ -215,7 +215,8 @@ export const PageModel = {
             manualAffiliationCity: 'input[placeholder="City"]',
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
-        }
+        },
+        versionsAccordionButton: 'aside button[title="Versions"]'
     },
     coauthorApprove: {},
     coauthorDeny: {},

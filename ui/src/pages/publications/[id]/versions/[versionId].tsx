@@ -152,6 +152,7 @@ type Props = {
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
+    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const confirmation = Contexts.useConfirmationModal();
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const isBookmarked = bookmarkId ? true : false;
@@ -192,6 +193,16 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.flags }
     );
 
+    const { data: publication } = useSWR<
+        Pick<Interfaces.Publication, 'id' | 'type'> & {
+            versions: Types.PartialPublicationVersion[];
+        }
+    >(
+        publicationVersion?.versionNumber === 1 && publicationVersion.isLatestVersion
+            ? null // don't fetch data if there is only one version available
+            : `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,versions(id,doi,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion)`
+    );
+
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
     // problems this publication is linked to
@@ -200,7 +211,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     // problems linked from this publication
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
-    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const isBookmarkButtonVisible = useMemo(
         () => user && publicationVersion?.currentStatus === 'LIVE',
         [publicationVersion, user]
@@ -216,6 +226,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
+    const showVersionsAccordion = publication && publication.versions.length > 1;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
@@ -645,6 +656,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
 
                         <div className="block lg:hidden">
+                            {showVersionsAccordion && (
+                                <div className="my-8">
+                                    <Components.VersionsAccordion
+                                        versions={publication.versions}
+                                        selectedVersion={publicationVersion}
+                                    />
+                                </div>
+                            )}
                             {publicationVersion && (
                                 <SidebarCard
                                     publicationVersion={publicationVersion}
@@ -917,6 +936,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
+                        {showVersionsAccordion && (
+                            <Components.VersionsAccordion
+                                versions={publication.versions}
+                                selectedVersion={publicationVersion}
+                            />
+                        )}
                         <SidebarCard
                             publicationVersion={publicationVersion}
                             linkedFrom={linkedFrom}
