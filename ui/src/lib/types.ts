@@ -328,3 +328,15 @@ export type BlogFields = {
     slug: Contentful.EntryFields.Text;
     publishedDate: Contentful.EntryFields.Date;
 };
+
+export type PartialPublicationVersion = Pick<
+    Interfaces.PublicationVersion,
+    | 'id'
+    | 'doi'
+    | 'versionOf'
+    | 'versionNumber'
+    | 'createdBy'
+    | 'publishedDate'
+    | 'isLatestLiveVersion'
+    | 'isLatestVersion'
+>;
