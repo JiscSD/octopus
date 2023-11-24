@@ -112,6 +112,10 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicatonQueryParams {
+    fields?: string;
+}
+
 export interface GetPublicationLinksPathParams {
     id: string;
 }
@@ -828,6 +832,7 @@ export interface UserEmployment {
     organisation: string;
 }
 
+// Topics
 export interface TopicTranslation {
     language: Languages;
     value: string;
@@ -861,3 +866,9 @@ export interface TopicsPaginatedResults {
         createdAt: Date;
     }[];
 }
+
+// Events
+/**
+ * @todo remove once functionality has been tested.
+ */
+export type EventType = 'dummy';

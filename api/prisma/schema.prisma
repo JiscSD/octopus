@@ -53,15 +53,15 @@ model Images {
 }
 
 model Publication {
-    id                                 String                 @id @default(cuid())
-    url_slug                           String                 @unique @default(cuid())
-    type                               PublicationType
-    doi                                String
-    publicationFlags                   PublicationFlags[]
-    PublicationBookmarks               PublicationBookmarks[]
-    linkedTo                           Links[]                @relation("from")
-    linkedFrom                         Links[]                @relation("to")
-    versions                           PublicationVersion[]
+    id                   String                 @id @default(cuid())
+    url_slug             String                 @unique @default(cuid())
+    type                 PublicationType
+    doi                  String
+    publicationFlags     PublicationFlags[]
+    PublicationBookmarks PublicationBookmarks[]
+    linkedTo             Links[]                @relation("from")
+    linkedFrom           Links[]                @relation("to")
+    versions             PublicationVersion[]
 }
 
 model PublicationVersion {
@@ -195,15 +195,15 @@ model PublicationBookmarks {
 }
 
 model Topic {
-    id                      String             @id @default(cuid())
-    title                   String
-    language                Languages          @default(en)
-    translations            TopicTranslation[]
-    createdAt               DateTime           @default(now())
-    updatedAt               DateTime           @updatedAt
-    parents                 Topic[]            @relation("TopicHierarchy")
-    children                Topic[]            @relation("TopicHierarchy")
-    publicationVersions     PublicationVersion[]
+    id                  String               @id @default(cuid())
+    title               String
+    language            Languages            @default(en)
+    translations        TopicTranslation[]
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    parents             Topic[]              @relation("TopicHierarchy")
+    children            Topic[]              @relation("TopicHierarchy")
+    publicationVersions PublicationVersion[]
 }
 
 model Bookmark {
@@ -223,6 +223,13 @@ model TopicTranslation {
     language Languages
     value    String
     topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+    id        String   @id @default(cuid())
+    type      String
+    createdAt DateTime @default(now())
+    data      Json
 }
 
 enum ImageExtension {

@@ -522,3 +522,12 @@ functions:
                   path: ${self:custom.versions.v1}/topics
                   method: GET
                   cors: true
+
+    # Events
+    dailyEventCheck:
+        handler: src/components/event/routes.dailyEventCheck
+        events:
+            # TODO: uncomment schedule below when functionality has been tested.
+            # - schedule: cron(0 7 ? * * *) # Every day at 7 a.m.
+            # TODO: remove schedule below when functionality has been tested.
+            - schedule: cron(0 * ? * * *) # Every hour, on the hour.

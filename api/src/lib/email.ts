@@ -719,3 +719,18 @@ export const notifyCoAuthorCancelledApproval = async (options: NotifyCoAuthorCan
         subject: 'A co-author has cancelled their approval'
     });
 };
+
+/**
+ * @todo: remove once functionality has been tested.
+ */
+export const dummyEventNotification = async (to: string): Promise<void> => {
+    const html = '<p>This is a test notification to demonstrate the scheduled notification functionality.</p>';
+    const text = 'This is a test notification to demonstrate the scheduled notification functionality.';
+
+    await send({
+        html: standardHTMLEmailTemplate('Dummy event nofication', html, 'This was sent by a scheduled function'),
+        text,
+        to,
+        subject: 'Dummy event nofication'
+    });
+};
