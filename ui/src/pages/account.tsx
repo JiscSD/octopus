@@ -184,7 +184,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         Publications
                     </h2>
                     {props.userPublications.length ? (
-                        <div className="relative space-y-4">
+                        <ul className="relative space-y-4">
                             {props.userPublications.map((publication) => (
                                 <Components.PublicationSimpleResult
                                     key={publication.id}
@@ -192,7 +192,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                     user={props.user}
                                 />
                             ))}
-                        </div>
+                        </ul>
                     ) : (
                         <Components.Alert
                             severity="INFO"

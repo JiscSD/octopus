@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
@@ -61,7 +61,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     ).length;
 
     return (
-        <div
+        <li
             data-testid={`publication-${props.publication.id}`}
             className="flex min-h-[200px] w-full flex-col rounded border border-transparent bg-white-50 p-5 text-sm text-grey-800 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:text-white-50 dark:shadow-none sm:flex-row sm:text-base"
         >
@@ -181,7 +181,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                     <p>Never published</p>
                 )}
             </div>
-        </div>
+        </li>
     );
 };
 
