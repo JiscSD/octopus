@@ -14,8 +14,8 @@ describe("Get a given user's publications", () => {
         expect(publications.status).toEqual(200);
         expect(publications.body.results.length).toEqual(21);
         expect(
-            publications.body.results.some((publication) =>
-                publication.versions.some((version) => version.currentStatus === 'DRAFT')
+            publications.body.results.some(
+                (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
             )
         ).toEqual(true);
     });
@@ -26,8 +26,8 @@ describe("Get a given user's publications", () => {
         expect(publications.status).toEqual(200);
         expect(publications.body.results.length).toEqual(9);
         expect(
-            publications.body.results.some((publication) =>
-                publication.versions.some((version) => version.currentStatus === 'DRAFT')
+            publications.body.results.some(
+                (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
             )
         ).toEqual(false);
     });
@@ -38,8 +38,8 @@ describe("Get a given user's publications", () => {
         expect(publications.status).toEqual(200);
         expect(publications.body.results.length).toEqual(9);
         expect(
-            publications.body.results.some((publication) =>
-                publication.versions.some((version) => version.currentStatus === 'DRAFT')
+            publications.body.results.some(
+                (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
             )
         ).toEqual(false);
     });
