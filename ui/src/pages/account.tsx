@@ -20,7 +20,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     const token = Helpers.getJWT(context);
 
     let user: Interfaces.User | null = null;
-    let userPublications: Interfaces.PublicationWithVersions[] = [];
+    let userPublications: Interfaces.Publication[] = [];
     let error: string | null = null;
 
     // fetch the current user
@@ -57,7 +57,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.PublicationWithVersions[];
+    userPublications: Interfaces.Publication[];
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {

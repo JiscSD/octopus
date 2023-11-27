@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 
 type Props = {
-    publication: Interfaces.PublicationWithVersions;
+    publication: Interfaces.Publication;
     user: Interfaces.User;
     canCreateNewVersion?: boolean;
     canEditNewVersion?: boolean;

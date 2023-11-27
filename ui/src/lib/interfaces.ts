@@ -416,7 +416,7 @@ export interface UserPublicationsResult {
     offset: number;
     limit: number;
     total: number;
-    results: PublicationWithVersions[];
+    results: Publication[];
 }
 
 export interface OrcidAffiliationDate {
