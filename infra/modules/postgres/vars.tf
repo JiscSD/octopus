@@ -15,6 +15,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "vpc_id_new" {
+  type = string
+}
+
 variable "allocated_storage" {
   type = number
 }
@@ -41,4 +45,8 @@ variable "monitoring_interval" {
 
 variable "performance_insights_retention_period" {
   type = number
+}
+
+variable "vpc_cidr_block" {
+  type = string
 }

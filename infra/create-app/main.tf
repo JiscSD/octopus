@@ -28,6 +28,8 @@ module "postgres" {
   private_subnet_ids                    = module.network.private_subnet_ids
   environment                           = local.environment
   vpc_id                                = module.network.vpc_id
+  vpc_id_new                            = module.network.vpc_id_new
+  vpc_cidr_block                        = data.aws_ssm_parameter.vpc_cidr_block.value
   allocated_storage                     = var.rds_allocated_storage
   max_allocated_storage                 = var.rds_max_allocated_storage
   instance                              = var.rds_instance
@@ -43,6 +45,8 @@ module "elasticsearch" {
   private_subnet_ids = module.network.private_subnet_ids
   environment        = local.environment
   vpc_id             = module.network.vpc_id
+  vpc_id_new         = module.network.vpc_id_new
+  vpc_cidr_block     = data.aws_ssm_parameter.vpc_cidr_block.value
   instance_size      = var.elasticsearch_instance_size
 }
 
