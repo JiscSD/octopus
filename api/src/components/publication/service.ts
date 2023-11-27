@@ -426,19 +426,15 @@ const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPubli
 
         // For each publication in "b"
         for (const bPub of b) {
-            const aByPublicationDate = sortPublicationsByPublicationDate(
-                // Pick the publications from "a" that are parents of the "b" publication...
-                aPrecedesB
-                    ? a.filter((aPub) => (aPub as I.LinkedToPublication).childPublication === bPub.id)
-                    : // Or children, if we're working the other way
-                      a.filter((aPub) => (aPub as I.LinkedFromPublication).parentPublication === bPub.id)
+            aSorted.push(
+                ...sortPublicationsByPublicationDate(
+                    // Pick the publications from "a" that are parents of the "b" publication...
+                    aPrecedesB
+                        ? a.filter((aPub) => (aPub as I.LinkedToPublication).childPublication === bPub.id)
+                        : // Or children, if we're working the other way
+                          a.filter((aPub) => (aPub as I.LinkedFromPublication).parentPublication === bPub.id)
+                )
             );
-
-            for (const aPub of aByPublicationDate) {
-                if (!aSorted.find((sortedAPub) => sortedAPub.id === aPub.id)) {
-                    aSorted.push(aPub);
-                }
-            }
         }
 
         return aSorted;
