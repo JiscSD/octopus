@@ -31,6 +31,19 @@ resource "aws_security_group" "elasticsearch" {
   }
 }
 
+resource "aws_security_group" "elasticsearch_new" {
+  name   = "${var.environment}-elasticsearch-sg-new"
+  vpc_id = var.vpc_id_new
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+}
+
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name           = "${var.environment}-octopus"
   elasticsearch_version = "OpenSearch_2.7"

@@ -27,6 +27,25 @@ resource "aws_security_group" "database_security_group" {
   }
 }
 
+resource "aws_security_group" "database_security_group_new" {
+  name        = "${var.project_name}_${var.environment}_database_security_group_new"
+  description = "${var.project_name}_${var.environment}_database_security_group_new"
+  vpc_id      = var.vpc_id_new
+
+  ingress {
+    description = "Access from VPC"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr_block]
+  }
+
+  tags = {
+    Name        = "${var.project_name}_security_group_${var.environment}"
+    Environment = var.environment
+  }
+}
+
 resource "random_string" "db_master_pass" {
   length  = 40
   special = false

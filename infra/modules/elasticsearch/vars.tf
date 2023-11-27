@@ -2,6 +2,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "vpc_id_new" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -11,5 +15,9 @@ variable "private_subnet_ids" {
 }
 
 variable "instance_size" {
+  type = string
+}
+
+variable "vpc_cidr_block" {
   type = string
 }
