@@ -120,6 +120,93 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
     );
 };
 
+const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: string) => {
+    const { publication, linkedTo, linkedFrom } = data;
+    const publications: BoxEntry[] = [];
+
+    if (publication.type === type) {
+        // We only need the currently viewed publication in this case.
+        return [
+            {
+                id: publication.id,
+                title: publication.title,
+                type: publication.type,
+                createdBy: publication.createdBy,
+                publishedDate: publication.publishedDate,
+                authorFirstName: publication.authorFirstName,
+                authorLastName: publication.authorLastName,
+                authors: publication.authors,
+                pointers: linkedFrom
+                    .filter(
+                        (linkedPublication) =>
+                            linkedPublication.type !== 'PEER_REVIEW' &&
+                            linkedPublication.parentPublication === publication.id
+                    )
+                    .map((publication) => publication.id) // get the ids of all direct child publications
+            }
+        ];
+    }
+
+    // ignore publications above 'PROBLEM'
+    if (publication.type !== 'PROBLEM') {
+        // Loop through all parent publications
+        for (const linkedPublication of linkedTo) {
+            if (
+                linkedPublication.type === type &&
+                !publications.find((publication) => publication.id === linkedPublication.id)
+            ) {
+                publications.push({
+                    id: linkedPublication.id,
+                    title: linkedPublication.title,
+                    type: linkedPublication.type,
+                    createdBy: linkedPublication.createdBy,
+                    authorFirstName: linkedPublication.authorFirstName,
+                    authorLastName: linkedPublication.authorLastName,
+                    authors: linkedPublication.authors,
+                    publishedDate: linkedPublication.publishedDate,
+                    pointers: linkedTo
+                        .filter(
+                            (publication) =>
+                                publication.type !== 'PEER_REVIEW' && publication.id === linkedPublication.id
+                        )
+                        .map((publication) => publication.childPublication) // get the ids of all direct child publications
+                });
+            }
+        }
+    }
+
+    // ignore publications below 'REAL_WORLD_APPLICATION'
+    if (publication.type !== 'REAL_WORLD_APPLICATION') {
+        // Loop through all child publications
+        for (const linkedPublication of linkedFrom) {
+            if (
+                linkedPublication.type === type &&
+                !publications.find((publication) => publication.id === linkedPublication.id)
+            ) {
+                publications.push({
+                    id: linkedPublication.id,
+                    title: linkedPublication.title,
+                    type: linkedPublication.type,
+                    createdBy: linkedPublication.createdBy,
+                    authorFirstName: linkedPublication.authorFirstName,
+                    authorLastName: linkedPublication.authorLastName,
+                    publishedDate: linkedPublication.publishedDate,
+                    authors: linkedPublication.authors,
+                    pointers: linkedFrom
+                        .filter(
+                            (publication) =>
+                                publication.type !== 'PEER_REVIEW' &&
+                                publication.parentPublication === linkedPublication.id
+                        )
+                        .map((publication) => publication.id) // get the ids of all direct child publications
+                });
+            }
+        }
+    }
+
+    return publications;
+};
+
 type VisualizationProps = {
     publicationId: string;
 };
@@ -158,53 +245,6 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
         []
     );
 
-    const boxes: BoxEntry[] = [];
-    if (data) {
-        const { publication: selectedPublication, linkedTo, linkedFrom } = data;
-        const allPublications = [selectedPublication, ...linkedTo, ...linkedFrom];
-        const selectedTypeIndex = filteredPublicationTypes.indexOf(selectedPublication.type);
-        for (const publication of allPublications) {
-            const typeIndex = filteredPublicationTypes.indexOf(publication.type);
-            if (!boxes.find((box) => box.id === publication.id)) {
-                boxes.push({
-                    id: publication.id,
-                    title: publication.title,
-                    type: publication.type,
-                    createdBy: publication.createdBy,
-                    publishedDate: publication.publishedDate,
-                    authorFirstName: publication.authorFirstName,
-                    authorLastName: publication.authorLastName,
-                    authors: publication.authors,
-                    pointers:
-                        // for the selected publication and its child types, get pointers from linkedFrom
-                        publication.type === selectedPublication.type || typeIndex > selectedTypeIndex
-                            ? [
-                                  ...new Set(
-                                      linkedFrom
-                                          .filter(
-                                              (link) =>
-                                                  link.type !== 'PEER_REVIEW' &&
-                                                  link.parentPublication === publication.id
-                                          )
-                                          .map((link) => link.id)
-                                  )
-                              ]
-                            : // for immediate parents, just point to the selected publication
-                            typeIndex === selectedTypeIndex - 1
-                            ? [selectedPublication.id]
-                            : // for more distant ancestors, get pointers from linkedTo
-                              [
-                                  ...new Set(
-                                      linkedTo
-                                          .filter((link) => link.id === publication.id)
-                                          .map((link) => link.childPublication)
-                                  )
-                              ]
-                });
-            }
-        }
-    }
-
     return (
         <section className="container mb-8 px-8 pt-8 lg:pt-16">
             <div className="overflow-hidden" ref={visualizationHeaderRef}>
@@ -226,18 +266,17 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
                         {data && (
                             <Xwrapper>
-                                {filteredPublicationTypes.map((type) => {
-                                    const boxesOfType = boxes
-                                        .filter((box) => box.type === type)
-                                        .map((box) => (
-                                            <Box isSelected={props.publicationId == box.id} key={box.id} {...box} />
-                                        ));
-                                    return (
-                                        <div key={type} className="space-y-4 p-1">
-                                            {boxesOfType}
-                                        </div>
-                                    );
-                                })}
+                                {filteredPublicationTypes.map((type) => (
+                                    <div key={type} className="space-y-4 p-1">
+                                        {getPublicationsByType(data, type).map((publication) => (
+                                            <Box
+                                                isSelected={props.publicationId == publication.id}
+                                                key={publication.id}
+                                                {...publication}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
                             </Xwrapper>
                         )}
                     </div>
