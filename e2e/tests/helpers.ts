@@ -161,7 +161,7 @@ export const search = async (page: Page, searchTerm: string, publicationSearchRe
 export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
     // Go to live publication page
     await page.goto(`${UI_BASE}/publications/${id}`, {
-        waitUntil: 'domcontentloaded'
+        waitUntil: 'networkidle'
     });
     await expect(page.locator('h1')).toBeVisible();
 
@@ -189,7 +189,7 @@ export const clickFirstPublication = async (page: Page): Promise<void> => {
     await firstPublication.click();
 
     // expect URL to contain publication path
-    await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}`);
+    await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}/versions/latest`);
 };
 
 export const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {

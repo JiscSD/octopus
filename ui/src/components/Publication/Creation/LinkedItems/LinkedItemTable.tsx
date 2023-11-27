@@ -6,7 +6,7 @@ import * as Interfaces from '@interfaces';
 import * as Types from '@types';
 
 type LinkedEntityTableProps = {
-    deleteLink: (id: string) => void;
+    deleteLink: (id: string) => Promise<void>;
     entities: Interfaces.LinkedToPublication[] | Interfaces.BaseTopic[];
     entityType: Types.LinkedEntityType;
 };

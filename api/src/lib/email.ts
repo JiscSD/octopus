@@ -3,7 +3,10 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as aws from '@aws-sdk/client-ses';
 import * as I from 'interface';
 
-const from = process.env.EMAIL_SENDER_ADDRESS;
+const from = {
+    name: 'Octopus.ac',
+    address: process.env.EMAIL_SENDER_ADDRESS || ''
+};
 const baseURL = process.env.BASE_URL;
 
 const ses = new aws.SES({
@@ -122,7 +125,7 @@ const styles = {
     `
 };
 
-export const standardHTMLEmailTemplate = (subject: string, html: string): string => {
+export const standardHTMLEmailTemplate = (subject: string, html: string, previewText = ''): string => {
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -133,6 +136,7 @@ export const standardHTMLEmailTemplate = (subject: string, html: string): string
                 <title>${subject}</title>
             </head>
             <body style="${styles.body}">
+                <div style="display: none; max-height: 0px; overflow: hidden;">${previewText}&zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj; &zwnj;</div>
                 <div style="${styles.wrapper}">
                     <div style="${styles.header}">
                         <img
@@ -231,7 +235,11 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => 
     const text = `${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus: ${options.publicationTitle}. To confirm your involvement, and see a preview of the publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=true . If you are not an author of this publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=false . An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
-        html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),
+        html: standardHTMLEmailTemplate(
+            'You’ve been added as a co-author on Octopus',
+            html,
+            'Next, confirm your involvement, and log in to get started'
+        ),
         text,
         to: options.coAuthor,
         subject: 'You’ve been added as a co-author on Octopus'
@@ -267,7 +275,7 @@ export const verificationCode = async (options: VerificationCode): Promise<void>
     const text = `Please enter the following code to verify your email address: ${options.code}`;
 
     await send({
-        html: standardHTMLEmailTemplate('Verify your Octopus account', html),
+        html: standardHTMLEmailTemplate('Verify your Octopus account', html, 'Use the code within to get started'),
         text,
         to: options.to,
         subject: 'Verify your Octopus account'
@@ -308,7 +316,11 @@ export const newRedFlagAuthorNotification = async (
     const text = `Your publication '${options.publicationName}' has been red flagged by ${options.submitter}. Flag type: ${options.type}. Flag message: ${options.flagReason}.`;
 
     return send({
-        html: standardHTMLEmailTemplate('Your publication has been red flagged', html),
+        html: standardHTMLEmailTemplate(
+            'Your publication has been red flagged',
+            html,
+            'Somebody has identified a potential concern'
+        ),
         text,
         to: options.to,
         subject: 'Your publication has been red flagged'
@@ -340,7 +352,7 @@ export const newRedFlagCreatorNotification = async (
     const text = `You have successfully red flagged this publication. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
     return send({
-        html: standardHTMLEmailTemplate('Red flag created', html),
+        html: standardHTMLEmailTemplate('Red flag created', html, "The publication's author has been notified"),
         text,
         to: options.to,
         subject: 'Red flag created'
@@ -380,7 +392,7 @@ export const updateRedFlagNotification = async (
     const text = `A new comment has been added against the red flag submitted by ${options.submitter}. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
     return send({
-        html: standardHTMLEmailTemplate('Red flag updated', html),
+        html: standardHTMLEmailTemplate('Red flag updated', html, `${options.submitter} has added a comment`),
         text,
         to: options.to,
         subject: 'Red flag updated'
@@ -411,7 +423,11 @@ export const resolveRedFlagAuthorNotification = async (
     const text = `A red flag has been resolved for '${options.publicationName}'. Flag type: ${options.type}. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
     return send({
-        html: standardHTMLEmailTemplate('Red flag resolved', html),
+        html: standardHTMLEmailTemplate(
+            'Red flag resolved',
+            html,
+            'It will no longer appear prominently against the publication'
+        ),
         text,
         to: options.to,
         subject: 'Red flag resolved'
@@ -441,7 +457,7 @@ export const resolveRedFlagCreatorNotification = async (
     const text = `Thank you for resolving the red flag you created for '${options.publicationName}'. You can view it here: ${baseURL}/publications/${options.publicationId}/flag/${options.flagId}`;
 
     return send({
-        html: standardHTMLEmailTemplate('Red flag resolved', html),
+        html: standardHTMLEmailTemplate('Red flag resolved', html, "The publication's author has been notified"),
         text,
         to: options.to,
         subject: 'Red flag resolved'
@@ -491,7 +507,11 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
         } still need to confirm your draft before this publication can go live. Note that all co-authors must approve before this publication can go live`;
 
         await send({
-            html: standardHTMLEmailTemplate('A co-author has approved your Octopus publication', html),
+            html: standardHTMLEmailTemplate(
+                'A co-author has approved your Octopus publication',
+                html,
+                'One step closer to going live'
+            ),
             text,
             to: options.publication.authorEmail,
             subject: 'A co-author has approved your Octopus publication'
@@ -514,7 +534,11 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
     const text = `All co-authors have confirmed their involvement in '${options.publication.title}' and have confirmed that the draft is ready to publish. You are now ready to publish! You can view the publication here: ${options.publication.url} . Note that any changes to the draft publication at this stage will require co-authors to reapprove.`;
 
     await send({
-        html: standardHTMLEmailTemplate('All co-authors have approved your Octopus publication', html),
+        html: standardHTMLEmailTemplate(
+            'All co-authors have approved your Octopus publication',
+            html,
+            'You are ready to publish!'
+        ),
         text,
         to: options.publication.authorEmail,
         subject: 'All co-authors have approved your Octopus publication'
@@ -543,7 +567,11 @@ export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection):
     const text = `The request that you sent to ${options.coAuthor.email} to be register as a co-author of '${options.publication.title}' has been rejected, and this individual has denied their involvement. If you feel that this may have been a mistake, please check that the email address was spelled correctly, or contact this individual directly to discuss their involvement. This individual’s approval is no longer required before this publication can go live.`;
 
     await send({
-        html: standardHTMLEmailTemplate('A co-author has denied their involvement', html),
+        html: standardHTMLEmailTemplate(
+            'A co-author has denied their involvement',
+            html,
+            'Their approval is no longer required to go live'
+        ),
         text,
         to: options.publication.authorEmail,
         subject: 'A co-author has denied their involvement'
@@ -568,7 +596,11 @@ export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval): Pro
     const text = `You are no longer listed as a co-author on '${options.publication.title}' and will not receive emails about updates to this publication in future. If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.`;
 
     await send({
-        html: standardHTMLEmailTemplate('You are no longer listed as a co-author', html),
+        html: standardHTMLEmailTemplate(
+            'You are no longer listed as a co-author',
+            html,
+            "You won't receive any more updates about this publication"
+        ),
         text,
         to: options.coAuthor.email,
         subject: 'You are no longer listed as a co-author'
@@ -608,7 +640,11 @@ export const sendApprovalReminder = async (options: SendApprovalReminder): Promi
     const text = `${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus: ${options.publication.title}. To confirm your involvement, and see a preview of the publication, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=true. If you are not the co-author, follow this link: ${baseURL}/author-link?email=${options.coAuthor.email}&code=${options.coAuthor.code}&publicationId=${options.publication.id}&versionId=${options.publication.versionId}&approve=false. An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
-        html: standardHTMLEmailTemplate('You’ve been added as a co-author on Octopus', html),
+        html: standardHTMLEmailTemplate(
+            'You’ve been added as a co-author on Octopus',
+            html,
+            `A reminder from ${options.publication.creator}`
+        ),
         text,
         to: options.coAuthor.email,
         subject: 'You’ve been added as a co-author on Octopus'
@@ -641,7 +677,11 @@ export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutC
     const text = `The corresponding author has made changes to a publication you are involved with. Please use the link below to review the draft publication to ensure you are happy with the changes: ${options.publication.url} . Your approval is required before the corresponding author can publish. If you have any concerns with the publication, please contact the corresponding author directly to discuss them.`;
 
     await send({
-        html: standardHTMLEmailTemplate('Changes have been made to a publication that you are an author on', html),
+        html: standardHTMLEmailTemplate(
+            'Changes have been made to a publication that you are an author on',
+            html,
+            'These are waiting for your review'
+        ),
         text,
         to: options.coAuthor.email,
         subject: 'Changes have been made to a publication that you are an author on'
@@ -669,9 +709,28 @@ export const notifyCoAuthorCancelledApproval = async (options: NotifyCoAuthorCan
     const text = `A co-author had previously approved your publication, ${options.publication.title}, but has now changed their mind, indicating that changes might be needed. You can view the publication following this link: ${options.publication.url}. This author’s approval is required before publishing. Please discuss whether any further changes are needed with the author.`;
 
     await send({
-        html: standardHTMLEmailTemplate('A co-author has cancelled their approval', html),
+        html: standardHTMLEmailTemplate(
+            'A co-author has cancelled their approval',
+            html,
+            'You may need to discuss their concerns directly to proceed'
+        ),
         text,
         to: options.publication.authorEmail,
         subject: 'A co-author has cancelled their approval'
+    });
+};
+
+/**
+ * @todo: remove once functionality has been tested.
+ */
+export const dummyEventNotification = async (to: string): Promise<void> => {
+    const html = '<p>This is a test notification to demonstrate the scheduled notification functionality.</p>';
+    const text = 'This is a test notification to demonstrate the scheduled notification functionality.';
+
+    await send({
+        html: standardHTMLEmailTemplate('Dummy event nofication', html, 'This was sent by a scheduled function'),
+        text,
+        to,
+        subject: 'Dummy event nofication'
     });
 };

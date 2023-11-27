@@ -64,16 +64,24 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch data concurrently
     const promises: [
-        Promise<Interfaces.PublicationVersion | void>,
+        Promise<
+            | { publicationVersion: Interfaces.PublicationVersion; versionRequestError: null }
+            | { publicationVersion: null; versionRequestError: { status: number; message: string } }
+        >,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
-        Promise<Interfaces.Flag[] | void>,
-        Promise<Interfaces.BaseTopic[] | void>
+        Promise<Interfaces.Flag[] | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
-            .then((res) => res.data)
-            .catch((error) => console.log(error)),
+            .then((res) => ({ publicationVersion: res.data, versionRequestError: null }))
+            .catch((error) => {
+                console.log(error);
+                const status = error.response.status;
+                const message = error.response.data.message;
+
+                return { publicationVersion: null, versionRequestError: { status, message } };
+            }),
         api
             .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
             .then((res) => res.data)
@@ -85,39 +93,51 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         api
             .get(`${Config.endpoints.publications}/${requestedId}/flags`, token)
             .then((res) => res.data)
-            .catch((error) => console.log(error)),
-        api
-            .get(`${Config.endpoints.publications}/${requestedId}/topics`, token)
-            .then((res) => res.data)
             .catch((error) => console.log(error))
     ];
 
     const [
-        publicationVersion,
+        { publicationVersion, versionRequestError },
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
         topics = []
     ] = await Promise.all(promises);
 
-    if (!publicationVersion) {
+    if (versionRequestError) {
+        const status = versionRequestError.status;
+        if (status === 404 || (token && status === 403)) {
+            return {
+                notFound: true
+            };
+        } else if (status === 403) {
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(context.resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+    }
+
+    if (publicationVersion) {
+        return {
+            props: {
+                publicationVersion,
+                userToken: token || '',
+                bookmarkId: bookmarks.length ? bookmarks[0].id : null,
+                publicationId: publicationVersion.publication.id,
+                protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
+                directLinks,
+                flags,
+                topics
+            }
+        };
+    } else {
         return {
             notFound: true
         };
     }
-
-    return {
-        props: {
-            publicationVersion,
-            userToken: token || '',
-            bookmarkId: bookmarks.length ? bookmarks[0].id : null,
-            publicationId: publicationVersion.publication.id,
-            protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
-            directLinks,
-            flags,
-            topics
-        }
-    };
 };
 
 type Props = {
@@ -132,6 +152,7 @@ type Props = {
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = useRouter();
+    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
     const confirmation = Contexts.useConfirmationModal();
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const isBookmarked = bookmarkId ? true : false;
@@ -172,12 +193,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.flags }
     );
 
-    const { data: topics = [] } = useSWR<Interfaces.BaseTopic[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/topics`,
-        null,
-        {
-            fallbackData: props.topics
+    const { data: publication } = useSWR<
+        Pick<Interfaces.Publication, 'id' | 'type'> & {
+            versions: Types.PartialPublicationVersion[];
         }
+    >(
+        publicationVersion?.versionNumber === 1 && publicationVersion.isLatestVersion
+            ? null // don't fetch data if there is only one version available
+            : `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,versions(id,doi,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion)`
     );
 
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
@@ -188,25 +211,22 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     // problems linked from this publication
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
-    const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isBookmarkButtonVisible = useMemo(() => {
-        if (!user || !publicationVersion) {
-            return false;
-        } else {
-            return true;
-        }
-    }, [publicationVersion, user]);
+    const isBookmarkButtonVisible = useMemo(
+        () => user && publicationVersion?.currentStatus === 'LIVE',
+        [publicationVersion, user]
+    );
 
     const list = [];
 
     const showReferences = Boolean(references?.length);
     const showChildProblems = Boolean(childProblems?.length);
     const showParentProblems = Boolean(parentProblems?.length);
-    const showTopics = Boolean(topics?.length);
+    const showTopics = Boolean(publicationVersion?.topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
+    const showVersionsAccordion = publication && publication.versions.length > 1;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
@@ -636,6 +656,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </div>
 
                         <div className="block lg:hidden">
+                            {showVersionsAccordion && (
+                                <div className="my-8">
+                                    <Components.VersionsAccordion
+                                        versions={publication.versions}
+                                        selectedVersion={publicationVersion}
+                                    />
+                                </div>
+                            )}
                             {publicationVersion && (
                                 <SidebarCard
                                     publicationVersion={publicationVersion}
@@ -722,7 +750,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             hasBreak
                         >
                             <Components.List ordered={false}>
-                                {topics.map((topic) => (
+                                {publicationVersion.topics.map((topic) => (
                                     <Components.ListItem key={topic.id}>
                                         <Components.Link
                                             href={`${Config.urls.viewTopic.path}/${topic.id}`}
@@ -908,6 +936,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
+                        {showVersionsAccordion && (
+                            <Components.VersionsAccordion
+                                versions={publication.versions}
+                                selectedVersion={publicationVersion}
+                            />
+                        )}
                         <SidebarCard
                             publicationVersion={publicationVersion}
                             linkedFrom={linkedFrom}

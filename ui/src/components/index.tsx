@@ -94,3 +94,4 @@ export { default as EditAffiliationsModal } from './EditAffiliationsModal';
 export { default as BlogCard } from './BlogCard';
 export { default as Maintenance } from './Maintenance';
 export { default as ModalBarLoader } from './ModalBarLoader';
+export { default as VersionsAccordion } from './Publication/VersionsAccordion/VersionsAccordion';

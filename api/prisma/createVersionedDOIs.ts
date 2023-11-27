@@ -18,7 +18,7 @@ const createVersionedDOIs = async (): Promise<number> => {
                     id: true,
                     type: true,
                     doi: true,
-                    topics: true,
+
                     publicationFlags: true,
                     url_slug: true
                 }
@@ -76,6 +76,13 @@ const createVersionedDOIs = async (): Promise<number> => {
                     email: true,
                     createdAt: true,
                     updatedAt: true
+                }
+            },
+            topics: {
+                select: {
+                    id: true,
+                    title: true,
+                    createdAt: true
                 }
             }
         }

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -58,16 +58,24 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // fetch data concurrently
     const promises: [
-        Promise<Interfaces.PublicationVersion | void>,
+        Promise<
+            | { publicationVersion: Interfaces.PublicationVersion; versionRequestError: null }
+            | { publicationVersion: null; versionRequestError: { status: number; message: string } }
+        >,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
-        Promise<Interfaces.Flag[] | void>,
-        Promise<Interfaces.BaseTopic[] | void>
+        Promise<Interfaces.Flag[] | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/latest`, token)
-            .then((res) => res.data)
-            .catch((error) => console.log(error)),
+            .then((res) => ({ publicationVersion: res.data, versionRequestError: null }))
+            .catch((error) => {
+                console.log(error);
+                const status = error.response.status;
+                const message = error.response.data.message;
+
+                return { publicationVersion: null, versionRequestError: { status, message } };
+            }),
         api
             .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
             .then((res) => res.data)
@@ -79,39 +87,51 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         api
             .get(`${Config.endpoints.publications}/${requestedId}/flags`, token)
             .then((res) => res.data)
-            .catch((error) => console.log(error)),
-        api
-            .get(`${Config.endpoints.publications}/${requestedId}/topics`, token)
-            .then((res) => res.data)
             .catch((error) => console.log(error))
     ];
 
     const [
-        publicationVersion,
+        { publicationVersion, versionRequestError },
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
         topics = []
     ] = await Promise.all(promises);
 
-    if (!publicationVersion) {
+    if (versionRequestError) {
+        const status = versionRequestError.status;
+        if (status === 404 || (token && status === 403)) {
+            return {
+                notFound: true
+            };
+        } else if (status === 403) {
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(context.resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+    }
+
+    if (publicationVersion) {
+        return {
+            props: {
+                publicationVersion,
+                userToken: token || '',
+                bookmarkId: bookmarks.length ? bookmarks[0].id : null,
+                publicationId: publicationVersion.publication.id,
+                protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
+                directLinks,
+                flags,
+                topics
+            }
+        };
+    } else {
         return {
             notFound: true
         };
     }
-
-    return {
-        props: {
-            publicationVersion,
-            userToken: token || '',
-            bookmarkId: bookmarks.length ? bookmarks[0].id : null,
-            publicationId: publicationVersion.publication.id,
-            protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
-            directLinks,
-            flags,
-            topics
-        }
-    };
 };
 
 type Props = {
@@ -166,14 +186,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.flags }
     );
 
-    const { data: topics = [] } = useSWR<Interfaces.BaseTopic[]>(
-        `${Config.endpoints.publications}/${props.publicationId}/topics`,
-        null,
-        {
-            fallbackData: props.topics
-        }
-    );
-
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
     // problems this publication is linked to
@@ -183,20 +195,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
     const user = Stores.useAuthStore((state: Types.AuthStoreType) => state.user);
-    const isBookmarkButtonVisible = useMemo(() => {
-        if (!user || !publicationVersion) {
-            return false;
-        } else {
-            return true;
-        }
-    }, [publicationVersion, user]);
+    const isBookmarkButtonVisible = useMemo(
+        () => user && publicationVersion?.currentStatus === 'LIVE',
+        [publicationVersion, user]
+    );
 
     const list = [];
 
     const showReferences = Boolean(references?.length);
     const showChildProblems = Boolean(childProblems?.length);
     const showParentProblems = Boolean(parentProblems?.length);
-    const showTopics = Boolean(topics?.length);
+    const showTopics = Boolean(publicationVersion?.topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
@@ -716,7 +725,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             hasBreak
                         >
                             <Components.List ordered={false}>
-                                {topics.map((topic) => (
+                                {publicationVersion.topics.map((topic) => (
                                     <Components.ListItem key={topic.id}>
                                         <Components.Link
                                             href={`${Config.urls.viewTopic.path}/${topic.id}`}

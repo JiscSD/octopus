@@ -196,82 +196,6 @@ export const publicationFlowFunders = async (
     await page.locator(PageModel.publish.nextButton).click();
 };
 
-export const publicationFlowReview = async (page: Page, pubType: string, licenceType: string) => {
-    // Review and publish
-};
-
-const problemPublication = {
-    pubType: 'Research Problem',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Research Problem does not have any specified conflicts of interest.',
-    funding: 'This Research Problem has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
-const hypothesisPublication = {
-    pubType: 'Rationale / Hypothesis',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Rationale / Hypothesis does not have any specified conflicts of interest.',
-    funding: 'This Rationale / Hypothesis has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
-const methodPublication = {
-    pubType: 'Method',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Method does not have any specified conflicts of interest.',
-    funding: 'This Method has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
-const analysisPublication = {
-    pubType: 'Analysis',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Analysis does not have any specified conflicts of interest.',
-    funding: 'This Analysis has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
-const interpretationPublication = {
-    pubType: 'Interpretation',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Interpretation does not have any specified conflicts of interest.',
-    funding: 'This Interpretation has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
-const realWorldApplicationPublication = {
-    pubType: 'Real World Application',
-    language: 'Afar',
-    title: 'test title',
-    author: Helpers.user1.fullName,
-    text: 'main text',
-    references: referencesList,
-    coi: 'This Real World Application does not have any specified conflicts of interest.',
-    funding: 'This Real World Application has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
-};
-
 interface PublicationTestType {
     pubType: string;
     language: string;
@@ -284,19 +208,92 @@ interface PublicationTestType {
     fundingExtraDetails: string;
 }
 
-export const checkPublication = async (page: Page, publication: PublicationTestType) => {
+const problemPublication: PublicationTestType = {
+    pubType: 'Research Problem',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Research Problem does not have any specified conflicts of interest.',
+    funding: 'This Research Problem has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const hypothesisPublication: PublicationTestType = {
+    pubType: 'Rationale / Hypothesis',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Rationale / Hypothesis does not have any specified conflicts of interest.',
+    funding: 'This Rationale / Hypothesis has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const methodPublication: PublicationTestType = {
+    pubType: 'Method',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Method does not have any specified conflicts of interest.',
+    funding: 'This Method has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const analysisPublication: PublicationTestType = {
+    pubType: 'Analysis',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Analysis does not have any specified conflicts of interest.',
+    funding: 'This Analysis has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const interpretationPublication: PublicationTestType = {
+    pubType: 'Interpretation',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Interpretation does not have any specified conflicts of interest.',
+    funding: 'This Interpretation has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const realWorldApplicationPublication: PublicationTestType = {
+    pubType: 'Real World Application',
+    language: 'Afar',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Real World Application does not have any specified conflicts of interest.',
+    funding: 'This Real World Application has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+export const checkPublication = async (page: Page, publication: PublicationTestType, authors: Helpers.TestUser[]) => {
     // Wait for page to be loaded - viz will try to fetch links
-    await page.waitForResponse((response) => response.url().includes('/links'));
+    await page.waitForLoadState('networkidle');
+
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
         `aside span:has-text("${publication.language}")`,
-        `main > section > header > div >> a:has-text("${Helpers.user1.shortName}")`,
         `h1:has-text("${publication.title}")`,
         `text=${publication.references[1].text}`,
         `text=${publication.references[1].refURL}`,
         `text=${publication.coi}`,
         `text=${publication.funding}`,
-        `article p:has-text("${publication.fundingExtraDetails}")`
+        `article p:has-text("${publication.fundingExtraDetails}")`,
+        ...authors.map((author) => `main > section > header > div >> a:has-text("${author.shortName}")`)
     ];
 
     await Promise.all(publicationTemplate(publication).map((selector) => expect(page.locator(selector)).toBeVisible()));
@@ -333,15 +330,15 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, problemPublication);
+        await checkPublication(page, problemPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
+        await page.waitForLoadState('networkidle');
         await page.locator(PageModel.publish.publishButton).click();
 
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, problemPublication);
+        await checkPublication(page, problemPublication, [Helpers.user1]);
     });
 
     test('Create a problem and link it to a topic', async ({ browser }) => {
@@ -412,8 +409,8 @@ test.describe('Publication flow', () => {
         );
 
         const json = JSON.parse(await response.text());
-        expect(json.topics.length === 1);
-        expect(json.topics[0].title === 'Test topic');
+        expect(json.versions[0].topics.length === 1);
+        expect(json.versions[0].topics[0].title === 'Test topic');
     });
 
     test('Create a hypothesis (standard publication)', async ({ browser }) => {
@@ -446,14 +443,13 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, hypothesisPublication);
+        await checkPublication(page, hypothesisPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, hypothesisPublication);
+        await checkPublication(page, hypothesisPublication, [Helpers.user1]);
     });
 
     test('Create a method (standard publication)', async ({ browser }) => {
@@ -486,14 +482,13 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, methodPublication);
+        await checkPublication(page, methodPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, methodPublication);
+        await checkPublication(page, methodPublication, [Helpers.user1]);
     });
 
     test('Create an analysis (standard publication)', async ({ browser }) => {
@@ -526,14 +521,14 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, analysisPublication);
+        await checkPublication(page, analysisPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
+
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, analysisPublication);
+        await checkPublication(page, analysisPublication, [Helpers.user1]);
     });
 
     test('Create an interpretation (standard publication)', async ({ browser }) => {
@@ -562,14 +557,13 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, interpretationPublication);
+        await checkPublication(page, interpretationPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, interpretationPublication);
+        await checkPublication(page, interpretationPublication, [Helpers.user1]);
     });
 
     test('Create a real world application (standard publication)', async ({ browser }) => {
@@ -602,14 +596,185 @@ test.describe('Publication flow', () => {
 
         // Preview and check preview draft publication
         await page.locator(PageModel.publish.previewButton).click();
-        await checkPublication(page, realWorldApplicationPublication);
+        await checkPublication(page, realWorldApplicationPublication, [Helpers.user1]);
 
         // Publish and check live publication
         await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForResponse((response) => response.url().includes('/references') && response.ok());
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
-        await checkPublication(page, realWorldApplicationPublication);
+        await checkPublication(page, realWorldApplicationPublication, [Helpers.user1]);
+    });
+
+    test('Corresponding author and co-authors can create multiple versions for a publication', async ({ browser }) => {
+        let page = await browser.newPage();
+
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create v1
+        await createPublication(page, problemPublication.title, 'PROBLEM');
+        await publicationFlowKeyInformation(page);
+        await publicationFlowAffiliations(page, false);
+        await publicationFlowLinkedPublication(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+        await publicationFlowMainText(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await publicationFlowConflictOfInterest(page, false);
+        await publicationFlowFunders(
+            page,
+            '01rv9gx86',
+            'funder name',
+            'funder city',
+            'https://funder.com',
+            'extra details'
+        );
+
+        // publish v1
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+
+        await page.locator(`h1:has-text("${problemPublication.title}")`).first().waitFor({ state: 'visible' });
+
+        await checkPublication(page, problemPublication, [Helpers.user1]);
+
+        // get publication id from url and deduct canonical DOI
+        const publicationId = page.url().split('/').slice(-3)[0];
+
+        // create v2 and invite a co-author
+        await page.locator('[data-testid="username-button"]').click();
+        await page.locator('a:has-text("My Account")').click();
+        await page.locator('h2:has-text("Live publications")').waitFor();
+
+        // check latest live publication
+        await page.locator(`a[href="/publications/${publicationId}"]`).waitFor();
+        let livePublicationLocator = page.locator(`a[href="/publications/${publicationId}"]`);
+
+        // check "Create new version" button is visible
+        const createNewVersionButton = 'button:has-text("Create new version")';
+        await expect(livePublicationLocator.locator(createNewVersionButton)).toBeVisible();
+
+        // create new version
+        await livePublicationLocator.locator(createNewVersionButton).click();
+        await page.waitForResponse(
+            (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
+        );
+
+        // wait to be redirected to the edit page
+        await page.waitForURL('**/edit?**');
+
+        // change title
+        let newTitle = problemPublication.title + ' v2';
+        const titleInputLocator = 'input[aria-labelledby="title-label"]';
+        await page.fill(titleInputLocator, newTitle);
+
+        // invite a co-author
+        await page.locator('aside button:has-text("Co-authors")').first().click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // request approvals for v2
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
+        await page.locator(`h1:has-text("${newTitle}")`).waitFor(); // wait for redirect
+
+        // confirm co-author invitation
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        // publish v2
+        await page.reload();
+        await expect(page.locator(PageModel.publish.publishButtonTracker)).toBeEnabled();
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await Promise.all([
+            page.waitForNavigation(),
+            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+        ]);
+
+        // check v2 is published
+        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user1, Helpers.user2]);
+
+        // close corresponding author session
+        await page.close();
+
+        // create new session as co-author
+        page = await browser.newPage();
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser, Helpers.user2);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user2.fullName);
+
+        // create v3 as co-author
+        await page.locator('[data-testid="username-button"]').click();
+        await page.locator('a:has-text("My Account")').click();
+        await page.locator('h2:has-text("Live publications")').waitFor();
+
+        // check latest live publication
+        await expect(page.locator(`a[href="/publications/${publicationId}"]`)).toBeVisible();
+        livePublicationLocator = page.locator(`a[href="/publications/${publicationId}"]`);
+
+        // check "Create new version" button is visible
+        await expect(livePublicationLocator.locator(createNewVersionButton)).toBeVisible();
+
+        // create new version
+        await livePublicationLocator.locator(createNewVersionButton).click();
+        await page.waitForResponse(
+            (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
+        );
+
+        // wait to be redirected to the edit page
+        await page.waitForURL('**/edit?**');
+
+        // change title to v3
+        newTitle = problemPublication.title + ' v3';
+        await page.fill(titleInputLocator, newTitle);
+
+        // remove initial corresponding author
+        await removeCoAuthor(page, Helpers.user1);
+
+        // preview the the new version
+        await page.locator(PageModel.publish.previewButton).click();
+        await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
+
+        // check v3 DRAFT
+        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
+        await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
+
+        // switch between versions
+        await page.click(PageModel.publish.versionsAccordionButton);
+        await expect(page.locator('#versions-accordion p:has-text("Version 3: Currently viewed")')).toBeVisible();
+        expect(page.url()).toContain('/versions/latest');
+
+        // switch to v2
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/2');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 2: Currently viewed")')).toBeVisible();
+
+        // switch to v1
+        await page.locator('#versions-accordion a').nth(1).click();
+        await page.waitForURL('**/versions/1');
+        await expect(page.locator('#versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(page.locator('#versions-accordion p:has-text("Version 1: Currently viewed")')).toBeVisible();
+
+        // switch back to v3
+        await page.locator('#versions-accordion a').first().click();
+        await page.waitForURL('**/versions/3');
+
+        // go back to edit page
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.waitForURL('**/edit?**');
+
+        // check publish button is now enabled
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+
+        // publish v3
+        await page.locator(PageModel.publish.publishButton).click();
+        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
+
+        // check v3 is published
+        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
     });
 });
 
@@ -1997,7 +2162,7 @@ test.describe('Publication flow + co-authors', () => {
             page.waitForResponse(
                 (response) =>
                     response.request().method() === 'GET' &&
-                    response.url().includes(`/publication-versions/latest`) &&
+                    response.url().includes(`/publication-versions`) &&
                     response.ok()
             )
         ]);

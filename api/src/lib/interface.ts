@@ -112,6 +112,10 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicatonQueryParams {
+    fields?: string;
+}
+
 export interface GetPublicationLinksPathParams {
     id: string;
 }
@@ -137,34 +141,27 @@ export interface UpdatePublicationVersionPathParams {
     id: string;
 }
 
-export interface GetPublicationTopicsPathParams {
-    id: string;
-}
-
 export interface UpdateStatusPathParams {
     id: string;
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
 export interface UpdatePublicationVersionRequestBody {
-    content?: string;
     title?: string;
     description?: string;
+    content?: string;
     keywords?: string[];
     language?: Languages;
+    topics?: string[];
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
-}
-
-export interface UpdatePublicationTopicsRequestBody {
-    topics: string[];
-}
-export interface UpdatePublicationTopicsPathParams {
-    id: string;
+    conflictOfInterestStatus?: boolean;
+    conflictOfInterestText?: string;
+    fundersStatement?: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
@@ -208,12 +205,14 @@ export interface LinkedPublication {
 
 export interface LinkedToPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: PublicationType;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     parentPublication: string;
     parentPublicationType: PublicationType;
 }
@@ -326,6 +325,10 @@ export interface UpdateUserInformation {
 }
 
 export interface DeletePublicationVersionPathParams {
+    id: string;
+}
+
+export interface CreatePublicationVersionPathParams {
     id: string;
 }
 
@@ -829,6 +832,7 @@ export interface UserEmployment {
     organisation: string;
 }
 
+// Topics
 export interface TopicTranslation {
     language: Languages;
     value: string;
@@ -862,3 +866,9 @@ export interface TopicsPaginatedResults {
         createdAt: Date;
     }[];
 }
+
+// Events
+/**
+ * @todo remove once functionality has been tested.
+ */
+export type EventType = 'dummy';

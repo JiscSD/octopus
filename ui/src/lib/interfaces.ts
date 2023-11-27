@@ -97,43 +97,14 @@ export interface PublicationVersion {
     funders: Funder[];
     coAuthors: CoAuthor[];
     publication: CorePublication;
+    topics: BaseTopic[];
 }
 
-export interface PublicationWithVersions extends CorePublication {
-    versions: PublicationVersion[];
-}
-
-// The form of publication generally expected by the UI, with versionable data merged into the object.
 export interface Publication extends CorePublication {
-    versionId: string;
-    versionNumber: number;
-    isLatestVersion: boolean;
-    isLatestLiveVersion: boolean;
-    title: string;
-    description: string;
-    keywords: string[];
-    createdBy: string;
-    createdAt: string;
-    updatedAt: string;
-    currentStatus: Types.PublicationStatuses;
-    publishedDate: string;
-    licence: Types.LicenceType;
-    content: string;
-    language: Types.Languages;
-    ethicalStatement: string;
-    ethicalStatementFreeText: string | null;
-    publicationStatus: PublicationStatus[];
-    user: User;
-    conflictOfInterestStatus: boolean | undefined;
-    conflictOfInterestText: string | null;
-    dataAccessStatement: string | null;
-    dataPermissionsStatement: string | null;
-    dataPermissionsStatementProvidedBy: string | null;
-    selfDeclaration: boolean;
-    coAuthors: CoAuthor[];
-    funders: Funder[];
-    fundersStatement: string | null;
-    references: Reference[];
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
+    publicationFlags: Flag[];
+    versions: PublicationVersion[];
 }
 
 export interface LinkedPublication {
@@ -151,12 +122,14 @@ export interface LinkedPublication {
 
 export interface LinkedToPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
+    draft: boolean;
     parentPublication: string;
     parentPublicationType: Types.PublicationType;
 }
@@ -424,6 +397,7 @@ export interface PublicationUpdateRequestBody extends JSON {
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
+    topics?: string[];
 }
 
 export interface CreationStep {
@@ -485,9 +459,10 @@ export interface MappedOrcidAffiliation {
     url: string | null;
 }
 
-export interface TopicPublication {
+export interface TopicPublicationVersion {
     id: string;
     title: string;
+    versionOf: string;
 }
 
 export interface TopicTranslation {
@@ -501,6 +476,7 @@ export interface BaseTopic {
     id: string;
     title: string;
     createdAt: string;
+    draft?: boolean;
 }
 
 export interface Topic extends BaseTopic {
@@ -508,7 +484,7 @@ export interface Topic extends BaseTopic {
     language: string;
     parents: BaseTopic[];
     children: BaseTopic[];
-    publications: TopicPublication[];
+    publicationVersions: TopicPublicationVersion[];
     translations: TopicTranslation[];
 }
 
