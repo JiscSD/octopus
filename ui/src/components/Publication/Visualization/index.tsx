@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import Xarrow from 'react-xarrows';
+import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows';
 import useSWR from 'swr';
 
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
+import * as Types from '@types';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {
@@ -25,6 +26,7 @@ type BoxProps = BoxEntry & {
 };
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
+    useXarrow();
     // pick main author to display on visualization box
     const mainAuthor = useMemo(() => {
         const correspondingAuthor = {
@@ -123,25 +125,26 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
     const publications: BoxEntry[] = [];
 
     if (publication.type === type) {
-        // Push the selected publication first
-
-        publications.push({
-            id: publication.id,
-            title: publication.title,
-            type: publication.type,
-            createdBy: publication.createdBy,
-            publishedDate: publication.publishedDate,
-            authorFirstName: publication.authorFirstName,
-            authorLastName: publication.authorLastName,
-            authors: publication.authors,
-            pointers: linkedFrom
-                .filter(
-                    (linkedPublication) =>
-                        linkedPublication.type !== 'PEER_REVIEW' &&
-                        linkedPublication.parentPublication === publication.id
-                )
-                .map((publication) => publication.id) // get the ids of all direct child publications
-        });
+        // We only need the currently viewed publication in this case.
+        return [
+            {
+                id: publication.id,
+                title: publication.title,
+                type: publication.type,
+                createdBy: publication.createdBy,
+                publishedDate: publication.publishedDate,
+                authorFirstName: publication.authorFirstName,
+                authorLastName: publication.authorLastName,
+                authors: publication.authors,
+                pointers: linkedFrom
+                    .filter(
+                        (linkedPublication) =>
+                            linkedPublication.type !== 'PEER_REVIEW' &&
+                            linkedPublication.parentPublication === publication.id
+                    )
+                    .map((publication) => publication.id) // get the ids of all direct child publications
+            }
+        ];
     }
 
     // ignore publications above 'PROBLEM'
@@ -261,18 +264,21 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     ref={visualizationWrapperRef}
                 >
                     <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
-                        {data &&
-                            filteredPublicationTypes.map((type) => (
-                                <div key={type} className="space-y-4 p-1">
-                                    {getPublicationsByType(data, type).map((publication) => (
-                                        <Box
-                                            isSelected={props.publicationId == publication.id}
-                                            key={publication.id}
-                                            {...publication}
-                                        />
-                                    ))}
-                                </div>
-                            ))}
+                        {data && (
+                            <Xwrapper>
+                                {filteredPublicationTypes.map((type) => (
+                                    <div key={type} className="space-y-4 p-1">
+                                        {getPublicationsByType(data, type).map((publication) => (
+                                            <Box
+                                                isSelected={props.publicationId == publication.id}
+                                                key={publication.id}
+                                                {...publication}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
+                            </Xwrapper>
+                        )}
                     </div>
                 </div>
             </div>
