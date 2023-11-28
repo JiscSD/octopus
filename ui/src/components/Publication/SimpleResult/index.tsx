@@ -27,7 +27,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     const latestVersion = props.publication.versions.find((version) => version.isLatestVersion);
     const draftExistsWithPermission =
         latestVersion?.currentStatus === 'DRAFT' || latestVersion?.currentStatus === 'LOCKED';
-    const draftVersion = draftExistsWithPermission ? latestVersion : false;
+    const draftVersion = draftExistsWithPermission ? latestVersion : null;
     const draftExistsWithoutPermission = !draftExistsWithPermission && !latestLiveVersion?.isLatestVersion;
 
     const handleCreateNewVersion = React.useCallback(
