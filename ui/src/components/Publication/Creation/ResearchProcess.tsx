@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Stores from '@stores';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
 
 const ResearchProcess: React.FC = () => {
     const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type Props = {
     title: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Types from '@types';
+import * as Types from '@/types';
 import * as Axios from 'axios';
 import { ParsedUrlQuery } from 'querystring';
 

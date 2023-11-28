@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import { fireEvent, render, screen } from '@testing-library/react';

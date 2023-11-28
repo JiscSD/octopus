@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type Props = {
     sectionList?: { title: string; href: string }[];

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
 import * as tiptap from '@tiptap/react';
-import * as Config from '@config';
+import * as Config from '@/config';
 import * as HeadlessUI from '@headlessui/react';
-import * as Helpers from '@helpers';
+import * as Helpers from '@/helpers';
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';

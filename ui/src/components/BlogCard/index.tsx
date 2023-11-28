@@ -1,5 +1,5 @@
-import * as Types from '@types';
-import * as Helpers from '@helpers';
+import * as Types from '@/types';
+import * as Helpers from '@/helpers';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 import { useMemo } from 'react';
 

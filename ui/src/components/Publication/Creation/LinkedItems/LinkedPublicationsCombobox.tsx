@@ -2,12 +2,12 @@ import React from 'react';
 import useSWR from 'swr';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
-import * as api from '@api';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
+import * as api from '@/api';
+import * as Config from '@/config';
 
 type LinkedPublicationsComboboxProps = {
     setError: (error: string | null) => void;

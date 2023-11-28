@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 
-import * as Assets from '@assets';
-import * as Components from '@components';
+import * as Assets from '@/assets';
+import * as Components from '@/components';
 
 const Maintenance: React.FC = () => (
     <>

@@ -1,10 +1,12 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Hooks from '@hooks';
+import * as Interfaces from '@/interfaces';
+import * as Helpers from '@/helpers';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Hooks from '@/hooks';
+
+import { useRouter } from 'next/router';
 
 type Props = {
     publication: Interfaces.Publication;

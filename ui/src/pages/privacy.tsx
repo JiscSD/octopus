@@ -1,9 +1,9 @@
 import Head from 'next/head';
 
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const Privacy: Types.NextPage = (): React.ReactElement => {
     return (

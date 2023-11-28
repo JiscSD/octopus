@@ -4,16 +4,16 @@ import { AxiosError } from 'axios';
 import Head from 'next/head';
 import Router from 'next/router';
 
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
 import * as HeadlessUI from '@headlessui/react';
-import * as Helpers from '@helpers';
+import * as Helpers from '@/helpers';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as SolidIcons from '@heroicons/react/24/solid';
-import * as Layouts from '@layouts';
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => ({
     props: {

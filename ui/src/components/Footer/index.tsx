@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Assets from '@assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Assets from '@/assets';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import dynamic from 'next/dynamic';
 

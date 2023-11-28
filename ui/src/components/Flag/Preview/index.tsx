@@ -2,10 +2,10 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as SolidIcons from '@heroicons/react/24/solid';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
 
 type Props = {
     publicationId: string;

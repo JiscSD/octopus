@@ -1,6 +1,6 @@
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const Error404: Types.NextPage = () => (
     <Layouts.Error

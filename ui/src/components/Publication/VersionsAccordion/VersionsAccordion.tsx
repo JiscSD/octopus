@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
-import * as Components from '@components';
-import * as Stores from '@stores';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
+import * as Components from '@/components';
 import * as Framer from 'framer-motion';
-import * as Hooks from '@hooks';
-import * as Config from '@config';
+import * as Hooks from '@/hooks';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
 
 type Props = {
     versions: Types.PartialPublicationVersion[];
