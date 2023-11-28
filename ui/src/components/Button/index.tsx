@@ -12,7 +12,6 @@ type CommonProps = {
     textSize?: string;
     padding?: string;
     children?: React.ReactNode;
-    childClasses?: string;
 };
 
 type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };
@@ -50,9 +49,8 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-2
             border-b-teal-400
             dark:border-b-teal-500
-            ${props.childClasses ?? ''}
             `;
-    }, [props.endIcon, props.padding, props.startIcon, props.textSize, props.childClasses]);
+    }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
 
     return props.href ? (
         <Components.Link

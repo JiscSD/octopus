@@ -110,8 +110,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                     href={`/publications/${props.publication.id}/edit?step=0`}
                                     endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                     title="Edit Draft"
-                                    className="mt-5 bg-green-600 px-3 text-white-50"
-                                    childClasses="text-white-50 border-none"
+                                    className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                                 />
                             ) : (
                                 <p>
@@ -129,8 +128,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 href={`/publications/${props.publication.id}`}
                                 endIcon={<OutlineIcons.EyeIcon className="h-4" />}
                                 title="View Draft"
-                                className="mt-5 bg-green-600 px-3 text-white-50"
-                                childClasses="text-white-50 border-none"
+                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
                         )}
                     </>
@@ -145,8 +143,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 title="Create Draft Version"
                                 onClick={handleCreateNewVersion}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
-                                className="mt-5 bg-green-600 px-3 text-white-50"
-                                childClasses="text-white-50 border-none"
+                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
                         </>
                     )
@@ -173,8 +170,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             href={`/publications/${props.publication.id}`}
                             endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
                             title="View"
-                            className="mt-5 bg-teal-500 px-3 text-white-50"
-                            childClasses="text-white-50 border-none"
+                            className="mt-5 bg-teal-500 px-3 text-white-50 children:border-none children:text-white-50"
                         />
                     </>
                 ) : (
