@@ -74,10 +74,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </Components.Link>
             </div>
-            {/**
-             * @TODO - remove stage check when the versioned DOIs are released
-             */}
-            {['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!) && props.publicationVersion.doi && (
+            {props.publicationVersion.doi && (
                 <div className="flex w-full flex-wrap whitespace-normal">
                     <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                         DOI (This Version):
@@ -96,12 +93,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
 
             <div className={`flex w-full ${props.publicationVersion.doi ? 'flex-wrap' : ''} whitespace-normal`}>
                 <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    {/**
-                     * @TODO - remove stage check when the versioned DOIs are released
-                     */}
-                    {['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!) && props.publicationVersion.doi
-                        ? 'DOI (All Versions):'
-                        : 'DOI:'}
+                    {props.publicationVersion.doi ? 'DOI (All Versions):' : 'DOI:'}
                 </span>
                 <Components.Link
                     href={`https://doi.org/${props.publicationVersion.publication.doi}`}

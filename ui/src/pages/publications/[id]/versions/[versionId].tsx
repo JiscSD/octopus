@@ -47,19 +47,6 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     const versionId = context.query.versionId;
-
-    /**
-     * TODO - remove this when we decide to deploy versioned DOIs & creating new versions on prod
-     */
-    if (!['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!)) {
-        return {
-            redirect: {
-                destination: `/publications/${requestedId}`,
-                permanent: false
-            }
-        };
-    }
-
     const token = Helpers.getJWT(context);
 
     // fetch data concurrently

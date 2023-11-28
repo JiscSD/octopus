@@ -395,13 +395,6 @@ export const deleteVersion = async (
 export const create = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreatePublicationVersionPathParams>
 ): Promise<I.JSONResponse> => {
-    /**
-     * @TODO - remove stage check when ready to go in production
-     */
-    if (!['local', 'int'].includes(process.env.STAGE!)) {
-        return response.json(403, 'This feature is not available yet in the current environment.');
-    }
-
     const publicationId = event.pathParameters.id;
 
     try {

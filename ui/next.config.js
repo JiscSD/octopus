@@ -4,13 +4,18 @@ const nextConfig = {
 
     async redirects() {
         return [
-          {
-            source: '/search',
-            destination: '/search/publications/',
-            permanent: true,
-          },
-        ]
-      },
+            {
+                source: '/search',
+                destination: '/search/publications/',
+                permanent: true
+            },
+            {
+                source: '/publications/:path',
+                destination: '/publications/:path/versions/latest',
+                permanent: false
+            }
+        ];
+    }
 };
 
 module.exports = nextConfig;
