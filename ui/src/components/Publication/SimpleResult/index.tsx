@@ -21,8 +21,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
 
     const latestLiveVersion = props.publication.versions.find((version) => version.isLatestLiveVersion);
-    const authorOnLatestLive =
-        latestLiveVersion?.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id) ||
+    const isAuthorOnLatestLive =
+        latestLiveVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === props.user.id) ||
         latestLiveVersion?.createdBy === props.user.id;
     const latestVersion = props.publication.versions.find((version) => version.isLatestVersion);
     const draftExistsWithPermission =
@@ -132,7 +132,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             />
                         )}
                     </>
-                ) : authorOnLatestLive ? (
+                ) : isAuthorOnLatestLive ? (
                     draftExistsWithoutPermission ? (
                         <p>Someone else has created a new draft version, and you do not yet have access to it</p>
                     ) : (
@@ -164,7 +164,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                         Helpers.formatDate(latestLiveVersion.publishedDate)}
                                 </time>
                             </p>
-                            {!authorOnLatestLive && <p>You are not listed as an author on the latest version</p>}
+                            {!isAuthorOnLatestLive && <p>You are not listed as an author on the latest version</p>}
                         </div>
                         <Components.Button
                             href={`/publications/${props.publication.id}`}
