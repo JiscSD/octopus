@@ -145,6 +145,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                 className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
+                            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
                         </>
                     )
                 ) : (
