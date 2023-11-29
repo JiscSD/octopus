@@ -8,11 +8,6 @@ const nextConfig = {
                 source: '/search',
                 destination: '/search/publications/',
                 permanent: true
-            },
-            {
-                source: '/publications/:path',
-                destination: '/publications/:path/versions/latest',
-                permanent: false
             }
         ];
     }
