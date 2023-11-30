@@ -243,11 +243,11 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}
                   method: GET
                   cors: true
-    getUserPublicationVersions:
-        handler: src/components/user/routes.getPublicationVersions
+    getUserPublications:
+        handler: src/components/user/routes.getPublications
         events:
             - http:
-                  path: ${self:custom.versions.v1}/users/{id}/publication-versions
+                  path: ${self:custom.versions.v1}/users/{id}/publications
                   method: GET
                   cors: true
 

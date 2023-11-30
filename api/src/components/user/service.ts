@@ -132,89 +132,131 @@ export const get = async (id: string, isAccountOwner = false) => {
     return user;
 };
 
-export const getPublicationVersions = async (
-    id: string,
-    params: I.UserPublicationVersionsFilters,
-    isAccountOwner: boolean
-) => {
-    const { offset, limit, orderBy, orderDirection } = params;
+export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+    const { offset, limit } = params;
 
-    // Account owners can retrieve their DRAFT publications also
-    const statuses: Array<I.ValidStatuses> = isAccountOwner ? ['DRAFT', 'LIVE', 'LOCKED'] : ['LIVE'];
-    const latestVersionFilter = isAccountOwner
-        ? { OR: [{ isLatestVersion: true }, { isLatestLiveVersion: true }] } // co-authors can see LIVE and DRAFT versions
-        : { isLatestLiveVersion: true };
-
-    const where: Prisma.PublicationVersionWhereInput = {
+    const where: Prisma.PublicationWhereInput = {
         OR: [
             {
-                createdBy: id,
-                ...latestVersionFilter
+                versions: {
+                    some: {
+                        createdBy: id
+                    }
+                }
             },
             {
-                coAuthors: {
+                versions: {
                     some: {
-                        linkedUser: id
+                        coAuthors: {
+                            some: {
+                                linkedUser: id
+                            }
+                        }
                     }
-                },
-                ...latestVersionFilter
+                }
             }
         ],
-        currentStatus: {
-            in: statuses
-        }
+        ...(!isAccountOwner && { versions: { some: { isLatestLiveVersion: true } } })
     };
 
-    const userPublicationVersions = await client.prisma.publicationVersion.findMany({
+    const userPublications = await client.prisma.publication.findMany({
         skip: offset,
         take: limit,
         where,
         include: {
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    doi: true,
-                    url_slug: true
-                }
-            },
-            user: {
-                select: {
-                    firstName: true,
-                    lastName: true,
-                    id: true,
-                    orcid: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    linkedUser: true,
-                    confirmedCoAuthor: true,
+            versions: {
+                where: {
+                    ...(isAccountOwner
+                        ? // The owner of the account gets all live versions, and the draft if they are an author on it
+                          {
+                              OR: [
+                                  { currentStatus: 'LIVE' },
+                                  {
+                                      createdBy: id
+                                  },
+                                  {
+                                      coAuthors: {
+                                          some: {
+                                              linkedUser: id
+                                          }
+                                      }
+                                  }
+                              ]
+                          }
+                        : // Other users viewing a user's profile just need the latest live version
+                          { isLatestLiveVersion: true })
+                },
+                include: {
                     user: {
                         select: {
-                            orcid: true,
                             firstName: true,
-                            lastName: true
+                            lastName: true,
+                            id: true,
+                            orcid: true
+                        }
+                    },
+                    coAuthors: {
+                        select: {
+                            id: true,
+                            linkedUser: true,
+                            confirmedCoAuthor: true,
+                            user: {
+                                select: {
+                                    orcid: true,
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
                         }
                     }
-                },
-                orderBy: {
-                    position: 'asc'
                 }
             }
-        },
-        orderBy:
-            orderBy && orderDirection
-                ? {
-                      [orderBy]: orderDirection
-                  }
-                : undefined
+        }
     });
 
-    const totalUserPublications = await client.prisma.publicationVersion.count({ where });
+    const totalUserPublications = await client.prisma.publication.count({ where });
 
-    return { offset, limit, total: totalUserPublications, results: userPublicationVersions };
+    // Because the sorting is conditional on the publication state of a publication's versions, we can't do it in prisma.
+    const sortedPublications = isAccountOwner // If account owner, put publications with an active draft first (sub-sorted by updated time descending), then others (sub-sorted by published date descending)
+        ? userPublications.sort((a, b) => {
+              const aLatest = a.versions.find((version) => version.isLatestVersion);
+              const bLatest = b.versions.find((version) => version.isLatestVersion);
+
+              if (!(aLatest && bLatest)) {
+                  return 0;
+              }
+
+              if (aLatest.currentStatus !== 'LIVE' && bLatest.currentStatus === 'LIVE') {
+                  return -1;
+              } else if (aLatest.currentStatus === 'LIVE' && bLatest.currentStatus !== 'LIVE') {
+                  return 1;
+              } else if (aLatest.currentStatus === 'LIVE' && bLatest.currentStatus === 'LIVE') {
+                  // Sort by publication date
+                  if (aLatest.publishedDate && bLatest.publishedDate) {
+                      return bLatest.publishedDate.getTime() - aLatest.publishedDate.getTime();
+                  } else {
+                      return 0;
+                  }
+              } else {
+                  // Neither publication's latest version is live - sort by updated date
+                  return bLatest.updatedAt.getTime() - aLatest.updatedAt.getTime();
+              }
+          }) // If not account owner, we only have latest live publications - sort by published date descending
+        : userPublications.sort((a, b) => {
+              const aLatestLive = a.versions.find((version) => version.isLatestLiveVersion);
+              const bLatestLive = b.versions.find((version) => version.isLatestLiveVersion);
+
+              if (aLatestLive?.publishedDate && bLatestLive?.publishedDate) {
+                  return bLatestLive.publishedDate.getTime() - aLatestLive.publishedDate.getTime();
+              } else {
+                  return 0;
+              }
+          });
+
+    return { offset, limit, total: totalUserPublications, results: sortedPublications };
 };
 
 export const getUserList = async () => {

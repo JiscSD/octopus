@@ -672,8 +672,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-hypothesis-live-problem-live',
         doi: '10.82259/cty5-2g23',
         type: 'HYPOTHESIS',
-        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
-        linkedFrom: { create: { publicationFrom: 'publication-protocol-live' } },
+        linkedTo: { create: { publicationTo: 'publication-problem-live', draft: false } },
+        linkedFrom: { create: { publicationFrom: 'publication-protocol-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-hypothesis-live-problem-live-v1',
@@ -765,7 +765,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'research-topic',
         doi: '10.57874/01x8-yb56',
         type: 'PROBLEM',
-        linkedTo: { create: { publicationTo: 'publication-problem-live' } },
+        linkedTo: { create: { publicationTo: 'publication-problem-live', draft: false } },
         versions: {
             create: {
                 id: 'research-topic-v1',
