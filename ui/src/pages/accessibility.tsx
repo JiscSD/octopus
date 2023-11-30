@@ -9,10 +9,12 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.accessibility.title}</title>
                 <meta name="description" content={Config.urls.accessibility.description} />
+                <meta name="og:title" content={Config.urls.accessibility.title} />
+                <meta name="og:description" content={Config.urls.accessibility.description} />
                 <meta name="keywords" content={Config.urls.accessibility.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.accessibility.canonical} />
-                <title>{Config.urls.accessibility.title}</title>
             </Head>
 
             <Layouts.Information>

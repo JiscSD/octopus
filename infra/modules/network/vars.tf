@@ -1,20 +1,20 @@
 variable "project_name" {
-    type        = string
-    description = "The name of the project, in snake case"
+  type        = string
+  description = "The name of the project, in snake case"
 }
 
 variable "cidr_block" {
-    type = string
+  type = string
 }
 
 variable "public_subnets" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "private_subnets" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "environment" {
-    type = string
+  type = string
 }

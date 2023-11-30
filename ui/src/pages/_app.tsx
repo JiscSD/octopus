@@ -1,98 +1,75 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
+import NextProgressBar from 'next-nprogress-bar';
+
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
-import NextNprogress from 'nextjs-progressbar';
-
 import * as Components from '@components';
 import * as Stores from '@stores';
 import * as Types from '@types';
 import * as api from '@api';
+import * as Contexts from '@contexts';
+import * as Hooks from '@hooks';
+import * as Helpers from '@helpers';
 
 import '../styles/globals.css';
 
-const App = ({ Component, pageProps }: Types.AppProps) => {
-    const isMounted = React.useRef(false);
-    const [loading, setLoading] = React.useState(true);
-    const darkMode = Stores.usePreferencesStore((state) => state.darkMode);
-    const showCmdPalette = Stores.useGlobalsStore((state) => state.showCmdPalette);
-    const toggleCmdPalette = Stores.useGlobalsStore((state) => state.toggleCmdPalette);
-    const user = Stores.useAuthStore((state) => state.user);
+type CustomProps = {
+    protectedPage?: boolean;
+};
 
-    const setUpCmdPalListeners = React.useCallback(() => {
-        if (isMounted.current === true) {
-            document.addEventListener('keydown', (e) => {
-                if (window.navigator.appVersion.indexOf('Mac')) {
-                    if (e.metaKey && e.code === 'KeyK') {
-                        toggleCmdPalette();
-                    }
-                } else {
-                    if (e.ctrlKey && e.code === 'KeyK') {
-                        toggleCmdPalette();
-                    }
-                }
+const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
+    const { user } = Stores.useAuthStore();
+    const { darkMode } = Stores.usePreferencesStore();
 
-                if (e.key === 'Escape' && !showCmdPalette) toggleCmdPalette();
-            });
-        }
-    }, [showCmdPalette, toggleCmdPalette]);
+    // check authentication client side
+    Hooks.useAuthCheck(pageProps.protectedPage || false);
 
-    React.useEffect(() => {
-        isMounted.current = true;
-        setUpCmdPalListeners();
-        setLoading(false);
-        return () => {
-            isMounted.current = false;
-        };
+    // matomo tracking
+    Hooks.useMatomoNext();
+
+    useEffect(() => {
+        Stores.usePreferencesStore.persist.rehydrate();
+        Stores.useAuthStore.persist.rehydrate();
     }, []);
 
-    return (
-        <>
+    return process.env.NEXT_PUBLIC_MAINTENANCE_MODE === 'true' ? (
+        <Components.Maintenance />
+    ) : (
+        <Contexts.ConfirmationModalProvider>
             <Head>
-                {/** TODO: Relook at this post launch */}
-                <meta name="robots" content="noindex, nofollow" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="og:title" content="Octopus" />
+                <meta
+                    name="og:description"
+                    content="Free, fast and fair: the global primary research record where researchers publish their work in full detail."
+                />
             </Head>
-            <NextNprogress
-                color={'#348cb1'}
-                startPosition={0.3}
-                stopDelayMs={200}
-                height={4}
-                showOnShallow={false}
-                options={{
-                    showSpinner: false
-                }}
-            />
-            {!loading && (
-                <SWR.SWRConfig
-                    value={{
-                        fetcher: (resource) => api.get(resource, user?.token),
-                        fallback: pageProps.fallback,
-                        errorRetryCount: 3,
-                        refreshInterval: 600000000, // for dev
-                        onError: (error, key) => {
-                            if (error.status === 403) {
-                                console.log('403 error');
-                            }
 
-                            if (error.status === 401) {
-                                console.log('401 error');
-                            }
-                        }
-                    }}
-                >
-                    <Framer.MotionConfig reducedMotion="user">
-                        <div className={darkMode ? 'dark' : ''}>
-                            <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
-                                <Components.Toast />
-                                <Components.CommandPalette />
-                                <Component {...pageProps} />
-                            </div>
+            <NextProgressBar
+                color="#348cb1"
+                height="4px"
+                options={{ showSpinner: false, minimum: 0.3, easing: 'ease-in', speed: 200 }}
+            />
+
+            <SWR.SWRConfig
+                value={{
+                    fetcher: (resource) => api.get(resource, Helpers.getJWT()).then((res) => res.data),
+                    onError: (error) => {
+                        console.error(error);
+                    }
+                }}
+            >
+                <Framer.MotionConfig reducedMotion="user">
+                    <div className={darkMode ? 'dark' : ''}>
+                        <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
+                            <Components.Toast />
+                            <Component {...pageProps} />
                         </div>
-                    </Framer.MotionConfig>
-                </SWR.SWRConfig>
-            )}
-        </>
+                    </div>
+                </Framer.MotionConfig>
+            </SWR.SWRConfig>
+        </Contexts.ConfirmationModalProvider>
     );
 };
 

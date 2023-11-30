@@ -1,6 +1,8 @@
-import * as client from 'lib/client';
+import { Prisma } from '@prisma/client';
 
+import * as client from 'lib/client';
 import * as I from 'interface';
+import * as helpers from 'lib/helpers';
 
 export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
     const user = await client.prisma.user.upsert({
@@ -17,19 +19,10 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
         where: {
             orcid
         },
-        update: {
-            firstName: updateUserInformation.firstName,
-            lastName: updateUserInformation.lastName,
-            employment: updateUserInformation.employment,
-            education: updateUserInformation.education,
-            works: updateUserInformation.works
-        },
+        update: { ...updateUserInformation },
         create: {
-            firstName: updateUserInformation.firstName,
-            lastName: updateUserInformation.lastName,
-            employment: updateUserInformation.employment,
-            education: updateUserInformation.education,
-            orcid
+            orcid,
+            ...updateUserInformation
         }
     });
 
@@ -55,6 +48,7 @@ export const updateEmail = async (orcid: string, email: string) => {
             orcid
         }
     });
+
     return user;
 };
 
@@ -62,13 +56,14 @@ export const getAll = async (filters: I.UserFilters) => {
     const query = {};
 
     if (filters.search) {
+        const searchQuery = helpers.sanitizeSearchQuery(filters.search);
         // @ts-ignore
         query.where = {
             firstName: {
-                search: filters.search?.replace(/ /gi, '|')
+                search: searchQuery
             },
             lastName: {
-                search: filters.search?.replace(/ /gi, '|')
+                search: searchQuery
             }
         };
     }
@@ -86,18 +81,7 @@ export const getAll = async (filters: I.UserFilters) => {
             firstName: true,
             lastName: true,
             orcid: true,
-            Publication: {
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    description: true,
-                    keywords: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
-                }
-            }
+            employment: true
         }
     });
 
@@ -125,7 +109,7 @@ export const getByApiKey = async (apiKey: string) => {
 };
 
 export const get = async (id: string, isAccountOwner = false) => {
-    const user = await client.prisma.user.findFirst({
+    const user = await client.prisma.user.findUnique({
         where: {
             id
         },
@@ -141,68 +125,162 @@ export const get = async (id: string, isAccountOwner = false) => {
             employment: true,
             education: true,
             works: true,
-            Publication: {
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    doi: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    publishedDate: true,
-                    currentStatus: true,
-                    description: true,
-                    keywords: true,
-                    url_slug: true,
-                    licence: true,
-                    content: true,
-                    user: true
-                },
-                where: {
-                    currentStatus: 'LIVE'
-                }
-            }
+            orcidAccessToken: isAccountOwner ? true : false
         }
     });
 
     return user;
 };
 
-export const getPublications = async (id: string, statuses: Array<I.ValidStatuses>, isAccountOwner = false) => {
-    const userPublications = await client.prisma.user.findFirst({
-        where: {
-            id
-        },
-        select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            orcid: true,
-            email: isAccountOwner ? true : false,
-            createdAt: true,
-            updatedAt: true,
-            Publication: {
-                where: {
-                    currentStatus: {
-                        in: statuses
+export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+    const { offset, limit } = params;
+
+    const where: Prisma.PublicationWhereInput = {
+        OR: [
+            {
+                versions: {
+                    some: {
+                        createdBy: id
                     }
+                }
+            },
+            {
+                versions: {
+                    some: {
+                        coAuthors: {
+                            some: {
+                                linkedUser: id
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        ...(!isAccountOwner && { versions: { some: { isLatestLiveVersion: true } } })
+    };
+
+    const userPublications = await client.prisma.publication.findMany({
+        skip: offset,
+        take: limit,
+        where,
+        include: {
+            versions: {
+                where: {
+                    ...(isAccountOwner
+                        ? // The owner of the account gets all live versions, and the draft if they are an author on it
+                          {
+                              OR: [
+                                  { currentStatus: 'LIVE' },
+                                  {
+                                      createdBy: id
+                                  },
+                                  {
+                                      coAuthors: {
+                                          some: {
+                                              linkedUser: id
+                                          }
+                                      }
+                                  }
+                              ]
+                          }
+                        : // Other users viewing a user's profile just need the latest live version
+                          { isLatestLiveVersion: true })
                 },
-                select: {
-                    id: true,
-                    title: true,
-                    type: true,
-                    doi: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    publishedDate: true,
-                    currentStatus: true,
-                    url_slug: true,
-                    licence: true,
-                    content: true
+                include: {
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            id: true,
+                            orcid: true
+                        }
+                    },
+                    coAuthors: {
+                        select: {
+                            id: true,
+                            linkedUser: true,
+                            confirmedCoAuthor: true,
+                            user: {
+                                select: {
+                                    orcid: true,
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            position: 'asc'
+                        }
+                    }
                 }
             }
         }
     });
 
-    return userPublications;
+    const totalUserPublications = await client.prisma.publication.count({ where });
+
+    // Because the sorting is conditional on the publication state of a publication's versions, we can't do it in prisma.
+    const sortedPublications = isAccountOwner // If account owner, put publications with an active draft first (sub-sorted by updated time descending), then others (sub-sorted by published date descending)
+        ? userPublications.sort((a, b) => {
+              const aLatest = a.versions.find((version) => version.isLatestVersion);
+              const bLatest = b.versions.find((version) => version.isLatestVersion);
+
+              if (!(aLatest && bLatest)) {
+                  return 0;
+              }
+
+              if (aLatest.currentStatus !== 'LIVE' && bLatest.currentStatus === 'LIVE') {
+                  return -1;
+              } else if (aLatest.currentStatus === 'LIVE' && bLatest.currentStatus !== 'LIVE') {
+                  return 1;
+              } else if (aLatest.currentStatus === 'LIVE' && bLatest.currentStatus === 'LIVE') {
+                  // Sort by publication date
+                  if (aLatest.publishedDate && bLatest.publishedDate) {
+                      return bLatest.publishedDate.getTime() - aLatest.publishedDate.getTime();
+                  } else {
+                      return 0;
+                  }
+              } else {
+                  // Neither publication's latest version is live - sort by updated date
+                  return bLatest.updatedAt.getTime() - aLatest.updatedAt.getTime();
+              }
+          }) // If not account owner, we only have latest live publications - sort by published date descending
+        : userPublications.sort((a, b) => {
+              const aLatestLive = a.versions.find((version) => version.isLatestLiveVersion);
+              const bLatestLive = b.versions.find((version) => version.isLatestLiveVersion);
+
+              if (aLatestLive?.publishedDate && bLatestLive?.publishedDate) {
+                  return bLatestLive.publishedDate.getTime() - aLatestLive.publishedDate.getTime();
+              } else {
+                  return 0;
+              }
+          });
+
+    return { offset, limit, total: totalUserPublications, results: sortedPublications };
+};
+
+export const getUserList = async () => {
+    const users = await client.prisma.user.findMany({
+        select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            createdAt: true,
+            employment: true
+        }
+    });
+
+    return users.map(({ firstName, lastName, email, createdAt, employment }) => ({
+        firstName,
+        lastName,
+        email,
+        createdAt: createdAt.toLocaleDateString('en-GB', { dateStyle: 'short' }),
+        currentEmployer: (employment as unknown as I.UserEmployment[])
+            .filter(
+                (employment) =>
+                    !employment?.endDate || Object.values(employment?.endDate).every((value) => value === null)
+            )
+            .map((employment) => employment?.organisation)
+            .join(', ')
+    }));
 };

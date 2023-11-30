@@ -2,17 +2,16 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import * as Framer from 'framer-motion';
-
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 type TextProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
     className?: string;
 };
 
@@ -43,10 +42,12 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
 const GetInvolved: NextPage = (): React.ReactElement => (
     <>
         <Head>
-            <meta name="description" content={Config.urls.authorGuide.description} />
-            <meta name="keywords" content={Config.urls.authorGuide.keywords.join(', ')} />
-            <link rel="canonical" href={Config.urls.authorGuide.canonical} />
-            <title>{Config.urls.authorGuide.title}</title>
+            <title>{Config.urls.getInvolved.title}</title>
+            <meta name="description" content={Config.urls.getInvolved.description} />
+            <meta name="keywords" content={Config.urls.getInvolved.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.getInvolved.title} />
+            <meta name="og:description" content={Config.urls.getInvolved.description} />
+            <link rel="canonical" href={Config.urls.getInvolved.canonical} />
         </Head>
 
         <Layouts.Standard fixedHeader={false}>

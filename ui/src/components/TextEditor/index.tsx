@@ -1,24 +1,23 @@
 import React from 'react';
+import * as HeadlessUi from '@headlessui/react';
+import * as SolidIcon from '@heroicons/react/24/solid';
 import * as tiptap from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
+import * as FAIcons from 'react-icons/fa';
+import * as api from '@api';
+import * as Components from '@components';
+import * as Config from '@config';
+import * as Interfaces from '@interfaces';
+import * as Stores from '@stores';
+
+import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';
-import TextAlign from '@tiptap/extension-text-align';
+import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import * as Mammoth from 'mammoth';
-import * as SolidIcon from '@heroicons/react/solid';
-import * as HeadlessUi from '@headlessui/react';
-import * as FAIcons from 'react-icons/fa';
-
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import TableRow from '@tiptap/extension-table-row';
+import TextAlign from '@tiptap/extension-text-align';
+import StarterKit from '@tiptap/starter-kit';
 
 type LetterIconType = {
     letter: string;
@@ -83,7 +82,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         [props.editor]
     );
 
-    const [activeImageUploadType, setActiveImageUploadType] = React.useState<Types.ImageUploadTypes>('FILE_UPLOAD');
+    const [uploadImageErrors, setUploadImageErrors] = React.useState<string[]>([]);
     const [selected, setSelected] = React.useState(headingOptions[0]);
     const [linkModalVisible, setLinkModalVisible] = React.useState(false);
     const [imageModalVisible, setImageModalVisible] = React.useState(false);
@@ -97,6 +96,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         libraryUrl: null,
         width: null
     });
+
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<null | string>(null);
 
@@ -127,6 +127,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 
     // For File upload
     const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
+        setUploadImageErrors([]);
         setLoading(true);
 
         const syncFiles = await Promise.allSettled(
@@ -142,6 +143,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             )
         );
 
+        const uploadErrors: string[] = [];
+
         syncFiles.forEach((file) => {
             // check status, only do it for fulfilled
             if (file.status === 'fulfilled') {
@@ -151,9 +154,18 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     title: file.value.data.name
                 });
             }
+
+            if (file.status === 'rejected') {
+                uploadErrors.push(file.reason?.response?.data?.message);
+            }
         });
 
-        setImageModalVisible(false);
+        if (uploadErrors.length) {
+            setUploadImageErrors(uploadErrors);
+        } else {
+            setImageModalVisible(false);
+        }
+
         setLoading(false);
     };
 
@@ -179,6 +191,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
             width: '',
             libraryUrl: null
         });
+        setUploadImageErrors([]);
     };
 
     // Array buffer helper
@@ -230,6 +243,8 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     } else {
                         props.editor.commands.insertContent(result.value);
                     }
+
+                    props.setImportModalVisible(false);
                 } catch (err) {
                     setError('Unable to import .docx file. Please re-save your document and try again.');
                 }
@@ -292,7 +307,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
                                 <span className="block truncate">{selected.name}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                    <SolidIcon.SelectorIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
+                                    <SolidIcon.ChevronUpDownIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
                                 </span>
                             </HeadlessUi.Listbox.Button>
                             <HeadlessUi.Transition
@@ -307,7 +322,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                             key={index}
                                             className={({ active }) =>
                                                 `${active ? 'text-slate-800  bg-grey-50' : 'text-slate-600'}
-                          relative cursor-default select-none py-2 px-4 ${heading.className}`
+                          relative cursor-default select-none px-4 py-2 ${heading.className}`
                                             }
                                             value={heading}
                                         >
@@ -335,6 +350,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Bold"
                             onClick={() => props.editor.chain().focus().toggleBold().run()}
                             className={props.editor.isActive('bold') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -342,6 +358,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Italic"
                             onClick={() => props.editor.chain().focus().toggleItalic().run()}
                             className={props.editor.isActive('italic') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -349,6 +366,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Strikethrough"
                             onClick={() => props.editor.chain().focus().toggleStrike().run()}
                             className={props.editor.isActive('strike') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -357,6 +375,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Align Left"
                             onClick={() => props.editor.chain().focus().setTextAlign('left').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'left' }) ? activeMenuIconStyles : menuIconStyles
@@ -366,6 +385,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Align Center"
                             onClick={() => props.editor.chain().focus().setTextAlign('center').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'center' }) ? activeMenuIconStyles : menuIconStyles
@@ -375,6 +395,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Align Right"
                             onClick={() => props.editor.chain().focus().setTextAlign('right').run()}
                             className={
                                 props.editor.isActive({ textAlign: 'right' }) ? activeMenuIconStyles : menuIconStyles
@@ -385,6 +406,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Unordered list"
                             onClick={() => props.editor.chain().focus().toggleBulletList().run()}
                             className={props.editor.isActive('bulletList') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -392,6 +414,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Ordered List"
                             onClick={() => props.editor.chain().focus().toggleOrderedList().run()}
                             className={props.editor.isActive('orderedList') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -400,6 +423,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Code block"
                             onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
                             className={props.editor.isActive('codeBlock') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -407,6 +431,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Quote"
                             onClick={() => props.editor.chain().focus().toggleBlockquote().run()}
                             className={props.editor.isActive('blockquote') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -415,6 +440,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
+                            title="Link"
                             onClick={openLinkModal}
                             className={props.editor.isActive('link') ? activeMenuIconStyles : menuIconStyles}
                         >
@@ -423,6 +449,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Image"
                             onClick={() => {
                                 setImage({
                                     name: props.editor.getAttributes('image').title,
@@ -441,6 +468,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Horizontal rule"
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
@@ -449,7 +477,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
-                            title="insertTable"
+                            title="Insert table"
                             className={props.editor.isActive('insertTable') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() =>
                                 props.editor
@@ -463,6 +491,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Add column"
                             className={props.editor.isActive('addColumnBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addColumnBefore().run()}
                         >
@@ -470,6 +499,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Stop"
                             className={props.editor.isActive('deleteColumn') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteColumn().run()}
                         >
@@ -477,6 +507,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Add row before"
                             className={props.editor.isActive('addRowBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addRowBefore().run()}
                         >
@@ -484,6 +515,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Delete row"
                             className={props.editor.isActive('deleteRow') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteRow().run()}
                         >
@@ -491,6 +523,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Delete table"
                             className={props.editor.isActive('deleteTable') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteTable().run()}
                         >
@@ -499,6 +532,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
                             type="button"
+                            title="Undo"
                             className={props.editor.isActive('undo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().undo().run()}
                         >
@@ -506,6 +540,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </button>
                         <button
                             type="button"
+                            title="Redo"
                             className={props.editor.isActive('redo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().redo().run()}
                         >
@@ -560,12 +595,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                 {/* Image upload modal */}
                 <HeadlessUi.Dialog
                     open={imageModalVisible}
-                    onClose={() => setImageModalVisible(false)}
-                    className="fixed inset-0 z-10 overflow-y-auto"
+                    onClose={() => {
+                        setImageModalVisible(false);
+                        setUploadImageErrors([]);
+                    }}
+                    className="fixed inset-0 z-10 grid place-items-center overflow-y-auto py-20"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-                    <div className="relative top-[30%] mx-auto w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
+                    <div className="relative w-11/12 rounded bg-white-50 p-4 shadow-sm md:w-9/12 lg:w-160 xl:w-192">
                         <HeadlessUi.Dialog.Title className="sr-only">Add an image</HeadlessUi.Dialog.Title>
                         <HeadlessUi.Dialog.Description>
                             <Components.Tabs
@@ -576,6 +614,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                         positiveActionCallback={handleUploadImage}
                                         negativeActionCallback={clearImageAndCloseModal}
                                         loading={loading}
+                                        uploadErrors={uploadImageErrors}
                                     />,
                                     <Components.URLSourceUpload
                                         key="url-source-upload"
@@ -589,11 +628,11 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                     </div>
                 </HeadlessUi.Dialog>
 
-                {/* Import document modal */}
                 <HeadlessUi.Dialog
                     open={props.importModalVisible}
                     onClose={() => props.setImportModalVisible(false)}
                     className="fixed inset-0 z-10 overflow-y-auto"
+                    title="Document Import"
                 >
                     <HeadlessUi.Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
@@ -609,7 +648,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="file"
                                     aria-label="Choose a Word document"
                                     accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                                 />
                                 <span className="sr-only">Choose a Word document</span>
                             </label>
@@ -632,6 +671,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     Replace existing
                                 </button>
                             </div>
+                            <div className="mt-6 flex justify-between space-x-4">
+                                <Components.ModalButton
+                                    onClick={() => props.setImportModalVisible(false)}
+                                    disabled={false}
+                                    text="Cancel"
+                                    title="Cancel"
+                                    actionType="NEGATIVE"
+                                />
+                            </div>
                         </HeadlessUi.Dialog.Description>
                     </div>
                 </HeadlessUi.Dialog>
@@ -640,11 +688,10 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     );
 };
 
-// handleURLSourceUpload(e.target.value)
-
 interface TextEditorProps {
-    contentChangeHandler: (editor: any) => void;
+    contentChangeHandler: (htmlString: string) => void;
     defaultContent: string;
+    references?: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
@@ -676,7 +723,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         onSelectionUpdate: () => setLoading(true),
         editorProps: {
             attributes: {
-                class: `${Config.values.HTMLStyles} prose max-w-none mt-6 outline-none min-h-[80px] xl:min-h-[150px] 2xl:min-h-[350px] dark:text-grey-800`
+                class: `${Config.values.HTMLStylesTiptapEditor} prose max-w-none mt-6 outline-none min-h-[150px] xl:min-h-[250px] dark:text-grey-800 pb-6`
             }
         },
         content: props.defaultContent
@@ -689,16 +736,15 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 imported, your publication can be further edited in the text field.
             </span>
             <button
-                onClick={() => {
-                    setImportModalVisible(true);
-                }}
+                onClick={() => setImportModalVisible(true)}
+                title="Import from Microsoft Word (.docx)"
                 className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
             >
                 <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
                 <span>Import from Microsoft Word (.docx)</span>
             </button>
 
-            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pb-4 pt-2 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                 <MenuBar
                     editor={textEditor}
                     loading={loading}
@@ -706,6 +752,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                     importModalVisible={importModalVisible}
                     setImportModalVisible={setImportModalVisible}
                 />
+
                 <tiptap.EditorContent editor={textEditor} />
             </div>
         </>

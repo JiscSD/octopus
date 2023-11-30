@@ -33,14 +33,20 @@
             "publication/*": [
                 "src/components/publication/*"
             ],
+            "publicationVersion/*": [
+                "src/components/publicationVersion/*"
+            ],
             "user/*": [
                 "src/components/user/*"
             ],
-            "bookmark/*": [
-                "src/components/bookmark/*"
+            "publicationBookmark/*": [
+                "src/components/publicationBookmark/*"
             ],
             "link/*": [
                 "src/components/link/*"
+            ],
+            "reference/*": [
+                "src/components/reference/*"
             ],
             "authorization/*": [
                 "src/components/authorization/*"
@@ -59,6 +65,15 @@
             ],
             "flag/*": [
                 "src/components/flag/*"
+            ],
+            "topic/*": [
+                "src/components/topic/*"
+            ],
+            "bookmark/*": [
+                "src/components/bookmark/*"
+            ],
+            "event/*": [
+                "src/components/event/*"
             ],
             "lib/*": [
                 "src/lib/*"

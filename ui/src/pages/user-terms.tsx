@@ -1,19 +1,18 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Framer from 'framer-motion';
 
+import * as Framer from 'framer-motion';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 type TextProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
@@ -41,10 +40,12 @@ const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
 const UserTerms: NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.userTerms.title}</title>
             <meta name="description" content={Config.urls.userTerms.description} />
             <meta name="keywords" content={Config.urls.userTerms.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.userTerms.title} />
+            <meta name="og:description" content={Config.urls.userTerms.description} />
             <link rel="canonical" href={Config.urls.userTerms.canonical} />
-            <title>{Config.urls.userTerms.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
@@ -178,7 +179,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                                 <li className="mb-6">
                                     A <span className="font-bold">Registered User </span> is an individual who has
-                                    created an Octopus user account affiliated with an ORCID ID by following the steps
+                                    created an Octopus user account affiliated with an ORCID® iD by following the steps
                                     set out in Section 3. A Registered User can search, browse, and view content
                                     published to the site, but can also publish their own research as well as review,
                                     rate, create links between, and red flag others&apos; publications. Registered Users
@@ -291,7 +292,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <span className="font-bold">All Users shall:</span>
                         </StandardText>
-                        <div>
+                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">only access and use the Service on these Terms</li>
                             </ul>
@@ -494,7 +495,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 User Content licensing arrangements.
                             </>
                         </StandardText>
-                        <Components.PageSubTitle text="SECTION 12: LIABILITY" className="mt-8" />
+                        <Components.PageSubTitle text="SECTION 13: ACCESSIBILITY" className="mt-8" />
                         <StandardText>
                             <>
                                 <span className="font-bold">
@@ -1076,7 +1077,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         </Components.Link>
                                     </li>
                                     <li className="mb-3">
-                                        ORCiD:{' '}
+                                        ORCID:{' '}
                                         <Components.Link
                                             href="https://orcid.org/"
                                             openNew={true}

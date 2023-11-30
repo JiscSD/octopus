@@ -9,10 +9,12 @@ const Terms: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.terms.title}</title>
                 <meta name="description" content={Config.urls.terms.description} />
+                <meta name="og:title" content={Config.urls.terms.title} />
+                <meta name="og:description" content={Config.urls.terms.description} />
                 <meta name="keywords" content={Config.urls.terms.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.terms.canonical} />
-                <title>{Config.urls.terms.title}</title>
             </Head>
 
             <Layouts.Information>

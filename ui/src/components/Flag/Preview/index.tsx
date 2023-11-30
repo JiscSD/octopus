@@ -1,6 +1,6 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -33,7 +33,7 @@ const Preview: React.FC<Props> = (props) => (
         </span>
         <span className="ml-6 text-sm text-grey-600 transition-colors duration-500 dark:text-grey-100">
             Flagged by {props.flag.user.firstName} {props.flag.user.lastName},{' '}
-            {Helpers.formatDate(props.flag.createdAt)}
+            <time suppressHydrationWarning>{Helpers.formatDate(props.flag.createdAt)}</time>
         </span>
     </Components.Link>
 );

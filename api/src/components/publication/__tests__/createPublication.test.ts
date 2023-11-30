@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('Create publication', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });
@@ -22,12 +22,13 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(201);
 
-        expect(createPublicationRequest.body.user.id).toEqual('test-user-1');
-        expect(createPublicationRequest.body.publicationStatus.length).toEqual(1);
-        expect(createPublicationRequest.body.publicationStatus[0].status).toEqual('DRAFT');
-        expect(createPublicationRequest.body.keywords.length).toEqual(2);
-        expect(createPublicationRequest.body.description).toEqual('description of Publication test 1');
-        expect(createPublicationRequest.body.licence).toEqual('CC_BY_SA');
+        expect(createPublicationRequest.body.versions.length).toEqual(1);
+
+        expect(createPublicationRequest.body.versions[0].createdBy).toEqual('test-user-1');
+        expect(createPublicationRequest.body.versions[0].currentStatus).toEqual('DRAFT');
+        expect(createPublicationRequest.body.versions[0].keywords.length).toEqual(2);
+        expect(createPublicationRequest.body.versions[0].description).toEqual('description of Publication test 1');
+        expect(createPublicationRequest.body.versions[0].licence).toEqual('CC_BY_SA');
     });
 
     test('Valid publication created by real user with content (200)', async () => {
@@ -127,7 +128,7 @@ describe('Create publication', () => {
             });
 
         expect(createPublicationRequest.status).toEqual(201);
-        expect(createPublicationRequest.body.publishedDate).toBeNull();
+        expect(createPublicationRequest.body.versions[0].publishedDate).toBeNull();
     });
 
     test('Valid publicatiom created by real user when provided a correct ISO-639-1 language code', async () => {
@@ -144,7 +145,7 @@ describe('Create publication', () => {
             });
 
         expect(createPublicationRequest.status).toEqual(201);
-        expect(createPublicationRequest.body.language).toEqual('fr');
+        expect(createPublicationRequest.body.versions[0].language).toEqual('fr');
     });
 
     test('Publication failed to be created if language code provided is not out of the ISO-639-1 language list', async () => {
@@ -208,7 +209,7 @@ describe('Create publication', () => {
             });
 
         expect(createPublicationRequest.status).toEqual(201);
-        expect(createPublicationRequest.body.language).toEqual('en');
+        expect(createPublicationRequest.body.versions[0].language).toEqual('en');
     });
 
     test('Publication can not be created if supplying a self declaration and if not a protocol or hypotheses', async () => {
@@ -240,7 +241,7 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.type).toEqual('PROTOCOL');
-        expect(createPublicationRequest.body.selfDeclaration).toEqual(true);
+        expect(createPublicationRequest.body.versions[0].selfDeclaration).toEqual(true);
     });
 
     test('Publication can be created if not supplying a self declration and is of type hypotheses', async () => {
@@ -257,6 +258,22 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.type).toEqual('HYPOTHESIS');
-        expect(createPublicationRequest.body.selfDeclaration).toEqual(true);
+        expect(createPublicationRequest.body.versions[0].selfDeclaration).toEqual(true);
+    });
+
+    test('Publication can be linked to topic on creation', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Publication related to a topic',
+                topicIds: ['test-topic-1']
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.versions[0].topics[0].title).toEqual('Test topic');
     });
 });

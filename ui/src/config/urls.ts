@@ -1,7 +1,3 @@
-let host: string;
-let mediaBucket: string;
-let orcidAppiID: string;
-
 function checkEnvVariable(variable: string | undefined): string {
     if (variable === undefined) {
         throw new Error('Environment Variable is undefined.');
@@ -10,22 +6,18 @@ function checkEnvVariable(variable: string | undefined): string {
     }
 }
 
-if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF == 'local') {
-    host = 'https://localhost:3001';
-    mediaBucket = `http://localhost:4566/science-octopus-publishing-images-local`;
-    orcidAppiID = 'APP-0Q7JRZQZG3G0M957';
-} else {
-    host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
-    mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
-    orcidAppiID = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
-}
+const host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
+const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
+const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
-export const base = {
+const base = {
     title: 'Octopus | Built for Researchers',
     host
 };
 
 const urls = {
+    base,
     // Search
     search: {
         path: '/search',
@@ -127,6 +119,13 @@ const urls = {
         title: `${base.title}`,
         description: '',
         canonical: `${base.host}/publications` // append `/{publication_id}/flag/{flag_id}`
+    },
+
+    // Topics
+    viewTopic: {
+        path: '/topics',
+        title: `${base.title}`,
+        canonical: `${base.host}/topics`
     },
 
     // Static Pages
@@ -254,10 +253,27 @@ const urls = {
         canonical: `${base.host}/login`
     },
     orcidLogin: {
-        path: `https://orcid.org/oauth/authorize?client_id=${orcidAppiID}&response_type=code&scope=/authenticate&redirect_uri=${base.host}/login`
+        path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket,
-    baseUrl: base.host
+    baseUrl: base.host,
+    blog: {
+        path: '/blog',
+        title: 'The Octopus Blog',
+        description: 'Stay up to date with the latest from the Octopus team',
+        documentTitle: `The Octopus Blog - ${base.title}`,
+        keywords: ['blog', 'Octopus blog'],
+        canonical: `${base.host}/blog`
+    },
+    researchCultureReport: {
+        path: '/research-culture-report',
+        title: 'Research Culture Report',
+        description:
+            'Explore Octopus: Transforming Academic Research Culture. Discover how the University of Bristol report highlights challenges in academia and how Octopus is reshaping research incentives to foster collaboration and quality.',
+        documentTitle: `Research Culture Report - ${base.title}`,
+        keywords: ['research', 'culture', 'report'],
+        canonical: `${base.host}/research-culture-report`
+    }
 };
 
 export default urls;

@@ -1,0 +1,27 @@
+@startuml system-context-diagram
+!include <C4/C4_Container>
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/orcid.puml
+
+AddElementTag("internal system", $bgColor="teal")
+
+Person(octopusUser, "Octopus User")
+' Container(containerAlias, "Label", "Technology", "Optional Description")
+System(octopus, "Octopus", "Allows researchers to publish and browse publications", $tags="internal system")
+System(orcid, "ORCID", "Distinguishes researchers by providing them with a unique ID", $sprite="orcid")
+System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)")
+System(doiOrg, "doi.org", "Governs the Digital Object Identifier (DOI) system")
+System(rorOrg, "ror.org", "Registry of identifiers for research organizations")
+System(pubRouter, "Publications Router", "Forwards publications and metadata to other repositories")
+
+Rel(octopusUser, octopus, "Manages and browses publications using")
+Rel(octopusUser, orcid, "Logs in via")
+Rel_R(octopus, orcid, "Gets user details from")
+Rel(octopus, datacite, "Mints a DOI per publication using")
+Rel(octopus, rorOrg, "Pulls funder details from")
+Rel(octopus, doiOrg, "Pulls reference data from")
+Rel_D(datacite, doiOrg, "Registers octopus publication DOIs with")
+Rel(octopus, pubRouter, "Notifies about publications")
+
+@enduml

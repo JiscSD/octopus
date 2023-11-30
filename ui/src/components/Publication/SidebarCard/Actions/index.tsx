@@ -1,11 +1,8 @@
 import React from 'react';
-import useSWR, * as SWR from 'swr';
 import Image from 'next/image';
+import * as SWR from 'swr';
 import * as Router from 'next/router';
-import * as ReactRange from 'react-range';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as OutlineIcons from '@heroicons/react/outline';
-
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Helpers from '@helpers';
@@ -15,8 +12,10 @@ import * as Assets from '@assets';
 import * as Types from '@types';
 import * as api from '@api';
 
+import axios from 'axios';
+
 type ActionProps = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
 };
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
@@ -27,7 +26,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     const setToast = Stores.useToastStore((state) => state.setToast);
 
     // Modals
-    const [showRedFlagModel, setShowRedFlagModel] = React.useState(false);
+    const [showRedFlagModal, setShowRedFlagModal] = React.useState(false);
 
     // State
     const [redFlagReason, setRedFlagReason] = React.useState<Types.RedFlagTypes>('PLAGIARISM');
@@ -42,8 +41,9 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
         setSubmitting(true);
         try {
             if (redFlagComment.length) {
-                const response = await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/flag`,
+                const createFlagEndpoint = `${Config.endpoints.publications}/${props.publicationVersion.publication.id}/flags`;
+                await api.post(
+                    createFlagEndpoint,
                     {
                         category: redFlagReason,
                         comment: redFlagComment
@@ -51,8 +51,8 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     user?.token
                 );
 
-                // Close the model
-                setShowRedFlagModel(false);
+                // Close the modal
+                setShowRedFlagModal(false);
 
                 // Mount a new toast for successful response
                 setToast({
@@ -63,44 +63,49 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                     message: 'Your red flag has now been saved.'
                 });
 
-                // Mutate original publication
-                SWRConfig.mutate(`${Config.endpoints.publications}/${props.publication.id}`);
+                // refetch publication flags
+                await SWRConfig.mutate(createFlagEndpoint);
             } else {
                 setError('You must provide a comment for this red flag.');
             }
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
-            setError(message);
+            setError(
+                axios.isAxiosError(err) && typeof err.response?.data?.message === 'string'
+                    ? err.response.data.message
+                    : message
+            );
         }
         setSubmitting(false);
     };
 
     // Adds a small delay so the error just instantly jump off the screen
     React.useEffect(() => {
-        if (!showRedFlagModel) {
+        if (!showRedFlagModal) {
             setTimeout(() => {
                 setError(undefined);
                 setRedFlagComment('');
             }, 500);
         }
-    }, [showRedFlagModel]);
+    }, [showRedFlagModal]);
+
+    const onCloseRedFlagModal = () => {
+        setShowRedFlagModal(false);
+    };
 
     return (
         <>
             <Components.Modal
-                open={showRedFlagModel}
-                setOpen={setShowRedFlagModel}
+                open={showRedFlagModal}
+                onClose={onCloseRedFlagModal}
                 positiveActionCallback={saveRedFlag}
+                loading={submitting}
                 positiveButtonText="Submit"
                 cancelButtonText="Cancel"
                 title="Red flag publication"
-                disableButtons={submitting}
             >
                 <>
-                    {!!submitting && (
-                        <Assets.Spinner width={25} height={25} className="absolute top-5 right-5 stroke-teal-500" />
-                    )}
-                    <p className="mt-4 mb-8 text-left text-xs text-grey-700">
+                    <p className="mb-8 mt-4 text-left text-xs text-grey-700">
                         Flag any potential research integrity issues with this publication.
                         <br className="hidden xl:block" />
                         The author(s) will receive a notification of this flag, and will have the opportunity to respond
@@ -147,98 +152,117 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                 </>
             </Components.Modal>
 
-            <Components.SectioBreak name="Actions" />
-
-            {/** Download options */}
-            <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
-                    Download:
-                </span>
-                <button
-                    aria-label="Print"
-                    onClick={() => window.print()}
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                >
-                    <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
-                    <span className="ml-1">pdf</span>
-                </button>
-                <button
-                    aria-label="Download JSON"
-                    onClick={() =>
-                        Helpers.blobFileDownload(
-                            `${Config.endpoints.publications}/${props.publication.id}`,
-                            `${props.publication.id}.json`
-                        )
-                    }
-                    className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                >
-                    <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
-                    <span className="ml-1">json</span>
-                </button>
-            </div>
-
-            {user && user.email ? (
-                props.publication.user.id !== user.id && (
-                    <>
-                        {Helpers.linkedPublicationTypes[
-                            props.publication.type as keyof typeof Helpers.linkedPublicationTypes
-                        ].map((item: any) => {
-                            return (
-                                <Components.PublicationSidebarCardActionsButton
-                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
-                                    key={item}
-                                    onClick={() => {
-                                        router.push({
-                                            pathname: `${Config.urls.createPublication.path}`,
-                                            query: {
-                                                for: props.publication.id,
-                                                type: item
-                                            }
-                                        });
-                                    }}
+            {props.publicationVersion.currentStatus === 'LIVE' && (
+                <>
+                    <Components.SectionBreak name="Actions" />
+                    {/** Download options */}
+                    <div className="flex">
+                        <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                            Download:
+                        </span>
+                        <button
+                            aria-label="Print"
+                            onClick={() => {
+                                window.open(
+                                    `${Config.endpoints.publications}/${props.publicationVersion.versionOf}/pdf?redirectToPreview=true`,
+                                    '_blank'
+                                );
+                            }}
+                            className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                        >
+                            <Image src="/images/pdf.svg" alt="PDF Icon" width={18} height={18} />
+                            <span className="ml-1">pdf</span>
+                        </button>
+                        <button
+                            aria-label="Download JSON"
+                            onClick={() =>
+                                Helpers.blobFileDownload(
+                                    `${Config.endpoints.publications}/${props.publicationVersion.versionOf}`,
+                                    `${props.publicationVersion.versionOf}.json`
+                                )
+                            }
+                            className="mr-4 flex items-center rounded border-transparent text-right text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                        >
+                            <Image src="/images/json.svg" alt="PDF Icon" width={18} height={18} />
+                            <span className="ml-1">json</span>
+                        </button>
+                    </div>
+                    {user && user.email ? (
+                        <>
+                            {/* if the publication is a peer review, no options shall be given to write a linked publication */}
+                            {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
+                                <>
+                                    {Helpers.linkedPublicationTypes[
+                                        props.publicationVersion.publication
+                                            .type as keyof typeof Helpers.linkedPublicationTypes
+                                    ].map((item: any) => {
+                                        return (
+                                            <Components.PublicationSidebarCardActionsButton
+                                                label={`Write a linked ${Helpers.formatPublicationType(item)}`}
+                                                key={item}
+                                                onClick={() => {
+                                                    router.push({
+                                                        pathname: `${Config.urls.createPublication.path}`,
+                                                        query: {
+                                                            for: props.publicationVersion.versionOf,
+                                                            type: item
+                                                        }
+                                                    });
+                                                }}
+                                            />
+                                        );
+                                    })}
+                                    {props.publicationVersion.user.id !== user.id && (
+                                        <>
+                                            <Components.PublicationSidebarCardActionsButton
+                                                label="Write a review"
+                                                onClick={() => {
+                                                    router.push({
+                                                        pathname: `${Config.urls.createPublication.path}`,
+                                                        query: {
+                                                            for: props.publicationVersion.versionOf,
+                                                            type: 'PEER_REVIEW'
+                                                        }
+                                                    });
+                                                }}
+                                            />
+                                            <Components.PublicationSidebarCardActionsButton
+                                                label="Flag a concern with this publication"
+                                                onClick={() => setShowRedFlagModal(true)}
+                                            />
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    ) : user && !user.email ? (
+                        <>
+                            <Components.Link
+                                href={`${Config.urls.verify.path}?state=${encodeURIComponent(
+                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
+                                )}`}
+                                className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                            >
+                                Verify your email for more actions
+                            </Components.Link>
+                        </>
+                    ) : (
+                        <>
+                            <Components.Link
+                                href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
+                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
+                                )}`}
+                                className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                            >
+                                <Assets.ORCID
+                                    width={25}
+                                    height={25}
+                                    className="mr-2 rounded-md bg-orcid fill-white-50 p-1"
                                 />
-                            );
-                        })}
-
-                        {props.publication.type !== 'PEER_REVIEW' && (
-                            <Components.PublicationSidebarCardActionsButton
-                                label="Write a review"
-                                onClick={() => {
-                                    router.push({
-                                        pathname: `${Config.urls.createPublication.path}`,
-                                        query: {
-                                            for: props.publication.id,
-                                            type: 'PEER_REVIEW'
-                                        }
-                                    });
-                                }}
-                            />
-                        )}
-
-                        <Components.PublicationSidebarCardActionsButton
-                            label="Flag a concern with this publication"
-                            onClick={() => setShowRedFlagModel(true)}
-                        />
-                    </>
-                )
-            ) : user && !user.email ? (
-                <>
-                    <Components.Link
-                        href={`${Config.urls.verify.path}?state=${Config.urls.viewPublication.path}/${props.publication.id}`}
-                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                    >
-                        Verify your email for more actions
-                    </Components.Link>
-                </>
-            ) : (
-                <>
-                    <Components.Link
-                        href={Config.urls.orcidLogin.path}
-                        className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                    >
-                        <Assets.ORCID width={25} height={25} className="mr-2 rounded-md bg-orcid fill-white-50 p-1" />
-                        <span> Sign in for more actions</span>
-                    </Components.Link>
+                                <span> Sign in for more actions</span>
+                            </Components.Link>
+                        </>
+                    )}
                 </>
             )}
         </>

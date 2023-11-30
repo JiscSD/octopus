@@ -27,7 +27,7 @@ const HTML: React.FC<Props> = (props): React.ReactElement => (
         >
             <source src={props.srcWebM} type="video/webm" />
             <source src={props.srcMp4} type="video/mp4" />
-            <track kind="captions" about={props.title ?? ''} />
+            <track kind="captions" label={props.title ?? ''} />
         </video>
 
         <figcaption className={`mt-2 block text-right text-sm ${!props.showCaption && 'sr-only'}`}>

@@ -1,6 +1,5 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
-
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 };
 
 const ActionCard: React.FC<Props> = (props): React.ReactElement => (
-    <div className="space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
+    <div className="space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
         <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.title}
@@ -21,11 +20,9 @@ const ActionCard: React.FC<Props> = (props): React.ReactElement => (
             {props.content}
         </p>
         <Components.Button
-            link
             href={props.link}
             title={props.linkText}
-            iconPosition="RIGHT"
-            icon={
+            endIcon={
                 <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
             }
         />

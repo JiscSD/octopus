@@ -1,6 +1,6 @@
 import React from 'react';
 import * as HeadlessUI from '@headlessui/react';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as Stores from '@stores';
 
@@ -19,7 +19,7 @@ const Toast: React.FC = (): React.ReactElement => {
     return !!toast.visible ? (
         <div
             aria-live="assertive"
-            className="fixed right-5 bottom-8 z-40 flex w-11/12 flex-col items-center space-y-4 sm:items-end lg:bottom-12 lg:right-12 lg:w-full"
+            className="fixed bottom-8 right-5 z-40 flex w-11/12 flex-col items-center space-y-4 sm:items-end lg:bottom-12 lg:right-12 lg:w-full"
         >
             <HeadlessUI.Transition
                 show={toast.visible}
@@ -66,7 +66,7 @@ const Toast: React.FC = (): React.ReactElement => {
                                     }}
                                 >
                                     <span className="sr-only">Close</span>
-                                    <SolidIcons.XIcon className="h-5 w-5" aria-hidden="true" />
+                                    <SolidIcons.XMarkIcon className="h-5 w-5" aria-hidden="true" />
                                 </button>
                             </div>
                         </div>

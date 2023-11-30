@@ -1,15 +1,19 @@
 import middy from '@middy/core';
 
 import * as middleware from 'middleware';
-
 import * as coAuthorController from 'coauthor/controller';
 import * as coAuthorSchema from 'coauthor/schema';
 
-export const create = middy(coAuthorController.create)
+export const get = middy(coAuthorController.get)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
+
+export const updateAll = middy(coAuthorController.updateAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(coAuthorSchema.create, 'body'));
+    .use(middleware.validator(coAuthorSchema.updateAll, 'body'));
 
 export const remove = middy(coAuthorController.remove)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
@@ -22,8 +26,19 @@ export const link = middy(coAuthorController.link)
     .use(middleware.authentication(true))
     .use(middleware.validator(coAuthorSchema.link, 'body'));
 
-export const update = middy(coAuthorController.update)
+export const updateConfirmation = middy(coAuthorController.updateConfirmation)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(coAuthorSchema.update, 'body'));
+    .use(middleware.validator(coAuthorSchema.updateConfirmation, 'body'));
+
+export const requestApproval = middy(coAuthorController.requestApproval)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
+
+export const sendApprovalReminder = middy(coAuthorController.sendApprovalReminder)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(coAuthorSchema.sendApprovalReminder, 'pathParameters'));

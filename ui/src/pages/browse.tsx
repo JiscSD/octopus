@@ -1,41 +1,31 @@
 import React from 'react';
 import useSWR from 'swr';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
 
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
-import * as Interfaces from '@interfaces';
 import * as Layouts from '@layouts';
 import * as Helpers from '@helpers';
 import * as Config from '@config';
 import * as Types from '@types';
 import * as api from '@api';
-
-interface Errors {
-    latest: null | string;
-}
+import * as Interfaces from '@interfaces';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const swrKey = `/publications?search&type=${Config.values.publicationTypes.join()}&limit=5&offset=0`;
-
-    const errors: Errors = {
-        latest: null
-    };
+    const swrKey = `/publication-versions?limit=5&orderBy=publishedDate&orderDirection=desc`;
 
     let latest: unknown = [];
     let metadata: unknown = {};
     try {
-        const latestResponse = await api.search('publications', null, Config.values.publicationTypes.join(), 5, 0);
-        latest = latestResponse.data.reverse() as Interfaces.Publication[];
-        metadata = latestResponse.metadata;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        errors.latest = message;
+        const latestResponse = await api.get(swrKey, undefined);
+        latest = latestResponse.data.data;
+        metadata = latestResponse.data.metadata;
+    } catch (error) {
+        // couldn't load the latest publication versions
     }
 
     return {
         props: {
-            errors,
             swrKey,
             fallback: {
                 [swrKey]: {
@@ -50,23 +40,21 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    errors: Errors;
     swrKey: string;
 };
 
 const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
-    const {
-        data: { data },
-        error
-    } = useSWR(props.swrKey);
+    const { data: results, error } = useSWR<Interfaces.SearchResults<Interfaces.PublicationVersion>>(props.swrKey);
 
     return (
         <>
             <Head>
+                <title>{Config.urls.browsePublications.title}</title>
                 <meta name="description" content={Config.urls.browsePublications.description} />
+                <meta name="og:title" content={Config.urls.browsePublications.title} />
+                <meta name="og:description" content={Config.urls.browsePublications.description} />
                 <meta name="keywords" content={Config.urls.browsePublications.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.browsePublications.canonical} />
-                <title>{Config.urls.browsePublications.title}</title>
             </Head>
 
             <Layouts.Standard>
@@ -79,23 +67,19 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                             {/* view all publication & authors buttons */}
                             <div className="grid-row-2 mb-6 grid">
                                 <Components.Button
-                                    link
                                     href={`${
                                         Config.urls.search.path
-                                    }?for=publications&type=${Config.values.publicationTypes.join()}`}
+                                    }/publications?type=${Config.values.publicationTypes.join()}`}
                                     title="View all publications"
-                                    iconPosition="RIGHT"
-                                    icon={
+                                    endIcon={
                                         <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
                                     className="w-fit"
                                 />
                                 <Components.Button
-                                    link
-                                    href={`${Config.urls.search.path}?for=users`}
+                                    href={`${Config.urls.search.path}/authors`}
                                     title="View all authors"
-                                    iconPosition="RIGHT"
-                                    icon={
+                                    endIcon={
                                         <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
                                     className="w-fit"
@@ -107,7 +91,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                             {Config.values.publicationTypes.map((type) => (
                                 <Components.Link
                                     key={type}
-                                    href={`${Config.urls.search.path}?for=publications&type=${type}`}
+                                    href={`${Config.urls.search.path}/publications?type=${type}`}
                                     className="group mb-2 block w-fit rounded border-transparent outline-0 focus:ring-2 focus:ring-yellow-400"
                                 >
                                     <span className="text-grey-800 transition-colors duration-500 group-hover:text-grey-500 dark:text-grey-50">
@@ -119,7 +103,7 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                     </aside>
                     <article className="lg:col-span-6">
                         <div className="mb-16">
-                            {!error && data && <Components.LatestPublications publications={data.data} />}
+                            {!error && results && <Components.LatestPublications publicationVersions={results.data} />}
                         </div>
                     </article>
                 </section>

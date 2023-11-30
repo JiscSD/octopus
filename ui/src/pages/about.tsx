@@ -1,12 +1,13 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
+import * as Types from '@types';
 
 type CardItemProps = {
     title: string;
@@ -15,7 +16,7 @@ type CardItemProps = {
 };
 
 const CardItem: React.FC<CardItemProps> = (props): React.ReactElement => (
-    <div className="w-30 mx-3 mt-3 space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
+    <div className="w-30 mx-3 mt-3 space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700">
         {props.icon}
         <span className="block font-montserrat text-lg font-bold text-grey-800 transition-colors duration-500 dark:text-white-50">
             {props.title}
@@ -27,7 +28,7 @@ const CardItem: React.FC<CardItemProps> = (props): React.ReactElement => (
 );
 
 type PageSectionProps = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
@@ -47,10 +48,12 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
 const About: NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.about.title}</title>
             <meta name="description" content={Config.urls.about.description} />
             <meta name="keywords" content={Config.urls.about.keywords.join(', ')} />
+            <meta name="og:title" content={Config.urls.about.title} />
+            <meta name="og:description" content={Config.urls.about.description} />
             <link rel="canonical" href={Config.urls.about.canonical} />
-            <title>{Config.urls.about.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
@@ -66,10 +69,11 @@ const About: NextPage = (): React.ReactElement => (
                             research and research culture.
                         </h2>
                         <h2 className="text-l mx-auto mb-5 block text-center font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
-                            It sits alongside journals and other dissemination outlets, allowing those to specialise in
-                            delivering key findings to their audiences whilst Octopus acts like a &apos;patent
-                            office&apos; to record who has done what and when, and ensure the quality, integrity and
-                            accessibility of all primary research, in full.
+                            It sits alongside journals and other dissemination outlets: they can specialise in
+                            delivering key findings to their audiences. Octopus, meanwhile, is where researchers can
+                            publish everything in full: ideas, hypotheses, full data, analyses, code and reviews of
+                            others&apos; work. It acts like a &apos;patent office&apos; to record who has done what and
+                            when, and ensure the quality, integrity and accessibility of all primary research, in full.
                         </h2>
                     </div>
                     <div className="mx-auto mb-20 mt-10 flex w-fit space-x-6 ">
@@ -103,7 +107,7 @@ const About: NextPage = (): React.ReactElement => (
                     <CardItem
                         title="Free and fast"
                         content="We believe that new ideas and findings should be shared as quickly and accessibly as possible, and that primary research, including data and code should not be locked behind paywalls. On Octopus, researchers can put their work into the research record quickly, easily and in full. Researchers then have no need to worry about ‘being scooped’ as they can establish priority immediately. Others can use or build on the research quickly. Research of all types can be recorded, without barriers or editorial gatekeepers."
-                        icon={<OutlineIcons.LightningBoltIcon className="h-8 w-8 text-teal-500" />}
+                        icon={<OutlineIcons.BoltIcon className="h-8 w-8 text-teal-500" />}
                     />
                     <CardItem
                         title="Emphasis on quality"
@@ -118,45 +122,26 @@ const About: NextPage = (): React.ReactElement => (
                     <CardItem
                         title="Find relevant work"
                         content="All publications in Octopus are linked, forming branching chains. You can browse these links from each publication page to discover new content, while authors can identify potential collaborations working on related projects. Institutions and funders can also view all the research recorded by their researchers."
-                        icon={<OutlineIcons.SearchIcon className="h-8 w-8 text-teal-500" />}
+                        icon={<OutlineIcons.MagnifyingGlassIcon className="h-8 w-8 text-teal-500" />}
                     />
                 </div>
             </PageSection>
 
             <PageSection>
-                <div className="mx-10 grid grid-cols-1 gap-2 lg:grid-cols-3 lg:gap-4">
-                    <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 py-6 px-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
-                        <div className="text-center lg:mt-5">
-                            <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Do you feel like these principles align with your own?
-                            </h2>
-                            <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
-                                You can help to support Octopus by joining our user community.
-                            </p>
-                            <Components.Button
-                                title="Learn more about getting involved."
-                                link
-                                href={Config.urls.getInvolved.path}
-                                iconPosition="RIGHT"
-                                icon={
-                                    <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                }
-                            />
-                        </div>
-                    </div>
-                    <div className="container col-span-2 mx-auto mb-10 gap-6 transition-all duration-500 lg:mb-24">
-                        <h2 className="mx-auto mb-8 block w-5/6 text-center font-montserrat text-2xl font-bold text-grey-900 transition-colors duration-500 dark:text-grey-100">
-                            A quick introduction to Octopus from its creator, Alex Freeman
+                <div className="w-30 col-span-1 my-auto mb-20 h-auto space-y-6 rounded-md bg-white-50 px-6 py-6 shadow-lg transition-colors duration-500 dark:bg-grey-700 sm:mx-auto md:my-auto">
+                    <div className="text-center lg:mt-5">
+                        <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            Do you feel like these principles align with your own?
                         </h2>
-                        <Components.HTMLVideo
-                            srcWebM="/video/webm/a_quick_introduction_to_octopus.webm"
-                            srcMp4="/video/mp4/a_quick_introduction_to_octopus.mp4"
-                            title="A quick introduction to Octopus: the new primary research record for science"
-                            showCaption={false}
-                            controls={true}
-                            poster="/images/jpg/poster.jpg"
-                            width={1080}
-                            className="mx-auto !w-full"
+                        <p className="mb-6 block font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 ">
+                            You can help to support Octopus by joining our user community.
+                        </p>
+                        <Components.Button
+                            title="Learn more about getting involved."
+                            href={Config.urls.getInvolved.path}
+                            endIcon={
+                                <OutlineIcons.UsersIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            }
                         />
                     </div>
                 </div>
@@ -214,7 +199,7 @@ const About: NextPage = (): React.ReactElement => (
                         <Components.ActionCard
                             title="Browse publications"
                             content="Every publication in Octopus is linked to another, forming branching chains of research. You can navigate these chains from every publication page to browse areas of research and discover something new."
-                            icon={<OutlineIcons.DesktopComputerIcon className="h-8 w-8 text-teal-500" />}
+                            icon={<OutlineIcons.ComputerDesktopIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.browsePublications.path}
                             linkText="Browse publications"
                         />

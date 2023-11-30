@@ -1,11 +1,20 @@
-import { Languages, LicenceType, Prisma, PublicationFlagCategoryEnum, PublicationType, Role } from '@prisma/client';
+import {
+    Languages,
+    LicenceType,
+    Prisma,
+    PublicationFlagCategoryEnum,
+    PublicationType,
+    Role,
+    BookmarkType,
+    PublicationStatusEnum
+} from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
+import * as publicationVersionService from 'publicationVersion/service';
 
-import * as publicationService from 'publication/service';
 export {
     ImageExtension,
     Languages,
@@ -13,11 +22,12 @@ export {
     PublicationFlagCategoryEnum,
     PublicationStatusEnum,
     PublicationType,
-    Role
+    Role,
+    Topic,
+    BookmarkType
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-export { HandlerLambda } from 'middy';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -55,8 +65,8 @@ export interface OptionalAuthenticatedAPIRequest<
 }
 
 export interface JSONResponse {
-    body: string;
-    headers: any;
+    body?: string;
+    headers: unknown;
     statusCode: number;
 }
 
@@ -83,6 +93,7 @@ export interface CreatePublicationRequestBody {
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
     affiliationStatement?: string;
+    topicIds?: string[];
 }
 
 export interface OpenSearchPublication {
@@ -101,46 +112,75 @@ export interface GetPublicationPathParams {
     id: string;
 }
 
+export interface GetPublicatonQueryParams {
+    fields?: string;
+}
+
+export interface GetPublicationLinksPathParams {
+    id: string;
+}
+
+export interface GetPublicationLinksQueryParams {
+    direct?: string;
+}
+
+export interface GetPublicationVersionPathParams {
+    id: string;
+    version: string;
+}
+
+export interface GetSeedDataPublicationsFilters {
+    title: string;
+}
+
 export interface UpdatePublicationPathParams {
+    id: string;
+}
+
+export interface UpdatePublicationVersionPathParams {
     id: string;
 }
 
 export interface UpdateStatusPathParams {
     id: string;
-    status: 'LIVE';
+    status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
-export interface UpdatePublicationRequestBody {
-    content?: string;
+export interface UpdatePublicationVersionRequestBody {
     title?: string;
-    licence?: LicenceType;
     description?: string;
+    content?: string;
     keywords?: string[];
-    id?: string;
     language?: Languages;
+    topics?: string[];
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    conflictOfInterestStatus?: boolean;
+    conflictOfInterestText?: string;
+    fundersStatement?: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
-export interface PublicationFilters {
+export interface OpenSearchPublicationFilters {
     search?: string;
-    limit?: string;
-    offset?: string;
+    limit: number;
+    offset: number;
     type: string;
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
+    orderBy?: PublicationOrderBy;
+    orderDirection?: OrderDirection;
 }
 
-export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
+export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
 
 /**
  * @description Links
@@ -148,6 +188,39 @@ export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicatio
 export interface CreateLinkBody {
     to: string;
     from: string;
+}
+
+export interface LinkedPublication {
+    id: string;
+    type: PublicationType;
+    doi: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatusEnum;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+}
+
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
+    childPublication: string;
+    childPublicationType: PublicationType;
+}
+
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
+    parentPublication: string;
+    parentPublicationType: PublicationType;
+}
+
+export interface PublicationWithLinks {
+    publication: LinkedPublication | null;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
 }
 
 /**
@@ -248,9 +321,14 @@ export interface UpdateUserInformation {
         title?: string | null;
         url?: string | null;
     }>;
+    orcidAccessToken: string;
 }
 
-export interface DeletePublicationPathParams {
+export interface DeletePublicationVersionPathParams {
+    id: string;
+}
+
+export interface CreatePublicationVersionPathParams {
     id: string;
 }
 
@@ -258,7 +336,7 @@ export interface DeleteLinkPathParams {
     id: string;
 }
 
-export type ValidStatuses = 'DRAFT' | 'LIVE';
+export type ValidStatuses = 'DRAFT' | 'LIVE' | 'LOCKED';
 /**
  * ORCID
  */
@@ -357,6 +435,25 @@ export interface ORCIDUser {
 /**
  * @description Coauthor
  */
+
+export interface CoAuthor {
+    id: string;
+    linkedUser: null | string;
+    confirmedCoAuthor: boolean;
+    approvalRequested: boolean;
+    email: string;
+    publicationVersionId: string;
+    createdAt?: string;
+    reminderDate?: string | null;
+    isIndependent: boolean;
+    affiliations: MappedOrcidAffiliation[];
+    user?: {
+        firstName: string;
+        lastName: string;
+        orcid: string;
+    };
+}
+
 export interface CreateCoAuthorRequestBody {
     email: string;
 }
@@ -367,6 +464,7 @@ export interface CreateCoAuthorPathParams {
 
 export interface DeleteCoAuthorPathParams {
     id: string;
+
     coauthor: string;
 }
 
@@ -393,20 +491,81 @@ export interface ImageSentBody {
 }
 
 // @description Bookmarks
+export type GetBookmarkPathParamType = Lowercase<BookmarkType>;
 
-export interface CreateBookmarkPathParams {
+export interface CreateBookmarkRequestBody {
+    type: BookmarkType;
+    entityId: string;
+}
+
+export interface GetAllBookmarksQueryStringParameters {
+    type: BookmarkType;
+    entityId?: string;
+}
+
+export interface DeleteBookmarkPathParams {
     id: string;
 }
 
-export interface RemoveBookmarkPathParams {
+export interface BookmarkedPublication {
+    id: string;
+    title: string | null;
+    createdAt: Date;
+    type: PublicationType;
+    publishedDate: Date | null;
+    coAuthors: Array<{
+        user: {
+            firstName: string;
+            lastName: string | null;
+        } | null;
+    }>;
+    doi: string;
+    updatedAt: Date;
+    user: {
+        firstName: string;
+        lastName: string | null;
+    };
+}
+
+export interface BookmarkedTopic {
+    id: string;
+    title: string;
+}
+
+export interface PopulatedBookmark {
+    id: string;
+    type: BookmarkType;
+    entityId: string;
+    userId: string;
+    entity: BookmarkedPublication | BookmarkedTopic;
+}
+
+/**
+ * @description References
+ */
+
+export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
+
+export interface Reference {
+    id: string;
+    publicationVersionId: string;
+    type: ReferenceType;
+    text: string;
+    location?: string | null;
+}
+
+export type UpdateReferencesBody = Array<Reference>;
+
+export interface CreateReferencePath {
     id: string;
 }
 
-export interface GetBookmarkPathParams {
+export interface UpdateReferencePath {
     id: string;
+    referenceId: string;
 }
 
-export interface GetAllBookmarkPathParams {
+export interface RemoveAllReferencesPathParams {
     id: string;
 }
 
@@ -480,19 +639,232 @@ export interface DOIResponse {
 
 //affiliations
 
-export interface CreateAffiliationPathParams {
+export interface UpdateAffiliationsPathParams {
     id: string;
 }
 
-export interface DeleteAffiliationPathParams {
-    id: string;
-    affiliation: string;
+export interface UpdateAffiliationsBody {
+    affiliations: MappedOrcidAffiliation[];
+    isIndependent: boolean;
 }
 
-export interface CreateAffiliationRequestBody {
+export interface UserPublicationsFilters {
+    offset: number;
+    limit: number;
+}
+
+export interface SendApprovalReminderPathParams {
+    id: string;
+
+    coauthor: string;
+}
+
+type NameType = 'Personal' | 'Organizational';
+
+type DataCiteAffiliation = {
     name: string;
-    ror?: string;
-    city: string;
-    country: string;
-    link: string;
+    nameType: NameType;
+    affiliationIdentifier: string;
+    affiliationIdentifierScheme: string;
+};
+export interface DataCiteCreator {
+    name: string;
+    nameType: NameType;
+    givenName: string | undefined;
+    familyName: string | null;
+    nameIdentifiers: DataCiteCreatorNameIdentifiers[];
+    affiliation: DataCiteAffiliation[];
 }
+
+export interface DataCiteCreatorNameIdentifiers {
+    nameIdentifier: string;
+    nameIdentifierScheme: string;
+    schemeUri: string;
+}
+
+export interface DataCiteUser {
+    firstName: string | undefined;
+    lastName: string | null;
+    orcid: string;
+    affiliations: MappedOrcidAffiliation[];
+}
+export interface GeneratePDFPathParams {
+    id: string;
+}
+
+export interface GeneratePDFQueryParams {
+    redirectToPreview?: string;
+    generateNewPDF?: string;
+}
+
+export interface OrcidAffiliationSummaryDate {
+    year: {
+        value?: string;
+    };
+    month: {
+        value?: string;
+    };
+    day: {
+        value?: string;
+    };
+}
+
+export interface OrcidOrganization {
+    name: string;
+    address: {
+        city: string;
+        region?: string;
+        country: string;
+    };
+    'disambiguated-organization'?: {
+        'disambiguated-organization-identifier': string;
+        'disambiguation-source': string;
+    };
+}
+
+export interface OrcidAffiliationSummary {
+    'created-date': {
+        value: number;
+    };
+    'last-modified-date': {
+        value: number;
+    };
+    source: {
+        'source-orcid'?: {
+            uri: string;
+            path: string;
+            host: string;
+        };
+        'source-client-id'?: {
+            uri: string;
+            path: string;
+            host: string;
+        };
+        'source-name': {
+            value: string;
+        };
+        'assertion-origin-orcid'?: string;
+        'assertion-origin-client-id'?: string;
+        'assertion-origin-name'?: string;
+    };
+    'put-code': number;
+    'department-name'?: string;
+    'role-title'?: string;
+    'start-date'?: OrcidAffiliationSummaryDate;
+    'end-date'?: OrcidAffiliationSummaryDate;
+    organization: OrcidOrganization;
+    url?: { value: string };
+    'external-ids'?: string[];
+    'display-index': string;
+    visibility: string;
+    path: string;
+}
+
+export interface OrcidAffiliationDate {
+    year: string | null;
+    month: string | null;
+    day: string | null;
+}
+
+/**
+ *
+ * Relevant affiliation types for Octopus are:
+ * - Memberships
+ * - Services
+ * - Invited Positions
+ * - Distinctions
+ * - Employments
+ * - Educations
+ * - Qualifications
+ */
+export interface MappedOrcidAffiliation {
+    id: number;
+    affiliationType:
+        | 'membership'
+        | 'service'
+        | 'invited-position'
+        | 'distinction'
+        | 'employment'
+        | 'education'
+        | 'qualification'
+        | 'misc.';
+    title?: string;
+    departmentName?: string;
+    startDate?: OrcidAffiliationDate;
+    endDate?: OrcidAffiliationDate;
+    organization: OrcidOrganization;
+    createdAt: number;
+    updatedAt: number;
+    source: { name: string; orcid: string };
+    url?: string;
+}
+
+export interface AffiliationWithFormattedName extends MappedOrcidAffiliation {
+    name: string;
+}
+
+export interface LegacyAffiliation {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror: string | null;
+    id: string;
+}
+
+export interface UserEmployment {
+    role: string | null;
+    endDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    startDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    department: string | null;
+    organisation: string;
+}
+
+// Topics
+export interface TopicTranslation {
+    language: Languages;
+    value: string;
+}
+
+export interface CreateTopicRequestBody {
+    title: string;
+    language?: Languages;
+    translations?: TopicTranslation[];
+    parentIds: string[];
+}
+
+export interface GetTopicPathParams {
+    id: string;
+}
+
+export interface TopicsFilters {
+    search?: string;
+    limit?: number;
+    offset?: number;
+    exclude?: string;
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}
+
+// Events
+/**
+ * @todo remove once functionality has been tested.
+ */
+export type EventType = 'dummy';

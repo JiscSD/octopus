@@ -1,44 +1,30 @@
+import * as React from 'react';
+
+import { AxiosError } from 'axios';
+import Head from 'next/head';
+import Router from 'next/router';
+
 import * as api from '@api';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as HeadlessUI from '@headlessui/react';
 import * as Helpers from '@helpers';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Layouts from '@layouts';
 import * as Stores from '@stores';
 import * as Types from '@types';
-import { AxiosError } from 'axios';
-import Head from 'next/head';
-import Router from 'next/router';
-import * as React from 'react';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    Helpers.guardPrivateRoute(context);
-
-    let state: string | string[] | null = null;
-    let newUser: boolean | null = false;
-
-    if (context.query.state) {
-        state = Buffer.from(String(context.query.state), 'base64url').toString('utf-8');
-    } else {
-        state = '/';
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => ({
+    props: {
+        redirectTo: context.query.state || encodeURIComponent(Config.urls.home.path),
+        newUser: !currentUser.email, // new users don't have an email yet
+        protectedPage: true
     }
-
-    if (context.query.newUser) {
-        newUser = Boolean(context.query.newUser == 'true');
-    }
-
-    return {
-        props: {
-            state,
-            newUser
-        }
-    };
-};
+}));
 
 type Props = {
-    state: string;
+    redirectTo: string;
     newUser: boolean;
 };
 
@@ -52,9 +38,24 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState('');
     const [success, setSuccess] = React.useState(false);
+    const [emailValidated, setEmailValidated] = React.useState(true);
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+        setEmailValidated(true);
+        setEmail(event.target.value);
+    };
 
     const submitEmail = () => {
         setLoading(true);
+
+        const validEmail = Helpers.validateEmail(email);
+
+        if (!validEmail) {
+            setEmailValidated(false);
+            setLoading(false);
+            return;
+        }
+
         requestCode();
     };
 
@@ -72,7 +73,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 visible: true,
                 dismiss: true,
                 title: 'Email sent',
-                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                icon: <OutlineIcons.EnvelopeIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                 message: 'Please check your inbox for your verification code.'
             });
         } catch (err) {
@@ -81,7 +82,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 visible: true,
                 dismiss: true,
                 title: 'Unable to send verification email',
-                icon: <OutlineIcons.MailIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
+                icon: <OutlineIcons.EnvelopeIcon className="h-6 w-6 text-teal-400" aria-hidden="true" />,
                 message: 'Please check your email address and try again.'
             });
         }
@@ -104,7 +105,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                 const decodedJWT = Helpers.setAndReturnJWT(getToken.data.token) as Types.UserType;
                 if (decodedJWT && user) setUser({ ...decodedJWT, token: getToken.data.token });
                 setSuccess(true);
-                setTimeout(() => Router.push(decodeURIComponent(props.state)), 1000);
+                setTimeout(() => Router.push(decodeURIComponent(props.redirectTo)), 1000);
             } else {
                 throw new Error();
             }
@@ -142,6 +143,14 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         text={props.newUser ? 'Complete your registration' : 'Update your email address'}
                     />
                     <p className="mb-6 block text-grey-700 transition-colors duration-500 dark:text-grey-50 lg:w-3/4">
+                        {props.newUser && (
+                            <>
+                                Your Octopus account has been created, and is linked to your ORCID® iD. To complete your
+                                account setup, please verify your email address.
+                                <br />
+                                <br />
+                            </>
+                        )}
                         A verified email is required for essential service notifications. We’ll use it as described in
                         our privacy notice (at{' '}
                         <Components.Link
@@ -155,11 +164,11 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         no longer wish to hold an account. You can update your email address at any time from your user
                         account page.
                     </p>
-                    <form className="flex-column gap-4 space-y-6">
+                    <form className="flex-column gap-4 space-y-6" data-testid="update-email-form">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.BadgeCheckIcon className="h-5 w-5 text-green-400" />
+                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
                                 Your ORCID iD
                             </span>
                             <input
@@ -172,7 +181,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         </label>
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.BadgeCheckIcon className="h-5 w-5 text-green-400" />
+                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
                                 Your name
                             </span>
                             <input
@@ -198,16 +207,24 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     Your{!props.newUser && ' new'} email address
                                 </span>
                                 <input
+                                    data-testid="verify-email-input"
                                     id="email"
                                     type="email"
                                     className="block w-full rounded border bg-white-50 text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:disabled:bg-white-100 dark:disabled:text-grey-600 lg:w-1/2"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={handleEmailChange}
                                     disabled={loading}
                                 />
                                 <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
                                     Please confirm your{!props.newUser && ' new'} email address.
                                 </span>
+                                {!emailValidated && (
+                                    <Components.Alert
+                                        severity="ERROR"
+                                        title="Please enter a valid email address"
+                                        className="mt-3 w-1/2"
+                                    />
+                                )}
                             </label>
                             <span className="flex items-center gap-2">
                                 <Components.Button
@@ -217,7 +234,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="justify-self-end px-0"
                                 />
                                 {loading && (
-                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 )}
                             </span>
                         </HeadlessUI.Transition>
@@ -263,7 +280,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <OutlineIcons.RefreshIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    <OutlineIcons.ArrowPathIcon className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                                 </HeadlessUI.Transition>
                                 <HeadlessUI.Transition
                                     show={success}
@@ -274,7 +291,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
+                                    <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
                                 </HeadlessUI.Transition>
                             </span>
                             <div className="mt-4 text-xs font-medium leading-relaxed text-grey-500 transition-colors duration-500 dark:text-grey-300">

@@ -1,13 +1,11 @@
 import React from 'react';
 import * as Next from 'next';
 import Head from 'next/head';
-import jwt from 'jsonwebtoken';
 import useSWR from 'swr';
-import * as Axios from 'axios';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as Router from 'next/router';
 
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as Router from 'next/router';
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
@@ -20,25 +18,28 @@ import * as api from '@api';
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;
     let flag: Interfaces.FlagWithComments | null = null;
-    let publication: Interfaces.Publication | null = null;
+    let publicationVersion: Interfaces.PublicationVersion | null = null;
     let isResolvable = false;
     let isCommentable = false;
-    const token = context.req.cookies[Config.keys.cookieStorage.token];
-    const decodedToken = jwt.decode(token) as Interfaces.CoreUser;
-    const swrKey = `${Config.endpoints.flag}/${context.query.flagId}`;
+    const token = Helpers.getJWT(context);
+    const decodedToken = token ? await Helpers.getDecodedUserToken(token) : null;
+    const flagUrl = `${Config.endpoints.flags}/${context.query.flagId}`;
 
     try {
-        const flagResponse = await api.get(swrKey, token);
+        const flagResponse = await api.get(flagUrl, token);
         flag = flagResponse.data;
 
-        const publicationResponse = await api.get(`${Config.endpoints.publications}/${flag?.publicationId}`, token);
-        publication = publicationResponse.data;
+        const response = await api.get(
+            `${Config.endpoints.publications}/${flag?.publicationId}/publication-versions/latest`,
+            token
+        );
+        publicationVersion = response.data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
 
-    if (!flag || !publication) {
+    if (!flag || !publicationVersion) {
         return {
             notFound: true
         };
@@ -46,7 +47,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     if (decodedToken) {
         // Only the flag creator & publisher can comment
-        if (decodedToken.id === flag.user.id || decodedToken.id === publication.user.id) isCommentable = true;
+        if (decodedToken.id === flag.user.id || decodedToken.id === publicationVersion.user.id) isCommentable = true;
         // Only resolvable if the user is the flag creator
         if (decodedToken.id === flag.user.id && !flag.resolved) isResolvable = true;
     }
@@ -54,15 +55,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             flagId: context.query.flagId,
-            publication,
+            publicationVersion,
             error,
             isCommentable,
             isResolvable,
-            swrKey,
+            flagUrl,
             fallback: {
-                [swrKey]: {
-                    data: flag
-                }
+                [flagUrl]: flag
             }
         }
     };
@@ -70,11 +69,11 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
 type Props = {
     flagId: string;
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
     error: string | null;
     isCommentable: boolean;
     isResolvable: boolean;
-    swrKey: string;
+    flagUrl: string;
     fallback: {
         data: Interfaces.FlagWithComments;
     };
@@ -82,12 +81,9 @@ type Props = {
 
 const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
-    const { data, isValidating, error, mutate } = useSWR<Axios.AxiosResponse<Interfaces.FlagWithComments>>(
-        props.swrKey,
-        {
-            fallback: props.fallback
-        }
-    );
+    const { data, isValidating, error, mutate } = useSWR<Interfaces.FlagWithComments>(props.flagUrl, {
+        fallback: props.fallback
+    });
 
     const user = Stores.useAuthStore((state) => state.user);
     const setToast = Stores.useToastStore((state) => state.setToast);
@@ -105,7 +101,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
             try {
                 // Post off the comment to the thread
                 await api.post(
-                    `${Config.endpoints.flag}/${props.flagId}/comment`,
+                    `${Config.endpoints.flags}/${props.flagId}/comment`,
                     {
                         comment
                     },
@@ -116,7 +112,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                 setComment('');
 
                 // Inform swr this endpoint has had a mutation, so revalidate
-                mutate();
+                await mutate();
 
                 // Provide a user feedback toast
                 setToast({
@@ -143,16 +139,16 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
 
         try {
             // Post off to the resolve endpoint
-            await api.post(`${Config.endpoints.flag}/${props.flagId}/resolve`, {}, user?.token);
+            await api.post(`${Config.endpoints.flags}/${props.flagId}/resolve`, {}, user?.token);
 
             // Inform swr this endpoint has had a mutation, so revalidate
-            mutate();
+            await mutate();
 
             // Close the modal
             setShowResolveModal(false);
 
             // Take the user to the publication in question
-            router.push(`${Config.urls.viewPublication.path}/${props.publication.id}`);
+            router.push(`${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`);
 
             // Provide a user feedback toast
             setToast({
@@ -167,15 +163,19 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
         setSubmitting(false);
     };
 
+    const onCloseResolveModal = () => {
+        setShowResolveModal(false);
+    };
+
     return (
         <>
             <Head>
                 <meta name="description" content={Config.urls.viewFlagThread.description} />
                 <link
                     rel="canonical"
-                    href={`${Config.urls.viewFlagThread.canonical}/${props.publication.id}/flag/${props.flagId}`}
+                    href={`${Config.urls.viewFlagThread.canonical}/${props.publicationVersion.versionOf}/flag/${props.flagId}`}
                 />
-                <title>{`Red flag comment thread - ${props.publication.title}`}</title>
+                <title>{`Red flag comment thread - ${props.publicationVersion.title}`}</title>
             </Head>
 
             <Layouts.Standard fixedHeader={false}>
@@ -186,19 +186,19 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                         </section>
                     </>
                 )}
-                {!!data?.data && (
+                {!!data && (
                     <>
                         {props.isResolvable && (
                             <Components.Modal
                                 open={showResolveModal}
-                                setOpen={setShowResolveModal}
+                                onClose={onCloseResolveModal}
                                 title="Are you sure you want to resolve this red flag?"
-                                disableButtons={submitting}
+                                loading={submitting}
                                 positiveButtonText="Resolve"
                                 positiveActionCallback={resolve}
                                 cancelButtonText="Cancel"
                             >
-                                <p className="mt-4 mb-8 text-xs text-grey-700">
+                                <p className="mb-8 mt-4 text-xs text-grey-700">
                                     The flag will be marked as resolved across the site, and you will no longer be able
                                     to comment on this thread. Users can still view the flag and its comment history
                                     from the publication page.
@@ -207,7 +207,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                         )}
                         <section className="container mx-auto px-8 pt-10 lg:gap-4 lg:pb-10 lg:pt-20 xl:px-44">
                             <div className="mb-4 grid grid-cols-12 items-start">
-                                {data.data.resolved ? (
+                                {data.resolved ? (
                                     <OutlineIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
                                 ) : (
                                     <SolidIcons.FlagIcon className="col-span-1 hidden h-14 w-14 text-red-500 lg:block" />
@@ -215,28 +215,31 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                 <div className="col-span-11 space-y-2">
                                     <Components.PageTitle
                                         text={`${
-                                            Config.values.octopusInformation.redFlagReasons[data.data.category].nicename
-                                        }${data.data.resolved ? ' - (Resolved)' : ''}`}
+                                            Config.values.octopusInformation.redFlagReasons[data.category].nicename
+                                        }${data.resolved ? ' - (Resolved)' : ''}`}
                                         className="!mb-0"
                                     />
                                     <h2>
                                         <Components.Link
-                                            href={`${Config.urls.viewPublication.path}/${props.publication.id}`}
+                                            href={`${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`}
                                             className="text-teal-500 underline"
                                         >
-                                            <>Publication: {props.publication.title}</>
+                                            <>Publication: {props.publicationVersion.title}</>
                                         </Components.Link>
                                     </h2>
 
                                     <p className="text-grey-700 transition-colors duration-500 dark:text-grey-100">
                                         This publication was red flagged on{' '}
-                                        <span className="italic">{Helpers.formatDate(data.data.createdAt)}</span>, by{' '}
+                                        <time className="italic" suppressHydrationWarning>
+                                            {Helpers.formatDate(data.createdAt)}
+                                        </time>
+                                        , by{' '}
                                         <Components.Link
-                                            href={`${Config.urls.viewUser.path}/${data.data.user.id}`}
+                                            href={`${Config.urls.viewUser.path}/${data.user.id}`}
                                             className="text-teal-500 underline"
                                         >
                                             <>
-                                                {data.data.user.firstName} {data.data.user.lastName}
+                                                {data.user.firstName} {data.user.lastName}
                                             </>
                                         </Components.Link>
                                     </p>
@@ -248,19 +251,19 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                             </div>
                         </section>
 
-                        {!!data.data.flagComments.length && (
+                        {!!data.flagComments.length && (
                             <section
                                 className={`container mx-auto px-8 lg:space-y-6 xl:px-44 ${
-                                    data.data.resolved ? 'opacity-75' : ''
+                                    data.resolved ? 'opacity-75' : ''
                                 }`}
                             >
-                                {data.data.flagComments.map((flagComment) => (
+                                {data.flagComments.map((flagComment) => (
                                     <Components.FlagComment key={flagComment.id} flagComment={flagComment} />
                                 ))}
                             </section>
                         )}
 
-                        {!!user && props.isCommentable && !data.data.resolved && (
+                        {!!user && props.isCommentable && !data.resolved && (
                             <section className="container mx-auto mt-12 px-8 xl:px-44">
                                 <div className="grid grid-cols-12">
                                     <div className="col-span-12 mb-2 lg:col-span-2 lg:mb-0">
@@ -278,15 +281,14 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                 value={comment}
                                                 onChange={(value) => setComment(value)}
                                             />
-                                            <div className="mt-2 ml-auto flex w-fit space-x-4">
+                                            <div className="ml-auto mt-2 flex w-fit space-x-4">
                                                 {props.isResolvable && (
                                                     <Components.Button
                                                         title="Resolve flag"
                                                         onClick={() => setShowResolveModal(true)}
                                                         disabled={isValidating || submitting}
-                                                        iconPosition="RIGHT"
-                                                        icon={
-                                                            <OutlineIcons.ClipboardCheckIcon className="h-6 w-6 text-teal-400" />
+                                                        endIcon={
+                                                            <OutlineIcons.ClipboardDocumentCheckIcon className="h-6 w-6 text-teal-400" />
                                                         }
                                                     />
                                                 )}
@@ -294,8 +296,9 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                                     title="Save comment"
                                                     onClick={submitComment}
                                                     disabled={isValidating || submitting}
-                                                    iconPosition="RIGHT"
-                                                    icon={<OutlineIcons.ChatIcon className="h-6 w-6 text-teal-400" />}
+                                                    endIcon={
+                                                        <OutlineIcons.ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6 text-teal-400" />
+                                                    }
                                                 />
                                             </div>
                                         </div>

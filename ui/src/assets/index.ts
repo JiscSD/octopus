@@ -9,3 +9,4 @@ export { default as Github } from './Github';
 export { default as Twitter } from './Twitter';
 export { default as Window } from './Window';
 export { default as Spinner } from './Spinner';
+export { default as OrcidLogoIcon } from './OrcidLogoIcon';

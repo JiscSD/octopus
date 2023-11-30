@@ -1,20 +1,24 @@
-import create from 'zustand';
-import * as zustandMiddleware from 'zustand/middleware';
+import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 import * as Config from '@config';
 import * as Types from '@types';
 
-let store: any = (set: any): Types.PreferencesStoreTypes => ({
-    darkMode: true,
-    toggleDarkMode: () => set((state: Types.PreferencesStoreTypes) => ({ darkMode: !state.darkMode })),
-    feedback: true,
-    toggleFeedback: () => set((state: Types.PreferencesStoreTypes) => ({ feedback: !state.feedback }))
-});
-
-if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = zustandMiddleware.devtools(store);
-
-store = zustandMiddleware.persist(store, { name: Config.keys.localStorage.darkMode });
-
-const usePreferencesStore = create<Types.PreferencesStoreTypes>(store);
+const usePreferencesStore = create<Types.PreferencesStoreTypes>()(
+    devtools(
+        persist(
+            (set) => ({
+                darkMode: true,
+                toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+                feedback: true,
+                toggleFeedback: () => set((state) => ({ feedback: !state.feedback }))
+            }),
+            {
+                name: Config.keys.localStorage.darkMode,
+                skipHydration: true
+            }
+        )
+    )
+);
 
 export default usePreferencesStore;

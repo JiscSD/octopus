@@ -9,10 +9,10 @@
 **Octopus. The primary research record.**  
 A new way to publish your scientific work that's fast, free and fair.
 
--   The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
--   Publication is instant. Peer review happens openly. All work can be reviewed and rated.
--   Your personal page records everything you do and how it is rated by your peers.
--   Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
+- The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
+- Publication is instant. Peer review happens openly. All work can be reviewed and rated.
+- Your personal page records everything you do and how it is rated by your peers.
+- Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
 
 ---
 
@@ -20,23 +20,27 @@ A new way to publish your scientific work that's fast, free and fair.
 
 To run this application locally you will need:
 
--   [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
--   [Docker](https://www.docker.com/)
--   [Serverless Framework (Version 2.72.3)](https://www.serverless.com/) 
--   [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+- [Node v14 (v14.18.1 or greater)](https://nodejs.org/en/about/releases/)
+- [Docker](https://www.docker.com/)
+- [Serverless Framework](https://www.serverless.com/)
+- [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 ## Getting started
--   [API instructions](./api/README.md)
--   [UI instructions](./ui/README.md)
+
+- [API instructions](./api/README.md)
+- [UI instructions](./ui/README.md)
+- [E2E instructions](./e2e/README.md)
+
+You might also find it useful to get an overview of Octopus's architecture by reading our [system context](./architecture-diagrams/system-context-diagram.png) and [container](./architecture-diagrams/container-diagram.png) diagrams. These are based on the [C4 Model](https://c4model.com/).
 
 ## Authentication
 
 Octopus makes use of [ORCID](https://orcid.org) as a means of authenticating end users.
 
-You will need to register a client with ORCID and enter your application ID and secret into your .env file as described in the [API instructions]((./api/README.md)).
+You will need to register a client with ORCID and enter your application ID and secret into your .env file as described in the [API instructions](<(./api/README.md)>).
 
--   [Registering a Public API client](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/)
--   [ORCID documentation](https://info.orcid.org/documentation)
+- [Registering a Public API client](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/)
+- [ORCID documentation](https://info.orcid.org/documentation)
 
 In addition to this **only allow users who have verified their email address** can access areas of the site which require authentication (such as publishing content or accepting co-author status). The process of verification is explained below.
 
@@ -63,7 +67,7 @@ If a user has not received a code, or has entered the incorrect email address, t
 
 ### Updating email
 
-A previously verified user can also update their email address via their "My publications" page, or by visiting `/verify`.
+A previously verified user can also update their email address via their "My profile" page, or by visiting `/verify`.
 
 A user email address is only updated once successfully verified, so entering a new email here will not reflect on the user account until they have completed the process.
 
@@ -87,13 +91,13 @@ These github-actions workflows run on every push:
 
 ### API
 
--   **API Test Suite (TODO)** The Jest test suite for the API runs and outputs any failures.
+- **API Test Suite (TODO)** The Jest test suite for the API runs and outputs any failures.
 
 ### UI
 
--   **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
--   **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
--   **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
+- **ESLint CI** The ESLint CI Github action runs and ensures the code being checked follows the eslint rules. It will fail if any errors are found.
+- **Prettier CI** The Prettier CI Github actions runs and ensures the code being checked follows the prettier formatting rules. It will fail if any errors are found.
+- **Lighthouse CI** The Lighthouse CI tool runs and if the accessibility score is lower than 95, the action errors and outputs any failures.
 
 All checks will need to pass in order for a PR to be reviewed and merged.
 
@@ -105,14 +109,14 @@ All checks will need to pass in order for a PR to be reviewed and merged.
 
 There are eight publication types:
 
--   **Research Problem** - a neatly defined scientific problem.
--   **Rationale/Hypothesis** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
--   **Methods** - a practical method of testing an existing published Rationale/Hypothesis.
--   **Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
--   **Analysis** - a statistical or thematic analysis of existing published Results.
--   **Interpretation** - a discussion around an existing published Analysis.
--   **Real World Application** - real world applications arising from an existing published Interpretation.
--   **Peer Review** - A considered, detailed review of any of the above kinds of publication.
+- **Research Problem** - a neatly defined scientific problem.
+- **Rationale/Hypothesis** - an original hypothesis relating to an existing published Problem or the rationale for how you think the Problem could be addressed.
+- **Methods** - a practical method of testing an existing published Rationale/Hypothesis.
+- **Results** - raw data or summarised results collected according to an existing published Method (can be linked to a data repository).
+- **Analysis** - a statistical or thematic analysis of existing published Results.
+- **Interpretation** - a discussion around an existing published Analysis.
+- **Real World Application** - real world applications arising from an existing published Interpretation.
+- **Peer Review** - A considered, detailed review of any of the above kinds of publication.
 
 ### Links
 
@@ -137,7 +141,7 @@ Any pull requests from contributors will require a member of the team to review 
 1. We have chosen to either use npm packages if they provide a default export, or:
 
 ```
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 ```
 
 ```

@@ -3,18 +3,24 @@ import * as Config from '@config';
 import * as Helpers from '@helpers';
 import * as Layouts from '@layouts';
 import * as Types from '@types';
-import JWT from 'jsonwebtoken';
 import Head from 'next/head';
 import React from 'react';
 import axios from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    let email = null;
-    let code = null;
+    let email: string | null = null;
+    let code: string | null = null;
     let approve = null;
-    let publication = null;
+    let publicationId: string | null = null;
+    let versionId: string | null = null;
 
-    if (!context.query.code || !context.query.email || !context.query.approve || !context.query.publication) {
+    if (
+        !context.query.code ||
+        !context.query.email ||
+        !context.query.approve ||
+        !context.query.publicationId ||
+        !context.query.versionId
+    ) {
         return {
             props: {
                 message: 'Invalid link.'
@@ -25,9 +31,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     email = Array.isArray(context.query.email) ? context.query.email[0] : context.query.email;
     code = Array.isArray(context.query.code) ? context.query.code[0] : context.query.code;
     approve = Array.isArray(context.query.approve) ? context.query.approve[0] : context.query.approve;
-    publication = Array.isArray(context.query.publication) ? context.query.publication[0] : context.query.publication;
+    publicationId = Array.isArray(context.query.publicationId)
+        ? context.query.publicationId[0]
+        : context.query.publicationId;
+    versionId = Array.isArray(context.query.versionId) ? context.query.versionId[0] : context.query.versionId;
 
-    if (approve !== 'true' && approve !== 'false') {
+    if (!['true', 'false'].includes(approve)) {
         return {
             redirect: { permanent: true, destination: Config.urls.home.path }
         };
@@ -35,46 +44,45 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     // check user credentials
     if (approve === 'true') {
-        try {
-            const token = Helpers.guardPrivateRoute(context);
-            // Only attempt to link if user has an email in their token
-            if ((JWT.decode(token) as Types.UserType).email) {
+        // user must be logged in and have a verified email address in order to accept invitation
+        return Helpers.withServerSession(async (context) => {
+            try {
                 await api.patch(
-                    `/publications/${publication}/link-coauthor`,
+                    `/publication-versions/${versionId}/link-coauthor`,
                     {
                         email,
                         code,
                         approve: true
                     },
-                    token
+                    Helpers.getJWT(context)
                 );
-            }
-        } catch (err: unknown | Types.AxiosError) {
-            if (axios.isAxiosError(err)) {
+            } catch (err: unknown | Types.AxiosError) {
+                if (axios.isAxiosError(err)) {
+                    return {
+                        props: {
+                            title: 'Error linking you as a co-author.',
+                            statusCode: err.response?.status,
+                            message: err.response?.data.message
+                        }
+                    };
+                }
+
                 return {
                     props: {
-                        title: 'Error linking you as a co-author.',
-                        statusCode: err.response?.status,
-                        message: err.response?.data.message
+                        status: 500,
+                        message: 'Unknown server error'
                     }
                 };
             }
 
             return {
-                props: {
-                    status: 500,
-                    message: 'Unknown server error'
-                }
+                redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publicationId}` }
             };
-        }
-
-        return {
-            redirect: { permanent: true, destination: `${Config.urls.viewPublication.path}/${publication}` }
-        };
+        })(context);
     }
 
     try {
-        await api.patch(`/publications/${publication}/link-coauthor`, {
+        await api.patch(`/publication-versions/${versionId}/link-coauthor`, {
             email,
             code,
             approve: false
@@ -87,10 +95,21 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                 statusCode: 200
             }
         };
-    } catch (err) {
+    } catch (err: unknown | Types.AxiosError) {
+        if (axios.isAxiosError(err)) {
+            return {
+                props: {
+                    title: 'There was an error denying this request.',
+                    statusCode: err.response?.status,
+                    message: err.response?.data.message
+                }
+            };
+        }
+
         return {
             props: {
-                message: 'There was an error denying this request.'
+                status: 500,
+                message: 'Unknown server error'
             }
         };
     }

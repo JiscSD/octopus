@@ -44,7 +44,7 @@ const createPublicationSchema: I.Schema = {
         },
         language: {
             type: 'string',
-            enum: H.OctopusInformation.languages
+            enum: H.octopusInformation.languages
         },
         ethicalStatement: {
             type: 'string'
@@ -70,6 +70,10 @@ const createPublicationSchema: I.Schema = {
         },
         affiliationStatement: {
             type: 'string'
+        },
+        topicIds: {
+            type: 'array',
+            items: { type: 'string' }
         }
     },
     required: ['type', 'title'],

@@ -9,10 +9,12 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.privacy.title}</title>
                 <meta name="description" content={Config.urls.privacy.description} />
+                <meta name="og:title" content={Config.urls.privacy.title} />
+                <meta name="og:description" content={Config.urls.privacy.description} />
                 <meta name="keywords" content={Config.urls.privacy.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.privacy.canonical} />
-                <title>{Config.urls.privacy.title}</title>
             </Head>
 
             <Layouts.Information>
@@ -51,7 +53,7 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         you as an Octopus user:
                     </p>
                     <ul className="mb-4 ml-6 list-disc">
-                        <li>Name (via ORCID)</li>
+                        <li>Name (via ORCID®)</li>
                         <li>Affiliation (via ORCID)</li> <li>Current email address</li>
                     </ul>
                     <p className="mb-4">

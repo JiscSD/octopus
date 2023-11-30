@@ -1,5 +1,5 @@
 import * as testUtils from 'lib/testUtils';
-import cryptoRandomString from 'crypto-random-string';
+import * as cheerio from 'cheerio';
 
 describe('Confirm a verification code', () => {
     beforeEach(async () => {
@@ -8,7 +8,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User receives an error on incorrect code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
 
@@ -20,7 +20,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User receives not found on three incorrect code attempts', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0002').query({ apiKey: 123456789, email });
 
@@ -36,13 +36,16 @@ describe('Confirm a verification code', () => {
     });
 
     test('User can confirm a correct verification code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
 
         const inbox = await testUtils.getEmails(email);
+        const emailContent = inbox.items[0].Content.Body.replace(/3D"/g, '"'); // get rid of email encoding "3D"
 
-        const code = inbox.items[0].Content.Body.match(/(?<=<p class=3D"code">)(.*?)(?=<\/p>)/g)[0];
+        // get verification code using cheerio
+        const $ = cheerio.load(emailContent);
+        const code = $('p[id="verification-code"]').text();
 
         const confirm = await testUtils.agent.post('/verification/0000-0000-0000-0001').send({ code });
 

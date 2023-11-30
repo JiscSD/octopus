@@ -6,21 +6,10 @@ import * as Stores from '@stores';
 import * as Types from '@types';
 
 /**
- * @description Edit Licence, COI & soon to be description & keywords
+ * @description Edit conflict of interest status
  */
 const ConflictOfInterest: React.FC = (): React.ReactElement => {
-    const conflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestStatus
-    );
-    const updateConflictOfInterestStatus = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestStatus
-    );
-    const conflictOfInterestText = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.conflictOfInterestText
-    );
-    const updateConflictOfInterestText = Stores.usePublicationCreationStore(
-        (state: Types.PublicationCreationStoreType) => state.updateConflictOfInterestText
-    );
+    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -39,8 +28,10 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             name="coi"
                             value="true"
                             id="coi-true"
-                            checked={conflictOfInterestStatus}
-                            onChange={() => updateConflictOfInterestStatus(true)}
+                            checked={publicationVersion.conflictOfInterestStatus === true}
+                            onChange={() =>
+                                updatePublicationVersion({ ...publicationVersion, conflictOfInterestStatus: true })
+                            }
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Yes
@@ -52,17 +43,20 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                             name="coi"
                             value="false"
                             id="coi-false"
-                            checked={conflictOfInterestStatus === false}
+                            checked={publicationVersion.conflictOfInterestStatus === false}
                             onChange={() => {
-                                updateConflictOfInterestStatus(false);
-                                updateConflictOfInterestText('');
+                                updatePublicationVersion({
+                                    ...publicationVersion,
+                                    conflictOfInterestStatus: false,
+                                    conflictOfInterestText: ''
+                                });
                             }}
                         />
                         <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">No</span>
                     </label>
                 </fieldset>
 
-                {conflictOfInterestStatus && (
+                {publicationVersion.conflictOfInterestStatus && (
                     <>
                         <label
                             htmlFor="conflictOfInterestStatus"
@@ -73,9 +67,14 @@ const ConflictOfInterest: React.FC = (): React.ReactElement => {
                         <textarea
                             id="conflictOfInterestStatus"
                             name="conflictOfInterestStatus"
-                            value={conflictOfInterestText}
+                            value={publicationVersion.conflictOfInterestText || ''}
                             rows={6}
-                            onChange={(e) => updateConflictOfInterestText(e.target.value)}
+                            onChange={(e) =>
+                                updatePublicationVersion({
+                                    ...publicationVersion,
+                                    conflictOfInterestText: e.target.value
+                                })
+                            }
                             className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
                             required
                         />

@@ -12,6 +12,7 @@ datasource db {
 model User {
     id                   String                 @id @default(cuid())
     orcid                String                 @unique
+    orcidAccessToken     String?
     firstName            String
     lastName             String?
     email                String?
@@ -24,11 +25,12 @@ model User {
     works                Json[]
     education            Json[]
     coAuthors            CoAuthors[]
-    Publication          Publication[]
+    publicationVersions  PublicationVersion[]
     PublicationFlags     PublicationFlags[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
+    bookmarks            Bookmark[]
 }
 
 model Verification {
@@ -51,11 +53,34 @@ model Images {
 }
 
 model Publication {
-    id                                 String                 @id @default(cuid())
-    url_slug                           String                 @unique @default(cuid())
-    type                               PublicationType
+    id                   String                 @id @default(cuid())
+    url_slug             String                 @unique @default(cuid())
+    type                 PublicationType
+    doi                  String
+    publicationFlags     PublicationFlags[]
+    PublicationBookmarks PublicationBookmarks[]
+    linkedTo             Links[]                @relation("from")
+    linkedFrom           Links[]                @relation("to")
+    versions             PublicationVersion[]
+}
+
+model PublicationVersion {
+    id                                 String                @id @default(cuid())
+    doi                                String?
+    versionOf                          String
+    versionNumber                      Int
+    isLatestVersion                    Boolean               @default(true)
+    isLatestLiveVersion                Boolean               @default(false)
+    publication                        Publication           @relation(fields: [versionOf], references: [id], onDelete: Cascade)
+    createdBy                          String
+    createdAt                          DateTime              @default(now())
+    updatedAt                          DateTime              @updatedAt
+    user                               User                  @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    currentStatus                      PublicationStatusEnum @default(DRAFT)
+    publicationStatus                  PublicationStatus[]
+    publishedDate                      DateTime?
     title                              String?
-    licence                            LicenceType            @default(CC_BY)
+    licence                            LicenceType           @default(CC_BY)
     conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
     ethicalStatement                   String?
@@ -63,54 +88,37 @@ model Publication {
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
     dataAccessStatement                String?
-    selfDeclaration                    Boolean?               @default(false)
+    selfDeclaration                    Boolean?              @default(false)
     description                        String?
     keywords                           String[]
     content                            String?
-    doi                                String
-    language                           Languages              @default(en)
-    publishedDate                      DateTime?
-    currentStatus                      PublicationStatusEnum  @default(DRAFT)
-    createdBy                          String
-    createdAt                          DateTime               @default(now())
-    updatedAt                          DateTime               @updatedAt
-    user                               User                   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    language                           Languages             @default(en)
     coAuthors                          CoAuthors[]
-    linkedTo                           Links[]                @relation("from")
-    linkedFrom                         Links[]                @relation("to")
-    publicationFlags                   PublicationFlags[]
-    publicationStatus                  PublicationStatus[]
-    PublicationBookmarks               PublicationBookmarks[]
+    References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
-    affiliations                       Affiliations[]
-    affiliationStatement               String?
+    topics                             Topic[]
+}
+
+model References {
+    id                   String             @id
+    type                 ReferenceType
+    text                 String
+    location             String?
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
-    id            String  @id @default(cuid())
-    name          String
-    country       String
-    city          String
-    link          String
-    ror           String?
-    publicationId String
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    createdAt   DateTime    @default(now())
-}
-
-model Affiliations {
-    id            String  @id @default(cuid())
-    name          String
-    country       String
-    city          String
-    link          String
-    ror           String?
-    publicationId String
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    createdAt   DateTime    @default(now())
+    id                   String             @id @default(cuid())
+    name                 String
+    country              String
+    city                 String
+    link                 String
+    ror                  String?
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Links {
@@ -121,29 +129,36 @@ model Links {
     updatedAt          DateTime    @updatedAt
     publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
     publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+    draft              Boolean     @default(true)
 
     @@unique([publicationFrom, publicationTo])
 }
 
 model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
-    createdAt     DateTime              @default(now())
-    publication   Publication           @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    id                   String                @id @default(cuid())
+    status               PublicationStatusEnum
+    createdAt            DateTime              @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion    @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model CoAuthors {
-    id                String      @id @default(cuid())
-    publicationId     String
-    email             String
-    code              String      @default(cuid())
-    confirmedCoAuthor Boolean     @default(false)
-    linkedUser        String?
-    user              User?       @relation(fields: [linkedUser], references: [id])
-    publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    id                   String             @id @default(cuid())
+    email                String
+    code                 String             @default(cuid())
+    confirmedCoAuthor    Boolean            @default(false)
+    approvalRequested    Boolean            @default(false)
+    linkedUser           String?
+    position             Int                @default(0)
+    createdAt            DateTime           @default(now())
+    reminderDate         DateTime?
+    affiliations         Json[]
+    isIndependent        Boolean            @default(false)
+    user                 User?              @relation(fields: [linkedUser], references: [id])
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    publicationVersionId String
 
-    @@unique([publicationId, email])
+    @@unique([publicationVersionId, email])
 }
 
 model PublicationFlags {
@@ -179,10 +194,52 @@ model PublicationBookmarks {
     @@unique([publicationId, userId])
 }
 
+model Topic {
+    id                  String               @id @default(cuid())
+    title               String
+    language            Languages            @default(en)
+    translations        TopicTranslation[]
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    parents             Topic[]              @relation("TopicHierarchy")
+    children            Topic[]              @relation("TopicHierarchy")
+    publicationVersions PublicationVersion[]
+}
+
+model Bookmark {
+    id        String       @id @default(cuid())
+    type      BookmarkType
+    entityId  String
+    userId    String
+    createdAt DateTime     @default(now())
+    user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([entityId, type, userId])
+}
+
+model TopicTranslation {
+    id       String    @id @default(cuid())
+    topicId  String
+    language Languages
+    value    String
+    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model Event {
+    id        String   @id @default(cuid())
+    type      String
+    createdAt DateTime @default(now())
+    data      Json
+}
+
 enum ImageExtension {
     png
     jpg
     jpeg
+    apng
+    avif
+    gif
+    webp
 }
 
 enum Role {
@@ -195,6 +252,7 @@ enum PublicationStatusEnum {
     DRAFT
     LIVE
     HIDDEN
+    LOCKED
 }
 
 enum PublicationType {
@@ -409,4 +467,15 @@ enum Languages {
     yo
     za
     zu
+}
+
+enum ReferenceType {
+    DOI
+    URL
+    TEXT
+}
+
+enum BookmarkType {
+    PUBLICATION
+    TOPIC
 }

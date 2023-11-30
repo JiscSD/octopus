@@ -37,6 +37,7 @@ resource "random_string" "db_master_pass" {
 
 resource "aws_db_instance" "rds" {
   allocated_storage       = var.allocated_storage
+  max_allocated_storage   = var.max_allocated_storage
   engine                  = "postgres"
   engine_version          = var.db_version
   instance_class          = var.instance
@@ -48,12 +49,47 @@ resource "aws_db_instance" "rds" {
   vpc_security_group_ids  = [aws_security_group.database_security_group.id]
   db_subnet_group_name    = aws_db_subnet_group.database_subnet.name
 
+  monitoring_interval = var.monitoring_interval
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring.arn
+
+  performance_insights_enabled          = true
+  performance_insights_retention_period = var.performance_insights_retention_period
+
   auto_minor_version_upgrade = false
+  # Uncomment to allow for upgrades to RDS
+  # allow_major_version_upgrade = true
+  apply_immediately = true
 
 
   tags = {
     Name        = "${var.project_name}_${var.environment}"
     Environment = var.environment
+  }
+}
+
+// Enhanced monitoring
+resource "aws_iam_role" "rds_enhanced_monitoring" {
+  name_prefix        = "rds-enhanced-monitoring-"
+  assume_role_policy = data.aws_iam_policy_document.rds_enhanced_monitoring.json
+}
+
+resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring" {
+  role       = aws_iam_role.rds_enhanced_monitoring.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+}
+
+data "aws_iam_policy_document" "rds_enhanced_monitoring" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["monitoring.rds.amazonaws.com"]
+    }
   }
 }
 

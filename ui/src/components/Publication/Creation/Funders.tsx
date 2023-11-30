@@ -1,5 +1,5 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@components';
 
@@ -25,15 +25,14 @@ const Funders: React.FC = (): React.ReactElement => {
                 </span>
                 <Components.Button
                     title="Search for your organisation's ROR"
-                    link
                     href="https://ror.org/"
-                    iconPosition="RIGHT"
-                    icon={
-                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                    openNew
+                    endIcon={
+                        <OutlineIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                     }
                 />
             </div>
-            <Components.RORForm type="funders" />
+            <Components.RORForm />
         </div>
     );
 };

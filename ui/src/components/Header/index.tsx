@@ -1,12 +1,11 @@
 import React from 'react';
-import * as NextRouter from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
 
+import * as NextRouter from 'next/router';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Components from '@components';
 import * as Assets from '@assets';
 import * as Config from '@config';
 import * as Stores from '@stores';
-import * as Types from '@types';
 
 type Props = {
     fixed?: boolean;
@@ -21,24 +20,18 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     return (
         <>
             <Components.Banner>
-                <>
-                    This is a beta release under active development. Help us improve by providing{' '}
-                    <Components.Link
-                        href="https://forms.office.com/pages/responsepage.aspx?id=TTn5SBSKJ02CpvNfEjYSBdQdk25FM49NmnYND3Z_nExUNE5TNzVQNTdXNTY0UFdOT05CNkZUVDBZSy4u"
-                        className="w-fit underline  underline-offset-4"
-                        openNew
-                    >
-                        feedback
-                    </Components.Link>{' '}
-                    or contacting{' '}
-                    <Components.Link
-                        href="mailto:help@jisc.ac.uk"
-                        openNew
-                        className="w-fit underline  underline-offset-4"
-                    >
-                        help@jisc.ac.uk
-                    </Components.Link>
-                </>
+                Help us improve by providing{' '}
+                <Components.Link
+                    href="https://forms.office.com/e/80g02emciH"
+                    className="w-fit underline  underline-offset-4"
+                    openNew
+                >
+                    feedback
+                </Components.Link>{' '}
+                or contacting{' '}
+                <Components.Link href="mailto:help@jisc.ac.uk" openNew className="w-fit underline  underline-offset-4">
+                    help@jisc.ac.uk
+                </Components.Link>
             </Components.Banner>
             {/* Confirm email banner */}
             {user && !user?.email && router.pathname !== Config.urls.verify.path && (
@@ -46,7 +39,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
                         <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
                         <Components.Link
-                            href={`${Config.urls.verify.path}?newUser=true`}
+                            href={`${Config.urls.verify.path}`}
                             className="w-fit underline decoration-2 underline-offset-4"
                         >
                             Please confirm your email address to publish content
@@ -57,7 +50,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
 
             <header
                 className={`text-grey-800 transition-colors duration-500  print:hidden  ${
-                    props.fixed && 'lg:fixed lg:top-0 lg:left-0 lg:z-20 lg:w-full'
+                    props.fixed && 'lg:fixed lg:left-0 lg:top-0 lg:z-20 lg:w-full'
                 }`}
             >
                 <div className="container mx-auto px-8">
@@ -89,4 +82,4 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Header;
+export default React.memo(Header);

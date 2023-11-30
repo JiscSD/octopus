@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 import * as Components from '@components';
-import * as Docs from '@documentation';
+// import * as Docs from '@documentation';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 import * as Types from '@types';
@@ -9,10 +9,12 @@ import * as Types from '@types';
 const Documentation: Types.NextPage = (): React.ReactElement => (
     <>
         <Head>
+            <title>{Config.urls.documentation.title}</title>
+            <meta name="og:title" content={Config.urls.documentation.title} />
+            <meta name="og:description" content={Config.urls.documentation.description} />
             <meta name="description" content={Config.urls.documentation.description} />
             <meta name="keywords" content={Config.urls.documentation.keywords.join(', ')} />
             <link rel="canonical" href={Config.urls.documentation.canonical} />
-            <title>{Config.urls.documentation.title}</title>
         </Head>
 
         <Layouts.Standard fixedHeader={true}>
@@ -20,7 +22,7 @@ const Documentation: Types.NextPage = (): React.ReactElement => (
                 <Components.PageTitle text="Documentation" />
             </section>
             <section className="container mx-auto mb-8 px-8">
-                <Components.DocumentationSection entry={Docs.Publications[0]} />
+                {/* <Components.DocumentationSection entry={Docs.Publications[0]} /> */}
             </section>
         </Layouts.Standard>
     </>

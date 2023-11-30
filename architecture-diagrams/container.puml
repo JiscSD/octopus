@@ -1,0 +1,41 @@
+@startuml container-diagram
+!include <C4/C4_Container>
+
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/orcid.puml
+
+Person(octopusUser, "Octopus User")
+
+System_Boundary(octopusBoundary, "Octopus") {
+    Container(webServer, "Web server", "AWS Amplify", "Delivers the front end application")
+    Container(ui, "Front end application", "React", "Interface for researchers to manage and explore publications")
+    Container(api, "API", "TypeScript / AWS Lambda", "API for publication management")
+    ContainerDb(db, "Database", "PostgreSQL / AWS RDS", "Stores publication data")
+    Container(opensearch, "Opensearch", "AWS Opensearch", "Searchable index of publication records")
+    Container(email, "Email server", "AWS SES", "Sends emails to users")
+}
+
+System(orcid, "ORCID", "Distinguishes researchers by providing them with a unique ID", $sprite="orcid")
+System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)")
+System(doiOrg, "doi.org", "Governs the Digital Object Identifier (DOI) system")
+System(rorOrg, "ror.org", "Registry of identifiers for research organizations")
+System(pubRouter, "Publications Router", "Forwards publications and metadata to other repositories")
+
+Rel(octopusUser, webServer, "Visits octopus.ac using", "HTTPS")
+Rel(octopusUser, ui, "Manages and browses publications using")
+Rel(octopusUser, orcid, "Logs in via")
+Rel(webServer, ui, "Delivers to the user's web browser")
+Rel(ui, api, "Makes API requests to", "JSON/HTTPS")
+Rel(ui, rorOrg, "Pulls funder details from")
+Rel_L(ui, doiOrg, "Pulls reference data from")
+Rel(api, db, "Reads / writes to", "Prisma/SQL")
+Rel(api, opensearch, "Reads / writes from index", "Opensearch JS client")
+Rel(api, orcid, "Gets user data from", "OAuth")
+Rel(api, datacite, "Mints a DOI per publication using")
+Rel(api, email, "Sends emails using")
+Rel(api, pubRouter, "Notifies about publications")
+Rel(email, octopusUser, "Sends emails to")
+Rel(datacite, doiOrg, "Registers octopus publication DOIs with")
+
+' SHOW_LEGEND(false)
+@enduml

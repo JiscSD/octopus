@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+cd api || exit
+npm run format:write || exit
+npx lint-staged
+echo "eslint pre-commit checks: SUCCESSFUL"

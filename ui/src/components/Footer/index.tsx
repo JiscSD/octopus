@@ -4,7 +4,10 @@ import Image from 'next/image';
 import * as Components from '@components';
 import * as Config from '@config';
 import * as Assets from '@assets';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import dynamic from 'next/dynamic';
+
+const ScrollTopNoSSR = dynamic(() => import('../ScrollToTop'), { ssr: false });
 
 type Props = {
     waves: boolean;
@@ -33,7 +36,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         <Assets.Github height={25} width={25} className="fill-white-50" />
                     </Components.Link>
                     <Components.Link
-                        href="https://twitter.com/science_octopus"
+                        href="https://twitter.com/octopus_ac"
                         openNew={true}
                         ariaLabel="Twitter"
                         className="h-fit"
@@ -41,7 +44,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         <Assets.Twitter width={25} height={25} className="fill-white-50" />
                     </Components.Link>
                     <Components.Link href="mailto:help@jisc.ac.uk" openNew={true} ariaLabel="Email" className="h-fit">
-                        <SolidIcons.MailIcon width={26} height={26} className="fill-white-50" />
+                        <SolidIcons.EnvelopeIcon width={26} height={26} className="fill-white-50" />
                     </Components.Link>
                 </div>
                 {/* contact us section */}
@@ -50,38 +53,69 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
                     </h3>
                 </div>
-                {/** Links */}
-                <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
-                    <Components.Link href={Config.urls.browsePublications.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Browse</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.createPublication.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Publish</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.about.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">About</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">FAQs</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.getInvolved.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Get involved</h3>
-                    </Components.Link>
-                </div>
-                {/** Links */}
-                <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
-                    <Components.Link href={Config.urls.terms.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Terms</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.privacy.path} className="mb-1 block max-w-fit p-1">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">Privacy</h3>
-                    </Components.Link>
-                    <Components.Link href={Config.urls.accessibility.path} className="mb-1 block max-w-fit p-1 ">
-                        <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                            Accessibility
-                        </h3>
-                    </Components.Link>
-                </div>
+                {
+                    /** Links */
+                    process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== 'true' && (
+                        <>
+                            <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
+                                <Components.Link
+                                    href={Config.urls.browsePublications.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Browse
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.createPublication.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Publish
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.about.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        About
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        FAQs
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.getInvolved.path}
+                                    className="mb-1 block max-w-fit p-1"
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Get involved
+                                    </h3>
+                                </Components.Link>
+                            </div>
+                            <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
+                                <Components.Link href={Config.urls.terms.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Terms
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.privacy.path} className="mb-1 block max-w-fit p-1">
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Privacy
+                                    </h3>
+                                </Components.Link>
+                                <Components.Link
+                                    href={Config.urls.accessibility.path}
+                                    className="mb-1 block max-w-fit p-1 "
+                                >
+                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                                        Accessibility
+                                    </h3>
+                                </Components.Link>
+                            </div>
+                        </>
+                    )
+                }
                 {/** Socket */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-1">
                     <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-white-50 dark:text-teal-200">
@@ -97,7 +131,13 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     </h4>
                     <div className="flex">
                         <Components.Link href="https://www.ukri.org/" openNew={true} className="flex w-fit">
-                            <Image src="/images/logo-ukri.png" alt="UKRI" width={200} height={64} />
+                            <Image
+                                src="/images/logo-ukri.png"
+                                alt="UKRI"
+                                width={200}
+                                height={64}
+                                style={{ width: 200, height: 64 }} // removes strange next13 console warning...
+                            />
                         </Components.Link>
                     </div>
                 </div>
@@ -111,16 +151,10 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                         </Components.Link>
                     </div>
                 </div>
-                <div className="col-span-1 md:col-span-2 lg:col-span-1">
-                    <h4 className="text-md mb-8 block font-montserrat text-sm font-bold text-teal-400 dark:text-teal-200">
-                        &nbsp;
-                    </h4>
-                    <div className="flex"></div>
-                </div>
             </div>
-            <Components.ScrollToTop />
+            <ScrollTopNoSSR />
         </footer>
     </>
 );
 
-export default Footer;
+export default React.memo(Footer);
