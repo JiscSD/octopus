@@ -7,6 +7,7 @@ import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
 import axios from 'axios';
+import * as Framer from 'framer-motion';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
@@ -641,6 +642,20 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </div>
                             ))}
                         </div>
+                        <Framer.AnimatePresence>
+                            {/** API will only return versions that the current user has permission to see */}
+                            {publication && publication.versions.length !== publicationVersion.versionNumber && (
+                                <Framer.motion.p
+                                    className="mb-4 text-sm leading-relaxed dark:text-white-50"
+                                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                >
+                                    <OutlineIcons.ExclamationCircleIcon className="inline w-6 stroke-2 align-bottom text-red-600 dark:text-red-500" />{' '}
+                                    A newer version of this publication exists
+                                </Framer.motion.p>
+                            )}
+                        </Framer.AnimatePresence>
 
                         <div className="block lg:hidden">
                             {showVersionsAccordion && (
