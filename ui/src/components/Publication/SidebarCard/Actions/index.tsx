@@ -187,81 +187,87 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             <span className="ml-1">json</span>
                         </button>
                     </div>
-                    {user && user.email ? (
-                        <>
-                            {/* if the publication is a peer review, no options shall be given to write a linked publication */}
-                            {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
-                                <>
-                                    {Helpers.linkedPublicationTypes[
-                                        props.publicationVersion.publication
-                                            .type as keyof typeof Helpers.linkedPublicationTypes
-                                    ].map((item: any) => {
-                                        return (
-                                            <Components.PublicationSidebarCardActionsButton
-                                                label={`Write a linked ${Helpers.formatPublicationType(item)}`}
-                                                key={item}
-                                                onClick={() => {
-                                                    router.push({
-                                                        pathname: `${Config.urls.createPublication.path}`,
-                                                        query: {
-                                                            for: props.publicationVersion.versionOf,
-                                                            type: item
-                                                        }
-                                                    });
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                    {props.publicationVersion.user.id !== user.id && (
-                                        <>
-                                            <Components.PublicationSidebarCardActionsButton
-                                                label="Write a review"
-                                                onClick={() => {
-                                                    router.push({
-                                                        pathname: `${Config.urls.createPublication.path}`,
-                                                        query: {
-                                                            for: props.publicationVersion.versionOf,
-                                                            type: 'PEER_REVIEW'
-                                                        }
-                                                    });
-                                                }}
-                                            />
-                                            <Components.PublicationSidebarCardActionsButton
-                                                label="Flag a concern with this publication"
-                                                onClick={() => setShowRedFlagModal(true)}
-                                            />
-                                        </>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    ) : user && !user.email ? (
-                        <>
-                            <Components.Link
-                                href={`${Config.urls.verify.path}?state=${encodeURIComponent(
-                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
-                                )}`}
-                                className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                            >
-                                Verify your email for more actions
-                            </Components.Link>
-                        </>
+                    {props.publicationVersion.isLatestLiveVersion ? (
+                        user && user.email ? (
+                            <>
+                                {/* if the publication is a peer review, no options shall be given to write a linked publication */}
+                                {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
+                                    <>
+                                        {Helpers.linkedPublicationTypes[
+                                            props.publicationVersion.publication
+                                                .type as keyof typeof Helpers.linkedPublicationTypes
+                                        ].map((item: any) => {
+                                            return (
+                                                <Components.PublicationSidebarCardActionsButton
+                                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
+                                                    key={item}
+                                                    onClick={() => {
+                                                        router.push({
+                                                            pathname: `${Config.urls.createPublication.path}`,
+                                                            query: {
+                                                                for: props.publicationVersion.versionOf,
+                                                                type: item
+                                                            }
+                                                        });
+                                                    }}
+                                                />
+                                            );
+                                        })}
+                                        {props.publicationVersion.user.id !== user.id && (
+                                            <>
+                                                <Components.PublicationSidebarCardActionsButton
+                                                    label="Write a review"
+                                                    onClick={() => {
+                                                        router.push({
+                                                            pathname: `${Config.urls.createPublication.path}`,
+                                                            query: {
+                                                                for: props.publicationVersion.versionOf,
+                                                                type: 'PEER_REVIEW'
+                                                            }
+                                                        });
+                                                    }}
+                                                />
+                                                <Components.PublicationSidebarCardActionsButton
+                                                    label="Flag a concern with this publication"
+                                                    onClick={() => setShowRedFlagModal(true)}
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        ) : user && !user.email ? (
+                            <>
+                                <Components.Link
+                                    href={`${Config.urls.verify.path}?state=${encodeURIComponent(
+                                        `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
+                                    )}`}
+                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                >
+                                    Verify your email for more actions
+                                </Components.Link>
+                            </>
+                        ) : (
+                            <>
+                                <Components.Link
+                                    href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
+                                        `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
+                                    )}`}
+                                    className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                >
+                                    <Assets.ORCID
+                                        width={25}
+                                        height={25}
+                                        className="mr-2 rounded-md bg-orcid fill-white-50 p-1"
+                                    />
+                                    <span> Sign in for more actions</span>
+                                </Components.Link>
+                            </>
+                        )
                     ) : (
-                        <>
-                            <Components.Link
-                                href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(
-                                    `${Config.urls.viewPublication.path}/${props.publicationVersion.versionOf}`
-                                )}`}
-                                className="flex items-center rounded border-transparent text-sm font-medium text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                            >
-                                <Assets.ORCID
-                                    width={25}
-                                    height={25}
-                                    className="mr-2 rounded-md bg-orcid fill-white-50 p-1"
-                                />
-                                <span> Sign in for more actions</span>
-                            </Components.Link>
-                        </>
+                        <p className="pt-5 text-center text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-50">
+                            Actions are not available on older publication versions
+                        </p>
                     )}
                 </>
             )}
