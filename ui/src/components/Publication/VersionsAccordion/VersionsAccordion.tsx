@@ -77,22 +77,6 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                     )}
                 </Framer.AnimatePresence>
             </Framer.motion.div>
-
-            <Framer.AnimatePresence>
-                {/** API will only return versions that the current user has permission to see */}
-                {props.versions.length !== props.selectedVersion.versionNumber && (
-                    <Framer.motion.p
-                        key="info"
-                        className="text-sm leading-relaxed dark:text-white-50"
-                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
-                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    >
-                        <OutlineIcons.ExclamationCircleIcon className="inline w-6 stroke-2 align-bottom text-red-600 dark:text-red-500" />{' '}
-                        A newer version of this publication exists
-                    </Framer.motion.p>
-                )}
-            </Framer.AnimatePresence>
         </Framer.AnimatePresence>
     );
 };
