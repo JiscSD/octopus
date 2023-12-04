@@ -14,10 +14,10 @@ export const get = middy(userController.get)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication(true));
 
-export const getPublicationVersions = middy(userController.getPublicationVersions)
+export const getPublications = middy(userController.getPublications)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication(true))
-    .use(middleware.validator(userSchema.getPublicationVersions, 'queryStringParameters'));
+    .use(middleware.validator(userSchema.getPublications, 'queryStringParameters'));
 
 export const getUserList = userController.getUserList;

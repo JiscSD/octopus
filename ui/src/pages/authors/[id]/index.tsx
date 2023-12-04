@@ -16,10 +16,10 @@ const pageSize = 10;
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationVersionsUrl = `${Config.endpoints.users}/${userId}/publication-versions?offset=0&limit=${pageSize}`;
+    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=0&limit=${pageSize}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
-    let firstUserPublicationsPage: Interfaces.UserPublicationVersionsResult | null = null;
+    let firstUserPublicationsPage: Interfaces.UserPublicationsResult | null = null;
     let error: string | null = null;
 
     try {
@@ -37,7 +37,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     }
 
     try {
-        const response = await api.get(userPublicationVersionsUrl, undefined);
+        const response = await api.get(userPublicationsUrl, undefined);
         firstUserPublicationsPage = response.data;
     } catch (error) {
         console.log(error);
@@ -46,7 +46,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             user,
-            userPublicationVersionsUrl,
+            userPublicationsUrl,
             fallbackData: firstUserPublicationsPage
         }
     };
@@ -54,24 +54,24 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
 type Props = {
     user: Interfaces.User;
-    userPublicationVersionsUrl: string;
-    fallbackData: Interfaces.UserPublicationVersionsResult | null;
+    userPublicationsUrl: string;
+    fallbackData: Interfaces.UserPublicationsResult | null;
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
 
-    const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationVersionsResult>(
+    const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationsResult>(
         (pageIndex, prevPageData) => {
             if (pageIndex === 0) {
-                return props.userPublicationVersionsUrl;
+                return props.userPublicationsUrl;
             }
 
             if (prevPageData && !prevPageData.results.length) {
                 return null; // reached the end
             }
 
-            return props.userPublicationVersionsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
+            return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
         },
         async (url) => {
             const response = await api.get(url, undefined);
@@ -89,7 +89,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     );
 
-    const userPublicationVersions = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
+    const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
     const pageTitle = `Author: ${props.user.orcid} - ${Config.urls.viewUser.title}`;
 
@@ -183,21 +183,22 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
-                    {userPublicationVersions.length ? (
+                    {userPublications.length ? (
                         <div className="rouned-md relative lg:w-2/3">
-                            {userPublicationVersions.map((publicationVersion, index) => {
-                                if (index <= userPublicationVersions.length) {
+                            {userPublications.map((publication, index) => {
+                                const version = publication.versions[0];
+                                if (version && version.isLatestLiveVersion && index <= userPublications.length) {
                                     let classes = '';
 
                                     if (index === 0) {
                                         classes += 'rounded-t-lg ';
                                     }
 
-                                    if (index === userPublicationVersions.length - 1) {
+                                    if (index === userPublications.length - 1) {
                                         classes += 'rounded-b-lg';
                                     }
 
-                                    publicationVersion.user = {
+                                    version.user = {
                                         id: props.user.id,
                                         createdAt: props.user.createdAt,
                                         email: props.user.email || '',
@@ -207,10 +208,17 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                         updatedAt: props.user.updatedAt
                                     };
 
+                                    version.publication = {
+                                        id: publication.id,
+                                        type: publication.type,
+                                        doi: publication.doi,
+                                        url_slug: publication.url_slug
+                                    };
+
                                     return (
-                                        <Components.Delay key={publicationVersion.id} delay={50}>
+                                        <Components.Delay key={publication.id} delay={50}>
                                             <Components.PublicationSearchResult
-                                                publicationVersion={publicationVersion}
+                                                publicationVersion={version}
                                                 className={classes}
                                             />
                                         </Components.Delay>
