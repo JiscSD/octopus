@@ -6,7 +6,8 @@ import {
     PublicationType,
     Role,
     BookmarkType,
-    PublicationStatusEnum
+    PublicationStatusEnum,
+    EventType
 } from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
@@ -24,7 +25,8 @@ export {
     PublicationType,
     Role,
     Topic,
-    BookmarkType
+    BookmarkType,
+    EventType
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -330,6 +332,19 @@ export interface DeletePublicationVersionPathParams {
 
 export interface CreatePublicationVersionPathParams {
     id: string;
+}
+
+export interface RequestControlPathParams {
+    id: string;
+}
+
+export interface ApproveControlRequestPathParams {
+    id: string;
+}
+
+export interface ApproveControlRequestBody {
+    approve: 'true' | 'false';
+    eventId: string;
 }
 
 export interface DeleteLinkPathParams {
@@ -863,8 +878,17 @@ export interface TopicsPaginatedResults {
     }[];
 }
 
-// Events
-/**
- * @todo remove once functionality has been tested.
- */
-export type EventType = 'dummy';
+// events
+export interface DummyEventData {
+    to: string;
+}
+
+export interface RequestControlData {
+    requesterId: string;
+    publicationVersionId: string;
+}
+
+export interface EventDataType {
+    [EventType.DUMMY]: DummyEventData;
+    [EventType.REQUEST_CONTROL]: RequestControlData;
+}

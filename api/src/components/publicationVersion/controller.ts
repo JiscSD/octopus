@@ -4,8 +4,11 @@ import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
 import * as coAuthorService from 'coauthor/service';
+import * as userService from 'user/service';
 import * as helpers from 'lib/helpers';
 import * as sqs from 'lib/sqs';
+import * as eventService from 'event/service';
+import * as email from 'lib/email';
 
 export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationVersionPathParams>
@@ -431,6 +434,223 @@ export const create = async (
         const newPublicationVersion = await publicationVersionService.create(latestPublicationVersion, event.user);
 
         return response.json(201, newPublicationVersion);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const requestControl = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.RequestControlPathParams>
+): Promise<I.JSONResponse> => {
+    const publicationVersionId = event.pathParameters.id;
+
+    try {
+        // get publication version
+        const publicationVersion = await publicationVersionService.getById(publicationVersionId);
+
+        if (!publicationVersion) {
+            return response.json(404, {
+                message: 'Publication version not found.'
+            });
+        }
+
+        // check that versionNumber is at least 2
+        if (publicationVersion.versionNumber < 2) {
+            return response.json(403, {
+                message: 'You are not allowed to request control over this publication version.'
+            });
+        }
+
+        // check version status
+        if (publicationVersion.currentStatus === 'LIVE') {
+            return response.json(403, {
+                message: 'You cannot request control over a published version.'
+            });
+        }
+
+        // check that requester is not the corresponding author on this version
+        if (event.user.id === publicationVersion.createdBy) {
+            return response.json(403, {
+                message: 'You cannot request control over your own publication version.'
+            });
+        }
+
+        const previousPublicationVersion = await publicationVersionService.get(
+            publicationVersion.versionOf,
+            publicationVersion.versionNumber - 1
+        );
+
+        if (!previousPublicationVersion) {
+            return response.json(403, {
+                message: 'Your authorship on the previous version cannot be verified.'
+            });
+        }
+
+        // check if user is a co-author on the previous version
+        if (
+            !(
+                previousPublicationVersion.user.id === event.user.id ||
+                previousPublicationVersion.coAuthors.some((author) => author.linkedUser === event.user.id)
+            )
+        ) {
+            return response.json(403, {
+                message: 'You do not have permission to request control over this publication version.'
+            });
+        }
+
+        // check if this user already requested control over this version
+        const requestControlEvents = await eventService.getByTypes(['REQUEST_CONTROL'], {
+            data: {
+                equals: {
+                    publicationVersionId,
+                    requesterId: event.user.id
+                }
+            }
+        });
+
+        if (requestControlEvents.length) {
+            return response.json(403, { message: 'You have already requested control over this publication version.' });
+        }
+
+        // create new 'REQUEST_CONTROL' event
+        const requestControlEvent = await eventService.create('REQUEST_CONTROL', {
+            publicationVersionId,
+            requesterId: event.user.id
+        });
+
+        // notify current corresponding author about the request
+        await email.requestControl({
+            eventId: requestControlEvent.id,
+            publicationVersion: {
+                id: publicationVersion.id,
+                versionOf: publicationVersion.versionOf,
+                title: publicationVersion.title || '',
+                authorEmail: publicationVersion.user.email || ''
+            },
+            requesterName: `${event.user.firstName} ${event.user.lastName}`
+        });
+
+        return response.json(200, { message: 'Successfully requested control over this publication version.' });
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const approveControlRequest = async (
+    event: I.AuthenticatedAPIRequest<I.ApproveControlRequestBody, undefined, I.ApproveControlRequestPathParams>
+): Promise<I.JSONResponse> => {
+    const publicationVersionId = event.pathParameters.id;
+    const { approve, eventId } = event.body;
+    const isApproved = approve === 'true';
+
+    try {
+        // get publication version
+        const publicationVersion = await publicationVersionService.getById(publicationVersionId);
+
+        if (!publicationVersion) {
+            return response.json(404, {
+                message: 'Publication version not found.'
+            });
+        }
+
+        // check that user is the current corresponding author
+        if (event.user.id !== publicationVersion.createdBy) {
+            return response.json(403, { message: 'You are not allowed to approve this control request.' });
+        }
+
+        // check if there's a request control event for the given 'eventId'
+        const requestControlEvent = await eventService.get(eventId);
+
+        if (!requestControlEvent) {
+            return response.json(404, { message: 'Control request not found.' });
+        }
+
+        const requestControlEventData = requestControlEvent.data as unknown as I.RequestControlData;
+        const { requesterId, publicationVersionId: eventVersionId } = requestControlEventData;
+
+        // check that version id from the event matches the current version id
+        if (eventVersionId !== publicationVersion.id) {
+            return response.json(400, { message: "Invalid 'eventId' provided." });
+        }
+
+        const requester = await userService.get(requesterId, true);
+
+        if (!requester) {
+            return response.json(404, { message: 'Requester not found.' });
+        }
+
+        if (!isApproved) {
+            // delete request control event
+            await eventService.deleteEvent(requestControlEvent.id);
+
+            // notify requester that they've been rejected
+            await email.rejectControlRequest({
+                requesterEmail: requester.email || '',
+                publicationVersion: {
+                    authorFullName: `${publicationVersion.user.firstName} ${publicationVersion.user.lastName}`,
+                    title: publicationVersion.title || ''
+                }
+            });
+
+            return response.json(200, { message: 'This control request has been rejected.' });
+        }
+
+        // transfer ownership
+        await publicationVersionService.update(publicationVersionId, {
+            user: {
+                connect: {
+                    id: requester.id
+                }
+            },
+            coAuthors: {
+                // create/update the new corresponding author
+                upsert: {
+                    create: {
+                        email: requester.email || '',
+                        confirmedCoAuthor: true,
+                        linkedUser: requester.id
+                    },
+                    update: {
+                        confirmedCoAuthor: true,
+                        linkedUser: requester.id
+                    },
+                    where: {
+                        publicationVersionId_email: {
+                            email: requester.email || '',
+                            publicationVersionId: publicationVersion.id
+                        }
+                    }
+                }
+            }
+        });
+
+        // reset co-authors in order to enforce adding affiliations and confirm their involvement
+        await coAuthorService.resetCoAuthors(publicationVersion.id);
+
+        // notify requester that they've been approved to take control over this version
+        await email.approveControlRequest({
+            requesterEmail: requester.email || '',
+            publicationVersion: {
+                authorFullName: `${publicationVersion.user.firstName} ${publicationVersion.user.lastName}`,
+                title: publicationVersion.title || '',
+                url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/latest`
+            }
+        });
+
+        // delete all pending request control events for this publication version
+        await eventService.deleteMany({
+            type: 'REQUEST_CONTROL',
+            data: {
+                path: ['publicationVersionId'],
+                equals: publicationVersion.id
+            }
+        });
+
+        return response.json(200, { message: 'Successfully transferred control over this publication version.' });
     } catch (err) {
         console.log(err);
 

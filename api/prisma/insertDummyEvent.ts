@@ -10,7 +10,7 @@ const insertDummyEvent = async (): Promise<string> => {
         };
         await client.prisma.event.create({
             data: {
-                type: 'dummy',
+                type: 'DUMMY',
                 data
             }
         });
