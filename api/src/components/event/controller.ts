@@ -39,19 +39,18 @@ export const dailyEventCheck = async (): Promise<void> => {
     const uniqueControlRequestEvents: typeof requestControlEvents = [];
 
     for (const requestControlEvent of requestControlEvents) {
-        const { publicationVersionId } = requestControlEvent.data as unknown as I.RequestControlData;
+        const {
+            publicationVersion: { id: publicationVersionId }
+        } = requestControlEvent.data as I.RequestControlData;
 
         if (
             !uniqueControlRequestEvents.some(
-                (event) => (event.data as unknown as I.RequestControlData).publicationVersionId === publicationVersionId
+                (event) => (event.data as I.RequestControlData).publicationVersion.id === publicationVersionId
             )
         ) {
             // get the oldest request control event for this publication version
             const oldestControlRequestEvent = requestControlEvents
-                .filter(
-                    (event) =>
-                        (event.data as unknown as I.RequestControlData).publicationVersionId === publicationVersionId
-                )
+                .filter((event) => (event.data as I.RequestControlData).publicationVersion.id === publicationVersionId)
                 .reduce((previousEvent, currentEvent) =>
                     new Date(previousEvent.createdAt) < new Date(currentEvent.createdAt) ? previousEvent : currentEvent
                 );
@@ -66,10 +65,12 @@ export const dailyEventCheck = async (): Promise<void> => {
         const createdAt = new Date(requestControlEvent.createdAt).getTime();
         const daysSinceEvent = Math.floor((now - createdAt) / 1000 / 60 / 60 / 24);
 
-        if (daysSinceEvent > -1) {
+        if (daysSinceEvent > 14) {
             try {
-                const { publicationVersionId, requesterId } =
-                    requestControlEvent.data as unknown as I.RequestControlData;
+                const {
+                    publicationVersion: { id: publicationVersionId },
+                    requesterId
+                } = requestControlEvent.data as I.RequestControlData;
 
                 const publicationVersion = await publicationVersionService.getById(publicationVersionId);
                 const requester = await userService.get(requesterId, true);
@@ -127,11 +128,11 @@ export const dailyEventCheck = async (): Promise<void> => {
                     true // is automatically approved
                 );
 
-                // delete all pending request control events for this publication version
+                // delete all pending requests for this publication version
                 await eventService.deleteMany({
                     type: 'REQUEST_CONTROL',
                     data: {
-                        path: ['publicationVersionId'],
+                        path: ['publicationVersion', 'id'],
                         equals: publicationVersion.id
                     }
                 });

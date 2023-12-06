@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import axios from 'axios';
+import useSWR from 'swr';
 
 import * as Interfaces from '@interfaces';
 import * as Components from '@components';
@@ -19,37 +20,38 @@ import * as Framer from 'framer-motion';
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
 
-    let user: Interfaces.User | null = null;
-    let userPublications: Interfaces.Publication[] = [];
-    let error: string | null = null;
-
-    // fetch the current user
-    try {
-        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}`, token);
-        user = response.data;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
-    }
-
     /**
      * @TODO - /user/{id}/publications now returns paginated results
      * Need to handle this into a separate ticket
      *
      */
 
-    try {
-        const response = await api.get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token);
-        userPublications = response.data.results;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
-    }
+    const promises: [
+        Promise<Interfaces.User | void>,
+        Promise<Interfaces.Publication[] | void>,
+        Promise<Interfaces.ControlRequest[] | void>
+    ] = [
+        api
+            .get(`${Config.endpoints.users}/${currentUser.id}`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token)
+            .then((res) => res.data.results)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.users}/me/control-requests`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error))
+    ];
+
+    const [user, userPublications = [], controlRequests = []] = await Promise.all(promises);
 
     return {
         props: {
             user,
             userPublications,
+            controlRequests,
             protectedPage: true
         }
     };
@@ -58,6 +60,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 type Props = {
     user: Interfaces.User;
     userPublications: Interfaces.Publication[];
+    controlRequests: Interfaces.ControlRequest[];
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -66,6 +69,11 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const { setUser } = Stores.useAuthStore();
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
+    const { data: controlRequests = [] } = useSWR<Interfaces.ControlRequest[]>(
+        `${Config.endpoints.users}/me/control-requests`,
+        null,
+        { fallbackData: props.controlRequests, revalidateOnFocus: false }
+    );
 
     const handleRevokeAccess = useCallback(async () => {
         const confirmed = await confirmation(
@@ -190,6 +198,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                     key={publication.id}
                                     publication={publication}
                                     user={props.user}
+                                    controlRequests={controlRequests}
                                 />
                             ))}
                         </ul>

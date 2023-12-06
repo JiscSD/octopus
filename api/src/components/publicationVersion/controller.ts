@@ -342,6 +342,15 @@ export const updateStatus = async (
             cleanContent: htmlToText.convert(updatedVersion.content)
         });
 
+        // delete all pending request control events for this publication version
+        await eventService.deleteMany({
+            type: 'REQUEST_CONTROL',
+            data: {
+                path: ['publicationVersion', 'id'],
+                equals: publicationVersion.id
+            }
+        });
+
         // send message to the pdf generation queue
         // currently only on deployed instances while a local solution is developed
         if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationVersion.versionOf);
@@ -385,7 +394,17 @@ export const deleteVersion = async (
             });
         }
 
+        // delete publication version
         await publicationVersionService.deleteVersion(publicationVersion);
+
+        // delete all pending request control events for this publication version
+        await eventService.deleteMany({
+            type: 'REQUEST_CONTROL',
+            data: {
+                path: ['publicationVersion', 'id'],
+                equals: publicationVersion.id
+            }
+        });
 
         return response.json(200, { message: `Publication version ${event.pathParameters.id} has been deleted` });
     } catch (err) {
@@ -444,11 +463,11 @@ export const create = async (
 export const requestControl = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.RequestControlPathParams>
 ): Promise<I.JSONResponse> => {
-    const publicationVersionId = event.pathParameters.id;
+    const { id: publicationId, version } = event.pathParameters;
 
     try {
         // get publication version
-        const publicationVersion = await publicationVersionService.getById(publicationVersionId);
+        const publicationVersion = await publicationVersionService.get(publicationId, version);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -504,8 +523,8 @@ export const requestControl = async (
         const requestControlEvents = await eventService.getByTypes(['REQUEST_CONTROL'], {
             data: {
                 equals: {
-                    publicationVersionId,
-                    requesterId: event.user.id
+                    requesterId: event.user.id,
+                    publicationVersion: { id: publicationVersion.id, versionOf: publicationVersion.versionOf }
                 }
             }
         });
@@ -516,8 +535,8 @@ export const requestControl = async (
 
         // create new 'REQUEST_CONTROL' event
         const requestControlEvent = await eventService.create('REQUEST_CONTROL', {
-            publicationVersionId,
-            requesterId: event.user.id
+            requesterId: event.user.id,
+            publicationVersion: { id: publicationVersion.id, versionOf: publicationVersion.versionOf }
         });
 
         // notify current corresponding author about the request
@@ -543,13 +562,13 @@ export const requestControl = async (
 export const approveControlRequest = async (
     event: I.AuthenticatedAPIRequest<I.ApproveControlRequestBody, undefined, I.ApproveControlRequestPathParams>
 ): Promise<I.JSONResponse> => {
-    const publicationVersionId = event.pathParameters.id;
+    const { id: publicationId, version } = event.pathParameters;
     const { approve, eventId } = event.body;
     const isApproved = approve === 'true';
 
     try {
         // get publication version
-        const publicationVersion = await publicationVersionService.getById(publicationVersionId);
+        const publicationVersion = await publicationVersionService.get(publicationId, version);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -569,8 +588,11 @@ export const approveControlRequest = async (
             return response.json(404, { message: 'Control request not found.' });
         }
 
-        const requestControlEventData = requestControlEvent.data as unknown as I.RequestControlData;
-        const { requesterId, publicationVersionId: eventVersionId } = requestControlEventData;
+        const requestControlEventData = requestControlEvent.data as I.RequestControlData;
+        const {
+            requesterId,
+            publicationVersion: { id: eventVersionId }
+        } = requestControlEventData;
 
         // check that version id from the event matches the current version id
         if (eventVersionId !== publicationVersion.id) {
@@ -600,7 +622,7 @@ export const approveControlRequest = async (
         }
 
         // transfer ownership
-        await publicationVersionService.update(publicationVersionId, {
+        await publicationVersionService.update(publicationVersion.id, {
             user: {
                 connect: {
                     id: requester.id
@@ -645,7 +667,7 @@ export const approveControlRequest = async (
         await eventService.deleteMany({
             type: 'REQUEST_CONTROL',
             data: {
-                path: ['publicationVersionId'],
+                path: ['publicationVersion', 'id'],
                 equals: publicationVersion.id
             }
         });

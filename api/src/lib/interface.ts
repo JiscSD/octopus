@@ -336,10 +336,12 @@ export interface CreatePublicationVersionPathParams {
 
 export interface RequestControlPathParams {
     id: string;
+    version: string;
 }
 
 export interface ApproveControlRequestPathParams {
     id: string;
+    version: string;
 }
 
 export interface ApproveControlRequestBody {
@@ -879,13 +881,16 @@ export interface TopicsPaginatedResults {
 }
 
 // events
-export interface DummyEventData {
+export interface DummyEventData extends Record<string, unknown> {
     to: string;
 }
 
-export interface RequestControlData {
+export interface RequestControlData extends Record<string, unknown> {
     requesterId: string;
-    publicationVersionId: string;
+    publicationVersion: {
+        id: string;
+        versionOf: string;
+    };
 }
 
 export interface EventDataType {

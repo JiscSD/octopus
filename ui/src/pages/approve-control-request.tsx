@@ -18,7 +18,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     if (['true', 'false'].includes(approve)) {
         try {
             await api.post(
-                `${Config.endpoints.publicationVersions}/${versionId}/approve-control-request`,
+                `${Config.endpoints.publications}/${versionOf}/publication-versions/${versionId}/approve-control-request`,
                 {
                     approve: isApproved ? true : false,
                     eventId
@@ -65,21 +65,12 @@ const AuthorLink: Types.NextPage<Props> = (props): React.ReactElement => (
         <Head>
             <meta name="robots" content="noindex, nofollow" />
         </Head>
-        {props.statusCode == 200 ? (
-            <Layouts.InformationLanding
-                title={props.title}
-                windowTitle={props.title}
-                content={props.message}
-                statusCode={props.statusCode}
-            />
-        ) : (
-            <Layouts.Error
-                title={props.title}
-                windowTitle={`${props.statusCode} - Octopus | Built for Researchers`}
-                content={props.message}
-                statusCode={props.statusCode}
-            />
-        )}
+        <Layouts.Error
+            title={props.title}
+            windowTitle={`${props.statusCode} - Octopus | Built for Researchers`}
+            content={props.message}
+            statusCode={props.statusCode}
+        />
     </>
 );
 
