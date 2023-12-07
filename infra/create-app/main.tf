@@ -17,11 +17,12 @@ module "network" {
 }
 
 module "bastion" {
-  source        = "../modules/bastion"
-  vpc_id        = module.network.vpc_id
-  vpc_id_new    = module.network.vpc_id_new
-  public_subnet = module.network.public_subnet_ids[0]
-  environment   = local.environment
+  source            = "../modules/bastion"
+  vpc_id            = module.network.vpc_id
+  vpc_id_new        = module.network.vpc_id_new
+  public_subnet     = module.network.public_subnet_ids[0]
+  public_subnet_new = module.network.public_subnet_ids_new[0]
+  environment       = local.environment
 }
 
 module "postgres" {
