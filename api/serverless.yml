@@ -547,5 +547,4 @@ functions:
     dailyEventCheck:
         handler: src/components/event/routes.dailyEventCheck
         events:
-            # TODO: uncomment schedule below when functionality has been tested.
-            - schedule: cron(0/1 * * * ? *) # Every day at 7 a.m.
+            - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
