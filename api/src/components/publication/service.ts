@@ -1074,3 +1074,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
         }
     }
 };
+
+export const count = async () => {
+    return await client.prisma.publication.count();
+};

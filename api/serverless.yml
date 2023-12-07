@@ -184,6 +184,13 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
+    count:
+        handler: src/components/publication/routes.count
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/count
+                  method: GET
+                  cors: true
 
     # Publication Versions
     createPublicationVersion:

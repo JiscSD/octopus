@@ -923,3 +923,10 @@ export const topicDescription =
     'This is a research topic created to provide authors with a place to attach new problem publications.';
 
 export const blogContentType = 'octopusBlog';
+
+// The number of URLs google will accept in one sitemap file.
+// export const sitemapChunkSize = 50000;
+export const sitemapChunkSize = 100;
+
+// The amount of results opensearch can return in one query.
+export const opensearchLimit = 10000;

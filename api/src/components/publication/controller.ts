@@ -200,3 +200,15 @@ export const getPDF = async (
           }
         : response.json(200, { pdfUrl });
 };
+
+export const count = async (): Promise<I.JSONResponse> => {
+    try {
+        const publicationCount = await publicationService.count();
+
+        return response.json(200, publicationCount);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
