@@ -2355,6 +2355,8 @@ test.describe('Publication flow + co-authors', () => {
 
         // transfer ownership to user2
         await approveControlRequest(context, Helpers.user1, Helpers.user2.fullName, true);
+
+        // check that old corresponding author doesn't have permissions to edit the DRAFT anymore
         await page.reload();
         await page.waitForLoadState('networkidle');
         await expect(page.getByText('This publication is currently being edited.')).toBeVisible();
@@ -2362,15 +2364,16 @@ test.describe('Publication flow + co-authors', () => {
         // login with user2 and check they can edit the new version
         const page3 = await browser.newPage();
         await page3.goto(Helpers.UI_BASE);
-        await Helpers.login(page3, browser);
+        await Helpers.login(page3, browser, Helpers.user2);
         await expect(page3.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user2.fullName);
 
-        await page.goto(Helpers.UI_BASE + `/publications/${publicationId}/versions/latest`);
-        await page.waitForLoadState('networkidle');
-        await expect(page.locator(PageModel.publish.draftEditButton)).toBeVisible();
-        await page.locator(PageModel.publish.draftEditButton).click();
-        await page.waitForURL('**/edit?**');
-        await expect(page.locator(PageModel.publish.title)).toBeVisible();
+        await page3.goto(Helpers.UI_BASE + `/publications/${publicationId}/versions/latest`);
+        await page3.waitForLoadState('networkidle');
+        await expect(page3.locator(PageModel.publish.draftEditButton)).toBeVisible();
+        await page3.locator(PageModel.publish.draftEditButton).click();
+        await page3.waitForURL('**/edit?**');
+        await page3.waitForLoadState('networkidle');
+        await expect(page3.locator('aside button:has-text("Key information")').first()).toBeVisible();
     });
 });
 
