@@ -8,6 +8,16 @@ resource "aws_db_subnet_group" "database_subnet" {
   }
 }
 
+resource "aws_db_subnet_group" "database_subnet_new" {
+  name       = "${var.project_name}_database_subnet_${var.environment}_new"
+  subnet_ids = toset(var.private_subnet_ids_new)
+
+  tags = {
+    Name        = "${var.project_name}_subnet_group_${var.environment}_new"
+    Environment = var.environment
+  }
+}
+
 resource "aws_security_group" "database_security_group" {
   name        = "${var.project_name}_database_security_group"
   description = "${var.project_name}_database_security_group"

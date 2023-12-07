@@ -15,6 +15,23 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
+resource "aws_security_group" "ec2_sg_new" {
+  name   = "ec2-sg"
+  vpc_id = var.vpc_id_new
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "-1"
+  }
+
+  tags = {
+    Name        = "bastion_sg_${var.environment}_new"
+    Environment = var.environment
+  }
+}
+
 resource "aws_iam_role" "allow_ssm_role" {
   name               = "ssm-role-${var.environment}"
   description        = "Allow SSM access to EC2"
