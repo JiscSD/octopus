@@ -15,6 +15,7 @@ import {
     APIGatewayProxyEventV2
 } from 'aws-lambda';
 import * as publicationVersionService from 'publicationVersion/service';
+import * as eventService from 'event/service';
 
 export {
     ImageExtension,
@@ -880,6 +881,8 @@ export interface TopicsPaginatedResults {
     }[];
 }
 
+export type Event = Exclude<Prisma.PromiseReturnType<typeof eventService.get>, null>;
+
 // events
 export interface DummyEventData extends Record<string, unknown> {
     to: string;
@@ -896,4 +899,12 @@ export interface RequestControlData extends Record<string, unknown> {
 export interface EventDataType {
     [EventType.DUMMY]: DummyEventData;
     [EventType.REQUEST_CONTROL]: RequestControlData;
+}
+
+export interface DummyEvent extends Record<string, unknown>, Omit<Event, 'data'> {
+    data: DummyEventData;
+}
+
+export interface RequestControlEvent extends Record<string, unknown>, Omit<Event, 'data'> {
+    data: RequestControlData;
 }

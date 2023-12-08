@@ -622,33 +622,7 @@ export const approveControlRequest = async (
         }
 
         // transfer ownership
-        await publicationVersionService.update(publicationVersion.id, {
-            user: {
-                connect: {
-                    id: requester.id
-                }
-            },
-            coAuthors: {
-                // create/update the new corresponding author
-                upsert: {
-                    create: {
-                        email: requester.email || '',
-                        confirmedCoAuthor: true,
-                        linkedUser: requester.id
-                    },
-                    update: {
-                        confirmedCoAuthor: true,
-                        linkedUser: requester.id
-                    },
-                    where: {
-                        publicationVersionId_email: {
-                            email: requester.email || '',
-                            publicationVersionId: publicationVersion.id
-                        }
-                    }
-                }
-            }
-        });
+        await publicationVersionService.transferOwnership(publicationVersion.id, requester.id, requester.email || '');
 
         // reset co-authors in order to enforce adding affiliations and confirm their involvement
         await coAuthorService.resetCoAuthors(publicationVersion.id);
