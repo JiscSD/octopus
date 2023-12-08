@@ -756,7 +756,7 @@ export const requestControl = async (options: RequestControlOptions): Promise<vo
                 <br>
                 <p style="text-align: center"><strong><i>${options.publicationVersion.title}</i></strong></p>
                 <br>
-                <p>Please use the buttons below to either confirm they can take over the editing of this publication, or reject the request. <strong>If you do not take action, they will take over from you as the corresponding author after two weeks has passed.</strong>.</p>
+                <p>Please use the buttons below to either confirm they can take over the editing of this publication, or reject the request. <strong>If you do not take action, they will take over from you as the corresponding author after two weeks have passed.</strong>.</p>
                 <br/>
                 <p style="text-decoration: underline;">Note that you will lose the ability to edit the publication yourself if you confirm this request.</p>
                 <br/>
@@ -777,7 +777,7 @@ export const requestControl = async (options: RequestControlOptions): Promise<vo
                 <p>You are seeing this message as you have initiated the creation of a new version of a publication you are an author on.</p>
             `;
 
-    const text = `${options.requesterName} is requesting to take over editing. ${options.requesterName} has asked for permission to take over as the corresponding author of the following publication on Octopus so they can make edits to it: ${options.publicationVersion.title}. Please use the following link to confirm they can take over the editing of this publication (Note that you will lose the ability to edit the publication yourself if you confirm this request.): ${approveUrl}. If you would like to remain in control of the editing process instead of ${options.requesterName}, use the following link to reject their request: ${rejectUrl}. If you do not take action, they will take over from you as the corresponding author after two weeks has passed. You are seeing this message as you have initiated the creation of a new version of a publication you are an author on.`;
+    const text = `${options.requesterName} is requesting to take over editing. ${options.requesterName} has asked for permission to take over as the corresponding author of the following publication on Octopus so they can make edits to it: ${options.publicationVersion.title}. Please use the following link to confirm they can take over the editing of this publication (Note that you will lose the ability to edit the publication yourself if you confirm this request.): ${approveUrl}. If you would like to remain in control of the editing process instead of ${options.requesterName}, use the following link to reject their request: ${rejectUrl}. If you do not take action, they will take over from you as the corresponding author after two weeks have passed. You are seeing this message as you have initiated the creation of a new version of a publication you are an author on.`;
 
     await send({
         html: standardHTMLEmailTemplate(subject, html, 'Your response is required to confirm or reject their request.'),
