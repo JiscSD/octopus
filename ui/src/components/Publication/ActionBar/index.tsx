@@ -57,7 +57,7 @@ const ActionBar: React.FC<Props> = (props) => {
                             <p className="pb-1">This publication is locked for approval.</p>
                             <Components.Link
                                 className="inline w-fit rounded text-teal-600 underline outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-teal-200 dark:decoration-teal-200"
-                                href={`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}/edit?step=4`}
+                                href={`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}/edit?step=0`}
                                 title="Edit publication"
                                 onClick={async (e) => {
                                     e.preventDefault();
