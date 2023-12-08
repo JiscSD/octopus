@@ -77,7 +77,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                 setLoading(true);
 
                 try {
-                    // create new version
+                    // request control over this version
                     await api.get(
                         `${Config.endpoints.publications}/${props.publication.id}/publication-versions/latest/request-control`,
                         Helpers.getJWT()
