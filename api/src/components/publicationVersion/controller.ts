@@ -596,7 +596,9 @@ export const approveControlRequest = async (
 
         // check that version id from the event matches the current version id
         if (eventVersionId !== publicationVersion.id) {
-            return response.json(400, { message: "Invalid 'eventId' provided." });
+            return response.json(403, {
+                message: "There's no control request for this publication version with the provided 'eventId'"
+            });
         }
 
         const requester = await userService.get(requesterId, true);
