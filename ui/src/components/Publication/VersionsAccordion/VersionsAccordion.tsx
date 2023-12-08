@@ -104,7 +104,7 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                                 {canCreateNewVersion && (
                                     <Components.Link
                                         title="Create new version"
-                                        className="flex w-fit rounded border-transparent text-sm font-semibold text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                        className="flex w-fit rounded border-transparent text-sm font-semibold capitalize text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                         href="#"
                                         onClick={handleCreateNewVersion}
                                     >
