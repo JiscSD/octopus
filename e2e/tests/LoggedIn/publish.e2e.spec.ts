@@ -2286,16 +2286,8 @@ test.describe('Publication flow + co-authors', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTabMinimally(page, 'main text');
         await completeConflictOfInterestTab(page, false);
-        await completeFundersTab(
-            page,
-            '01rv9gx86',
-            'funder name',
-            'funder city',
-            'https://funder.com',
-            'extra details'
-        );
 
         // invite a co-author
         await page.locator('aside button:has-text("Co-authors")').first().click();
