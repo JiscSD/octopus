@@ -681,3 +681,32 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
 
     return newPublicationVersion;
 };
+
+export const transferOwnership = (publicationVersionId: string, requesterId: string, requesterEmail: string) =>
+    update(publicationVersionId, {
+        user: {
+            connect: {
+                id: requesterId
+            }
+        },
+        coAuthors: {
+            // create/update the new corresponding author
+            upsert: {
+                create: {
+                    email: requesterEmail,
+                    confirmedCoAuthor: true,
+                    linkedUser: requesterId
+                },
+                update: {
+                    confirmedCoAuthor: true,
+                    linkedUser: requesterId
+                },
+                where: {
+                    publicationVersionId_email: {
+                        email: requesterEmail,
+                        publicationVersionId: publicationVersionId
+                    }
+                }
+            }
+        }
+    });

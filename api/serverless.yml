@@ -228,6 +228,20 @@ functions:
                   path: ${self:custom.versions.v1}/publication-versions/{id}
                   method: DELETE
                   cors: true
+    requestControl:
+        handler: src/components/publicationVersion/routes.requestControl
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version}/request-control
+                  method: GET
+                  cors: true
+    approveControlRequest:
+        handler: src/components/publicationVersion/routes.approveControlRequest
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version}/approve-control-request
+                  method: POST
+                  cors: true
     # Users
     getUsers:
         handler: src/components/user/routes.getAll
@@ -250,12 +264,18 @@ functions:
                   path: ${self:custom.versions.v1}/users/{id}/publications
                   method: GET
                   cors: true
-
     getUserList:
         handler: src/components/user/routes.getUserList
         events:
             - http:
                   path: ${self:custom.versions.v1}/user-list
+                  method: GET
+                  cors: true
+    getUserControlRequests:
+        handler: src/components/user/routes.getUserControlRequests
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/users/me/control-requests
                   method: GET
                   cors: true
     # Auth
@@ -527,7 +547,4 @@ functions:
     dailyEventCheck:
         handler: src/components/event/routes.dailyEventCheck
         events:
-            # TODO: uncomment schedule below when functionality has been tested.
-            # - schedule: cron(0 7 ? * * *) # Every day at 7 a.m.
-            # TODO: remove schedule below when functionality has been tested.
-            - schedule: cron(0 * ? * * *) # Every hour, on the hour.
+            - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
