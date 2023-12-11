@@ -870,3 +870,32 @@ export const approveControlRequest = async (
         subject
     });
 };
+
+type RemoveCorrespondingAuthorOptions = {
+    oldCorrespondingAuthorEmail: string;
+    newCorrespondingAuthorFullName: string;
+    publicationVersionTitle: string;
+};
+
+export const removeCorrespondingAuthor = async (options: RemoveCorrespondingAuthorOptions): Promise<void> => {
+    const subject =
+        'Another author has taken over editing and correspondence responsibility for one of your publications.';
+
+    const html = `
+                <p>${options.newCorrespondingAuthorFullName} had made a request to take over as corresponding author on <strong><i>${options.publicationVersionTitle}</i></strong>.</p>
+                <br/>
+                <p>As two weeks have passed since this request was made without any confirmation or rejection, corresponding authorship has automatically been passed to them. You will no longer be able to make edits to this publication yourself.</p>
+                <br/>
+                <p>Please discuss with the current corresponding author if you feel there may have been a mistake.</p>
+            </p>
+            `;
+
+    const text = `${options.newCorrespondingAuthorFullName} had made a request to take over as corresponding author on '${options.publicationVersionTitle}'. As two weeks have passed since this request was made without any confirmation or rejection, corresponding authorship has automatically been passed to them. You will no longer be able to make edits to this publication yourself. Please discuss with the current corresponding author if you feel there may have been a mistake.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, 'Corresponding author status has been transferred.'),
+        text,
+        to: options.oldCorrespondingAuthorEmail,
+        subject
+    });
+};
