@@ -227,9 +227,14 @@ model TopicTranslation {
 
 model Event {
     id        String   @id @default(cuid())
-    type      String
+    type      EventType
     createdAt DateTime @default(now())
     data      Json
+}
+
+enum EventType {
+    DUMMY  // for testing purpose
+    REQUEST_CONTROL
 }
 
 enum ImageExtension {

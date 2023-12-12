@@ -1,45 +1,58 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import axios from 'axios';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Components from '@components';
 import * as api from '@api';
 import * as Config from '@config';
-import axios from 'axios';
+import * as Contexts from '@contexts';
+import * as SWRConfig from 'swr';
+import * as FaIcons from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
 type Props = {
-    publicationVersion: Interfaces.PublicationVersion;
+    publication: Interfaces.Publication;
     user: Interfaces.User;
     canCreateNewVersion?: boolean;
     canEditNewVersion?: boolean;
+    controlRequests: Interfaces.ControlRequest[];
 };
 
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
+    const confirmation = Contexts.useConfirmationModal();
     const router = useRouter();
     const [error, setError] = React.useState('');
     const [loading, setLoading] = React.useState(false);
-    const status = useMemo(
-        () => Helpers.getPublicationStatusByAuthor(props.publicationVersion, props.user),
-        [props.publicationVersion, props.user]
+
+    const latestLiveVersion = props.publication.versions.find((version) => version.isLatestLiveVersion);
+    const isAuthorOnLatestLive =
+        latestLiveVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === props.user.id) ||
+        latestLiveVersion?.createdBy === props.user.id;
+    const latestVersion = props.publication.versions.find((version) => version.isLatestVersion);
+    const draftExistsWithPermission =
+        latestVersion?.currentStatus === 'DRAFT' || latestVersion?.currentStatus === 'LOCKED';
+    const draftVersion = draftExistsWithPermission ? latestVersion : null;
+    const draftExistsWithoutPermission = !draftExistsWithPermission && !latestLiveVersion?.isLatestVersion;
+    const hasAlreadyRequestedControl = props.controlRequests.some(
+        (request) => request.data.publicationVersion.versionOf === props.publication.id
     );
 
     const handleCreateNewVersion = React.useCallback(
         async (e: React.MouseEvent<Element, MouseEvent>) => {
-            e.preventDefault();
             setError('');
             setLoading(true);
 
             try {
                 // create new version
                 await api.post(
-                    `${Config.endpoints.publications}/${props.publicationVersion.versionOf}/publication-versions`,
+                    `${Config.endpoints.publications}/${props.publication.id}/publication-versions`,
                     {},
                     Helpers.getJWT()
                 );
 
                 // redirect user to the edit page
-                await router.push(`/publications/${props.publicationVersion.versionOf}/edit?step=0`);
+                await router.push(`/publications/${props.publication.id}/edit?step=0`);
             } catch (error) {
                 console.log(error);
                 setError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
@@ -47,114 +60,191 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
 
             setLoading(false);
         },
-        [props.publicationVersion.versionOf, router]
+        [props.publication.id, router]
     );
 
-    const handleEditDraftVersion = React.useCallback(
+    const handleTakeOverEditing = React.useCallback(
         async (e: React.MouseEvent<Element, MouseEvent>) => {
-            e.preventDefault();
-            // redirect user to the edit page
-            await router.push(`/publications/${props.publicationVersion.versionOf}/edit?step=0`);
+            const confirmed = await confirmation(
+                'Take over editing',
+                'This action will remove the current corresponding author and allow you to make edits instead. Are you sure you want to do this?',
+                <FaIcons.FaEdit className="h-8 w-8 text-grey-600" />,
+                'Request Control'
+            );
+
+            if (confirmed) {
+                setError('');
+                setLoading(true);
+
+                try {
+                    // request control over this version
+                    await api.get(
+                        `${Config.endpoints.publications}/${props.publication.id}/publication-versions/latest/request-control`,
+                        Helpers.getJWT()
+                    );
+
+                    // re-fetch control requests for this user
+                    await SWRConfig.mutate(`${Config.endpoints.users}/me/control-requests`);
+                } catch (error) {
+                    console.log(error);
+                    setError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
+                }
+
+                setLoading(false);
+            }
         },
-        [props.publicationVersion.versionOf, router]
+        [confirmation, props.publication.id]
+    );
+
+    const divider = <span className="border-b border-grey-300 pt-4 dark:border-teal-500 sm:border-r sm:pb-4" />;
+    const publishedVersionCount = props.publication.versions.filter(
+        (version) => version.currentStatus === 'LIVE'
+    ).length;
+
+    const requestControl = hasAlreadyRequestedControl ? (
+        <Components.Alert
+            severity="INFO"
+            title="You have requested control over this publication version."
+            className="mt-4"
+        />
+    ) : (
+        <>
+            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
+            <Components.Button
+                disabled={loading}
+                title="Take over editing"
+                onClick={handleTakeOverEditing}
+                endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
+                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+            />
+        </>
     );
 
     return (
-        <div className="w-full rounded border border-transparent bg-white-50 p-3 text-sm shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:shadow-none sm:text-base">
-            <div className="flex justify-between gap-2">
-                <div className="flex w-fit flex-col flex-wrap gap-3 sm:flex-row sm:items-center sm:gap-2">
-                    <span
-                        className={`${
-                            status === 'Live'
-                                ? 'text-teal-500 dark:text-teal-300'
-                                : 'text-purple-500 dark:text-purple-300'
-                        } flex items-center gap-2 font-semibold leading-3 transition-colors duration-500`}
-                    >
-                        {status === 'Live' ? (
-                            <OutlineIcons.ArrowTopRightOnSquareIcon className="inline h-4 min-w-[1rem] leading-3" />
-                        ) : (
-                            <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem] leading-3" />
-                        )}
-
-                        {status}
-                    </span>
-                    {props.user.id === props.publicationVersion.createdBy && (
-                        <span className="leading-tight text-green-700 dark:text-green-300">(Corresponding Author)</span>
-                    )}
-                    <span className="leading-3 text-pink-500 ">
-                        {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
-                    </span>
-                    {props.publicationVersion.publishedDate ? (
-                        <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                            Published:{' '}
-                            <time suppressHydrationWarning>
-                                {Helpers.formatDate(props.publicationVersion.publishedDate)}
-                            </time>
-                        </span>
-                    ) : (
-                        <span className="text-xs leading-3 text-grey-600 transition-colors duration-500 dark:text-grey-100 ">
-                            Last updated:{' '}
-                            <time suppressHydrationWarning>
-                                {Helpers.formatDate(props.publicationVersion.updatedAt)}
-                            </time>
-                        </span>
-                    )}
-                </div>
-                <span className="right-4 text-xs text-teal-500 empty:hidden">
-                    {props.publicationVersion.publication.doi}
-                </span>
-            </div>
-            <div className={`mt-2 flex gap-4 ${error ? 'flex-col' : 'flex-col sm:flex-row'}`}>
-                <p className="flex-1 font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {props.publicationVersion.title}
+        <li
+            data-testid={`publication-${props.publication.id}`}
+            className="flex min-h-[200px] w-full flex-col rounded border border-transparent bg-white-50 p-5 text-sm text-grey-800 shadow transition-colors duration-500 dark:border-teal-500 dark:bg-transparent dark:text-white-50 dark:shadow-none sm:flex-row sm:text-base"
+        >
+            <div className="flex flex-grow basis-1/5 flex-col sm:pr-5">
+                <p className="pb-5 font-bold text-pink-500 dark:text-pink-300">
+                    {Helpers.formatPublicationType(props.publication.type)}
                 </p>
-
-                {
-                    /**
-                     * @TODO - remove stage check when ready to go in production
-                     */
-
-                    ['local', 'int'].includes(process.env.NEXT_PUBLIC_STAGE!) && status === 'Live' && (
-                        <>
-                            {error && <Components.Alert severity="ERROR" title={error} />}
-                            {props.canCreateNewVersion && (
+                <p className="flex-1 flex-grow pb-5 font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    {latestLiveVersion ? latestLiveVersion.title : latestVersion?.title}
+                </p>
+                <div className="flex flex-col justify-between lg:flex-row">
+                    <span>{`${publishedVersionCount} published version${publishedVersionCount !== 1 ? 's' : ''}`}</span>
+                    <span className="right-4 text-teal-500 empty:hidden dark:text-teal-300">
+                        {props.publication.doi}
+                    </span>
+                </div>
+            </div>
+            {divider}
+            <div className="flex flex-grow basis-1/5 flex-col items-start pt-4 sm:px-5 sm:pt-0">
+                <p className="flex flex-col gap-2 pb-5 lg:flex-row lg:items-center">
+                    <span className="flex items-center gap-2 font-bold text-pink-500 dark:text-pink-300">
+                        <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem]" />
+                        Draft
+                    </span>
+                    {draftExistsWithPermission && (
+                        <span>
+                            {latestVersion.user.id === props.user.id
+                                ? ' (Corresponding Author)'
+                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id) &&
+                                  ' (Author)'}
+                        </span>
+                    )}
+                </p>
+                {draftVersion ? (
+                    <div className="flex h-full flex-col justify-between">
+                        <p>
+                            Last updated:{' '}
+                            <time suppressHydrationWarning>{Helpers.formatDate(draftVersion.updatedAt)}</time>
+                        </p>
+                        <p className="flex-grow pb-5">
+                            Status: {Helpers.getPublicationStatusByAuthor(draftVersion, props.user)}
+                        </p>
+                        {['DRAFT', 'LOCKED'].includes(draftVersion.currentStatus) ? (
+                            props.user.id === draftVersion.user.id ? (
                                 <Components.Button
-                                    disabled={loading}
-                                    title="Create new version"
-                                    className="self-end children:border-0 children:py-0 children:text-teal-500 children:dark:text-teal-300"
-                                    endIcon={
-                                        <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem] leading-3" />
-                                    }
-                                    onClick={handleCreateNewVersion}
-                                >
-                                    Create new version
-                                </Components.Button>
-                            )}
-                            {props.canEditNewVersion && (
-                                <Components.Button
-                                    disabled={loading}
-                                    title="Edit draft version"
-                                    className="self-end children:border-0 children:py-0 children:text-teal-500 children:dark:text-teal-300"
-                                    endIcon={
-                                        <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem] leading-3" />
-                                    }
-                                    onClick={handleEditDraftVersion}
-                                >
-                                    Edit draft version
-                                </Components.Button>
-                            )}
-                            {!props.canCreateNewVersion && !props.canEditNewVersion && (
-                                <Components.Alert
-                                    className="sm:mt-2"
-                                    severity="INFO"
-                                    title="New version being edited."
+                                    href={`/publications/${props.publication.id}/edit?step=0`}
+                                    endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
+                                    title="Edit Draft"
+                                    className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                                 />
-                            )}
+                            ) : (
+                                <>
+                                    <p>
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                            className="underline"
+                                        >
+                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                        </Components.Link>{' '}
+                                        has created a new draft version
+                                    </p>
+                                    {isAuthorOnLatestLive && requestControl}
+                                </>
+                            )
+                        ) : (
+                            <Components.Button
+                                href={`/publications/${props.publication.id}`}
+                                endIcon={<OutlineIcons.EyeIcon className="h-4" />}
+                                title="View Draft"
+                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                            />
+                        )}
+                    </div>
+                ) : isAuthorOnLatestLive ? (
+                    draftExistsWithoutPermission ? (
+                        <div className="flex h-full flex-col justify-between">
+                            <p>Someone else has created a new draft version, and you do not yet have access to it.</p>
+                            {requestControl}
+                        </div>
+                    ) : (
+                        <>
+                            <p className="flex-grow pb-5">New draft not created</p>
+                            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
+                            <Components.Button
+                                disabled={loading}
+                                title="Create Draft Version"
+                                onClick={handleCreateNewVersion}
+                                endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
+                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                            />
                         </>
                     )
-                }
+                ) : (
+                    <p>You do not have permission to create draft versions of this publication</p>
+                )}
             </div>
-        </div>
+            {divider}
+            <div className="flex flex-grow basis-1/5 flex-col items-start pt-4 sm:pl-5 sm:pt-0">
+                <p className="pb-5 font-bold text-pink-500 dark:text-pink-300">Published</p>
+                {latestLiveVersion ? (
+                    <>
+                        <div className="flex-grow">
+                            <p>
+                                Published on:{' '}
+                                <time suppressHydrationWarning>
+                                    {latestLiveVersion.publishedDate &&
+                                        Helpers.formatDate(latestLiveVersion.publishedDate)}
+                                </time>
+                            </p>
+                            {!isAuthorOnLatestLive && <p>You are not listed as an author on the latest version</p>}
+                        </div>
+                        <Components.Button
+                            href={`/publications/${props.publication.id}`}
+                            endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
+                            title="View"
+                            className="mt-5 bg-teal-500 px-3 text-white-50 children:border-none children:text-white-50"
+                        />
+                    </>
+                ) : (
+                    <p>Never published</p>
+                )}
+            </div>
+        </li>
     );
 };
 

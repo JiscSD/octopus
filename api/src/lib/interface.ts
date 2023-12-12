@@ -6,7 +6,8 @@ import {
     PublicationType,
     Role,
     BookmarkType,
-    PublicationStatusEnum
+    PublicationStatusEnum,
+    EventType
 } from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
@@ -14,6 +15,7 @@ import {
     APIGatewayProxyEventV2
 } from 'aws-lambda';
 import * as publicationVersionService from 'publicationVersion/service';
+import * as eventService from 'event/service';
 
 export {
     ImageExtension,
@@ -24,7 +26,8 @@ export {
     PublicationType,
     Role,
     Topic,
-    BookmarkType
+    BookmarkType,
+    EventType
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -330,6 +333,21 @@ export interface DeletePublicationVersionPathParams {
 
 export interface CreatePublicationVersionPathParams {
     id: string;
+}
+
+export interface RequestControlPathParams {
+    id: string;
+    version: string;
+}
+
+export interface ApproveControlRequestPathParams {
+    id: string;
+    version: string;
+}
+
+export interface ApproveControlRequestBody {
+    approve: 'true' | 'false';
+    eventId: string;
 }
 
 export interface DeleteLinkPathParams {
@@ -648,13 +666,9 @@ export interface UpdateAffiliationsBody {
     isIndependent: boolean;
 }
 
-export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
-
-export interface UserPublicationVersionsFilters {
+export interface UserPublicationsFilters {
     offset: number;
     limit: number;
-    orderBy?: UserPublicationsOrderBy;
-    orderDirection?: OrderDirection;
 }
 
 export interface SendApprovalReminderPathParams {
@@ -867,8 +881,30 @@ export interface TopicsPaginatedResults {
     }[];
 }
 
-// Events
-/**
- * @todo remove once functionality has been tested.
- */
-export type EventType = 'dummy';
+export type Event = Exclude<Prisma.PromiseReturnType<typeof eventService.get>, null>;
+
+// events
+export interface DummyEventData extends Record<string, unknown> {
+    to: string;
+}
+
+export interface RequestControlData extends Record<string, unknown> {
+    requesterId: string;
+    publicationVersion: {
+        id: string;
+        versionOf: string;
+    };
+}
+
+export interface EventDataType {
+    [EventType.DUMMY]: DummyEventData;
+    [EventType.REQUEST_CONTROL]: RequestControlData;
+}
+
+export interface DummyEvent extends Record<string, unknown>, Omit<Event, 'data'> {
+    data: DummyEventData;
+}
+
+export interface RequestControlEvent extends Record<string, unknown>, Omit<Event, 'data'> {
+    data: RequestControlData;
+}

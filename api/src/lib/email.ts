@@ -734,3 +734,139 @@ export const dummyEventNotification = async (to: string): Promise<void> => {
         subject: 'Dummy event nofication'
     });
 };
+
+type RequestControlOptions = {
+    requesterName: string;
+    eventId: string;
+    publicationVersion: {
+        id: string;
+        versionOf: string;
+        title: string;
+        authorEmail: string;
+    };
+};
+
+export const requestControl = async (options: RequestControlOptions): Promise<void> => {
+    const subject = `${options.requesterName} is requesting to take over editing`;
+    const approveUrl = `${process.env.BASE_URL}/approve-control-request?approve=true&eventId=${options.eventId}&versionId=${options.publicationVersion.id}&versionOf=${options.publicationVersion.versionOf}`;
+    const rejectUrl = approveUrl.replace('approve=true', 'approve=false');
+
+    const html = `
+                <p>${options.requesterName} has asked for permission to take over as the corresponding author of the following publication on Octopus so they can make edits to it:</p>
+                <br>
+                <p style="text-align: center"><strong><i>${options.publicationVersion.title}</i></strong></p>
+                <br>
+                <p>Please use the buttons below to either confirm they can take over the editing of this publication, or reject the request. <strong>If you do not take action, they will take over from you as the corresponding author after two weeks have passed.</strong>.</p>
+                <br/>
+                <p style="text-decoration: underline;">Note that you will lose the ability to edit the publication yourself if you confirm this request.</p>
+                <br/>
+                <p style="text-align: center;">
+                    <a style="${styles.button}" href="${approveUrl}">
+                        Transfer control to ${options.requesterName}
+                    </a>
+                </p>
+                <br/>
+                <p>If you would like to remain in control of the editing process instead of ${options.requesterName}, use the button below to reject their request:</p>
+                <br/>
+                <p style="text-align: center;">
+                    <a style="${styles.button}" href="${rejectUrl}">
+                        Reject request
+                    </a>
+                </p>
+                <br/>
+                <p>You are seeing this message as you have initiated the creation of a new version of a publication you are an author on.</p>
+            `;
+
+    const text = `${options.requesterName} is requesting to take over editing. ${options.requesterName} has asked for permission to take over as the corresponding author of the following publication on Octopus so they can make edits to it: ${options.publicationVersion.title}. Please use the following link to confirm they can take over the editing of this publication (Note that you will lose the ability to edit the publication yourself if you confirm this request.): ${approveUrl}. If you would like to remain in control of the editing process instead of ${options.requesterName}, use the following link to reject their request: ${rejectUrl}. If you do not take action, they will take over from you as the corresponding author after two weeks have passed. You are seeing this message as you have initiated the creation of a new version of a publication you are an author on.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, 'Your response is required to confirm or reject their request.'),
+        text,
+        to: options.publicationVersion.authorEmail,
+        subject
+    });
+};
+
+type RejectControlRequestOptions = {
+    requesterEmail: string;
+    publicationVersion: {
+        title: string;
+        authorFullName: string;
+    };
+};
+
+export const rejectControlRequest = async (options: RejectControlRequestOptions): Promise<void> => {
+    const subject = `${options.publicationVersion.authorFullName} has rejected your request to take over editing`;
+    const html = `
+                <p>${options.publicationVersion.authorFullName} has rejected your request to take over as the corresponding author of the following publication on Octopus:</p>
+                <br>
+                <p style="text-align: center"><strong><i>${options.publicationVersion.title}</i></strong></p>
+                <br>
+                <p>Please discuss with the current corresponding author if you feel there may have been a mistake. Making additional requests to take over as corresponding author is discouraged until you have discussed the situation with the current corresponding author.</p>
+            `;
+
+    const text = `${options.publicationVersion.authorFullName} has rejected your request to take over as the corresponding author of the following publication on Octopus: ${options.publicationVersion.title}. Please discuss with the current corresponding author if you feel there may have been a mistake. Making additional requests to take over as corresponding author is discouraged until you have discussed the situation with the current corresponding author.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, 'Please discuss with the current corresponding author.'),
+        text,
+        to: options.requesterEmail,
+        subject
+    });
+};
+
+type ApproveControlRequestOptions = {
+    requesterEmail: string;
+    publicationVersion: {
+        title: string;
+        authorFullName: string;
+        url: string;
+    };
+};
+
+export const approveControlRequest = async (
+    options: ApproveControlRequestOptions,
+    isAutomaticallyApproved = false
+): Promise<void> => {
+    const subject = isAutomaticallyApproved
+        ? 'You have been automatically approved as corresponding author'
+        : `${options.publicationVersion.authorFullName} has approved your request to take over editing`;
+
+    const html = `
+                <p>${
+                    isAutomaticallyApproved
+                        ? `${options.publicationVersion.authorFullName} has not responded to your request within the 2 week window, and you have been automatically given corresponding authorship of the following publication on Octopus:`
+                        : `${options.publicationVersion.authorFullName} has approved your request to take over as the corresponding author of the following publication on Octopus:`
+                }</p>
+                <br>
+                <p style="text-align: center"><strong><i>${options.publicationVersion.title}</i></strong></p>
+                <br>
+                <p>You are now able to make edits to this publication. To get started, please click the button below, or visit your account on Octopus and open the publication</p>
+                <br/>
+                <p style="text-align: center;">
+                    <a style="${styles.button}" href="${options.publicationVersion.url}">
+                        Open publication
+                    </a>
+                </p>
+                <br/>
+                <p>Please note that ${
+                    options.publicationVersion.authorFullName
+                } has lost the ability to make edits of their own.</p>
+            </p>
+            `;
+
+    const text = `${options.publicationVersion.authorFullName} has rejected your request to take over as the corresponding author of the following publication on Octopus: ${options.publicationVersion.title}. Please discuss with the current corresponding author if you feel there may have been a mistake. Making additional requests to take over as corresponding author is discouraged until you have discussed the situation with the current corresponding author.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(
+            subject,
+            html,
+            isAutomaticallyApproved
+                ? 'You are now able to make edits to this publication.'
+                : 'You have been approved as corresponding author.'
+        ),
+        text,
+        to: options.requesterEmail,
+        subject
+    });
+};

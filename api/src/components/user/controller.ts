@@ -1,6 +1,7 @@
 import * as response from 'lib/response';
 import * as userService from 'user/service';
 import * as I from 'interface';
+import * as eventService from 'event/service';
 
 export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>): Promise<I.JSONResponse> => {
     try {
@@ -35,8 +36,8 @@ export const get = async (
     }
 };
 
-export const getPublicationVersions = async (
-    event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationVersionsFilters, I.GetUserParameters>
+export const getPublications = async (
+    event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
@@ -47,13 +48,13 @@ export const getPublicationVersions = async (
             return response.json(400, { message: 'User not found' });
         }
 
-        const userPublicationVersions = await userService.getPublicationVersions(
+        const userPublications = await userService.getPublications(
             event.pathParameters.id,
             event.queryStringParameters,
             isAccountOwner
         );
 
-        return response.json(200, userPublicationVersions);
+        return response.json(200, userPublications);
     } catch (err) {
         console.log(err);
 
@@ -72,6 +73,25 @@ export const getUserList = async (event: I.APIRequest): Promise<I.JSONResponse> 
         const userList = await userService.getUserList();
 
         return response.json(200, userList);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getUserControlRequests = async (event: I.AuthenticatedAPIRequest<undefined>): Promise<I.JSONResponse> => {
+    const requesterId = event.user.id;
+
+    try {
+        const userControlRequests = await eventService.getByTypes(['REQUEST_CONTROL'], {
+            data: {
+                path: ['requesterId'],
+                equals: requesterId
+            }
+        });
+
+        return response.json(200, userControlRequests);
     } catch (error) {
         console.log(error);
 

@@ -8,3 +8,4 @@ export { default as problems } from './problems';
 export { default as referencesSeedData } from './references';
 export { default as usersProdSeedData } from './usersProdSeedData';
 export { default as problemsProd } from './problemsProd';
+export { default as events } from './events';

@@ -412,11 +412,11 @@ export interface CreationStepWithCompletenessStatus extends CreationStep {
     status: Types.TabCompletionStatus;
 }
 
-export interface UserPublicationVersionsResult {
+export interface UserPublicationsResult {
     offset: number;
     limit: number;
     total: number;
-    results: PublicationVersion[];
+    results: Publication[];
 }
 
 export interface OrcidAffiliationDate {
@@ -501,4 +501,17 @@ export interface TopicsPaginatedResults {
 
 export interface TopicsPageQuery extends ParsedUrlQuery {
     query?: string;
+}
+
+export interface ControlRequest {
+    id: string;
+    type: string;
+    createdAt: string;
+    data: {
+        requesterId: string;
+        publicationVersion: {
+            id: string;
+            versionOf: string;
+        };
+    };
 }
