@@ -656,8 +656,6 @@ export const approveControlRequest = async (
             for (const request of otherRequests) {
                 const supersededRequester = await userService.get(request.data.requesterId, true);
 
-                console.log({ supersededRequester });
-
                 if (supersededRequester) {
                     // send email to the superseded requester
                     await email.controlRequestSuperseded({
