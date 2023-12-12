@@ -21,11 +21,11 @@ provider:
     stage: ${opt:stage, 'local'}
     vpc:
         securityGroupIds:
-            - ${ssm:/${self:provider.stage}_octopus_sls_sg}
+            - ${ssm:/${self:provider.stage}_octopus_sls_sg_new}
         subnetIds:
-            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az1}
-            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az2}
-            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az1_new}
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az2_new}
+            - ${ssm:/${self:provider.stage}_octopus_private_subnet_az3_new}
     environment:
         STAGE: ${self:provider.stage}
         ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
