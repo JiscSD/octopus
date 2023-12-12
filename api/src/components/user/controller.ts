@@ -84,7 +84,8 @@ export const getUserControlRequests = async (event: I.AuthenticatedAPIRequest<un
     const requesterId = event.user.id;
 
     try {
-        const userControlRequests = await eventService.getByTypes(['REQUEST_CONTROL'], {
+        const userControlRequests = await eventService.getMany({
+            type: 'REQUEST_CONTROL',
             data: {
                 path: ['requesterId'],
                 equals: requesterId

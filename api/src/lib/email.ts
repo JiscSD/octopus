@@ -897,3 +897,31 @@ export const removeCorrespondingAuthor = async (options: RemoveCorrespondingAuth
         subject
     });
 };
+
+type ControlRequestSupersededOptions = {
+    requesterEmail: string;
+    newCorrespondingAuthorFullName: string;
+    publicationVersionTitle: string;
+};
+
+export const controlRequestSuperseded = async (options: ControlRequestSupersededOptions): Promise<void> => {
+    const subject = `${options.newCorrespondingAuthorFullName} has been approved as the new corresponding author.`;
+
+    const html = `
+                <p>${options.newCorrespondingAuthorFullName} is now the corresponding author for the following publication on Octopus:</p>
+                <br>
+                <p style="text-align: center"><strong><i>${options.publicationVersionTitle}</i></strong></p>
+                <br>
+                <p>Your request to take over corresponding authorship of this publication has been invalidated by this change. If you would still like to take over corresponding authorship, please discuss this with ${options.newCorrespondingAuthorFullName} or raise a new request.</p>
+            </p>
+            `;
+
+    const text = `${options.newCorrespondingAuthorFullName} is now the corresponding author for the following publication on Octopus: ${options.publicationVersionTitle}. Your request to take over corresponding authorship of this publication has been invalidated by this change. If you would still like to take over corresponding authorship, please discuss this with ${options.newCorrespondingAuthorFullName} or raise a new request.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, 'Another author has taken over as corresponding author'),
+        text,
+        to: options.requesterEmail,
+        subject
+    });
+};
