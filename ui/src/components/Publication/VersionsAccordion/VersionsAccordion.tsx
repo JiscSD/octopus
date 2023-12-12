@@ -101,6 +101,7 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                                             <OutlineIcons.PencilSquareIcon className="inline w-4" />
                                         </Components.Link>
                                     ))}
+
                                 {canCreateNewVersion && (
                                     <Components.Link
                                         title="Create new version"
@@ -112,6 +113,7 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                                         <OutlineIcons.PencilSquareIcon className="inline w-4" />
                                     </Components.Link>
                                 )}
+
                                 {canRequestControl && !hasAlreadyRequestedControl && (
                                     <Components.Link
                                         title="Take over editing"
@@ -119,7 +121,7 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                                         href="#"
                                         onClick={handleControlRequest}
                                     >
-                                        Take over editing&nbsp;
+                                        Take over editing &nbsp;
                                         <OutlineIcons.PencilSquareIcon className="inline w-4" />
                                     </Components.Link>
                                 )}
