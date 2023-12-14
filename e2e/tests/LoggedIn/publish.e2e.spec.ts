@@ -1,5 +1,5 @@
 import * as Helpers from '../helpers';
-import { expect, test, Page, Browser } from '@playwright/test';
+import { expect, test, Page, Browser, BrowserContext } from '@playwright/test';
 import { PageModel } from '../PageModel';
 import cuid2 from '@paralleldrive/cuid2';
 
@@ -214,6 +214,18 @@ const problemPublication: PublicationTestType = {
     pubType: 'Research Problem',
     language: 'Afar',
     title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    references: referencesList,
+    coi: 'This Research Problem does not have any specified conflicts of interest.',
+    funding: 'This Research Problem has the following sources of funding:',
+    fundingExtraDetails: 'extra details'
+};
+
+const problemPublication2: PublicationTestType = {
+    pubType: 'Research Problem 2',
+    language: 'Afar',
+    title: 'test title 2',
     author: Helpers.user1.fullName,
     text: 'main text',
     references: referencesList,
@@ -664,13 +676,52 @@ const approvePublication = async (page: Page, hasAffiliations?: boolean) => {
     await page.waitForSelector('button[title="Cancel your approval"]');
 };
 
-const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser, hasAffiliations?: boolean) => {
+const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.TestUser) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await confirmInvolvement(browser, user, page, true);
     await approvePublication(page);
 
     await context.close();
+};
+
+const approveControlRequest = async (
+    context: BrowserContext,
+    user: Helpers.TestUser,
+    requesterName: string,
+    approve: boolean
+) => {
+    const page = await context.newPage();
+
+    await page.goto(Helpers.MAIL_HOG);
+    await page.waitForSelector('.messages > .row');
+
+    // click on the latest request for the given 'requesterName' that has been sent to this user
+    await page
+        .locator(`.msglist-message:has-text("${user.email}")`, {
+            hasText: `${requesterName} is requesting to take over editing`
+        })
+        .first()
+        .click();
+
+    if (approve) {
+        const approveRequestControlLink = await page
+            .frameLocator('iframe')
+            .locator(`a:has-text('Transfer control to ${requesterName}')`)
+            .getAttribute('href');
+
+        await page.goto(approveRequestControlLink);
+        await page.waitForLoadState('networkidle');
+    } else {
+        const rejectRequestControlLink = await page
+            .frameLocator('iframe')
+            .locator(`a:has-text("Reject request")`)
+            .getAttribute('href');
+        await page.goto(rejectRequestControlLink);
+        await page.waitForLoadState('networkidle');
+    }
+
+    await page.close();
 };
 
 const rejectCoAuthorInvitation = async (
@@ -869,7 +920,7 @@ test.describe('Publication flow + co-authors', () => {
         await verifyLastEmailNotification(browser, Helpers.user1, 'A co-author has approved your Octopus publication');
 
         // second co-author confirmation
-        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
+        await confirmCoAuthorInvitation(browser, Helpers.user3);
 
         // verify notification triggered after last confirmation
         await verifyLastEmailNotification(
@@ -1542,7 +1593,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
 
         await confirmCoAuthorInvitation(browser, Helpers.user2);
-        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
+        await confirmCoAuthorInvitation(browser, Helpers.user3);
 
         // refresh corresponding author page
         await page.reload();
@@ -1618,7 +1669,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // handle co-authors confirmations
         await confirmCoAuthorInvitation(browser, Helpers.user2);
-        await confirmCoAuthorInvitation(browser, Helpers.user3, true);
+        await confirmCoAuthorInvitation(browser, Helpers.user3);
 
         // refresh corresponding author page
         await page.reload();
@@ -2216,6 +2267,105 @@ test.describe('Publication flow + co-authors', () => {
 
         // check v3 is published
         await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
+    });
+
+    test('Co-authors can transfer ownership of a new DRAFT version', async ({ browser }) => {
+        const context = await browser.newContext();
+        const page = await context.newPage();
+
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        // create v1
+        await createPublication(page, problemPublication2.title, 'PROBLEM');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, false);
+        await completeLinkedItemsTab(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // invite a co-author
+        await page.locator('aside button:has-text("Co-authors")').first().click();
+        await addCoAuthor(page, Helpers.user2);
+
+        // request approvals for v1
+        await page.locator(PageModel.publish.requestApprovalButton).click();
+        await page.locator(PageModel.publish.confirmRequestApproval).click();
+        await page.locator(`h1:has-text("${problemPublication2.title}")`).first().waitFor({ state: 'visible' });
+        await page.locator(`h1:has-text("${problemPublication2.title}")`).waitFor(); // wait for redirect
+
+        // confirm co-author invitation
+        await confirmCoAuthorInvitation(browser, Helpers.user2);
+
+        // publish v1
+        await page.reload();
+        await page.locator(PageModel.publish.publishButtonTracker).click();
+        await page.locator(PageModel.publish.confirmPublishButtonTracker).click();
+
+        // get publication id from url and deduct canonical DOI
+        const publicationId = page.url().split('/').slice(-3)[0];
+        const publicationTestId = 'publication-' + publicationId;
+
+        // create v2
+        await checkPublicationOnAccountPage(page, { id: publicationId }, 'published once', true);
+
+        // create new version
+        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
+        await page.waitForResponse(
+            (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
+        );
+
+        // wait to be redirected to the edit page
+        await page.waitForURL('**/edit?**');
+        await page.click(PageModel.publish.previewButton);
+        await page.waitForURL('**/versions/latest');
+
+        // login as co-author and request control over v2
+        const page2 = await browser.newPage();
+        await page2.goto(Helpers.UI_BASE);
+        await Helpers.login(page2, browser, Helpers.user2);
+        await expect(page2.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user2.fullName);
+
+        // navigate to /account page
+        await page2.goto(Helpers.UI_BASE + '/account');
+
+        // request control over the new version
+        const publicationRow = page2.getByTestId(publicationTestId);
+        await expect(publicationRow).toContainText(problemPublication2.title);
+        await publicationRow.locator('button[title="Take over editing"]').click();
+        await page2.click('button[title="Request Control"]');
+        await page2.waitForResponse((response) => response.url().includes('/request-control') && response.ok());
+
+        await expect(page2.getByTestId(publicationTestId)).toContainText(
+            'You have requested control over this publication version.'
+        );
+
+        // transfer ownership to user2
+        await approveControlRequest(context, Helpers.user1, Helpers.user2.fullName, true);
+
+        // check that old corresponding author doesn't have permissions to edit the DRAFT anymore
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await expect(page.getByText('This publication is currently being edited.')).toBeVisible();
+
+        // login with user2 and check they can edit the new version
+        const page3 = await browser.newPage();
+        await page3.goto(Helpers.UI_BASE);
+        await Helpers.login(page3, browser, Helpers.user2);
+        await expect(page3.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user2.fullName);
+
+        await page3.goto(Helpers.UI_BASE + `/publications/${publicationId}/versions/latest`);
+        await page3.waitForLoadState('networkidle');
+        await expect(page3.locator(PageModel.publish.draftEditButton)).toBeVisible();
+        await page3.locator(PageModel.publish.draftEditButton).click();
+        await page3.waitForURL('**/edit?**');
+        await page3.waitForLoadState('networkidle');
+        await expect(page3.locator('aside button:has-text("Key information")').first()).toBeVisible();
     });
 });
 

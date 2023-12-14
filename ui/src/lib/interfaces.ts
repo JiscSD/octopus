@@ -502,3 +502,16 @@ export interface TopicsPaginatedResults {
 export interface TopicsPageQuery extends ParsedUrlQuery {
     query?: string;
 }
+
+export interface ControlRequest {
+    id: string;
+    type: string;
+    createdAt: string;
+    data: {
+        requesterId: string;
+        publicationVersion: {
+            id: string;
+            versionOf: string;
+        };
+    };
+}

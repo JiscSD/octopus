@@ -1,6 +1,7 @@
 import * as response from 'lib/response';
 import * as userService from 'user/service';
 import * as I from 'interface';
+import * as eventService from 'event/service';
 
 export const getAll = async (event: I.APIRequest<undefined, I.UserFilters>): Promise<I.JSONResponse> => {
     try {
@@ -72,6 +73,25 @@ export const getUserList = async (event: I.APIRequest): Promise<I.JSONResponse> 
         const userList = await userService.getUserList();
 
         return response.json(200, userList);
+    } catch (error) {
+        console.log(error);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getUserControlRequests = async (event: I.AuthenticatedAPIRequest<undefined>): Promise<I.JSONResponse> => {
+    const requesterId = event.user.id;
+
+    try {
+        const userControlRequests = await eventService.getByTypes(['REQUEST_CONTROL'], {
+            data: {
+                path: ['requesterId'],
+                equals: requesterId
+            }
+        });
+
+        return response.json(200, userControlRequests);
     } catch (error) {
         console.log(error);
 

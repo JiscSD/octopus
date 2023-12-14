@@ -40,6 +40,10 @@ export const testSeed = async (): Promise<void> => {
     await client.prisma.bookmark.createMany({
         data: seeds.bookmarkSeeds
     });
+
+    await client.prisma.event.createMany({
+        data: seeds.events
+    });
 };
 
 export const openSearchSeed = async (): Promise<void> => {
@@ -90,13 +94,15 @@ export const clearDB = async (): Promise<void> => {
     const deleteTopics = client.prisma.topic.deleteMany();
     const deleteUsers = client.prisma.user.deleteMany();
     const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
+    const deleteEvents = client.prisma.event.deleteMany();
 
     await client.prisma.$transaction([
         deleteUsers,
         deletePublications,
         deleteTopics,
         deleteBookmarks,
-        deletePublicationStatuses
+        deletePublicationStatuses,
+        deleteEvents
     ]);
 
     const doesIndexExists = await client.search.indices.exists({
