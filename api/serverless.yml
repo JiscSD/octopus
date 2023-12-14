@@ -184,13 +184,6 @@ functions:
                   path: ${self:custom.versions.v1}/publications/{id}/pdf
                   method: GET
                   cors: true
-    count:
-        handler: src/components/publication/routes.count
-        events:
-            - http:
-                  path: ${self:custom.versions.v1}/publications/count
-                  method: GET
-                  cors: true
 
     # Publication Versions
     createPublicationVersion:
@@ -538,3 +531,17 @@ functions:
             # - schedule: cron(0 7 ? * * *) # Every day at 7 a.m.
             # TODO: remove schedule below when functionality has been tested.
             - schedule: cron(0 * ? * * *) # Every hour, on the hour.
+
+    # Sitemaps
+    generateSitemaps:
+        handler: src/components/sitemap/controller.generate
+        events:
+            - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
+
+    getSitemapUrls:
+        handler: src/components/sitemap/controller.getUrls
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/sitemaps/urls
+                  method: GET
+                  cors: true

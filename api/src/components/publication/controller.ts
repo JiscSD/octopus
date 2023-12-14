@@ -156,7 +156,7 @@ export const getPDF = async (
     if (!generateNewPDF) {
         // check if there's a generated PDF for this publication
         try {
-            const currentPdfUrl = `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationId}.pdf`;
+            const currentPdfUrl = `${s3.endpoint}/${s3.buckets.pdfs}/${publicationId}.pdf`;
             const result = await axios.get(currentPdfUrl);
 
             if (result.status === 200) {
@@ -199,16 +199,4 @@ export const getPDF = async (
               }
           }
         : response.json(200, { pdfUrl });
-};
-
-export const count = async (): Promise<I.JSONResponse> => {
-    try {
-        const publicationCount = await publicationService.count();
-
-        return response.json(200, publicationCount);
-    } catch (err) {
-        console.log(err);
-
-        return response.json(500, { message: 'Unknown server error.' });
-    }
 };

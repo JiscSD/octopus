@@ -103,7 +103,7 @@ export const initialDevSeed = async (): Promise<void> => {
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets
         for (const bucketNameSegment of ['images', 'pdfs', 'sitemaps']) {
-            const bucketName = `science-octopus-publishing-${bucketNameSegment}-${process.env.STAGE}`;
+            const bucketName = s3.buckets[bucketNameSegment];
 
             try {
                 await s3.client.send(
