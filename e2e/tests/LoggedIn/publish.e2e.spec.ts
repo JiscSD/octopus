@@ -42,7 +42,6 @@ const completeLinkedItemsTab = async (page: Page, linkedPubSearchTerm: string, l
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
     await page.locator(PageModel.publish.linkedItems.addLink).click();
-    await page.waitForResponse((response) => response.url().includes('/links?direct=true') && response.ok());
     await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -816,7 +815,6 @@ const checkPublicationOnAccountPage = async (
         case 'pending your approval':
             await expect(publicationContainer).toContainText('(Author)');
             await expect(publicationContainer).toContainText('Status: Pending your approval');
-            await expect(publicationContainer.locator(PageModel.myProfile.viewDraftButton)).toBeVisible();
             break;
         case 'approved':
             await expect(publicationContainer).toContainText('Status: Ready to publish');
@@ -825,12 +823,12 @@ const checkPublicationOnAccountPage = async (
             await expect(publicationContainer).toContainText('1 published version');
             await expect(publicationContainer).toContainText('New draft not created');
             await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
-            await expect(publicationContainer).toContainText('Published on: ');
+            await expect(publicationContainer).toContainText('Published on ');
             await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
             break;
         case 'published':
             await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
-            await expect(publicationContainer).toContainText('Published on: ');
+            await expect(publicationContainer).toContainText('Published on ');
             await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
             break;
         case 'own new version':
@@ -838,13 +836,13 @@ const checkPublicationOnAccountPage = async (
             break;
         case "coauthor's new version":
             await expect(publicationContainer).toContainText(
-                'Someone else has created a new draft version, and you do not yet have access to it'
+                'Someone else is working on a new draft version, and you do not yet have access to it'
             );
             break;
         case "coauthor's unlocked draft":
             await expect(publicationContainer).toContainText('Status: Editing in progress');
             await expect(publicationContainer).toContainText(
-                `${Helpers.user2.shortName} has created a new draft version`
+                `${Helpers.user2.shortName} is working on a new draft version`
             );
             break;
     }
@@ -1480,7 +1478,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page2, { id: publicationId }, 'pending your approval', true);
 
         // Approve publication
-        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myProfile.viewDraftButton).click();
+        await page2.goto(Helpers.UI_BASE + '/publications/' + publicationId);
         await approvePublication(page2);
 
         // Check details as co-author
