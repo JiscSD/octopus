@@ -132,6 +132,13 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                     true // is automatically approved
                 );
 
+                // notify old corresponding author they've been removed
+                await email.removeCorrespondingAuthor({
+                    newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                    oldCorrespondingAuthorEmail: publicationVersion.user.email || '',
+                    publicationVersionTitle: publicationVersion.title || ''
+                });
+
                 // delete all pending requests for this publication version
                 await deleteMany({
                     type: 'REQUEST_CONTROL',
