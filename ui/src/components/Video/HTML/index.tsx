@@ -6,8 +6,9 @@ type Props = {
     title?: string;
     showCaption: boolean;
     controls: boolean;
+    controlsList?: string;
     poster?: string;
-    width?: number;
+    width?: number | string;
     className?: string;
 };
 
@@ -20,6 +21,7 @@ const HTML: React.FC<Props> = (props): React.ReactElement => (
     >
         <video
             controls={props.controls}
+            controlsList={props.controlsList}
             width={props.width}
             poster={props.poster}
             preload="none"
