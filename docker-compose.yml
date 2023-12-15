@@ -28,7 +28,7 @@ services:
       - 8025:8025
 
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack:${LOCALSTACK_IMAGE_VERSION:-latest}
     ports:
       - "4510-4559:4510-4559"
       - "4566:4566"
