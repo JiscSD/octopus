@@ -339,4 +339,6 @@ export type PartialPublicationVersion = Pick<
     | 'publishedDate'
     | 'isLatestLiveVersion'
     | 'isLatestVersion'
+    | 'coAuthors'
+    | 'currentStatus'
 >;
