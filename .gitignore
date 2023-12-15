@@ -18,3 +18,4 @@ coverage
 
 # VSC settings
 .vscode
+.env
