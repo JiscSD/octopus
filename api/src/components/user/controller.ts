@@ -39,6 +39,14 @@ export const get = async (
 export const getPublications = async (
     event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
+    const versionStatusArray = event.queryStringParameters?.versionStatus?.split(',') || [];
+
+    if (versionStatusArray && !versionStatusArray.every((status) => I.PublicationStatusEnum[status])) {
+        return response.json(400, {
+            message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', 'LOCKED"
+        });
+    }
+
     try {
         const isAccountOwner = Boolean(event.user?.id === event.pathParameters.id);
 
@@ -51,7 +59,8 @@ export const getPublications = async (
         const userPublications = await userService.getPublications(
             event.pathParameters.id,
             event.queryStringParameters,
-            isAccountOwner
+            isAccountOwner,
+            versionStatusArray.length ? (versionStatusArray as I.PublicationStatusEnum[]) : undefined
         );
 
         return response.json(200, userPublications);

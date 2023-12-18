@@ -19,6 +19,7 @@ import * as Framer from 'framer-motion';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
+    const versionStatus = context.query.versionStatus;
 
     /**
      * @TODO - /user/{id}/publications now returns paginated results
@@ -69,6 +70,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const { setUser } = Stores.useAuthStore();
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
+
     const { data: controlRequests = [] } = useSWR<Interfaces.ControlRequest[]>(
         `${Config.endpoints.users}/me/control-requests`,
         null,
