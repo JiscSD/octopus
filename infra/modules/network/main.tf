@@ -396,74 +396,74 @@ resource "aws_ssm_parameter" "vpc_id_new" {
   value = aws_vpc.main_new.id
 }
 resource "aws_ssm_parameter" "public_subnet_az1" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az1"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az1_old"
   type  = "String"
   value = aws_subnet.public_az1.id
 }
 
 resource "aws_ssm_parameter" "public_subnet_az1_new" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az1_new"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az1"
   type  = "String"
   value = aws_subnet.public_az1_new.id
 }
 resource "aws_ssm_parameter" "public_subnet_az2" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az2"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az2_old"
   type  = "String"
   value = aws_subnet.public_az2.id
 }
 
 resource "aws_ssm_parameter" "public_subnet_az2_new" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az2_new"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az2"
   type  = "String"
   value = aws_subnet.public_az2_new.id
 }
 resource "aws_ssm_parameter" "public_subnet_az3" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az3"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az3_old"
   type  = "String"
   value = aws_subnet.public_az3.id
 }
 resource "aws_ssm_parameter" "public_subnet_az3_new" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az3_new"
+  name  = "${var.environment}_${var.project_name}_public_subnet_az3"
   type  = "String"
   value = aws_subnet.public_az3_new.id
 }
 resource "aws_ssm_parameter" "private_subnet_az1" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az1"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az1_old"
   type  = "String"
   value = aws_subnet.private_az1.id
 }
 resource "aws_ssm_parameter" "private_subnet_az1_new" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az1_new"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az1"
   type  = "String"
   value = aws_subnet.private_az1_new.id
 }
 resource "aws_ssm_parameter" "private_subnet_az2" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az2"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az2_old"
   type  = "String"
   value = aws_subnet.private_az2.id
 }
 resource "aws_ssm_parameter" "private_subnet_az2_new" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az2_new"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az2"
   type  = "String"
   value = aws_subnet.private_az2_new.id
 }
 resource "aws_ssm_parameter" "private_subnet_az3" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az3"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az3_old"
   type  = "String"
   value = aws_subnet.private_az3.id
 }
 resource "aws_ssm_parameter" "private_subnet_az3_new" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az3_new"
+  name  = "${var.environment}_${var.project_name}_private_subnet_az3"
   type  = "String"
   value = aws_subnet.private_az3_new.id
 }
 resource "aws_ssm_parameter" "sls_sg" {
-  name  = "${var.environment}_${var.project_name}_sls_sg"
+  name  = "${var.environment}_${var.project_name}_sls_sg_old"
   type  = "String"
   value = aws_security_group.sls_sg.id
 }
 resource "aws_ssm_parameter" "sls_sg_new" {
-  name  = "${var.environment}_${var.project_name}_sls_sg_new"
+  name  = "${var.environment}_${var.project_name}_sls_sg"
   type  = "String"
   value = aws_security_group.sls_sg_new.id
 }
