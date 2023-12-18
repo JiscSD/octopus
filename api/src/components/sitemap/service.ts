@@ -62,7 +62,7 @@ export const generatePublicationSitemaps = async (): Promise<number> => {
         await s3.client.send(
             new PutObjectCommand({
                 Bucket: s3.buckets.sitemaps,
-                Key: `${sitemapCount}.xml`,
+                Key: `publications/${sitemapCount}.xml`,
                 ContentType: 'text/xml',
                 Body: sitemap
             })
@@ -80,17 +80,23 @@ export const generatePublicationSitemaps = async (): Promise<number> => {
     // This should generally only occur locally.
     const bucketFiles = await listSitemapBucket();
 
-    if (bucketFiles.Contents && bucketFiles.Contents.length > sitemapCount) {
-        for (const file of bucketFiles.Contents) {
-            const fileNumber = Number(file.Key?.slice(0, -4));
+    if (bucketFiles.Contents) {
+        const publicationSitemapsInBucket = bucketFiles.Contents.filter(
+            (file) => file.Key?.slice(0, 13) === 'publications/'
+        );
 
-            if (fileNumber > sitemapCount) {
-                await s3.client.send(
-                    new DeleteObjectCommand({
-                        Bucket: s3.buckets.sitemaps,
-                        Key: file.Key
-                    })
-                );
+        if (publicationSitemapsInBucket.length > sitemapCount) {
+            for (const file of publicationSitemapsInBucket) {
+                const fileNumber = Number(file.Key?.slice(13, -4));
+
+                if (fileNumber > sitemapCount) {
+                    await s3.client.send(
+                        new DeleteObjectCommand({
+                            Bucket: s3.buckets.sitemaps,
+                            Key: file.Key
+                        })
+                    );
+                }
             }
         }
     }
