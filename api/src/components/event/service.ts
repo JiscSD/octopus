@@ -6,14 +6,9 @@ import * as userService from 'user/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as coAuthorService from 'coauthor/service';
 
-export const getByTypes = async (types: I.EventType[], additionalFilters: Omit<Prisma.EventWhereInput, 'type'> = {}) =>
+export const getMany = async (where: Prisma.EventWhereInput = {}) =>
     client.prisma.event.findMany({
-        where: {
-            type: {
-                in: types
-            },
-            ...additionalFilters
-        }
+        where
     });
 
 export const deleteEvent = async (id: string) =>
@@ -138,6 +133,28 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                     oldCorrespondingAuthorEmail: publicationVersion.user.email || '',
                     publicationVersionTitle: publicationVersion.title || ''
                 });
+
+                // notify the rest of requesters that their control request has been dismissed
+                const otherRequests = requestControlEvents.filter(
+                    (event) =>
+                        event.id !== requestControlEvent.id &&
+                        event.data.publicationVersion.id === requestControlEvent.data.publicationVersion.id
+                );
+
+                if (otherRequests.length) {
+                    for (const request of otherRequests) {
+                        const supersededRequester = await userService.get(request.data.requesterId, true);
+
+                        if (supersededRequester) {
+                            // send email to the superseded requester
+                            await email.controlRequestSuperseded({
+                                newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                                publicationVersionTitle: publicationVersion.title || '',
+                                requesterEmail: supersededRequester.email || ''
+                            });
+                        }
+                    }
+                }
 
                 // delete all pending requests for this publication version
                 await deleteMany({
