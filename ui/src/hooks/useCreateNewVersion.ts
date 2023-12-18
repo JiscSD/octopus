@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import * as Config from '@config';
-import * as api from '@api';
-import * as Helpers from '@helpers';
+import * as Config from '@/config';
+import * as api from '@/api';
+import * as Helpers from '@/helpers';
 import { useRouter } from 'next/router';
 
 const useCreateNewVersion = (publicationId: string) => {
