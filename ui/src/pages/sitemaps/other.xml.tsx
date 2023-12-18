@@ -10,11 +10,9 @@ const Sitemap = () => {
     return null;
 };
 
+// Return a sitemap with URLs of all static pages, topics, and blog posts.
 export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
-    // Get URLs of all static content, topics, and blog posts.
-    // Publications are handled in publications-sitemap[number].xml.tsx, and
-    // users are handled in users-sitemap[number].xml.tsx.
-
+    const now = new Date().toISOString();
     // Get URLs of all static pages by scanning file system.
     const staticUrls = fs
         .readdirSync(process.cwd() + '/src/pages')
@@ -54,10 +52,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
     // Get URLs of topics from the API.
     let topicUrls: string[] = [];
     try {
-        const response = await api.get(
-            `${Config.endpoints.topics}?&limit=${Config.values.sitemapChunkSize - staticUrls.length}`,
-            undefined
-        );
+        const response = await api.get(Config.endpoints.topics, undefined);
         const data: Interfaces.TopicsPaginatedResults = response.data;
         if (data.results.length) {
             topicUrls = data.results.map((topic) => `${Config.urls.viewTopic.canonical}/${topic.id}`);
@@ -89,7 +84,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
                     (url) => `
                         <url>
                             <loc>${url}</loc>
-                            <lastmod>${new Date().toISOString()}</lastmod>
+                            <lastmod>${now}</lastmod>
                             <changefreq>monthly</changefreq>
                             <priority>1.0</priority>
                         </url>
@@ -101,7 +96,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
                     (url) => `
                         <url>
                             <loc>${url}</loc>
-                            <lastmod>${new Date().toISOString()}</lastmod>
+                            <lastmod>${now}</lastmod>
                             <changefreq>daily</changefreq>
                             <priority>1.0</priority>
                         </url>
@@ -113,7 +108,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
                     (url) => `
                         <url>
                             <loc>${url}</loc>
-                            <lastmod>${new Date().toISOString()}</lastmod>
+                            <lastmod>${now}</lastmod>
                             <changefreq>yearly</changefreq>
                             <priority>1.0</priority>
                         </url>

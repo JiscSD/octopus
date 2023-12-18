@@ -7,7 +7,7 @@ export const generate = async (): Promise<I.JSONResponse> => {
         const sitemapCount = await sitemapService.generatePublicationSitemaps();
 
         return response.json(200, {
-            message: `Generated ${sitemapCount} sitemaps`
+            message: `Generated ${sitemapCount} sitemap${sitemapCount === 1 ? '' : 's'}`
         });
     } catch (err) {
         console.log(err);

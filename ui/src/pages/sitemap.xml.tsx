@@ -6,27 +6,22 @@ const PublicationSitemapIndex = () => {
     return null;
 };
 
+// Return a sitemap index file that refers to the rest of our sitemaps.
 export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
-    // Google can only accept site maps of a given size, so we work out how many sitemaps of this size
-    // we will need to include all of our publications.
-    let totalPublications: number = 0;
+    // Get details of sitemaps hosted in S3 bucket.
+    let publicationSitemaps: string[] = [];
     try {
-        const publicationCountResponse = await api.get(`${Config.endpoints.publications}/count`, undefined);
-        totalPublications = publicationCountResponse.data;
+        const publicationSitemapsRequest = await api.get('/sitemaps/urls', undefined);
+        publicationSitemaps = publicationSitemapsRequest.data;
     } catch (error) {
         console.log(error);
     }
-    const chunkSize = Config.values.sitemapChunkSize;
-    const sitemapCount =
-        totalPublications % chunkSize
-            ? Math.floor(totalPublications / chunkSize) + 1
-            : Math.floor(totalPublications / chunkSize);
-    // Make a sitemap element for each separate publications sitemap we need.
-    let sitemapsArray = [...Array(sitemapCount).keys()].map(
-        (idx) =>
+    // Make a sitemap element for each separate publications sitemap.
+    let sitemapsArray = publicationSitemaps.map(
+        (url) =>
             `
         <sitemap>
-            <loc>${Config.urls.baseUrl}/sitemaps/publications/${idx + 1}.xml</loc>
+            <loc>${url}</loc>
         </sitemap>
         `
     );
