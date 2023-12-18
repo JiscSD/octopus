@@ -4,10 +4,10 @@ import * as sitemapService from 'sitemap/service';
 
 export const generate = async (): Promise<I.JSONResponse> => {
     try {
-        await sitemapService.generatePublicationSitemaps();
+        const sitemapCount = await sitemapService.generatePublicationSitemaps();
 
         return response.json(200, {
-            message: 'Great :)'
+            message: `Generated ${sitemapCount} sitemaps`
         });
     } catch (err) {
         console.log(err);
