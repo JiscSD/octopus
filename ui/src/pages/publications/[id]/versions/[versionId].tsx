@@ -1,13 +1,9 @@
-/**
- * This page is a temporary copy of /publications/[id] page and will be only available on local and int stages until we release versioning work on prod
- * If trying to access this page on prod, the user will be redirected back to the /publications/[id]
- */
 import React, { useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import useSWR from 'swr';
 import axios from 'axios';
-
+import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as api from '@api';
 import * as Components from '@components';
@@ -64,10 +60,20 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             .then((res) => ({ publicationVersion: res.data, versionRequestError: null }))
             .catch((error) => {
                 console.log(error);
-                const status = error.response.status;
-                const message = error.response.data.message;
 
-                return { publicationVersion: null, versionRequestError: { status, message } };
+                // check if the api responded with an error
+                // if the api is not reachable, trying to access error.response.status will throw an error
+                if (axios.isAxiosError(error)) {
+                    const status = error.response?.status as number;
+                    const message = error.response?.data.message as string;
+
+                    return { publicationVersion: null, versionRequestError: { status, message } };
+                }
+
+                return {
+                    publicationVersion: null,
+                    versionRequestError: { status: 500, message: 'Unknown Server error' }
+                };
             }),
         api
             .get(`${Config.endpoints.bookmarks}?type=PUBLICATION&entityId=${requestedId}`, token)
@@ -147,6 +153,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
+    const [isUnlocking, setIsUnlocking] = React.useState(false);
 
     useEffect(() => {
         setBookmarkId(props.bookmarkId);
@@ -185,9 +192,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             versions: Types.PartialPublicationVersion[];
         }
     >(
-        publicationVersion?.versionNumber === 1 && publicationVersion.isLatestVersion
-            ? null // don't fetch data if there is only one version available
-            : `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,versions(id,doi,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion)`
+        `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,versions(id,doi,currentStatus,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion,coAuthors)`
+    );
+
+    const { data: controlRequests = [], isLoading: isLoadingControlRequests } = useSWR<Interfaces.ControlRequest[]>(
+        user ? `${Config.endpoints.users}/me/control-requests` : null
+    );
+
+    const hasAlreadyRequestedControl = controlRequests.some(
+        (request) => request.data.publicationVersion.versionOf === props.publicationId
     );
 
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
@@ -198,10 +211,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     // problems linked from this publication
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
 
-    const isBookmarkButtonVisible = useMemo(
-        () => user && publicationVersion?.currentStatus === 'LIVE',
-        [publicationVersion, user]
-    );
+    const isBookmarkButtonVisible = user && publicationVersion?.currentStatus === 'LIVE';
 
     const list = [];
 
@@ -213,7 +223,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
-    const showVersionsAccordion = publication && publication.versions.length > 1;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
@@ -336,6 +345,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     }, [confirmation, publicationVersion?.id, router]);
 
     const handleUnlock = async () => {
+        if (isUnlocking) {
+            return;
+        }
+
         const confirmed = await confirmation(
             'Are you sure you want to cancel and unlock?',
             'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
@@ -345,6 +358,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         );
 
         if (confirmed) {
+            setIsUnlocking(true);
+
             try {
                 await api.put(
                     `${Config.endpoints.publicationVersions}/${publicationVersion?.id}/status/DRAFT`,
@@ -352,11 +367,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     Helpers.getJWT()
                 );
 
-                router.push(`${Config.urls.viewPublication.path}/${publicationVersion?.publication.id}/edit?step=4`);
+                await router.push(
+                    `${Config.urls.viewPublication.path}/${publicationVersion?.publication.id}/edit?step=0`
+                );
             } catch (err) {
                 const unlockError = err as Interfaces.JSONResponseError;
                 setServerError(unlockError.message);
             }
+
+            setIsUnlocking(false);
         }
     };
 
@@ -515,7 +534,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     <Components.Link
                                         openNew={false}
                                         title="Edit publication"
-                                        href={`${Config.urls.viewPublication.path}/${publicationVersion.publication.id}/edit?step=4`}
+                                        href={`${Config.urls.viewPublication.path}/${publicationVersion.publication.id}/edit?step=0`}
                                         className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
                                     >
                                         <OutlineIcons.PencilSquareIcon className="w-4" />
@@ -524,6 +543,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </Components.Alert>
                             )}
                         </>
+                    )}
+
+                    {hasAlreadyRequestedControl && (
+                        <Components.Alert
+                            severity="INFO"
+                            title="You have requested control over this publication version."
+                            className="mb-4"
+                        />
                     )}
 
                     {showApprovalsTracker && (
@@ -540,7 +567,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                     )}
 
-                    {serverError && <Components.Alert severity="ERROR" title={serverError} />}
+                    {serverError && <Components.Alert severity="ERROR" className="mb-4" title={serverError} />}
 
                     {showApprovalsTracker && (
                         <div className="pb-16">
@@ -641,16 +668,34 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 </div>
                             ))}
                         </div>
+                        <Framer.AnimatePresence>
+                            {/** API will only return versions that the current user has permission to see */}
+                            {publication && publication.versions.length !== publicationVersion.versionNumber && (
+                                <Framer.motion.p
+                                    className="mb-4 text-sm leading-relaxed dark:text-white-50"
+                                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                >
+                                    <OutlineIcons.ExclamationCircleIcon className="inline w-6 stroke-2 align-bottom text-red-600 dark:text-red-500" />{' '}
+                                    A newer version of this publication exists
+                                </Framer.motion.p>
+                            )}
+                        </Framer.AnimatePresence>
 
                         <div className="block lg:hidden">
-                            {showVersionsAccordion && (
+                            {publication && !isLoadingControlRequests && (
                                 <div className="my-8">
                                     <Components.VersionsAccordion
                                         versions={publication.versions}
                                         selectedVersion={publicationVersion}
+                                        controlRequests={controlRequests}
+                                        onServerError={setServerError}
+                                        onUnlockPublication={handleUnlock}
                                     />
                                 </div>
                             )}
+
                             {publicationVersion && (
                                 <SidebarCard
                                     publicationVersion={publicationVersion}
@@ -923,10 +968,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
-                        {showVersionsAccordion && (
+                        {publication && !isLoadingControlRequests && (
                             <Components.VersionsAccordion
                                 versions={publication.versions}
                                 selectedVersion={publicationVersion}
+                                controlRequests={controlRequests}
+                                onServerError={setServerError}
+                                onUnlockPublication={handleUnlock}
                             />
                         )}
                         <SidebarCard

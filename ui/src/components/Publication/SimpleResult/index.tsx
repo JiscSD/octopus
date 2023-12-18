@@ -3,22 +3,22 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Components from '@components';
-import * as api from '@api';
 import * as Config from '@config';
-import axios from 'axios';
-import { useRouter } from 'next/router';
+import * as Hooks from '@hooks';
 
 type Props = {
     publication: Interfaces.Publication;
     user: Interfaces.User;
-    canCreateNewVersion?: boolean;
-    canEditNewVersion?: boolean;
+    controlRequests: Interfaces.ControlRequest[];
 };
 
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
-    const router = useRouter();
-    const [error, setError] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
+    const { handleCreateNewVersion, loadingNewVersion, newVersionError } = Hooks.useCreateNewVersion(
+        props.publication.id
+    );
+    const { handleControlRequest, loadingControlRequest, controlRequestError } = Hooks.useControlRequest(
+        props.publication.id
+    );
 
     const latestLiveVersion = props.publication.versions.find((version) => version.isLatestLiveVersion);
     const isAuthorOnLatestLive =
@@ -29,36 +29,33 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
         latestVersion?.currentStatus === 'DRAFT' || latestVersion?.currentStatus === 'LOCKED';
     const draftVersion = draftExistsWithPermission ? latestVersion : null;
     const draftExistsWithoutPermission = !draftExistsWithPermission && !latestLiveVersion?.isLatestVersion;
-
-    const handleCreateNewVersion = React.useCallback(
-        async (e: React.MouseEvent<Element, MouseEvent>) => {
-            setError('');
-            setLoading(true);
-
-            try {
-                // create new version
-                await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/publication-versions`,
-                    {},
-                    Helpers.getJWT()
-                );
-
-                // redirect user to the edit page
-                await router.push(`/publications/${props.publication.id}/edit?step=0`);
-            } catch (error) {
-                console.log(error);
-                setError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
-            }
-
-            setLoading(false);
-        },
-        [props.publication.id, router]
+    const hasAlreadyRequestedControl = props.controlRequests.some(
+        (request) => request.data.publicationVersion.versionOf === props.publication.id
     );
 
     const divider = <span className="border-b border-grey-300 pt-4 dark:border-teal-500 sm:border-r sm:pb-4" />;
     const publishedVersionCount = props.publication.versions.filter(
         (version) => version.currentStatus === 'LIVE'
     ).length;
+
+    const requestControl = hasAlreadyRequestedControl ? (
+        <Components.Alert
+            severity="INFO"
+            title="You have requested control over this publication version."
+            className="mt-4"
+        />
+    ) : (
+        <>
+            {controlRequestError && <Components.Alert severity="ERROR" title={controlRequestError} className="mt-4" />}
+            <Components.Button
+                disabled={loadingControlRequest}
+                title="Take over editing"
+                onClick={handleControlRequest}
+                endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
+                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+            />
+        </>
+    );
 
     return (
         <li
@@ -82,7 +79,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             {divider}
             <div className="flex flex-grow basis-1/5 flex-col items-start pt-4 sm:px-5 sm:pt-0">
                 <p className="flex flex-col gap-2 pb-5 lg:flex-row lg:items-center">
-                    <span className="flex items-center gap-2 font-bold leading-3 text-pink-500 dark:text-pink-300">
+                    <span className="flex items-center gap-2 font-bold text-pink-500 dark:text-pink-300">
                         <OutlineIcons.PencilSquareIcon className="inline h-4 min-w-[1rem]" />
                         Draft
                     </span>
@@ -96,7 +93,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </p>
                 {draftVersion ? (
-                    <>
+                    <div className="flex h-full flex-col justify-between">
                         <p>
                             Last updated:{' '}
                             <time suppressHydrationWarning>{Helpers.formatDate(draftVersion.updatedAt)}</time>
@@ -104,24 +101,27 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                         <p className="flex-grow pb-5">
                             Status: {Helpers.getPublicationStatusByAuthor(draftVersion, props.user)}
                         </p>
-                        {draftVersion.currentStatus === 'DRAFT' ? (
+                        {['DRAFT', 'LOCKED'].includes(draftVersion.currentStatus) ? (
                             props.user.id === draftVersion.user.id ? (
                                 <Components.Button
                                     href={`/publications/${props.publication.id}/edit?step=0`}
                                     endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                     title="Edit Draft"
-                                    className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                    className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                                 />
                             ) : (
-                                <p>
-                                    <Components.Link
-                                        href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
-                                        className="underline"
-                                    >
-                                        {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
-                                    </Components.Link>{' '}
-                                    has created a new draft version
-                                </p>
+                                <>
+                                    <p>
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                            className="underline"
+                                        >
+                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                        </Components.Link>{' '}
+                                        has created a new draft version
+                                    </p>
+                                    {isAuthorOnLatestLive && requestControl}
+                                </>
                             )
                         ) : (
                             <Components.Button
@@ -131,21 +131,26 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
                         )}
-                    </>
+                    </div>
                 ) : isAuthorOnLatestLive ? (
                     draftExistsWithoutPermission ? (
-                        <p>Someone else has created a new draft version, and you do not yet have access to it</p>
+                        <div className="flex h-full flex-col justify-between">
+                            <p>Someone else has created a new draft version, and you do not yet have access to it.</p>
+                            {requestControl}
+                        </div>
                     ) : (
                         <>
                             <p className="flex-grow pb-5">New draft not created</p>
+                            {newVersionError && (
+                                <Components.Alert severity="ERROR" title={newVersionError} className="mt-4" />
+                            )}
                             <Components.Button
-                                disabled={loading}
+                                disabled={loadingNewVersion}
                                 title="Create Draft Version"
                                 onClick={handleCreateNewVersion}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                 className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
-                            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
                         </>
                     )
                 ) : (
