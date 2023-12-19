@@ -19,7 +19,6 @@ import * as Framer from 'framer-motion';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
-    const versionStatus = context.query.versionStatus;
 
     /**
      * @TODO - /user/{id}/publications now returns paginated results
@@ -29,7 +28,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
     const promises: [
         Promise<Interfaces.User | void>,
-        Promise<Interfaces.Publication[] | void>,
+        Promise<Interfaces.UserPublicationsResult | void>,
         Promise<Interfaces.ControlRequest[] | void>
     ] = [
         api
@@ -38,7 +37,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             .catch((error) => console.log(error)),
         api
             .get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token)
-            .then((res) => res.data.results)
+            .then((res) => res.data)
             .catch((error) => console.log(error)),
         api
             .get(`${Config.endpoints.users}/me/control-requests`, token)
@@ -47,6 +46,12 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     ];
 
     const [user, userPublications = [], controlRequests = []] = await Promise.all(promises);
+
+    if (!user) {
+        return {
+            notFound: true
+        };
+    }
 
     return {
         props: {
@@ -60,7 +65,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.Publication[];
+    userPublications: Interfaces.UserPublicationsResult;
     controlRequests: Interfaces.ControlRequest[];
 };
 
@@ -70,11 +75,24 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const { setUser } = Stores.useAuthStore();
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
+    const [versionStatusArray, setVersionStatusArray] = useState<Types.PublicationStatuses[]>([
+        'LIVE',
+        'DRAFT',
+        'LOCKED'
+    ]);
 
     const { data: controlRequests = [] } = useSWR<Interfaces.ControlRequest[]>(
         `${Config.endpoints.users}/me/control-requests`,
         null,
         { fallbackData: props.controlRequests, revalidateOnFocus: false }
+    );
+
+    const { data: { results: userPublications = [] } = {} } = useSWR<Interfaces.UserPublicationsResult>(
+        `${Config.endpoints.users}/${props.user.id}/publications?limit=999`.concat(
+            versionStatusArray.length ? `&versionStatus=${versionStatusArray.join(',')}` : ''
+        ),
+        null,
+        { fallbackData: props.userPublications }
     );
 
     const handleRevokeAccess = useCallback(async () => {
@@ -193,9 +211,67 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Publications
                     </h2>
-                    {props.userPublications.length ? (
+
+                    <fieldset className="mb-8">
+                        <legend className="mb-2 text-xs font-semibold text-grey-800 transition-colors dark:text-white-50">
+                            Include publications with:
+                        </legend>
+                        <div className="flex flex-wrap gap-4 sm:gap-12">
+                            <label
+                                htmlFor="include-live-version"
+                                className="flex cursor-pointer items-center gap-4 text-sm"
+                            >
+                                <input
+                                    required
+                                    id="include-live-version"
+                                    name="LIVE"
+                                    type="checkbox"
+                                    checked={versionStatusArray.includes('LIVE')}
+                                    onChange={(e) =>
+                                        setVersionStatusArray(
+                                            e.target.checked
+                                                ? [...versionStatusArray, 'LIVE']
+                                                : versionStatusArray.filter((status) => status !== 'LIVE')
+                                        )
+                                    }
+                                    className="cursor-pointer rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <span className="text-grey-800 transition-colors dark:text-white-50">
+                                    A live version
+                                </span>
+                            </label>
+
+                            <label
+                                htmlFor="include-draft-version"
+                                className="flex cursor-pointer items-center gap-4 text-sm"
+                            >
+                                <input
+                                    required
+                                    id="include-draft-version"
+                                    name="DRAFT"
+                                    type="checkbox"
+                                    checked={versionStatusArray.includes('DRAFT')}
+                                    onChange={(e) =>
+                                        setVersionStatusArray(
+                                            e.target.checked
+                                                ? [...versionStatusArray, 'DRAFT', 'LOCKED']
+                                                : versionStatusArray.filter(
+                                                      (status) => !['DRAFT', 'LOCKED'].includes(status)
+                                                  )
+                                        )
+                                    }
+                                    className="cursor-pointer rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <span className="text-grey-800 transition-colors dark:text-white-50">
+                                    A draft version
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    {userPublications.length ? (
                         <ul className="relative space-y-4">
-                            {props.userPublications.map((publication) => (
+                            {userPublications.map((publication) => (
                                 <Components.PublicationSimpleResult
                                     key={publication.id}
                                     publication={publication}
