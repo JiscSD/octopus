@@ -39,9 +39,10 @@ export const get = async (
 export const getPublications = async (
     event: I.OptionalAuthenticatedAPIRequest<undefined, I.UserPublicationsFilters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
-    const versionStatusArray = event.queryStringParameters?.versionStatus?.split(',') || [];
+    const versionStatus = event.queryStringParameters?.versionStatus;
+    const versionStatusArray = versionStatus ? versionStatus.split(',') : [];
 
-    if (versionStatusArray && !versionStatusArray.every((status) => I.PublicationStatusEnum[status])) {
+    if (versionStatusArray.length && versionStatusArray.some((status) => !I.PublicationStatusEnum[status])) {
         return response.json(400, {
             message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', 'LOCKED"
         });

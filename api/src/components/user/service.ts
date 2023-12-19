@@ -165,7 +165,7 @@ export const getPublications = async (
             ? versionStatusArray
                 ? {
                       versions: {
-                          every: {
+                          some: {
                               currentStatus: {
                                   in: versionStatusArray
                               }
