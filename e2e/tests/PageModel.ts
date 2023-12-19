@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a:has-text("My Account")'
+        myAccountButton: 'a:has-text("My Account")'
     },
     footer: {
         links: [
@@ -133,7 +133,7 @@ export const PageModel = {
         rejectCookies: '#onetrust-reject-all-handler'
     },
     confirmEmail: {},
-    myProfile: {
+    myAccount: {
         liveAuthorPageButton: 'a:has-text("View my public author page")',
         publicationHeader: 'h2:has-text("Publications")',
         editDraftButton: 'a:has-text("Edit Draft")',
