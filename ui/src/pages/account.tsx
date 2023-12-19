@@ -213,14 +213,11 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
 
                     <fieldset className="mb-8">
-                        <legend className="mb-2 text-xs font-semibold text-grey-800 transition-colors dark:text-white-50">
+                        <legend className="mb-2 text-sm text-grey-800 transition-colors dark:text-white-50">
                             Include publications with:
                         </legend>
                         <div className="flex flex-wrap gap-4 sm:gap-12">
-                            <label
-                                htmlFor="include-live-version"
-                                className="flex cursor-pointer items-center gap-4 text-sm"
-                            >
+                            <label htmlFor="include-live-version" className="flex cursor-pointer items-center gap-2">
                                 <input
                                     required
                                     id="include-live-version"
@@ -234,17 +231,14 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 : versionStatusArray.filter((status) => status !== 'LIVE')
                                         )
                                     }
-                                    className="cursor-pointer rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                                 />
                                 <span className="text-grey-800 transition-colors dark:text-white-50">
                                     A live version
                                 </span>
                             </label>
 
-                            <label
-                                htmlFor="include-draft-version"
-                                className="flex cursor-pointer items-center gap-4 text-sm"
-                            >
+                            <label htmlFor="include-draft-version" className="flex cursor-pointer items-center gap-2">
                                 <input
                                     required
                                     id="include-draft-version"
@@ -260,7 +254,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                                                   )
                                         )
                                     }
-                                    className="cursor-pointer rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                                 />
                                 <span className="text-grey-800 transition-colors dark:text-white-50">
                                     A draft version
