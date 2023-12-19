@@ -16,7 +16,18 @@ export const updateAll = async (publicationVersionId: string, data: I.UpdateRefe
         }
     });
 
-    return await client.prisma.references.createMany({
+    const create = await client.prisma.references.createMany({
         data
     });
+
+    await client.prisma.publicationVersion.update({
+        where: {
+            id: publicationVersionId
+        },
+        data: {
+            updatedAt: new Date().toISOString()
+        }
+    });
+
+    return create;
 };

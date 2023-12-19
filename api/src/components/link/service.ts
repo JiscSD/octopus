@@ -8,6 +8,16 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
         }
     });
 
+    await client.prisma.publicationVersion.updateMany({
+        where: {
+            versionOf: fromPublicationId,
+            isLatestVersion: true
+        },
+        data: {
+            updatedAt: new Date().toISOString()
+        }
+    });
+
     return link;
 };
 
@@ -23,9 +33,30 @@ export const doesLinkExist = async (fromPublicationId: string, toPublicationId: 
 };
 
 export const deleteLink = async (id: string) => {
+    const link = await client.prisma.links.findFirst({
+        where: {
+            id
+        },
+        select: {
+            publicationFromRef: {
+                select: {
+                    id: true
+                }
+            }
+        }
+    });
     const deletedLink = await client.prisma.links.delete({
         where: {
             id
+        }
+    });
+    await client.prisma.publicationVersion.updateMany({
+        where: {
+            versionOf: link?.publicationFromRef.id,
+            isLatestVersion: true
+        },
+        data: {
+            updatedAt: new Date().toISOString()
         }
     });
 

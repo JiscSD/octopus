@@ -12,6 +12,14 @@ export const create = async (publicationVersionId: string, data: I.CreateFunderR
             link: data.link
         }
     });
+    await client.prisma.publicationVersion.update({
+        where: {
+            id: publicationVersionId
+        },
+        data: {
+            updatedAt: new Date().toISOString()
+        }
+    });
 
     return funder;
 };
@@ -21,6 +29,14 @@ export const destroy = async (publicationVersionId: string, funderId: string) =>
         where: {
             publicationVersionId,
             id: funderId
+        }
+    });
+    await client.prisma.publicationVersion.update({
+        where: {
+            id: publicationVersionId
+        },
+        data: {
+            updatedAt: new Date().toISOString()
         }
     });
 
