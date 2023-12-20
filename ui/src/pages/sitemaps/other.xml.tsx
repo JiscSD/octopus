@@ -25,17 +25,16 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
                     '_document.tsx',
                     'account.tsx',
                     'api',
+                    'approve-control-request.tsx',
                     'author-link.tsx',
                     'authors',
                     'login.tsx',
                     'my-bookmarks.tsx',
                     'publications',
-                    'publications-sitemap-index.xml.tsx',
-                    'publications-sitemap[number].xml.tsx',
                     'sitemap.xml.tsx',
                     'topics',
                     'verify.tsx'
-                ].includes(staticPage)
+                ].includes(staticPage) && !staticPage.startsWith('.')
         )
         .map((staticPagePath) => {
             if (staticPagePath.includes('.tsx')) {
