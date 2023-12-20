@@ -84,7 +84,7 @@ export const PageModel = {
             // content
             '#main-text >> text=How has life on earth evolved?',
             // problems above this
-            'text=Research problems above this in the hierarchy',
+            'text=Publications above this in the hierarchy',
             // problems below this
             'text=Research problems below this in the hierarchy',
             // funders
