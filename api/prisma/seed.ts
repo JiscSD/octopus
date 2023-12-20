@@ -102,7 +102,7 @@ export const initialDevSeed = async (): Promise<void> => {
 
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets
-        for (const bucketNameSegment of ['images', 'pdfs', 'sitemaps']) {
+        for (const bucketNameSegment in s3.buckets) {
             const bucketName = s3.buckets[bucketNameSegment];
 
             try {

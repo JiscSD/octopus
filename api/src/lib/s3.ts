@@ -17,15 +17,10 @@ if (process.env.STAGE === 'local') {
     };
 }
 
-type OctopusBucketType = 'images' | 'pdfs' | 'sitemaps';
-const buckets: {
-    [key in OctopusBucketType]?: string;
-} = {};
-
-for (const nameSegment of ['images', 'pdfs', 'sitemaps']) {
-    buckets[nameSegment] = `science-octopus-publishing-${nameSegment}-${process.env.STAGE}`;
-}
-
-export { buckets };
+export const buckets = {
+    images: `science-octopus-publishing-images-${process.env.STAGE}`,
+    pdfs: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
+    sitemaps: `science-octopus-publishing-sitemaps-${process.env.STAGE}`
+};
 
 export const client = new S3Client(config);
