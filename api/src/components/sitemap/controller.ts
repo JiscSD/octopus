@@ -10,9 +10,9 @@ export const generate = async (): Promise<void> => {
     }
 };
 
-export const getUrls = async (): Promise<I.JSONResponse> => {
+export const getPaths = async (): Promise<I.JSONResponse> => {
     try {
-        const urls = await sitemapService.getUrls();
+        const urls = await sitemapService.getPaths();
 
         return response.json(200, urls);
     } catch (err) {

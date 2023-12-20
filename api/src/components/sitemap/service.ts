@@ -102,11 +102,11 @@ export const generatePublicationSitemaps = async (): Promise<void> => {
     }
 };
 
-export const getUrls = async (): Promise<string[]> => {
+export const getPaths = async (): Promise<string[]> => {
     const bucketFiles = await listSitemapBucket();
 
     if (bucketFiles.Contents) {
-        return bucketFiles.Contents.map((file) => `${s3.endpoint}/${s3.buckets.sitemaps}/${file.Key}`);
+        return bucketFiles.Contents.flatMap((file) => file.Key || []);
     }
 
     return [];

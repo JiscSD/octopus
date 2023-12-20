@@ -8,6 +8,7 @@ function checkEnvVariable(variable: string | undefined): string {
 
 const host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
 const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+const sitemapBucket = checkEnvVariable(process.env.NEXT_PUBLIC_SITEMAP_BUCKET);
 const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
@@ -256,6 +257,7 @@ const urls = {
         path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },
     mediaBucket,
+    sitemapBucket,
     baseUrl: base.host,
     blog: {
         path: '/blog',

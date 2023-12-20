@@ -555,10 +555,10 @@ functions:
         events:
             - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
 
-    getSitemapUrls:
-        handler: src/components/sitemap/routes.getUrls
+    getSitemapPaths:
+        handler: src/components/sitemap/routes.getPaths
         events:
             - http:
-                  path: ${self:custom.versions.v1}/sitemaps/urls
+                  path: ${self:custom.versions.v1}/sitemaps/paths
                   method: GET
                   cors: true
