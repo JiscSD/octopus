@@ -16,7 +16,7 @@ const listSitemapBucket = async (): Promise<ListObjectsV2CommandOutput> => {
     );
 };
 
-export const generatePublicationSitemaps = async (): Promise<number> => {
+export const generatePublicationSitemaps = async (): Promise<void> => {
     // The maximum number of URLs per sitemap (the maximum google can take in one go)
     const URL_LIMIT = 50000;
     const now = new Date().toISOString();
@@ -100,8 +100,6 @@ export const generatePublicationSitemaps = async (): Promise<number> => {
             }
         }
     }
-
-    return sitemapCount;
 };
 
 export const getUrls = async (): Promise<string[]> => {

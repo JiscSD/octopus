@@ -551,12 +551,12 @@ functions:
 
     # Sitemaps
     generateSitemaps:
-        handler: src/components/sitemap/controller.generate
+        handler: src/components/sitemap/routes.generate
         events:
             - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
 
     getSitemapUrls:
-        handler: src/components/sitemap/controller.getUrls
+        handler: src/components/sitemap/routes.getUrls
         events:
             - http:
                   path: ${self:custom.versions.v1}/sitemaps/urls

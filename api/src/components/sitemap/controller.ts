@@ -2,19 +2,11 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as sitemapService from 'sitemap/service';
 
-export const generate = async (): Promise<I.JSONResponse> => {
+export const generate = async (): Promise<void> => {
     try {
-        const sitemapCount = await sitemapService.generatePublicationSitemaps();
-
-        return response.json(200, {
-            message: `Generated ${sitemapCount} sitemap${sitemapCount === 1 ? '' : 's'}`
-        });
+        await sitemapService.generatePublicationSitemaps();
     } catch (err) {
         console.log(err);
-
-        return response.json(500, {
-            message: 'Unknown server error'
-        });
     }
 };
 
