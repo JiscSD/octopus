@@ -98,6 +98,7 @@ model PublicationVersion {
     funders                            Funders[]
     fundersStatement                   String?
     topics                             Topic[]
+    externalResources                  ExternalResource[]
 }
 
 model References {
@@ -226,14 +227,24 @@ model TopicTranslation {
 }
 
 model Event {
-    id        String   @id @default(cuid())
+    id        String    @id @default(cuid())
     type      EventType
-    createdAt DateTime @default(now())
+    createdAt DateTime  @default(now())
     data      Json
 }
 
+model ExternalResource {
+    id                   String             @id @default(cuid())
+    title                String
+    url                  String
+    description          String?
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+}
+
 enum EventType {
-    DUMMY  // for testing purpose
+    DUMMY // for testing purpose
     REQUEST_CONTROL
 }
 

@@ -75,6 +75,9 @@
             "event/*": [
                 "src/components/event/*"
             ],
+            "externalResource/*": [
+                "src/components/externalResource/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],

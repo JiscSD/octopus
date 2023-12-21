@@ -908,3 +908,14 @@ export interface DummyEvent extends Record<string, unknown>, Omit<Event, 'data'>
 export interface RequestControlEvent extends Record<string, unknown>, Omit<Event, 'data'> {
     data: RequestControlData;
 }
+
+// External resources
+export interface CreateExternalResourcePathParams {
+    id: string;
+}
+
+export interface CreateExternalResourceBody {
+    title: string;
+    url: string;
+    description?: string;
+}
