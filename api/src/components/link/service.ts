@@ -9,13 +9,7 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
         }
     });
 
-    const latestVersionFrom = await client.prisma.publicationVersion.findFirst({
-        where: {
-            versionOf: fromPublicationId,
-            isLatestVersion: true
-        },
-        select: { id: true }
-    });
+    const latestVersionFrom = await publicationVersionService.get(fromPublicationId, 'latest');
 
     if (latestVersionFrom) {
         await publicationVersionService.update(latestVersionFrom.id, {
@@ -50,20 +44,20 @@ export const deleteLink = async (id: string) => {
             }
         }
     });
-    const latestVersionFrom = await client.prisma.publicationVersion.findFirst({
-        where: { versionOf: link?.publicationFromRef.id, isLatestVersion: true },
-        select: { id: true }
-    });
     const deletedLink = await client.prisma.links.delete({
         where: {
             id
         }
     });
 
-    if (latestVersionFrom) {
-        await publicationVersionService.update(latestVersionFrom?.id, {
-            updatedAt: new Date().toISOString()
-        });
+    if (link) {
+        const latestVersionFrom = await publicationVersionService.get(link.publicationFromRef.id, 'latest');
+
+        if (latestVersionFrom) {
+            await publicationVersionService.update(latestVersionFrom.id, {
+                updatedAt: new Date().toISOString()
+            });
+        }
     }
 
     return deletedLink;
