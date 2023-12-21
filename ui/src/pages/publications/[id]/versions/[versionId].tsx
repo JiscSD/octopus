@@ -205,15 +205,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
-    // problems linked from this publication
-    const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
+    // Publications this publication is linked to (only shown on problems)
+    const parentPublications = publicationVersion?.publication.type === 'PROBLEM' ? linkedTo : [];
+
+    // Problems linked from this publication (shown on any type)
+    const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM');
+
     const isBookmarkButtonVisible = user && publicationVersion?.currentStatus === 'LIVE';
 
     const list = [];
 
     const showReferences = Boolean(references?.length);
-    const showChildProblems = Boolean(childProblems?.length);
-    const showParentPublications = Boolean(linkedTo?.length);
+    const showChildProblems = Boolean(childProblems.length);
+    const showParentPublications = Boolean(parentPublications.length);
     const showTopics = Boolean(publicationVersion?.topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
@@ -731,7 +735,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {(showParentPublications || showChildProblems) && (
                         <div id="linked-publications">
-                            {/* Parent problems */}
+                            {/* Parent publications */}
                             {showParentPublications && (
                                 <Components.ContentSection
                                     id="publications-linked-to"
@@ -739,7 +743,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     hasBreak
                                 >
                                     <Components.List ordered={false}>
-                                        {linkedTo.map((link) => (
+                                        {parentPublications.map((link) => (
                                             <Components.ListItem
                                                 key={link.id}
                                                 className="flex items-center font-semibold leading-3"
