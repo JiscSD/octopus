@@ -25,6 +25,7 @@
         "createVersionedDOIs": "ts-node -r tsconfig-paths/register prisma/createVersionedDOIs.ts",
         "updateLinksStatus": "ts-node -r tsconfig-paths/register prisma/updateLinksStatus.ts",
         "insertDummyEvent": "ts-node -r tsconfig-paths/register prisma/insertDummyEvent.ts",
+        "deleteHighLevelTopicBookmarks": "ts-node -r tsconfig-paths/register prisma/deleteHighLevelTopicBookmarks.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",

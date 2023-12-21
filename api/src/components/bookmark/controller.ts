@@ -42,6 +42,22 @@ export const create = async (
                     });
                 }
 
+                // check if it's god topic
+                if (!topic.parents.length) {
+                    return response.json(403, { message: 'Bookmarking against the high level topics is not allowed.' });
+                }
+
+                // check if the parent of this topic is the god topic
+                if (topic.parents.length === 1) {
+                    const parentTopic = await topicService.get(topic.parents[0].id);
+
+                    if (!parentTopic?.parents.length) {
+                        return response.json(403, {
+                            message: 'Bookmarking against the high level topics is not allowed.'
+                        });
+                    }
+                }
+
                 break;
             }
 
