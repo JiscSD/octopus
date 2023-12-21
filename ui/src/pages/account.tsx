@@ -219,7 +219,6 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         <div className="flex flex-wrap gap-4 sm:gap-12">
                             <label htmlFor="include-live-version" className="flex cursor-pointer items-center gap-2">
                                 <input
-                                    required
                                     id="include-live-version"
                                     name="LIVE"
                                     type="checkbox"
@@ -240,7 +239,6 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
 
                             <label htmlFor="include-draft-version" className="flex cursor-pointer items-center gap-2">
                                 <input
-                                    required
                                     id="include-draft-version"
                                     name="DRAFT"
                                     type="checkbox"
