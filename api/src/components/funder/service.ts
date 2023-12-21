@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export const create = async (publicationVersionId: string, data: I.CreateFunderRequestBody) => {
     const funder = await client.prisma.funders.create({
@@ -12,13 +13,8 @@ export const create = async (publicationVersionId: string, data: I.CreateFunderR
             link: data.link
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return funder;
@@ -31,13 +27,8 @@ export const destroy = async (publicationVersionId: string, funderId: string) =>
             id: funderId
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return funder;

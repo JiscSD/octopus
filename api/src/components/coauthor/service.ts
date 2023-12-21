@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import * as I from 'lib/interface';
+import * as publicationVersionService from 'publicationVersion/service';
 import { createId } from '@paralleldrive/cuid2';
 import { Prisma } from '@prisma/client';
 
@@ -48,13 +49,8 @@ export const update = async (id: string, data: Prisma.CoAuthorsUpdateInput) => {
         data
     });
 
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: updateCoAuthor.publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(updateCoAuthor.publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return updateCoAuthor;
@@ -89,13 +85,8 @@ export const updateAll = async (publicationVersionId: string, authors: I.CoAutho
         )
     );
 
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return update;
@@ -115,14 +106,12 @@ export const deleteCoAuthor = async (id: string) => {
             id
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: coAuthor?.publicationVersionId
-        },
-        data: {
+
+    if (coAuthor) {
+        await publicationVersionService.update(coAuthor.publicationVersionId, {
             updatedAt: new Date().toISOString()
-        }
-    });
+        });
+    }
 
     return deleteCoAuthor;
 };
@@ -134,13 +123,8 @@ export const deleteCoAuthorByEmail = async (publicationVersionId: string, email:
         }
     });
 
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return deleteCoAuthor;
@@ -157,13 +141,8 @@ export const linkUser = async (userId: string, publicationVersionId: string, ema
             linkedUser: userId
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return update;
@@ -177,13 +156,8 @@ export const removeFromPublicationVersion = async (publicationVersionId: string,
             code
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return removeCoAuthor;
@@ -199,13 +173,8 @@ export const updateConfirmation = async (publicationVersionId: string, userId: s
             confirmedCoAuthor: confirm
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return updateCoAuthor;
@@ -233,13 +202,8 @@ export const resetCoAuthors = async (publicationVersionId: string) => {
             code: createId()
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return resetCoAuthors;
@@ -270,13 +234,8 @@ export const updateRequestApprovalStatus = async (publicationVersionId: string, 
             approvalRequested: true
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersionId
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersionId, {
+        updatedAt: new Date().toISOString()
     });
 
     return coAuthors;
@@ -294,13 +253,8 @@ export const createCorrespondingAuthor = async (publicationVersion: I.Publicatio
             confirmedCoAuthor: true
         }
     });
-    await client.prisma.publicationVersion.update({
-        where: {
-            id: publicationVersion.id
-        },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+    await publicationVersionService.update(publicationVersion.id, {
+        updatedAt: new Date().toISOString()
     });
 
     return create;

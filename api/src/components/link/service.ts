@@ -1,4 +1,5 @@
 import * as client from 'lib/client';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export const create = async (fromPublicationId: string, toPublicationId: string) => {
     const link = await client.prisma.links.create({
@@ -8,15 +9,19 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
         }
     });
 
-    await client.prisma.publicationVersion.updateMany({
+    const latestVersionFrom = await client.prisma.publicationVersion.findFirst({
         where: {
             versionOf: fromPublicationId,
             isLatestVersion: true
         },
-        data: {
-            updatedAt: new Date().toISOString()
-        }
+        select: { id: true }
     });
+
+    if (latestVersionFrom) {
+        await publicationVersionService.update(latestVersionFrom.id, {
+            updatedAt: new Date().toISOString()
+        });
+    }
 
     return link;
 };
@@ -45,20 +50,21 @@ export const deleteLink = async (id: string) => {
             }
         }
     });
+    const latestVersionFrom = await client.prisma.publicationVersion.findFirst({
+        where: { versionOf: link?.publicationFromRef.id, isLatestVersion: true },
+        select: { id: true }
+    });
     const deletedLink = await client.prisma.links.delete({
         where: {
             id
         }
     });
-    await client.prisma.publicationVersion.updateMany({
-        where: {
-            versionOf: link?.publicationFromRef.id,
-            isLatestVersion: true
-        },
-        data: {
+
+    if (latestVersionFrom) {
+        await publicationVersionService.update(latestVersionFrom?.id, {
             updatedAt: new Date().toISOString()
-        }
-    });
+        });
+    }
 
     return deletedLink;
 };
