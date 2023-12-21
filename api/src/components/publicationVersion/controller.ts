@@ -520,7 +520,8 @@ export const requestControl = async (
         }
 
         // check if this user already requested control over this version
-        const requestControlEvents = await eventService.getByTypes(['REQUEST_CONTROL'], {
+        const requestControlEvents = await eventService.getMany({
+            type: 'REQUEST_CONTROL',
             data: {
                 equals: {
                     requesterId: event.user.id,
@@ -638,6 +639,33 @@ export const approveControlRequest = async (
                 url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/latest`
             }
         });
+
+        // notify the rest of requesters that their control request has been dismissed
+        const otherRequests = (await eventService.getMany({
+            type: 'REQUEST_CONTROL',
+            id: {
+                not: requestControlEvent.id
+            },
+            data: {
+                path: ['publicationVersion', 'id'],
+                equals: publicationVersion.id
+            }
+        })) as I.RequestControlEvent[];
+
+        if (otherRequests.length) {
+            for (const request of otherRequests) {
+                const supersededRequester = await userService.get(request.data.requesterId, true);
+
+                if (supersededRequester) {
+                    // send email to the superseded requester
+                    await email.controlRequestSuperseded({
+                        newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                        publicationVersionTitle: publicationVersion.title || '',
+                        requesterEmail: supersededRequester.email || ''
+                    });
+                }
+            }
+        }
 
         // delete all pending request control events for this publication version
         await eventService.deleteMany({
