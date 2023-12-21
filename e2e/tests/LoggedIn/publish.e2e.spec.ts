@@ -796,7 +796,7 @@ const checkPublicationOnAccountPage = async (
 ) => {
     if (navigate) {
         await page.locator(PageModel.header.usernameButton).click();
-        await page.locator(PageModel.header.myProfileButton).click();
+        await page.locator(PageModel.header.myAccountButton).click();
     }
     const publicationContainer = await page.getByTestId('publication-' + publicationDetails.id);
     switch (state) {
@@ -806,17 +806,17 @@ const checkPublicationOnAccountPage = async (
             await expect(publicationContainer).toContainText('0 published versions');
             await expect(publicationContainer).toContainText('(Corresponding Author)');
             await expect(publicationContainer).toContainText('Status: Draft');
-            await expect(publicationContainer.locator(PageModel.myProfile.editDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.editDraftButton)).toBeVisible();
             await expect(publicationContainer).toContainText('Never published');
             break;
         case 'pending coauthor approval':
             await expect(publicationContainer).toContainText('Status: Pending author approval');
-            await expect(publicationContainer.locator(PageModel.myProfile.viewDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
             break;
         case 'pending your approval':
             await expect(publicationContainer).toContainText('(Author)');
             await expect(publicationContainer).toContainText('Status: Pending your approval');
-            await expect(publicationContainer.locator(PageModel.myProfile.viewDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
             break;
         case 'approved':
             await expect(publicationContainer).toContainText('Status: Ready to publish');
@@ -824,14 +824,14 @@ const checkPublicationOnAccountPage = async (
         case 'published once':
             await expect(publicationContainer).toContainText('1 published version');
             await expect(publicationContainer).toContainText('New draft not created');
-            await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.createDraftVersionButton)).toBeVisible();
             await expect(publicationContainer).toContainText('Published on: ');
-            await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewButton)).toBeVisible();
             break;
         case 'published':
-            await expect(publicationContainer.locator(PageModel.myProfile.createDraftVersionButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.createDraftVersionButton)).toBeVisible();
             await expect(publicationContainer).toContainText('Published on: ');
-            await expect(publicationContainer.locator(PageModel.myProfile.viewButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewButton)).toBeVisible();
             break;
         case 'own new version':
             await expect(publicationContainer).toContainText('(Corresponding Author)');
@@ -1452,7 +1452,7 @@ test.describe('Publication flow + co-authors', () => {
         );
 
         // Edit draft
-        await page.getByTestId(publicationContainerTestId).locator(PageModel.myProfile.editDraftButton).click();
+        await page.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.editDraftButton).click();
         await completeKeyInformationTab(page);
         await completeAffiliationsTab(page, true);
         await completeLinkedItemsTab(
@@ -1480,7 +1480,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page2, { id: publicationId }, 'pending your approval', true);
 
         // Approve publication
-        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myProfile.viewDraftButton).click();
+        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.viewDraftButton).click();
         await approvePublication(page2);
 
         // Check details as co-author
@@ -1491,7 +1491,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page, { id: publicationId }, 'approved');
 
         // Publish
-        await page.getByTestId(publicationContainerTestId).locator(PageModel.myProfile.viewDraftButton).click();
+        await page.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.viewDraftButton).click();
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator('button[aria-label="Yes"]').click()]);
 
@@ -1502,7 +1502,7 @@ test.describe('Publication flow + co-authors', () => {
         await page2.reload();
         await page2
             .getByTestId(publicationContainerTestId)
-            .locator(PageModel.myProfile.createDraftVersionButton)
+            .locator(PageModel.myAccount.createDraftVersionButton)
             .click();
         await page2.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
@@ -1517,7 +1517,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page, { id: publicationId }, "coauthor's new version", false);
 
         // Request approval on new version
-        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myProfile.editDraftButton).click();
+        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.editDraftButton).click();
         await expect(page2.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
         await page2.locator(PageModel.publish.requestApprovalButton).click();
         await page2.locator(PageModel.publish.confirmRequestApproval).click();
@@ -2158,7 +2158,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page, { id: publicationId }, 'published once', true);
 
         // create new version
-        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
+        await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2209,7 +2209,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page, { id: publicationId }, 'published', true);
 
         // create new version
-        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
+        await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2315,7 +2315,7 @@ test.describe('Publication flow + co-authors', () => {
         await checkPublicationOnAccountPage(page, { id: publicationId }, 'published once', true);
 
         // create new version
-        await page.getByTestId(publicationTestId).locator(PageModel.myProfile.createDraftVersionButton).click();
+        await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
