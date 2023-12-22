@@ -687,6 +687,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             {publication && !isLoadingControlRequests && (
                                 <div className="my-8">
                                     <Components.VersionsAccordion
+                                        id="mobile-versions-accordion"
                                         versions={publication.versions}
                                         selectedVersion={publicationVersion}
                                         controlRequests={controlRequests}
@@ -970,6 +971,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="sticky top-12 space-y-8">
                         {publication && !isLoadingControlRequests && (
                             <Components.VersionsAccordion
+                                id="desktop-versions-accordion"
                                 versions={publication.versions}
                                 selectedVersion={publicationVersion}
                                 controlRequests={controlRequests}
