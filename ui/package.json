@@ -43,7 +43,7 @@
         "@tiptap/react": "^2.0.4",
         "@tiptap/starter-kit": "^2.0.4",
         "@types/react-beautiful-dnd": "^13.1.4",
-        "axios": "^1.6.0",
+        "axios": "^1.6.3",
         "cheerio": "^1.0.0-rc.12",
         "contentful": "^10.5.0",
         "framer-motion": "^10.13.2",
