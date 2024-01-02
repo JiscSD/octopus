@@ -2241,7 +2241,7 @@ test.describe('Publication flow + co-authors', () => {
         expect(page.url()).toContain('/versions/latest');
 
         // switch to v2
-        await page.locator('#desktop-versions-accordion a').nth(1).click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 2: ")').click();
         await page.waitForURL('**/versions/2');
         await expect(page.locator('#desktop-versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
         await expect(
@@ -2249,7 +2249,7 @@ test.describe('Publication flow + co-authors', () => {
         ).toBeVisible();
 
         // switch to v1
-        await page.locator('#desktop-versions-accordion a').nth(2).click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 1: ")').click();
         await page.waitForURL('**/versions/1');
         await expect(page.locator('#desktop-versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
         await expect(
@@ -2257,7 +2257,7 @@ test.describe('Publication flow + co-authors', () => {
         ).toBeVisible();
 
         // switch back to v3
-        await page.locator('#desktop-versions-accordion a').nth(1).click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 3: ")').click();
         await page.waitForURL('**/versions/3');
 
         // go back to edit page
