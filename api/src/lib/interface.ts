@@ -909,12 +909,12 @@ export interface RequestControlEvent extends Record<string, unknown>, Omit<Event
     data: RequestControlData;
 }
 
-// External resources
-export interface CreateExternalResourcePathParams {
+// Additional information
+export interface CreateAdditionalInformationPathParams {
     id: string;
 }
 
-export interface CreateExternalResourceBody {
+export interface CreateAdditionalInformationBody {
     title: string;
     url: string;
     description?: string;

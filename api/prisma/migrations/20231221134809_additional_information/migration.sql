@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "ExternalResource" (
+CREATE TABLE "AdditionalInformation" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -11,4 +11,4 @@ CREATE TABLE "ExternalResource" (
 );
 
 -- AddForeignKey
-ALTER TABLE "ExternalResource" ADD CONSTRAINT "ExternalResource_publicationVersionId_fkey" FOREIGN KEY ("publicationVersionId") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AdditionalInformation" ADD CONSTRAINT "AdditionalInformation_publicationVersionId_fkey" FOREIGN KEY ("publicationVersionId") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;

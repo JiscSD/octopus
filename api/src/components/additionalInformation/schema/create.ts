@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const createExternalResourceSchema: I.JSONSchemaType<I.CreateExternalResourceBody> = {
+const createAdditionalInformationSchema: I.JSONSchemaType<I.CreateAdditionalInformationBody> = {
     type: 'object',
     properties: {
         title: {
@@ -19,4 +19,4 @@ const createExternalResourceSchema: I.JSONSchemaType<I.CreateExternalResourceBod
     additionalProperties: false
 };
 
-export default createExternalResourceSchema;
+export default createAdditionalInformationSchema;

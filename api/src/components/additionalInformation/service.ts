@@ -2,8 +2,8 @@ import * as client from 'lib/client';
 import * as I from 'interface';
 import * as publicationVersionService from 'publicationVersion/service';
 
-export const create = async (publicationVersionId: string, data: I.CreateExternalResourceBody) => {
-    const externalResource = await client.prisma.externalResource.create({
+export const create = async (publicationVersionId: string, data: I.CreateAdditionalInformationBody) => {
+    const additionalInformation = await client.prisma.additionalInformation.create({
         data: {
             publicationVersionId,
             ...data
@@ -11,5 +11,5 @@ export const create = async (publicationVersionId: string, data: I.CreateExterna
     });
     await publicationVersionService.update(publicationVersionId, { updatedAt: new Date().toISOString() });
 
-    return externalResource;
+    return additionalInformation;
 };

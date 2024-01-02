@@ -1,11 +1,15 @@
 import * as response from 'lib/response';
-import * as externalResourceService from 'externalResource/service';
+import * as additionalInformationService from 'additionalInformation/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 
 export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreateExternalResourceBody, undefined, I.CreateExternalResourcePathParams>
+    event: I.AuthenticatedAPIRequest<
+        I.CreateAdditionalInformationBody,
+        undefined,
+        I.CreateAdditionalInformationPathParams
+    >
 ): Promise<I.JSONResponse> => {
     try {
         const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
@@ -19,14 +23,14 @@ export const create = async (
         // Ensure that the publication version is DRAFT
         if (publicationVersion?.currentStatus !== 'DRAFT') {
             return response.json(403, {
-                message: 'You can only add an external resource to a draft publication'
+                message: 'You can only add additional information to a draft publication'
             });
         }
 
         // Ensure that current user owns this publication version
         if (event.user.id !== publicationVersion.user.id) {
             return response.json(403, {
-                message: 'You cannot add an external resource to a publication version you do not own'
+                message: 'You cannot add additional information to a publication version you do not own'
             });
         }
 
@@ -37,10 +41,10 @@ export const create = async (
             });
         }
 
-        // Create the external resource
-        const externalResource = await externalResourceService.create(event.pathParameters.id, event.body);
+        // Create the additional information
+        const additionalInformation = await additionalInformationService.create(event.pathParameters.id, event.body);
 
-        return response.json(200, externalResource);
+        return response.json(200, additionalInformation);
     } catch (err) {
         console.log(err);
 

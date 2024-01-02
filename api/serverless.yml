@@ -549,11 +549,11 @@ functions:
         events:
             - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
 
-    # External resources
-    createExternalResource:
-        handler: src/components/externalResource/routes.create
+    # Additional Information
+    createAdditionalInformation:
+        handler: src/components/additionalInformation/routes.create
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publication-versions/{id}/external-resources
+                  path: ${self:custom.versions.v1}/publication-versions/{id}/additional-information
                   method: POST
                   cors: true
