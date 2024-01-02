@@ -205,19 +205,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
 
-    // problems this publication is linked to
-    const parentProblems = linkedTo.filter((link) => link.type === 'PROBLEM') || [];
+    // Publications this publication is linked to (only shown on problems)
+    const parentPublications = publicationVersion?.publication.type === 'PROBLEM' ? linkedTo : [];
 
-    // problems linked from this publication
-    const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM') || [];
+    // Problems linked from this publication (shown on any type)
+    const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM');
 
     const isBookmarkButtonVisible = user && publicationVersion?.currentStatus === 'LIVE';
 
     const list = [];
 
     const showReferences = Boolean(references?.length);
-    const showChildProblems = Boolean(childProblems?.length);
-    const showParentProblems = Boolean(parentProblems?.length);
+    const showChildProblems = Boolean(childProblems.length);
+    const showParentPublications = Boolean(parentPublications.length);
     const showTopics = Boolean(publicationVersion?.topics?.length);
     const showPeerReviews = Boolean(peerReviews?.length);
     const showEthicalStatement =
@@ -225,7 +225,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showRedFlags = !!flags.length;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
-    if (showChildProblems || showParentProblems) list.push({ title: 'Linked problems', href: 'problems' });
+    if (showChildProblems || showParentPublications)
+        list.push({ title: 'Linked publications', href: 'linked-publications' });
     if (showTopics) list.push({ title: 'Linked topics', href: 'topics' });
     if (showPeerReviews) list.push({ title: 'Peer reviews', href: 'peer-reviews' });
     if (showEthicalStatement) list.push({ title: 'Ethical statement', href: 'ethical-statement' });
@@ -732,17 +733,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </Components.ContentSection>
                     )}
 
-                    {(showParentProblems || showChildProblems) && (
-                        <div id="problems">
-                            {/* Parent problems */}
-                            {showParentProblems && (
+                    {(showParentPublications || showChildProblems) && (
+                        <div id="linked-publications">
+                            {/* Parent publications */}
+                            {showParentPublications && (
                                 <Components.ContentSection
-                                    id="problems-linked-to"
-                                    title="Research problems above this in the hierarchy"
+                                    id="publications-linked-to"
+                                    title="Publications above this in the hierarchy"
                                     hasBreak
                                 >
                                     <Components.List ordered={false}>
-                                        {parentProblems.map((link) => (
+                                        {parentPublications.map((link) => (
                                             <Components.ListItem
                                                 key={link.id}
                                                 className="flex items-center font-semibold leading-3"
