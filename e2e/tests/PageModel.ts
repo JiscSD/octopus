@@ -220,6 +220,7 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
+        versionsAccordion: 'aside >> #versions-accordion',
         versionsAccordionButton: 'aside button[title="Versions"]'
     },
     coauthorApprove: {},
