@@ -669,11 +669,11 @@ export interface UpdateAffiliationsBody {
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
+    versionStatus?: string;
 }
 
 export interface SendApprovalReminderPathParams {
     id: string;
-
     coauthor: string;
 }
 
