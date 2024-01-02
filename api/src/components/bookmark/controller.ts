@@ -44,7 +44,7 @@ export const create = async (
 
                 // check if it's god topic
                 if (!topic.parents.length) {
-                    return response.json(403, { message: 'Bookmarking against the high level topics is not allowed.' });
+                    return response.json(403, { message: 'Bookmarking against high level topics is not allowed.' });
                 }
 
                 // check if the parent of this topic is the god topic
@@ -53,7 +53,7 @@ export const create = async (
 
                     if (!parentTopic?.parents.length) {
                         return response.json(403, {
-                            message: 'Bookmarking against the high level topics is not allowed.'
+                            message: 'Bookmarking against high level topics is not allowed.'
                         });
                     }
                 }
