@@ -75,8 +75,8 @@ resource "aws_db_instance" "rds" {
   password                = random_string.db_master_pass.result
   skip_final_snapshot     = true
   backup_retention_period = var.backup_retention_period
-  vpc_security_group_ids  = [aws_security_group.database_security_group.id]
-  db_subnet_group_name    = aws_db_subnet_group.database_subnet.name
+  vpc_security_group_ids  = [aws_security_group.database_security_group_new.id]
+  db_subnet_group_name    = aws_db_subnet_group.database_subnet_new.name
 
   monitoring_interval = var.monitoring_interval
   monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring.arn
