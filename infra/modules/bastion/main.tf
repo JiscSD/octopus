@@ -15,11 +15,6 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-moved {
-  from = aws_security_group.ec2_sg_new
-  to   = aws_security_group.ec2_sg
-}
-
 resource "aws_iam_role" "allow_ssm_role" {
   name               = "ssm-role-${var.environment}"
   description        = "Allow SSM access to EC2"
