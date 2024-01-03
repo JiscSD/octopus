@@ -9,11 +9,11 @@ resource "aws_db_subnet_group" "database_subnet" {
 }
 
 resource "aws_db_subnet_group" "database_subnet_new" {
-  name       = "${var.project_name}_database_subnet_${var.environment}_new"
+  name       = "${var.project_name}_${var.environment}_database_subnet"
   subnet_ids = toset(var.private_subnet_ids_new)
 
   tags = {
-    Name        = "${var.project_name}_subnet_group_${var.environment}_new"
+    Name        = "${var.project_name}_${var.environment}_database_subnet"
     Environment = var.environment
   }
 }
@@ -38,8 +38,8 @@ resource "aws_security_group" "database_security_group" {
 }
 
 resource "aws_security_group" "database_security_group_new" {
-  name        = "${var.project_name}_${var.environment}_database_security_group_new"
-  description = "${var.project_name}_${var.environment}_database_security_group_new"
+  name        = "${var.project_name}_${var.environment}_database_security_group"
+  description = "${var.project_name}_${var.environment}_database_security_group"
   vpc_id      = var.vpc_id_new
 
   ingress {

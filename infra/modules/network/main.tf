@@ -320,7 +320,7 @@ resource "aws_security_group" "sls_sg" {
 }
 
 resource "aws_security_group" "sls_sg_new" {
-  name        = "${var.environment}_${var.project_name}_sls_api_sg_new"
+  name        = "${var.environment}_${var.project_name}_sls_api_sg"
   description = "Allow TLS inbound traffic from IPv4/6"
   vpc_id      = aws_vpc.main_new.id
 
