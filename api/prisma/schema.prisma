@@ -98,7 +98,7 @@ model PublicationVersion {
     funders                            Funders[]
     fundersStatement                   String?
     topics                             Topic[]
-    additionalInformations             AdditionalInformation[]
+    additionalInformation              AdditionalInformation[]
 }
 
 model References {

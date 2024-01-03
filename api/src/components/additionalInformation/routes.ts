@@ -10,3 +10,8 @@ export const create = middy(additionalInformationController.create)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(additionalInformationSchema.create, 'body'));
+
+export const deleteAdditionalInformation = middy(additionalInformationController.deleteAdditionalInformation)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());

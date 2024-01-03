@@ -51,3 +51,42 @@ export const create = async (
         return response.json(500, { message: 'Unknown server error' });
     }
 };
+
+export const deleteAdditionalInformation = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteAdditionalInformationPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+
+        // Check that the publication version exists
+        if (!publicationVersion) {
+            return response.json(404, {
+                message: 'This publication version does not exist.'
+            });
+        }
+
+        // Ensure that the publication version is a draft
+        if (publicationVersion.currentStatus !== 'DRAFT') {
+            return response.json(403, {
+                message: 'You cannot delete additional information from a publication version that is not a draft.'
+            });
+        }
+
+        if (event.user.id !== publicationVersion.user.id) {
+            return response.json(403, {
+                message: 'You do not have permission to delete additional information from this publication version.'
+            });
+        }
+
+        const additionalInformation = await additionalInformationService.deleteAdditionalInformation(
+            publicationVersion.id,
+            event.pathParameters.additionalInformationId
+        );
+
+        return response.json(200, additionalInformation);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

@@ -919,3 +919,8 @@ export interface CreateAdditionalInformationBody {
     url: string;
     description?: string;
 }
+
+export interface DeleteAdditionalInformationPathParams {
+    publicationVersionId: string;
+    additionalInformationId: string;
+}

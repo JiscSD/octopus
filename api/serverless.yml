@@ -557,3 +557,10 @@ functions:
                   path: ${self:custom.versions.v1}/publication-versions/{id}/additional-information
                   method: POST
                   cors: true
+    deleteAdditionalInformation:
+        handler: src/components/additionalInformation/routes.deleteAdditionalInformation
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/additional-information/{additionalInformationId}
+                  method: DELETE
+                  cors: true
