@@ -1,20 +1,3 @@
-resource "aws_security_group" "ec2_sg" {
-  name   = "ec2-sg"
-  vpc_id = var.vpc_id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-    protocol    = "-1"
-  }
-
-  tags = {
-    Name        = "bastion_sg_${var.environment}"
-    Environment = var.environment
-  }
-}
-
 resource "aws_security_group" "ec2_sg_new" {
   name   = "ec2-sg"
   vpc_id = var.vpc_id_new
