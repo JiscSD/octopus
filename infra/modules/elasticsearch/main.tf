@@ -18,6 +18,19 @@ resource "random_string" "db_master_pass" {
 #   aws_service_name = "es.amazonaws.com"
 # }
 
+resource "aws_security_group" "elasticsearch" {
+  name   = "${var.environment}-elasticsearch-sg"
+  vpc_id = var.vpc_id
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+}
+
 resource "aws_security_group" "elasticsearch_new" {
   name   = "${var.environment}-elasticsearch-sg-new"
   vpc_id = var.vpc_id_new
