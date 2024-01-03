@@ -8,11 +8,6 @@ resource "aws_db_subnet_group" "database_subnet" {
   }
 }
 
-moved {
-  from = aws_db_subnet_group.database_subnet_new
-  to   = aws_db_subnet_group.database_subnet
-}
-
 resource "aws_security_group" "database_security_group" {
   name        = "${var.project_name}_${var.environment}_database_security_group"
   description = "${var.project_name}_${var.environment}_database_security_group"
@@ -30,11 +25,6 @@ resource "aws_security_group" "database_security_group" {
     Name        = "${var.project_name}_security_group_${var.environment}"
     Environment = var.environment
   }
-}
-
-moved {
-  from = aws_security_group.database_security_group_new
-  to   = aws_security_group.database_security_group
 }
 
 resource "random_string" "db_master_pass" {
