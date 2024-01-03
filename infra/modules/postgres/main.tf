@@ -1,6 +1,6 @@
-resource "aws_db_subnet_group" "database_subnet_new" {
+resource "aws_db_subnet_group" "database_subnet" {
   name       = "${var.project_name}_${var.environment}_database_subnet"
-  subnet_ids = toset(var.private_subnet_ids_new)
+  subnet_ids = toset(var.private_subnet_ids)
 
   tags = {
     Name        = "${var.project_name}_${var.environment}_database_subnet"
@@ -8,10 +8,15 @@ resource "aws_db_subnet_group" "database_subnet_new" {
   }
 }
 
-resource "aws_security_group" "database_security_group_new" {
+moved {
+  from = aws_db_subnet_group.database_subnet_new
+  to   = aws_db_subnet_group.database_subnet
+}
+
+resource "aws_security_group" "database_security_group" {
   name        = "${var.project_name}_${var.environment}_database_security_group"
   description = "${var.project_name}_${var.environment}_database_security_group"
-  vpc_id      = var.vpc_id_new
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "Access from VPC"
@@ -25,6 +30,11 @@ resource "aws_security_group" "database_security_group_new" {
     Name        = "${var.project_name}_security_group_${var.environment}"
     Environment = var.environment
   }
+}
+
+moved {
+  from = aws_security_group.database_security_group_new
+  to   = aws_security_group.database_security_group
 }
 
 resource "random_string" "db_master_pass" {
@@ -46,8 +56,8 @@ resource "aws_db_instance" "rds" {
   password                = random_string.db_master_pass.result
   skip_final_snapshot     = true
   backup_retention_period = var.backup_retention_period
-  vpc_security_group_ids  = [aws_security_group.database_security_group_new.id]
-  db_subnet_group_name    = aws_db_subnet_group.database_subnet_new.name
+  vpc_security_group_ids  = [aws_security_group.database_security_group.id]
+  db_subnet_group_name    = aws_db_subnet_group.database_subnet.name
 
   monitoring_interval = var.monitoring_interval
   monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring.arn

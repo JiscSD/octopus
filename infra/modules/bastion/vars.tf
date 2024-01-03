@@ -1,8 +1,8 @@
-variable "vpc_id_new" {
+variable "vpc_id" {
   type = string
 }
 
-variable "public_subnet_new" {
+variable "public_subnet" {
   type = string
 }
 
